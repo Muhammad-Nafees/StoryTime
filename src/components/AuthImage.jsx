@@ -1,10 +1,13 @@
 import React from 'react'
 import { TouchableOpacity, Image, StyleSheet } from "react-native"
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const AuthImage = () => {
+
+
+const AuthImage = ({ ImageSource, onPress }) => {
     return (
-        <TouchableOpacity activeOpacity={0.7} style={styles.container}>
-            <Image style={{ width: 270, height: 200, justifyContent: "center", alignItems: "center" }} resizeMode="center" source={require("../assets/background-frame-img.png")} />
+        <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={styles.container}>
+            <Image style={{ width: responsiveWidth(76), height: responsiveHeight(26), justifyContent: "center", alignItems: "center" }} resizeMode="center" source={ImageSource} />
         </TouchableOpacity>
 
     )
@@ -17,6 +20,7 @@ const styles = StyleSheet.create({
     container: {
         width: "75%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        marginVertical: 5,
     }
 })
