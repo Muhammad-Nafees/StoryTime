@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { SecondaryColor, ThirdColor } from '../screens/Styles/Style'
 import { responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions"
 
+
+
 const TouchableButton = ({ text, onPress, backgroundColor, color, borderWidth }) => {
 
     return (
@@ -12,6 +14,7 @@ const TouchableButton = ({ text, onPress, backgroundColor, color, borderWidth })
                 <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: color, }}>{text}</Text>
             </TouchableOpacity>
         </View>
+
     )
 }
 

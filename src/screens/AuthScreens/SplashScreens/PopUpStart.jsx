@@ -2,6 +2,7 @@ import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { PrimaryColor, SecondaryColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
+import { responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 
 const PopUpStart = () => {
 
@@ -15,11 +16,12 @@ const PopUpStart = () => {
                 <Image style={{ marginVertical: 100, width: width * 0.8, height: height * 0.3, resizeMode: "center" }} source={require("../../../assets/story-time.png")} />
             </View>
 
-            <View style={{ marginTop: 40, justifyContent: "center", alignItems: "center", }}>
+            <View style={{ marginTop: responsiveWidth(25), justifyContent: "center", alignItems: "center", }}>
                 <TouchableOpacity onPress={() => navigation.navigate("SplashScreen")}>
                     <Image style={{ marginVertical: 14, width: width * 0.3, height: height * 0.12, resizeMode: "center" }} source={require("../../../assets/play-btn.png")} />
                 </TouchableOpacity>
-                <Text style={{ color: PrimaryColor, fontSize: 30, textAlign: "center", fontWeight: "600" }}>Get Started</Text>
+                {/* <Text style={{ color: PrimaryColor, fontSize: 30, textAlign: "center", fontWeight: "600" }}>Get Started</Text> */}
+                <Image style={{ resizeMode: "center", width: responsiveWidth(50), height: responsiveHeight(5), }} source={require("../../../assets/Get-Started-img.png")} />
             </View>
 
         </ImageBackground>

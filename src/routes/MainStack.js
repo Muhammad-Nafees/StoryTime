@@ -1,8 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import PopUpStart from "../screens/AuthScreens/SplashScreens/PopUpStart";
-import SplashScreen from "../screens/AuthScreens/SplashScreens/SplashScreen";
+import PopUpStart from "../screens/AuthScreens/splashScreens/PopUpStart";
+import SplashScreen from "../screens/AuthScreens/splashScreens/SplashScreen";
 import Home from "../screens/HomeScreens/Home";
+import Navigations from "./Navigations";
 
 
 
@@ -11,11 +12,8 @@ const MainStack = () => {
     const Stack = createStackNavigator()
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={Home} />
-                {/* <Stack.Screen name="SplashScreen" component={SplashScreen} /> */}
-            </Stack.Navigator>
+        <NavigationContainer independent={true}>
+            <Navigations />
         </NavigationContainer>
     )
 

@@ -14,7 +14,7 @@ const SplashScreen = () => {
 
     return (
 
-        <ImageBackground style={styles.container} source={require("../../../assets/splash-screen-bg.png")}>
+        <ImageBackground style={styles.container} source={require("../../../assets/splash-bg.png")}>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={require("../../../assets/story-time.png")} />
             </View>

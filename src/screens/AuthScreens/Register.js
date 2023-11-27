@@ -11,6 +11,7 @@ import PhoneInput
     from 'react-native-phone-input';
 import CountryPicker
     from 'react-native-country-picker-modal';
+import PhoneNumber from '../../components/PhoneNumber';
 
 const Register = () => {
     const navigation = useNavigation()
@@ -70,18 +71,9 @@ const Register = () => {
                         <Text style={{ color: FourthColor, fontWeight: "600" }}>Phone Number</Text>
                     </View>
 
+                    <PhoneNumber value={phoneNumber} onchangeState={setPhoneNumber} onPressFlag={toggleCountryPicker} />
                     <View>
 
-                        <View style={{ justifyContent: "center", alignItems: "center", marginTop: responsiveWidth(5) }}>
-                            <PhoneInput
-                                value={phoneNumber}
-                                onChangePhoneNumber={(number) => setPhoneNumber(number)}
-                                onPressFlag={toggleCountryPicker}
-                                style={{ ...styles.phoneInput, }}
-                                textStyle={{ color: "#000" }}
-                                flagStyle={{}}
-                            />
-                        </View>
 
                     </View>
                     {countryPickerVisible && (
@@ -97,6 +89,8 @@ const Register = () => {
                         />
                     )}
                 </View>
+
+
                 <View>
                     <View style={{ width: "90%", marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
@@ -104,13 +98,11 @@ const Register = () => {
                     <TextInputField placeholderText="Type here" />
                 </View>
                 <View style={{ marginTop: responsiveWidth(6) }}>
-                    <TouchableButton backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate("RegisterUserInformation")} backgroundColor="#395E66" color="#FFF" text="Next" />
                     <View style={{ marginVertical: 7 }}>
-                        <TouchableButton backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                        <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                     </View>
                 </View>
-
-
 
             </View>
 
@@ -150,15 +142,6 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 
-    phoneInput: {
-        height: responsiveHeight(6.5),
-        width: '80%',
-        marginBottom: 20,
-        paddingHorizontal: 10,
-        borderRadius: 12,
-        backgroundColor: TextinputColor,
-        color: FourthColor
-    },
     countryButton: {
         marginBottom: 20,
     },
