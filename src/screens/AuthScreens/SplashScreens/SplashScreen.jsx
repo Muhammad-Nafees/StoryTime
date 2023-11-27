@@ -6,7 +6,6 @@ import AuthImage from '../../../components/AuthImage';
 import TouchableButton from '../../../components/TouchableButton';
 
 
-
 const SplashScreen = () => {
 
     const { width, height } = Dimensions.get('window');

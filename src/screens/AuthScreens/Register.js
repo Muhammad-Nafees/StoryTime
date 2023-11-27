@@ -6,7 +6,6 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-// import { Image } from 'react-native-reanimated/lib/typescript/Animated';
 import PhoneInput
     from 'react-native-phone-input';
 import CountryPicker
@@ -33,7 +32,6 @@ const Register = () => {
     console.log(selectedCountry)
     console.log(countryPickerVisible)
     // console.log(selectedCountry)
-
 
     const onSubmit = () => {
         // Perform your desired action with 
@@ -74,7 +72,6 @@ const Register = () => {
                     <PhoneNumber value={phoneNumber} onchangeState={setPhoneNumber} onPressFlag={toggleCountryPicker} />
                     <View>
 
-
                     </View>
                     {countryPickerVisible && (
                         <CountryPicker
@@ -89,6 +86,7 @@ const Register = () => {
                         />
                     )}
                 </View>
+
 
 
                 <View>
@@ -109,6 +107,7 @@ const Register = () => {
         </View>
     )
 }
+
 
 export default Register;
 

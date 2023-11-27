@@ -30,6 +30,7 @@ const ForgetConfirmPassword = () => {
 
             <View>
                 <View>
+
                     {/*New Password----------- */}
 
                     <View style={{ width: "90%", marginLeft: "auto" }}>
@@ -48,15 +49,12 @@ const ForgetConfirmPassword = () => {
                 </View>
 
 
-                {/* Next and Back------------ */}
+                {/* Next------------ */}
 
-                <View style={{ marginTop: responsiveWidth(60) }}>
-                    <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Resend </Text>
-                        <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", }}> in 30s</Text>
-                    </View>
-                    <TouchableButton backgroundColor="#395E66" color="#FFF" text="Next" />
+                <View style={{ marginTop: responsiveWidth(75) }}>
+                    <TouchableButton backgroundColor="#395E66" color="#FFF" text="Save" />
                 </View>
+
 
             </View>
 

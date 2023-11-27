@@ -33,7 +33,7 @@ const ForgetEmail = () => {
 
                 {/* Confirm Password------------ */}
 
-                {/* Next and Back------------ */}
+                {/* Next------------ */}
 
                 <View style={{ marginTop: responsiveWidth(85) }}>
                     <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use phone number instead</Text>
