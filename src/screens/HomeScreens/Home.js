@@ -3,6 +3,7 @@ import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, Style
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import FrameContent from '../../components/FrameContent';
 
 
 
@@ -91,42 +92,8 @@ const Home = () => {
                 </View>
             </View>
             {/* Frame Content Start */}
-            <View style={{ justifyContent: "center", alignItems: "center", marginTop: responsiveWidth(6) }}>
-                <View style={{ width: "90%", }}>
-                    <ImageBackground style={{ width: "100%", height: 220, justifyContent: "center", alignItems: "center" }} resizeMode="center" source={require("../../assets/home-frame.png")}>
-                        <View style={{ backgroundColor: TextColorGreen, justifyContent: "center", alignItems: "center", width: "79.5%", height: 195, marginLeft: 4 }}>
-                            <View style={{ backgroundColor: pinkColor, width: "88%", height: 185, marginTop: responsiveWidth(1.5), borderRadius: 18 }}>
+            <FrameContent />
 
-                                <View style={{ marginTop: responsiveWidth(1), marginLeft: "auto", width: "95%" }}>
-                                    <View style={{ flexDirection: "row", width: "40%", justifyContent: "space-between", alignItems: "center" }}>
-                                        <Image style={{ width: 26, height: 26, resizeMode: "center" }} source={require("../../assets/avatar-inn.png")} />
-                                        <Text style={{ color: "#FFF" }}>Lilibeth</Text>
-                                    </View>
-
-                                    <View style={{ marginTop: responsiveWidth(4) }}>
-                                        <Text style={{ fontSize: 13, color: "#FFF", lineHeight: 16 }}>
-                                            Suddenly his friend saw him start to move strangely. The shark attacked Wilson so hard his entire body flew out of the water, and multiple eyewitnesses observed the whole situation. His friend and some others grabbed him when the shark attempted to drag him under.
-                                        </Text>
-                                    </View>
-
-                                </View>
-
-                            </View>
-
-                        </View>
-
-                    </ImageBackground>
-
-                    {/* <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        <View style={{ width: "80%", backgroundColor: "#E44173", height: 55 }}>
-                            {/* <Image source={require("../../assets/")}/>
-                                 <Image/>
-                                 <Image/> */}
-                    {/* </View>
-                    </View> */}
-
-                </View>
-            </View>
 
         </ImageBackground>
     )

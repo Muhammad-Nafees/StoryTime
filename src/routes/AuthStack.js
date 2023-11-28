@@ -10,6 +10,7 @@ import ForgetEmail from "../screens/AuthScreens/forgetscreens/ForgetEmail";
 import ForgetPhoneNumber from "../screens/AuthScreens/forgetscreens/ForgetPhoneNumber";
 import OtpForget from "../screens/AuthScreens/forgetscreens/OtpForget";
 import ForgetConfirmPassword from "../screens/AuthScreens/forgetscreens/ForgetConfirmPassword";
+import FrameContent from "../components/FrameContent";
 
 
 const AuthStack = () => {
@@ -29,6 +30,7 @@ const AuthStack = () => {
                 <Stack.Screen name="ForgetPhoneNumber" component={ForgetPhoneNumber} options={{ headerShown: false }} />
                 <Stack.Screen name="OtpForget" component={OtpForget} options={{ headerShown: false }} />
                 <Stack.Screen name="ForgetConfirmPassword" component={ForgetConfirmPassword} options={{ headerShown: false }} />
+                <Stack.Screen name="FrameContent" component={FrameContent} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )
