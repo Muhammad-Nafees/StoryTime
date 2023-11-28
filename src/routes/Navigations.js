@@ -3,7 +3,8 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import PopUpStart from "../screens/AuthScreens/splashScreens/PopUpStart";
 import SplashScreen from "../screens/AuthScreens/splashScreens/SplashScreen";
 import Home from "../screens/HomeScreens/Home";
-
+import  {createBottomTabNavigator} from "@react-navigation/bottom-tabs"
+import { View } from "react-native-reanimated/lib/typescript/Animated";
 
 
 const Navigations = () => {
@@ -16,6 +17,17 @@ const Navigations = () => {
         </Stack.Navigator>
     )
 
+}
+
+const BottomTavNavigator=()=>{
+     
+      const Tab = createBottomTabNavigator()
+
+     return(
+            <Tab.Navigator>
+                 <Tab.Screen name=""/>
+            </Tab.Navigator>
+     )
 }
 
 export default Navigations;

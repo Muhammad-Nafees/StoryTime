@@ -21,6 +21,7 @@ const ForgetConfirmPassword = () => {
 
 
     return (
+
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
@@ -39,23 +40,21 @@ const ForgetConfirmPassword = () => {
 
                     <TextInputField onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
                     {/* Confirm Password------------ */}
+
                     <View style={{}}>
                         <View style={{ width: "90%", marginLeft: "auto" }}>
                             <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
                         </View>
                         <TextInputField onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
                     </View>
-
                 </View>
-
 
                 {/* Next------------ */}
 
                 <View style={{ marginTop: responsiveWidth(75) }}>
                     <TouchableButton backgroundColor="#395E66" color="#FFF" text="Save" />
                 </View>
-
-
+    
             </View>
 
         </View>

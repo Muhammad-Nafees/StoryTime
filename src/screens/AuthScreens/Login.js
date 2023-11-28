@@ -61,7 +61,7 @@ const Login = () => {
                             placeholderText="Type here"
                         />
                         <View style={{ width: '90%', marginLeft: 'auto' }}>
-                            {errors.username && <Text style={{ color: 'red' }}>{errors.username}</Text>}
+                            {errors.username && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.username}</Text>}
                         </View>
                         <View style={{ width: '90%', marginLeft: 'auto' }}>
                             <Text style={{ color: FourthColor, fontWeight: '600' }}>Password</Text>
@@ -75,10 +75,10 @@ const Login = () => {
                             type="password"
                         />
                         <View style={{ width: '90%', marginLeft: 'auto' }}>
-                            {errors.password && <Text style={{ color: 'red' }}>{errors.password}</Text>}
+                            {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate('ForgetEmail')} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                            <Text style={{ color: FourthColor, fontWeight: '600' }}>Forgot password?</Text>
+                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Forgot password?</Text>
                         </TouchableOpacity>
                         <View style={{ marginTop: 14 }}>
                             <TouchableButton onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
@@ -123,7 +123,7 @@ const Login = () => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: '100%',
+        height: responsiveHeight(100),
         backgroundColor: SecondaryColor,
     },
     text: {

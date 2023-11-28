@@ -38,6 +38,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
         }
     };
 
+    
     return (
         <View style={styles.container}>
             <View style={styles.img_container}>
