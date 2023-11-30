@@ -37,6 +37,7 @@ export default SplashScreen;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
+        flex: 1,
         width: "100%",
         height: "100%",
     },

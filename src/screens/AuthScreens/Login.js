@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: responsiveHeight(100),
         backgroundColor: SecondaryColor,
+        flex: 1,
     },
     text: {
         fontSize: responsiveFontSize(1.8),

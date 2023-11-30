@@ -14,7 +14,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
                     onChangeText={onChangeText}
                     value={value}
                     placeholderTextColor="#AAAAAA"
-                    secureTextEntry={!showPassword}
+                    secureTextEntry={type == "password" ? !showPassword : null}
                     style={{ color: "#000", width: type == "password" ? 235 : 260 }} />
 
                 {

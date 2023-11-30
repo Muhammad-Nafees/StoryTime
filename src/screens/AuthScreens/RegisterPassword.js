@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
-        backgroundColor: SecondaryColor
+        backgroundColor: SecondaryColor,
+        flex: 1,
     },
     text: {
         fontSize: responsiveFontSize(1.8),

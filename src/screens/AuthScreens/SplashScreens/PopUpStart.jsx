@@ -11,7 +11,7 @@ const PopUpStart = () => {
 
     return (
 
-        <ImageBackground style={styles.container} source={require("../../../assets/splash-screen-bg.png")}>
+        <ImageBackground style={[styles.container, { flex: 1 }]} source={require("../../../assets/splash-screen-bg.png")}>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <Image style={{ marginVertical: 100, width: width * 0.8, height: height * 0.3, resizeMode: "center" }} source={require("../../../assets/story-time.png")} />
             </View>
