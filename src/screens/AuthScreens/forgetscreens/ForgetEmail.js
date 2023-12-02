@@ -7,11 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
+import NavigationsString from '../../../constants/NavigationsString';
 
 
 
 const ForgetEmail = () => {
-
+    const { FORGET_PHONE_NO } = NavigationsString
     const navigation = useNavigation()
 
     return (
@@ -37,7 +38,7 @@ const ForgetEmail = () => {
 
                 <View style={{ marginTop: responsiveWidth(85) }}>
                     <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use phone number instead</Text>
-                    <TouchableButton onPress={() => navigation.navigate("ForgetPhoneNumber")} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate(FORGET_PHONE_NO)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
             </View>

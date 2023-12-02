@@ -4,11 +4,7 @@ import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputCol
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
-import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
-
-
 
 const RegisterPassword = () => {
 

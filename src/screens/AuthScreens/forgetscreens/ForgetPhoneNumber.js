@@ -8,6 +8,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
 import PhoneNumber from '../../../components/PhoneNumber';
+import NavigationsString from '../../../constants/NavigationsString';
 
 
 
@@ -15,6 +16,7 @@ const ForgetPhoneNumber = () => {
 
     const navigation = useNavigation()
     const [phoneNumber, setPhoneNumber] = useState('');
+    const { OTP_FORGET } = NavigationsString
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
@@ -45,7 +47,7 @@ const ForgetPhoneNumber = () => {
 
                 <View style={{ marginTop: responsiveWidth(80) }}>
                     <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use email address instead</Text>
-                    <TouchableButton onPress={() => navigation.navigate("OtpForget")} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate(OTP_FORGET)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
             </View>

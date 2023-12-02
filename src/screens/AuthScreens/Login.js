@@ -10,6 +10,10 @@ import { login } from '../../../store/slices/User_Slice';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import NavigationsString from '../../constants/NavigationsString';
+
+
+
 
 const SignInSchema = Yup.object().shape({
     username: Yup.string().min(4, 'Too Short').max(40, 'Too Long!').required('Please Enter Your Full Name'),
@@ -26,6 +30,7 @@ const Login = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
+    const { REGISTER, FORGET_EMAIL } = NavigationsString
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword); // Toggle the state between true and false
@@ -77,7 +82,7 @@ const Login = () => {
                         <View style={{ width: '90%', marginLeft: 'auto' }}>
                             {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
                         </View>
-                        <TouchableOpacity onPress={() => navigation.navigate('ForgetEmail')} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                             <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Forgot password?</Text>
                         </TouchableOpacity>
                         <View style={{ marginTop: 14 }}>
@@ -95,6 +100,7 @@ const Login = () => {
                                 </TouchableOpacity>
                             </View>
                         </View>
+
                         <View>
                             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 12 }}>
                                 <Text style={[styles.text, { color: FourthColor, fontWeight: '400' }]}>or login with</Text>
@@ -107,7 +113,7 @@ const Login = () => {
 
                             <View style={{ marginTop: responsiveWidth(6), flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={[styles.text, { color: FourthColor }]}>Don’t have an account yet? </Text>
-                                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                                <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
                                     <Text style={[styles.text, { color: TextColorGreen, fontWeight: '600' }]}>Create one</Text>
                                 </TouchableOpacity>
                             </View>

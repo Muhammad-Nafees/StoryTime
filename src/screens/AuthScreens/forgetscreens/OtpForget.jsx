@@ -5,10 +5,12 @@ import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputCol
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TouchableButton from "../../../components/TouchableButton";
 import { useNavigation } from "@react-navigation/native"
+import NavigationsString from "../../../constants/NavigationsString";
+
 
 const OtpForget = ({ length, value, disabled, onChange, }) => {
     const navigation = useNavigation()
-
+    const { FORGET_CONFIRM_PASSWORD } = NavigationsString
     const inputRefs = useRef([]);
 
     // const onChangeValue = (text, index) => {
@@ -38,7 +40,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
         }
     };
 
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.img_container}>
@@ -92,7 +94,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                         <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Resend </Text>
                         <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", }}> in 30s</Text>
                     </View>
-                    <TouchableButton onPress={() => navigation.navigate("ForgetConfirmPassword")} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate(FORGET_CONFIRM_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
             </View>

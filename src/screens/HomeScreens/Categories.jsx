@@ -32,7 +32,7 @@ const FlatListData = [
 
 
 
-const Home = () => {
+const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
@@ -94,12 +94,12 @@ const Home = () => {
                 </View>
 
                 {/* Frame Content Start----------- */}
+
                 <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
                 <FrameContent type="imp_bg_img" profile_text="Sophia" backgroundImage={require("../../assets/sophia-thumbnail.png")} profileImage={require("../../assets/sophia-img.png")} />
                 <FrameContent type="imp_bg_img" profile_text="Alfred" backgroundImage={require("../../assets/porter-thumbnail.png")} profileImage={require("../../assets/porter-img.png")} />
                 <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
                 <FrameContent type="imp_bg_img" profile_text="Alfred" backgroundImage={require("../../assets/alfred-thumbnail.png")} profileImage={require("../../assets/alfred-img.png")} />
-
 
                 {/* Frame Content Close----------- */}
 
@@ -109,7 +109,7 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Categories;
 
 
 const styles = StyleSheet.create({

@@ -11,10 +11,11 @@ import PhoneInput
 import CountryPicker
     from 'react-native-country-picker-modal';
 import PhoneNumber from '../../components/PhoneNumber';
+import NavigationsString from '../../constants/NavigationsString';
 
 const Register = () => {
     const navigation = useNavigation()
-
+    const { REGISTER_USER_INFO } = NavigationsString
     const [phoneNumber, setPhoneNumber] = useState('');
     const [countryCode, setCountryCode] = useState('');
     const [selectedCountry, setSelectedCountry] =
@@ -87,16 +88,15 @@ const Register = () => {
                     )}
                 </View>
 
-
-
                 <View>
                     <View style={{ width: "90%", marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
                     </View>
                     <TextInputField placeholderText="Type here" />
                 </View>
+
                 <View style={{ marginTop: responsiveWidth(6) }}>
-                    <TouchableButton onPress={() => navigation.navigate("RegisterUserInformation")} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate(REGISTER_USER_INFO)} backgroundColor="#395E66" color="#FFF" text="Next" />
                     <View style={{ marginVertical: 7 }}>
                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                     </View>
@@ -107,6 +107,7 @@ const Register = () => {
         </View>
     )
 }
+
 
 
 export default Register;

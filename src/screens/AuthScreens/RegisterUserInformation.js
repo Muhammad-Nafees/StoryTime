@@ -7,6 +7,7 @@ import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import NavigationsString from '../../constants/NavigationsString';
 
 
 
@@ -21,7 +22,7 @@ const itemscity = [
 
 
 const RegisterUserInformation = () => {
-
+    const { REGISTER_PASSWORD } = NavigationsString
     const [isOpen, setIsOpen] = useState(false)
     const [currentvalue, setCurrentValue] = useState(false)
     console.log("CuRe", currentvalue)
@@ -94,7 +95,7 @@ const RegisterUserInformation = () => {
                 {/* Next and Back------------ */}
 
                 <View style={{ marginTop: responsiveWidth(30) }}>
-                    <TouchableButton onPress={() => navigation.navigate("RegisterPassword")} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => navigation.navigate(REGISTER_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
                     <View style={{ marginVertical: 7 }}>
                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                     </View>
