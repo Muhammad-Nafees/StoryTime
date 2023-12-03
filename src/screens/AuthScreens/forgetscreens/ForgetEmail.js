@@ -8,26 +8,28 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
-
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { Img_Paths } from '../../../assets/Imagepaths';
 
 
 const ForgetEmail = () => {
     const { FORGET_PHONE_NO } = NavigationsString
+    const { FORGET_BG_IMG } = Img_Paths
     const navigation = useNavigation()
 
     return (
 
         <View style={styles.container}>
             <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
+                <Image style={styles.img_child} source={FORGET_BG_IMG} />
             </View>
 
             {/* Password------------ */}
 
             <View>
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
                     </View>
                     <TextInputField placeholderText="Type here" />
                 </View>
@@ -36,8 +38,8 @@ const ForgetEmail = () => {
 
                 {/* Next------------ */}
 
-                <View style={{ marginTop: responsiveWidth(85) }}>
-                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use phone number instead</Text>
+                <View>
+                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(20), fontSize: responsiveFontSize(1.9) }}>Use phone number instead</Text>
                     <TouchableButton onPress={() => navigation.navigate(FORGET_PHONE_NO)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -68,14 +70,6 @@ const styles = StyleSheet.create({
         width: responsiveWidth(50),
         height: responsiveHeight(20),
         resizeMode: "center"
-    },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
     },
 
 })

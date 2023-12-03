@@ -12,8 +12,12 @@ import CountryPicker
     from 'react-native-country-picker-modal';
 import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 const Register = () => {
+    const { CREATE_ACCOUNT_ICON } = Img_Paths;
+
     const navigation = useNavigation()
     const { REGISTER_USER_INFO } = NavigationsString
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -30,46 +34,32 @@ const Register = () => {
         setCountryPickerVisible(false);
     };
 
-    console.log(selectedCountry)
-    console.log(countryPickerVisible)
-    // console.log(selectedCountry)
-
-    const onSubmit = () => {
-        // Perform your desired action with 
-        // the phone number and country code 
-        Alert.alert('Form Submitted',
-            `Phone Number: ${phoneNumber} 
-                    \nCountry Code: ${countryCode}`);
-    };
-
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
-
     return (
         <View style={styles.container}>
 
             <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../assets/create-account-img.png")} />
+                <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
             </View>
 
             <View>
-                <View style={{ width: "90%", marginLeft: "auto" }}>
-                    <Text style={{ color: FourthColor, fontWeight: "600" }}>First Name</Text>
+                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
                 </View>
                 <TextInputField placeholderText="Type here" />
 
-                <View style={{ width: "90%", marginLeft: "auto" }}>
-                    <Text style={{ color: FourthColor, fontWeight: "600" }}>Last Name</Text>
+                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
                 </View>
 
                 <TextInputField placeholderText="Type here" />
 
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Phone Number</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                     </View>
-
                     <PhoneNumber value={phoneNumber} onchangeState={setPhoneNumber} onPressFlag={toggleCountryPicker} />
                     <View>
 
@@ -89,13 +79,13 @@ const Register = () => {
                 </View>
 
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
                     </View>
                     <TextInputField placeholderText="Type here" />
                 </View>
 
-                <View style={{ marginTop: responsiveWidth(6) }}>
+                <View style={{ paddingTop: responsiveWidth(6) }}>
                     <TouchableButton onPress={() => navigation.navigate(REGISTER_USER_INFO)} backgroundColor="#395E66" color="#FFF" text="Next" />
                     <View style={{ marginVertical: 7 }}>
                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
@@ -125,37 +115,13 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
     img_child: {
         width: responsiveWidth(50),
         height: responsiveHeight(20),
-        resizeMode: "center"
-    },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-
-    countryButton: {
-        marginBottom: 20,
-    },
-    countryPickerButton: {
-        borderRadius: 5,
-        backgroundColor: 'red',
-        marginBottom: 20,
-    },
-    countryPickerCloseButton: {
-        width: 20,
-        height: 20,
-    },
-    submitButton: {
-        width: '100%',
+        resizeMode: "center",
     },
 })

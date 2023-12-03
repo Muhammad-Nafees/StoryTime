@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Image, StyleSheet } from "react-native"
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 
 const AuthImage = ({ ImageSource, onPress }) => {
@@ -18,9 +18,9 @@ export default AuthImage
 
 const styles = StyleSheet.create({
     container: {
-        width: "75%",
+        width: responsiveWidth(70),
         justifyContent: "center",
         alignItems: "center",
-        marginVertical: 5,
+        paddingVertical: moderateVerticalScale(5),
     }
 })

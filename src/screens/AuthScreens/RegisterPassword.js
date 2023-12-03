@@ -5,6 +5,8 @@ import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-nat
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import { useNavigation } from '@react-navigation/native';
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+
 
 const RegisterPassword = () => {
 
@@ -22,7 +24,6 @@ const RegisterPassword = () => {
 
 
 
-
     return (
 
         <View style={styles.container}>
@@ -34,8 +35,8 @@ const RegisterPassword = () => {
 
             <View>
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Password</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Password</Text>
                     </View>
                     <TextInputField onPress={toggleconfirmshowpassword} showPassword={confirmShowPassword} type="password" placeholderText="Type here" />
                 </View>
@@ -43,7 +44,7 @@ const RegisterPassword = () => {
                 {/* Confirm Password------------ */}
 
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
                     </View>
                     <TextInputField onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Type here" />
@@ -51,7 +52,7 @@ const RegisterPassword = () => {
 
                 {/* Next and Back------------ */}
 
-                <View style={{ marginTop: responsiveWidth(60) }}>
+                <View style={{ paddingTop: responsiveWidth(60) }}>
                     <TouchableButton backgroundColor="#395E66" color="#FFF" text="Create" />
                     <View style={{ marginVertical: 7 }}>
                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
@@ -63,6 +64,7 @@ const RegisterPassword = () => {
         </View>
     )
 }
+
 
 
 const styles = StyleSheet.create({
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -86,18 +88,7 @@ const styles = StyleSheet.create({
         height: responsiveHeight(20),
         resizeMode: "center"
     },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
 
 })
 
-
 export default RegisterPassword;
-
-

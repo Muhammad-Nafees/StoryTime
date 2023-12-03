@@ -6,25 +6,16 @@ import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-nat
 import TouchableButton from "../../../components/TouchableButton";
 import { useNavigation } from "@react-navigation/native"
 import NavigationsString from "../../../constants/NavigationsString";
-
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { Img_Paths } from "../../../assets/Imagepaths";
 
 const OtpForget = ({ length, value, disabled, onChange, }) => {
     const navigation = useNavigation()
     const { FORGET_CONFIRM_PASSWORD } = NavigationsString
+    const { FORGET_BG_IMG } = Img_Paths
     const inputRefs = useRef([]);
 
-    // const onChangeValue = (text, index) => {
-    //     const newValue = value?.map((item, valueindex) => {
-    //         if (valueindex === index) {
-    //             return text;
-    //         }
-    //         return item;
-    //     });
-    //     onChange(newValue);
-    // };
-
     const handlechange = (text, index) => {
-        // onChangeValue(text, index)
         if (text.length !== 0) {
             return inputRefs.current[index + 1]?.focus();
         }
@@ -41,10 +32,11 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
     };
 
 
+
     return (
         <View style={styles.container}>
             <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
+                <Image style={styles.img_child} source={FORGET_BG_IMG} />
             </View>
 
             {/* Code------------ */}
@@ -52,13 +44,13 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
             <View>
                 <View>
                     <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Code</Text>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Code</Text>
                     </View>
 
                     {/* OtpPassword----------- */}
                     <View style={{ justifyContent: "center", alignItems: "center", marginTop: responsiveWidth(5) }}>
 
-                        <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
+                        <View style={{ width: responsiveWidth(80), flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
                             {[...new Array(6)].map((item, index) => (
                                 <TextInput
                                     ref={ref => {
@@ -83,6 +75,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                     </View>
 
 
+
                 </View>
 
                 {/* Confirm Password------------ */}
@@ -91,8 +84,8 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Resend </Text>
-                        <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", }}> in 30s</Text>
+                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
+                        <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>
                     </View>
                     <TouchableButton onPress={() => navigation.navigate(FORGET_CONFIRM_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
@@ -102,6 +95,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
         </View>
     )
 }
+
 
 
 const styles = StyleSheet.create({
@@ -116,7 +110,7 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -125,14 +119,7 @@ const styles = StyleSheet.create({
         height: responsiveHeight(20),
         resizeMode: "center"
     },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
+
 })
 
 export default OtpForget;

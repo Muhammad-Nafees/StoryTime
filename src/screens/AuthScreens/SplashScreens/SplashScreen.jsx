@@ -5,8 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import AuthImage from '../../../components/AuthImage';
 import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
+import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 
 const SplashScreen = () => {
+    const { SPLASH_SCREEN_IMAGE, STORY_TIME_IMG, BG_FRAME, LOGIN_IMG } = Img_Paths
     const { LOGIN } = NavigationsString
 
     const { width, height } = Dimensions.get('window');
@@ -14,14 +17,14 @@ const SplashScreen = () => {
 
 
     return (
-        <ImageBackground style={styles.container} source={require("../../../assets/splash-bg.png")}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={require("../../../assets/story-time.png")} />
+        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+            <View style={styles.story_time_container}>
+                <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={STORY_TIME_IMG} />
             </View>
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <AuthImage ImageSource={require("../../../assets/background-frame-img.png")} />
-                <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={require("../../../assets/login-img.png")} />
+                <AuthImage ImageSource={BG_FRAME} />
+                <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
 
             <View style={{ marginTop: 22 }}>
@@ -43,7 +46,11 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     img: {
-        marginVertical: 8,
-        resizeMode: "center"
+        marginVertical: moderateVerticalScale(8),
+        resizeMode: "center",
+    },
+    story_time_container: {
+        justifyContent: "center",
+        alignItems: "center"
     }
 })

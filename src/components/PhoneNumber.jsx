@@ -4,12 +4,13 @@ import PhoneInput
     from 'react-native-phone-input';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import { FourthColor, TextinputColor } from '../screens/Styles/Style';
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 const PhoneNumber = ({ value, onchangeState, onPressFlag }) => {
     return (
         <>
 
-            <View style={{ justifyContent: "center", alignItems: "center", marginTop: responsiveWidth(5) }}>
+            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
                 <PhoneInput
                     value={value}
                     onChangePhoneNumber={(number) => onchangeState(number)}
@@ -27,9 +28,8 @@ const styles = StyleSheet.create({
 
     phoneInput: {
         height: responsiveHeight(6.5),
-        width: '80%',
-        marginBottom: 20,
-        paddingHorizontal: 10,
+        width: responsiveWidth(80),
+        paddingHorizontal: moderateVerticalScale(20),
         borderRadius: 12,
         backgroundColor: TextinputColor,
         color: FourthColor

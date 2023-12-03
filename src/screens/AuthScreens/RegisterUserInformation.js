@@ -8,6 +8,7 @@ import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import NavigationsString from '../../constants/NavigationsString';
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 
 
@@ -25,12 +26,10 @@ const RegisterUserInformation = () => {
     const { REGISTER_PASSWORD } = NavigationsString
     const [isOpen, setIsOpen] = useState(false)
     const [currentvalue, setCurrentValue] = useState(false)
-    console.log("CuRe", currentvalue)
-    // const [isOpen,setIsOpen] = useState(false)
     const [isOpenCity, setIsOpenCity] = useState(false)
     const [currentvalueCity, setCurrentValueCity] = useState(false)
-
     const navigation = useNavigation()
+
 
     return (
         <View style={styles.container}>
@@ -42,13 +41,13 @@ const RegisterUserInformation = () => {
             {/* City------------ */}
 
             <View>
-                <View style={{ width: "90%", marginLeft: "auto" }}>
-                    <Text style={{ color: FourthColor, fontWeight: "600" }}>City</Text>
+                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                    <Text style={[styles.text, { color: FourthColor, }]}>City</Text>
                 </View>
-                <View style={{ justifyContent: "center", alignItems: "center", zIndex: currentvalue == false ? 1000 : 1000, marginVertical: 14 }}>
+                <View style={{ justifyContent: "center", alignItems: "center", zIndex: currentvalue == false ? 1000 : 1000, paddingVertical: moderateVerticalScale(14) }}>
                     <DropDownPicker
                         style={{ borderWidth: 0, backgroundColor: TextinputColor, }}
-                        containerStyle={{ width: "80%", }}
+                        containerStyle={{ width: responsiveWidth(80), }}
                         items={itemscity}
                         showTickIcon={false}
                         open={isOpenCity}
@@ -62,15 +61,15 @@ const RegisterUserInformation = () => {
 
                 {/* State----------- */}
 
-                <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>State</Text>
+                <View style={{}}>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={[styles.text, { color: FourthColor, }]}>State</Text>
                     </View>
                     {/* <TextInputField placeholderText="Type here" /> */}
-                    <View style={{ justifyContent: "center", alignItems: "center", zIndex: 999, marginVertical: 14 }}>
+                    <View style={{ justifyContent: "center", alignItems: "center", zIndex: 999, paddingVertical: moderateVerticalScale(14) }}>
                         <DropDownPicker
                             style={{ borderWidth: 0, backgroundColor: TextinputColor }}
-                            containerStyle={{ width: "80%", }}
+                            containerStyle={{ width: responsiveWidth(80), }}
                             items={items}
                             showTickIcon={false}
                             open={isOpen}
@@ -86,22 +85,22 @@ const RegisterUserInformation = () => {
                 {/* Zip------------ */}
 
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Zip Code</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={[styles.text, { color: FourthColor, }]}>Zip Code</Text>
                     </View>
                     <TextInputField placeholderText="Type here" />
                 </View>
-
-                {/* Next and Back------------ */}
-
-                <View style={{ marginTop: responsiveWidth(30) }}>
-                    <TouchableButton onPress={() => navigation.navigate(REGISTER_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
-                    <View style={{ marginVertical: 7 }}>
-                        <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
-                    </View>
-                </View>
-
             </View>
+
+            {/* Next and Back------------ */}
+
+            <View style={{ marginTop: responsiveWidth(30) }}>
+                <TouchableButton onPress={() => navigation.navigate(REGISTER_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
+                <View style={{ paddingVertical: moderateVerticalScale(7) }}>
+                    <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                </View>
+            </View>
+
 
         </View>
     )
@@ -118,11 +117,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        fontSize: responsiveFontSize(1.8),
-        fontWeight: "400"
+        fontSize: responsiveFontSize(1.9),
+        fontWeight: "600"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -130,14 +129,6 @@ const styles = StyleSheet.create({
         width: responsiveWidth(50),
         height: responsiveHeight(20),
         resizeMode: "center"
-    },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
     },
 
 

@@ -1,11 +1,13 @@
 import React from "react"
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { SecondaryColor } from "../screens/Styles/Style";
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 const SocialsLogin = ({ ImageSource }) => {
     return (
-        <TouchableOpacity style={{ marginVertical: 20, borderWidth: 1, borderColor: "#DEDEDE", paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12, width: "30%", justifyContent: "center", alignItems: "center" }}>
-            <Image style={{ width: 24, height: 24, resizeMode: "center" }} source={ImageSource} />
+        <TouchableOpacity style={{ borderWidth: 1, borderColor: "#DEDEDE", paddingVertical: moderateVerticalScale(14), paddingHorizontal: moderateVerticalScale(18), borderRadius: 12, width: responsiveWidth(24), justifyContent: "center", alignItems: "center" }}>
+            <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), resizeMode: "center" }} source={ImageSource} />
         </TouchableOpacity>
     )
 }

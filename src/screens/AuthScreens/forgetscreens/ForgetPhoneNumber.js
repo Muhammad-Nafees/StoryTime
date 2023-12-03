@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
-
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
 import PhoneNumber from '../../../components/PhoneNumber';
 import NavigationsString from '../../../constants/NavigationsString';
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { Img_Paths } from '../../../assets/Imagepaths';
 
 
 
@@ -17,6 +16,7 @@ const ForgetPhoneNumber = () => {
     const navigation = useNavigation()
     const [phoneNumber, setPhoneNumber] = useState('');
     const { OTP_FORGET } = NavigationsString
+    const { FORGET_BG_IMG } = Img_Paths
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
@@ -26,15 +26,15 @@ const ForgetPhoneNumber = () => {
 
         <View style={styles.container}>
             <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
+                <Image style={styles.img_child} source={FORGET_BG_IMG} />
             </View>
 
             {/* Password------------ */}
 
             <View>
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                     </View>
                     <PhoneNumber value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
                     {/* <TextInputField placeholderText="Type here" /> */}
@@ -46,7 +46,7 @@ const ForgetPhoneNumber = () => {
                 {/* Next and Back------------ */}
 
                 <View style={{ marginTop: responsiveWidth(80) }}>
-                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use email address instead</Text>
+                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
                     <TouchableButton onPress={() => navigation.navigate(OTP_FORGET)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -77,14 +77,6 @@ const styles = StyleSheet.create({
         width: responsiveWidth(50),
         height: responsiveHeight(20),
         resizeMode: "center"
-    },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
     },
 
 })

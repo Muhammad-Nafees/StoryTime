@@ -3,12 +3,13 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
 import { FourthColor, SecondaryColor, TextinputColor, ThirdColor } from '../screens/Styles/Style'
 import Icon from "react-native-vector-icons/Feather"
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value }) => {
 
     return (
 
-        <View style={{ justifyContent: "center", alignItems: "center", marginVertical: 12, }}>
+        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12), }}>
             <View style={{ flexDirection: type == "password" ? "row" : null, width: responsiveWidth(80), backgroundColor: TextinputColor, borderRadius: 12, height: responsiveHeight(6.5), justifyContent: "center", alignItems: "center", }}>
                 <TextInput placeholder={placeholderText}
                     onChangeText={onChangeText}

@@ -5,12 +5,16 @@ import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputCol
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TouchableButton from "../../../components/TouchableButton";
 import TextInputField from "../../../components/TextInputField";
+import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { Img_Paths } from "../../../assets/Imagepaths";
+
 
 const ForgetConfirmPassword = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
 
+    const { FORGET_BG_IMG } = Img_Paths
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -24,7 +28,7 @@ const ForgetConfirmPassword = () => {
 
         <View style={styles.container}>
             <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
+                <Image style={styles.img_child} source={FORGET_BG_IMG} />
             </View>
 
             {/* Code------------ */}
@@ -34,16 +38,16 @@ const ForgetConfirmPassword = () => {
 
                     {/*New Password----------- */}
 
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>New Password</Text>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
                     </View>
 
                     <TextInputField onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
                     {/* Confirm Password------------ */}
 
                     <View style={{}}>
-                        <View style={{ width: "90%", marginLeft: "auto" }}>
-                            <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
+                        <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                            <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Confirm Password</Text>
                         </View>
                         <TextInputField onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
                     </View>
@@ -51,10 +55,10 @@ const ForgetConfirmPassword = () => {
 
                 {/* Next------------ */}
 
-                <View style={{ marginTop: responsiveWidth(75) }}>
+                <View style={{ paddingTop: responsiveWidth(75) }}>
                     <TouchableButton backgroundColor="#395E66" color="#FFF" text="Save" />
                 </View>
-    
+
             </View>
 
         </View>
@@ -74,7 +78,7 @@ const styles = StyleSheet.create({
         fontWeight: "400"
     },
     img_container: {
-        marginVertical: 22,
+        paddingVertical: moderateVerticalScale(22),
         justifyContent: "center",
         alignItems: "center"
     },
@@ -83,14 +87,7 @@ const styles = StyleSheet.create({
         height: responsiveHeight(20),
         resizeMode: "center"
     },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
+
 })
 
 export default ForgetConfirmPassword;
