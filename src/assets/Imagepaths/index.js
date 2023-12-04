@@ -9,4 +9,7 @@ export const Img_Paths = {
     GOOGLE_ICON: require("../../assets/google-icon.png"),
     FACEBOOK_ICON: require("../../assets/facebook-icon.png"),
     APPLE_ICON: require("../../assets/apple-icon.png"),
+    HOME_FRAME: require("../../assets/home-frame.png"),
+    PLAY_STORY_IMG: require("../../assets/playstory-time.png"),
+    HOME_FOCUSED: require("../../assets/home_focused.png")
 }

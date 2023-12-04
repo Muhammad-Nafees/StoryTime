@@ -10,4 +10,8 @@ export default NavigationString = {
     OTP_FORGET: "OtpForget",
     FORGET_CONFIRM_PASSWORD: "ForgetConfirmPassword",
     FRAME_CONTENT: "FrameContent",
+    HOME: "Home",
+    CATEGORIES: "Categories",
+    PROFILE: "Profile",
+    PLAY_STORY_TIME: "PlayStoryTime"
 }

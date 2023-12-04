@@ -7,7 +7,7 @@ import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 const AuthImage = ({ ImageSource, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={styles.container}>
-            <Image style={{ width: responsiveWidth(76), height: responsiveHeight(26), justifyContent: "center", alignItems: "center" }} resizeMode="center" source={ImageSource} />
+            <Image style={styles.Auth_Img} resizeMode="center" source={ImageSource} />
         </TouchableOpacity>
 
     )
@@ -22,5 +22,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: moderateVerticalScale(5),
+    },
+    Auth_Img: {
+        width: responsiveWidth(76),
+        height: responsiveHeight(26),
+        justifyContent: "center",
+        alignItems: "center"
     }
 })

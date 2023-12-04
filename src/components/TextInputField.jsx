@@ -31,4 +31,4 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
     )
 }
 
-export default TextInputField
+export default TextInputField;

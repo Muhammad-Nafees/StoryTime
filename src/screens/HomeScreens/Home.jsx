@@ -2,8 +2,11 @@ import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import FrameContent from '../../components/FrameContent';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../assets/Imagepaths';
+import NavigationsString from '../../constants/NavigationsString';
 
 
 
@@ -31,21 +34,23 @@ const FlatListData = [
 ]
 
 
-
 const Home = () => {
 
     const { width, height } = Dimensions.get('window');
+    const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE } = Img_Paths
+    const { PLAY_STORY_TIME } = NavigationsString
     const navigation = useNavigation()
+
 
     return (
         <ScrollView>
-            <ImageBackground style={styles.container} source={require("../../assets/splash-bg.png")}>
+            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
                 <View style={styles.fisrt_row_container}>
                     <View>
-                        <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={require("../../assets/story-time.png")} />
+                        <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                     </View>
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "51%", }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: responsiveWidth(50), }}>
                         <TouchableOpacity>
                             <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                         </TouchableOpacity>
@@ -54,7 +59,7 @@ const Home = () => {
                             <Text style={{ color: "#E44173", fontSize: responsiveFontSize(1.9), fontWeight: "700" }}> Play with Friends </Text>
                         </View>
 
-                        <TouchableOpacity onPress={() => navigation.navigate("PlayStoryTime")}>
+                        <TouchableOpacity onPress={() => navigation.navigate(PLAY_STORY_TIME)}>
                             <Image style={[styles.pause_img, {
                                 width: width * 0.10,
                                 height: height * 0.05,
@@ -68,12 +73,12 @@ const Home = () => {
 
                 </View>
 
-                <View style={{ width: "95%", marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
+                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
                     <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
                 </View>
 
                 <View style={styles.flatlist_container}>
-                    <View style={{ width: "95%", marginLeft: "auto" }}>
+                    <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
 
                         <FlatList
                             data={FlatListData}
@@ -81,8 +86,8 @@ const Home = () => {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: 6, paddingHorizontal: 10 }}>
-                                            <Image style={{ width: 55, height: 55, resizeMode: "center" }} source={item.img} />
+                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(10), }}>
+                                            <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
                                         </TouchableOpacity>
                                         <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
                                     </View>
@@ -108,6 +113,7 @@ const Home = () => {
 
     )
 }
+
 
 export default Home;
 

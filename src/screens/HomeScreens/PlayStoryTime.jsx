@@ -1,26 +1,38 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
-import { PrimaryColor, SecondaryColor } from '../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
+import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
+import NavigationsString from '../../constants/NavigationsString';
+import { Img_Paths } from '../../assets/Imagepaths';
+
 
 
 const PlayStoryTime = () => {
-
+    const {
+        SPLASH_SCREEN_IMAGE,
+        PLAY_STORY_IMG,
+        STORY_TIME_IMG
+    } = Img_Paths
     const { width, height } = Dimensions.get('window');
+    const { CATEGORIES } = NavigationsString
     const navigation = useNavigation()
 
     return (
-        <ImageBackground style={[styles.container, { flex: 1 }]} source={require("../../assets/splash-screen-bg.png")}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Image style={{ marginVertical: 100, width: width * 0.8, height: height * 0.3, resizeMode: "center" }} source={require("../../assets/story-time.png")} />
+
+        <ImageBackground style={[styles.container]} source={SPLASH_SCREEN_IMAGE}>
+            <View style={styles.story_time_container}>
+                <Image style={[styles.story_time_img, {
+                    width: width * 0.8,
+                    height: height * 0.3,
+                }]} source={STORY_TIME_IMG} />
             </View>
 
-            <View style={{ marginTop: responsiveWidth(25), justifyContent: "center", alignItems: "center", }}>
-                <TouchableOpacity>
-                    <Image style={{ marginVertical: 14, width: width * 0.3, height: height * 0.12, resizeMode: "center" }} source={require("../../assets/play-btn.png")} />
+            <View style={styles.container_img}>
+                <TouchableOpacity onPress={() => navigation.navigate(CATEGORIES)}>
+                    <Image style={{ marginVertical: moderateVerticalScale(12), width: width * 0.3, height: height * 0.12, resizeMode: "center" }} source={require("../../assets/play-btn.png")} />
                 </TouchableOpacity>
-                <Image style={{ resizeMode: "center", width: responsiveWidth(50), height: responsiveHeight(5), }} source={require("../../assets/playstory-time.png")} />
+                <Image style={styles.get_started} source={PLAY_STORY_IMG} />
             </View>
 
         </ImageBackground>
@@ -31,11 +43,32 @@ const PlayStoryTime = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: SecondaryColor,
         width: "100%",
         height: "100%",
+        flex: 1,
+    },
+    container_img: {
+        marginTop: responsiveWidth(20),
+        justifyContent: "center",
+        alignItems: "center",
+
+    },
+    story_time_container: {
+        justifyContent: "center",
+        alignItems: "center",
+
+    },
+    story_time_img: {
+        marginVertical: moderateVerticalScale(100),
+        resizeMode: "center"
+    },
+    get_started: {
+        resizeMode: "center",
+        width: responsiveWidth(50),
+        height: responsiveHeight(5),
     }
 })
 
 
-export default PlayStoryTime
+export default PlayStoryTime;
+
