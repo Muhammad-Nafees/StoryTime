@@ -11,5 +11,20 @@ export const Img_Paths = {
     APPLE_ICON: require("../../assets/apple-icon.png"),
     HOME_FRAME: require("../../assets/home-frame.png"),
     PLAY_STORY_IMG: require("../../assets/playstory-time.png"),
-    HOME_FOCUSED: require("../../assets/home_focused.png")
+    HOME_FOCUSED: require("../../assets/home_focused.png"),
+    // Categories File
+    ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
+    BAG_IMG: require("../../assets/Categories-image/bag-icon.png"),
+    CALENDER_ICON: require("../../assets/Categories-image/calender-icon.png"),
+    ELEMENTS_ICON: require("../../assets/Categories-image/elements-icon.png"),
+    SHOPPING_ICON: require("../../assets/Categories-image/shopping-icon.png"),
+    TEAM_ICON: require("../../assets/Categories-image/team-icon.png"),
+    VEHICLE_ICON: require("../../assets/Categories-image/vehicle-icon.png"),
+    FRUIT_ICON: require("../../assets/Categories-image/fruit-icon.png"),
+    LEFT_ARROW_IMG: require("../../assets/Categories-image/left-arrow.png"),
+    LIFENEED_ICON: require("../../assets/Categories-image/lifeneed-icon.png"),
+    LOCATION_ICON: require("../../assets/Categories-image/location-icon.png"),
+    LUDO_ICON: require("../../assets/Categories-image/ludo-icon.png"),
+    COUNTRIES_ICON: require("../../assets/Categories-image/countries-icon.png"),
+    SCHOOL_ICON: require("../../assets/Categories-image/school-icon.png")
 }

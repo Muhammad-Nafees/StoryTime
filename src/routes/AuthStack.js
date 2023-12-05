@@ -16,7 +16,6 @@ import NavigationsString from "../constants/NavigationsString";
 import FrameContent from "../components/FrameContent";
 
 const AuthStack = () => {
-
     const {
         POPUP_START,
         SPLASH_SCREEN,
@@ -30,6 +29,7 @@ const AuthStack = () => {
         FORGET_CONFIRM_PASSWORD,
         FRAME_CONTENT
     } = NavigationsString
+    
     const Stack = createStackNavigator()
 
     return (

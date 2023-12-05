@@ -13,5 +13,7 @@ export default NavigationString = {
     HOME: "Home",
     CATEGORIES: "Categories",
     PROFILE: "Profile",
-    PLAY_STORY_TIME: "PlayStoryTime"
+    PLAY_STORY_TIME: "PlayStoryTime",
+    
+
 }
