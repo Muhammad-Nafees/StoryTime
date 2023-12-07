@@ -14,7 +14,10 @@ import StoryUsers from '../../components/StoryUsers';
 const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, COUNTRIES_ICON, ANIMAL_IMG, BAG_IMG, CALENDER_ICON, ELEMENTS_ICON, SHOPPING_ICON, TEAM_ICON, VEHICLE_ICON, FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON, LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths
+    const { SPLASH_SCREEN_IMAGE, COUNTRIES_ICON, ANIMAL_IMG, BAG_IMG,
+        CALENDER_ICON, ELEMENTS_ICON, SHOPPING_ICON, TEAM_ICON, VEHICLE_ICON,
+        FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON,
+        LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths
     const { PLAY_STORY_TIME } = NavigationsString
     const navigation = useNavigation()
 
@@ -91,6 +94,7 @@ const Categories = () => {
 
     )
 }
+
 
 
 const styles = StyleSheet.create({

@@ -4,6 +4,8 @@ import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-nat
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../assets/Imagepaths'
+import { useNavigation } from '@react-navigation/native'
+import NavigationsString from '../constants/NavigationsString'
 
 
 
@@ -11,7 +13,9 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
 
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
+    const navigation = useNavigation()
     const { HOME_FRAME } = Img_Paths
+    const { FEED_CHAT } = NavigationsString
 
     return (
 
@@ -68,26 +72,32 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
 
 
                             <View style={styles.third_container}>
-                                <View style={styles.fourth_container}>
-                                    <TouchableOpacity style={styles.first_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.second_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>456</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.third_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
 
-                            <View style={{ width: responsiveWidth(28), justifyContent: 'flex-end', alignItems: "flex-end" }}>
-                                <TouchableOpacity style={{ width: responsiveWidth(6), }}>
-                                    <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/three-dots-mod.png")} />
-                                </TouchableOpacity>
+                                <View style={[styles.fourth_container]}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(36) }}>
+                                        <TouchableOpacity style={styles.first_view}>
+                                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
+                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.second_view}>
+                                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
+                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>456</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
+                                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
+                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ width: responsiveWidth(20), justifyContent: 'flex-end', alignItems: "flex-end" }}>
+                                        <TouchableOpacity style={{ width: responsiveWidth(6), }}>
+                                            <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/three-dots-mod.png")} />
+                                        </TouchableOpacity>
+                                    </View>
+
+
+                                </View>
+
+
                             </View>
 
 

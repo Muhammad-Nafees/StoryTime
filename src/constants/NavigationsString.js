@@ -14,6 +14,5 @@ export default NavigationString = {
     CATEGORIES: "Categories",
     PROFILE: "Profile",
     PLAY_STORY_TIME: "PlayStoryTime",
-    
-
+    FEED_CHAT: "Feedchat",
 }

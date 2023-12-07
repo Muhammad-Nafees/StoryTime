@@ -26,5 +26,14 @@ export const Img_Paths = {
     LOCATION_ICON: require("../../assets/Categories-image/location-icon.png"),
     LUDO_ICON: require("../../assets/Categories-image/ludo-icon.png"),
     COUNTRIES_ICON: require("../../assets/Categories-image/countries-icon.png"),
-    SCHOOL_ICON: require("../../assets/Categories-image/school-icon.png")
+    SCHOOL_ICON: require("../../assets/Categories-image/school-icon.png"),
+    FRANKIN_DRAWEN: require("../../assets/frankin-drawin.png"),
+    SEARCH_ADD_ICON: require("../../assets/search-addfriends-icon.png"),
+    // Add Friends
+    FIRST_PROFILE: require("../../assets/first-profile.png"),
+    SECOND_PROFILE: require("../../assets/second-profile.png"),
+    THIRD_PROFILE: require("../../assets/third-profile.png"),
+    FOURTH_PROFILE: require("../../assets/fourth-profile.png"),
+    FIFTH_PROFILE: require("../../assets/fifth-profile.png"),
+    SIXTH_PROFILE: require("../../assets/sixth-profile.png"),
 }

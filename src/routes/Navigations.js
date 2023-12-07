@@ -9,19 +9,22 @@ import PlayStoryTime from "../screens/HomeScreens/PlayStoryTime";
 import NavigationsString from "../constants/NavigationsString";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { Img_Paths } from "../assets/Imagepaths";
+import FeedChat from "../screens/HomeScreens/FeedChat";
 
 const Navigations = () => {
     const Stack = createStackNavigator()
-    const { PLAY_STORY_TIME } = NavigationsString
+    const { PLAY_STORY_TIME, FEED_CHAT } = NavigationsString
 
     return (
         <Stack.Navigator initialRouteName="BottomTavNavigator">
             <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} options={{ headerShown: false }} />
             <Stack.Screen name={PLAY_STORY_TIME} component={PlayStoryTime} options={{ headerShown: false }} />
+            <Stack.Screen name={FEED_CHAT} component={FeedChat} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 
 }
+
 
 
 const BottomTavNavigator = () => {
