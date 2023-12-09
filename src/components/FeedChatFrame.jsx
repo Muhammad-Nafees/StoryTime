@@ -66,7 +66,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
 
                 {/* Comments Content */}
                 <View style={{ position: 'relative', bottom: responsiveWidth(5), right: moderateScale(6), }}>
-                    <View style={{ width: responsiveWidth(92), marginLeft: responsiveWidth(1), backgroundColor: "#E44173", height: responsiveHeight(55), justifyContent: "center", alignItems: "center", }}>
+                    <View style={{ width: responsiveWidth(92), marginLeft: responsiveWidth(1), backgroundColor: "#E44173", height: responsiveHeight(41), justifyContent: "center", alignItems: "center", }}>
 
                         <View style={styles.third_container}>
                             <View style={[styles.fourth_container]}>
@@ -94,15 +94,15 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                         </View>
 
 
-                        <View style={{ width: responsiveWidth(89), backgroundColor: "#FFF", height: responsiveHeight(45.5), }}>
+                        <View style={{ width: responsiveWidth(89), backgroundColor: "#FFF", height: responsiveHeight(32), }}>
 
-                            <View style={{ paddingTop: responsiveWidth(5), paddingVertical: moderateVerticalScale(8), alignItems: "center" }}>
+                            <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center" }}>
                                 <View>
                                     <View style={{ width: responsiveWidth(83), flexDirection: 'row', justifyContent: "space-between" }}>
                                         <View style={{ justifyContent: "center", alignItems: "center" }}>
                                             <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
                                         </View>
-                                        <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(6), paddingHorizontal: 10 }}>
+                                        <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
                                             <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Frank Darwin</Text>
                                             <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>That looks fun!, i wanna join next time!</Text>
                                         </View>
@@ -118,7 +118,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                 </View>
                             </View>
 
-                            <View style={{ justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
+                            <View style={{ paddingVertical: 4, justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
                                 <View style={{ width: responsiveWidth(67), flexDirection: 'row', justifyContent: "space-between" }}>
                                     <View style={{ justifyContent: "center", alignItems: "center" }}>
                                         <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
@@ -135,32 +135,12 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                         <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                                     </View>
                                 </View>
-
                             </View>
 
-                            <View style={{ paddingVertical: moderateVerticalScale(8), justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
-                                <View style={{ width: responsiveWidth(67), flexDirection: 'row', justifyContent: "space-between" }}>
-                                    <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                        <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
-                                    </View>
-                                    <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(53), paddingVertical: moderateVerticalScale(6), paddingHorizontal: 10 }}>
-                                        <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Frank Darwin</Text>
-                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>I’m in!</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-                                    <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(55), }}>
-                                        <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>2m ago</Text>
-                                        <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
-                                    </View>
-                                </View>
-
-                            </View>
-
+                            {/* TextInput Content------- */}
                             <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center", }}>
-                                <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(79) }}>
-                                    <TextInput placeholder="Message" placeholderTextColor={"#000"} style={{ width: responsiveWidth(70), paddingLeft: 12, color: "#000" }} />
+                                <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(79), height: 45 }}>
+                                    <TextInput placeholder="Message" placeholderTextColor={"#000"} style={{ width: responsiveWidth(70), paddingLeft: 12, color: "#000", }} />
                                     <TouchableOpacity>
                                         <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), resizeMode: "center", }} source={require("../assets/image-icon.png")} />
                                     </TouchableOpacity>
@@ -188,7 +168,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: moderateVerticalScale(10),
+        // paddingVertical: moderateVerticalScale(10),
         flex: 1
     },
     img_backgroung_content: {
@@ -209,7 +189,7 @@ const styles = StyleSheet.create({
         backgroundColor: pinkColor,
         width: responsiveWidth(70),
         height: responsiveHeight(28),
-        marginTop: responsiveWidth(5),
+        marginTop: responsiveWidth(4),
         borderRadius: 18,
     },
 
@@ -278,7 +258,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         margin: responsiveWidth(2.8)
-    }
+    },
+
+
+
 })
 
 export default FeedChatFrame;

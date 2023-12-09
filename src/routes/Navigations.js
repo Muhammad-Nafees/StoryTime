@@ -10,21 +10,36 @@ import NavigationsString from "../constants/NavigationsString";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { Img_Paths } from "../assets/Imagepaths";
 import FeedChat from "../screens/HomeScreens/FeedChat";
+import FirstScreenPlayFlow from "../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow";
+
 
 const Navigations = () => {
+
     const Stack = createStackNavigator()
-    const { PLAY_STORY_TIME, FEED_CHAT } = NavigationsString
+    const { PLAY_STORY_TIME, FEED_CHAT, FIRSTSCREENPLAYFLOW } = NavigationsString
 
     return (
+
         <Stack.Navigator initialRouteName="BottomTavNavigator">
             <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} options={{ headerShown: false }} />
             <Stack.Screen name={PLAY_STORY_TIME} component={PlayStoryTime} options={{ headerShown: false }} />
             <Stack.Screen name={FEED_CHAT} component={FeedChat} options={{ headerShown: false }} />
         </Stack.Navigator>
-    )
 
+    )
 }
 
+const PLayFlowScreens = () => {
+    const Stack = createStackNavigator()
+    const { FIRSTSCREENPLAYFLOW } = NavigationsString
+
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={FIRSTSCREENPLAYFLOW} component={FirstScreenPlayFlow} />
+        </Stack.Navigator>
+    )
+}
 
 
 const BottomTavNavigator = () => {
@@ -40,6 +55,7 @@ const BottomTavNavigator = () => {
             tabBarIcon: () => null,
             tabBarStyle: { height: responsiveHeight(10) }
         }}>
+
             <Tab.Screen name={HOME} component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (

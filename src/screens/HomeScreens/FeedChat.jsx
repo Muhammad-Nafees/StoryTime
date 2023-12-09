@@ -44,67 +44,57 @@ const FeedChat = () => {
 
     return (
 
-        <ScrollView>
-            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-                <View style={styles.fisrt_row_container}>
+        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+                <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                     <View>
                         <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                     </View>
-
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: responsiveWidth(50), }}>
-                        <TouchableOpacity>
+                    <View style={{ flexDirection: 'row', }}>
+                        <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }}>
                             <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                         </TouchableOpacity>
-
                         <View>
-                            <Text style={{ color: "#E44173", fontSize: responsiveFontSize(1.9), fontWeight: "700" }}> Play with Friends </Text>
+                            <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
                         </View>
 
-                        <TouchableOpacity onPress={() => navigation.navigate(PLAY_STORY_TIME)}>
-                            <Image style={[styles.pause_img, {
-                                width: width * 0.10,
-                                height: height * 0.05,
-                            }]} source={require("../../assets/pause-img.png")} />
-                        </TouchableOpacity>
-                    </View>
-
-                    <TouchableOpacity>
-                        <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
-                </View>
-
-                <View style={styles.flatlist_container}>
-                    <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
-                        <FlatList
-                            data={FlatListData}
-                            horizontal
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(10), }}>
-                                            <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
-                                        </TouchableOpacity>
-                                        <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
-                                    </View>
-                                )
-                            }}
-                        />
-
                     </View>
                 </View>
+            </View>
 
-                {/* Frame Content Start----------- */}
 
+            <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(2) }}>
+                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
+            </View>
+
+            <View style={styles.flatlist_container}>
+                <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
+
+                    <FlatList
+                        data={FlatListData}
+                        horizontal
+                        renderItem={({ item, index }) => {
+                            return (
+                                <View style={{ justifyContent: "center", alignItems: "center", }}>
+                                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10), }}>
+                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
+                                    </TouchableOpacity>
+                                    <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
+                                </View>
+                            )
+                        }}
+                    />
+                </View>
+            </View>
+
+            {/* Frame Content Start----------- */}
+            <View>
                 <FeedChatFrame type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
-                {/* Frame Content Close----------- */}
+            </View>
+            {/* Frame Content Close----------- */}
 
-            </ImageBackground>
-        </ScrollView>
+        </ImageBackground>
+
 
     )
 }
@@ -131,7 +121,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        marginTop: responsiveWidth(8)
+        paddingTop: responsiveWidth(4)
     },
     pause_img: {
         resizeMode: "center"

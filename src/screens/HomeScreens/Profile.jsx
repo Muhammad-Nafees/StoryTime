@@ -10,12 +10,11 @@ import NavigationsString from '../../constants/NavigationsString';
 import StoryUsers from '../../components/StoryUsers';
 import AddFriendUsers from '../../components/AddFriendUsers';
 
-
-
 const Profile = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
+        SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
     const { PLAY_STORY_TIME } = NavigationsString;
     const navigation = useNavigation();
 
@@ -24,8 +23,9 @@ const Profile = () => {
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>
                 {/* Frame Content Close----------- */}
+
                 <View style={styles.first_container}>
-                    <TouchableOpacity style={styles.back_button}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
                         <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
                     </TouchableOpacity>
                     <View style={styles.categories_text_container}>
@@ -38,10 +38,9 @@ const Profile = () => {
                         <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
                             <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
                         </View>
-                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} />
+                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
                     </View>
                 </View>
-
 
                 <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
                     <AddFriendUsers profileimage={FIRST_PROFILE} text="@diane101" />
@@ -57,6 +56,7 @@ const Profile = () => {
 
     )
 }
+
 
 
 

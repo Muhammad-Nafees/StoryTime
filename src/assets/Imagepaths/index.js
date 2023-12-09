@@ -36,4 +36,12 @@ export const Img_Paths = {
     FOURTH_PROFILE: require("../../assets/fourth-profile.png"),
     FIFTH_PROFILE: require("../../assets/fifth-profile.png"),
     SIXTH_PROFILE: require("../../assets/sixth-profile.png"),
-}
+    // PlayFlowScreens
+    BG_PLAYFLOW: require("../../assets/bg-play-flow.png"),
+    FULL_BORDER_FRAME: require("../../assets/full-border-frame.png"),
+    VOICE_OF_TEXT_ICON: require("../../assets/voiceoftext-icon.png"),
+    VIDEO_ICON: require("../../assets/video-icon.png"),
+    SHARE_BTN: require("../../assets/sendbtn-icon.png"),
+    SHARK_ICON: require("../../assets/shark-icon.png"),
+    FISH_ICON: require("../../assets/fish-icon.png"),
+};

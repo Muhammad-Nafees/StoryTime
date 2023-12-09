@@ -9,12 +9,12 @@ import NavigationsString from '../constants/NavigationsString'
 
 
 
-const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => {
+const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
     const navigation = useNavigation()
-    const { HOME_FRAME } = Img_Paths
+    const { HOME_FRAME, SHARE_BTN, SHARK_ICON } = Img_Paths
     const { FEED_CHAT } = NavigationsString
 
     return (
@@ -35,7 +35,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
                                             </View>
 
                                             <View style={styles.text_container}>
-                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16 }}>
+                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
                                                     Suddenly his friend saw him start to move strangely. The shark attacked Wilson so hard his entire body flew out of the water, and multiple eyewitnesses observed the whole situation. His friend and some others grabbed him when the shark attempted to drag him under.
                                                 </Text>
                                             </View>
@@ -50,17 +50,28 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
                         {
                             type == "imp_bg_img" ?
                                 <>
-                                    <ImageBackground style={{ marginTop: responsiveWidth(3), width: SCREENWIDTH / 1.4, height: SCREENHEIGHT / 3.6, }} resizeMode="cover" borderRadius={18} source={backgroundImage}>
-                                        <View style={styles.sophia_container}>
-                                            <Image style={styles.child_bg_img} source={profileImage} />
-                                            <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Lilibeth</Text>
+                                    <View style={styles.child_bg}>
+                                        <View style={styles.second_childbg}>
+                                            <View style={styles.third_childbg}>
+                                                <Image style={styles.child_bg_img} source={profileImage} />
+                                                <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Tiffany</Text>
+                                            </View>
                                         </View>
-                                    </ImageBackground>
+                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                            <View style={{ width: responsiveWidth(46), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(14), marginVertical: moderateVerticalScale(10), }}>
+                                                <Image style={{ width: responsiveWidth(15), height: responsiveHeight(7.5), resizeMode: "center" }} source={backgroundImage} />
+                                                <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{text}</Text>
+                                            </View>
+
+                                            <View style={{ width: responsiveWidth(60), borderRadius: 10, height: responsiveHeight(7.5), justifyContent: "space-around", flexDirection: "row", backgroundColor: "#FFF", alignItems: "center", paddingHorizontal: moderateVerticalScale(14) }}>
+                                                <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>www.facebook.com/oli....</Text>
+                                            </View>
+                                        </View>
+                                    </View>
                                 </>
                                 :
                                 null
                         }
-
                     </View>
                 </ImageBackground>
 
@@ -74,21 +85,25 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
                             <View style={styles.third_container}>
 
                                 <View style={[styles.fourth_container]}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(36) }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                         <TouchableOpacity style={styles.first_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.second_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>456</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>456</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.third_view}>
+                                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>Share</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={{ width: responsiveWidth(20), justifyContent: 'flex-end', alignItems: "flex-end" }}>
+                                    <View style={{ width: responsiveWidth(15), justifyContent: 'flex-end', alignItems: "flex-end" }}>
                                         <TouchableOpacity style={{ width: responsiveWidth(6), }}>
                                             <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/three-dots-mod.png")} />
                                         </TouchableOpacity>
@@ -96,10 +111,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
 
 
                                 </View>
-
-
                             </View>
-
 
 
                         </View>
@@ -108,8 +120,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage }) => 
             </View>
         </View>
     )
-}
-
+};
 
 
 const styles = StyleSheet.create({
@@ -136,15 +147,15 @@ const styles = StyleSheet.create({
     },
     child_bg: {
         backgroundColor: pinkColor,
-        width: responsiveWidth(70),
+        width: responsiveWidth(71),
         height: responsiveHeight(28),
-        marginTop: responsiveWidth(5),
+        marginTop: responsiveWidth(2),
         borderRadius: 18,
     },
 
     second_childbg: {
         marginLeft: "auto",
-        width: responsiveWidth(67)
+        width: responsiveWidth(69)
     },
 
     third_childbg: {
@@ -160,7 +171,7 @@ const styles = StyleSheet.create({
         resizeMode: "center",
     },
     text_container: {
-        paddingTop: responsiveWidth(4),
+        paddingTop: responsiveWidth(3),
     },
     second_container: {
         position: 'relative',
@@ -179,14 +190,13 @@ const styles = StyleSheet.create({
         height: responsiveHeight(7.5),
     },
     third_container: {
-        justifyContent: "center",
-        alignItems: "center",
+        // justifyContent: "center",
+        // alignItems: "center",
     },
     fourth_container: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
-        width: responsiveWidth(36),
+        width: responsiveWidth(65),
     },
 
     first_view: {

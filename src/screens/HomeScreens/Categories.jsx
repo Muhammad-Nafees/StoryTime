@@ -8,6 +8,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
 import StoryUsers from '../../components/StoryUsers';
+import BackButton from '../../components/BackButton';
 
 
 
@@ -17,9 +18,11 @@ const Categories = () => {
     const { SPLASH_SCREEN_IMAGE, COUNTRIES_ICON, ANIMAL_IMG, BAG_IMG,
         CALENDER_ICON, ELEMENTS_ICON, SHOPPING_ICON, TEAM_ICON, VEHICLE_ICON,
         FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON,
-        LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths
-    const { PLAY_STORY_TIME } = NavigationsString
-    const navigation = useNavigation()
+        LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths;
+
+    const { PLAY_STORY_TIME } = NavigationsString;
+    const navigation = useNavigation();
+
 
 
     return (
@@ -27,9 +30,7 @@ const Categories = () => {
             <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
                 {/* Frame Content Close----------- */}
                 <View style={styles.first_container}>
-                    <TouchableOpacity style={styles.back_button}>
-                        <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-                    </TouchableOpacity>
+                    <BackButton />
                     <View style={styles.categories_text_container}>
                         <Text style={styles.categories_text}>Categories</Text>
                     </View>
