@@ -33,13 +33,13 @@ const FlatListData = [
     },
 ]
 
-
 const Home = () => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, SHARK_ICON, FISH_ICON } = Img_Paths;
-    const { PLAY_STORY_TIME, FIRSTSCREENPLAYFLOW } = NavigationsString;
+    const { PLAY_STORY_TIME, ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+
 
 
     return (
@@ -52,7 +52,7 @@ const Home = () => {
                             <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                         </View>
                         <View style={{ flexDirection: 'row', }}>
-                            <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate("PLayFlowScreens", { screen: FIRSTSCREENPLAYFLOW })}>
+                            <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
                                 <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                             </TouchableOpacity>
                             <View>
@@ -102,10 +102,8 @@ const Home = () => {
         </ScrollView>
 
     )
-}
+};
 
-
-export default Home;
 
 
 const styles = StyleSheet.create({
@@ -131,4 +129,8 @@ const styles = StyleSheet.create({
     pause_img: {
         resizeMode: "center"
     }
-})
+});
+
+
+
+export default Home;

@@ -39,66 +39,66 @@ const FeedChat = () => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE } = Img_Paths
-    const { PLAY_STORY_TIME } = NavigationsString
-    const navigation = useNavigation()
+    const { PLAY_STORY_TIME } = NavigationsString;
+    const navigation = useNavigation();
 
     return (
 
-        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
-                <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                    <View>
-                        <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
-                    </View>
-                    <View style={{ flexDirection: 'row', }}>
-                        <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }}>
-                            <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
-                        </TouchableOpacity>
+        <ScrollView>
+
+            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+                <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+                    <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                         <View>
-                            <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
+                            <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                         </View>
+                        <View style={{ flexDirection: 'row', }}>
+                            <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }}>
+                                <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
+                            </TouchableOpacity>
+                            <View>
+                                <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
+                            </View>
 
+                        </View>
                     </View>
                 </View>
-            </View>
 
-
-            <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(2) }}>
-                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
-            </View>
-
-            <View style={styles.flatlist_container}>
-                <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
-                    <FlatList
-                        data={FlatListData}
-                        horizontal
-                        renderItem={({ item, index }) => {
-                            return (
-                                <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10), }}>
-                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
-                                    </TouchableOpacity>
-                                    <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
-                                </View>
-                            )
-                        }}
-                    />
+                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(2) }}>
+                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
                 </View>
-            </View>
 
-            {/* Frame Content Start----------- */}
-            <View>
-                <FeedChatFrame type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
-            </View>
-            {/* Frame Content Close----------- */}
+                <View style={styles.flatlist_container}>
+                    <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
 
-        </ImageBackground>
+                        <FlatList
+                            data={FlatListData}
+                            horizontal
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <View style={{ justifyContent: "center", alignItems: "center", }}>
+                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10), }}>
+                                            <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
+                                        </TouchableOpacity>
+                                        <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
+                                    </View>
+                                )
+                            }}
+                        />
+                    </View>
+                </View>
 
+                {/* Frame Content Start----------- */}
+                <View>
+                    <FeedChatFrame type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
+                </View>
+                {/* Frame Content Close----------- */}
+
+            </ImageBackground>
+        </ScrollView>
 
     )
-}
-
+};
 
 export default FeedChat;
 
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
     pause_img: {
         resizeMode: "center"
     }
-})
+});

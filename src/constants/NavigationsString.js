@@ -15,5 +15,7 @@ export default NavigationString = {
     PROFILE: "Profile",
     PLAY_STORY_TIME: "PlayStoryTime",
     FEED_CHAT: "Feedchat",
-    FIRSTSCREENPLAYFLOW: "FirstScreenPlayFlow"
+    FIRSTSCREENPLAYFLOW: "FirstScreenPlayFlow",
+    ADD_FRIENDS: "AddFiends",
+    ADD_PLAYERS: "AddPlayers"
 }

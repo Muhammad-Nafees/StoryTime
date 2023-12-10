@@ -1,16 +1,15 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import StoryUsers from '../../components/StoryUsers';
-import AddFriendUsers from '../../components/AddFriendUsers';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import NavigationsString from '../../../constants/NavigationsString';
+import AddFriendUsers from '../../../components/AddFriendUsers';
+import TouchableButton from '../../../components/TouchableButton';
 
-const AddFiends = () => {
+const AddPlayers = () => {
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
         SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
@@ -28,7 +27,7 @@ const AddFiends = () => {
                         <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
                     </TouchableOpacity>
                     <View style={styles.categories_text_container}>
-                        <Text style={styles.categories_text}>Add Friends</Text>
+                        <Text style={styles.categories_text}>Add Players</Text>
                     </View>
                 </View>
 
@@ -42,21 +41,22 @@ const AddFiends = () => {
                 </View>
 
                 <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
-                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@diane101" userchoice="Follow" />
-                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@nolanjames" userchoice="Follow" />
-                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@christine02" userchoice="Follow" />
-                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@adamadam" userchoice="Follow" />
-                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@markyyy" userchoice="Follow" />
-                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@jeniffer.p" userchoice="Follow" />
+                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@diane101" userchoice="Add" />
+                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@nolanjames" userchoice="Add" />
+                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@christine02" userchoice="Add" />
+                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@adamadam" userchoice="Add" />
+                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@markyyy" userchoice="Add" />
+                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@jeniffer.p" userchoice="Add" />
+                </View>
+                <View style={{ paddingTop: responsiveWidth(60), }}>
+                    <TouchableButton backgroundColor={TextColorGreen} text="Add" color="#FFF" />
                 </View>
 
             </ScrollView>
         </ImageBackground>
 
     )
-}
-
-
+};
 
 
 const styles = StyleSheet.create({
@@ -129,4 +129,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default AddFiends;
+export default AddPlayers;

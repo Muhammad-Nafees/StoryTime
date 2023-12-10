@@ -1,14 +1,14 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../components/FrameContent';
+import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import StoryUsers from '../../components/StoryUsers';
-import BackButton from '../../components/BackButton';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import NavigationsString from '../../../constants/NavigationsString';
+import StoryUsers from '../../../components/StoryUsers';
+import BackButton from '../../../components/BackButton';
 
 
 
@@ -20,7 +20,7 @@ const Categories = () => {
         FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON,
         LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths;
 
-    const { PLAY_STORY_TIME } = NavigationsString;
+    const { PROFILE, ADD_PLAYERS } = NavigationsString;
     const navigation = useNavigation();
 
 
@@ -66,7 +66,7 @@ const Categories = () => {
 
                 <View style={{ paddingTop: responsiveWidth(3), justifyContent: "center", alignItems: "center" }}>
                     <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={TEAM_ICON} text="Humans" mainbgColor="#395E66" backgroundColor="#F6A96C" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories")} images={TEAM_ICON} text="Humans" mainbgColor="#395E66" backgroundColor="#F6A96C" />
                         <StoryUsers images={LIFENEED_ICON} text="Things" mainbgColor="#395E66" backgroundColor="#79905C" />
                         <StoryUsers images={ANIMAL_IMG} text="Animals" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                     </View>
@@ -86,8 +86,9 @@ const Categories = () => {
                         <StoryUsers images={COUNTRIES_ICON} text="Countries" mainbgColor="#395E66" backgroundColor="#C453D7" />
                     </View>
                     <View style={{ paddingBottom: moderateVerticalScale(20), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" />
+                        <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" onPress={() => navigation.navigate(ADD_PLAYERS)} />
                     </View>
+
                 </View>
 
             </ImageBackground>

@@ -4,7 +4,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale } from 'react-native-size-matters';
 
-const AddFriendUsers = ({ profileimage, text }) => {
+const AddFriendUsers = ({ profileimage, text, userchoice }) => {
 
 
     return (
@@ -16,7 +16,7 @@ const AddFriendUsers = ({ profileimage, text }) => {
                 </View>
             </View>
             <TouchableOpacity>
-                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>Follow</Text>
+                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{userchoice}</Text>
             </TouchableOpacity>
         </View>
     )

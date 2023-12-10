@@ -158,8 +158,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
             </View>
         </View>
     )
-}
-
+};
 
 
 

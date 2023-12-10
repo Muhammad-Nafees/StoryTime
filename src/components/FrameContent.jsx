@@ -76,7 +76,6 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                 </ImageBackground>
 
 
-
                 <View style={styles.second_container}>
                     <View style={styles.sec_container_firstchild}>
                         <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: moderateScale(55) }}>
@@ -142,8 +141,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(29.5),
-        marginLeft: responsiveWidth(1)
+        height: responsiveHeight(28.5),
+        marginLeft: responsiveWidth(1),
+        marginTop: responsiveWidth(1.8)
     },
     child_bg: {
         backgroundColor: pinkColor,
