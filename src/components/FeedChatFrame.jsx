@@ -15,7 +15,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     const SCREENHEIGHT = Dimensions.get("window").height
     const navigation = useNavigation()
     const { HOME_FRAME, FRANKIN_DRAWEN } = Img_Paths
-    const { FEED_CHAT } = NavigationsString
+    const { FEED_CHAT } = NavigationsString;
 
     return (
 

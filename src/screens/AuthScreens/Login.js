@@ -83,7 +83,7 @@ const Login = () => {
                             placeholderText="Type here"
                             type="password"
                         />
-                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                        <View style={{width: responsiveWidth(90), marginLeft: 'auto' }}>
                             {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
                         </View>
                     </View>

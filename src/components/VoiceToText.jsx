@@ -17,7 +17,8 @@ const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor })
         </ImageBackground>
 
     )
-}
+};
+
 
 const styles = StyleSheet.create({
     img_backgroung_content: {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
+import MainInputField from '../../../components/MainInputField';
 
 
 
@@ -29,6 +30,7 @@ const Categories = () => {
         <ScrollView>
             <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
                 {/* Frame Content Close----------- */}
+
                 <View style={styles.first_container}>
                     <BackButton />
                     <View style={styles.categories_text_container}>
@@ -36,14 +38,17 @@ const Categories = () => {
                     </View>
                 </View>
 
-                <View style={styles.text_Input_container}>
+                {/* <View style={styles.text_Input_container}>
                     <View style={styles.text_input_child}>
                         <TextInput placeholder="Username" placeholderTextColor={"#000"} style={styles.input_field} />
                         <TouchableOpacity style={styles.add_button}>
                             <Text style={styles.add_text}>Add</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
+
+                <MainInputField placeholder="Username" />
+
 
 
                 <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
@@ -64,38 +69,39 @@ const Categories = () => {
                     </View>
                 </View>
 
+
+
                 <View style={{ paddingTop: responsiveWidth(3), justifyContent: "center", alignItems: "center" }}>
                     <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories")} images={TEAM_ICON} text="Humans" mainbgColor="#395E66" backgroundColor="#F6A96C" />
-                        <StoryUsers images={LIFENEED_ICON} text="Things" mainbgColor="#395E66" backgroundColor="#79905C" />
-                        <StoryUsers images={ANIMAL_IMG} text="Animals" mainbgColor="#395E66" backgroundColor="#56B6A4" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 0 },)} images={TEAM_ICON} text="Humans" mainbgColor="#395E66" backgroundColor="#F6A96C" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 1 },)} images={LIFENEED_ICON} text="Things" mainbgColor="#395E66" backgroundColor="#79905C" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 2 },)} images={ANIMAL_IMG} text="Animals" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                     </View>
                     <View style={{ paddingVertical: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={LOCATION_ICON} text="Places" mainbgColor="#395E66" backgroundColor="#C45E89" />
-                        <StoryUsers images={FRUIT_ICON} text="Food" mainbgColor="#395E66" backgroundColor="#8482D1" />
-                        <StoryUsers images={BAG_IMG} text="Work" mainbgColor="#395E66" backgroundColor="#974444" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 3 })} images={LOCATION_ICON} text="Places" mainbgColor="#395E66" backgroundColor="#C45E89" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 4 })} images={FRUIT_ICON} text="Food" mainbgColor="#395E66" backgroundColor="#8482D1" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 5 })} images={BAG_IMG} text="Work" mainbgColor="#395E66" backgroundColor="#974444" />
                     </View>
                     <View style={{ paddingBottom: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={CALENDER_ICON} text="Event" mainbgColor="#395E66" backgroundColor="#A4C857" />
-                        <StoryUsers images={SHOPPING_ICON} text="Travels" mainbgColor="#395E66" backgroundColor="#C67D66" />
-                        <StoryUsers images={SCHOOL_ICON} text="School" mainbgColor="#395E66" backgroundColor="#56C488" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 6 })} images={CALENDER_ICON} text="Event" mainbgColor="#395E66" backgroundColor="#A4C857" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 7 })} images={SHOPPING_ICON} text="Travels" mainbgColor="#395E66" backgroundColor="#C67D66" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 8 })} images={SCHOOL_ICON} text="School" mainbgColor="#395E66" backgroundColor="#56C488" />
                     </View>
                     <View style={{ paddingBottom: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={VEHICLE_ICON} text="Vehicles" mainbgColor="#395E66" backgroundColor="#C07632" />
-                        <StoryUsers images={ELEMENTS_ICON} text="Elements" mainbgColor="#395E66" backgroundColor="#82BED1" />
-                        <StoryUsers images={COUNTRIES_ICON} text="Countries" mainbgColor="#395E66" backgroundColor="#C453D7" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 9 })} images={VEHICLE_ICON} text="Vehicles" mainbgColor="#395E66" backgroundColor="#C07632" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 10 })} images={ELEMENTS_ICON} text="Elements" mainbgColor="#395E66" backgroundColor="#82BED1" />
+                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 11 })} images={COUNTRIES_ICON} text="Countries" mainbgColor="#395E66" backgroundColor="#C453D7" />
                     </View>
                     <View style={{ paddingBottom: moderateVerticalScale(20), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                         <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" onPress={() => navigation.navigate(ADD_PLAYERS)} />
                     </View>
-
                 </View>
 
             </ImageBackground>
         </ScrollView>
 
     )
-}
+};
 
 
 

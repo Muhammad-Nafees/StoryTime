@@ -37,7 +37,8 @@ const PlayStoryTime = () => {
 
         </ImageBackground>
     )
-}
+};
+
 
 
 
