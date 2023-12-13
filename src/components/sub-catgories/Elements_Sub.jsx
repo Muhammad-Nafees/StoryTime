@@ -29,7 +29,7 @@ const Element_Sub = () => {
             <View style={styles.first_container}>
                 <BackButton />
                 <View style={styles.categories_text_container}>
-                    <Text style={styles.categories_text}>Vehicles</Text>
+                    <Text style={styles.categories_text}>Element</Text>
                 </View>
             </View>
 

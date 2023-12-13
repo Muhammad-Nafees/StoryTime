@@ -17,5 +17,6 @@ export default NavigationString = {
     FEED_CHAT: "Feedchat",
     FIRSTSCREENPLAYFLOW: "FirstScreenPlayFlow",
     ADD_FRIENDS: "AddFiends",
-    ADD_PLAYERS: "AddPlayers"
-}
+    ADD_PLAYERS: "AddPlayers",
+    PLAYER_SEQUENCE: "Sequence"
+};

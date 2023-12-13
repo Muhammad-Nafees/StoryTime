@@ -15,11 +15,12 @@ import AddFiends from "../screens/HomeScreens/AddFriends";
 import AddPlayers from "../screens/HomeScreens/catagoriesaddMembers/Add_Players";
 import SubCategories from "../screens/HomeScreens/catagoriesaddMembers/SubCategories";
 import FeedChat from "../screens/HomeScreens/FeedChat";
+import Sequence from "../screens/HomeScreens/catagoriesaddMembers/sequenceofPlayer/Sequence";
 
 const Navigations = () => {
 
     const Stack = createStackNavigator();
-    const { PLAY_STORY_TIME, FEED_CHAT, FIRSTSCREENPLAYFLOW, ADD_FRIENDS, ADD_PLAYERS } = NavigationsString;
+    const { PLAY_STORY_TIME, FEED_CHAT, FIRSTSCREENPLAYFLOW, ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE } = NavigationsString;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="BottomTavNavigator">
@@ -27,6 +28,7 @@ const Navigations = () => {
             <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
             <Stack.Screen name={ADD_FRIENDS} component={AddFiends} />
             <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
+            <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
         </Stack.Navigator>
     )
 };
@@ -54,7 +56,8 @@ const HomeStack = () => {
             <Stack.Screen name={FEED_CHAT} component={FeedChat} />
         </Stack.Navigator>
     )
-}
+};
+
 
 const CategoriesStack = () => {
     const Stack = createStackNavigator();

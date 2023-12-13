@@ -56,7 +56,7 @@ const SubCategories = ({ route }) => {
                 }
                 {/* Things SubCategory */}
 
-                {/* Animals Sub Category */}
+
                 {
                     id === 2 &&
                     <>
@@ -119,7 +119,7 @@ const SubCategories = ({ route }) => {
                     </>
                 }
 
-                {/* Humans Sub Category */}
+
 
             </ScrollView>
         </ImageBackground>

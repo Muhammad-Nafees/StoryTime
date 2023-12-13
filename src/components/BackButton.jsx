@@ -4,7 +4,7 @@ import { Img_Paths } from '../assets/Imagepaths';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const BackButton = () => {
+const BackButton = ({ leftarrow }) => {
 
     const { LEFT_ARROW_IMG } = Img_Paths;
     const navigation = useNavigation();

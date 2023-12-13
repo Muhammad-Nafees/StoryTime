@@ -28,7 +28,7 @@ const Event_Sub = () => {
             <View style={styles.first_container}>
                 <BackButton />
                 <View style={styles.categories_text_container}>
-                    <Text style={styles.categories_text}>Work</Text>
+                    <Text style={styles.categories_text}>Event</Text>
                 </View>
             </View>
 

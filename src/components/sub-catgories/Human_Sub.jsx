@@ -7,10 +7,14 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
+import NavigationsString from '../../constants/NavigationsString'
 
 const Human_Sub = ({ }) => {
 
     const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON, } = Img_Paths;
+    const { PLAYER_SEQUENCE } = NavigationsString;
+    const navigation = useNavigation();
 
 
     return (
@@ -45,7 +49,7 @@ const Human_Sub = ({ }) => {
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <View style={{ paddingTop: responsiveWidth(2), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                    <StoryUsers images={TEACHER_ICON} text="Teacher" mainbgColor="#395E66" backgroundColor="#56B6A4" />
+                    <StoryUsers onPress={() => navigation.navigate(PLAYER_SEQUENCE)} images={TEACHER_ICON} text="Teacher" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                     <StoryUsers images={POLICE_ICON} text="Police" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                     <StoryUsers images={FAMILY_ICON} text="Family" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                 </View>

@@ -35,7 +35,7 @@ const Countries_Sub = () => {
             <View style={styles.first_container}>
                 <BackButton />
                 <View style={styles.categories_text_container}>
-                    <Text style={styles.categories_text}>Things</Text>
+                    <Text style={styles.categories_text}>Countries</Text>
                 </View>
             </View>
 

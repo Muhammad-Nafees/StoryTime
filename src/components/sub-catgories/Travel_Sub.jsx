@@ -26,13 +26,14 @@ const Travel_Sub = () => {
             <View style={styles.first_container}>
                 <BackButton />
                 <View style={styles.categories_text_container}>
-                    <Text style={styles.categories_text}>Work</Text>
+                    <Text style={styles.categories_text}>Travel</Text>
                 </View>
             </View>
 
             {/* IMainnputField-----*/}
             <MainInputField placeholder="Username" />
             {/* MainInputField----- */}
+
             <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
                 <View style={{ width: responsiveWidth(90), flexDirection: 'row', alignItems: "center", flexWrap: "wrap" }}>
                     <View style={{ marginHorizontal: moderateScale(10), }}>
