@@ -10,8 +10,10 @@ import TouchableButton from '../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../constants/NavigationsString';
 import UserNames from '../../../components/UserNames';
+import { useSelector } from 'react-redux';
+import FirstScreen from '../../../components/FirstScreen';
 
-const SecondUserNextPlayer = () => {
+const FirstUser = () => {
 
     let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
@@ -26,13 +28,16 @@ const SecondUserNextPlayer = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of current index
+    const counters = useSelector((state) => state.SequencePlayer.counters)
 
     const handleStart = () => {
         setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
         startRecognizing()
     };
 
-    // Timer 2 Minutes
+    // Timer 2 Minutes-----
+
     useEffect(() => {
         let countdown;
 
@@ -89,6 +94,7 @@ const SecondUserNextPlayer = () => {
     const onspeechResult = (e) => {
         setResult(e.value[0])
     };
+
     // Start Recording And Convert Text----------
 
     const startRecognizing = async () => {
@@ -99,7 +105,9 @@ const SecondUserNextPlayer = () => {
             console.log("err", error);
         }
     };
+
     // Stop Recording---------
+
     const stopRecording = async () => {
         setIsRecording(false);
         try {
@@ -110,13 +118,16 @@ const SecondUserNextPlayer = () => {
     };
 
     // Handle Press In----------
+
     const handlePressIn = () => {
         longPressTimeout = setTimeout(() => {
             setIsLongPress(true);
             // Perform actions or start voice recognition on long press
         }, 1000); // Set your desired duration for long press
     };
+
     // Handle Press out----------
+
     const handlePressOut = () => {
         clearTimeout(longPressTimeout);
         setIsLongPress(false);
@@ -126,17 +137,39 @@ const SecondUserNextPlayer = () => {
     };
 
     const onPressnext = () => {
-        navigation.navigate(CONTINUE_AND_NEXTPLAYER)
+        if (currentIndex < counters.length - 1) {
+            setCurrentIndex(currentIndex + 1); // Increment index if within range
+        }
     }
+
+
+
+    const onPressNext = () => {
+
+    };
 
 
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
+            {
+                currentIndex < counters.length && (
+                    <>
+                        <FirstScreen image={PLAYFLOW_FRAME} started={started} handlePressOut={handlePressOut} onPressnext={onPressnext} isPressed={isPressed} setIsPressed={setIsPressed} handleStart={handleStart} result={result} timeText={timeText} />
+                    </>
+                )
+
+            }
+
+            {currentIndex + 1 < counters.length && (
+                <FirstScreen content={counters[currentIndex + 1]} image={PLAYFLOW_FRAME} started={started} handlePressOut={handlePressOut} onPressnext={onPressnext} isPressed={isPressed} setIsPressed={setIsPressed} handleStart={handleStart} result={result} timeText="NAFEE" />
+            )}
+
+
             {/* BACK BUTTON AND TIMER */}
 
-            <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
+            {/* <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
@@ -187,7 +220,8 @@ const SecondUserNextPlayer = () => {
             <View>
                 <TouchableButton onPress={onPressnext} isLongPress={isLongPress} text="Next Player: @alfred" backgroundColor={TextColorGreen} color="#FFF" />
                 <TouchableButton text="Save Story" color={TextColorGreen} />
-            </View>
+            </View> */}
+
 
 
         </ImageBackground>
@@ -248,5 +282,5 @@ const styles = StyleSheet.create({
     },
 
 })
-export default SecondUserNextPlayer;
+export default FirstUser;
 

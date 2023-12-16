@@ -15,7 +15,7 @@ const SecondPlayFlowScreen = () => {
     const navigation = useNavigation();
     // const SCREENWIDTH = Dimensions.get("window").width;
     const windowWidth = Dimensions.get('window').width;
-    const { THIRDSCREENPLAYFLOW } = NavigationsString;
+    const { THIRDSCREENPLAYFLOW, FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95
 
 
@@ -47,7 +47,7 @@ const SecondPlayFlowScreen = () => {
                 </View>
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate(THIRDSCREENPLAYFLOW)}>
+                    <TouchableOpacity onPress={() => navigation.navigate(FIRST_USER)}>
                         <Image source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>

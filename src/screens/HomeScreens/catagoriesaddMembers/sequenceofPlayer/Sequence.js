@@ -8,42 +8,42 @@ import { Img_Paths } from '../../../../assets/Imagepaths'
 import { TextColorGreen } from '../../../Styles/Style'
 import TouchableButton from '../../../../components/TouchableButton'
 import { useNavigation } from '@react-navigation/native'
-import FirstScreenPlayFlow from '../../playslowscreens/FirstScreenPlayFlow'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { UpdateSequencePlayers } from '../../../../../store/slices/SequencePlayer'
 
 const Sequence = () => {
 
     const { FIRSTSCREENPLAYFLOW } = NavigationsString;
     const [isSequence, setIsSequence] = useState(false);
-    const [counters, setCounters] = useState([null, null, null, null]);
+    // const [counters, setCounters] = useState([null, null, null, null]);
     const [initialClick, setInitialClick] = useState(false);
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const counters = useSelector((state) => state?.SequencePlayer?.counters)
 
     const { LEFT_ARROW_IMG } = Img_Paths;
 
     const handlePress = (index) => {
 
         const newCounters = [...counters];
-
+        console.log("newcoun--", newCounters)
         if (newCounters[index] === null) {
             const existingValues = new Set(newCounters.filter(Boolean)); // Get existing values
-            console.log("existingvalues---", existingValues)
-            const availableValues = [1, 2, 3, 4].filter((value) => !existingValues.has(value)); // Get available values
-            console.log("avaiablevalues", availableValues)
+            const availableValues = [1, 2, 3, 4,].filter((value) => !existingValues.has(value)); // Get available values
             if (availableValues.length > 0) {
                 newCounters[index] = availableValues[0];
             }
         } else {
             newCounters[index] = null;
         }
-        setCounters(newCounters);
+        dispatch(UpdateSequencePlayers(newCounters));
     };
 
 
 
     const handlesequence = () => {
         const filterlength = counters.filter(Boolean).length;
-        if (filterlength > 3) {
+        if (filterlength === counters.length) {
             navigation.navigate("PLayFlowScreens", {
                 screen: FIRSTSCREENPLAYFLOW,
             })
@@ -77,7 +77,7 @@ const Sequence = () => {
             backgroundColor: "#E44173",
             textindex: counters[3],
             id: 3
-        }
+        },
     ]
 
 
@@ -106,12 +106,11 @@ const Sequence = () => {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView>
-
+            <ScrollView style={{ height: responsiveHeight(72) }}>
                 {
                     sequenceplayers.map((item, index) => (
                         <>
-                            <View style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+                            <View key={item.id} style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
                                 <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor }}>
                                     <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>
                                 </TouchableOpacity>
@@ -125,7 +124,7 @@ const Sequence = () => {
             </ScrollView>
 
 
-            <View style={{ paddingTop: responsiveWidth(85), }}>
+            <View style={{}}>
                 <TouchableButton onPress={() => handlesequence()} backgroundColor={TextColorGreen} text="Next" color="#FFF" />
             </View>
         </View>
