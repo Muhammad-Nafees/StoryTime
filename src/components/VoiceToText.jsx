@@ -4,10 +4,10 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 import { TextColorGreen, PrimaryColor } from '../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 
-const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor }) => {
+const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress }) => {
     return (
         <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={BackgroundImage}>
-            <TouchableOpacity activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: bgColor, }]}>
+            <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: bgColor, }]}>
                 <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(20), backgroundColor: innerColor, justifyContent: "center", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(60), height: responsiveHeight(18), resizeMode: "center" }} source={InnerImage} />
                 </View>

@@ -18,5 +18,16 @@ export default NavigationString = {
     FIRSTSCREENPLAYFLOW: "FirstScreenPlayFlow",
     ADD_FRIENDS: "AddFiends",
     ADD_PLAYERS: "AddPlayers",
-    PLAYER_SEQUENCE: "Sequence"
+    PLAYER_SEQUENCE: "Sequence",
+    SECONDSCREENPLAYFLOW: "SecondScreenPlayFlow",
+    THIRDSCREENPLAYFLOW: "ThirdScreenPlayFlow",
+    EXTENDSTORY: "ExtendStory",
+    SECONDUSER_NEXT_PLAY: "SecondUserNextPlayer",
+    CONTINUE_AND_NEXTPLAYER: "ContinueAndNextPlayer",
+    THIRD_USER: "ThirdUser",
+    THIRD_EXTEND_STORY: "ThirdExtendStory",
+    FOURTH_USER: "FourthUser",
+    FOURTH_USER_STORY: "FourthUserStory",
+    VIDEO_FIRST_SCREEN: "VideoFirstStartScreen"
+
 };

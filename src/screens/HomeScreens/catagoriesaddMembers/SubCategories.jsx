@@ -56,25 +56,27 @@ const SubCategories = ({ route }) => {
                 }
                 {/* Things SubCategory */}
 
-
                 {
                     id === 2 &&
                     <>
                         <Animals_Sub />
                     </>
                 }
+
                 {
                     id === 3 &&
                     <>
                         <Places_Sub />
                     </>
                 }
+
                 {
                     id === 4 &&
                     <>
                         <Food_Sub />
                     </>
                 }
+
                 {
                     id === 5 &&
                     <>
@@ -88,30 +90,35 @@ const SubCategories = ({ route }) => {
                         <Event_Sub />
                     </>
                 }
+
                 {
                     id === 7 &&
                     <>
                         <Travel_Sub />
                     </>
                 }
+
                 {
                     id === 8 &&
                     <>
                         <School_Sub />
                     </>
                 }
+
                 {
                     id === 9 &&
                     <>
                         <Vehicles_Sub />
                     </>
                 }
+
                 {
                     id === 10 &&
                     <>
                         <Element_Sub />
                     </>
                 }
+
                 {
                     id === 11 &&
                     <>

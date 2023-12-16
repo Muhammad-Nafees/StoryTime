@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,8 @@ import MainInputField from '../../../components/MainInputField';
 
 
 
+
+
 const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
@@ -20,15 +22,131 @@ const Categories = () => {
         CALENDER_ICON, ELEMENTS_ICON, SHOPPING_ICON, TEAM_ICON, VEHICLE_ICON,
         FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON,
         LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths;
+    const [randomItem, setRandomItem] = useState(null);
+    const navigation = useNavigation()
 
-    const { PROFILE, ADD_PLAYERS } = NavigationsString;
-    const navigation = useNavigation();
 
 
+    const CategoriesData = [
+        {
+            name: "Humans",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/team-icon.png"),
+            subCategoryBGColor: "rgba(199, 152, 97, 1)",
+            id: 0
+        },
+        {
+            name: "Things",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/lifeneed-icon.png"),
+            subCategoryBGColor: "#79905C",
+
+            id: 1
+        },
+        {
+            name: "Animals",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/animal-icon.png"),
+            subCategoryBGColor: "#56B6A4",
+
+            id: 2
+        },
+
+        {
+            name: "Places",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/location-icon.png"),
+            subCategoryBGColor: "#C45E89",
+
+            id: 3
+        },
+        {
+            name: "Food",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/fruit-icon.png"),
+            subCategoryBGColor: "#8482D1",
+
+            id: 4
+        },
+        {
+            name: "Work",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/bag-icon.png"),
+            subCategoryBGColor: "#974444",
+
+            id: 5
+        },
+        {
+            name: "Event",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/calender-icon.png"),
+            subCategoryBGColor: "#A4C857",
+
+            id: 6
+        },
+        {
+            name: "Travels",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/shopping-icon.png"),
+            subCategoryBGColor: "rgba(209, 130, 130, 1)",
+
+            id: 7
+        },
+        {
+            name: "School",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/school-icon.png"),
+            subCategoryBGColor: "#56C488",
+
+            id: 8
+        },
+        {
+            name: "Vehicles",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/vehicle-icon.png"),
+            subCategoryBGColor: "#C07632",
+
+            id: 9
+        },
+        {
+            name: "Elements",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/elements-icon.png"),
+            subCategoryBGColor: "#82BED1",
+
+            id: 10
+        },
+        {
+            name: "Countries",
+            backgroundColor: TextColorGreen,
+            image: require("../../../assets/Categories-image/countries-icon.png"),
+            subCategoryBGColor: "#C453D7",
+            id: 11
+        },
+    ]
+
+
+    const handleRandomClick = () => {
+        const RandomInd = Math.floor(Math.random() * CategoriesData.length)
+        setRandomItem(RandomInd)
+    }
+
+    // useEffect(() => {
+    //     return () => {
+    //         setRandomItem(null)
+    //     }
+    // }, [])
+
+
+
+    const handleStoryUser = (id) => {
+        navigation.navigate("SubCategories", { id: id },)
+
+    }
 
     return (
-        <ScrollView>
-            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+            <ScrollView>
                 {/* Frame Content Close----------- */}
 
                 <View style={styles.first_container}>
@@ -47,9 +165,9 @@ const Categories = () => {
                     </View>
                 </View> */}
 
+                {/* IMainnputField-----*/}
                 <MainInputField placeholder="Username" />
-
-
+                {/* MainInputField----- */}
 
                 <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
                     <View style={{ width: responsiveWidth(90), flexDirection: 'row', alignItems: "center", flexWrap: "wrap" }}>
@@ -69,36 +187,35 @@ const Categories = () => {
                     </View>
                 </View>
 
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                    {randomItem === null && CategoriesData.map((category) => (
+                        <View key={category.id} style={{ backgroundColor: category.backgroundColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                            <StoryUsers onPress={() => handleStoryUser(category.id)} images={category.image} text={category.name} mainbgColor={category.backgroundColor} backgroundColor={category.subCategoryBGColor} />
+                        </View>
+                    ))}
+
+                    {randomItem !== null && CategoriesData.map((category) => (
+                        category.id === randomItem &&
+                        <View key={category.id} style={{ backgroundColor: category.backgroundColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                            <StoryUsers onPress={() => handleStoryUser(category.id)} images={category.image} text={category.name} mainbgColor={category.backgroundColor} backgroundColor={category.subCategoryBGColor} />
+                        </View>
+                    ))}
+                </View>
 
 
-                <View style={{ paddingTop: responsiveWidth(3), justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 0 },)} images={TEAM_ICON} text="Humans" mainbgColor="#395E66" backgroundColor="#F6A96C" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 1 },)} images={LIFENEED_ICON} text="Things" mainbgColor="#395E66" backgroundColor="#79905C" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 2 },)} images={ANIMAL_IMG} text="Animals" mainbgColor="#395E66" backgroundColor="#56B6A4" />
-                    </View>
-                    <View style={{ paddingVertical: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 3 })} images={LOCATION_ICON} text="Places" mainbgColor="#395E66" backgroundColor="#C45E89" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 4 })} images={FRUIT_ICON} text="Food" mainbgColor="#395E66" backgroundColor="#8482D1" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 5 })} images={BAG_IMG} text="Work" mainbgColor="#395E66" backgroundColor="#974444" />
-                    </View>
-                    <View style={{ paddingBottom: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 6 })} images={CALENDER_ICON} text="Event" mainbgColor="#395E66" backgroundColor="#A4C857" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 7 })} images={SHOPPING_ICON} text="Travels" mainbgColor="#395E66" backgroundColor="#C67D66" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 8 })} images={SCHOOL_ICON} text="School" mainbgColor="#395E66" backgroundColor="#56C488" />
-                    </View>
-                    <View style={{ paddingBottom: moderateVerticalScale(12), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 9 })} images={VEHICLE_ICON} text="Vehicles" mainbgColor="#395E66" backgroundColor="#C07632" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 10 })} images={ELEMENTS_ICON} text="Elements" mainbgColor="#395E66" backgroundColor="#82BED1" />
-                        <StoryUsers onPress={() => navigation.navigate("SubCategories", { id: 11 })} images={COUNTRIES_ICON} text="Countries" mainbgColor="#395E66" backgroundColor="#C453D7" />
-                    </View>
-                    <View style={{ paddingBottom: moderateVerticalScale(20), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" onPress={() => navigation.navigate(ADD_PLAYERS)} />
+
+                <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>
+                    <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
+                        <TouchableOpacity onPress={() => handleRandomClick()} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "#EE5F8A", justifyContent: "center", alignItems: "center" }}>
+                            <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={LUDO_ICON} />
+                        </TouchableOpacity>
+                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Random</Text>
                     </View>
                 </View>
 
-            </ImageBackground>
-        </ScrollView>
+            </ScrollView>
+        </ImageBackground>
 
     )
 };

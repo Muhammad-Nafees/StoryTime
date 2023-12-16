@@ -48,15 +48,19 @@ const AddPlayers = () => {
                     <AddFriendUsers profileimage={FIFTH_PROFILE} text="@markyyy" userchoice="Add" />
                     <AddFriendUsers profileimage={SIXTH_PROFILE} text="@jeniffer.p" userchoice="Add" />
                 </View>
+
                 <View style={{ paddingTop: responsiveWidth(60), }}>
                     <TouchableButton backgroundColor={TextColorGreen} text="Add" color="#FFF" />
                 </View>
+
 
             </ScrollView>
         </ImageBackground>
 
     )
 };
+
+
 
 const styles = StyleSheet.create({
     container: {

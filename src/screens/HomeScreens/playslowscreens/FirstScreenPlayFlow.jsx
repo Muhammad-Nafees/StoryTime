@@ -16,8 +16,8 @@ const FirstScreenPlayFlow = () => {
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, VOICE_OF_TEXT_ICON, VIDEO_ICON } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
-    const { FEED_CHAT } = NavigationsString
-
+    const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
+    const navigation = useNavigation();
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
@@ -25,8 +25,8 @@ const FirstScreenPlayFlow = () => {
                 <BackButton />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Voice to Text" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/voiceoftext-icon.png")} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Video " BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/video-icon.png")} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText onPress={() => navigation.navigate(SECONDSCREENPLAYFLOW)} text="Voice to Text" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/voiceoftext-icon.png")} bgColor={TextColorGreen} innerColor="#EA89A7" />
+                        <VoiceToText onPress={() => navigation.navigate(VIDEO_FIRST_SCREEN)} text="Video" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/video-icon.png")} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
             </View>
@@ -34,7 +34,6 @@ const FirstScreenPlayFlow = () => {
 
     )
 };
-
 
 
 export default FirstScreenPlayFlow;

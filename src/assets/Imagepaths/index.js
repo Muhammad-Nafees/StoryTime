@@ -2,7 +2,6 @@ export const Img_Paths = {
     SPLASH_SCREEN_IMAGE: require("../../assets/splash-screen-bg.png"),
     GET_STARTED_IMAGE: require("../../assets/Get-Started-img.png"),
     STORY_TIME_IMG: require("../../assets/story-time.png"),
-    BG_FRAME: require("../../assets/background-frame-img.png"),
     LOGIN_IMG: require("../../assets/login-img.png"),
     CREATE_ACCOUNT_ICON: require("../../assets/create-account-img.png"),
     FORGET_BG_IMG: require("../../assets/forget-bg-img.png"),
@@ -12,7 +11,9 @@ export const Img_Paths = {
     HOME_FRAME: require("../../assets/home-frame.png"),
     PLAY_STORY_IMG: require("../../assets/playstory-time.png"),
     HOME_FOCUSED: require("../../assets/home_focused.png"),
-    // Categories File
+
+    // Categories File-----
+
     ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
     BAG_IMG: require("../../assets/Categories-image/bag-icon.png"),
     CALENDER_ICON: require("../../assets/Categories-image/calender-icon.png"),
@@ -29,22 +30,27 @@ export const Img_Paths = {
     SCHOOL_ICON: require("../../assets/Categories-image/school-icon.png"),
     FRANKIN_DRAWEN: require("../../assets/frankin-drawin.png"),
     SEARCH_ADD_ICON: require("../../assets/search-addfriends-icon.png"),
-    // Add Friends
+
+    // Add Friends-----
+
     FIRST_PROFILE: require("../../assets/first-profile.png"),
     SECOND_PROFILE: require("../../assets/second-profile.png"),
     THIRD_PROFILE: require("../../assets/third-profile.png"),
     FOURTH_PROFILE: require("../../assets/fourth-profile.png"),
     FIFTH_PROFILE: require("../../assets/fifth-profile.png"),
     SIXTH_PROFILE: require("../../assets/sixth-profile.png"),
-    // PlayFlowScreens
+
+    // PlayFlowScreens-----
+
     BG_PLAYFLOW: require("../../assets/bg-play-flow.png"),
-    FULL_BORDER_FRAME: require("../../assets/full-border-frame.png"),
     VOICE_OF_TEXT_ICON: require("../../assets/voiceoftext-icon.png"),
     VIDEO_ICON: require("../../assets/video-icon.png"),
     SHARE_BTN: require("../../assets/sendbtn-icon.png"),
     SHARK_ICON: require("../../assets/shark-icon.png"),
     FISH_ICON: require("../../assets/fish-icon.png"),
-    // Animals Sub Categories Img Paths
+
+    // Animals Sub Categories Img Paths-----
+
     ANIMAL_SHARK: require("../../assets/subCategory/shark.png"),
     ANIMAL_DOG: require("../../assets/subCategory/dog.png"),
     ANIMAL_MANTA: require("../../assets/subCategory/manta-ray.png"),
@@ -79,11 +85,15 @@ export const Img_Paths = {
     ANIMAL_FOX: require("../../assets/subCategory/fox.png"),
     ANIMAL_COYOTE: require("../../assets/subCategory/coyote.png"),
     ANIMAL_OSTRICH: require("../../assets/subCategory/ostrich.png"),
-    // HUMANS_SUB CATEGORIES
+
+    // HUMANS_SUB CATEGORIES-----
+
     TEACHER_ICON: require("../../assets/subCategory/teacher.png"),
     POLICE_ICON: require("../../assets/subCategory/police-officer.png"),
     FAMILY_ICON: require("../../assets/subCategory/family-man.png"),
-    // THINGS_SUB CATEGORIES
+
+    // THINGS_SUB CATEGORIES----
+
     TELEPHONE_MOBILE: require("../../assets/subCategory/telephone-mobile.png"),
     CAMERA_ICON: require("../../assets/subCategory/camera.png"),
     MONEY_ICON: require("../../assets/subCategory/money.png"),
@@ -99,7 +109,9 @@ export const Img_Paths = {
     FLOWER_ICON: require("../../assets/subCategory/flower.png"),
     SAND_CASTLE_ICON: require("../../assets/subCategory/sand-castle.png"),
     TREASURE_ICON: require("../../assets/subCategory/treasure.png"),
+
     // PLACES CATEGORY-----
+
     MOUNTAINS_ICON: require("../../assets/subCategory/mountains.png"),
     ISLAND_ICON: require("../../assets/subCategory/island.png"),
     WATERFALL_ICON: require("../../assets/subCategory/waterfall.png"),
@@ -116,7 +128,9 @@ export const Img_Paths = {
     SCHOOL_ICON: require("../../assets/subCategory/school-camp.png"),
     LANDMARKS_ICON: require("../../assets/subCategory/land-marks.png"),
     POOL_ICON: require("../../assets/subCategory/pool.png"),
+
     // FOODS CATEGORY-----
+
     PIE_ICON: require("../../assets/subCategory/pie.png"),
     BIRTAHDAY_ICON: require("../../assets/subCategory/birthday.png"),
     BREAD_ICON: require("../../assets/subCategory/bread.png"),
@@ -133,7 +147,9 @@ export const Img_Paths = {
     STEAK_ICON: require("../../assets/subCategory/steak.png"),
     BBQ_ICON: require("../../assets/subCategory/bbq.png"),
     ITALIAN_ICON: require("../../assets/subCategory/italian.png"),
+
     // WORK CATEGORIES-----
+
     PRINTER_ICON: require("../../assets/subCategory/printer.png"),
     MEETING_ICON: require("../../assets/subCategory/meeting-room.png"),
     BULLETIN_ICON: require("../../assets/subCategory/bulletin-board.png"),
@@ -142,7 +158,9 @@ export const Img_Paths = {
     WORK_SPACE_ICON: require("../../assets/subCategory/works-pace.png"),
     CHAIR_ICON: require("../../assets/subCategory/chair.png"),
     STAPLER_ICON: require("../../assets/subCategory/stapler.png"),
-    // Event CATEGORIES----- 
+
+    // Event CATEGORIES -------- 
+
     SUNRISE_ICON: require("../../assets/subCategory/sunrise.png"),
     STORM_ICON: require("../../assets/subCategory/storm.png"),
     RAIN_ICON: require("../../assets/subCategory/rain.png"),
@@ -152,7 +170,9 @@ export const Img_Paths = {
     REFLECTION_ICON: require("../../assets/subCategory/reflection.png"),
     BIRTHDAY_ICON: require("../../assets/subCategory/birthday-balloon.png"),
     FUNERAL_ICON: require("../../assets/subCategory/funeral.png"),
-    // TRAVEL CATEGORIES----- 
+
+    // TRAVEL CATEGORIES ------- 
+
     SURF_ICON: require("../../assets/subCategory/surf.png"),
     BIKE_ICON: require("../../assets/subCategory/bike.png"),
     CAR_ICON: require("../../assets/subCategory/car.png"),
@@ -160,7 +180,7 @@ export const Img_Paths = {
     AMBULANCE_ICON: require("../../assets/subCategory/ambulance.png"),
     SCOOTER_ICON: require("../../assets/subCategory/scooter.png"),
 
-    // SCHOOL CATEGORIES-----    
+    // SCHOOL CATEGORIES -------    
 
     BAG_ICON: require("../../assets/subCategory/bag.png"),
     LIBRARY_ICON: require("../../assets/subCategory/library.png"),
@@ -173,7 +193,8 @@ export const Img_Paths = {
     DESKCHAIR_ICON: require("../../assets/subCategory/desk-chair.png"),
     PENCIL_ICON: require("../../assets/subCategory/pencil-case.png"),
 
-    // VEHICLES CATEGORIES-----    
+    // VEHICLES CATEGORIES -------    
+
     PLANE_ICON: require("../../assets/subCategory/plane.png"),
     TRAIN_ICON: require("../../assets/subCategory/train.png"),
     BUS_ICON: require("../../assets/subCategory/bus.png"),
@@ -190,6 +211,7 @@ export const Img_Paths = {
     POGOSTICK_ICON: require("../../assets/subCategory/pogo-stick.png"),
 
     // ELEMENTS CATEGORIES-----
+
     SNOWDAY_ICON: require("../../assets/subCategory/snow-day.png"),
     HEATWAVE_ICON: require("../../assets/subCategory/heatwave.png"),
     HURRICANE_ICON: require("../../assets/subCategory/hurricane.png"),
@@ -197,7 +219,8 @@ export const Img_Paths = {
     HAIL_ICON: require("../../assets/subCategory/hail.png"),
     ECLIPSE_ICON: require("../../assets/subCategory/eclipse.png"),
 
-    // COUNTRIES CATEGORIES
+    // COUNTRIES CATEGORIES-----
+
     SPAIN_ICON: require("../../assets/subCategory/spain.png"),
     FRANCE_ICON: require("../../assets/subCategory/france.png"),
     GERMANY_ICON: require("../../assets/subCategory/germany.png"),
@@ -215,5 +238,17 @@ export const Img_Paths = {
     AUSTRALIA_ICON: require("../../assets/subCategory/australia.png"),
     NEWZEALAND_ICON: require("../../assets/subCategory/new-zealand.png"),
     INDIA_ICON: require("../../assets/subCategory/india.png"),
+
+    // BORDERS FRAME -------
+
+    FULL_BORDER_FRAME: require("../../assets/full-border-frame.png"),
+    HOME_FRAME: require("../../assets/home-frame.png"),
+    BG_FRAME: require("../../assets/background-frame-img.png"),
+    PLAYFLOW_FRAME: require("../../assets/border-frame.png"),
+
+    // BORDERS FRAME-------
+    // PLAY FLOW SECTION IMAGES
+    NEXT_PLAYER_IMG: require("../../assets/next-player-img.png"),
+    EXTEND_STORY_IMG: require("../../assets/extend-story-img.png"),
 
 };

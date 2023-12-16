@@ -4,8 +4,7 @@ import { SecondaryColor, ThirdColor } from '../screens/Styles/Style'
 import { responsiveHeight, responsiveFontSize, responsiveWidth } from "react-native-responsive-dimensions"
 
 
-
-const TouchableButton = ({ text, onPress, backgroundColor, color, borderWidth }) => {
+const TouchableButton = ({ text, onPress, backgroundColor, color, borderWidth, isLongPress }) => {
 
     return (
 
@@ -16,6 +15,6 @@ const TouchableButton = ({ text, onPress, backgroundColor, color, borderWidth })
         </View>
 
     )
-}
+};
 
 export default TouchableButton;

@@ -36,18 +36,21 @@ const Sequence = () => {
         } else {
             newCounters[index] = null;
         }
-
         setCounters(newCounters);
-
     };
-    console.log("counti", counters)
+
+
 
     const handlesequence = () => {
-        navigation.navigate("PLayFlowScreens", {
-            screen: FIRSTSCREENPLAYFLOW
-        })
-
+        const filterlength = counters.filter(Boolean).length
+        if (filterlength > 3) {
+            navigation.navigate("PLayFlowScreens", {
+                screen: FIRSTSCREENPLAYFLOW
+            })
+        }
     }
+
+
 
     return (
 

@@ -3,8 +3,9 @@ import React from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateVerticalScale } from 'react-native-size-matters'
 
-const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress }) => {
 
+
+const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress }) => {
 
     return (
         <View style={{ backgroundColor: mainbgColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
@@ -15,6 +16,6 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress }) => 
         </View>
     )
 
-}
+};
 
 export default StoryUsers;
