@@ -1,21 +1,21 @@
 import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { Img_Paths } from '../../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
+import { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
-import FeedChatFrame from '../../../components/FeedChatFrame';
-import TouchableButton from '../../../components/TouchableButton';
+import FeedChatFrame from '../../../../components/FeedChatFrame';
+import TouchableButton from '../../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
-import NavigationsString from '../../../constants/NavigationsString';
-import UserNames from '../../../components/UserNames';
+import NavigationsString from '../../../../constants/NavigationsString';
+import UserNames from '../../../../components/UserNames';
 
-const ThirdUser = () => {
+const VideoThirdUser = () => {
 
     let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
-    const { THIRD_EXTEND_STORY } = NavigationsString
+    const { VIDEO_THIRD_STORY, VIDEO_FOURTH_STORY } = NavigationsString;
     const navigation = useNavigation();
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
@@ -24,7 +24,6 @@ const ThirdUser = () => {
     const [isPressed, setIsPressed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
-    const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
 
     const handleStart = () => {
@@ -105,7 +104,7 @@ const ThirdUser = () => {
     // Stop Recording---------
 
     const stopRecording = async () => {
-        setIsRecording(false)
+
         try {
             await Voice.stop();
         } catch (error) {
@@ -134,7 +133,7 @@ const ThirdUser = () => {
 
 
     const onPressnext = () => {
-        navigation.navigate(THIRD_EXTEND_STORY)
+        navigation.navigate(VIDEO_FOURTH_STORY)
     }
 
 
@@ -147,7 +146,7 @@ const ThirdUser = () => {
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
-                        <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
+                        <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../../assets/back-playflowicon.png")} />
                     </TouchableOpacity>
                     <View>
                         <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
@@ -157,27 +156,25 @@ const ThirdUser = () => {
                 </View>
             </View>
 
-            <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
-                <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                    <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
-                        <UserNames username="@alfred" />
-
-                        <ScrollView>
-                            <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{result}</Text>
+            <View>
+                <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
+                    <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
+                        <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
+                            <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+                            <View>
+                                {
+                                    !started &&
+                                    <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
+                                }
                             </View>
-                        </ScrollView>
-
-                        <View>
-                            {
-                                !started &&
-                                <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
-                            }
                         </View>
-
                     </View>
-                </View>
-            </ImageBackground>
+                </ImageBackground>
+
+                <TouchableOpacity activeOpacity={0.7} style={{ position: "absolute", bottom: 0, right: 150, width: responsiveWidth(20), height: responsiveHeight(6), backgroundColor: "#4B7A84", justifyContent: "center", alignItems: "center" }}>
+                    <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../../../../assets/camera-image.png")} />
+                </TouchableOpacity>
+            </View>
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
                 <TouchableOpacity onLongPress={() => {
@@ -186,15 +183,14 @@ const ThirdUser = () => {
                 }}
                     onPressOut={handlePressOut}
                     activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
-                    <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
+                    <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
                 </TouchableOpacity>
             </View>
 
             <View>
                 <TouchableButton onPress={onPressnext} isLongPress={isLongPress} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton text="Save Story" color={TextColorGreen} />
+                <TouchableButton text="Save Story3" color={TextColorGreen} />
             </View>
-
 
         </ImageBackground>
     )
@@ -254,5 +250,4 @@ const styles = StyleSheet.create({
     },
 
 })
-export default ThirdUser;
-
+export default VideoThirdUser;

@@ -34,7 +34,7 @@ const SubCategories = ({ route }) => {
     const navigation = useNavigation();
     const id = route?.params?.id;
 
-    console.log("id---", id)
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>

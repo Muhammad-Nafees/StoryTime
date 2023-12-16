@@ -9,7 +9,6 @@ import PlayStoryTime from "../screens/HomeScreens/PlayStoryTime";
 import NavigationsString from "../constants/NavigationsString";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { Img_Paths } from "../assets/Imagepaths";
-// import FeedChat from "../screens/HomeScreens/FeedChat";
 import FirstScreenPlayFlow from "../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow";
 import AddFiends from "../screens/HomeScreens/AddFriends";
 import AddPlayers from "../screens/HomeScreens/catagoriesaddMembers/Add_Players";
@@ -26,6 +25,13 @@ import ThirdExtendStory from "../screens/HomeScreens/playslowscreens/extendstory
 import FourthUser from "../screens/HomeScreens/playslowscreens/FourthUser";
 import FourthUserStory from "../screens/HomeScreens/playslowscreens/extendstorytimes/FourthUSerStory";
 import VideoFirstStartScreen from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen";
+import VideoFirstUser from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser";
+import VideoSecondStory from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory";
+import VideoSecondUser from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondUser";
+import VideoThirdStory from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoThirdStory";
+import VideoThirdUser from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoThirdUser";
+import VideoFourthStory from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFourthStory";
+import VideoFourthUser from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser";
 
 const Navigations = () => {
 
@@ -48,7 +54,7 @@ const Navigations = () => {
 const PLayFlowScreens = () => {
 
     const Stack = createStackNavigator();
-    const { FIRSTSCREENPLAYFLOW, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, EXTENDSTORY, SECONDUSER_NEXT_PLAY, CONTINUE_AND_NEXTPLAYER, THIRD_USER, THIRD_EXTEND_STORY, FOURTH_USER, FOURTH_USER_STORY, VIDEO_FIRST_SCREEN } = NavigationsString;
+    const { FIRSTSCREENPLAYFLOW, VIDEO_THIRD_USER, VIDEO_FOURTH_STORY, VIDEO_FOURTH_USER, VIDEO_THIRD_STORY, SECONDSCREENPLAYFLOW, VIDEO_SECOND_USER, THIRDSCREENPLAYFLOW, EXTENDSTORY, SECONDUSER_NEXT_PLAY, CONTINUE_AND_NEXTPLAYER, THIRD_USER, THIRD_EXTEND_STORY, FOURTH_USER, FOURTH_USER_STORY, VIDEO_FIRST_SCREEN, VIDEO_FIRST_USER, SECOND_USER_STORY } = NavigationsString;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -62,7 +68,15 @@ const PLayFlowScreens = () => {
             <Stack.Screen name={THIRD_EXTEND_STORY} component={ThirdExtendStory} />
             <Stack.Screen name={FOURTH_USER} component={FourthUser} />
             <Stack.Screen name={FOURTH_USER_STORY} component={FourthUserStory} />
+            {/* VIDEOS---------SCR*** */}
             <Stack.Screen name={VIDEO_FIRST_SCREEN} component={VideoFirstStartScreen} />
+            <Stack.Screen name={VIDEO_FIRST_USER} component={VideoFirstUser} />
+            <Stack.Screen name={SECOND_USER_STORY} component={VideoSecondStory} />
+            <Stack.Screen name={VIDEO_SECOND_USER} component={VideoSecondUser} />
+            <Stack.Screen name={VIDEO_THIRD_STORY} component={VideoThirdStory} />
+            <Stack.Screen name={VIDEO_THIRD_USER} component={VideoThirdUser} />
+            <Stack.Screen name={VIDEO_FOURTH_STORY} component={VideoFourthStory} />
+            <Stack.Screen name={VIDEO_FOURTH_USER} component={VideoFourthUser} />
         </Stack.Navigator>
     )
 };

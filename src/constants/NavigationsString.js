@@ -28,6 +28,13 @@ export default NavigationString = {
     THIRD_EXTEND_STORY: "ThirdExtendStory",
     FOURTH_USER: "FourthUser",
     FOURTH_USER_STORY: "FourthUserStory",
-    VIDEO_FIRST_SCREEN: "VideoFirstStartScreen"
+    VIDEO_FIRST_SCREEN: "VideoFirstStartScreen",
+    VIDEO_FIRST_USER: "VideoFirstUser",
+    SECOND_USER_STORY: "SecondUserStory",
+    VIDEO_SECOND_USER: "VideoSecondUser",
+    VIDEO_THIRD_STORY: "VideoThirdStory",
+    VIDEO_THIRD_USER: "VideoThirdUser",
+    VIDEO_FOURTH_STORY: "VideoFourthStory",
+    VIDEO_FOURTH_USER: "VideoFourthUser",
 
 };

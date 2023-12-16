@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import BackButton from '../../../../components/BackButton'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
@@ -42,25 +42,53 @@ const Sequence = () => {
 
 
     const handlesequence = () => {
-        const filterlength = counters.filter(Boolean).length
+        const filterlength = counters.filter(Boolean).length;
         if (filterlength > 3) {
             navigation.navigate("PLayFlowScreens", {
-                screen: FIRSTSCREENPLAYFLOW
+                screen: FIRSTSCREENPLAYFLOW,
             })
         }
     }
 
 
 
-    return (
+    const sequenceplayers = [
+        {
+            text: "@Cedrick101",
+            backgroundColor: TextColorGreen,
+            textindex: counters[0],
+            id: 0
+        },
+        {
+            text: "@Cedrick101",
+            backgroundColor: TextColorGreen,
+            textindex: counters[1],
+            id: 1
+        }
+        ,
+        {
+            text: "@Cedrick101",
+            backgroundColor: TextColorGreen,
+            textindex: counters[2],
+            id: 2
+        },
+        {
+            text: "@oliverpierce",
+            backgroundColor: "#E44173",
+            textindex: counters[3],
+            id: 3
+        }
+    ]
 
+
+
+    return (
         <View style={{ justifyContent: "center", alignItems: "center" }}>
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                 <View style={{ flexDirection: "row", alignItems: "center", }}>
                     <BackButton backimage={LEFT_ARROW_IMG} />
                     <Text style={{ color: "#E44173", fontSize: responsiveFontSize(2.2), paddingHorizontal: moderateScale(10), fontWeight: "600" }}>Sequence</Text>
                 </View>
-
 
                 <TouchableOpacity style={{
                     borderRadius: 10,
@@ -78,76 +106,24 @@ const Sequence = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+            <ScrollView>
 
-                <TouchableOpacity onPress={() => handlePress(0)} activeOpacity={0.7} style={{ backgroundColor: counters[0] ? TextColorGreen : null, justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen }}>
-                    <Text style={{ color: "#FFF" }}>{counters[0]}</Text>
-                </TouchableOpacity>
+                {
+                    sequenceplayers.map((item, index) => (
+                        <>
+                            <View style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+                                <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor }}>
+                                    <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>
+                                </TouchableOpacity>
+                                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: item.backgroundColor, padding: moderateScale(14) }}>
+                                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>{item.text}</Text>
+                                </View>
+                            </View>
+                        </>
+                    ))
+                }
+            </ScrollView>
 
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
-                </View>
-            </View>
-
-            <View style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                <TouchableOpacity onPress={() => handlePress(1)} activeOpacity={0.7} style={{ backgroundColor: counters[1] ? TextColorGreen : null, justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen }}>
-                    <Text style={{ color: "#FFF" }}>{counters[1]}</Text>
-                </TouchableOpacity>
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
-                </View>
-            </View>
-
-            <View style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                <TouchableOpacity onPress={() => handlePress(2)} activeOpacity={0.7} style={{ backgroundColor: counters[2] ? TextColorGreen : null, justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen }}>
-                    <Text style={{ color: "#FFFFFF" }}>{counters[2]}</Text>
-                </TouchableOpacity>
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
-                </View>
-            </View>
-
-
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                <TouchableOpacity onPress={() => handlePress(3)} activeOpacity={0.7} style={{ backgroundColor: counters[3] ? "#E44173" : null, justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: "#E44173" }}>
-                    <Text style={{ color: "#FFFFFF" }}>{counters[3]}</Text>
-                </TouchableOpacity>
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: "#E44173", padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@oliverpierce</Text>
-                </View>
-            </View>
-
-
-
-            {/* Third User */}
-
-            {/* <View style={{ paddingVertical: moderateVerticalScale(14), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                <TouchableOpacity onPress={() => handlePress()} activeOpacity={0.7} style={{ justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen }}>
-                    {
-                        isSequence &&
-                        <Text style={{ color: "#FFF", }}></Text>
-                    }
-                </TouchableOpacity>
-
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@alfred</Text>
-                </View>
-            </View> */}
-
-            {/* Fourth User */}
-
-            {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                <TouchableOpacity onPress={() => handlePress()} activeOpacity={0.7} style={{ justifyContent: "center", alignItems: "center", width: 45, height: 45, borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen }}>
-                    {
-                        isSequence &&
-                        <Text style={{ color: "#FFF", }}></Text>
-                    }
-                </TouchableOpacity>
-
-                <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
-                    <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>@oliverpierce</Text>
-                </View>
-            </View> */}
 
             <View style={{ paddingTop: responsiveWidth(85), }}>
                 <TouchableButton onPress={() => handlesequence()} backgroundColor={TextColorGreen} text="Next" color="#FFF" />
