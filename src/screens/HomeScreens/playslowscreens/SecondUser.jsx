@@ -12,8 +12,9 @@ import NavigationsString from '../../../constants/NavigationsString';
 import UserNames from '../../../components/UserNames';
 import { useSelector } from 'react-redux';
 import FirstScreen from '../../../components/FirstScreen';
+import SaveStory from '../../../components/SaveStory';
 
-const FirstUser = () => {
+const SecondUser = () => {
 
     let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
@@ -28,7 +29,9 @@ const FirstUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of current index
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [showStory, setShowStory] = useState(false);
+
     const counters = useSelector((state) => state.SequencePlayer.counters)
 
     const handleStart = () => {
@@ -143,7 +146,11 @@ const FirstUser = () => {
     // }
 
     const onPressNext = () => {
-        navigation.navigate("FirstUserStorytext")
+        // navigation.navigate("SecondUserStory")
+    }
+
+    const handlesavestory = () => {
+        setShowStory(true)
     }
 
 
@@ -185,7 +192,7 @@ const FirstUser = () => {
                 <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
                     <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
 
-                        <UserNames username="@chrislee" />
+                        <UserNames username=" @Cedrick101" />
 
                         <ScrollView>
                             <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
@@ -217,9 +224,11 @@ const FirstUser = () => {
             </View>
 
             <View>
-                <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @cedrick101" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton text="Save Story" color={TextColorGreen} />
+                <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @alfred" backgroundColor={TextColorGreen} color="#FFF" />
+                <TouchableButton onPress={handlesavestory} text="Save Story" color={TextColorGreen} />
             </View>
+
+            {showStory && <SaveStory isVisible={showStory} setVisible={setShowStory} />}
 
         </ImageBackground>
     )
@@ -279,5 +288,5 @@ const styles = StyleSheet.create({
     },
 
 })
-export default FirstUser;
+export default SecondUser;
 

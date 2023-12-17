@@ -33,6 +33,9 @@ import VideoThirdUser from "../screens/HomeScreens/playslowscreens/videoplayersc
 import VideoFourthStory from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFourthStory";
 import VideoFourthUser from "../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser";
 import FirstUser from "../screens/HomeScreens/playslowscreens/FirstUser";
+import FirstUserStory from "../screens/HomeScreens/playslowscreens/FirstUserStory";
+import SecondUserStory from "../screens/HomeScreens/playslowscreens/SecondUser";
+import SecondUser from "../screens/HomeScreens/playslowscreens/SecondUser";
 
 const Navigations = () => {
 
@@ -62,6 +65,8 @@ const PLayFlowScreens = () => {
             <Stack.Screen name={FIRSTSCREENPLAYFLOW} component={FirstScreenPlayFlow} />
             <Stack.Screen name={SECONDSCREENPLAYFLOW} component={SecondPlayFlowScreen} />
             <Stack.Screen name={FIRST_USER} component={FirstUser} />
+            <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
+            <Stack.Screen name="SecondUsertext" component={SecondUser} />
             {/* <Stack.Screen name={THIRDSCREENPLAYFLOW} component={ThirdPlayFlowScreen} /> */}
             {/* <Stack.Screen name={EXTENDSTORY} component={ExtendStoryOptions} /> */}
             {/* <Stack.Screen name={SECONDUSER_NEXT_PLAY} component={SecondUserNextPlayer} /> */}

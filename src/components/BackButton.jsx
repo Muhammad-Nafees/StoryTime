@@ -4,13 +4,13 @@ import { Img_Paths } from '../assets/Imagepaths';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const BackButton = ({ leftarrow }) => {
+const BackButton = ({ leftarrow, onPress }) => {
 
     const { LEFT_ARROW_IMG } = Img_Paths;
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={() => navigation?.goBack()} style={styles.back_button}>
+        <TouchableOpacity onPress={onPress} style={styles.back_button}>
             <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
         </TouchableOpacity>
     )
