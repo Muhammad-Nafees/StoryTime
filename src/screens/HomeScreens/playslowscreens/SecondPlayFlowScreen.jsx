@@ -34,6 +34,7 @@ const SecondPlayFlowScreen = () => {
                     height: squareSize,
                     borderRadius: squareSize / 2,
                 }]}>
+
                     <View>
                         <Image style={styles.img_dog} source={require("../../../assets/dog-playflow.png")} />
                     </View>
@@ -46,6 +47,7 @@ const SecondPlayFlowScreen = () => {
                     </View>
                 </View>
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
+
                 <View>
                     <TouchableOpacity onPress={() => navigation.navigate(FIRST_USER)}>
                         <Image source={require("../../../assets/pause-img.png")} />

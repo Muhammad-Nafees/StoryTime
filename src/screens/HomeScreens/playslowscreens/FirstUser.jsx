@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -10,8 +10,9 @@ import TouchableButton from '../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../constants/NavigationsString';
 import UserNames from '../../../components/UserNames';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FirstScreen from '../../../components/FirstScreen';
+import { recordingData } from '../../../../store/slices/RecordingData';
 
 const FirstUser = () => {
 
@@ -28,8 +29,9 @@ const FirstUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of current index
-    const counters = useSelector((state) => state.SequencePlayer.counters)
+    const dispatch = useDispatch();
+    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
+
 
     const handleStart = () => {
         setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
@@ -91,9 +93,10 @@ const FirstUser = () => {
 
     // onSpeechResult----------
 
-    const onspeechResult = (e) => {
-        setResult(e.value[0])
-    };
+
+    const onspeechResult = useCallback((e) => {
+        dispatch(recordingData(e.value[0]));
+    }, [dispatch]);
 
     // Start Recording And Convert Text----------
 
@@ -140,13 +143,11 @@ const FirstUser = () => {
     //     if (currentIndex < counters.length - 1) {
     //         setCurrentIndex(currentIndex + 1); // Increment index if within range
     //     }
-    // }
+    // }    
 
     const onPressNext = () => {
         navigation.navigate("FirstUserStorytext")
     }
-
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -164,6 +165,7 @@ const FirstUser = () => {
                 <FirstScreen content={counters[currentIndex + 1]} image={PLAYFLOW_FRAME} started={started} handlePressOut={handlePressOut} onPressnext={onPressnext} isPressed={isPressed} setIsPressed={setIsPressed} handleStart={handleStart} result={result} timeText="NAFEE" />
             )}
  */}
+
 
 
             {/* BACK BUTTON AND TIMER */}
@@ -189,7 +191,7 @@ const FirstUser = () => {
 
                         <ScrollView>
                             <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{result}</Text>
+                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{RecordingText}</Text>
                             </View>
                         </ScrollView>
 
@@ -279,5 +281,5 @@ const styles = StyleSheet.create({
     },
 
 })
-export default FirstUser;
 
+export default FirstUser;

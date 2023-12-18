@@ -22,4 +22,4 @@ const AddFriendUsers = ({ profileimage, text, userchoice }) => {
     )
 }
 
-export default AddFriendUsers
+export default AddFriendUsers;

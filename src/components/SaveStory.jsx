@@ -1,13 +1,17 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../assets/Imagepaths/index";
 import BackButton from '../components/BackButton';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
+import RNFS from 'react-native-fs';
+import { useSelector } from 'react-redux';
+import PDFLib, { PDFDocument, PDFText } from 'react-native-pdf';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 
 const SaveStory = ({ isVisible, setVisible }) => {
@@ -18,9 +22,23 @@ const SaveStory = ({ isVisible, setVisible }) => {
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
+
+    const generatePdf = async () => {
+        const options = {
+            html: `<h1>${RecordingText}</h1>`,
+            fileName: 'HTML_TO_PDF',
+            directory: 'Documents',
+        };
+        const file = await RNHTMLtoPDF.convert(options)
+        console.log(file);
+        // alert(file.filePath);
+    }
+
+
 
     return (
-        <Modal visible={isVisible} >
+        <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
                 <View>
                     {/* Back Button */}
@@ -28,15 +46,13 @@ const SaveStory = ({ isVisible, setVisible }) => {
                         <BackButton onPress={() => setVisible(false)} />
                     </View>
                     <View style={styles.container}>
-                        <TouchableButton backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                        <TouchableButton onPress={generatePdf} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
                         <TouchableButton text="Save as Pdf" />
-
                     </View>
 
                 </View>
             </ImageBackground>
         </Modal>
-
     )
 };
 
@@ -80,7 +96,6 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(5),
         borderRadius: 18,
     },
-
     second_childbg: {
         marginLeft: "auto",
         width: responsiveWidth(67)
@@ -150,4 +165,3 @@ const styles = StyleSheet.create({
 });
 
 export default SaveStory;
-

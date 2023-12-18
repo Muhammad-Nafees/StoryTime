@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { Img_Paths } from '../../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -10,6 +10,8 @@ import TouchableButton from '../../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
+import { Camera, useCameraDevices, } from "react-native-vision-camera"
+import VisionCamera from '../../../../components/VisionCamera';
 
 const VideoFirstUser = () => {
 
@@ -25,11 +27,29 @@ const VideoFirstUser = () => {
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
     const [isLongPress, setIsLongPress] = useState(false);
+    const [showCamera, setShowCamera] = useState(false)
+    const [currentCamera, setCurrentCamera] = useState('back');
+    const devices = Camera.getAvailableCameraDevices();
+    const [isRecording, setIsRecording] = useState(false);
+    const cameraRef = useRef(null);
 
-    const handleStart = () => {
-        setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
-        startRecognizing()
+
+    console.log("devoces--", devices)
+    useEffect(() => {
+        checkpermission()
+    }, [])
+
+    const getCameraDetails = () => {
+        return devices.find(camera => camera.position === currentCamera);
     };
+    const activeCamera = getCameraDetails();
+    const checkpermission = async () => {
+        const newCameraPermisssion = await Camera.requestCameraPermission()
+        const newMicrophonePermission = await Camera.requestMicrophonePermission()
+        console.log(newCameraPermisssion)
+    }
+
+
 
     // Timer 2 Minutes
     useEffect(() => {
@@ -59,49 +79,7 @@ const VideoFirstUser = () => {
         }
     }, [timeLeft]);
 
-    // ----------XXXXXXXXXX----------
 
-    useEffect(() => {
-        Voice.onSpeechStart = onspeechStart;
-        Voice.onSpeechEnd = onspeechEnd;
-        Voice.onSpeechResults = onspeechResult;
-        return () => {
-            Voice.destroy().then(Voice.removeAllListeners);
-        };
-    }, []);
-
-    // onSpeechStart-----------
-
-    const onspeechStart = (e) => {
-        console.log(e);
-        setStarted(true)
-    };
-
-    // onSpeechEnd-----------
-
-    const onspeechEnd = (e) => {
-        console.log(e);
-        setEnded(e.value)
-    };
-
-    // onSpeechResult----------
-
-    const onspeechResult = (e) => {
-        setResult(e.value[0])
-    };
-
-    // Start Recording And Convert Text----------
-
-    const startRecognizing = async () => {
-        try {
-            await Voice.start('en-US');
-            handlePressIn()
-        } catch (error) {
-            console.log("err", error);
-        }
-    };
-
-    // Stop Recording---------
 
     const stopRecording = async () => {
 
@@ -112,17 +90,6 @@ const VideoFirstUser = () => {
         }
     };
 
-    // Handle Press In----------
-
-    const handlePressIn = () => {
-        longPressTimeout = setTimeout(() => {
-            setIsLongPress(true);
-            // Perform actions or start voice recognition on long press
-        }, 1000); // Set your desired duration for long press
-    };
-
-    // Handle Press out----------
-
     const handlePressOut = () => {
         clearTimeout(longPressTimeout);
         setIsLongPress(false);
@@ -130,15 +97,38 @@ const VideoFirstUser = () => {
         stopRecording()
     };
 
-
-
     const onPressnext = () => {
-        navigation.navigate(VIDEO_FOURTH_STORY)
+        setShowCamera(true)
     }
 
+    const toggleCamera = () => {
+        const newCamera = currentCamera === 'back' ? 'front' : 'back';
+        setCurrentCamera(newCamera);
+    };
 
+    // if (device === null) {
+    //     return <Text>Camera not available</Text>
+    // }
+
+    // const toggleRecording = async () => {
+    //     try {
+    //         if (!isRecording) {
+    //             const activeCamera = getCameraDetails();
+    //             if (activeCamera) {
+    //                 await cameraRef.current.startRecording(activeCamera);
+    //                 setIsRecording(true);
+    //             }
+    //         } else {
+    //             await cameraRef.current.stopRecording();
+    //             setIsRecording(false);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error recording video:', error);
+    //     }
+    // };
 
     return (
+
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
             {/* BACK BUTTON AND TIMER */}
@@ -159,29 +149,55 @@ const VideoFirstUser = () => {
             <View>
                 <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                        <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
+                        {/* <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}> */}
+                        {/* <View style={{}}> */}
+                        <ImageBackground style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }} source={require("../../../../assets/bgImage-video.png")}>
                             <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+
+                            {/* {
+                                activeCamera && showCamera &&
+                                <Camera
+                                    // ref={camera}
+                                    style={{ width: SCREENWIDTH * 0.7, height: SCREENWIDTH * 0.6, }}
+                                    device={activeCamera}
+                                    isActive={true}
+                                // photo={true}
+                                />
+                            } */}
+
                             <View>
                                 {
                                     !started &&
                                     <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
                                 }
                             </View>
-                        </View>
+                        </ImageBackground>
+
+                        {/*                         
+                        {
+                            showCamera &&
+                            <Camera
+                                // ref={camera}
+                                style={{ width: 300, height: 200 }}
+                                device={device}
+                                isActive={true}
+                            // photo={true}
+                            />
+                        } */}
+
+
                     </View>
+                    {/* </View> */}
                 </ImageBackground>
 
-                <TouchableOpacity activeOpacity={0.7} style={{ position: "absolute", bottom: 0, right: 150, width: responsiveWidth(20), height: responsiveHeight(6), backgroundColor: "#4B7A84", justifyContent: "center", alignItems: "center" }}>
+                <TouchableOpacity onPress={toggleCamera} activeOpacity={0.7} style={{ position: "absolute", bottom: 0, right: 150, width: responsiveWidth(20), height: responsiveHeight(6), backgroundColor: "#4B7A84", justifyContent: "center", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../../../../assets/camera-image.png")} />
                 </TouchableOpacity>
             </View>
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity onLongPress={() => {
-                    setIsPressed(true);
-                    handleStart();
-                }}
-                    onPressOut={handlePressOut}
+                <TouchableOpacity
+                    // onPress={toggleRecording}
                     activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
                 </TouchableOpacity>
@@ -192,6 +208,10 @@ const VideoFirstUser = () => {
                 <TouchableButton text="Save Story3" color={TextColorGreen} />
             </View>
 
+            {/* {
+                showCamera &&
+                <VisionCamera showCamera={showCamera} setShowCamera={setShowCamera} />
+            } */}
 
 
         </ImageBackground>
@@ -249,6 +269,9 @@ const styles = StyleSheet.create({
         marginLeft: responsiveWidth(1),
         marginTop: responsiveWidth(1),
         // marginBottom: responsiveWidth(2.5)
+    },
+    cameraView: {
+        flex: 1,
     },
 
 })

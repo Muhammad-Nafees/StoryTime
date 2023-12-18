@@ -11,8 +11,10 @@ import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../constants/NavigationsString';
 import UserNames from '../../../components/UserNames';
 import { useSelector } from 'react-redux';
-import FirstScreen from '../../../components/FirstScreen';
 import SaveStory from '../../../components/SaveStory';
+import Pdf from 'react-native-pdf';
+
+
 
 const SecondUser = () => {
 
@@ -29,17 +31,22 @@ const SecondUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
     const [showStory, setShowStory] = useState(false);
-
     const counters = useSelector((state) => state.SequencePlayer.counters)
+    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
+
+
 
     const handleStart = () => {
         setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
         startRecognizing()
     };
 
+
+
     // Timer 2 Minutes-----
+
+
 
     useEffect(() => {
         let countdown;
@@ -55,6 +62,8 @@ const SecondUser = () => {
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
     }, [timeLeft]);
 
+
+
     useEffect(() => {
         if (timeLeft === null) {
             // Display default time when countdown is not started
@@ -68,7 +77,11 @@ const SecondUser = () => {
         }
     }, [timeLeft]);
 
+
+
     // ----------XXXXXXXXXX----------
+
+
 
     useEffect(() => {
         Voice.onSpeechStart = onspeechStart;
@@ -224,7 +237,7 @@ const SecondUser = () => {
             </View>
 
             <View>
-                <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @alfred" backgroundColor={TextColorGreen} color="#FFF" />
+                {/* <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @alfred" backgroundColor={TextColorGreen} color="#FFF" /> */}
                 <TouchableButton onPress={handlesavestory} text="Save Story" color={TextColorGreen} />
             </View>
 
