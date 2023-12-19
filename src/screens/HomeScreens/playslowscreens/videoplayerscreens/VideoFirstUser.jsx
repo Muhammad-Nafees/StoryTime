@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, PermissionsAndroid, SafeAreaView, Alert } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Img_Paths } from '../../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -10,48 +10,44 @@ import TouchableButton from '../../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
-import { Camera, useCameraDevices, } from "react-native-vision-camera"
-import VisionCamera from '../../../../components/VisionCamera';
+import { Camera, getCameraFormat, useCameraDevices, } from "react-native-vision-camera"
+import SaveVideo from '../../../../components/SaveVideo';
+import { recordingVideo } from '../../../../../store/slices/RecordingData';
+import { useDispatch } from 'react-redux';
+
 
 const VideoFirstUser = () => {
 
-    let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
-    const { VIDEO_THIRD_STORY, VIDEO_FOURTH_STORY } = NavigationsString;
     const navigation = useNavigation();
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
-    const [ended, setEnded] = useState("")
-    const [result, setResult] = useState([])
     const [isPressed, setIsPressed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
-    const [isLongPress, setIsLongPress] = useState(false);
     const [showCamera, setShowCamera] = useState(false)
+    const [path, setPath] = useState({})
+    const [isVisible, setIsVisible] = useState(false)
     const [currentCamera, setCurrentCamera] = useState('back');
     const devices = Camera.getAvailableCameraDevices();
-    const [isRecording, setIsRecording] = useState(false);
     const cameraRef = useRef(null);
-
-
-    console.log("devoces--", devices)
-    useEffect(() => {
-        checkpermission()
-    }, [])
+    const dispatch = useDispatch()
 
     const getCameraDetails = () => {
         return devices.find(camera => camera.position === currentCamera);
     };
+
     const activeCamera = getCameraDetails();
     const checkpermission = async () => {
-        const newCameraPermisssion = await Camera.requestCameraPermission()
-        const newMicrophonePermission = await Camera.requestMicrophonePermission()
-        console.log(newCameraPermisssion)
+        await Camera.requestCameraPermission()
+        await Camera.requestMicrophonePermission()
     }
-
-
+    useEffect(() => {
+        checkpermission()
+    }, [])
 
     // Timer 2 Minutes
+
     useEffect(() => {
         let countdown;
 
@@ -79,22 +75,13 @@ const VideoFirstUser = () => {
         }
     }, [timeLeft]);
 
-
-
-    const stopRecording = async () => {
-
-        try {
-            await Voice.stop();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     const handlePressOut = () => {
-        clearTimeout(longPressTimeout);
-        setIsLongPress(false);
         setIsPressed(false);
         stopRecording()
+        dispatch(recordingVideo(path))
+        if (isPressed) {
+            Alert.alert("Video Recorded Successfully")
+        }
     };
 
     const onPressnext = () => {
@@ -106,31 +93,35 @@ const VideoFirstUser = () => {
         setCurrentCamera(newCamera);
     };
 
-    // if (device === null) {
-    //     return <Text>Camera not available</Text>
-    // }
+    const recordVideos = useCallback(() => {
+        setIsPressed(true);
+        if (!cameraRef.current) {
+            return;
+        }
+        cameraRef.current.startRecording({
+            onRecordingFinished: (video) => setPath(video.path),
+            onRecordingError: (error) => console.error("err", error),
+        });
 
-    // const toggleRecording = async () => {
-    //     try {
-    //         if (!isRecording) {
-    //             const activeCamera = getCameraDetails();
-    //             if (activeCamera) {
-    //                 await cameraRef.current.startRecording(activeCamera);
-    //                 setIsRecording(true);
-    //             }
-    //         } else {
-    //             await cameraRef.current.stopRecording();
-    //             setIsRecording(false);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error recording video:', error);
-    //     }
-    // };
+    }, [cameraRef, path]);
+
+
+    const stopRecording = async () => {
+        await cameraRef.current?.stopRecording();
+    };
+
+    const saverecordingvideo = () => {
+        setIsVisible(true)
+
+    }
+
+    const handleStart = () => {
+        setTimeLeft(120);
+        recordVideos()
+    };
 
     return (
-
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-
             {/* BACK BUTTON AND TIMER */}
 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
@@ -149,43 +140,38 @@ const VideoFirstUser = () => {
             <View>
                 <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                        {/* <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}> */}
-                        {/* <View style={{}}> */}
-                        <ImageBackground style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }} source={require("../../../../assets/bgImage-video.png")}>
-                            <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
-
-                            {/* {
-                                activeCamera && showCamera &&
-                                <Camera
-                                    // ref={camera}
-                                    style={{ width: SCREENWIDTH * 0.7, height: SCREENWIDTH * 0.6, }}
-                                    device={activeCamera}
-                                    isActive={true}
-                                // photo={true}
-                                />
-                            } */}
-
-                            <View>
-                                {
-                                    !started &&
-                                    <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
-                                }
-                            </View>
-                        </ImageBackground>
-
-                        {/*                         
                         {
-                            showCamera &&
-                            <Camera
-                                // ref={camera}
-                                style={{ width: 300, height: 200 }}
-                                device={device}
-                                isActive={true}
-                            // photo={true}
-                            />
-                        } */}
+                            !showCamera ?
+                                <ImageBackground style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }} source={require("../../../../assets/bgImage-video.png")}>
+                                    <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+                                    <View>
+                                        {
+                                            !activeCamera &&
+                                            !started &&
+                                            <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
+                                        }
+                                    </View>
+                                </ImageBackground>
+                                :
+                                <>
+                                    <View>
+                                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999 }}>
+                                            <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+                                        </View>
 
-
+                                        <Camera
+                                            ref={cameraRef}
+                                            style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
+                                            device={activeCamera}
+                                            isActive={true}
+                                            video={true}
+                                            resizeMode='cover'
+                                            audio
+                                            photo={true}
+                                        />
+                                    </View>
+                                </>
+                        }
                     </View>
                     {/* </View> */}
                 </ImageBackground>
@@ -197,27 +183,27 @@ const VideoFirstUser = () => {
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
                 <TouchableOpacity
-                    // onPress={toggleRecording}
+                    onLongPress={handleStart}
+                    onPressOut={handlePressOut}
                     activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
                 </TouchableOpacity>
             </View>
 
             <View>
-                <TouchableButton onPress={onPressnext} isLongPress={isLongPress} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton text="Save Story3" color={TextColorGreen} />
+                <TouchableButton onPress={onPressnext} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
+                <TouchableButton onPress={saverecordingvideo} text="Save Story1" color={TextColorGreen} />
             </View>
 
-            {/* {
-                showCamera &&
-                <VisionCamera showCamera={showCamera} setShowCamera={setShowCamera} />
-            } */}
+            {
+                isVisible &&
+                <SaveVideo isVisible={isVisible} setIsVisible={setIsVisible} />
+            }
 
 
         </ImageBackground>
     )
 };
-
 
 
 const styles = StyleSheet.create({

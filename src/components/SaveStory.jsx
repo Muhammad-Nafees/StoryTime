@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -9,10 +9,10 @@ import BackButton from '../components/BackButton';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
 import RNFS from 'react-native-fs';
-import { useSelector } from 'react-redux';
-import PDFLib, { PDFDocument, PDFText } from 'react-native-pdf';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { recordingToHome } from '../../store/slices/RecordingData';
+import RNFetchBlob from 'rn-fetch-blob';
+import Pdf from 'react-native-pdf';
 
 const SaveStory = ({ isVisible, setVisible }) => {
 
@@ -23,16 +23,33 @@ const SaveStory = ({ isVisible, setVisible }) => {
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
     const RecordingText = useSelector((state) => state.RecordingData.recordingText)
+    const dispatch = useDispatch()
 
-    const generatePdf = async () => {
-        const options = {
-            html: `<h1>${RecordingText}</h1>`,
-            fileName: 'HTML_TO_PDF',
-            directory: 'Documents',
-        };
-        const file = await RNHTMLtoPDF.convert(options)
-        console.log(file);
-        // alert(file.filePath);
+    const saveVoicetoHome = () => {
+        dispatch(recordingToHome(RecordingText))
+        Alert.alert("Recording Text Saved to Home")
+    }
+
+    const downloadFile = () => {
+        const date = new Date();
+        const fileDir = RNFS.DownloadDirectoryPath; // RNFS ka use local filesystem access karne ke liye hota hai
+
+        // File path kahan pe save karna hai
+        const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
+
+        // State se text extract karen
+        const recordingText = RecordingText;
+
+        // Text ko file mein save karen
+        RNFS.writeFile(filePath, recordingText, 'utf8')
+            .then((success) => {
+                console.log('File saved at: ', filePath);
+                Alert.alert('File downloaded successfully');
+            })
+            .catch((err) => {
+                console.error(err);
+                Alert.alert('Error in downloading file');
+            });
     }
 
 
@@ -46,8 +63,8 @@ const SaveStory = ({ isVisible, setVisible }) => {
                         <BackButton onPress={() => setVisible(false)} />
                     </View>
                     <View style={styles.container}>
-                        <TouchableButton onPress={generatePdf} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        <TouchableButton text="Save as Pdf" />
+                        <TouchableButton onPress={saveVoicetoHome} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                        <TouchableButton onPress={downloadFile} text="Save as Pdf" color={"#FFF"} />
                     </View>
 
                 </View>
@@ -55,6 +72,7 @@ const SaveStory = ({ isVisible, setVisible }) => {
         </Modal>
     )
 };
+
 
 
 

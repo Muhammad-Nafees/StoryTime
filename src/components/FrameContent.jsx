@@ -6,6 +6,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../assets/Imagepaths'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
+import { useSelector } from 'react-redux'
 
 
 
@@ -15,7 +16,9 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
     const SCREENHEIGHT = Dimensions.get("window").height
     const navigation = useNavigation()
     const { HOME_FRAME, SHARE_BTN, SHARK_ICON } = Img_Paths
-    const { FEED_CHAT } = NavigationsString
+    const { FEED_CHAT } = NavigationsString;
+    const RecordingText = useSelector((state) => state.RecordingData.recordingTextToHome)
+
 
     return (
 
@@ -36,7 +39,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
 
                                             <View style={styles.text_container}>
                                                 <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
-                                                    Suddenly his friend saw him start to move strangely. The shark attacked Wilson so hard his entire body flew out of the water, and multiple eyewitnesses observed the whole situation. His friend and some others grabbed him when the shark attempted to drag him under.
+                                                    {RecordingText}
                                                 </Text>
                                             </View>
                                         </View>

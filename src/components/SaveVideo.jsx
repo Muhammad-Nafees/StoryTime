@@ -1,43 +1,77 @@
-import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../../Styles/Style";
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from "../../../../assets/Imagepaths/index";
-import BackButton from '../../../../components/BackButton';
-import NavigationsString from '../../../../constants/NavigationsString';
-import VoiceToText from '../../../../components/VoiceToText';
+import { Img_Paths } from "../assets/Imagepaths/index";
+import BackButton from '../components/BackButton';
+import NavigationsString from '../constants/NavigationsString';
+import TouchableButton from './TouchableButton';
+import RNFS from 'react-native-fs';
+import { useDispatch, useSelector } from 'react-redux';
+import { recordingVideo } from '../../store/slices/RecordingData';
+import RNFetchBlob from 'rn-fetch-blob';
 
 
-const VideoThirdStory = () => {
+const SaveVideo = ({ isVisible, setIsVisible }) => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_THIRD_USER } = NavigationsString;
+    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const recordedVideo = useSelector((state) => state.RecordingData.saveRecordingVideo)
+    // const saveVideo = () => {
+    //     dispatch(recordingToHome(RecordingText))
+    //     Alert.alert("Recording Text Saved to Home")
+    // }
 
+    // Recording ko download karne ka function
+    const downloadRecording = async () => {
+        try {
+            const destinationPath = `${RNFS.DownloadDirectoryPath}/downloaded_video.mp4`; // Downloaded file ka path
+
+            // Source path jo recording ka hai
+            const sourcePath = recordedVideo; // 'path' variable jo recording ka rasta store karta hai
+
+            // Check karein ke sourcePath khali toh nahi hai
+            if (!sourcePath) {
+                console.error('Recording path not found.');
+                return;
+            }
+
+            // File ko copy karein destination path par
+            await RNFS.copyFile(sourcePath, destinationPath);
+
+            console.log('Recording downloaded successfully:', destinationPath);
+            // Agar download ho gaya toh success message dikha sakte hain ya aur koi action le sakte hain
+        } catch (error) {
+            console.error('Error downloading recording:', error);
+        }
+    };
 
 
     return (
-        <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-            <View>
-                {/* Back Button */}
-                <BackButton />
-                <View style={styles.container}>
-                    <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText onPress={() => navigation.navigate(VIDEO_THIRD_USER)} text="Next Player" BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+        <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
+            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+                <View>
+                    {/* Back Button */}
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <BackButton onPress={() => setIsVisible(false)} />
                     </View>
-                </View>
-            </View>
-        </ImageBackground>
+                    <View style={styles.container}>
+                        <Text>Save your story to your phone</Text>
+                        <TouchableButton onPress={downloadRecording} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                    </View>
 
+                </View>
+            </ImageBackground>
+        </Modal>
     )
 };
-
 
 
 const styles = StyleSheet.create({
@@ -78,7 +112,6 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(5),
         borderRadius: 18,
     },
-
     second_childbg: {
         marginLeft: "auto",
         width: responsiveWidth(67)
@@ -147,5 +180,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default VideoThirdStory;
-
+export default SaveVideo;

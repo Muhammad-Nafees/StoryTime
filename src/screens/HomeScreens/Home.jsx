@@ -33,6 +33,8 @@ const FlatListData = [
     },
 ]
 
+
+
 const Home = () => {
 
     const { width, height } = Dimensions.get('window');
@@ -84,7 +86,6 @@ const Home = () => {
                                 )
                             }}
                         />
-
                     </View>
                 </View>
 
@@ -94,16 +95,13 @@ const Home = () => {
                 <FrameContent text="Shark" type="imp_bg_img" profile_text="Sophia" backgroundImage={SHARK_ICON} profileImage={require("../../assets/sophia-img.png")} />
                 <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
                 <FrameContent text="Whale" type="imp_bg_img" profile_text="Alfred" backgroundImage={FISH_ICON} profileImage={require("../../assets/porter-img.png")} />
-                {/* <FrameContent type="imp_bg_img" profile_text="Alfred" backgroundImage={require("../../assets/alfred-thumbnail.png")} profileImage={require("../../assets/alfred-img.png")} /> */}
 
                 {/* Frame Content Close----------- */}
 
             </ImageBackground>
         </ScrollView>
-
     )
 };
-
 
 
 const styles = StyleSheet.create({

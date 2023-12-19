@@ -18,7 +18,6 @@ const VideoFirstStartScreen = () => {
     const { THIRDSCREENPLAYFLOW, VIDEO_FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95
 
-
     return (
 
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

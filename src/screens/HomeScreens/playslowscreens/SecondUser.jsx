@@ -78,10 +78,7 @@ const SecondUser = () => {
     }, [timeLeft]);
 
 
-
     // ----------XXXXXXXXXX----------
-
-
 
     useEffect(() => {
         Voice.onSpeechStart = onspeechStart;
@@ -170,21 +167,6 @@ const SecondUser = () => {
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-
-            {/* {
-                currentIndex < counters.length && (
-                    <>
-                        <FirstScreen image={PLAYFLOW_FRAME} started={started} handlePressOut={handlePressOut} onPressnext={onPressnext} isPressed={isPressed} setIsPressed={setIsPressed} handleStart={handleStart} result={result} timeText={timeText} />
-                    </>
-                )
-
-            }
-
-            {currentIndex + 1 < counters.length && (
-                <FirstScreen content={counters[currentIndex + 1]} image={PLAYFLOW_FRAME} started={started} handlePressOut={handlePressOut} onPressnext={onPressnext} isPressed={isPressed} setIsPressed={setIsPressed} handleStart={handleStart} result={result} timeText="NAFEE" />
-            )}
- */}
-
 
             {/* BACK BUTTON AND TIMER */}
 
