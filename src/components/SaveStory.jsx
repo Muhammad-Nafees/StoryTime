@@ -36,10 +36,8 @@ const SaveStory = ({ isVisible, setVisible }) => {
 
         // File path kahan pe save karna hai
         const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
-
         // State se text extract karen
         const recordingText = RecordingText;
-
         // Text ko file mein save karen
         RNFS.writeFile(filePath, recordingText, 'utf8')
             .then((success) => {
@@ -51,7 +49,6 @@ const SaveStory = ({ isVisible, setVisible }) => {
                 Alert.alert('Error in downloading file');
             });
     }
-
 
 
     return (
@@ -72,8 +69,6 @@ const SaveStory = ({ isVisible, setVisible }) => {
         </Modal>
     )
 };
-
-
 
 
 const styles = StyleSheet.create({

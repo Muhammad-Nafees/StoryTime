@@ -1,10 +1,11 @@
 import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { TextColorGreen, PrimaryColor } from '../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 
 const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress }) => {
+
     return (
         <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={BackgroundImage}>
             <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: bgColor, }]}>
@@ -12,11 +13,11 @@ const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, o
                     <Image style={{ width: responsiveWidth(60), height: responsiveHeight(18), resizeMode: "center" }} source={InnerImage} />
                 </View>
                 <View style={{ paddingVertical: moderateVerticalScale(4), }} />
-                <Text style={{ color: "#FFF", fontSize: 22, fontWeight: "700", }}>{text}</Text>
+                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2.9), fontWeight: "700", }}>{text}</Text>
             </TouchableOpacity>
         </ImageBackground>
-
     )
+
 };
 
 
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(27),
+        height: responsiveHeight(26),
         marginLeft: responsiveWidth(1),
         marginBottom: responsiveWidth(2.5)
     },

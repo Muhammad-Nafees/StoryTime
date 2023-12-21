@@ -12,7 +12,7 @@ const user_Slice = createSlice({
 
     reducers: {
         login(state, { payload }) {
-            state.name = payload
+            state.name = payload;
         }
     }
 

@@ -16,14 +16,14 @@ const FirstUserStory = () => {
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
+    const { FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
                 {/* Back Button */}
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText text="Extend Your Story Time" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
@@ -146,4 +146,3 @@ const styles = StyleSheet.create({
 });
 
 export default FirstUserStory;
-

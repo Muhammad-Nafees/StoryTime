@@ -42,6 +42,7 @@ const VideoFirstUser = () => {
         await Camera.requestCameraPermission()
         await Camera.requestMicrophonePermission()
     }
+
     useEffect(() => {
         checkpermission()
     }, [])
@@ -93,6 +94,8 @@ const VideoFirstUser = () => {
         setCurrentCamera(newCamera);
     };
 
+
+
     const recordVideos = useCallback(() => {
         setIsPressed(true);
         if (!cameraRef.current) {
@@ -105,14 +108,12 @@ const VideoFirstUser = () => {
 
     }, [cameraRef, path]);
 
-
     const stopRecording = async () => {
         await cameraRef.current?.stopRecording();
     };
 
     const saverecordingvideo = () => {
         setIsVisible(true)
-
     }
 
     const handleStart = () => {
@@ -123,7 +124,7 @@ const VideoFirstUser = () => {
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
-
+            
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
@@ -166,19 +167,18 @@ const VideoFirstUser = () => {
                                             isActive={true}
                                             video={true}
                                             resizeMode='cover'
-                                            audio
                                             photo={true}
                                         />
                                     </View>
                                 </>
                         }
                     </View>
-                    {/* </View> */}
                 </ImageBackground>
 
                 <TouchableOpacity onPress={toggleCamera} activeOpacity={0.7} style={{ position: "absolute", bottom: 0, right: 150, width: responsiveWidth(20), height: responsiveHeight(6), backgroundColor: "#4B7A84", justifyContent: "center", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../../../../assets/camera-image.png")} />
                 </TouchableOpacity>
+
             </View>
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
@@ -192,7 +192,7 @@ const VideoFirstUser = () => {
 
             <View>
                 <TouchableButton onPress={onPressnext} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton onPress={saverecordingvideo} text="Save Story1" color={TextColorGreen} />
+                <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} />
             </View>
 
             {
@@ -200,10 +200,10 @@ const VideoFirstUser = () => {
                 <SaveVideo isVisible={isVisible} setIsVisible={setIsVisible} />
             }
 
-
         </ImageBackground>
     )
 };
+
 
 
 const styles = StyleSheet.create({

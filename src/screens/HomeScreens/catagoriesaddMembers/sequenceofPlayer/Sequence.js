@@ -106,6 +106,8 @@ const Sequence = () => {
                 </TouchableOpacity>
             </View>
 
+
+
             <ScrollView style={{ height: responsiveHeight(72) }}>
                 {
                     sequenceplayers.map((item, index) => (
@@ -122,6 +124,7 @@ const Sequence = () => {
                     ))
                 }
             </ScrollView>
+
 
 
             <View style={{}}>

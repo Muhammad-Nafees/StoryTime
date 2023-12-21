@@ -28,10 +28,11 @@ const SignInSchema = Yup.object().shape({
 });
 
 const Login = () => {
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
-    const { REGISTER, FORGET_EMAIL } = NavigationsString
+    const { REGISTER, FORGET_EMAIL } = NavigationsString;
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths
 
     const toggleShowPassword = () => {
@@ -49,12 +50,14 @@ const Login = () => {
                 if (!values.username || !values.password) {
                     return;
                 }
+                console.log("values-=", values)
                 dispatch(login(values));
                 setSubmitting(false);
             }}
         >
 
             {({ values, errors, handleChange, handleSubmit }) => (
+
                 <View style={styles.container}>
                     <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
                         <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
@@ -69,9 +72,6 @@ const Login = () => {
                             onChangeText={handleChange('username')}
                             placeholderText="Type here"
                         />
-                        {/* <View style={{ backgroundColor: 'red', width: responsiveWidth(90), marginLeft: 'auto' }}>
-                            {errors.username && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.username}</Text>}
-                        </View> */}
                         <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                             <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
                         </View>
@@ -83,7 +83,7 @@ const Login = () => {
                             placeholderText="Type here"
                             type="password"
                         />
-                        <View style={{width: responsiveWidth(90), marginLeft: 'auto' }}>
+                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                             {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
                         </View>
                     </View>
@@ -131,7 +131,6 @@ const Login = () => {
         </Formik>
     );
 };
-
 
 
 const styles = StyleSheet.create({

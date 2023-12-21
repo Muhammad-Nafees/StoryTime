@@ -6,9 +6,10 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { Formik } from 'formik';
+import * as  Yup from "yup"
 
-
-const RegisterPassword = () => {
+const RegisterPassword = ({ route }) => {
 
     const navigation = useNavigation()
     const [showPassword, setShowPassword] = useState(false)
@@ -26,42 +27,66 @@ const RegisterPassword = () => {
 
     return (
 
-        <View style={styles.container}>
-            <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../assets/create-account-img.png")} />
-            </View>
+        <Formik initialValues={{
+            password: "",
+            confirmPassword: "",
+        }}
+            // validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting }) => {
 
-            {/* Password------------ */}
+            }}
+        >
+            {({ values, errors, handleChange, handleSubmit, setFieldValue }) => (
 
-            <View>
-                <View>
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Password</Text>
+
+                <View style={styles.container}>
+                    <View style={styles.img_container}>
+                        <Image style={styles.img_child} source={require("../../assets/create-account-img.png")} />
                     </View>
-                    <TextInputField onPress={toggleconfirmshowpassword} showPassword={confirmShowPassword} type="password" placeholderText="Type here" />
-                </View>
 
-                {/* Confirm Password------------ */}
+                    {/* Password------------ */}
 
-                <View>
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
+                    <View>
+                        <View>
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Password</Text>
+                            </View>
+                            <TextInputField
+                                onPress={toggleconfirmshowpassword}
+                                showPassword={confirmShowPassword}
+                                value={values.password}
+                                onChangeText={handleChange("password")}
+                                type="password"
+                                placeholderText="Type here" />
+                        </View>
+
+                        {/* Confirm Password------------ */}
+
+                        <View>
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
+                            </View>
+                            <TextInputField onPress={toggleShowPassword}
+                                showPassword={showPassword}
+                                value={values.confirmPassword}
+                                onChangeText={handleChange("confirmPassword")}
+                                type="password" placeholderText="Type here" />
+                        </View>
+
+                        {/* Next and Back------------ */}
+
+                        <View style={{ paddingTop: responsiveWidth(60) }}>
+                            <TouchableButton backgroundColor="#395E66" color="#FFF" text="Create" />
+                            <View style={{ marginVertical: 7 }}>
+                                <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                            </View>
+                        </View>
+
                     </View>
-                    <TextInputField onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Type here" />
+
                 </View>
-
-                {/* Next and Back------------ */}
-
-                <View style={{ paddingTop: responsiveWidth(60) }}>
-                    <TouchableButton backgroundColor="#395E66" color="#FFF" text="Create" />
-                    <View style={{ marginVertical: 7 }}>
-                        <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
-                    </View>
-                </View>
-
-            </View>
-
-        </View>
+            )}
+        </Formik>
     )
 }
 

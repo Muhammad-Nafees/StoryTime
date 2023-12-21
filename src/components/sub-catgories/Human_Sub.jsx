@@ -53,7 +53,7 @@ const Human_Sub = ({ }) => {
                     <StoryUsers images={POLICE_ICON} text="Police" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                     <StoryUsers images={FAMILY_ICON} text="Family" mainbgColor="#395E66" backgroundColor="#56B6A4" />
                 </View>
-                <View style={{ paddingTop: responsiveWidth(3), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
+                <View  style={{ paddingTop: responsiveWidth(3), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                     {/* <StoryUsers images={ANIMAL_OSTRICH} text="Ostrich" mainbgColor="#395E66" backgroundColor="#56B6A4" /> */}
                     <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" />
                 </View>

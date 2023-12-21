@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -10,15 +10,12 @@ import TouchableButton from '../../../components/TouchableButton';
 import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../constants/NavigationsString';
 import UserNames from '../../../components/UserNames';
-import { useDispatch, useSelector } from 'react-redux';
-import FirstScreen from '../../../components/FirstScreen';
-import { recordingData } from '../../../../store/slices/RecordingData';
 
-const FirstUser = () => {
+const FourthUser = () => {
 
     let longPressTimeout;
-    const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
-    const { EXTENDSTORY, CONTINUE_AND_NEXTPLAYER, } = NavigationsString
+    const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, } = Img_Paths;
+    const { THIRD_EXTEND_STORY, FOURTH_USER_STORY } = NavigationsString
     const navigation = useNavigation();
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
@@ -29,17 +26,14 @@ const FirstUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
-    const dispatch = useDispatch();
-    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
 
-
+    
     const handleStart = () => {
         setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
         startRecognizing()
     };
 
-    // Timer 2 Minutes-----
-
+    // Timer 2 Minutes
     useEffect(() => {
         let countdown;
 
@@ -78,13 +72,14 @@ const FirstUser = () => {
         };
     }, []);
 
-    // onSpeechStart----------
+    // onSpeechStart-----------
+
     const onspeechStart = (e) => {
         console.log(e);
         setStarted(true)
     };
 
-    // onSpeechEnd----------
+    // onSpeechEnd-----------
 
     const onspeechEnd = (e) => {
         console.log(e);
@@ -93,10 +88,9 @@ const FirstUser = () => {
 
     // onSpeechResult----------
 
-
-    const onspeechResult = useCallback((e) => {
-        dispatch(recordingData(e.value[0]));
-    }, [dispatch]);
+    const onspeechResult = (e) => {
+        setResult(e.value[0])
+    };
 
     // Start Recording And Convert Text----------
 
@@ -112,7 +106,7 @@ const FirstUser = () => {
     // Stop Recording---------
 
     const stopRecording = async () => {
-        setIsRecording(false);
+        setIsRecording(false)
         try {
             await Voice.stop();
         } catch (error) {
@@ -136,16 +130,15 @@ const FirstUser = () => {
         setIsLongPress(false);
         setIsPressed(false);
         stopRecording()
-        console.log("pressout")
     };
+
+
+
     // const onPressnext = () => {
-    //     if (currentIndex < counters.length - 1) {
-    //         setCurrentIndex(currentIndex + 1); // Increment index if within range
-    //     }
-    // }    
-    const onPressNext = () => {
-        navigation.navigate("FirstUserStorytext")
-    }
+    //     navigation.navigate(THIRD_EXTEND_STORY)
+    // }
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -169,11 +162,11 @@ const FirstUser = () => {
                 <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
                     <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
 
-                        <UserNames username="@chrislee" />
+                        <UserNames username="@alfred" />
 
                         <ScrollView>
                             <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{RecordingText}</Text>
+                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{result}</Text>
                             </View>
                         </ScrollView>
 
@@ -183,7 +176,6 @@ const FirstUser = () => {
                                 <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
                             }
                         </View>
-
 
                     </View>
                 </View>
@@ -195,15 +187,16 @@ const FirstUser = () => {
                     handleStart();
                 }}
                     onPressOut={handlePressOut}
-                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
                 </TouchableOpacity>
             </View>
 
             <View>
-                <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @cedrick101" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton text="Save Story" color={TextColorGreen} />
+                {/* <TouchableButton onPress={onPressnext} isLongPress={isLongPress} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" /> */}
+                <TouchableButton onPress={() => navigation.navigate(FOURTH_USER_STORY)} text="Save Story" color={TextColorGreen} />
             </View>
+
 
         </ImageBackground>
     )
@@ -263,5 +256,5 @@ const styles = StyleSheet.create({
     },
 
 })
+export default FourthUser;
 
-export default FirstUser;

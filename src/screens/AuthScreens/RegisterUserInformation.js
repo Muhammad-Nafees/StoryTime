@@ -13,25 +13,39 @@ import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 
 const items = [
-    { label: "Austin", value: "Austin" },
-    { label: "Coding", value: "Coding" },
+    { label: "sindh", value: "sindh" },
+    { label: "punjab", value: "punjab" },
 ]
 const itemscity = [
-    { label: "Texas", value: "Texas" },
-    { label: "Coding", value: "Coding" },
+    { label: "karachi", value: "karachi" },
+    { label: "Islamabad", value: "Islamabad" },
 ]
 
 
-const RegisterUserInformation = () => {
-    const { REGISTER_PASSWORD } = NavigationsString
-    const [isOpen, setIsOpen] = useState(false)
+const RegisterUserInformation = ({ route }) => {
+    const { REGISTER_PASSWORD } = NavigationsString;
+    const [isOpen, setIsOpen] = useState(false);
     const [currentvalue, setCurrentValue] = useState(false)
     const [isOpenCity, setIsOpenCity] = useState(false)
     const [currentvalueCity, setCurrentValueCity] = useState(false)
-    const navigation = useNavigation()
+    const [zipCode, setIszipCode] = useState("")
+    const navigation = useNavigation();
+    console.log("route", route.params)
+    const { emailAdress, firstName, lastName, phoneNumber } = route.params;
+    console.log("emailAdress", emailAdress)
+    console.log("firstName", firstName)
+    console.log("lastName", lastName)
+    console.log("pho", phoneNumber)
 
+    const handlezipcode = (value) => {
+        setIszipCode(value)
+        console.log("value", value)
+        console.log("city", currentvalueCity)
+        console.log("state", currentvalue)
+    }
 
     return (
+
         <View style={styles.container}>
 
             <View style={styles.img_container}>
@@ -88,7 +102,11 @@ const RegisterUserInformation = () => {
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                         <Text style={[styles.text, { color: FourthColor, }]}>Zip Code</Text>
                     </View>
-                    <TextInputField placeholderText="Type here" />
+                    <TextInputField
+                        placeholderText="Type here"
+                        value={zipCode}
+                        onChangeText={(val) => handlezipcode(val)}
+                    />
                 </View>
             </View>
 
