@@ -1,39 +1,19 @@
 import axios from "axios";
 import { Base_Url, register_endpoint } from "..";
 
-const register_api_instance = axios.create({
-    baseURL: Base_Url,
-    timeout: 10000,
-});
 
-axios.interceptors.request.use(
-    async (request) => {
-        console.log(request);
-        return request;
-    },
-    (error) => {
-        return Promise.reject(error);
+const userService = {
+    registerUser: async (credentials) => {
+        console.log("res--", credentials)
+        try {
+            const response = await axios.post(Base_Url + register_endpoint, credentials);
+            console.log("res--", response)
+            return response.data;
+        } catch (err) {
+            console.log(err);
+        }
     }
-);
+}
 
-axios.interceptors.response.use(
-    async (response) => {
-        console.log(response);
-        return response;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
-export const registerUser = async () => {
-    try {
-        const response = await register_api_instance.post(register_endpoint,);
-        console.log("res--", response)
-        return response;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
+export default userService;
 // export default register_api_instance;

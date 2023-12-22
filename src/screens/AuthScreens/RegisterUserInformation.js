@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { useDispatch } from 'react-redux';
+import { register, registeruser_city } from '../../../store/slices/Register_Slice';
 
 
 
@@ -25,27 +27,35 @@ const itemscity = [
 const RegisterUserInformation = ({ route }) => {
     const { REGISTER_PASSWORD } = NavigationsString;
     const [isOpen, setIsOpen] = useState(false);
-    const [currentvalue, setCurrentValue] = useState(false)
+    const [currentvalue, setCurrentValue] = useState("")
     const [isOpenCity, setIsOpenCity] = useState(false)
-    const [currentvalueCity, setCurrentValueCity] = useState(false)
+    const [currentvalueCity, setCurrentValueCity] = useState("")
     const [zipCode, setIszipCode] = useState("")
     const navigation = useNavigation();
-    console.log("route", route.params)
-    const { emailAdress, firstName, lastName, phoneNumber } = route.params;
-    console.log("emailAdress", emailAdress)
-    console.log("firstName", firstName)
-    console.log("lastName", lastName)
-    console.log("pho", phoneNumber)
+    const dispatch = useDispatch();
+    const firstpageVal = route.params.values;
 
     const handlezipcode = (value) => {
         setIszipCode(value)
-        console.log("value", value)
-        console.log("city", currentvalueCity)
-        console.log("state", currentvalue)
     }
 
-    return (
+    if (!currentvalueCity && !currentvalue) {
+        console.log("please fill the field")
+    }
 
+    const handlenext = () => {
+        dispatch(registeruser_city({ state: currentvalue, city: currentvalueCity, zipCode: zipCode }))
+        // if (currentvalue && currentvalueCity && zipCode) {
+        navigation.navigate(REGISTER_PASSWORD, {
+            // firstpageVal,
+            // state: currentvalue, city: currentvalueCity, zipCode: zipCode
+        })
+        // }
+    }
+
+
+
+    return (
         <View style={styles.container}>
 
             <View style={styles.img_container}>
@@ -104,6 +114,7 @@ const RegisterUserInformation = ({ route }) => {
                     </View>
                     <TextInputField
                         placeholderText="Type here"
+                        type="zipcode"
                         value={zipCode}
                         onChangeText={(val) => handlezipcode(val)}
                     />
@@ -113,7 +124,7 @@ const RegisterUserInformation = ({ route }) => {
             {/* Next and Back------------ */}
 
             <View style={{ marginTop: responsiveWidth(30) }}>
-                <TouchableButton onPress={() => navigation.navigate(REGISTER_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
+                <TouchableButton onPress={handlenext} backgroundColor="#395E66" color="#FFF" text="Next" />
                 <View style={{ paddingVertical: moderateVerticalScale(7) }}>
                     <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                 </View>

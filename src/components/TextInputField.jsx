@@ -14,7 +14,9 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
                 <TextInput placeholder={placeholderText}
                     onChangeText={onChangeText}
                     value={value}
+                    keyboardType={type === "zipcode" ? "decimal-pad" : "default"}
                     placeholderTextColor="#AAAAAA"
+
                     secureTextEntry={type == "password" ? !showPassword : null}
                     style={{ color: "#000", width: type == "password" ? 235 : 260 }} />
 

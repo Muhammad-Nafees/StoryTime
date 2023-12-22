@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { FourthColor, SecondaryColor, TextColorGreen } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
@@ -7,25 +7,28 @@ import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import { login } from '../../../store/slices/User_Slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../assets/Imagepaths';
+import { login_user } from '../../../store/slices/Login_auth';
 
 
 
 const SignInSchema = Yup.object().shape({
     username: Yup.string().min(4, 'Too Short').max(40, 'Too Long!').required('Please Enter Your Full Name'),
-    password: Yup.string()
-        .min(8)
-        .required('Please enter your password')
-        .matches(
-            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-            'Must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character'
-        ),
+    // password: Yup.string()
+    //     .min(8)
+    //     .required('Please enter your password')
+    //     .matches(
+    //         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+    //         'Must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character'
+    //     ),
 });
+
+
 
 const Login = () => {
 
@@ -34,6 +37,8 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths
+    // const apilogin = useSelector((state) => state.login)
+    // console.log("apilogin=-", apilogin)
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword); // Toggle the state between true and false
@@ -42,16 +47,18 @@ const Login = () => {
     return (
         <Formik
             initialValues={{
-                username: '',
+                email: '',
                 password: '',
+                fcmToken: "fcmtoken12121212"
             }}
-            validationSchema={SignInSchema}
+
+            // validationSchema={SignInSchema}
             onSubmit={(values, { setSubmitting }) => {
-                if (!values.username || !values.password) {
-                    return;
-                }
-                console.log("values-=", values)
-                dispatch(login(values));
+                const { email, password, fcmToken } = values;
+                dispatch(login_user({ email, password, fcmToken }))
+                // console.log("email", email)
+                // console.log("password", password)
+                // console.log("password", fcmToken)
                 setSubmitting(false);
             }}
         >
@@ -65,11 +72,11 @@ const Login = () => {
 
                     <View style={{ paddingBottom: moderateVerticalScale(12) }}>
                         <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Username</Text>
+                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Email</Text>
                         </View>
                         <TextInputField
-                            value={values.username}
-                            onChangeText={handleChange('username')}
+                            value={values.email}
+                            onChangeText={handleChange('email')}
                             placeholderText="Type here"
                         />
                         <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
@@ -83,9 +90,10 @@ const Login = () => {
                             placeholderText="Type here"
                             type="password"
                         />
-                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+
+                        {/* <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                             {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
-                        </View>
+                        </View> */}
                     </View>
 
                     <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -108,7 +116,6 @@ const Login = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
 
                     <View style={{ paddingVertical: moderateVerticalScale(16), justifyContent: 'center', alignItems: 'center', }}>
                         <Text style={[styles.text, { color: FourthColor, fontWeight: '400', paddingVertical: moderateVerticalScale(10), }]}>or login with</Text>

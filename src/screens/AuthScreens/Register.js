@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, ScrollView } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import PhoneInput
-    from 'react-native-phone-input';
+
 import CountryPicker
     from 'react-native-country-picker-modal';
 import PhoneNumber from '../../components/PhoneNumber';
@@ -27,12 +26,14 @@ const Register = () => {
     const navigation = useNavigation()
     const { REGISTER_USER_INFO } = NavigationsString
     const [countryCode, setCountryCode] = useState('');
+    const [countryCodeNumber, setCountryCodeNumber] = useState('');
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
 
     const onSelectCountry = (country) => {
         setCountryCode(country.cca2);
+        setCountryCodeNumber(country.callingCode);
         setSelectedCountry(country);
         setCountryPickerVisible(false);
     };
@@ -41,103 +42,152 @@ const Register = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    // const validationSchema = Yup.object().shape({
-    //     firstName: Yup.string().required('First name is required'),
-    //     lastName: Yup.string().required('Last name is required'),
-    //     phoneNumber: Yup.string().required('Phone number is required'),
-    //     // Add more validations for email, etc.
-    // });
+    // console.log("country-code", countryCode)
+    // console.log("selectedcoutry-=-", selectedCountry)
+
+    const validationSignUp = Yup.object().shape({
+        username: Yup.string().min(3, 'Too Short').max(50, 'Too Long!').required('Please fill the field'),
+        firstName: Yup.string().min(4, 'Too Short').max(50, 'Too Long!').required('Please fill the field'),
+        lastName: Yup.string().required(),
+        phoneNo: Yup.string().required('Please fill the field'),
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Email is required')
+            .matches(
+                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                'Must be a valid email'
+            )
+    });
+
+
 
     return (
         <Formik initialValues={{
             firstName: '',
             lastName: '',
+            email: '',
             phoneNo: '',
-            emailAdress: ''
+            fcmToken: "fcmtoken11212",
+            role: "user",
+            countryCode: "PK",
+            phoneCode: "+92",
+            username: "",
         }}
-            // validationSchema={validationSchema}
+            validationSchema={validationSignUp}
             onSubmit={(values, { setSubmitting }) => {
-                dispatch(registeruser(values))
+                dispatch(register(values))
+                navigation.navigate(REGISTER_USER_INFO, {
+                    // values,
+                })
             }}
         >
+
             {({ values, errors, handleChange, handleSubmit, setFieldValue }) => (
-                <View style={styles.container}>
-                    <View style={styles.img_container}>
-                        <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
-                    </View>
 
-                    <View>
-                        <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                            <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
+                <ScrollView keyboardShouldPersistTaps="handled">
+                    <View style={styles.container}>
+                        <View style={styles.img_container}>
+                            <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
                         </View>
-
-                        <TextInputField
-                            placeholderText="Type here"
-                            onChangeText={handleChange("firstName")}
-                            value={values.firstName}
-                        />
-
-                        <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                            <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
-                        </View>
-
-                        <TextInputField placeholderText="Type here"
-                            onChangeText={handleChange("lastName")}
-                            value={values.lastName}
-                        />
 
                         <View>
+
                             <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Username</Text>
                             </View>
-                            <PhoneNumber value={values.phoneNo} onchangeState={(number) => { setFieldValue("phoneNo", number) }} onPressFlag={toggleCountryPicker} />
-                            <View>
 
-                            </View>
-                            {countryPickerVisible && (
-                                <CountryPicker
-                                    withFilter={true}
-                                    withFlagButton={false}
-                                    withCountryNameButton={false}
-                                    onSelect={onSelectCountry}
-                                    onClose={() => setCountryPickerVisible(false)}
-                                    visible={countryPickerVisible}
-                                    containerButtonStyle={styles.countryPickerButton}
-                                    closeButtonImageStyle={styles.countryPickerCloseButton}
-                                />
-                            )}
-                        </View>
-
-                        <View>
-                            <View style={{ paddingTop: responsiveWidth(5), width: responsiveWidth(90), marginLeft: "auto" }}>
-                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
-                            </View>
-                            <TextInputField placeholderText="Type here"
-                                onChangeText={handleChange("emailAdress")}
-                                value={values.emailAdress}
+                            <TextInputField
+                                placeholderText="Type here"
+                                onChangeText={handleChange("username")}
+                                value={values.username}
                             />
-                        </View>
 
-                        <View style={{ paddingTop: responsiveWidth(6) }}>
-                            <TouchableButton onPress={() => navigation.navigate(REGISTER_USER_INFO, {
-                                firstName: values.firstName,
-                                lastName: values.lastName,
-                                emailAdress: values.emailAdress,
-                                phoneNumber: values.phoneNumber,
-                            })} backgroundColor="#395E66" color="#FFF" text="Next" />
-                            {/* <TouchableButton onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Next" /> */}
-                            <View style={{ marginVertical: moderateVerticalScale(7) }}>
-                                <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
                             </View>
+
+                            <TextInputField
+                                placeholderText="Type here"
+                                onChangeText={handleChange("firstName")}
+                                value={values.firstName}
+                            />
+
+                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
+                                {errors.firstName && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.firstName}</Text>}
+                            </View>
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
+                            </View>
+
+                            <TextInputField placeholderText="Type here"
+                                onChangeText={handleChange("lastName")}
+                                value={values.lastName}
+                            />
+
+                            <View>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
+                                </View>
+
+                                <PhoneNumber value={values.phoneNo} onchangeState={(number) => { setFieldValue("phoneNo", number) }} onPressFlag={toggleCountryPicker} />
+                                <View>
+
+                                </View>
+                                {countryPickerVisible && (
+                                    <CountryPicker
+                                        withFilter={true}
+                                        withFlagButton={false}
+                                        withCountryNameButton={false}
+                                        onSelect={onSelectCountry}
+                                        onClose={() => setCountryPickerVisible(false)}
+                                        visible={countryPickerVisible}
+                                        containerButtonStyle={styles.countryPickerButton}
+                                        closeButtonImageStyle={styles.countryPickerCloseButton}
+                                    />
+                                )}
+                            </View>
+
+                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                {errors.phoneNo && <Text style={{ color: "red", fontSize: responsiveFontSize(1.9) }}>{errors.phoneNo}</Text>}
+                                {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
+                            </View>
+
+                            <View>
+                                <View style={{ paddingTop: responsiveWidth(5), width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
+                                </View>
+                                <TextInputField placeholderText="Type here"
+                                    onChangeText={handleChange("email")}
+                                    value={values.email}
+                                />
+                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                    {/* {errors.phoneNo && <Text style={{ color: "red", }}>{errors.phoneNo}</Text>} */}
+                                    {errors.email && <Text style={{ color: "red", fontSize: responsiveFontSize(1.9) }}>{errors.email}</Text>}
+                                    {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
+                                </View>
+                            </View>
+
+                            <View style={{ paddingVertical: responsiveWidth(6) }}>
+                                {/* <TouchableButton onPress={handleNext} backgroundColor="#395E66" color="#FFF" text="Next" /> */}
+                                <TouchableButton onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Next" />
+                                <View style={{ marginVertical: moderateVerticalScale(7) }}>
+                                    <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                                </View>
+                            </View>
+
                         </View>
 
                     </View>
-                </View>
+                </ScrollView>
+
             )}
         </Formik>
 
     )
-}
+};
+
+
 
 export default Register;
 
