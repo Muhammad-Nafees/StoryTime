@@ -1,5 +1,5 @@
-export { default as PopUpStart } from "../screens/AuthScreens/splashScreens/PopUpStart"
-export { default as SplashScreen } from "../screens/AuthScreens/splashScreens/SplashScreen"
+export { default as PopUpStart } from "../screens/AuthScreens/SplashScreens/PopUpStart"
+export { default as SplashScreen } from "../screens/AuthScreens/SplashScreens/SplashScreen"
 export { default as Login } from "../screens/AuthScreens/Login"
 export { default as Register } from "../screens/AuthScreens/Register"
 export { default as RegisterUserInformation } from "../screens/AuthScreens/RegisterUserInformation"

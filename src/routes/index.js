@@ -1,17 +1,40 @@
-import AuthStack from "./AuthStack";
-import MainStack from "./MainStack";
-import { View, Text } from "react-native"
-import { useSelector } from "react-redux"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+import { login_user } from './path/to/your/thunks'; // Import your thunk to log in user
+import { setAccessToken } from '../../store/slices/authSlice';
+import MainStack from './MainStack';
+import AuthStack from './AuthStack';
 
 const Routes = () => {
-    
-    const state = useSelector((state) => state.userSlice)
+    const dispatch = useDispatch();
+    const userToken = useSelector((state) => state?.authSlice?.accessToken);
 
-    console.log(state)
+    useEffect(() => {
+        const authenticateUser = async () => {
 
-    return (
-        state.name ? <MainStack /> : <AuthStack />
-    )
-}
+            try {
+                const accessToken = await AsyncStorage.getItem('isLoggedIn');
+                if (accessToken) {
+                    dispatch(setAccessToken(accessToken));
+                    // const isValidToken = await validateTokenFunction(accessToken);
+                    // if (isValidToken) {
+                    //     dispatch(setAccessToken(accessToken));
+                    // } else {
+                    //     await AsyncStorage.removeItem('isLoggedIn');
+                    //     dispatch(setAccessToken(null));
+                    // }
+                }
+            } catch (error) {
+                console.error('Error authenticating user:', error);
+            }
+        };
+
+        authenticateUser();
+    }, [dispatch]);
+
+    return userToken ? <MainStack /> : <AuthStack />;
+};
 
 export default Routes;

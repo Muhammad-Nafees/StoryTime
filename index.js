@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 
-
 const UserApp = () => {
     return (
         <>
@@ -19,5 +18,6 @@ const UserApp = () => {
         </>
     )
 }
+
 
 AppRegistry.registerComponent(appName, () => UserApp);

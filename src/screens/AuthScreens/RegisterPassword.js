@@ -14,6 +14,7 @@ import { registerUser } from '../../../services/api/Register_Api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../components/UserErrors';
 import NavigationsString from '../../constants/NavigationsString';
+import { Base_Url, register_endpoint } from '../../../services';
 
 
 const RegisterPassword = ({ route }) => {
@@ -65,16 +66,13 @@ const RegisterPassword = ({ route }) => {
     const navigation = useNavigation();
     const [showPassword, setShowPassword] = useState(false);
     const [confirmShowPassword, setConfirmShowPassword] = useState(false);
-    // const [isVisible, setVisible] = useState(false)
+    const [response, setResponse] = useState([])
     const [showErrors, setShowErrors] = useState(false);
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
     const firstuserData = useSelector((state) => state.Register.firstpageData);
     const seconduserData = useSelector((state) => state.Register.secondpageData);
-    const { loading } = useSelector((state) => state.Register);
-    const api = useSelector((state) => state?.Register?.data);
-    console.log("api", api)
-    console.log("laoding", loading)
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -83,38 +81,48 @@ const RegisterPassword = ({ route }) => {
         setConfirmShowPassword(!confirmShowPassword);
     };
 
+
     return (
         <Formik
             initialValues={{
                 password: "",
                 confirmPassword: "",
             }}
-
             onSubmit={async (values) => {
                 const { countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username } = firstuserData;
                 const { city, state, zipCode } = seconduserData;
                 const { confirmPassword, password } = values;
-                // console.log("cputryy=-=-========", countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username, city, state, zipCode, password, confirmPassword,)
-                dispatch(registeruser({
-                    countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username,
-                    city, state, zipCode,
-                    password, confirmPassword,
-                }));
 
-                const statusCode = api?.statusCode;
-                const accessToken = api?.data?.accessToken;
-                const message = api?.message;
-                const error = api?.stack;
+
+                const response = await fetch(Base_Url + register_endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username,
+                        city, state, zipCode,
+                        confirmPassword, password
+                    }),
+                });
+                const responseData = await response.json();
+
+                const statusCode = responseData?.statusCode;
+                const accessToken = responseData?.data?.accessToken;
+                const message = responseData?.message;
+                const error = responseData?.stack;
                 console.log("statuscode", statusCode,)
                 //  const {statusCode} = api?.data?.data;
-                console.log("satac", statusCode);
-
+                console.log("token ", accessToken);
                 if (statusCode === 200) {
                     setShowErrors(true)
                 }
                 if (error) {
                     Alert.alert(error);
                 }
+                console.log("respodata--", responseData)
+                setResponse(responseData)
+                return responseData;
             }}
         >
 

@@ -7,21 +7,54 @@ import TouchableButton from "../../../components/TouchableButton";
 import TextInputField from "../../../components/TextInputField";
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
+import { reset_password } from "../../../../services/api/auth_mdule/auth";
 
 
 const ForgetConfirmPassword = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
-
-    const { FORGET_BG_IMG } = Img_Paths
+    const { FORGET_BG_IMG } = Img_Paths;
+    const [newPassword, setnewPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword)
     }
+
     const toggleShowPasswordConfir = () => {
         setShowPasswordConfirm(!showPasswordConfirm)
     }
+
+
+
+    const resetConfirmPassword = async () => {
+
+        try {
+
+            const response = await reset_password(newPassword, confirmPassword);
+            console.log("repsonse", response)
+
+            console.log(response?.message)
+            if (response?.statusCode === 200) {
+                Alert.alert(response?.message)
+                setIsLoading(false)
+                // navigation.navigate(OTP_FORGET)
+            } else if (response?.stack) {
+                Alert.alert(response.stack)
+            }
+        }
+
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setIsLoading(false);
+
+        }
+    };
+
 
 
     return (
@@ -42,21 +75,21 @@ const ForgetConfirmPassword = () => {
                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
                     </View>
 
-                    <TextInputField onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
+                    <TextInputField onChangeText={(value) => setnewPassword(value)} onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
                     {/* Confirm Password------------ */}
 
                     <View style={{}}>
                         <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                             <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Confirm Password</Text>
                         </View>
-                        <TextInputField onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
+                        <TextInputField onChangeText={(value) => setConfirmPassword(value)} onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
                     </View>
                 </View>
 
                 {/* Next------------ */}
 
                 <View style={{ paddingTop: responsiveWidth(75) }}>
-                    <TouchableButton backgroundColor="#395E66" color="#FFF" text="Save" />
+                    <TouchableButton onPress={resetConfirmPassword} backgroundColor="#395E66" color="#FFF" text="Save" />
                 </View>
 
             </View>

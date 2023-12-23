@@ -17,8 +17,8 @@ import { registeruser } from '../../../store/slices/Register_Slice';
 import { register } from '../../../store/slices/Register_Slice';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-
 import { useDispatch } from 'react-redux';
+
 
 const Register = () => {
     const { CREATE_ACCOUNT_ICON } = Img_Paths;
@@ -31,19 +31,22 @@ const Register = () => {
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
 
-    const onSelectCountry = (country) => {
-        setCountryCode(country.cca2);
-        setCountryCodeNumber(country.callingCode);
-        setSelectedCountry(country);
-        setCountryPickerVisible(false);
-    };
-
+    // const onSelectCountry = (country) => {
+    //     setCountryCode(country.cca2);
+    //     setCountryCodeNumber(country.callingCode);
+    //     setSelectedCountry(country);
+    //     setCountryPickerVisible(false);
+    // };
+    // console.log(countryCode)
+    // console.log("countrycode---", countryCode.callingCode)
+    // console.log("phonecoding---", countryCode.cca2)
+    // const phoneCode = countryCode?.callingCode?.[0];
+    // const countrycoding = countryCode?.cca2;
+    // console.log("phonecode-=", phoneCode)
+    // console.log("countrycoding", countrycoding)
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
-
-    // console.log("country-code", countryCode)
-    // console.log("selectedcoutry-=-", selectedCountry)
 
     const validationSignUp = Yup.object().shape({
         username: Yup.string().min(3, 'Too Short').max(50, 'Too Long!').required('Please fill the field'),
@@ -58,8 +61,6 @@ const Register = () => {
                 'Must be a valid email'
             )
     });
-
-
 
     return (
         <Formik initialValues={{
@@ -77,7 +78,6 @@ const Register = () => {
             onSubmit={(values, { setSubmitting }) => {
                 dispatch(register(values))
                 navigation.navigate(REGISTER_USER_INFO, {
-                    // values,
                 })
             }}
         >
@@ -130,7 +130,11 @@ const Register = () => {
                                     <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                                 </View>
 
-                                <PhoneNumber value={values.phoneNo} onchangeState={(number) => { setFieldValue("phoneNo", number) }} onPressFlag={toggleCountryPicker} />
+                                <PhoneNumber
+                                    value={values.phoneNo}
+                                    onchangeState={(number) => { setFieldValue("phoneNo", number) }}
+                                    setCountryCode={setCountryCode}
+                                    onPressFlag={toggleCountryPicker} />
                                 <View>
 
                                 </View>

@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux';
 import { register, registeruser_city } from '../../../store/slices/Register_Slice';
 
 
-
 const items = [
     { label: "sindh", value: "sindh" },
     { label: "punjab", value: "punjab" },
@@ -25,35 +24,28 @@ const itemscity = [
 
 
 const RegisterUserInformation = ({ route }) => {
+
+
     const { REGISTER_PASSWORD } = NavigationsString;
     const [isOpen, setIsOpen] = useState(false);
     const [currentvalue, setCurrentValue] = useState("")
-    const [isOpenCity, setIsOpenCity] = useState(false)
-    const [currentvalueCity, setCurrentValueCity] = useState("")
-    const [zipCode, setIszipCode] = useState("")
+    const [isOpenCity, setIsOpenCity] = useState(false);
+    const [currentvalueCity, setCurrentValueCity] = useState("");
+    const [zipCode, setIszipCode] = useState("");
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const firstpageVal = route.params.values;
+
 
     const handlezipcode = (value) => {
         setIszipCode(value)
     }
 
-    if (!currentvalueCity && !currentvalue) {
-        console.log("please fill the field")
-    }
-
     const handlenext = () => {
+        // if (currentvalue && isOpenCity && zipCode) {
         dispatch(registeruser_city({ state: currentvalue, city: currentvalueCity, zipCode: zipCode }))
-        // if (currentvalue && currentvalueCity && zipCode) {
-        navigation.navigate(REGISTER_PASSWORD, {
-            // firstpageVal,
-            // state: currentvalue, city: currentvalueCity, zipCode: zipCode
-        })
+        navigation.navigate(REGISTER_PASSWORD)
         // }
     }
-
-
 
     return (
         <View style={styles.container}>

@@ -8,20 +8,26 @@ import { useNavigation } from "@react-navigation/native"
 import NavigationsString from "../../../constants/NavigationsString";
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
+import { reset_verify_code } from "../../../../services";
+import { otp_forget } from "../../../../services/api/auth_mdule/auth";
 
 const OtpForget = ({ length, value, disabled, onChange, }) => {
     const navigation = useNavigation()
     const { FORGET_CONFIRM_PASSWORD } = NavigationsString
-    const { FORGET_BG_IMG } = Img_Paths
+    const { FORGET_BG_IMG } = Img_Paths;
+    const [otptext, setOtptext] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const inputRefs = useRef([]);
 
     const handlechange = (text, index) => {
+        const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
+        setOtptext(updatedText);
+        // console.log(text)
         if (text.length !== 0) {
             return inputRefs.current[index + 1]?.focus();
         }
         return inputRefs.current[index - 1]?.focus();
     };
-
 
     const handleBackspace = (event, index) => {
         const { nativeEvent } = event;
@@ -32,8 +38,26 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
     };
 
 
+    const otp_forget_api = async () => {
+        try {
+            const response = await otp_forget(otptext)
+            console.log("response", response)
+            if (response?.statusCode === 200) {
+                Alert.alert(response?.message)
+                setIsLoading(false)
+            } else if (response?.stack) {
+                Alert.alert(response.stack)
+                navigation.navigate(FORGET_CONFIRM_PASSWORD)
+            }
+        }
+
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
+
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img_child} source={FORGET_BG_IMG} />
@@ -87,9 +111,9 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                         <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
                         <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>
                     </View>
-                    <TouchableButton onPress={() => navigation.navigate(FORGET_CONFIRM_PASSWORD)} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
                 </View>
-
+                {/* () => navigation.navigate(FORGET_CONFIRM_PASSWORD) */}
             </View>
 
         </View>

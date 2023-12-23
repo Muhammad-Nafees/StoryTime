@@ -80,7 +80,7 @@ const HomeStack = () => {
 
 const CategoriesStack = () => {
     const Stack = createStackNavigator();
-    const {  CATEGORIES,  } = NavigationsString;
+    const { CATEGORIES, } = NavigationsString;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

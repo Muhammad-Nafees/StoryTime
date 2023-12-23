@@ -6,27 +6,30 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import { login } from '../../../store/slices/User_Slice';
+import { login } from '../../../store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../assets/Imagepaths';
-import { login_user } from '../../../store/slices/Login_auth';
+import { Base_Url, login_andpoint } from '../../../services';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setAccessToken } from '../../../store/slices/authSlice';
 
 
 
-const SignInSchema = Yup.object().shape({
-    username: Yup.string().min(4, 'Too Short').max(40, 'Too Long!').required('Please Enter Your Full Name'),
-    // password: Yup.string()
-    //     .min(8)
-    //     .required('Please enter your password')
-    //     .matches(
-    //         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-    //         'Must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character'
-    //     ),
-});
+// const SignInSchema = Yup.object().shape({
+//     email: Yup.string()
+//         .email('Invalid email') // Checks for a valid email format
+//         .min(4, 'Too Short')
+//         .max(40, 'Too Long!')
+//         .required('Please Enter Your Email'),
+//     password: Yup.string()
+//         .min(6, 'Password must be at least 6 characters')
+//         .max(20, 'Password is too long') // Adjust the max length as needed
+//         .required('Please Enter Your Password'),
+// });
 
 
 
@@ -36,13 +39,14 @@ const Login = () => {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
-    const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths
-    // const apilogin = useSelector((state) => state.login)
-    // console.log("apilogin=-", apilogin)
-
+    const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
+    const login_user = useSelector((state) => state?.authSlice?.user)
+    console.log("loginser-0-", login_user)
     const toggleShowPassword = () => {
-        setShowPassword(!showPassword); // Toggle the state between true and false
+        setShowPassword(!showPassword);
     };
+
+
 
     return (
         <Formik
@@ -52,14 +56,39 @@ const Login = () => {
                 fcmToken: "fcmtoken12121212"
             }}
 
-            // validationSchema={SignInSchema}
-            onSubmit={(values, { setSubmitting }) => {
-                const { email, password, fcmToken } = values;
-                dispatch(login_user({ email, password, fcmToken }))
-                // console.log("email", email)
-                // console.log("password", password)
-                // console.log("password", fcmToken)
-                setSubmitting(false);
+            onSubmit={async (values, { setSubmitting }) => {
+                try {
+                    const { email, password, fcmToken } = values;
+                    const response = await fetch(Base_Url + login_andpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email, password, fcmToken
+                        }),
+                    });
+
+                    const responseData = await response.json();
+                    dispatch(login(responseData))
+                    console.log("respdara-=", responseData)
+                    const statusCode = responseData?.statusCode;
+                    const message = responseData?.message;
+                    const accessToken = responseData?.data?.accessToken;
+                    const error = responseData?.stack;
+                    if (statusCode === 200) {
+                        await AsyncStorage.setItem("isLoggedIn", accessToken)
+                        dispatch(setAccessToken(accessToken))
+                        Alert.alert(message)
+                    }
+                    if (error) {
+                        Alert.alert(error)
+                    }
+                    return responseData;
+                }
+                catch (err) {
+                    console.log(err)
+                }
             }}
         >
 
@@ -91,9 +120,9 @@ const Login = () => {
                             type="password"
                         />
 
-                        {/* <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                             {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
-                        </View> */}
+                        </View>
                     </View>
 
                     <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>

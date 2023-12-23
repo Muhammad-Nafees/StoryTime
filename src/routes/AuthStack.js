@@ -29,8 +29,8 @@ const AuthStack = () => {
         FORGET_CONFIRM_PASSWORD,
         FRAME_CONTENT
     } = NavigationsString
-    
-    const Stack = createStackNavigator()
+
+    const Stack = createStackNavigator();
 
     return (
         <NavigationContainer>
@@ -52,4 +52,16 @@ const AuthStack = () => {
 
 }
 
+const PhoneNumberStack = () => {
+    const Stack = createStackNavigator();
+    return (
+
+        <NavigationContainer>
+            <Stack.Navigator  >
+
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+
+}
 export default AuthStack;

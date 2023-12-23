@@ -8,6 +8,7 @@ import PhoneNumber from '../../../components/PhoneNumber';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../../assets/Imagepaths';
+import reset_email from '../../../../services/api/auth_mdule/auth';
 
 
 
@@ -15,12 +16,39 @@ const ForgetPhoneNumber = () => {
 
     const navigation = useNavigation()
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
     const { OTP_FORGET } = NavigationsString
     const { FORGET_BG_IMG } = Img_Paths
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
+
+    const resetPhonehandle = async (data) => {
+
+        try {
+            const response = await reset_email(data);
+            console.log("repsonse", response)
+
+            console.log(response?.message)
+            if (response?.statusCode === 200) {
+                Alert.alert(response?.message)
+                setIsLoading(false)
+                navigation.navigate(OTP_FORGET)
+            } else if (response?.stack) {
+                Alert.alert(response.stack)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        finally {
+            setIsLoading(false);
+
+        }
+    };
+
+    console.log("number", phoneNumber)
 
     return (
 
@@ -47,7 +75,7 @@ const ForgetPhoneNumber = () => {
 
                 <View style={{ marginTop: responsiveWidth(80) }}>
                     <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
-                    <TouchableButton onPress={() => navigation.navigate(OTP_FORGET)} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableButton onPress={() => resetPhonehandle(phoneNumber)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
             </View>

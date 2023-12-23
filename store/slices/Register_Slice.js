@@ -9,21 +9,12 @@ export const registeruser = createAsyncThunk("registration/registerUser", async 
 
     try {
 
-        const response = await fetch(Base_Url + register_endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-        });
-        const responseData = await response.json();
-
-        return responseData;
 
     } catch (error) {
         return thunkApi.rejectWithValue({ errorMessage: error.message });
     }
 });
+
 
 
 const registerUser_Slice = createSlice({
