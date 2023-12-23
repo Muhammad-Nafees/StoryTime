@@ -22,6 +22,8 @@ const ForgetEmail = () => {
     const navigation = useNavigation();
 
     const resetEmailhandle = async (data) => {
+        setIsLoading(true)
+
         try {
             const response = await reset_email(email);
             console.log("repsonse", response)
@@ -33,7 +35,9 @@ const ForgetEmail = () => {
                 navigation.navigate(OTP_FORGET)
             } else if (response?.stack) {
                 Alert.alert(response.stack)
+                setIsLoading(false)
             }
+
         }
         catch (err) {
             console.log(err)

@@ -39,9 +39,10 @@ const Login = () => {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
+    const [isLoading, setIsLoading] = useState(false)
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
     const login_user = useSelector((state) => state?.authSlice?.user)
-    console.log("loginser-0-", login_user)
+    // console.log("loginser-0-", login_user)
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -57,6 +58,7 @@ const Login = () => {
             }}
 
             onSubmit={async (values, { setSubmitting }) => {
+                setIsLoading(true)
                 try {
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
@@ -68,9 +70,13 @@ const Login = () => {
                             email, password, fcmToken
                         }),
                     });
-
                     const responseData = await response.json();
                     dispatch(login(responseData))
+
+                    if (responseData?.data) {
+                        setIsLoading(false)
+                    }
+
                     console.log("respdara-=", responseData)
                     const statusCode = responseData?.statusCode;
                     const message = responseData?.message;
@@ -83,6 +89,7 @@ const Login = () => {
                     }
                     if (error) {
                         Alert.alert(error)
+                        setIsLoading(false)
                     }
                     return responseData;
                 }
@@ -130,7 +137,7 @@ const Login = () => {
                     </TouchableOpacity>
 
                     <View style={{ paddingVertical: moderateVerticalScale(14) }}>
-                        <TouchableButton onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
+                        <TouchableButton isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>

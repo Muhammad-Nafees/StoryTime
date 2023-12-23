@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../components/UserErrors';
 import NavigationsString from '../../constants/NavigationsString';
 import { Base_Url, register_endpoint } from '../../../services';
+import { registerapi } from '../../../services/api/auth_mdule/auth';
 
 
 const RegisterPassword = ({ route }) => {
@@ -68,6 +69,8 @@ const RegisterPassword = ({ route }) => {
     const [confirmShowPassword, setConfirmShowPassword] = useState(false);
     const [response, setResponse] = useState([])
     const [showErrors, setShowErrors] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const [isVisible, setVisible] = useState(false)
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
     const firstuserData = useSelector((state) => state.Register.firstpageData);
@@ -88,41 +91,22 @@ const RegisterPassword = ({ route }) => {
                 password: "",
                 confirmPassword: "",
             }}
+
             onSubmit={async (values) => {
-                const { countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username } = firstuserData;
-                const { city, state, zipCode } = seconduserData;
-                const { confirmPassword, password } = values;
-
-
-                const response = await fetch(Base_Url + register_endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username,
-                        city, state, zipCode,
-                        confirmPassword, password
-                    }),
-                });
-                const responseData = await response.json();
-
+                setIsLoading(true)
+                const responseData = await registerapi(firstuserData, seconduserData, values)
                 const statusCode = responseData?.statusCode;
                 const accessToken = responseData?.data?.accessToken;
-                const message = responseData?.message;
                 const error = responseData?.stack;
-                console.log("statuscode", statusCode,)
-                //  const {statusCode} = api?.data?.data;
-                console.log("token ", accessToken);
                 if (statusCode === 200) {
-                    setShowErrors(true)
+                    setVisible(true)
+                    setIsLoading(false)
                 }
                 if (error) {
                     Alert.alert(error);
+                    setIsLoading(false)
                 }
-                console.log("respodata--", responseData)
                 setResponse(responseData)
-                return responseData;
             }}
         >
 
@@ -165,7 +149,7 @@ const RegisterPassword = ({ route }) => {
                         {/* Next and Back------------ */}
 
                         <View style={{ paddingTop: responsiveWidth(60) }}>
-                            <TouchableButton onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Create" />
+                            <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Create" />
                             <View style={{ marginVertical: 7 }}>
                                 <TouchableButton backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                             </View>
@@ -173,7 +157,7 @@ const RegisterPassword = ({ route }) => {
 
                     </View>
 
-                    {showErrors && <UserErrors text="Login" onPress={() => navigation.navigate(LOGIN)} />}
+                    {isVisible && <UserErrors setVisible={setVisible} isVisible={isVisible} text="Login" onPress={() => navigation.navigate(LOGIN)} />}
                 </View>
             )}
 

@@ -14,10 +14,9 @@ const UserErrors = ({ isVisible, setVisible, text, onPress }) => {
     const { BG_PLAYFLOW } = Img_Paths;
 
     return (
-
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-                <View style={{ width: "80%", height: responsiveHeight(20), backgroundColor: "#FFF", borderRadius: 30 }}>
+                <View style={{ width: responsiveWidth(80), height: responsiveHeight(20), backgroundColor: "#FFF", borderRadius: 30 }}>
 
                     <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12) }}>
                         <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 42, width: 42, justifyContent: "center", alignItems: "center" }}>
@@ -38,6 +37,7 @@ const UserErrors = ({ isVisible, setVisible, text, onPress }) => {
         </Modal>
     )
 };
+
 
 
 const styles = StyleSheet.create({

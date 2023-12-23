@@ -9,7 +9,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
 
     return (
 
-        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12), }}>
+        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(10), }}>
             <View style={{ flexDirection: type == "password" ? "row" : null, width: responsiveWidth(80), backgroundColor: TextinputColor, borderRadius: 12, height: responsiveHeight(6.5), justifyContent: "center", alignItems: "center", }}>
                 <TextInput placeholder={placeholderText}
                     onChangeText={onChangeText}

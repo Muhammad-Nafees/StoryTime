@@ -8,6 +8,7 @@ import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 
 const Routes = () => {
+
     const dispatch = useDispatch();
     const userToken = useSelector((state) => state?.authSlice?.accessToken);
 
@@ -18,13 +19,6 @@ const Routes = () => {
                 const accessToken = await AsyncStorage.getItem('isLoggedIn');
                 if (accessToken) {
                     dispatch(setAccessToken(accessToken));
-                    // const isValidToken = await validateTokenFunction(accessToken);
-                    // if (isValidToken) {
-                    //     dispatch(setAccessToken(accessToken));
-                    // } else {
-                    //     await AsyncStorage.removeItem('isLoggedIn');
-                    //     dispatch(setAccessToken(null));
-                    // }
                 }
             } catch (error) {
                 console.error('Error authenticating user:', error);

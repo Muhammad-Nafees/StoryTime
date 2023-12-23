@@ -8,6 +8,7 @@ const initialState = {
     userProfile: null,
     accessToken: null,
     refreshToken: null,
+    forgetAccesstoken: null
 };
 
 
@@ -35,6 +36,9 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.userRole = undefined;
         },
+        forgetResetToken: (state, action) => {
+            state.forgetAccesstoken = action.payload
+        }
 
     },
 });
@@ -48,7 +52,8 @@ export const {
     authenticate,
     setUserProfile,
     logout,
-    login
+    login,
+    forgetResetToken
 } = authSlice.actions;
 
 export default authSlice.reducer;

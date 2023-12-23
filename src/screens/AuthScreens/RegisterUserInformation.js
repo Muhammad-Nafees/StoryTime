@@ -41,10 +41,8 @@ const RegisterUserInformation = ({ route }) => {
     }
 
     const handlenext = () => {
-        // if (currentvalue && isOpenCity && zipCode) {
         dispatch(registeruser_city({ state: currentvalue, city: currentvalueCity, zipCode: zipCode }))
         navigation.navigate(REGISTER_PASSWORD)
-        // }
     }
 
     return (

@@ -8,6 +8,7 @@ import TextInputField from "../../../components/TextInputField";
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
 import { reset_password } from "../../../../services/api/auth_mdule/auth";
+import { useSelector } from "react-redux";
 
 
 const ForgetConfirmPassword = () => {
@@ -18,6 +19,8 @@ const ForgetConfirmPassword = () => {
     const [newPassword, setnewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const forgetuserToken = useSelector((state) => state?.authSlice?.forgetAccesstoken);
+    console.log("forgetPassword", forgetuserToken)
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -28,12 +31,12 @@ const ForgetConfirmPassword = () => {
     }
 
 
-
     const resetConfirmPassword = async () => {
+        setIsLoading(true)
 
         try {
 
-            const response = await reset_password(newPassword, confirmPassword);
+            const response = await reset_password(newPassword, confirmPassword, forgetuserToken);
             console.log("repsonse", response)
 
             console.log(response?.message)
@@ -43,6 +46,7 @@ const ForgetConfirmPassword = () => {
                 // navigation.navigate(OTP_FORGET)
             } else if (response?.stack) {
                 Alert.alert(response.stack)
+                setIsLoading(false)
             }
         }
 
@@ -51,10 +55,8 @@ const ForgetConfirmPassword = () => {
         }
         finally {
             setIsLoading(false);
-
         }
     };
-
 
 
     return (
@@ -89,7 +91,7 @@ const ForgetConfirmPassword = () => {
                 {/* Next------------ */}
 
                 <View style={{ paddingTop: responsiveWidth(75) }}>
-                    <TouchableButton onPress={resetConfirmPassword} backgroundColor="#395E66" color="#FFF" text="Save" />
+                    <TouchableButton isLoading={isLoading} onPress={resetConfirmPassword} backgroundColor="#395E66" color="#FFF" text="Save" />
                 </View>
 
             </View>

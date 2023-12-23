@@ -10,6 +10,8 @@ import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
 import { reset_verify_code } from "../../../../services";
 import { otp_forget } from "../../../../services/api/auth_mdule/auth";
+import { useDispatch } from "react-redux";
+import { forgetResetToken } from "../../../../store/slices/authSlice";
 
 const OtpForget = ({ length, value, disabled, onChange, }) => {
     const navigation = useNavigation()
@@ -18,11 +20,11 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
     const [otptext, setOtptext] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const inputRefs = useRef([]);
+    const dispatch = useDispatch();
 
     const handlechange = (text, index) => {
         const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
         setOtptext(updatedText);
-        // console.log(text)
         if (text.length !== 0) {
             return inputRefs.current[index + 1]?.focus();
         }
@@ -39,17 +41,22 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
 
     const otp_forget_api = async () => {
+        setIsLoading(true)
         try {
             const response = await otp_forget(otptext)
             console.log("response", response)
             if (response?.statusCode === 200) {
+                navigation.navigate(FORGET_CONFIRM_PASSWORD)
                 Alert.alert(response?.message)
+                dispatch(forgetResetToken(response?.data?.accessToken))
                 setIsLoading(false)
             } else if (response?.stack) {
                 Alert.alert(response.stack)
-                navigation.navigate(FORGET_CONFIRM_PASSWORD)
+                setIsLoading(false)
+
             }
         }
+
 
         catch (err) {
             console.log(err)
@@ -111,7 +118,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                         <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
                         <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>
                     </View>
-                    <TouchableButton onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
+                    <TouchableButton isLoading={isLoading} onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
                 </View>
                 {/* () => navigation.navigate(FORGET_CONFIRM_PASSWORD) */}
             </View>

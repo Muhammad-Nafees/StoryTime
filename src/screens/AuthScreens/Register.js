@@ -18,6 +18,9 @@ import { register } from '../../../store/slices/Register_Slice';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
+import { validationSignUp } from '../../../validation/validation';
+import Svg, { Path } from 'react-native-svg';
+import { registerapi } from '../../../services/api/auth_mdule/auth';
 
 
 const Register = () => {
@@ -31,36 +34,11 @@ const Register = () => {
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
 
-    // const onSelectCountry = (country) => {
-    //     setCountryCode(country.cca2);
-    //     setCountryCodeNumber(country.callingCode);
-    //     setSelectedCountry(country);
-    //     setCountryPickerVisible(false);
-    // };
-    // console.log(countryCode)
-    // console.log("countrycode---", countryCode.callingCode)
-    // console.log("phonecoding---", countryCode.cca2)
-    // const phoneCode = countryCode?.callingCode?.[0];
-    // const countrycoding = countryCode?.cca2;
-    // console.log("phonecode-=", phoneCode)
-    // console.log("countrycoding", countrycoding)
+
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    const validationSignUp = Yup.object().shape({
-        username: Yup.string().min(3, 'Too Short').max(50, 'Too Long!').required('Please fill the field'),
-        firstName: Yup.string().min(4, 'Too Short').max(50, 'Too Long!').required('Please fill the field'),
-        lastName: Yup.string().required(),
-        phoneNo: Yup.string().required('Please fill the field'),
-        email: Yup.string()
-            .email('Invalid email')
-            .required('Email is required')
-            .matches(
-                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                'Must be a valid email'
-            )
-    });
 
     return (
         <Formik initialValues={{
@@ -74,8 +52,13 @@ const Register = () => {
             phoneCode: "+92",
             username: "",
         }}
+
             validationSchema={validationSignUp}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
+
+                const repsonse = await registerapi()
+                console.log("ress", repsonse)
+
                 dispatch(register(values))
                 navigation.navigate(REGISTER_USER_INFO, {
                 })
@@ -92,38 +75,97 @@ const Register = () => {
 
                         <View>
 
-                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Username</Text>
+                            {/* User Name----- */}
+                            <View>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Username</Text>
+                                </View>
+
+                                <TextInputField
+                                    placeholderText="Type here"
+                                    onChangeText={handleChange("username")}
+                                    value={values.username}
+                                />
+
+
+
+                                {errors.username &&
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.username}</Text>
+                                            </View>
+                                        </View>
+
+                                    </View>
+                                }
                             </View>
 
-                            <TextInputField
-                                placeholderText="Type here"
-                                onChangeText={handleChange("username")}
-                                value={values.username}
-                            />
+                            {/* First Name----- */}
+                            <View>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
+                                </View>
+                                <TextInputField
+                                    placeholderText="Type here"
+                                    onChangeText={handleChange("firstName")}
+                                    value={values.firstName}
+                                />
+                                {errors.firstName &&
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.firstName}</Text>
+                                            </View>
+                                        </View>
 
-                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
+                                    </View>
+                                }
                             </View>
 
-                            <TextInputField
-                                placeholderText="Type here"
-                                onChangeText={handleChange("firstName")}
-                                value={values.firstName}
-                            />
+                            {/* Last Name----- */}
+                            <View>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
+                                </View>
 
-                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
-                                {errors.firstName && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.firstName}</Text>}
-                            </View>
-                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
-                            </View>
+                                <TextInputField placeholderText="Type here"
+                                    onChangeText={handleChange("lastName")}
+                                    value={values.lastName}
+                                />
 
-                            <TextInputField placeholderText="Type here"
-                                onChangeText={handleChange("lastName")}
-                                value={values.lastName}
-                            />
+                                {errors.lastName &&
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.lastName}</Text>
+                                            </View>
+                                        </View>
+
+                                    </View>
+                                }
+                            </View>
 
                             <View>
                                 <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
@@ -143,33 +185,57 @@ const Register = () => {
                                         withFilter={true}
                                         withFlagButton={false}
                                         withCountryNameButton={false}
-                                        onSelect={onSelectCountry}
+                                        // onSelect={onse}
                                         onClose={() => setCountryPickerVisible(false)}
                                         visible={countryPickerVisible}
                                         containerButtonStyle={styles.countryPickerButton}
                                         closeButtonImageStyle={styles.countryPickerCloseButton}
                                     />
                                 )}
+
+                                {errors.phoneNo &&
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingTop: responsiveWidth(3), }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.phoneNo}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
                             </View>
 
-                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                {errors.phoneNo && <Text style={{ color: "red", fontSize: responsiveFontSize(1.9) }}>{errors.phoneNo}</Text>}
-                                {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
-                            </View>
 
                             <View>
-                                <View style={{ paddingTop: responsiveWidth(5), width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <View style={{ paddingTop: responsiveWidth(4), width: responsiveWidth(90), marginLeft: "auto" }}>
                                     <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
                                 </View>
                                 <TextInputField placeholderText="Type here"
                                     onChangeText={handleChange("email")}
                                     value={values.email}
                                 />
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                    {/* {errors.phoneNo && <Text style={{ color: "red", }}>{errors.phoneNo}</Text>} */}
-                                    {errors.email && <Text style={{ color: "red", fontSize: responsiveFontSize(1.9) }}>{errors.email}</Text>}
-                                    {/* {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>} */}
-                                </View>
+                                {errors.email &&
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
                             </View>
 
                             <View style={{ paddingVertical: responsiveWidth(6) }}>

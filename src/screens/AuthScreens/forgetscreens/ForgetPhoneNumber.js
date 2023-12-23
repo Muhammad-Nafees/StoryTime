@@ -9,34 +9,35 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
+import { object } from 'yup';
 
 
 
 const ForgetPhoneNumber = () => {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const { OTP_FORGET } = NavigationsString
-    const { FORGET_BG_IMG } = Img_Paths
+    const { OTP_FORGET } = NavigationsString;
+
+    const [countryCode, setCountryCode] = useState([])
+    const { FORGET_BG_IMG } = Img_Paths;
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    const resetPhonehandle = async (data) => {
-
+    const resetPhonehandle = async () => {
+        setIsLoading(true)
         try {
-            const response = await reset_email(data);
-            console.log("repsonse", response)
-
-            console.log(response?.message)
+            const response = await reset_email(phoneNumber);
             if (response?.statusCode === 200) {
                 Alert.alert(response?.message)
                 setIsLoading(false)
                 navigation.navigate(OTP_FORGET)
             } else if (response?.stack) {
                 Alert.alert(response.stack)
+                setIsLoading(false)
             }
         }
         catch (err) {
@@ -44,11 +45,8 @@ const ForgetPhoneNumber = () => {
         }
         finally {
             setIsLoading(false);
-
         }
     };
-
-    console.log("number", phoneNumber)
 
     return (
 
@@ -64,7 +62,7 @@ const ForgetPhoneNumber = () => {
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                     </View>
-                    <PhoneNumber value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
+                    <PhoneNumber setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
                     {/* <TextInputField placeholderText="Type here" /> */}
 
                 </View>
