@@ -24,9 +24,9 @@ const Routes = () => {
                 console.error('Error authenticating user:', error);
             }
         };
-
         authenticateUser();
     }, [dispatch]);
+
 
     return userToken ? <MainStack /> : <AuthStack />;
 };

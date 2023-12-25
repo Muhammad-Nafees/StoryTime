@@ -7,7 +7,7 @@ import { FourthColor, TextinputColor } from '../screens/Styles/Style';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
 
-const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode }) => {
+const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFormatText, formatText }) => {
     return (
         <>
             <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
@@ -15,13 +15,14 @@ const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode }) => {
                 <PhoneInput
                     defaultValue={value}
                     onChangeText={(number) => onchangeState(number)}
+                    onChangeFormattedText={(val) => setFormatText(val)}
                     onPressFlag={onPressFlag}
                     withShadow
                     autoFocus
-                    defaultCode="PK"
+                    defaultCode="AU"
+                    // value='adad'
                     textInputStyle={{ color: "#000", }}
                     containerStyle={{
-                        // height: responsiveHeight(6.5),
                         width: responsiveWidth(80),
                         borderRadius: 12,
                         color: FourthColor,

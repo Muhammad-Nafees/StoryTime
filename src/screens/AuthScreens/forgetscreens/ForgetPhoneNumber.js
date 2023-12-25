@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
@@ -10,6 +10,7 @@ import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
 import { object } from 'yup';
+import Toast from 'react-native-toast-message';
 
 
 
@@ -18,9 +19,9 @@ const ForgetPhoneNumber = () => {
     const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const { OTP_FORGET } = NavigationsString;
-
-    const [countryCode, setCountryCode] = useState([])
+    const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
+    const [formatText, setFormatText] = useState("")
+    const [countryCode, setCountryCode] = useState({})
     const { FORGET_BG_IMG } = Img_Paths;
 
     const toggleCountryPicker = () => {
@@ -29,14 +30,23 @@ const ForgetPhoneNumber = () => {
 
     const resetPhonehandle = async () => {
         setIsLoading(true)
+
         try {
-            const response = await reset_email(phoneNumber);
+
+            const response = await reset_email(formatText, code,);
+            console.log("responsephonenu", response)
             if (response?.statusCode === 200) {
-                Alert.alert(response?.message)
+                Toast.show({
+                    type: "success",
+                    text1: response?.message,
+                })
                 setIsLoading(false)
                 navigation.navigate(OTP_FORGET)
             } else if (response?.stack) {
-                Alert.alert(response.stack)
+                Toast.show({
+                    type: "error",
+                    text1: response?.message,
+                })
                 setIsLoading(false)
             }
         }
@@ -47,6 +57,8 @@ const ForgetPhoneNumber = () => {
             setIsLoading(false);
         }
     };
+
+
 
     return (
 
@@ -62,8 +74,7 @@ const ForgetPhoneNumber = () => {
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                     </View>
-                    <PhoneNumber setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
-                    {/* <TextInputField placeholderText="Type here" /> */}
+                    <PhoneNumber setFormatText={setFormatText} formatText={formatText} setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
 
                 </View>
 
@@ -72,12 +83,14 @@ const ForgetPhoneNumber = () => {
                 {/* Next and Back------------ */}
 
                 <View style={{ marginTop: responsiveWidth(80) }}>
-                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
-                    <TouchableButton onPress={() => resetPhonehandle(phoneNumber)} backgroundColor="#395E66" color="#FFF" text="Next" />
+                    <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)}>
+                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
+                    </TouchableOpacity>
+                    <TouchableButton isLoading={isLoading} onPress={() => resetPhonehandle(phoneNumber)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
 
             </View>
-
+            <Toast />
         </View>
     )
 }

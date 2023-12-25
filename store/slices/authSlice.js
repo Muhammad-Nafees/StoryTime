@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { stat } from 'react-native-fs';
 
 const initialState = {
-    isAuthenticated: false,
     user: null,
     userProfile: null,
     accessToken: null,
@@ -11,16 +10,13 @@ const initialState = {
     forgetAccesstoken: null
 };
 
-
 const authSlice = createSlice({
+
     name: 'auth',
     initialState,
     reducers: {
         setuserRole: (state, action) => {
             state.userRole = action.payload;
-        },
-        authenticate: (state, action) => {
-            state.isAuthenticated = action.payload;
         },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload;
@@ -30,11 +26,9 @@ const authSlice = createSlice({
         },
         login: (state, action) => {
             state.user = action.payload;
-            console.log("login user---", state.user)
         },
         logout: (state) => {
             state.isAuthenticated = false;
-            state.userRole = undefined;
         },
         forgetResetToken: (state, action) => {
             state.forgetAccesstoken = action.payload
@@ -42,6 +36,7 @@ const authSlice = createSlice({
 
     },
 });
+
 
 export const {
     setuserRole,

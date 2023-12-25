@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { FourthColor, SecondaryColor, TextColorGreen } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
@@ -16,20 +16,9 @@ import { Img_Paths } from '../../assets/Imagepaths';
 import { Base_Url, login_andpoint } from '../../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setAccessToken } from '../../../store/slices/authSlice';
-
-
-
-// const SignInSchema = Yup.object().shape({
-//     email: Yup.string()
-//         .email('Invalid email') // Checks for a valid email format
-//         .min(4, 'Too Short')
-//         .max(40, 'Too Long!')
-//         .required('Please Enter Your Email'),
-//     password: Yup.string()
-//         .min(6, 'Password must be at least 6 characters')
-//         .max(20, 'Password is too long') // Adjust the max length as needed
-//         .required('Please Enter Your Password'),
-// });
+import Toast from 'react-native-toast-message';
+import { validationUserLogin } from '../../../validation/validation';
+import { Path, Svg } from 'react-native-svg';
 
 
 
@@ -57,8 +46,11 @@ const Login = () => {
                 fcmToken: "fcmtoken12121212"
             }}
 
-            onSubmit={async (values, { setSubmitting }) => {
+            validationSchema={validationUserLogin}
+
+            onSubmit={async (values) => {
                 setIsLoading(true)
+
                 try {
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
@@ -70,6 +62,7 @@ const Login = () => {
                             email, password, fcmToken
                         }),
                     });
+
                     const responseData = await response.json();
                     dispatch(login(responseData))
 
@@ -77,7 +70,6 @@ const Login = () => {
                         setIsLoading(false)
                     }
 
-                    console.log("respdara-=", responseData)
                     const statusCode = responseData?.statusCode;
                     const message = responseData?.message;
                     const accessToken = responseData?.data?.accessToken;
@@ -85,11 +77,22 @@ const Login = () => {
                     if (statusCode === 200) {
                         await AsyncStorage.setItem("isLoggedIn", accessToken)
                         dispatch(setAccessToken(accessToken))
-                        Alert.alert(message)
+                        Toast.show({
+                            type: "success",
+                            text1: message,
+                            position: "top",
+                            visibilityTime: 2500
+                        })
                     }
                     if (error) {
-                        Alert.alert(error)
                         setIsLoading(false)
+                        Toast.show({
+                            type: "error",
+                            text1: message,
+                            position: "top",
+                            visibilityTime: 2500,
+                            // text1Style: 
+                        })
                     }
                     return responseData;
                 }
@@ -102,78 +105,118 @@ const Login = () => {
             {({ values, errors, handleChange, handleSubmit }) => (
 
                 <View style={styles.container}>
-                    <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
-                        <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
-                    </View>
-
-                    <View style={{ paddingBottom: moderateVerticalScale(12) }}>
-                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Email</Text>
+                    <ScrollView>
+                        <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
+                            <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
                         </View>
-                        <TextInputField
-                            value={values.email}
-                            onChangeText={handleChange('email')}
-                            placeholderText="Type here"
-                        />
-                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
+
+                        <View style={{ paddingBottom: moderateVerticalScale(12) }}>
+                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Email</Text>
+                            </View>
+                            <TextInputField
+                                value={values.email}
+                                onChangeText={handleChange('email')}
+                                placeholderText="Type here"
+                            />
+
+                            {errors.email &&
+                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                    <View style={{ flexDirection: "row", }}>
+                                        <View>
+                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                <Path
+                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                />
+                                            </Svg>
+                                        </View>
+                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
+                                        </View>
+                                    </View>
+
+                                </View>
+                            }
+
+                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
+                            </View>
+                            <TextInputField
+                                value={values.password}
+                                onChangeText={handleChange('password')}
+                                onPress={toggleShowPassword}
+                                showPassword={showPassword}
+                                placeholderText="Type here"
+                                type="password"
+                            />
+
+                            {errors.password &&
+                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', }}>
+                                    <View style={{ flexDirection: "row", }}>
+                                        <View>
+                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                <Path
+                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                />
+                                            </Svg>
+                                        </View>
+                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            }
                         </View>
-                        <TextInputField
-                            value={values.password}
-                            onChangeText={handleChange('password')}
-                            onPress={toggleShowPassword}
-                            showPassword={showPassword}
-                            placeholderText="Type here"
-                            type="password"
-                        />
 
-                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                            {errors.password && <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9) }}>{errors.password}</Text>}
-                        </View>
-                    </View>
-
-                    <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>
-                        <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Forgot password?</Text>
-                    </TouchableOpacity>
-
-                    <View style={{ paddingVertical: moderateVerticalScale(14) }}>
-                        <TouchableButton isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
-                    </View>
-
-                    <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={styles.text_container}>
-                            <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our </Text>
-                            <TouchableOpacity>
-                                <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
-                            </TouchableOpacity>
-                            <Text style={[styles.text, { color: FourthColor }]}> and </Text>
-                            <TouchableOpacity>
-                                <Text style={[styles.text, { color: TextColorGreen }]}>Privacy Policy</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={{ paddingVertical: moderateVerticalScale(16), justifyContent: 'center', alignItems: 'center', }}>
-                        <Text style={[styles.text, { color: FourthColor, fontWeight: '400', paddingVertical: moderateVerticalScale(10), }]}>or login with</Text>
-                        <View style={{ flexDirection: 'row', width: responsiveWidth(78), justifyContent: 'space-between', }}>
-                            <SocialsLogin ImageSource={GOOGLE_ICON} />
-                            <SocialsLogin ImageSource={FACEBOOK_ICON} />
-                            <SocialsLogin ImageSource={APPLE_ICON} />
-                        </View>
-                    </View>
-
-                    <View style={{ paddingTop: responsiveWidth(7), flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={[styles.text, { color: FourthColor }]}>Don’t have an account yet? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
-                            <Text style={[styles.text, { color: TextColorGreen, fontWeight: '600' }]}>Create one</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Forgot password?</Text>
                         </TouchableOpacity>
-                    </View>
 
+                        <View style={{ paddingVertical: moderateVerticalScale(14) }}>
+                            <TouchableButton isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
+                        </View>
+
+                        <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.text_container}>
+                                <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our </Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
+                                    screen: "LoginTermsAndConditions"
+                                })}>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
+                                </TouchableOpacity>
+                                <Text style={[styles.text, { color: FourthColor }]}> and </Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
+                                    screen: "LoginPrivacyAndPolicy"
+                                })}>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}>Privacy Policy</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <View style={{ paddingVertical: moderateVerticalScale(16), justifyContent: 'center', alignItems: 'center', }}>
+                            <Text style={[styles.text, { color: FourthColor, fontWeight: '400', paddingVertical: moderateVerticalScale(10), }]}>or login with</Text>
+                            <View style={{ flexDirection: 'row', width: responsiveWidth(78), justifyContent: 'space-between', }}>
+                                <SocialsLogin ImageSource={GOOGLE_ICON} />
+                                <SocialsLogin ImageSource={FACEBOOK_ICON} />
+                                <SocialsLogin ImageSource={APPLE_ICON} />
+                            </View>
+                        </View>
+
+                        <View style={{ paddingTop: responsiveWidth(7), flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={[styles.text, { color: FourthColor }]}>Don’t have an account yet? </Text>
+                            <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
+                                <Text style={[styles.text, { color: TextColorGreen, fontWeight: '600' }]}>Create one</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                    <Toast />
                 </View>
             )}
+
         </Formik>
     );
 };
+
 
 
 const styles = StyleSheet.create({

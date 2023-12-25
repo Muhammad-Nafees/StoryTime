@@ -14,6 +14,11 @@ import {
 } from "../screens/index"
 import NavigationsString from "../constants/NavigationsString";
 import FrameContent from "../components/FrameContent";
+import FirstScreenGuest from "../screens/AuthScreens/guestScreens/FirstScreenGuest";
+import TermsAndConditions from "../screens/AuthScreens/guestScreens/TermsAndConditions";
+import PrivacyAndPolicy from "../screens/AuthScreens/guestScreens/PrivacyAndpolicy";
+import LoginPrivacyAndPolicy from "../screens/AuthScreens/LoginPrivacyPolicy";
+import LoginTermsAnd_Conditions from "../screens/AuthScreens/LoginTermsAnd_Conditions";
 
 const AuthStack = () => {
     const {
@@ -37,7 +42,9 @@ const AuthStack = () => {
             <Stack.Navigator initialRouteName={POPUP_START}>
                 <Stack.Screen name={POPUP_START} component={PopUpStart} options={{ headerShown: false }} />
                 <Stack.Screen name={SPLASH_SCREEN} component={SplashScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="GuestStack" component={GuestStack} options={{ headerShown: false }} />
                 <Stack.Screen name={LOGIN} component={Login} options={{ headerShown: false }} />
+                <Stack.Screen name="TermsAndConditionsStack" component={TermsAndConditionsStack} options={{ headerShown: false }} />
                 <Stack.Screen name={REGISTER} component={Register} options={{ headerShown: false }} />
                 <Stack.Screen name={REGISTER_USER_INFO} component={RegisterUserInformation} options={{ headerShown: false }} />
                 <Stack.Screen name={REGISTER_PASSWORD} component={RegisterPassword} options={{ headerShown: false }} />
@@ -49,19 +56,34 @@ const AuthStack = () => {
             </Stack.Navigator>
         </NavigationContainer>
     )
+};
 
-}
 
-const PhoneNumberStack = () => {
+
+const GuestStack = () => {
     const Stack = createStackNavigator();
     return (
+        <Stack.Navigator>
+            {/* <Stack.Screen name="FirstScreenGuest" component={FirstScreenGuest} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="LoginTermsAndConditions" component={LoginTermsAnd_Conditions} options={{ headerShown: false }} />
+            <Stack.Screen name="LoginPrivacyAndPolicy" component={LoginPrivacyAndPolicy} options={{ headerShown: false }} />
+        </Stack.Navigator>
 
-        <NavigationContainer>
-            <Stack.Navigator  >
-
-            </Stack.Navigator>
-        </NavigationContainer>
     )
 
 }
+
+const TermsAndConditionsStack = () => {
+    const Stack = createStackNavigator();
+    return (
+        <Stack.Navigator>
+            {/* <Stack.Screen name="FirstScreenGuest" component={FirstScreenGuest} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="LoginTermsAndConditions" component={LoginTermsAnd_Conditions} options={{ headerShown: false }} />
+            <Stack.Screen name="LoginPrivacyAndPolicy" component={LoginPrivacyAndPolicy} options={{ headerShown: false }} />
+        </Stack.Navigator>
+
+    )
+
+}
+
 export default AuthStack;

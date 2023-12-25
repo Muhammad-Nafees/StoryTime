@@ -5,7 +5,7 @@ import { FourthColor, SecondaryColor, TextinputColor, ThirdColor } from '../scre
 import Icon from "react-native-vector-icons/Feather"
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 
-const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value }) => {
+const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value, onBlur }) => {
 
     return (
 
@@ -13,6 +13,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
             <View style={{ flexDirection: type == "password" ? "row" : null, width: responsiveWidth(80), backgroundColor: TextinputColor, borderRadius: 12, height: responsiveHeight(6.5), justifyContent: "center", alignItems: "center", }}>
                 <TextInput placeholder={placeholderText}
                     onChangeText={onChangeText}
+                    // onBlur={onBlur}
                     value={value}
                     keyboardType={type === "zipcode" ? "decimal-pad" : "default"}
                     placeholderTextColor="#AAAAAA"

@@ -11,6 +11,7 @@ import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { useDispatch } from 'react-redux';
 import { register, registeruser_city } from '../../../store/slices/Register_Slice';
+import { userinfoState } from '../../../store/slices/userInfoState_Slice';
 
 
 const items = [
@@ -35,15 +36,20 @@ const RegisterUserInformation = ({ route }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    console.log("route-=-", route?.params?.countryCode)
+    const countryCode = route?.params?.countryCode;
 
     const handlezipcode = (value) => {
         setIszipCode(value)
     }
 
     const handlenext = () => {
+        dispatch(userinfoState(countryCode))
         dispatch(registeruser_city({ state: currentvalue, city: currentvalueCity, zipCode: zipCode }))
         navigation.navigate(REGISTER_PASSWORD)
+
     }
+
 
     return (
         <View style={styles.container}>
@@ -65,11 +71,13 @@ const RegisterUserInformation = ({ route }) => {
                         items={itemscity}
                         showTickIcon={false}
                         open={isOpenCity}
+                        autoScroll
                         setOpen={() => { setIsOpenCity(!isOpenCity) }}
                         value={currentvalueCity}
                         setValue={(val) => setCurrentValueCity(val)}
                         placeholder="Select here"
                         placeholderStyle={{ color: "#AAAAAA" }}
+                        m
                     />
                 </View>
 

@@ -9,6 +9,9 @@ import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
 import { reset_password } from "../../../../services/api/auth_mdule/auth";
 import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
+import { Formik } from "formik";
+import { Path, Svg } from "react-native-svg";
 
 
 const ForgetConfirmPassword = () => {
@@ -16,11 +19,10 @@ const ForgetConfirmPassword = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
     const { FORGET_BG_IMG } = Img_Paths;
-    const [newPassword, setnewPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    // const [newPassword, setnewPassword] = useState("")
+    // const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const forgetuserToken = useSelector((state) => state?.authSlice?.forgetAccesstoken);
-    console.log("forgetPassword", forgetuserToken)
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -31,72 +33,123 @@ const ForgetConfirmPassword = () => {
     }
 
 
-    const resetConfirmPassword = async () => {
-        setIsLoading(true)
-
-        try {
-
-            const response = await reset_password(newPassword, confirmPassword, forgetuserToken);
-            console.log("repsonse", response)
-
-            console.log(response?.message)
-            if (response?.statusCode === 200) {
-                Alert.alert(response?.message)
-                setIsLoading(false)
-                // navigation.navigate(OTP_FORGET)
-            } else if (response?.stack) {
-                Alert.alert(response.stack)
-                setIsLoading(false)
-            }
-        }
-
-        catch (err) {
-            console.log(err)
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
 
 
     return (
 
-        <View style={styles.container}>
-            <View style={styles.img_container}>
-                <Image style={styles.img_child} source={FORGET_BG_IMG} />
-            </View>
+        <Formik initialValues={{
+            newPassword: '',
+            confirmPassword: '',
+        }}
+            onSubmit={async (values) => {
+                const { newPassword, confirmPassword } = values
+                setIsLoading(true)
+                try {
 
-            {/* Code------------ */}
+                    const response = await reset_password(newPassword, confirmPassword, forgetuserToken);
 
-            <View>
-                <View>
+                    if (response?.statusCode === 200) {
+                        Toast.show({
+                            type: "success",
+                            text1: response?.message
+                        })
+                        setIsLoading(false)
+                    } else if (response?.stack) {
+                        Toast.show({
+                            type: "error",
+                            text1: response?.message
+                        })
+                        setIsLoading(false)
+                    }
+                }
 
-                    {/*New Password----------- */}
+                catch (err) {
+                    console.log(err)
+                }
+                finally {
+                    setIsLoading(false);
+                }
+            }}
+        >
 
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
+            {({ values, errors, handleChange, handleSubmit }) => (
+
+                <View style={styles.container}>
+                    <View style={styles.img_container}>
+                        <Image style={styles.img_child} source={FORGET_BG_IMG} />
                     </View>
 
-                    <TextInputField onChangeText={(value) => setnewPassword(value)} onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
-                    {/* Confirm Password------------ */}
+                    {/* Code------------ */}
 
-                    <View style={{}}>
-                        <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                            <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Confirm Password</Text>
+                    <View>
+                        <View>
+
+                            {/*New Password----------- */}
+
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
+                            </View>
+
+                            <TextInputField onChangeText={handleChange("newPassword")} onPress={toggleShowPassword} showPassword={showPassword} type="password" placeholderText="Enter here" />
+
+
+                            {errors.newPassword &&
+                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                    <View style={{ flexDirection: "row", }}>
+                                        <View>
+                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                <Path
+                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                />
+                                            </Svg>
+                                        </View>
+                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.newPassword}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            }
+
+                            {/* Confirm Password------------ */}
+
+                            <View style={{}}>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ marginVertical: responsiveWidth(1), color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Confirm Password</Text>
+                                </View>
+                                <TextInputField onChangeText={handleChange("confirmPassword")} onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
+                            </View>
+
+                            {errors.confirmPassword &&
+                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                    <View style={{ flexDirection: "row", }}>
+                                        <View>
+                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                <Path
+                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                />
+                                            </Svg>
+                                        </View>
+                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.confirmPassword}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            }
                         </View>
-                        <TextInputField onChangeText={(value) => setConfirmPassword(value)} onPress={toggleShowPasswordConfir} showPassword={showPasswordConfirm} type="password" placeholderText="Enter here" />
+
+                        {/* Next------------ */}
+
+                        <View style={{ paddingTop: responsiveWidth(75) }}>
+                            <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Save" />
+                        </View>
+
                     </View>
+                    <Toast />
                 </View>
+            )}
 
-                {/* Next------------ */}
+        </Formik>
 
-                <View style={{ paddingTop: responsiveWidth(75) }}>
-                    <TouchableButton isLoading={isLoading} onPress={resetConfirmPassword} backgroundColor="#395E66" color="#FFF" text="Save" />
-                </View>
-
-            </View>
-
-        </View>
     )
 }
 

@@ -28,4 +28,39 @@ export const validationSignUp = Yup.object().shape({
 
 export const validationUserAdressInfo = Yup.object().shape({
     zipCode: Yup.string().required('zipCode is required')
-})
+});
+
+
+export const validationUserPassword = Yup.object().shape({
+    password: Yup.string().required('password is required').min(8, 'password length should be 8 character'),
+    confirmPassword: Yup.string().required('Confirm password is required').min(8, 'password length should be 8 character')
+});
+
+
+export const validationUserLogin = Yup.object().shape({
+    email: Yup.string()
+        .email('Invalid email')
+        .required('Email is required')
+        .matches(
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            'Must be a valid email'
+        ).matches(
+            /^[^\s]+$/,
+            'Email cannot contain spaces'
+        ),
+    password: Yup.string().required('Password is required').min(8, 'password length should be 8 character')
+});
+
+
+export const validationforgetEmail = Yup.object().shape({
+    email: Yup.string()
+        .email('Invalid email')
+        .required('Email is required')
+        .matches(
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            'Must be a valid email'
+        ).matches(
+            /^[^\s]+$/,
+            'Email cannot contain spaces'
+        ),
+});

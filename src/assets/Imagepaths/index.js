@@ -1,5 +1,6 @@
 export const Img_Paths = {
     SPLASH_SCREEN_IMAGE: require("../../assets/splash-screen-bg.png"),
+    BG_IMAGE_ELEMENTS: require("../../assets/background-red-image.jpeg"),
     GET_STARTED_IMAGE: require("../../assets/Get-Started-img.png"),
     STORY_TIME_IMG: require("../../assets/story-time.png"),
     LOGIN_IMG: require("../../assets/login-img.png"),

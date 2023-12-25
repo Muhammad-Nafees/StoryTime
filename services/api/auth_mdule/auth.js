@@ -1,19 +1,22 @@
 import { Alert } from "react-native";
-import { Base_Url, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code } from "../..";
+import { Base_Url, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code, stateandCity_endpoint } from "../..";
 
 
 
-const reset_email = async (email, phone) => {
+const reset_email = async (userData, code) => {
 
     try {
+
         const requestBody = {}
-        console.log("requestbdy", requestBody)
-        if (email) {
-            requestBody.email = email
+        console.log("useradata", userData)
+        if (code) {
+            requestBody.phone = userData;
         }
-        if (phone) {
-            requestBody.phone = phone
+        else {
+            requestBody.email = userData;
         }
+        console.log("requestbody", requestBody)
+
         const response = await fetch(Base_Url + reset_email_endpoint, {
             method: "POST",
             headers: {
@@ -61,7 +64,7 @@ export const reset_password = async (newPassword, confirmPassword, forgetuserTok
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${forgetuserToken}`
+                accessToken: forgetuserToken
             },
             body: JSON.stringify({
                 newPassword: newPassword,
@@ -78,9 +81,12 @@ export const reset_password = async (newPassword, confirmPassword, forgetuserTok
     }
 }
 
+// email, fcmToken, firstName, lastName, phoneNo, role, username, countryCode, phonecode, city, state, zipCode, password, confirmPassword
 
 export const registerapi = async (firstpageData, secondpageData, values) => {
-    const { countryCode, email, fcmToken, firstName, lastName, phoneCode, phoneNo, role, username } = firstpageData;
+    const { countryCode, phonecodee, } = firstpageData;
+    const { email, fcmToken, firstName, lastName, phoneNo, role, username } = firstpageData?.values;
+    const phoneCode = `+${phonecodee}`
     const { city, state, zipCode } = secondpageData;
     const { confirmPassword, password } = values;
 
@@ -107,3 +113,23 @@ export const registerapi = async (firstpageData, secondpageData, values) => {
 }
 
 export default reset_email;
+
+
+export const stateandcity_api = async (countryCode) => {
+
+    try {
+        const response = await fetch(`${Base_Url}${stateandCity_endpoint}?countryCode=${countryCode}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const responseData = await response.json()
+        console.log("resposeData--", responseData)
+
+        return responseData;
+    }
+    catch (error) {
+        console.log(error)
+    }
+};

@@ -4,3 +4,4 @@ export const login_andpoint = "auth/login";
 export const reset_email_endpoint = "auth/send-code";
 export const reset_verify_code = "auth/verify-code";
 export const reset_password_endpoint = "auth/reset-password";
+export const stateandCity_endpoint = "states";

@@ -1,34 +1,30 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
-import { PrimaryColor, SecondaryColor, ThirdColor } from '../../Styles/Style';
+import { SecondaryColor, } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import AuthImage from '../../../components/AuthImage';
-import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
-import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 
 const SplashScreen = () => {
-    const { SPLASH_SCREEN_IMAGE, STORY_TIME_IMG, BG_FRAME, LOGIN_IMG } = Img_Paths
+    const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths
     const { LOGIN } = NavigationsString
 
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
 
-
     return (
-        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            <View style={styles.story_time_container}>
+        <ImageBackground style={styles.container} source={BG_IMAGE_ELEMENTS}>
+            <TouchableOpacity style={styles.story_time_container}>
                 <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={STORY_TIME_IMG} />
-            </View>
+            </TouchableOpacity>
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <AuthImage ImageSource={BG_FRAME} />
+                <AuthImage onPress={() => navigation.navigate("GuestStack", {
+                    screen: "FirstScreenGuest"
+                })} ImageSource={BG_FRAME} />
                 <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
-            </View>
-
-            <View style={{ marginTop: 22 }}>
-                <TouchableButton color="#FFF" backgroundColor="#395E66" text="Subscribe for AD FREE experience" />
             </View>
 
         </ImageBackground>

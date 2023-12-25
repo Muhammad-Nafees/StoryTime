@@ -12,6 +12,7 @@ import { reset_verify_code } from "../../../../services";
 import { otp_forget } from "../../../../services/api/auth_mdule/auth";
 import { useDispatch } from "react-redux";
 import { forgetResetToken } from "../../../../store/slices/authSlice";
+import Toast from "react-native-toast-message";
 
 const OtpForget = ({ length, value, disabled, onChange, }) => {
     const navigation = useNavigation()
@@ -24,6 +25,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
     const handlechange = (text, index) => {
         const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
+
         setOtptext(updatedText);
         if (text.length !== 0) {
             return inputRefs.current[index + 1]?.focus();
@@ -39,7 +41,6 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
         }
     };
 
-
     const otp_forget_api = async () => {
         setIsLoading(true)
         try {
@@ -47,16 +48,22 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
             console.log("response", response)
             if (response?.statusCode === 200) {
                 navigation.navigate(FORGET_CONFIRM_PASSWORD)
-                Alert.alert(response?.message)
+                Toast.show({
+                    type: "success",
+                    text1: response?.message
+                })
                 dispatch(forgetResetToken(response?.data?.accessToken))
                 setIsLoading(false)
+
             } else if (response?.stack) {
-                Alert.alert(response.stack)
+                Toast.show({
+                    type: "error",
+                    text1: response?.message
+                })
                 setIsLoading(false)
 
             }
         }
-
 
         catch (err) {
             console.log(err)
@@ -115,17 +122,19 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
+                        <TouchableOpacity>
+                            <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
+                        </TouchableOpacity>
                         <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>
                     </View>
                     <TouchableButton isLoading={isLoading} onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
                 </View>
                 {/* () => navigation.navigate(FORGET_CONFIRM_PASSWORD) */}
             </View>
-
+            <Toast />
         </View>
     )
-}
+};
 
 
 

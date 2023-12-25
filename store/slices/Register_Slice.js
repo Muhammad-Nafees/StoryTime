@@ -35,11 +35,12 @@ const registerUser_Slice = createSlice({
     reducers: {
         register: (state, action) => {
             // state.token = action.payload;
-            state.firstpageData = action.payload;
-            console.log("register", state.firstpageData)
+            state.firstpageData = action.payload
+            console.log("register---data", state.firstpageData);
         },
         registeruser_city: (state, action) => {
             state.secondpageData = action.payload;
+
             console.log("registercity", state.secondpageData)
         },
         registeruser_password: (state, action) => {
