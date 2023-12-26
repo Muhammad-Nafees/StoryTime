@@ -112,8 +112,6 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                         </View>
                     </View>
 
-
-
                 </View>
 
                 {/* Confirm Password------------ */}
@@ -122,7 +120,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity >
                             <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
                         </TouchableOpacity>
                         <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>

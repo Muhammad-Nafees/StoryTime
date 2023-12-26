@@ -2,13 +2,12 @@ import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import { Base_Url, register_endpoint } from "../../services";
 import { stateandcity_api } from "../../services/api/auth_mdule/auth";
 
-
-
 export const userinfoState = createAsyncThunk("userinfostate/userinfo", async (countryCode, thunkApi) => {
 
     try {
         const response = await stateandcity_api(countryCode)
         console.log("reduxUserInfo", response);
+        return response;
 
     } catch (error) {
         return thunkApi.rejectWithValue({ errorMessage: error.message });
@@ -17,7 +16,8 @@ export const userinfoState = createAsyncThunk("userinfostate/userinfo", async (c
 
 
 
-const registerUser_Slice = createSlice({
+const userinfo_state = createSlice({
+
     name: "userinfostate",
 
     initialState: {
@@ -27,7 +27,9 @@ const registerUser_Slice = createSlice({
     },
 
     reducers: {
-
+        userdata: (state, action) => {
+            state.userdata = action.payload
+        }
     },
 
 
@@ -39,7 +41,7 @@ const registerUser_Slice = createSlice({
             builder.addCase(userinfoState.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.userdata = payload;
-                console.log("data-=-=-=", state.data)
+                console.log("state.suerdaatA", state.userdata)
             }),
             builder.addCase(userinfoState.rejected, (state, action) => {
                 state.error = true;
@@ -48,5 +50,5 @@ const registerUser_Slice = createSlice({
 });
 
 
-export default registerUser_Slice.reducer;
-export const { } = registerUser_Slice.actions;
+export default userinfo_state.reducer;
+export const { userdata } = userinfo_state.actions;

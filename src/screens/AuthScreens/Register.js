@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, ScrollView } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
@@ -20,23 +20,24 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
 import Svg, { Path } from 'react-native-svg';
-import { registerapi } from '../../../services/api/auth_mdule/auth';
+import { registerapi, stateandcity_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import { userinfoState } from '../../../store/slices/userInfoState_Slice';
+import { userdata, userinfoState } from '../../../store/slices/userInfoState_Slice';
 
 
 const Register = () => {
+
     const { CREATE_ACCOUNT_ICON } = Img_Paths;
 
     const navigation = useNavigation()
     const { REGISTER_USER_INFO } = NavigationsString
-    const [countryCode, setCountryCode] = useState('');
-    const [countryCodeNumber, setCountryCodeNumber] = useState('');
-    const [formatText, setFormatText] = useState("")
-    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [countryCode, setCountryCode] = useState("");
+    const [formatText, setFormatText] = useState("");
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
+    const inputRef = useRef();
 
+    console.log("countrycode-=`", countryCode)
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
@@ -45,24 +46,6 @@ const Register = () => {
     const countrycodevar = countryCode?.cca2
     const phonecode = countryCode?.callingCode?.[0]
     console.log("codecountry", countryCode?.callingCode?.[0])
-
-    // useEffect(() => {
-    //     // yahan aap useEffect mein initialValues ko set kar sakte hain
-    //     // agar countrycodevar aur phonecode runtime pe available hain
-
-    //     formikProps.setValues({
-    //         firstName: '',
-    //         lastName: '',
-    //         email: '',
-    //         phoneNo: '',
-    //         fcmToken: "fcmtoken11212",
-    //         role: "user",
-    //         countryCode: countrycodevar,
-    //         phoneCode: `+${phonecode}`,
-    //         username: "",
-    //     });
-    // }, [countrycodevar, phonecode]);
-
     return (
 
         <Formik initialValues={{
@@ -72,14 +55,15 @@ const Register = () => {
             phoneNo: '',
             fcmToken: "fcmtoken11212",
             role: "user",
-            // countryCode: countrycodevar,
-            // phoneCode: `+${phonecode}`,
             username: '',
         }}
 
             validationSchema={validationSignUp}
             onSubmit={async (values, { setSubmitting }) => {
+                // dispatch(userdata(countrycodevar))
                 dispatch(userinfoState(countrycodevar))
+                // console.log("response", responsee);
+
                 dispatch(register({ values: values, phonecodee: phonecode, countryCode: countrycodevar }))
                 navigation.navigate(REGISTER_USER_INFO, {
                 })

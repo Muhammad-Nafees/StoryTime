@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { Base_Url, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code, stateandCity_endpoint } from "../..";
+import { Base_Url, city_andpoint, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code, stateandCity_endpoint } from "../..";
 
 
 
@@ -118,6 +118,7 @@ export default reset_email;
 export const stateandcity_api = async (countryCode) => {
 
     try {
+
         const response = await fetch(`${Base_Url}${stateandCity_endpoint}?countryCode=${countryCode}`, {
             method: "GET",
             headers: {
@@ -133,3 +134,25 @@ export const stateandcity_api = async (countryCode) => {
         console.log(error)
     }
 };
+
+
+export const userandcity_api = async (statesinfo) => {
+    const { countryCode, isoCode } = statesinfo;
+    try {
+
+        const response = await fetch(`${Base_Url}${city_andpoint}?countryCode=${countryCode}&stateCode=${isoCode}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const responseData = await response.json()
+        console.log("resposeData--", responseData)
+        return responseData;
+
+    }
+    catch (error) {
+        console.log(error)
+    }
+};
+

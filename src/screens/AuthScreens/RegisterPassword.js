@@ -37,10 +37,6 @@ const RegisterPassword = ({ route }) => {
         setConfirmShowPassword(!confirmShowPassword);
     };
 
-    const { countryCode, phonecodee, values } = firstuserData;
-    const { city, state, zipCode } = seconduserData
-    const { email, fcmToken, firstName, lastName, phoneNo, role, username } = values;
-
     return (
         <Formik
             initialValues={{
@@ -49,7 +45,6 @@ const RegisterPassword = ({ route }) => {
             }}
             validationSchema={validationUserPassword}
             onSubmit={async (values) => {
-                const { password, confirmPassword } = values;
                 setIsLoading(true)
                 const responseData = await registerapi(firstuserData, seconduserData, values)
                 const statusCode = responseData?.statusCode;
