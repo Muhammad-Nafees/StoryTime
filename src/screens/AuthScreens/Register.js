@@ -6,7 +6,6 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-
 import CountryPicker
     from 'react-native-country-picker-modal';
 import PhoneNumber from '../../components/PhoneNumber';
@@ -20,7 +19,6 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
 import Svg, { Path } from 'react-native-svg';
-import { registerapi, stateandcity_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { userdata, userinfoState } from '../../../store/slices/userInfoState_Slice';
 
@@ -28,26 +26,40 @@ import { userdata, userinfoState } from '../../../store/slices/userInfoState_Sli
 const Register = () => {
 
     const { CREATE_ACCOUNT_ICON } = Img_Paths;
-
     const navigation = useNavigation()
     const { REGISTER_USER_INFO } = NavigationsString
     const [countryCode, setCountryCode] = useState("");
     const [formatText, setFormatText] = useState("");
+    const [phoneCode, setPhoneCode] = useState("");
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
     const inputRef = useRef();
-
-    console.log("countrycode-=`", countryCode)
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    const countrycodevar = countryCode?.cca2
-    const phonecode = countryCode?.callingCode?.[0]
-    console.log("codecountry", countryCode?.callingCode?.[0])
-    return (
+    console.log("counrycode", countryCode)
 
+    // const countrycodevar = countryCode?.cca2
+    const countryinfo = {}
+
+    if (countryCode === "") {
+        countryinfo.countryCode = "AU"
+    } else {
+        countryinfo.countryCode = countryCode
+    }
+
+
+
+    if (phoneCode === "") {
+        countryinfo.phonecodee = "61"
+    } else {
+        countryinfo.phonecodee = phoneCode
+    }
+
+
+    return (
         <Formik initialValues={{
             firstName: '',
             lastName: '',
@@ -60,11 +72,8 @@ const Register = () => {
 
             validationSchema={validationSignUp}
             onSubmit={async (values, { setSubmitting }) => {
-                // dispatch(userdata(countrycodevar))
-                dispatch(userinfoState(countrycodevar))
-                // console.log("response", responsee);
-
-                dispatch(register({ values: values, phonecodee: phonecode, countryCode: countrycodevar }))
+                dispatch(userinfoState(countryinfo))
+                dispatch(register({ values: values, countryCode: countryinfo }))
                 navigation.navigate(REGISTER_USER_INFO, {
                 })
             }}
@@ -142,6 +151,7 @@ const Register = () => {
                                 </View>
 
                                 {/* Last Name----- */}
+
                                 <View>
                                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Last Name</Text>
@@ -171,6 +181,7 @@ const Register = () => {
                                 </View>
 
 
+
                                 <View>
                                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
@@ -181,6 +192,8 @@ const Register = () => {
                                         setFormatText={setFormatText}
                                         onchangeState={(number) => { setFieldValue("phoneNo", number) }}
                                         setCountryCode={setCountryCode}
+                                        countrycode={countryCode}
+                                        setPhoneCode={setPhoneCode}
                                         onPressFlag={toggleCountryPicker} />
                                     <View>
 
@@ -190,11 +203,8 @@ const Register = () => {
                                             withFilter={true}
                                             withFlagButton={false}
                                             withCountryNameButton={false}
-                                            // onSelect={onse}
                                             onClose={() => setCountryPickerVisible(false)}
                                             visible={countryPickerVisible}
-                                            containerButtonStyle={styles.countryPickerButton}
-                                            closeButtonImageStyle={styles.countryPickerCloseButton}
                                         />
                                     )}
 
@@ -244,7 +254,7 @@ const Register = () => {
                                 </View>
 
                                 <View style={{ paddingVertical: responsiveWidth(6) }}>
-                                    {/* <TouchableButton onPress={handleNext} backgroundColor="#395E66" color="#FFF" text="Next" /> */}
+
                                     <TouchableButton onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Next" />
                                     <View style={{ marginVertical: moderateVerticalScale(7) }}>
                                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />

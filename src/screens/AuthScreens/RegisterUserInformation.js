@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, Dimensions, FlatList, ScrollView, SafeAreaView } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, Dimensions, FlatList, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight, responsiveScreenWidth } from "react-native-responsive-dimensions"
 import TextInputField from '../../components/TextInputField';
@@ -27,13 +27,13 @@ const RegisterUserInformation = ({ }) => {
     const [isOpenCity, setIsOpenCity] = useState(false);
     const [currentvalueCity, setCurrentValueCity] = useState("Selected Here");
     const [zipCode, setIszipCode] = useState("");
+    const [loading, setIsLoading] = useState(false)
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const userdata = useSelector((state) => state?.userinfostate?.userdata?.data)
-    const userdatacity = useSelector((state) => state?.userinfocity?.userdatacity)
-
+    const userdata = useSelector((state) => state?.userinfostate?.userdata)
+    const userdatacity = useSelector((state) => state?.userinfocity?.userdatacity?.data)
     const [CountryandState, setCountryAndState] = useState({})
-    const [data, setData] = useState(userdata);
+    const [data, setData] = useState(userdata?.data);
     const [stateData, setStateData] = useState(userdatacity)
     const { height } = Dimensions.get("window");
 
@@ -45,14 +45,14 @@ const RegisterUserInformation = ({ }) => {
     console.log("countryandstateVal-=-", CountryandState)
 
     const handlenext = () => {
-        dispatch(registeruser_city({ state: currentvalue, city: currentvalueCity, zipCode: zipCode }))
+        dispatch(registeruser_city({ state: currentvalueState, city: currentvalueCity, zipCode: zipCode }))
         navigation.navigate(REGISTER_PASSWORD)
     }
 
     const onSearch = search => {
         if (search !== '') {
-            const newData = userdata?.filter(item => {
-                console.log('Filterda', item.name);
+            const newData = userdata?.data?.filter(item => {
+                console.log('Filterda', item?.name);
                 return (
                     item?.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1
                 );
@@ -78,7 +78,6 @@ const RegisterUserInformation = ({ }) => {
     };
 
     return (
-
         <SafeAreaView style={{ flex: 1 }}>
 
             <View style={styles.container}>
@@ -147,7 +146,6 @@ const RegisterUserInformation = ({ }) => {
                                             data={data}
                                             nestedScrollEnabled
                                             scrollEnabled
-                                            // showsVerticalScrollIndicator
                                             renderItem={({ item, index }) => {
                                                 return (
                                                     <View>
@@ -155,13 +153,13 @@ const RegisterUserInformation = ({ }) => {
                                                             setIsOpenCity(false),
                                                                 onSearch('')
                                                             setCurrentValueCity(item?.name)
-                                                            const selectedItem = userdata.find(data => data.name === item?.name);
+                                                            const selectedItem = userdata?.data?.find(data => data?.name === item?.name);
+
                                                             if (selectedItem) {
-                                                                dispatch(userinfocity(CountryandState))
-                                                                setCountryAndState({
-                                                                    countryCode: selectedItem.countryCode,
-                                                                    isoCode: selectedItem.isoCode
-                                                                });
+                                                                dispatch(userinfocity({
+                                                                    countryCode: selectedItem?.countryCode,
+                                                                    isoCode: selectedItem?.isoCode
+                                                                }))
                                                             }
                                                             console.log("selecteditem", selectedItem)
                                                         }
@@ -255,7 +253,7 @@ const RegisterUserInformation = ({ }) => {
                                                         <TouchableOpacity onPress={() => {
                                                             setIsOpenState(false),
                                                                 onSearchstate('')
-                                                            setCurrentValueCity(item?.name)
+                                                            setCurrentValueState(item?.name)
                                                         }
                                                         }
                                                             style={{

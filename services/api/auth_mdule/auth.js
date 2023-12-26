@@ -84,11 +84,12 @@ export const reset_password = async (newPassword, confirmPassword, forgetuserTok
 // email, fcmToken, firstName, lastName, phoneNo, role, username, countryCode, phonecode, city, state, zipCode, password, confirmPassword
 
 export const registerapi = async (firstpageData, secondpageData, values) => {
-    const { countryCode, phonecodee, } = firstpageData;
+    const { countryCode, phonecodee, } = firstpageData?.countryCode;
     const { email, fcmToken, firstName, lastName, phoneNo, role, username } = firstpageData?.values;
     const phoneCode = `+${phonecodee}`
     const { city, state, zipCode } = secondpageData;
     const { confirmPassword, password } = values;
+    console.log("INSIDE_api", countryCode, phoneCode)
 
     try {
 
@@ -115,8 +116,8 @@ export const registerapi = async (firstpageData, secondpageData, values) => {
 export default reset_email;
 
 
-export const stateandcity_api = async (countryCode) => {
-
+export const stateandcity_api = async (countryinfo) => {
+    const { countryCode } = countryinfo;
     try {
 
         const response = await fetch(`${Base_Url}${stateandCity_endpoint}?countryCode=${countryCode}`, {
@@ -137,7 +138,9 @@ export const stateandcity_api = async (countryCode) => {
 
 
 export const userandcity_api = async (statesinfo) => {
+
     const { countryCode, isoCode } = statesinfo;
+    console.log("insideApi---", countryCode, isoCode)
     try {
 
         const response = await fetch(`${Base_Url}${city_andpoint}?countryCode=${countryCode}&stateCode=${isoCode}`, {

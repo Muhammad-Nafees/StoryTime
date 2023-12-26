@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import { Base_Url, register_endpoint } from "../../services";
 import { stateandcity_api } from "../../services/api/auth_mdule/auth";
 
-export const userinfoState = createAsyncThunk("userinfostate/userinfo", async (countryCode, thunkApi) => {
+export const userinfoState = createAsyncThunk("userinfostate/userinfo", async (countryinfo, thunkApi) => {
 
     try {
-        const response = await stateandcity_api(countryCode)
+        const response = await stateandcity_api(countryinfo)
         console.log("reduxUserInfo", response);
         return response;
 

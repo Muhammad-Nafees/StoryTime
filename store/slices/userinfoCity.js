@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
-import { Base_Url, register_endpoint } from "../../services";
 import { stateandcity_api, userandcity_api } from "../../services/api/auth_mdule/auth";
 
 export const userinfocity = createAsyncThunk("userinfocity/userinfo", async (statesinfo, thunkApi) => {
@@ -13,7 +12,6 @@ export const userinfocity = createAsyncThunk("userinfocity/userinfo", async (sta
         return thunkApi.rejectWithValue({ errorMessage: error.message });
     }
 });
-
 
 
 const userinfo_city = createSlice({
@@ -34,21 +32,23 @@ const userinfo_city = createSlice({
     },
 
 
+
     extraReducers: (builder) => {
-        builder.addCase(userinfo_city.pending, (state, action) => {
+        builder.addCase(userinfocity.pending, (state, action) => {
             state.loading = true;
             state.userdata = null;
         }),
-            builder.addCase(userinfo_city.fulfilled, (state, { payload }) => {
+            builder.addCase(userinfocity.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.userdatacity = payload;
                 console.log("state.-a-userdataCITY-=-", state.userdatacity)
             }),
-            builder.addCase(userinfo_city.rejected, (state, action) => {
+            builder.addCase(userinfocity.rejected, (state, action) => {
                 state.error = true;
             })
     }
 });
+
 
 
 export default userinfo_city.reducer;

@@ -13,7 +13,7 @@ const store = configureStore({
         Register: Register,
         authSlice: authSlice,
         userinfostate: userinfostate,
-        // userinfocity: userinfocity
+        userinfocity: userinfocity
     }
 })
 
