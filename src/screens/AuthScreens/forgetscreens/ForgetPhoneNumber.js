@@ -11,6 +11,7 @@ import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { Path, Svg } from 'react-native-svg';
+import { Formik } from 'formik';
 
 
 
@@ -23,101 +24,89 @@ const ForgetPhoneNumber = () => {
     const [formatText, setFormatText] = useState("")
     const [countryCode, setCountryCode] = useState({})
     const [phoneCode, setPhoneCode] = useState("")
-    const [showError, setShowError] = useState("")
     const { FORGET_BG_IMG } = Img_Paths;
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    console.log("--pho", phoneCode)
-    console.log("--fomtext--", formatText)
-    const resetPhonehandle = async () => {
-        setIsLoading(true)
-
-        const code = phoneCode;
-
-        try {
-            const response = await reset_email(formatText, code,);
-            console.log("responsephonenu", response)
-            if (response?.statusCode === 200) {
-                Toast.show({
-                    type: "success",
-                    text1: response?.message,
-                })
-                setIsLoading(false)
-                setTimeout(() => {
-                    navigation.navigate(OTP_FORGET, {
-                        code: response?.data?.code
-                    })
-                }, 1000);
-            } else if (response?.stack) {
-                Toast.show({
-                    type: "error",
-                    text1: response?.message,
-                })
-                setIsLoading(false)
-            }
-        }
-        catch (err) {
-            console.log(err)
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-
-
 
     return (
-        <View style={styles.container}>
-            <View style={styles.img_container}>
-                <Image style={styles.img_child} source={FORGET_BG_IMG} />
-            </View>
 
-            {/* Password------------ */}
-
-            <View>
-                <View>
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
+        <Formik initialValues={{ phone: "" }}
+            onSubmit={async (values) => {
+                const { phone } = values;
+                console.log(phone)
+                setIsLoading(true)
+                const code = phoneCode;
+                try {
+                    const response = await reset_email({ phone: phone },);
+                    console.log("responsephonenu", response?.data?.code)
+                    if (response?.statusCode === 200) {
+                        Toast.show({
+                            type: "success",
+                            text1: response?.message,
+                        })
+                        setIsLoading(false)
+                        setTimeout(() => {
+                            navigation.navigate(OTP_FORGET, {
+                                code: response?.data?.code,
+                                phone: phone,
+                                type: "phone"
+                            })
+                        }, 1000);
+                    } else if (response?.stack) {
+                        Toast.show({
+                            type: "error",
+                            text1: response?.message,
+                        })
+                        setIsLoading(false)
+                    }
+                }
+                catch (err) {
+                    console.log(err)
+                }
+                finally {
+                    setIsLoading(false);
+                }
+            }
+            }
+        >
+            {({ values, errors, handleChange, handleSubmit, setFieldValue, touched, isValid, dirty }) => (
+                <View style={styles.container}>
+                    <View style={styles.img_container}>
+                        <Image style={styles.img_child} source={FORGET_BG_IMG} />
                     </View>
-                    <PhoneNumber setFormatText={setFormatText} setPhoneCode={setPhoneCode} formatText={formatText} setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
 
-                </View>
+                    {/* Password------------ */}
 
-                {/* Confirm Password------------ */}
-
-                {/* Next and Back------------ */}
-
-                <View style={{ marginTop: responsiveWidth(80) }}>
-                    <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)}>
-                        <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
-                    </TouchableOpacity>
-                    <TouchableButton isLoading={isLoading} onPress={() => resetPhonehandle(phoneNumber)} backgroundColor="#395E66" color="#FFF" text="Next" />
-                </View>
-
-                {/* {showError &&
-                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
-                        <View style={{ flexDirection: "row", }}>
-                            <View>
-                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                    <Path
-                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                    />
-                                </Svg>
+                    <View>
+                        <View>
+                            <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                             </View>
-                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{}</Text>
-                            </View>
+                            <PhoneNumber setFormatText={handleChange("phone")} setPhoneCode={setPhoneCode} formatText={formatText} setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
+
                         </View>
+
+                        {/* Confirm Password------------ */}
+
+                        {/* Next and Back------------ */}
+
+                        <View style={{ marginTop: responsiveWidth(80) }}>
+                            <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)}>
+                                <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22) }}>Use email address instead</Text>
+                            </TouchableOpacity>
+                            <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Next" />
+                        </View>
+
                     </View>
-                } */}
+                    <Toast />
+                </View>
+            )}
+        </Formik>
 
 
-            </View>
-            <Toast />
-        </View>
     )
 }
 

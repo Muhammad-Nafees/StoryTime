@@ -1,27 +1,19 @@
 import { Alert } from "react-native";
-import { Base_Url, city_andpoint, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code, stateandCity_endpoint } from "../..";
+import { Base_Url, city_andpoint, register_endpoint, reset_email_endpoint, reset_password_endpoint, reset_verify_code, stateandCity_endpoint, username_endpoint } from "../..";
 
 
 
-const reset_email = async (userData, code) => {
+const reset_email = async (values) => {
 
     try {
-        const requestBody = {}
-        if (code) {
-            requestBody.phone = userData;
-        }
-        else {
-            requestBody.email = userData;
-        }
-
-        console.log("requestbody", requestBody)
+        console.log("values---", values)
 
         const response = await fetch(Base_Url + reset_email_endpoint, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify(values),
         });
 
         const responseData = await response.json();
@@ -30,7 +22,8 @@ const reset_email = async (userData, code) => {
 
         console.error('Error:', error);
     }
-}
+};
+
 
 
 
@@ -143,7 +136,6 @@ export const userandcity_api = async (statesinfo) => {
     const { countryCode, isoCode } = statesinfo;
     console.log("insideApi---", countryCode, isoCode)
     try {
-
         const response = await fetch(`${Base_Url}${city_andpoint}?countryCode=${countryCode}&stateCode=${isoCode}`, {
             method: "GET",
             headers: {
@@ -159,3 +151,17 @@ export const userandcity_api = async (statesinfo) => {
         console.log(error)
     }
 };
+
+
+export const username_api = async (username) => {
+    const response = await fetch(Base_Url + username_endpoint, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username })
+    })
+    const responseData = await response.json();
+    console.log("usernameapi---", responseData)
+    return responseData;
+}

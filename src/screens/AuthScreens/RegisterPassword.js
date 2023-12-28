@@ -37,6 +37,16 @@ const RegisterPassword = ({ route }) => {
         setConfirmShowPassword(!confirmShowPassword);
     };
 
+    const generateOTP = () => {
+        // Random 6-digit OTP generation
+        let otp = Math.floor(100000 + Math.random() * 900000);
+        return otp;
+    }
+
+    // OTP generate karne ke liye function call
+    let generatedOTP = generateOTP();
+    console.log("Generated OTP:", generatedOTP);
+
     return (
         <Formik
             initialValues={{
@@ -164,6 +174,7 @@ const RegisterPassword = ({ route }) => {
 
                             {isVisible && <UserErrors setVisible={setVisible} isVisible={isVisible} text="Login" onPress={() => navigation.navigate(LOGIN)} />}
                         </ScrollView>
+
                     </View>
                     <Toast />
                 </>

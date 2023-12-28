@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import PhoneInput
     from 'react-native-phone-number-input';
@@ -8,11 +8,13 @@ import { verticalScale } from "react-native-size-matters"
 
 
 
-const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFormatText, formatText, countrycode, setPhoneCode }) => {
+const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFormatText, formatText, countrycode, setPhoneCode, setShowError, phoneInput }) => {
+
     return (
         <>
             <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
                 <PhoneInput
+                    ref={phoneInput}
                     defaultValue={value}
                     onChangeText={(number) => onchangeState(number)}
                     onChangeFormattedText={(val) => setFormatText(val)}

@@ -5,28 +5,23 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 const FlatlistItems = ({ setIsOpenState, setCurrentValueState, item, cityloading }) => {
     return (
         <>
-            {
-                !cityloading ?
-                    <View>
-                        <TouchableOpacity onPress={() => {
-                            setIsOpenState(false),
-                                setCurrentValueState(item?.name)
-                        }
-                        }
-                            style={{
-                                width: responsiveWidth(65),
-                                borderBottomWidth: 0.2,
-                                height: responsiveHeight(5.4),
-                                alignSelf: 'center',
-                                borderColor: '#D0D0D0',
-                                justifyContent: 'center',
-                            }}>
-                            <Text style={{ color: "#000" }}>{item?.name}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-                    <ActivityIndicator size={22} color={"#000"} />
-            }
+            <View>
+                <TouchableOpacity onPress={() => {
+                    setIsOpenState(false),
+                        setCurrentValueState(item?.name)
+                }
+                }
+                    style={{
+                        width: responsiveWidth(65),
+                        borderBottomWidth: 0.2,
+                        height: responsiveHeight(5.4),
+                        alignSelf: 'center',
+                        borderColor: '#D0D0D0',
+                        justifyContent: 'center',
+                    }}>
+                    <Text style={{ color: "#000" }}>{item?.name}</Text>
+                </TouchableOpacity>
+            </View>
         </>
 
     )

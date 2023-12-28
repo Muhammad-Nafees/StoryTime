@@ -21,6 +21,7 @@ import { validationSignUp } from '../../../validation/validation';
 import Svg, { Path } from 'react-native-svg';
 import Toast from 'react-native-toast-message';
 import { userdata, userinfoState } from '../../../store/slices/userInfoState_Slice';
+import { username_api } from '../../../services/api/auth_mdule/auth';
 
 
 const Register = () => {
@@ -31,16 +32,16 @@ const Register = () => {
     const [countryCode, setCountryCode] = useState("");
     const [formatText, setFormatText] = useState("");
     const [phoneCode, setPhoneCode] = useState("");
+    const [showError, setShowError] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     const [countryPickerVisible, setCountryPickerVisible] = useState(false);
     const dispatch = useDispatch();
-    const inputRef = useRef();
+    const phoneInput = useRef(null);
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    console.log(phoneCode)
-    console.log(formatText)
 
     const countryinfo = {}
 
@@ -49,8 +50,6 @@ const Register = () => {
     } else {
         countryinfo.countryCode = countryCode
     }
-
-
 
     if (phoneCode === "") {
         countryinfo.phonecodee = "61"
@@ -71,16 +70,36 @@ const Register = () => {
 
             validationSchema={validationSignUp}
             onSubmit={async (values, { setSubmitting }) => {
+                setIsLoading(true)
+                const { username } = values;
+                const response = await username_api(username);
+                if (response?.statusCode === 200) {
+                    setIsLoading(false)
+                    navigation.navigate(REGISTER_USER_INFO)
+                } else {
+                    Toast.show({
+                        type: "error",
+                        text1: response?.message,
+                    })
+                    setIsLoading(false)
+                }
+
+                const { phoneNo } = values;
+                const checkValid = phoneInput.current?.isValidNumber(phoneNo);
+
+                if (!checkValid) {
+                    return setShowError('Invalid phone number');
+                }
+
+                console.log("checkvalid", checkValid)
+
                 dispatch(userinfoState(countryinfo))
                 dispatch(register({ values: values, countryCode: countryinfo }))
-                navigation.navigate(REGISTER_USER_INFO, {
-                })
+
             }}
         >
-
             {({ values, errors, handleChange, handleSubmit, setFieldValue, touched, isValid, dirty }) => (
                 <>
-
                     <ScrollView keyboardShouldPersistTaps="handled">
                         <View style={styles.container}>
                             <View style={styles.img_container}>
@@ -88,7 +107,6 @@ const Register = () => {
                             </View>
 
                             <View>
-
                                 {/* User Name----- */}
 
                                 <View>
@@ -194,10 +212,35 @@ const Register = () => {
                                         setCountryCode={setCountryCode}
                                         countrycode={countryCode}
                                         setPhoneCode={setPhoneCode}
-                                        onPressFlag={toggleCountryPicker} />
+                                        onPressFlag={toggleCountryPicker}
+                                        setShowError={setShowError}
+                                        phoneInput={phoneInput}
+                                    />
                                     <View>
 
+                                        {
+                                            !errors.phoneNo && showError ?
+                                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingTop: responsiveWidth(4) }}>
+                                                    <View style={{ flexDirection: "row", }}>
+                                                        <View>
+
+                                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                                <Path
+                                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                                />
+                                                            </Svg>
+
+                                                        </View>
+                                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{showError}</Text>
+                                                        </View>
+
+                                                    </View>
+                                                </View> :
+                                                null
+                                        }
                                     </View>
+
                                     {countryPickerVisible && (
                                         <CountryPicker
                                             withFilter={true}
@@ -254,7 +297,7 @@ const Register = () => {
 
                                 <View style={{ paddingVertical: responsiveWidth(6) }}>
 
-                                    <TouchableButton type="register" onPress={handleSubmit} isValid={isValid} dirty={dirty} backgroundColor="#395E66" color="#FFF" text="Next" />
+                                    <TouchableButton isLoading={isLoading} type="register" onPress={handleSubmit} isValid={isValid} dirty={dirty} backgroundColor="#395E66" color="#FFF" text="Next" />
                                     <View style={{ marginVertical: moderateVerticalScale(7) }}>
                                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                                     </View>

@@ -40,7 +40,6 @@ const RegisterUserInformation = ({ }) => {
         <Formik initialValues={{
             zipCode: ""
         }}
-
             validationSchema={zipCodeValidation}
             onSubmit={async (values, { setSubmitting }) => {
                 const { zipCode } = values
@@ -49,7 +48,6 @@ const RegisterUserInformation = ({ }) => {
             }}
         >
             {({ values, error, errors, touched, handleSubmit, setFieldValue, handleChange, isValid, dirty, }) => (
-
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={styles.container}>
 
@@ -162,24 +160,33 @@ const RegisterUserInformation = ({ }) => {
                                                     zIndex: 999,
 
                                                 }}>
-                                                <FlatList
-                                                    data={userdatacity?.data}
-                                                    nestedScrollEnabled
-                                                    initialNumToRender={7}
-                                                    scrollEnabled
-                                                    showsVerticalScrollIndicator
-                                                    renderItem={({ item, index }) => {
-                                                        console.log("flatlist-item-=-", item)
-                                                        return (
-                                                            <FlatlistItems
-                                                                item={item}
-                                                                setCurrentValueState={setCurrentValueState}
-                                                                setIsOpenState={setIsOpenState}
-                                                                cityloading={cityloading}
-                                                            />
-                                                        );
-                                                    }}
-                                                />
+
+                                                {
+                                                    !cityloading ?
+                                                        <FlatList
+                                                            data={userdatacity?.data}
+                                                            nestedScrollEnabled
+                                                            initialNumToRender={7}
+                                                            scrollEnabled
+                                                            showsVerticalScrollIndicator
+                                                            renderItem={({ item, index }) => {
+                                                                console.log("flatlist-item-=-", item)
+                                                                return (
+                                                                    <FlatlistItems
+                                                                        item={item}
+                                                                        setCurrentValueState={setCurrentValueState}
+                                                                        setIsOpenState={setIsOpenState}
+                                                                        cityloading={cityloading}
+                                                                    />
+                                                                );
+                                                            }}
+                                                        />
+                                                        :
+                                                        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(75) }}>
+                                                            <ActivityIndicator size={40} color={"#000"} />
+                                                        </View>
+                                                }
+
                                             </View>
                                         ) : null
                                     }

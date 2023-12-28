@@ -6,9 +6,9 @@ import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-nat
 import TouchableButton from "../../../components/TouchableButton";
 import { useNavigation } from "@react-navigation/native"
 import NavigationsString from "../../../constants/NavigationsString";
-import { moderateVerticalScale, } from "react-native-size-matters"
+import { moderateScale, moderateVerticalScale, } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
-import { otp_forget } from "../../../../services/api/auth_mdule/auth";
+import reset_email, { otp_forget } from "../../../../services/api/auth_mdule/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { forgetResetToken } from "../../../../store/slices/authSlice";
 import Toast from "react-native-toast-message";
@@ -20,13 +20,16 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
     const [otptext, setOtptext] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [timer, setTimer] = useState(30);
-    const random = useSelector((state) => state?.authSlice?.randomNumber)
     const inputRefs = useRef([]);
+    const [timeLeft, setTimeLeft] = useState(30);
+    const [timeText, setTimeText] = useState('30');
+    const [otp, setOtp] = useState("")
     const dispatch = useDispatch();
-    console.log("otpforgetPage", random)
+
+    console.log("route--", route?.params?.code)
+
 
     const handlechange = (text, index) => {
-
         const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
 
         setOtptext(updatedText);
@@ -38,32 +41,45 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
 
     const handleBackspace = (event, index) => {
         const { nativeEvent } = event;
-
         if (nativeEvent.key === "Backspace") {
             handlechange("", index);
         }
     };
 
-    const handleButtonClick = () => {
 
-        if (route?.params?.code) {
-            Toast.show({
-                type: "success",
-                text1: String(route?.params?.code),
-                visibilityTime: 5000
-            })
+
+    const handleButtonClick = async () => {
+        setTimeLeft(30);
+
+        try {
+            const response = await reset_email({ phone: route?.params?.phone, email: route?.params?.email });
+            console.log("res=-=-", response?.data?.code)
+            setOtp(response?.data?.code)
+            if (response?.statusCode === 200) {
+                route?.params?.code
+                Toast.show({
+                    type: "success",
+                    text1: String(response?.data?.code),
+                })
+                setIsLoading(false)
+            } else if (response?.stack) {
+                Toast.show({
+                    type: "error",
+                    text1: response?.message,
+                })
+                setIsLoading(false)
+            }
+        }
+        catch (err) {
+            console.log(err)
         }
     };
-
-
-    useEffect(() => {
-        handleButtonClick()
-    }, [])
 
 
 
     const otp_forget_api = async () => {
         setIsLoading(true)
+
         try {
             const response = await otp_forget(otptext)
             console.log("response", response)
@@ -84,31 +100,35 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                 setIsLoading(false)
             }
         }
-
-
         catch (err) {
             console.log(err)
         }
-    }
+    };
 
-    // const handleResendcode = () => {
-    //     let intervalId;
-    //     if (timer > 0) {
-    //         intervalId = setInterval(() => {
-    //             setTimer((prevTimer) => prevTimer - 1);
-    //         }, 1000);
-    //     }
+    useEffect(() => {
+        const seconds = timeLeft % 60;
+        const formattedTime = `${seconds.toString()}`;
+        setTimeText(formattedTime);
+    }, [timeLeft]);
 
-    //     return () => clearInterval(intervalId);
-    // }
+    useEffect(() => {
+        let countdown;
+        if (timeLeft > 0) {
+            countdown = setInterval(() => {
+                setTimeLeft(prevTime => prevTime - 1);
+            }, 1000);
+        } else if (timeLeft === 0) {
+            clearInterval(countdown);
+        }
+        return () => clearInterval(countdown);
+    }, [timeLeft]);
 
-    // useEffect(() => {
-    //     handleResendcode()
-    // }, [timer]);
 
+    const handleResendClick = () => {
+        // handleButtonClick();
+    };
 
     return (
-
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img_child} source={FORGET_BG_IMG} />
@@ -118,8 +138,9 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
 
             <View>
                 <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Code</Text>
+                    <View style={{ width: responsiveWidth(92), marginLeft: "auto", flexDirection: 'row' }}>
+                        <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9), paddingHorizontal: moderateScale(5) }}>Your Verification Code is:</Text>
+                        <Text style={{ color: FourthColor, fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>{otp ? otp : route?.params?.code}</Text>
                     </View>
 
                     {/* OtpPassword----------- */}
@@ -164,14 +185,12 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                             </Text>
                         </TouchableOpacity>
                         <View>
-                            <Text style={{ color: TextColorGreen, fontWeight: "300" }}> {`in ${timer}s`}</Text>
+                            <Text style={{ color: TextColorGreen, fontWeight: "300" }}> {`in ${timeText}s`}</Text>
                         </View>
-
 
                     </View>
                     <TouchableButton isLoading={isLoading} onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
                 </View>
-                {/* () => navigation.navigate(FORGET_CONFIRM_PASSWORD) */}
             </View>
             <Toast />
         </View>

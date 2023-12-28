@@ -38,17 +38,19 @@ const ForgetEmail = () => {
                 const { email } = values;
                 setIsLoading(true)
                 try {
-
-                    const response = await reset_email(email);
+                    const response = await reset_email({ email: email });
                     if (response?.statusCode === 200) {
                         Toast.show({
                             type: "success",
-                            text1: response?.message
+                            text1: response?.message,
+
                         })
                         setIsLoading(false)
                         setTimeout(() => {
                             navigation.navigate(OTP_FORGET, {
-                                code: response?.data?.code
+                                code: response?.data?.code,
+                                email: email,
+                                type: "email"
                             })
                         }, 1000);
                     } else if (response?.stack) {
@@ -67,7 +69,6 @@ const ForgetEmail = () => {
                 }
             }}
         >
-
             {({ values, errors, handleChange, handleSubmit }) => (
                 <>
                     <View style={styles.container}>
