@@ -12,17 +12,18 @@ import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { Formik } from "formik";
 import { Path, Svg } from "react-native-svg";
-
+import { useNavigation } from "@react-navigation/native";
+import NavigationsString from "../../../constants/NavigationsString";
 
 const ForgetConfirmPassword = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
     const { FORGET_BG_IMG } = Img_Paths;
-    // const [newPassword, setnewPassword] = useState("")
-    // const [confirmPassword, setConfirmPassword] = useState("")
+    const { LOGIN } = NavigationsString;
     const [isLoading, setIsLoading] = useState(false)
     const forgetuserToken = useSelector((state) => state?.authSlice?.forgetAccesstoken);
+    const navigation = useNavigation()
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -31,9 +32,6 @@ const ForgetConfirmPassword = () => {
     const toggleShowPasswordConfir = () => {
         setShowPasswordConfirm(!showPasswordConfirm)
     }
-
-
-
 
     return (
 
@@ -49,11 +47,15 @@ const ForgetConfirmPassword = () => {
                     const response = await reset_password(newPassword, confirmPassword, forgetuserToken);
 
                     if (response?.statusCode === 200) {
-                        Toast.show({
-                            type: "success",
-                            text1: response?.message
-                        })
-                        setIsLoading(false)
+                        setIsLoading(false),
+                            Toast.show({
+                                type: "success",
+                                text1: response?.message
+                            })
+                        setTimeout(() => {
+                            navigation.navigate(LOGIN);
+                        }, 1000);
+
                     } else if (response?.stack) {
                         Toast.show({
                             type: "error",

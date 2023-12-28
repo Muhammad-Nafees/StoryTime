@@ -9,8 +9,8 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
-import { object } from 'yup';
 import Toast from 'react-native-toast-message';
+import { Path, Svg } from 'react-native-svg';
 
 
 
@@ -22,17 +22,22 @@ const ForgetPhoneNumber = () => {
     const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
     const [formatText, setFormatText] = useState("")
     const [countryCode, setCountryCode] = useState({})
+    const [phoneCode, setPhoneCode] = useState("")
+    const [showError, setShowError] = useState("")
     const { FORGET_BG_IMG } = Img_Paths;
 
     const toggleCountryPicker = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
+    console.log("--pho", phoneCode)
+    console.log("--fomtext--", formatText)
     const resetPhonehandle = async () => {
         setIsLoading(true)
 
-        try {
+        const code = phoneCode;
 
+        try {
             const response = await reset_email(formatText, code,);
             console.log("responsephonenu", response)
             if (response?.statusCode === 200) {
@@ -41,7 +46,11 @@ const ForgetPhoneNumber = () => {
                     text1: response?.message,
                 })
                 setIsLoading(false)
-                navigation.navigate(OTP_FORGET)
+                setTimeout(() => {
+                    navigation.navigate(OTP_FORGET, {
+                        code: response?.data?.code
+                    })
+                }, 1000);
             } else if (response?.stack) {
                 Toast.show({
                     type: "error",
@@ -61,7 +70,6 @@ const ForgetPhoneNumber = () => {
 
 
     return (
-
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img_child} source={FORGET_BG_IMG} />
@@ -74,7 +82,7 @@ const ForgetPhoneNumber = () => {
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
                     </View>
-                    <PhoneNumber setFormatText={setFormatText} formatText={formatText} setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
+                    <PhoneNumber setFormatText={setFormatText} setPhoneCode={setPhoneCode} formatText={formatText} setCountryCode={setCountryCode} value={phoneNumber} onPressFlag={toggleCountryPicker} onchangeState={setPhoneNumber} />
 
                 </View>
 
@@ -88,6 +96,24 @@ const ForgetPhoneNumber = () => {
                     </TouchableOpacity>
                     <TouchableButton isLoading={isLoading} onPress={() => resetPhonehandle(phoneNumber)} backgroundColor="#395E66" color="#FFF" text="Next" />
                 </View>
+
+                {/* {showError &&
+                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                        <View style={{ flexDirection: "row", }}>
+                            <View>
+                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                    <Path
+                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                    />
+                                </Svg>
+                            </View>
+                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{}</Text>
+                            </View>
+                        </View>
+                    </View>
+                } */}
+
 
             </View>
             <Toast />

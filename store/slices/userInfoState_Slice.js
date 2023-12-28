@@ -50,5 +50,6 @@ const userinfo_state = createSlice({
 });
 
 
+
 export default userinfo_state.reducer;
 export const { userdata } = userinfo_state.actions;

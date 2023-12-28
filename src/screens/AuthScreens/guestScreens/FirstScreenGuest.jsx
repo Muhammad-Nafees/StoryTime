@@ -10,17 +10,19 @@ import { Img_Paths } from '../../../assets/Imagepaths';
 
 
 const FirstScreenGuest = () => {
+
     const {
         SPLASH_SCREEN_IMAGE,
         GET_STARTED_IMAGE,
-        STORY_TIME_IMG
+        STORY_TIME_IMG,
     } = Img_Paths
-    const { SPLASH_SCREEN } = NavigationsString
+    const { } = NavigationsString;
     const { width, height } = Dimensions.get('window');
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+
+
 
     return (
-
         <ImageBackground style={[styles.container]} source={SPLASH_SCREEN_IMAGE}>
             <View style={styles.story_time_container}>
                 <Image style={[styles.story_time_img, {
@@ -35,7 +37,6 @@ const FirstScreenGuest = () => {
                 </TouchableOpacity>
                 <Image style={styles.get_started} source={GET_STARTED_IMAGE} />
             </View>
-
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <View style={{ flexDirection: "row", width: responsiveWidth(72), alignItems: "center", justifyContent: "space-between" }}>
@@ -65,7 +66,7 @@ const FirstScreenGuest = () => {
 
         </ImageBackground>
     )
-}
+};
 
 
 
@@ -80,17 +81,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: moderateVerticalScale(20)
-
     },
     story_time_container: {
         justifyContent: "center",
         alignItems: "center",
-
     },
     text: {
         fontWeight: "500",
         fontSize: responsiveFontSize(1.6)
     },
+
     story_time_img: {
         marginVertical: moderateVerticalScale(100),
         resizeMode: "center"

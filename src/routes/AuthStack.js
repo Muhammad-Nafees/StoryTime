@@ -64,9 +64,9 @@ const GuestStack = () => {
     const Stack = createStackNavigator();
     return (
         <Stack.Navigator>
-            {/* <Stack.Screen name="FirstScreenGuest" component={FirstScreenGuest} options={{ headerShown: false }} /> */}
-            <Stack.Screen name="LoginTermsAndConditions" component={LoginTermsAnd_Conditions} options={{ headerShown: false }} />
-            <Stack.Screen name="LoginPrivacyAndPolicy" component={LoginPrivacyAndPolicy} options={{ headerShown: false }} />
+            <Stack.Screen name="FirstScreenGuest" component={FirstScreenGuest} options={{ headerShown: false }} />
+            <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} options={{ headerShown: false }} />
+            <Stack.Screen name="PrivacyAndPolicy" component={PrivacyAndPolicy} options={{ headerShown: false }} />
         </Stack.Navigator>
 
     )

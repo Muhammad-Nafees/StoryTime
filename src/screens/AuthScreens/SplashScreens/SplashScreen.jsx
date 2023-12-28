@@ -21,9 +21,7 @@ const SplashScreen = () => {
             </TouchableOpacity>
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <AuthImage onPress={() => navigation.navigate("GuestStack", {
-                    screen: "FirstScreenGuest"
-                })} ImageSource={BG_FRAME} />
+                <AuthImage onPress={() => navigation.navigate("GuestStack")} ImageSource={BG_FRAME} />
                 <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
 

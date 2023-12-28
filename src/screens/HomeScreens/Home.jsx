@@ -65,11 +65,21 @@ const Home = () => {
                     </View>
                 </View>
 
-                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
+
+                {/* <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
                     <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
+                </View> */}
+
+
+                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', paddingVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(6) }}>
+                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>Dashboard coming soon...</Text>
                 </View>
 
-                <View style={styles.flatlist_container}>
+
+                {/* <View style={{ width: responsiveWidth(95), marginLeft: 'auto', }}>
+                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>Dashboard coming soon</Text>
+                </View> */}
+                {/* <View style={styles.flatlist_container}>
                     <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
 
                         <FlatList
@@ -87,7 +97,7 @@ const Home = () => {
                             }}
                         />
                     </View>
-                </View>
+                </View> */}
 
                 {/* Frame Content Start----------- */}
 

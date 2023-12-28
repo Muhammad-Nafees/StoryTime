@@ -7,13 +7,15 @@ const initialState = {
     userProfile: null,
     accessToken: null,
     refreshToken: null,
-    forgetAccesstoken: null
+    forgetAccesstoken: null,
+    randomNumber: ""
 };
 
 const authSlice = createSlice({
 
     name: 'auth',
     initialState,
+
     reducers: {
         setuserRole: (state, action) => {
             state.userRole = action.payload;
@@ -32,6 +34,9 @@ const authSlice = createSlice({
         },
         forgetResetToken: (state, action) => {
             state.forgetAccesstoken = action.payload
+        },
+        setRandomNumber: (state, action) => {
+            state.randomNumber = action.payload
         }
 
     },
@@ -48,7 +53,8 @@ export const {
     setUserProfile,
     logout,
     login,
-    forgetResetToken
+    forgetResetToken,
+    setRandomNumber
 } = authSlice.actions;
 
 export default authSlice.reducer;

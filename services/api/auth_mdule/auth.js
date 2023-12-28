@@ -6,15 +6,14 @@ import { Base_Url, city_andpoint, register_endpoint, reset_email_endpoint, reset
 const reset_email = async (userData, code) => {
 
     try {
-
         const requestBody = {}
-        console.log("useradata", userData)
         if (code) {
             requestBody.phone = userData;
         }
         else {
             requestBody.email = userData;
         }
+
         console.log("requestbody", requestBody)
 
         const response = await fetch(Base_Url + reset_email_endpoint, {
@@ -48,7 +47,7 @@ export const otp_forget = async (code) => {
 
         const responseData = await response.json();
         return responseData
-        // console.log("repsonseemail-=-=-", responseData)
+
     } catch (error) {
 
         console.error('Error:', error);
@@ -60,6 +59,7 @@ export const otp_forget = async (code) => {
 export const reset_password = async (newPassword, confirmPassword, forgetuserToken) => {
 
     try {
+
         const response = await fetch(Base_Url + reset_password_endpoint, {
             method: "PUT",
             headers: {
@@ -74,22 +74,21 @@ export const reset_password = async (newPassword, confirmPassword, forgetuserTok
 
         const responseData = await response.json();
         return responseData
-        // console.log("repsonseemail-=-=-", responseData)
     } catch (error) {
 
         console.error('Error:', error);
     }
 }
 
-// email, fcmToken, firstName, lastName, phoneNo, role, username, countryCode, phonecode, city, state, zipCode, password, confirmPassword
+
 
 export const registerapi = async (firstpageData, secondpageData, values) => {
+
     const { countryCode, phonecodee, } = firstpageData?.countryCode;
     const { email, fcmToken, firstName, lastName, phoneNo, role, username } = firstpageData?.values;
     const phoneCode = `+${phonecodee}`
     const { city, state, zipCode } = secondpageData;
     const { confirmPassword, password } = values;
-    console.log("INSIDE_api", countryCode, phoneCode)
 
     try {
 
@@ -104,10 +103,12 @@ export const registerapi = async (firstpageData, secondpageData, values) => {
                 confirmPassword, password
             }),
         });
+
         const responseData = await response.json();
         return responseData;
 
     }
+
     catch (err) {
         console.log("error", err)
     }
@@ -115,11 +116,11 @@ export const registerapi = async (firstpageData, secondpageData, values) => {
 
 export default reset_email;
 
-
 export const stateandcity_api = async (countryinfo) => {
-    const { countryCode } = countryinfo;
-    try {
 
+    const { countryCode } = countryinfo;
+
+    try {
         const response = await fetch(`${Base_Url}${stateandCity_endpoint}?countryCode=${countryCode}`, {
             method: "GET",
             headers: {
@@ -158,4 +159,3 @@ export const userandcity_api = async (statesinfo) => {
         console.log(error)
     }
 };
-

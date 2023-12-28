@@ -39,9 +39,9 @@ const Register = () => {
         setCountryPickerVisible(!countryPickerVisible);
     };
 
-    console.log("counrycode", countryCode)
+    console.log(phoneCode)
+    console.log(formatText)
 
-    // const countrycodevar = countryCode?.cca2
     const countryinfo = {}
 
     if (countryCode === "") {
@@ -57,7 +57,6 @@ const Register = () => {
     } else {
         countryinfo.phonecodee = phoneCode
     }
-
 
     return (
         <Formik initialValues={{
@@ -79,9 +78,9 @@ const Register = () => {
             }}
         >
 
-            {({ values, errors, handleChange, handleSubmit, setFieldValue, touched }) => (
-
+            {({ values, errors, handleChange, handleSubmit, setFieldValue, touched, isValid, dirty }) => (
                 <>
+
                     <ScrollView keyboardShouldPersistTaps="handled">
                         <View style={styles.container}>
                             <View style={styles.img_container}>
@@ -91,6 +90,7 @@ const Register = () => {
                             <View>
 
                                 {/* User Name----- */}
+
                                 <View>
                                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Username</Text>
@@ -121,6 +121,7 @@ const Register = () => {
                                 </View>
 
                                 {/* First Name----- */}
+
                                 <View>
                                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>First Name</Text>
@@ -181,7 +182,6 @@ const Register = () => {
                                 </View>
 
 
-
                                 <View>
                                     <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Phone Number</Text>
@@ -226,7 +226,6 @@ const Register = () => {
                                     }
                                 </View>
 
-
                                 <View>
                                     <View style={{ paddingTop: responsiveWidth(4), width: responsiveWidth(90), marginLeft: "auto" }}>
                                         <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>Email Address</Text>
@@ -255,7 +254,7 @@ const Register = () => {
 
                                 <View style={{ paddingVertical: responsiveWidth(6) }}>
 
-                                    <TouchableButton onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Next" />
+                                    <TouchableButton type="register" onPress={handleSubmit} isValid={isValid} dirty={dirty} backgroundColor="#395E66" color="#FFF" text="Next" />
                                     <View style={{ marginVertical: moderateVerticalScale(7) }}>
                                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                                     </View>
@@ -265,13 +264,10 @@ const Register = () => {
 
                         </View>
                     </ScrollView>
-
                     <Toast />
                 </>
-
             )}
         </Formik>
-
     )
 };
 

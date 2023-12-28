@@ -4,19 +4,14 @@ import PhoneInput
     from 'react-native-phone-number-input';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import { FourthColor, TextinputColor } from '../screens/Styles/Style';
-import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { verticalScale } from "react-native-size-matters"
+
 
 
 const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFormatText, formatText, countrycode, setPhoneCode }) => {
-
-    // const getCode = PhoneInput.current?.getCountryCode()
-    // console.log("getcode", getCode)
-    // const phoneinp = PhoneInput
-    // console.log(phoneinp)
     return (
         <>
             <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
-
                 <PhoneInput
                     defaultValue={value}
                     onChangeText={(number) => onchangeState(number)}
@@ -25,20 +20,16 @@ const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFor
                     withShadow
                     autoFocus
                     defaultCode={"AU"}
-                    textInputStyle={{ color: "#000", }}
-                    containerStyle={{
-                        width: responsiveWidth(80),
-                        borderRadius: 12,
-                        color: FourthColor,
-                        backgroundColor: '#E8E8E8'
-                    }}
+                    layout="first"
+                    placeholder=" "
+                    containerStyle={styles.phoneContainer}
+                    textContainerStyle={styles.phoneTextContainer}
+                    textInputStyle={styles.phoneTextInput}
                     onChangeCountry={val => {
                         setCountryCode(val?.cca2),
                             setPhoneCode(val.callingCode)
                     }
                     }
-
-                    textContainerStyle={{}}
                     textStyle={{ color: "#000" }}
                 />
             </View>
@@ -47,18 +38,31 @@ const PhoneNumber = ({ value, onchangeState, onPressFlag, setCountryCode, setFor
 };
 
 
+
 const styles = StyleSheet.create({
 
     phoneInput: {
-        // height: responsiveHeight(4),
         width: responsiveWidth(80),
-        // paddingHorizontal: moderateVerticalScale(20),
         borderRadius: 12,
         backgroundColor: TextinputColor,
         color: FourthColor,
-
+    },
+    phoneTextInput: {
+        padding: 0,
+        fontSize: responsiveFontSize(2),
+        color: '#000',
+    },
+    phoneTextContainer: {
+        backgroundColor: '#F3F3F3',
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12,
+    },
+    phoneContainer: {
+        height: verticalScale(50),
+        width: responsiveWidth(80),
+        backgroundColor: 'rgba(232, 232, 232, 1)',
+        borderRadius: 12,
     },
 })
 
 export default PhoneNumber;
-

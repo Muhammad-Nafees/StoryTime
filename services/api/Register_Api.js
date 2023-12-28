@@ -16,4 +16,3 @@ const userService = {
 }
 
 export default userService;
-// export default register_api_instance;

@@ -30,6 +30,7 @@ const Navigations = () => {
     const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE } = NavigationsString;
 
     return (
+
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="BottomTavNavigator">
             <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
             <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
@@ -37,6 +38,7 @@ const Navigations = () => {
             <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
             <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
         </Stack.Navigator>
+
     )
 };
 

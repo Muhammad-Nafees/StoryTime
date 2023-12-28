@@ -1,29 +1,32 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import React, { useState } from 'react'
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native'
-import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../../Styles/Style';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Alert, } from 'react-native'
+import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, } from '../../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TouchableButton from "../../../components/TouchableButton";
 import { useNavigation } from "@react-navigation/native"
 import NavigationsString from "../../../constants/NavigationsString";
-import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
+import { moderateVerticalScale, } from "react-native-size-matters"
 import { Img_Paths } from "../../../assets/Imagepaths";
-import { reset_verify_code } from "../../../../services";
 import { otp_forget } from "../../../../services/api/auth_mdule/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { forgetResetToken } from "../../../../store/slices/authSlice";
 import Toast from "react-native-toast-message";
 
-const OtpForget = ({ length, value, disabled, onChange, }) => {
-    const navigation = useNavigation()
+const OtpForget = ({ length, value, disabled, onChange, route }) => {
+    const navigation = useNavigation();
     const { FORGET_CONFIRM_PASSWORD } = NavigationsString
     const { FORGET_BG_IMG } = Img_Paths;
     const [otptext, setOtptext] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [timer, setTimer] = useState(30);
+    const random = useSelector((state) => state?.authSlice?.randomNumber)
     const inputRefs = useRef([]);
     const dispatch = useDispatch();
+    console.log("otpforgetPage", random)
 
     const handlechange = (text, index) => {
+
         const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
 
         setOtptext(updatedText);
@@ -40,6 +43,24 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
             handlechange("", index);
         }
     };
+
+    const handleButtonClick = () => {
+
+        if (route?.params?.code) {
+            Toast.show({
+                type: "success",
+                text1: String(route?.params?.code),
+                visibilityTime: 5000
+            })
+        }
+    };
+
+
+    useEffect(() => {
+        handleButtonClick()
+    }, [])
+
+
 
     const otp_forget_api = async () => {
         setIsLoading(true)
@@ -61,14 +82,30 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                     text1: response?.message
                 })
                 setIsLoading(false)
-
             }
         }
+
 
         catch (err) {
             console.log(err)
         }
     }
+
+    // const handleResendcode = () => {
+    //     let intervalId;
+    //     if (timer > 0) {
+    //         intervalId = setInterval(() => {
+    //             setTimer((prevTimer) => prevTimer - 1);
+    //         }, 1000);
+    //     }
+
+    //     return () => clearInterval(intervalId);
+    // }
+
+    // useEffect(() => {
+    //     handleResendcode()
+    // }, [timer]);
+
 
     return (
 
@@ -86,6 +123,7 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
                     </View>
 
                     {/* OtpPassword----------- */}
+
                     <View style={{ justifyContent: "center", alignItems: "center", marginTop: responsiveWidth(5) }}>
 
                         <View style={{ width: responsiveWidth(80), flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
@@ -120,10 +158,16 @@ const OtpForget = ({ length, value, disabled, onChange, }) => {
 
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity >
-                            <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>Resend </Text>
+                        <TouchableOpacity onPress={handleButtonClick}>
+                            <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", paddingVertical: moderateVerticalScale(22), fontSize: responsiveFontSize(1.9) }}>
+                                Resend
+                            </Text>
                         </TouchableOpacity>
-                        <Text style={{ color: TextColorGreen, fontWeight: "300", textAlign: "center", fontSize: responsiveFontSize(1.9) }}> in 30s</Text>
+                        <View>
+                            <Text style={{ color: TextColorGreen, fontWeight: "300" }}> {`in ${timer}s`}</Text>
+                        </View>
+
+
                     </View>
                     <TouchableButton isLoading={isLoading} onPress={otp_forget_api} backgroundColor="#395E66" color="#FFF" text="Verify" />
                 </View>

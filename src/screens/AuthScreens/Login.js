@@ -22,7 +22,7 @@ import { Path, Svg } from 'react-native-svg';
 
 
 
-const Login = () => {
+const Login = ({ route }) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -52,6 +52,7 @@ const Login = () => {
                 setIsLoading(true)
 
                 try {
+
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
                         method: 'POST',
@@ -74,6 +75,7 @@ const Login = () => {
                     const message = responseData?.message;
                     const accessToken = responseData?.data?.accessToken;
                     const error = responseData?.stack;
+
                     if (statusCode === 200) {
                         await AsyncStorage.setItem("isLoggedIn", accessToken)
                         dispatch(setAccessToken(accessToken))
@@ -91,7 +93,7 @@ const Login = () => {
                             text1: message,
                             position: "top",
                             visibilityTime: 2500,
-                            // text1Style: 
+
                         })
                     }
                     return responseData;
@@ -101,6 +103,8 @@ const Login = () => {
                 }
             }}
         >
+
+
 
             {({ values, errors, handleChange, handleSubmit }) => (
 
@@ -134,9 +138,10 @@ const Login = () => {
                                             <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
                                         </View>
                                     </View>
-
                                 </View>
                             }
+
+
 
                             <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                                 <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>

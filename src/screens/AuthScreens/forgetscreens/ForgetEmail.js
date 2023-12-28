@@ -46,7 +46,11 @@ const ForgetEmail = () => {
                             text1: response?.message
                         })
                         setIsLoading(false)
-                        navigation.navigate(OTP_FORGET)
+                        setTimeout(() => {
+                            navigation.navigate(OTP_FORGET, {
+                                code: response?.data?.code
+                            })
+                        }, 1000);
                     } else if (response?.stack) {
                         Toast.show({
                             type: "error",

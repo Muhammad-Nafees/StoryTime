@@ -14,6 +14,7 @@ export const userinfocity = createAsyncThunk("userinfocity/userinfo", async (sta
 });
 
 
+
 const userinfo_city = createSlice({
 
     name: "userinfocity",
@@ -27,11 +28,8 @@ const userinfo_city = createSlice({
     reducers: {
         userdatacity: (state, action) => {
             state.userdatacity = action.payload;
-            console.log("USERDATCIT", state.userdatacity)
         }
     },
-
-
 
     extraReducers: (builder) => {
         builder.addCase(userinfocity.pending, (state, action) => {
