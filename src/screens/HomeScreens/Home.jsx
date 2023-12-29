@@ -7,31 +7,11 @@ import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
+// import { FlatListData } from '../../../dummyData/DummyData';
 
 
 
-const FlatListData = [
-    {
-        img: require("../../assets/first-img.png"),
-        text: "Alfred",
-    },
-    {
-        img: require("../../assets/second-img.png"),
-        text: "Sophia",
-    },
-    {
-        img: require("../../assets/third-img.png"),
-        text: "Ellen",
-    },
-    {
-        img: require("../../assets/fourth-img.png"),
-        text: "Chris",
-    },
-    {
-        img: require("../../assets/fifth-img.png"),
-        text: "Alma",
-    },
-]
+
 
 
 
@@ -98,7 +78,6 @@ const Home = () => {
                         />
                     </View>
                 </View> */}
-
                 {/* Frame Content Start----------- */}
 
                 <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />

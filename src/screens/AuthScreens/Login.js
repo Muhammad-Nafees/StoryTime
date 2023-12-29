@@ -31,12 +31,10 @@ const Login = ({ route }) => {
     const [isLoading, setIsLoading] = useState(false)
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
     const login_user = useSelector((state) => state?.authSlice?.user)
-    // console.log("loginser-0-", login_user)
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
-
 
     return (
         <Formik
@@ -47,7 +45,6 @@ const Login = ({ route }) => {
             }}
 
             validationSchema={validationUserLogin}
-
             onSubmit={async (values) => {
                 setIsLoading(true)
 
@@ -74,6 +71,8 @@ const Login = ({ route }) => {
                     const statusCode = responseData?.statusCode;
                     const message = responseData?.message;
                     const accessToken = responseData?.data?.accessToken;
+                    const refreshToken = responseData?.data?.refreshToken;
+                    console.log("refreshToke----", refreshToken)
                     const error = responseData?.stack;
 
                     if (statusCode === 200) {

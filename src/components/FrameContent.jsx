@@ -15,18 +15,20 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
     const navigation = useNavigation()
-    const { HOME_FRAME, SHARE_BTN, SHARK_ICON } = Img_Paths
+    const { HOME_FRAME, SHARE_BTN, } = Img_Paths
     const { FEED_CHAT } = NavigationsString;
     const RecordingText = useSelector((state) => state.RecordingData.recordingTextToHome)
 
 
-    return (
 
+    return (
         <View style={styles.container}>
             <View style={{ width: responsiveWidth(90), }}>
-                <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={HOME_FRAME}>
+                <ImageBackground style={[styles.img_backgroung_content, {
+                    width: SCREENWIDTH * 0.9,
+                    height: SCREENWIDTH * 0.7,
+                }]} resizeMode="contain" source={HOME_FRAME}>
                     <View style={styles.bg_content}>
-
                         {
                             type == "lilibeth" ?
                                 <>
@@ -48,7 +50,6 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                                 :
                                 null
                         }
-
 
                         {
                             type == "imp_bg_img" ?
@@ -134,19 +135,20 @@ const styles = StyleSheet.create({
         flex: 1
     },
     img_backgroung_content: {
-        width: responsiveWidth(90),
-        height: responsiveHeight(34),
+        // height: responsiveHeight(34),
         justifyContent: "center",
         alignItems: "center",
+        flex: 1,
+        // backgroundColor: "orange"
     },
     bg_content: {
         backgroundColor: TextColorGreen,
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(28.5),
+        height: responsiveHeight(28.6),
         marginLeft: responsiveWidth(1),
-        marginTop: responsiveWidth(1.8)
+        marginTop: responsiveWidth(0.5),
     },
     child_bg: {
         backgroundColor: pinkColor,
