@@ -32,13 +32,10 @@ const SaveStory = ({ isVisible, setVisible }) => {
 
     const downloadFile = () => {
         const date = new Date();
-        const fileDir = RNFS.DownloadDirectoryPath; // RNFS ka use local filesystem access karne ke liye hota hai
+        const fileDir = RNFS.DownloadDirectoryPath;
 
-        // File path kahan pe save karna hai
         const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
-        // State se text extract karen
         const recordingText = RecordingText;
-        // Text ko file mein save karen
         RNFS.writeFile(filePath, recordingText, 'utf8')
             .then((success) => {
                 console.log('File saved at: ', filePath);
@@ -49,6 +46,7 @@ const SaveStory = ({ isVisible, setVisible }) => {
                 Alert.alert('Error in downloading file');
             });
     }
+
 
 
     return (

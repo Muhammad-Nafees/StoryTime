@@ -7,6 +7,7 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
 
 const Countries_Sub = () => {
 
@@ -29,11 +30,11 @@ const Countries_Sub = () => {
         NEWZEALAND_ICON,
         INDIA_ICON,
         TREASURE_ICON } = Img_Paths;
-
+    const navigation = useNavigation()
     return (
         <>
             <View style={styles.first_container}>
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.categories_text_container}>
                     <Text style={styles.categories_text}>Countries</Text>
                 </View>

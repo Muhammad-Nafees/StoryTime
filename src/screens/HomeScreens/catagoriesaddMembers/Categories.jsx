@@ -10,138 +10,24 @@ import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
-
+import { CategoriesData } from '../../../../dummyData/DummyData';
 
 
 
 
 const Categories = () => {
-
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, COUNTRIES_ICON, ANIMAL_IMG, BAG_IMG,
-        CALENDER_ICON, ELEMENTS_ICON, SHOPPING_ICON, TEAM_ICON, VEHICLE_ICON,
-        FRUIT_ICON, LEFT_ARROW_IMG, LIFENEED_ICON,
-        LOCATION_ICON, LUDO_ICON, SCHOOL_ICON } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
     const [randomItem, setRandomItem] = useState(null);
     const navigation = useNavigation()
-
-
-
-    const CategoriesData = [
-        {
-            name: "Humans",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/team-icon.png"),
-            subCategoryBGColor: "rgba(199, 152, 97, 1)",
-            id: 0
-        },
-        {
-            name: "Things",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/lifeneed-icon.png"),
-            subCategoryBGColor: "#79905C",
-
-            id: 1
-        },
-        {
-            name: "Animals",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/animal-icon.png"),
-            subCategoryBGColor: "#56B6A4",
-
-            id: 2
-        },
-
-        {
-            name: "Places",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/location-icon.png"),
-            subCategoryBGColor: "#C45E89",
-
-            id: 3
-        },
-        {
-            name: "Food",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/fruit-icon.png"),
-            subCategoryBGColor: "#8482D1",
-
-            id: 4
-        },
-        {
-            name: "Work",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/bag-icon.png"),
-            subCategoryBGColor: "#974444",
-
-            id: 5
-        },
-        {
-            name: "Event",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/calender-icon.png"),
-            subCategoryBGColor: "#A4C857",
-
-            id: 6
-        },
-        {
-            name: "Travels",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/shopping-icon.png"),
-            subCategoryBGColor: "rgba(209, 130, 130, 1)",
-
-            id: 7
-        },
-        {
-            name: "School",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/school-icon.png"),
-            subCategoryBGColor: "#56C488",
-
-            id: 8
-        },
-        {
-            name: "Vehicles",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/vehicle-icon.png"),
-            subCategoryBGColor: "#C07632",
-
-            id: 9
-        },
-        {
-            name: "Elements",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/elements-icon.png"),
-            subCategoryBGColor: "#82BED1",
-
-            id: 10
-        },
-        {
-            name: "Countries",
-            backgroundColor: TextColorGreen,
-            image: require("../../../assets/Categories-image/countries-icon.png"),
-            subCategoryBGColor: "#C453D7",
-            id: 11
-        },
-    ]
-
 
     const handleRandomClick = () => {
         const RandomInd = Math.floor(Math.random() * CategoriesData.length)
         setRandomItem(RandomInd)
     }
 
-    // useEffect(() => {
-    //     return () => {
-    //         setRandomItem(null)
-    //     }
-    // }, [])
-
-
-
     const handleStoryUser = (id) => {
         navigation.navigate("SubCategories", { id: id },)
-
     }
 
     return (

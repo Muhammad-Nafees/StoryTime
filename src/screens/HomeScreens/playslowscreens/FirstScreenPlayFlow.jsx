@@ -18,11 +18,12 @@ const FirstScreenPlayFlow = () => {
     const SCREENHEIGHT = Dimensions.get("window").height
     const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
     const navigation = useNavigation();
+
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
                 {/* Back Button */}
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText onPress={() => navigation.navigate(SECONDSCREENPLAYFLOW)} text="Voice to Text" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/voiceoftext-icon.png")} bgColor={TextColorGreen} innerColor="#EA89A7" />
@@ -34,6 +35,7 @@ const FirstScreenPlayFlow = () => {
 
     )
 };
+
 
 
 export default FirstScreenPlayFlow;

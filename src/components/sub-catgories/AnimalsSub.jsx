@@ -8,6 +8,7 @@ import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 
 const Animals_Sub = ({ }) => {
+    const navigation = useNavigation()
 
     const { SPLASH_SCREEN_IMAGE,
         ANIMAL_SHARK,
@@ -49,7 +50,7 @@ const Animals_Sub = ({ }) => {
         <>
             <>
                 <View style={styles.first_container}>
-                    <BackButton />
+                    <BackButton onPress={() => navigation.goBack()} />
                     <View style={styles.categories_text_container}>
                         <Text style={styles.categories_text}>Animals</Text>
                     </View>

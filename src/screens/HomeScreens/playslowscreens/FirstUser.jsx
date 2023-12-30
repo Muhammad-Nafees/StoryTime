@@ -18,7 +18,6 @@ const FirstUser = () => {
 
     let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
-    const { EXTENDSTORY, CONTINUE_AND_NEXTPLAYER, } = NavigationsString
     const navigation = useNavigation();
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
@@ -34,7 +33,7 @@ const FirstUser = () => {
 
 
     const handleStart = () => {
-        setTimeLeft(120); // Set initial time to 120 seconds (2 minutes) on button press
+        setTimeLeft(120);
         startRecognizing()
     };
 

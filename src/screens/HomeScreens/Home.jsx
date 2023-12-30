@@ -19,7 +19,7 @@ const Home = () => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, SHARK_ICON, FISH_ICON } = Img_Paths;
-    const { PLAY_STORY_TIME, ADD_FRIENDS } = NavigationsString;
+    const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
 
 

@@ -1,13 +1,14 @@
-import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import React from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { TextColorGreen, PrimaryColor } from '../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 
-const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress }) => {
 
+const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress }) => {
+    const SCREENWIDTH = Dimensions.get("window").width
+    const SCREENHEIGHT = Dimensions.get("window").height
     return (
-        <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={BackgroundImage}>
+        <ImageBackground style={[styles.img_backgroung_content, { width: SCREENWIDTH * 0.9, height: SCREENWIDTH * 0.7 }]} resizeMode="center" source={BackgroundImage}>
             <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: bgColor, }]}>
                 <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(20), backgroundColor: innerColor, justifyContent: "center", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(60), height: responsiveHeight(18), resizeMode: "center" }} source={InnerImage} />
@@ -17,14 +18,15 @@ const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, o
             </TouchableOpacity>
         </ImageBackground>
     )
-
 };
+
+
 
 
 const styles = StyleSheet.create({
     img_backgroung_content: {
-        width: responsiveWidth(90),
-        height: responsiveHeight(32),
+        // width: responsiveWidth(90),
+        // height: responsiveHeight(32),
         justifyContent: "center",
         alignItems: "center",
         marginVertical: moderateVerticalScale(6)
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(26),
+        height: responsiveHeight(27),
         marginLeft: responsiveWidth(1),
         marginBottom: responsiveWidth(2.5)
     },

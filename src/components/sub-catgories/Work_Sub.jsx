@@ -25,7 +25,7 @@ const Work_Sub = () => {
     return (
         <>
             <View style={styles.first_container}>
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.categories_text_container}>
                     <Text style={styles.categories_text}>Work</Text>
                 </View>

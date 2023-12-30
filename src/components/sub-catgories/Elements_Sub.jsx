@@ -11,9 +11,10 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
 
 const Element_Sub = () => {
-
+    const navigation = useNavigation()
     const {
         LUDO_ICON,
         SNOWDAY_ICON,
@@ -27,7 +28,7 @@ const Element_Sub = () => {
     return (
         <>
             <View style={styles.first_container}>
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.categories_text_container}>
                     <Text style={styles.categories_text}>Element</Text>
                 </View>
