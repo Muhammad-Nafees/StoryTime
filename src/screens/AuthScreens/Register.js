@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -26,64 +26,61 @@ import {
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CountryPicker from 'react-native-country-picker-modal';
 import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {registeruser} from '../../../store/slices/Register_Slice';
-import {register} from '../../../store/slices/Register_Slice';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { registeruser } from '../../../store/slices/Register_Slice';
+import { register } from '../../../store/slices/Register_Slice';
 import CustomInput from '../../components/CustomInput';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {useDispatch} from 'react-redux';
-import {validationSignUp} from '../../../validation/validation';
-import Svg, {Path} from 'react-native-svg';
+import { useDispatch } from 'react-redux';
+import { validationSignUp } from '../../../validation/validation';
+import Svg, { Path } from 'react-native-svg';
 import Toast from 'react-native-toast-message';
 import CustomPhoneInput from '../../components/CustomPhoneInput';
 import {
   userdata,
   userinfoState,
 } from '../../../store/slices/userInfoState_Slice';
+import PhoneInput from 'react-native-phone-number-input';
 
 const Register = () => {
-  const {CREATE_ACCOUNT_ICON} = Img_Paths;
+  const { CREATE_ACCOUNT_ICON } = Img_Paths;
   const navigation = useNavigation();
-  const {REGISTER_USER_INFO} = NavigationsString;
-  const [countryCode, setCountryCode] = useState('');
+  const { REGISTER_USER_INFO } = NavigationsString;
   const [isError, setIsError] = useState('');
-  const [phoneCode, setPhoneCode] = useState('');
+  const [phoneCodee, setPhoneCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [formatText, setFormatText] = useState("")
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('')
   const dispatch = useDispatch();
   const phoneInput = useRef(null);
 
-  const countryinfo = {};
 
-  if (countryCode === '') {
-    countryinfo.countryCode = 'AU';
-  } else {
-    countryinfo.countryCode = countryCode;
-  }
-
-  if (phoneCode === '') {
-    countryinfo.phonecodee = '61';
-  } else {
-    countryinfo.phonecodee = phoneCode;
-  }
+  const phoneCode = phoneInput?.current?.state?.code
+  const countryCode = phoneInput?.current?.state?.countryCode
 
   const handleFormSubmit = async values => {
     setIsLoading(true);
     setIsLoading(false);
-    if (usernameError !== '' || emailError !== '') {
+    const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+    console.log("valid-=", checkValid)
+    if (usernameError !== '' || emailError !== '' || phoneError === 'completePhone available' || checkValid === false) {
       return;
     }
+
     navigation.navigate(REGISTER_USER_INFO);
-    dispatch(userinfoState(countryinfo));
-    dispatch(register({values, countryCode: countryinfo}));
+    dispatch(userinfoState(countryCode));
+    dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
   };
+
+
 
   return (
     <Formik
@@ -98,6 +95,7 @@ const Register = () => {
       }}
       validationSchema={validationSignUp}
       onSubmit={handleFormSubmit}>
+
       {({
         values,
         errors,
@@ -112,13 +110,13 @@ const Register = () => {
         <>
           <ScrollView
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{flexGrow: 1}}>
+            contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
               <View style={styles.img_container}>
                 <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
               </View>
 
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <CustomInput
                   label="Username"
                   placeholder="Type here"
@@ -157,18 +155,22 @@ const Register = () => {
                 />
 
                 <CustomPhoneInput
-                  value={values.phone}
-                  error={errors.phone}
-                  touched={touched.phone}
+                  value={values.phoneNo}
+                  error={errors.phoneNo}
+                  touched={touched.phoneNo}
                   handleChange={handleChange('phoneNo')}
                   setFieldValue={setFieldValue}
                   phoneInput={phoneInput}
                   setIsError={setIsError}
                   setFieldError={setFieldError}
+                  setFormatText={setFormatText}
                   isError={isError}
                   setPhoneCode={setPhoneCode}
-                  countryCode={phoneCode}
+                  setPhoneError={setPhoneError}
+                // countryCode={countryCodee}
+                // ={countryCodee}
                 />
+
                 <CustomInput
                   label="Email Address"
                   placeholder="Type here"
@@ -182,17 +184,17 @@ const Register = () => {
                   handleChange={text => setFieldValue('email', text)}
                 />
 
-                <View style={{paddingVertical: responsiveWidth(6)}}>
+                <View style={{ paddingVertical: responsiveWidth(6) }}>
                   <TouchableOpacity
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),
                       backgroundColor:
                         values.email &&
-                        values.firstName &&
-                        values.lastName &&
-                        values.phoneNo &&
-                        values.username
+                          values.firstName &&
+                          values.lastName &&
+                          values.phoneNo &&
+                          values.username
                           ? '#395E66'
                           : 'rgba(57, 94, 102, 0.6)',
                       borderRadius: 10,
@@ -222,7 +224,7 @@ const Register = () => {
                     </Text>
                   </TouchableOpacity>
 
-                  <View style={{marginVertical: moderateVerticalScale(7)}}>
+                  <View style={{ marginVertical: moderateVerticalScale(7) }}>
                     <TouchableButton
                       onPress={() => navigation.goBack()}
                       backgroundColor="#FFF"
@@ -241,6 +243,8 @@ const Register = () => {
     </Formik>
   );
 };
+
+
 
 export default Register;
 

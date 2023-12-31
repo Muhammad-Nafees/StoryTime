@@ -1,4 +1,4 @@
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 import {
   Base_Url,
   city_andpoint,
@@ -7,10 +7,10 @@ import {
   reset_password_endpoint,
   reset_verify_code,
   stateandCity_endpoint,
-  username_endpoint,
+  username_endpoint
 } from '../..';
 
-const reset_email = async values => {
+const reset_email = async (values) => {
   try {
     console.log('values---', values);
 
@@ -36,7 +36,7 @@ export const otp_forget = async code => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({code: code}),
+      body: JSON.stringify({ code: code }),
     });
 
     const responseData = await response.json();
@@ -72,12 +72,15 @@ export const reset_password = async (
 };
 
 export const registerapi = async (firstpageData, secondpageData, values) => {
-  const {countryCode, phonecodee} = firstpageData?.countryCode;
-  const {email, fcmToken, firstName, lastName, phoneNo, role, username} =
+  const countryCode = firstpageData?.countryCode;
+  const phonecodee = firstpageData?.phoneCode;
+  console.log("inside----------pa", countryCode, phonecodee)
+  console.log(countryCode, phonecodee)
+  const { email, fcmToken, firstName, lastName, phoneNo, role, username } =
     firstpageData?.values;
   const phoneCode = `+${phonecodee}`;
-  const {city, state, zipCode} = secondpageData;
-  const {confirmPassword, password} = values;
+  const { city, state, zipCode } = secondpageData;
+  const { confirmPassword, password } = values;
 
   try {
     const response = await fetch(Base_Url + register_endpoint, {
@@ -112,8 +115,7 @@ export const registerapi = async (firstpageData, secondpageData, values) => {
 
 export default reset_email;
 
-export const stateandcity_api = async countryinfo => {
-  const {countryCode} = countryinfo;
+export const stateandcity_api = async countryCode => {
 
   try {
     const response = await fetch(
@@ -135,7 +137,7 @@ export const stateandcity_api = async countryinfo => {
 };
 
 export const userandcity_api = async statesinfo => {
-  const {countryCode, isoCode} = statesinfo;
+  const { countryCode, isoCode } = statesinfo;
   console.log('insideApi---', countryCode, isoCode);
   try {
     const response = await fetch(
@@ -169,6 +171,8 @@ export const username_api = async (username, email, completePhone) => {
   if (completePhone !== '') {
     requestBody.completePhone = completePhone;
   }
+
+
 
   const response = await fetch(Base_Url + username_endpoint, {
     method: 'POST',

@@ -37,16 +37,6 @@ const RegisterPassword = ({ route }) => {
         setConfirmShowPassword(!confirmShowPassword);
     };
 
-    const generateOTP = () => {
-        // Random 6-digit OTP generation
-        let otp = Math.floor(100000 + Math.random() * 900000);
-        return otp;
-    }
-
-    // OTP generate karne ke liye function call
-    let generatedOTP = generateOTP();
-    console.log("Generated OTP:", generatedOTP);
-
     return (
         <Formik
             initialValues={{
@@ -55,6 +45,7 @@ const RegisterPassword = ({ route }) => {
             }}
             validationSchema={validationUserPassword}
             onSubmit={async (values) => {
+
                 setIsLoading(true)
                 const responseData = await registerapi(firstuserData, seconduserData, values)
                 const statusCode = responseData?.statusCode;
