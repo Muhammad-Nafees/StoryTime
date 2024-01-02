@@ -27,6 +27,7 @@ import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import SecondUser from '../screens/HomeScreens/playslowscreens/SecondUser';
 import { Text } from 'react-native';
+import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -41,6 +42,8 @@ const Navigations = () => {
       <Stack.Screen name={ADD_FRIENDS} component={AddFiends} />
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
+      <Stack.Screen name="ProfileStacks" component={ProfileStacks} />
+
     </Stack.Navigator>
   );
 };
@@ -113,6 +116,17 @@ const CategoriesStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={CATEGORIES} component={Categories} />
       <Stack.Screen name="SubCategories" component={SubCategories} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStacks = () => {
+  const Stack = createStackNavigator();
+  const { HOME, FEED_CHAT } = NavigationsString;
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TagFriends" component={TagFriends} />
+      {/* <Stack.Screen name={FEED_CHAT} component={FeedChat} /> */}
     </Stack.Navigator>
   );
 };

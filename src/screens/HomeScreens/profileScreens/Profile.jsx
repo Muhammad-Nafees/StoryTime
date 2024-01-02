@@ -13,7 +13,7 @@ import ProfileOliverData from '../../../components/ProfileOliverData';
 import RecordingOliverData from '../../../components/RecordingOliverData';
 
 const Profile = () => {
-    const { BG_CONTAINER, SHARE_BTN } = Img_Paths;
+    const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
     const navigation = useNavigation();
     const { FEED_CHAT, } = NavigationsString;
     const [isContent, setIsContent] = useState(0)
@@ -30,7 +30,7 @@ const Profile = () => {
                             <Image style={{ width: 180, height: 200, resizeMode: "center" }} source={require("../../../assets/bgoliver.png")} />
                         </View>
                         <View style={{ paddingTop: responsiveWidth(6) }}>
-                            <SettingButton />
+                            <SettingButton image={SETTINGS_ICON} />
                         </View>
                     </View>
                 </ImageBackground>

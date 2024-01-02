@@ -4,14 +4,14 @@ import { Img_Paths } from '../assets/Imagepaths';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const SettingButton = ({ leftarrow, onPress }) => {
+const SettingButton = ({ leftarrow, onPress, image }) => {
 
     const { SETTINGS_ICON } = Img_Paths;
     const navigation = useNavigation();
 
     return (
         <TouchableOpacity onPress={onPress} style={styles.back_button}>
-            <Image style={styles.left_arrow} source={SETTINGS_ICON} />
+            <Image style={styles.left_arrow} source={image} />
         </TouchableOpacity>
     )
 };

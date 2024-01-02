@@ -4,15 +4,19 @@ import { profile_oliverPierce } from '../../dummyData/DummyData'
 import { SecondaryColor, TextColorGreen } from '../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateScale } from 'react-native-size-matters'
+import { useNavigation } from '@react-navigation/native'
 
 const ProfileOliverData = () => {
+    const navigation = useNavigation();
     return (
         <>
             {
                 profile_oliverPierce?.map((item, index) => (
                     <>
                         <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
-                            <TouchableOpacity style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => navigation?.navigate("ProfileStacks", {
+                                screen: "TagFriends"
+                            })} style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
                                 <Image style={{ width: 30, height: 30, resizeMode: "center" }} source={item.image1} />
                                 <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2) }}>{item.text1}</Text>
                             </TouchableOpacity>
