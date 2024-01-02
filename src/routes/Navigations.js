@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/Home';
-import Profile from '../screens/HomeScreens/Profile';
+import Profile from '../screens/HomeScreens/profileScreens/Profile';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
 import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
@@ -78,7 +78,9 @@ const PLayFlowScreens = () => {
       <Stack.Screen name={FIRST_USER} component={FirstUser} />
       <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
       <Stack.Screen name="SecondUsertext" component={SecondUser} />
+
       {/* VIDEOS---------SCR*** */}
+
       <Stack.Screen
         name={VIDEO_FIRST_SCREEN}
         component={VideoFirstStartScreen}
@@ -90,28 +92,30 @@ const PLayFlowScreens = () => {
   );
 };
 
-// const HomeStack = () => {
-//   const Stack = createStackNavigator();
-//   const {HOME, FEED_CHAT} = NavigationsString;
-//   return (
-//     <Stack.Navigator screenOptions={{headerShown: false}}>
-//       <Stack.Screen name={HOME} component={Home} />
-//       <Stack.Screen name={FEED_CHAT} component={FeedChat} />
-//     </Stack.Navigator>
-//   );
-// };
 
-// const CategoriesStack = () => {
-//   const Stack = createStackNavigator();
-//   const {CATEGORIES} = NavigationsString;
 
-//   return (
-//     <Stack.Navigator screenOptions={{headerShown: false}}>
-//       <Stack.Screen name={CATEGORIES} component={Categories} />
-//       <Stack.Screen name="SubCategories" component={SubCategories} />
-//     </Stack.Navigator>
-//   );
-// };
+const HomeStack = () => {
+  const Stack = createStackNavigator();
+  const { HOME, FEED_CHAT } = NavigationsString;
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={HOME} component={Home} />
+      <Stack.Screen name={FEED_CHAT} component={FeedChat} />
+    </Stack.Navigator>
+  );
+};
+
+const CategoriesStack = () => {
+  const Stack = createStackNavigator();
+  const { CATEGORIES } = NavigationsString;
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={CATEGORIES} component={Categories} />
+      <Stack.Screen name="SubCategories" component={SubCategories} />
+    </Stack.Navigator>
+  );
+};
 
 
 
@@ -120,16 +124,17 @@ const BottomTavNavigator = () => {
   const { HOME_FOCUSED } = Img_Paths;
   const Tab = createBottomTabNavigator();
 
-  const HomeStack = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ color: "#000" }}>Home Screen Coming Soon</Text>
-    </View>
-  );
-  const CategoriesStack = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ color: "#000" }}>Category Screen Coming Soon</Text>
-    </View>
-  );
+
+  // const HomeStack = () => (
+  //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //     <Text style={{ color: "#000" }}>Home Screen Coming Soon</Text>
+  //   </View>
+  // );
+  // const CategoriesStack = () => (
+  //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //     <Text style={{ color: "#000" }}>Category Screen Coming Soon</Text>
+  //   </View>
+  // );
 
   return (
     <Tab.Navigator

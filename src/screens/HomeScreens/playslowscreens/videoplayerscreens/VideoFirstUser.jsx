@@ -85,9 +85,9 @@ const VideoFirstUser = () => {
         }
     };
 
-    const onPressnext = () => {
+    useEffect(() => {
         setShowCamera(true)
-    }
+    }, [])
 
     const toggleCamera = () => {
         const newCamera = currentCamera === 'back' ? 'front' : 'back';
@@ -124,7 +124,7 @@ const VideoFirstUser = () => {
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
-            
+
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
@@ -191,7 +191,7 @@ const VideoFirstUser = () => {
             </View>
 
             <View>
-                <TouchableButton onPress={onPressnext} text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
+                <TouchableButton text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
                 <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} />
             </View>
 

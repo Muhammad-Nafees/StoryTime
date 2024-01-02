@@ -13,9 +13,8 @@ import MainInputField from '../../../components/MainInputField';
 import { CategoriesData } from '../../../../dummyData/DummyData';
 
 
-
-
 const Categories = () => {
+
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
     const [randomItem, setRandomItem] = useState(null);
@@ -31,26 +30,17 @@ const Categories = () => {
     }
 
     return (
+
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>
                 {/* Frame Content Close----------- */}
 
                 <View style={styles.first_container}>
-                    <BackButton />
+                    <BackButton onPress={() => navigation.goBack()} />
                     <View style={styles.categories_text_container}>
                         <Text style={styles.categories_text}>Categories</Text>
                     </View>
                 </View>
-
-                {/* <View style={styles.text_Input_container}>
-                    <View style={styles.text_input_child}>
-                        <TextInput placeholder="Username" placeholderTextColor={"#000"} style={styles.input_field} />
-                        <TouchableOpacity style={styles.add_button}>
-                            <Text style={styles.add_text}>Add</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> */}
-
                 {/* IMainnputField-----*/}
                 <MainInputField placeholder="Username" />
                 {/* MainInputField----- */}
@@ -88,7 +78,6 @@ const Categories = () => {
                         </View>
                     ))}
                 </View>
-
 
 
                 <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>

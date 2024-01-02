@@ -16,7 +16,7 @@ const Routes = () => {
         const authenticateUser = async () => {
 
             try {
-                const accessToken = await AsyncStorage.removeItem('isLoggedIn');
+                const accessToken = await AsyncStorage.getItem('isLoggedIn');
                 if (accessToken) {
                     dispatch(setAccessToken(accessToken));
                 }

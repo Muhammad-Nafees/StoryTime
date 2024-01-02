@@ -8,6 +8,13 @@ import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
 import { useSelector } from 'react-redux'
 
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+
 
 
 const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text }) => {
@@ -17,7 +24,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
     const navigation = useNavigation()
     const { HOME_FRAME, SHARE_BTN, } = Img_Paths
     const { FEED_CHAT } = NavigationsString;
-    const RecordingText = useSelector((state) => state.RecordingData.recordingTextToHome)
+    const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome)
 
 
 
@@ -80,13 +87,12 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                 </ImageBackground>
 
 
+
                 <View style={styles.second_container}>
                     <View style={styles.sec_container_firstchild}>
                         <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: moderateScale(55) }}>
 
-
                             <View style={styles.third_container}>
-
                                 <View style={[styles.fourth_container]}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                         <TouchableOpacity style={styles.first_view}>
@@ -106,11 +112,34 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                                             <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>Share</Text>
                                         </TouchableOpacity>
                                     </View>
+
                                     <View style={{ width: responsiveWidth(15), justifyContent: 'flex-end', alignItems: "flex-end" }}>
                                         <TouchableOpacity style={{ width: responsiveWidth(6), }}>
-                                            <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/three-dots-mod.png")} />
+                                            <Menu>
+                                                <MenuTrigger>
+                                                    <Image
+                                                        style={{
+                                                            width: responsiveWidth(7),
+                                                            height: responsiveHeight(3.5),
+                                                            resizeMode: 'center',
+                                                        }}
+                                                        source={require('../assets/three-dots-mod.png')}
+                                                    />
+                                                </MenuTrigger>
+
+                                                <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, } }}>
+                                                    <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
+                                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
+                                                    </MenuOption>
+                                                    <MenuOption style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
+                                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Report</Text>
+                                                    </MenuOption>
+                                                </MenuOptions>
+
+                                            </Menu>
                                         </TouchableOpacity>
                                     </View>
+
 
 
                                 </View>

@@ -7,13 +7,16 @@ import App from './App';
 import { name as appName } from './app.json';
 import { Provider } from 'react-redux';
 import store from './store';
+import { MenuProvider } from 'react-native-popup-menu';
 
 
 const UserApp = () => {
     return (
         <>
             <Provider store={store}>
-                <App />
+                <MenuProvider>
+                    <App />
+                </MenuProvider>
             </Provider>
         </>
     )

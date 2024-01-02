@@ -13,6 +13,7 @@ export const Img_Paths = {
     PLAY_STORY_IMG: require("../../assets/playstory-time.png"),
     HOME_FOCUSED: require("../../assets/home_focused.png"),
 
+
     // Categories File-----
 
     ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
@@ -251,5 +252,8 @@ export const Img_Paths = {
     // PLAY FLOW SECTION IMAGES
     NEXT_PLAYER_IMG: require("../../assets/next-player-img.png"),
     EXTEND_STORY_IMG: require("../../assets/extend-story-img.png"),
+    // PROFILE---------
+    BG_CONTAINER: require("../../assets/bgcontainer.png"),
+    SETTINGS_ICON: require("../../assets/settingsicon.png")
 
 };

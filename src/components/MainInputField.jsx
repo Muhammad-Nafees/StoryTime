@@ -22,8 +22,6 @@ const MainInputField = ({ placeholder }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: pinkColor,
-        width: "100%",
-        height: "100%",
         flex: 1,
     },
     text_Input_container: {

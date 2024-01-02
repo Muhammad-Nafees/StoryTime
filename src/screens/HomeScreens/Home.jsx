@@ -7,11 +7,14 @@ import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
-// import { FlatListData } from '../../../dummyData/DummyData';
+import { FlatListData } from '../../../dummyData/DummyData';
 
-
-
-
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
 
 
 
@@ -34,9 +37,11 @@ const Home = () => {
                             <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                         </View>
                         <View style={{ flexDirection: 'row', }}>
+
                             <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
                                 <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                             </TouchableOpacity>
+
                             <View>
                                 <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
                             </View>
@@ -46,20 +51,8 @@ const Home = () => {
                 </View>
 
 
-                {/* <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
-                </View> */}
 
-
-                <View style={{ width: responsiveWidth(95), marginLeft: 'auto', paddingVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(6) }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>Dashboard coming soon...</Text>
-                </View>
-
-
-                {/* <View style={{ width: responsiveWidth(95), marginLeft: 'auto', }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>Dashboard coming soon</Text>
-                </View> */}
-                {/* <View style={styles.flatlist_container}>
+                <View style={styles.flatlist_container}>
                     <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
 
                         <FlatList
@@ -77,7 +70,8 @@ const Home = () => {
                             }}
                         />
                     </View>
-                </View> */}
+                </View>
+
                 {/* Frame Content Start----------- */}
 
                 <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
@@ -91,6 +85,7 @@ const Home = () => {
         </ScrollView>
     )
 };
+
 
 
 const styles = StyleSheet.create({
@@ -117,7 +112,5 @@ const styles = StyleSheet.create({
         resizeMode: "center"
     }
 });
-
-
 
 export default Home;

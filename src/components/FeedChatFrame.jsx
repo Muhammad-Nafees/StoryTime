@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
@@ -6,6 +6,14 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../assets/Imagepaths'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+
+
 
 
 
@@ -13,9 +21,19 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
 
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
-    const navigation = useNavigation()
-    const { HOME_FRAME, FRANKIN_DRAWEN } = Img_Paths
+    const navigation = useNavigation();
+    const [messages, setMessages] = useState([]);
+    const [inputText, setInputText] = useState('');
+    const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths
     const { FEED_CHAT } = NavigationsString;
+
+    const messageArrHandle = () => {
+        if (inputText?.trim() !== "") {
+            const messageBoxarr = [inputText]
+            setMessages((prevVal) => [...prevVal, ...messageBoxarr])
+        }
+        setInputText("")
+    }
 
     return (
 
@@ -46,7 +64,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                 null
                         }
 
-
                         {
                             type == "imp_bg_img" ?
                                 <>
@@ -63,62 +80,95 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                     </View>
                 </ImageBackground>
 
-
                 {/* Comments Content */}
                 <View style={{ position: 'relative', bottom: responsiveWidth(5), right: moderateScale(6), }}>
                     <View style={{ width: responsiveWidth(92), marginLeft: responsiveWidth(1), backgroundColor: "#E44173", height: responsiveHeight(41), justifyContent: "center", alignItems: "center", }}>
 
                         <View style={styles.third_container}>
+
                             <View style={[styles.fourth_container]}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(36) }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                     <TouchableOpacity style={styles.first_view}>
                                         <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.second_view}>
                                         <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>456</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>456</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
                                         <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
-                                        <Text style={{ fontSize: responsiveFontSize(1.9), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.third_view}>
+                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
+                                        <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>Share</Text>
                                     </TouchableOpacity>
                                 </View>
 
-                                <View style={{ width: responsiveWidth(20), justifyContent: 'flex-end', alignItems: "flex-end" }}>
+                                <View style={{ width: responsiveWidth(15), justifyContent: 'flex-end', alignItems: "flex-end" }}>
                                     <TouchableOpacity style={{ width: responsiveWidth(6), }}>
-                                        <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/three-dots-mod.png")} />
+                                        <Menu>
+                                            <MenuTrigger>
+                                                <Image
+                                                    style={{
+                                                        width: responsiveWidth(7),
+                                                        height: responsiveHeight(3.5),
+                                                        resizeMode: 'center',
+                                                    }}
+                                                    source={require('../assets/three-dots-mod.png')}
+                                                />
+                                            </MenuTrigger>
+
+                                            <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, } }}>
+                                                <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
+                                                    <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
+                                                </MenuOption>
+                                                <MenuOption style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
+                                                    <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Report</Text>
+                                                </MenuOption>
+                                            </MenuOptions>
+
+                                        </Menu>
                                     </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
 
 
+
                         <View style={{ width: responsiveWidth(89), backgroundColor: "#FFF", height: responsiveHeight(32), }}>
+                            <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center", height: responsiveHeight(25.5) }}>
+                                <ScrollView nestedScrollEnabled={true}>
+                                    {
+                                        messages?.map((item, index) => {
+                                            return (
+                                                <>
+                                                    <View key={index} style={{ width: responsiveWidth(83), flexDirection: 'row', justifyContent: "space-between" }}>
+                                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                                            <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
+                                                        </View>
+                                                        <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
+                                                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Frank Darwin</Text>
+                                                            <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>{item}</Text>
+                                                        </View>
+                                                    </View>
 
-                            <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center" }}>
-                                <View>
-                                    <View style={{ width: responsiveWidth(83), flexDirection: 'row', justifyContent: "space-between" }}>
-                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                            <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
-                                        </View>
-                                        <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
-                                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Frank Darwin</Text>
-                                            <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>That looks fun!, i wanna join next time!</Text>
-                                        </View>
-                                    </View>
-
-                                    <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-                                        <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(67), }}>
-                                            <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>2m ago</Text>
-                                            <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
-                                        </View>
-                                    </View>
-
-                                </View>
+                                                    <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
+                                                        <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(67), }}>
+                                                            <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>2m ago</Text>
+                                                            <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
+                                                        </View>
+                                                    </View>
+                                                </>
+                                            )
+                                        })
+                                    }
+                                </ScrollView>
                             </View>
 
-                            <View style={{ paddingVertical: 4, justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
+                            {/* 
+                            <View style={{ paddingVertical: moderateVerticalScale(4), justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
                                 <View style={{ width: responsiveWidth(67), flexDirection: 'row', justifyContent: "space-between" }}>
                                     <View style={{ justifyContent: "center", alignItems: "center" }}>
                                         <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
@@ -135,22 +185,21 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                         <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                                     </View>
                                 </View>
-                            </View>
+                            </View> */}
 
                             {/* TextInput Content------- */}
+
                             <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center", }}>
-                                <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(79), height: 45 }}>
-                                    <TextInput placeholder="Message" placeholderTextColor={"#000"} style={{ width: responsiveWidth(70), paddingLeft: 12, color: "#000", }} />
+                                <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(78), height: responsiveHeight(6) }}>
+                                    <TextInput placeholder="Message" value={inputText} onChangeText={(val) => setInputText(val)} placeholderTextColor={"#000"} style={{ width: responsiveWidth(70), paddingLeft: 12, color: "#000", }} />
                                     <TouchableOpacity>
                                         <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), resizeMode: "center", }} source={require("../assets/image-icon.png")} />
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", }}>
+                                <TouchableOpacity onPress={messageArrHandle} style={{ justifyContent: "center", alignItems: "center", }}>
                                     <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/send-btn.png")} />
                                 </TouchableOpacity>
                             </View>
-
-
 
                         </View>
                     </View>
@@ -181,8 +230,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(29.5),
-        marginLeft: responsiveWidth(1)
+        height: responsiveHeight(29),
+        marginLeft: responsiveWidth(1),
+        marginTop: responsiveWidth(1)
     },
     child_bg: {
         backgroundColor: pinkColor,
@@ -236,7 +286,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        width: responsiveWidth(36),
+        width: responsiveWidth(50),
     },
 
     first_view: {
