@@ -96,7 +96,6 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
 
     const otp_forget_api = async () => {
         setIsLoading(true);
-
         try {
             const response = await otp_forget(otptext);
             console.log('response', response);

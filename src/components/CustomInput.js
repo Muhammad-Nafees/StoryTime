@@ -60,13 +60,14 @@ const CustomInput = (props) => {
   };
 
   return (
+
     <View style={{ paddingVertical: 10 }}>
       <Text
         style={[
           {
             color: FourthColor,
             fontWeight: '600',
-            marginBottom: verticalScale(7),
+            paddingBottom: verticalScale(7),
           },
           props.labelStyles,
         ]}
@@ -106,7 +107,8 @@ const CustomInput = (props) => {
           <Text style={[{ color: 'red' }]}>{props.customError}</Text>
         </View>
       )}
-      {props.error && (
+
+      {isFocused && props.error && (
         <View
           style={[
             {
@@ -121,6 +123,7 @@ const CustomInput = (props) => {
           <Text style={[{ color: 'red' }]}>{props.error}</Text>
         </View>
       )}
+
     </View>
   );
 };

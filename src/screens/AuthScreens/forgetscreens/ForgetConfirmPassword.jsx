@@ -9,6 +9,7 @@ import {
     StyleSheet,
     Button,
     Alert,
+    ScrollView,
 } from 'react-native';
 import {
     FourthColor,
@@ -47,6 +48,7 @@ export const validationForgetConfirmPassword = Yup.object().shape({
 });
 
 const ForgetConfirmPassword = () => {
+
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const { FORGET_BG_IMG } = Img_Paths;
@@ -65,6 +67,7 @@ const ForgetConfirmPassword = () => {
         setShowPasswordConfirm(!showPasswordConfirm);
     };
 
+
     return (
         <Formik
             initialValues={{
@@ -82,8 +85,8 @@ const ForgetConfirmPassword = () => {
                         confirmPassword,
                         forgetuserToken,
                     );
-
                     if (response?.statusCode === 200) {
+
                         setIsLoading(false),
                             Toast.show({
                                 type: 'success',
@@ -92,6 +95,7 @@ const ForgetConfirmPassword = () => {
                         setTimeout(() => {
                             navigation.navigate(LOGIN);
                         }, 1000);
+
                     } else if (response?.stack) {
                         Toast.show({
                             type: 'error',
@@ -105,145 +109,151 @@ const ForgetConfirmPassword = () => {
                     setIsLoading(false);
                 }
             }}>
+
             {({ values, errors, handleChange, handleSubmit }) => (
+
                 <View style={styles.container}>
-                    <View style={styles.img_container}>
-                        <Image style={styles.img_child} source={FORGET_BG_IMG} />
-                    </View>
+                    <ScrollView style={{}}>
 
-                    {/* Code------------ */}
+                        <View style={styles.img_container}>
+                            <Image style={styles.img_child} source={FORGET_BG_IMG} />
+                        </View>
 
-                    <View>
+                        {/* Code------------ */}
+
                         <View>
-                            {/*New Password----------- */}
+                            <View>
+                                {/*New Password----------- */}
 
-                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                <Text
-                                    style={{
-                                        color: FourthColor,
-                                        fontWeight: '600',
-                                        fontSize: responsiveFontSize(1.7),
-                                    }}>
-                                    New Password
-                                </Text>
-                            </View>
-
-                            <TextInputField
-                                onChangeText={handleChange('newPassword')}
-                                onPress={toggleShowPassword}
-                                showPassword={showPassword}
-                                type="password"
-                                placeholderText="Enter here"
-                            />
-
-                            {errors.newPassword && (
-                                <View
-                                    style={{
-                                        width: responsiveWidth(90),
-                                        marginLeft: 'auto',
-                                        paddingBottom: responsiveWidth(2),
-                                    }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <View>
-                                            <Svg
-                                                width={20}
-                                                height={20}
-                                                viewBox="0 0 24 24"
-                                                fill="red">
-                                                <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                            </Svg>
-                                        </View>
-                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text
-                                                style={{
-                                                    color: 'red',
-                                                    fontSize: responsiveFontSize(1.7),
-                                                    fontWeight: '600',
-                                                }}>
-                                                {errors.newPassword}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            )}
-
-                            {/* Confirm Password------------ */}
-
-                            <View style={{}}>
                                 <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                                     <Text
                                         style={{
-                                            marginVertical: responsiveWidth(1),
                                             color: FourthColor,
                                             fontWeight: '600',
                                             fontSize: responsiveFontSize(1.7),
                                         }}>
-                                        Confirm Password
+                                        New Password
                                     </Text>
                                 </View>
+
                                 <TextInputField
-                                    onChangeText={handleChange('confirmPassword')}
-                                    onPress={toggleShowPasswordConfir}
-                                    showPassword={showPasswordConfirm}
+                                    onChangeText={handleChange('newPassword')}
+                                    onPress={toggleShowPassword}
+                                    showPassword={showPassword}
                                     type="password"
                                     placeholderText="Enter here"
                                 />
-                            </View>
 
-                            {errors.confirmPassword && (
-                                <View
-                                    style={{
-                                        width: responsiveWidth(90),
-                                        marginLeft: 'auto',
-                                        paddingBottom: responsiveWidth(2),
-                                    }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <View>
-                                            <Svg
-                                                width={20}
-                                                height={20}
-                                                viewBox="0 0 24 24"
-                                                fill="red">
-                                                <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                            </Svg>
-                                        </View>
-                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text
-                                                style={{
-                                                    color: 'red',
-                                                    fontSize: responsiveFontSize(1.7),
-                                                    fontWeight: '600',
-                                                }}>
-                                                {errors.confirmPassword}
-                                            </Text>
+                                {errors.newPassword && (
+                                    <View
+                                        style={{
+                                            width: responsiveWidth(90),
+                                            marginLeft: 'auto',
+                                            paddingBottom: responsiveWidth(2),
+                                        }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <View>
+                                                <Svg
+                                                    width={20}
+                                                    height={20}
+                                                    viewBox="0 0 24 24"
+                                                    fill="red">
+                                                    <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text
+                                                    style={{
+                                                        color: 'red',
+                                                        fontSize: responsiveFontSize(1.7),
+                                                        fontWeight: '600',
+                                                    }}>
+                                                    {errors.newPassword}
+                                                </Text>
+                                            </View>
                                         </View>
                                     </View>
+                                )}
+
+                                {/* Confirm Password------------ */}
+
+                                <View style={{}}>
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                        <Text
+                                            style={{
+                                                marginVertical: responsiveWidth(1),
+                                                color: FourthColor,
+                                                fontWeight: '600',
+                                                fontSize: responsiveFontSize(1.7),
+                                            }}>
+                                            Confirm Password
+                                        </Text>
+                                    </View>
+                                    <TextInputField
+                                        onChangeText={handleChange('confirmPassword')}
+                                        onPress={toggleShowPasswordConfir}
+                                        showPassword={showPasswordConfirm}
+                                        type="password"
+                                        placeholderText="Enter here"
+                                    />
                                 </View>
-                            )}
-                        </View>
 
-                        {/* Next------------ */}
+                                {errors.confirmPassword && (
+                                    <View
+                                        style={{
+                                            width: responsiveWidth(90),
+                                            marginLeft: 'auto',
+                                            paddingBottom: responsiveWidth(2),
+                                        }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <View>
+                                                <Svg
+                                                    width={20}
+                                                    height={20}
+                                                    viewBox="0 0 24 24"
+                                                    fill="red">
+                                                    <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text
+                                                    style={{
+                                                        color: 'red',
+                                                        fontSize: responsiveFontSize(1.7),
+                                                        fontWeight: '600',
+                                                    }}>
+                                                    {errors.confirmPassword}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                )}
+                            </View>
 
-                        <View style={{ paddingTop: responsiveWidth(75) }}>
-                            <TouchableButton
-                                isLoading={isLoading}
-                                onPress={
-                                    values.newPassword !== '' && values.confirmPassword
-                                        ? handleSubmit
-                                        : null
-                                }
-                                backgroundColor={
-                                    values.newPassword !== '' && values.confirmPassword
-                                        ? '#395E66'
-                                        : 'rgba(57, 94, 102, 0.5)'
-                                }
-                                color="#FFF"
-                                text="Save"
-                            />
+                            {/* Next------------ */}
+
+                            <View style={{ paddingTop: responsiveWidth(70) }}>
+                                <TouchableButton
+                                    isLoading={isLoading}
+                                    onPress={
+                                        values.newPassword !== '' && values.confirmPassword
+                                            ? handleSubmit
+                                            : null
+                                    }
+                                    backgroundColor={
+                                        values.newPassword !== '' && values.confirmPassword
+                                            ? '#395E66'
+                                            : 'rgba(57, 94, 102, 0.5)'
+                                    }
+                                    color="#FFF"
+                                    text="Save"
+                                />
+                            </View>
                         </View>
-                    </View>
-                    <Toast />
+                        <Toast />
+                    </ScrollView>
                 </View>
+
             )}
         </Formik>
     );

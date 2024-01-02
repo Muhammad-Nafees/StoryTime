@@ -11,8 +11,8 @@ import {
 } from '../..';
 
 const reset_email = async (values) => {
+  console.log('values---', values);
   try {
-    console.log('values---', values);
 
     const response = await fetch(Base_Url + reset_email_endpoint, {
       method: 'POST',

@@ -63,14 +63,15 @@ const Register = () => {
   const phoneInput = useRef(null);
 
 
-  const phoneCode = phoneInput?.current?.state?.code
-  const countryCode = phoneInput?.current?.state?.countryCode
+  const phoneCode = phoneInput?.current?.state?.code;
+  const countryCode = phoneInput?.current?.state?.countryCode;
 
   const handleFormSubmit = async values => {
     setIsLoading(true);
     setIsLoading(false);
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
     console.log("valid-=", checkValid)
+
     if (usernameError !== '' || emailError !== '' || phoneError === 'completePhone available' || checkValid === false) {
       return;
     }
@@ -78,9 +79,10 @@ const Register = () => {
     navigation.navigate(REGISTER_USER_INFO);
     dispatch(userinfoState(countryCode));
     dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
+
   };
 
-
+  console.log("phoneinp---", phoneInput)
 
   return (
     <Formik
@@ -95,7 +97,6 @@ const Register = () => {
       }}
       validationSchema={validationSignUp}
       onSubmit={handleFormSubmit}>
-
       {({
         values,
         errors,
@@ -167,8 +168,6 @@ const Register = () => {
                   isError={isError}
                   setPhoneCode={setPhoneCode}
                   setPhoneError={setPhoneError}
-                // countryCode={countryCodee}
-                // ={countryCodee}
                 />
 
                 <CustomInput

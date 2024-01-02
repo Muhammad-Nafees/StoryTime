@@ -47,8 +47,6 @@ const ForgetEmail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
 
-
-
     return (
         <Formik
             initialValues={{
@@ -56,7 +54,6 @@ const ForgetEmail = () => {
             }}
             validationSchema={validationforgetEmail}
             onSubmit={async values => {
-
                 // const handleNavigation = (code, email) => {
                 //     setTimeout(() => {
                 //         navigation.navigate(OTP_FORGET, {
@@ -68,7 +65,8 @@ const ForgetEmail = () => {
                 // };
 
             }}>
-            {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue }) => (
+            {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue, dirty, isValid }) => (
+
                 <>
                     <View style={styles.container}>
                         <View style={styles.img_container}>
@@ -106,8 +104,10 @@ const ForgetEmail = () => {
                                         initialTouched={true}
                                         setFieldError={setFieldError}
                                         erroremail={errors?.email}
-
+                                        handleSubmit={handleSubmit}
                                         fieldName="email"
+                                        dirty={dirty}
+                                        isValid={isValid}
                                         handleChange={text => setFieldValue('email', text)}
                                     />
                                 </View>
@@ -144,35 +144,25 @@ const ForgetEmail = () => {
                                 </View>
                             )} */}
 
+
                             {/* Confirm Password------------ */}
+
+                            {/* <TouchableButton
+                                isLoading={isLoading}
+                                setIsLoading={setIsLoading}
+                                onPress={() => {
+                                    values?.email !== '' ? values?.handleSubmit : null
+                                    handleSubmit();
+                                }}
+                                backgroundColor={
+                                    values?.email !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
+                                }
+                                color="#FFF"
+                                text="Next"
+                            /> */}
 
                             {/* Next------------ */}
 
-                            <View>
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
-                                    <Text
-                                        style={{
-                                            color: TextColorGreen,
-                                            fontWeight: '600',
-                                            textAlign: 'center',
-                                            paddingVertical: moderateVerticalScale(20),
-                                            fontSize: responsiveFontSize(1.7),
-                                        }}>
-                                        Use phone number instead
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableButton
-                                    isLoading={isLoading}
-                                    setIsLoading={setIsLoading}
-                                    onPress={values.email !== '' ? handleSubmit : null}
-                                    backgroundColor={
-                                        values.email !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
-                                    }
-                                    color="#FFF"
-                                    text="Next"
-                                />
-                            </View>
                         </View>
                         <Toast />
                     </View>

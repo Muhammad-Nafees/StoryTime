@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import { responsiveFontSize, responsiveScreenFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
-import { FourthColor, TextinputColor } from '../screens/Styles/Style';
+import { FourthColor, TextColorGreen, TextinputColor } from '../screens/Styles/Style';
 import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
 import _ from 'lodash';
+import TouchableButton from './TouchableButton';
+import NavigationsString from '../constants/NavigationsString';
+import { useNavigation } from '@react-navigation/native';
 
 const ForgetCustomInput = ({
     handleChange,
@@ -20,25 +23,37 @@ const ForgetCustomInput = ({
     setIsError,
     setPhoneCode,
     setFieldError,
-    countryCode,
-    placeholder,
     setPhoneError,
     disabled = false,
-    extraStyles,
-    setFormatText
+    handleSubmit,
+    isLoading,
+    isValid,
+    dirty
 }) => {
 
-    console.log("error", error)
-    console.log("isError", isError)
+    const [responses, setResponse] = useState("");
+    const [textphone, setPhone] = useState("");
+    const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
+    const navigation = useNavigation();
+
     const debouncedApiCall = useRef(_.debounce(async (phoneNumber, setFieldError) => {
-        const code = phoneInput?.current?.state?.code;
-        const response = await reset_email({ phone: phoneNumber });
-        if (response?.statusCode !== 200) {
-            setPhoneError("Invalid Information, Record Not Found!")
-            setFieldError('phone', `Invalid Information, Record Not Found!`);
+
+        try {
+
+            const response = await reset_email({ phone: phoneNumber });
+            setPhone(phoneNumber)
+            setResponse(response?.data?.code)
+
+            if (response?.statusCode !== 200) {
+                setPhoneError("Invalid Information, Record Not Found!")
+                setFieldError('phone', `Invalid Information, Record Not Found!`);
+            }
+        } catch (error) {
+            console.log(error)
         }
-    }, 1000)
+    }, 300)
     ).current;
+
 
     const handleCountryChange = () => {
         phoneInput.current?.setState({ number: '' });
@@ -89,7 +104,6 @@ const ForgetCustomInput = ({
                         value={value}
                         onChangeText={phoneNumber => {
                         }}
-
                         onChangeCountry={country => {
                             setPhoneCode(country.callingCode);
                             console.log(country.callingCode, 'phoneCode');
@@ -115,10 +129,47 @@ const ForgetCustomInput = ({
                         <View style={{ height: 0 }} />
                     </>
             }
+
+            <View style={{ paddingTop: responsiveWidth(80) }}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate(FORGET_EMAIL)}>
+                    <Text
+                        style={{
+                            color: TextColorGreen,
+                            fontWeight: '600',
+                            textAlign: 'center',
+                            paddingVertical: moderateVerticalScale(22),
+                        }}>
+                        Use email address instead
+                    </Text>
+                </TouchableOpacity>
+                <TouchableButton
+                    isLoading={isLoading}
+                    isValid={isValid}
+                    dirty={dirty}
+                    type="register"
+                    onPress={() => {
+                        value !== '' ? handleSubmit : null;
+                        const checkValid = phoneInput.current?.isValidNumber(textphone);
+                        if (!error && !isError && checkValid) {
+                            navigation.navigate(OTP_FORGET, {
+                                code: responses,
+                                phone: textphone
+                            })
+                        }
+                    }
+                    }
+                    backgroundColor={
+                        value !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
+                    }
+                    color="#FFF"
+                    text="Next"
+                />
+            </View>
+
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     phoneInput: {

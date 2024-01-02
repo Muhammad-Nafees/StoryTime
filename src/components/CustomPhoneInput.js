@@ -30,14 +30,17 @@ const CustomPhoneInput = ({
 
   console.log("error", error)
   console.log("isError", isError)
+  const [isFocused, setIsFocused] = useState(false);
+  const [response, setResponse] = useState();
   const debouncedApiCall = useRef(_.debounce(async (phoneNumber, setFieldError) => {
     const code = phoneInput?.current?.state?.code;
     const response = await username_api('', '', `+${code}${phoneNumber}`);
+    setResponse(response?.statusCode)
     if (response?.statusCode !== 200) {
       setPhoneError("Phone Number already exists")
       setFieldError('phoneNo', `Phone Number already exists`);
     }
-  }, 1000)
+  }, 300)
   ).current;
 
   const handleCountryChange = () => {
@@ -52,6 +55,15 @@ const CustomPhoneInput = ({
     }
   }, [touched, value]);
 
+  // ----------------------
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
   return (
     <View style={{ paddingVertical: 10 }}>
       <Text
@@ -92,29 +104,34 @@ const CustomPhoneInput = ({
               console.log(country.callingCode, 'phoneCode');
               handleCountryChange();
             }}
+            onFocus={handleFocus} // Simulate focus event
+            onBlur={handleBlur}
           />
         )}
       </Field>
 
-      {
-        !isError && !error ? null :
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2,
-                marginTop: 2,
-              }}>
-              <Icon name="alert-circle" size={22} color="red" />
-              <Text style={{ color: 'red' }}>{error ? error : isError}</Text>
-            </View>
-            <View style={{ height: 0 }} />
-          </>
+
+      {!response ?
+        (value !== "" && !isFocused && (!error || !isError)) && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+              marginTop: 2,
+            }}
+          >
+            <Icon name="alert-circle" size={22} color="red" />
+            <Text style={{ color: 'red' }}>{error || isError}</Text>
+          </View>
+        ) : null
       }
+
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   phoneInput: {

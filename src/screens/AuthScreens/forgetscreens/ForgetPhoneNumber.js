@@ -58,11 +58,10 @@ const ForgetPhoneNumber = () => {
         <Formik
             initialValues={{ phone: '' }}
             onSubmit={async values => {
-                const { phone } = values;
-                console.log(phone);
-                setIsLoading(true);
-                const code = phoneCode;
-
+                // const { phone } = values;
+                // console.log(phone);
+                // setIsLoading(true);
+                // const code = phoneCode;
             }}>
             {({
                 values,
@@ -73,7 +72,7 @@ const ForgetPhoneNumber = () => {
                 touched,
                 isValid,
                 dirty,
-                setFieldError
+                setFieldError,
             }) => (
 
                 <View style={styles.container}>
@@ -99,17 +98,10 @@ const ForgetPhoneNumber = () => {
                                 isError={isError}
                                 setPhoneCode={setPhoneCode}
                                 setPhoneError={setPhoneError}
-                            // value={values.phone}
-                            // error={errors.phone}
-                            // touched={touched.phone}
-                            // handleChange={handleChange('phone')}
-                            // setFieldValue={setFieldValue}
-                            // setFormatText={setFormatText}
-                            // setIsError={setIsError}
-                            // initialTouched={true}
-                            // setFieldError={setFieldError}
-                            // phoneError={phoneError}
-                            // phoneInput={phoneInput}
+                                isLoading={isLoading}
+                                handleSubmit={handleSubmit}
+                                isValid={isValid}
+                                dirty={dirty}
                             />
                         </View>
 
@@ -117,27 +109,6 @@ const ForgetPhoneNumber = () => {
 
                         {/* Next and Back------------ */}
 
-                        <View style={{ marginTop: responsiveWidth(80) }}>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate(FORGET_EMAIL)}>
-                                <Text
-                                    style={{
-                                        color: TextColorGreen,
-                                        fontWeight: '600',
-                                        textAlign: 'center',
-                                        paddingVertical: moderateVerticalScale(22),
-                                    }}>
-                                    Use email address instead
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableButton
-                                isLoading={isLoading}
-                                onPress={handleSubmit}
-                                backgroundColor="#395E66"
-                                color="#FFF"
-                                text="Next"
-                            />
-                        </View>
                     </View>
                     <Toast />
                 </View>
