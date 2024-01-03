@@ -26,8 +26,10 @@ import VideoFourthUser from '../screens/HomeScreens/playslowscreens/videoplayers
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import SecondUser from '../screens/HomeScreens/playslowscreens/SecondUser';
-import { Text } from 'react-native';
+import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
+import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
+import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -42,11 +44,11 @@ const Navigations = () => {
       <Stack.Screen name={ADD_FRIENDS} component={AddFiends} />
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
-      <Stack.Screen name="ProfileStacks" component={ProfileStacks} />
-
+      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
   );
 };
+
 
 const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
@@ -97,7 +99,7 @@ const PLayFlowScreens = () => {
 
 
 
-const HomeStack = () => {
+const HomeStackBottom = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
   return (
@@ -108,7 +110,9 @@ const HomeStack = () => {
   );
 };
 
-const CategoriesStack = () => {
+// Categories Bottom And Stack Screens
+
+const CategoriesStackBottom = () => {
   const Stack = createStackNavigator();
   const { CATEGORIES } = NavigationsString;
 
@@ -120,16 +124,31 @@ const CategoriesStack = () => {
   );
 };
 
-const ProfileStacks = () => {
+// Profile Bottom And Stack Screens -----
+
+const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="TagFriends" component={TagFriends} />
-      {/* <Stack.Screen name={FEED_CHAT} component={FeedChat} /> */}
+    <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };
+
+const ProfileScreens = () => {
+  const Stack = createStackNavigator();
+  const { HOME, FEED_CHAT } = NavigationsString;
+  return (
+    <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TagFriends" component={TagFriends} />
+      <Stack.Screen name="AddUrl" component={AddUrl} />
+    </Stack.Navigator>
+  );
+};
+
 
 
 
@@ -137,18 +156,6 @@ const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;
   const Tab = createBottomTabNavigator();
-
-
-  // const HomeStack = () => (
-  //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //     <Text style={{ color: "#000" }}>Home Screen Coming Soon</Text>
-  //   </View>
-  // );
-  // const CategoriesStack = () => (
-  //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //     <Text style={{ color: "#000" }}>Category Screen Coming Soon</Text>
-  //   </View>
-  // );
 
   return (
     <Tab.Navigator
@@ -160,7 +167,7 @@ const BottomTavNavigator = () => {
       }}>
       <Tab.Screen
         name="HomeStack"
-        component={HomeStack}
+        component={HomeStackBottom}
         options={{
           tabBarIcon: ({ focused }) => (
             <View>
@@ -190,7 +197,7 @@ const BottomTavNavigator = () => {
 
       <Tab.Screen
         name="categoriesStack"
-        component={CategoriesStack}
+        component={CategoriesStackBottom}
         options={{
           tabBarIcon: ({ focused }) => (
             <View>
@@ -219,8 +226,8 @@ const BottomTavNavigator = () => {
       />
 
       <Tab.Screen
-        name={PROFILE}
-        component={Profile}
+        name="profileStack"
+        component={ProfileStacksBottom}
         options={{
           tabBarIcon: ({ focused }) => (
             <View>

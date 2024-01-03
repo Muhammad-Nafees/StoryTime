@@ -4,9 +4,10 @@ import { Recording_oliverPierce } from '../../dummyData/DummyData'
 import { SecondaryColor, TextColorGreen } from '../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
+import { useNavigation } from '@react-navigation/native'
 
 const RecordingOliverData = () => {
-
+    const navigation = useNavigation()
     return (
         <>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -43,10 +44,12 @@ const RecordingOliverData = () => {
                                 </View>
                             </View>
 
-                            <View>
+                            <TouchableOpacity onPress={() => navigation.navigate("ProfileScreens", {
+                                screen: "AddUrl"
+                            })}>
                                 <Image style={{ width: 27, height: 27, alignItems: "center", paddingVertical: moderateVerticalScale(16), resizeMode: "center" }} source={require("../assets/profileurl_icon.png")} />
                                 <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>URL</Text>
-                            </View>
+                            </TouchableOpacity>
 
                         </View>
                     </>

@@ -1,244 +1,137 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
-import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
+import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import BackButton from '../../../components/BackButton';
-import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import SettingButton from '../../../components/SettingButton';
-import TouchableButton from '../../../components/TouchableButton';
-
-
-
-
+import NavigationsString from '../../../constants/NavigationsString';
+import StoryUsers from '../../../components/StoryUsers';
+import AddFriendUsers from '../../../components/AddFriendUsers';
+import TouchableButton from ' ../../../components/TouchableButton';
 
 const TagFriends = () => {
-
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, BG_PLAYFLOW, FULL_BORDER_FRAME, HOME_FRAME, SHARE_BTN } = Img_Paths;
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height
-    const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
+    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
+        SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
+    const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            <View style={{}}>
-                <View style={{ paddingTop: responsiveWidth(6), marginLeft: "auto", width: responsiveWidth(95) }}>
-                    <BackButton onPress={() => navigation.goBack()} />
-                </View>
+            <ScrollView>
+                {/* Frame Content Close----------- */}
 
-                {/* Back Button */}
-
-                <View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
-                        <View style={{ justifyContent: "space-between", flexDirection: "row", alignItems: "center", width: responsiveWidth(46) }}>
-                            <Text style={{ color: "#000", }}>Posted by:</Text>
-                            <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(18), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
-                                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>@chrislee</Text>
-                            </View>
-                        </View>
-
-                        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                            <View>
-                                <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
-                            </View>
-                            <TouchableOpacity activeOpacity={0.7} style={{ paddingLeft: 2, width: 50, height: 24, borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
-                                <View style={{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }} />
-                            </TouchableOpacity>
-                        </View>
-
-
+                <View style={styles.first_container}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
+                        <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
+                    </TouchableOpacity>
+                    <View style={styles.categories_text_container}>
+                        <Text style={styles.categories_text}>Tag Friends</Text>
                     </View>
                 </View>
 
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ width: responsiveWidth(90), }}>
-                        <ImageBackground
-                            style={[styles.img_background_content,
-                            {
-                                width: SCREENWIDTH * 0.9,
-                                height: SCREENWIDTH * 0.7,
-                            },
-                            ]}
-                            resizeMode="contain"
-                            source={HOME_FRAME}
-                        >
-                            <View style={styles.bg_content}>
-                                <View style={styles.child_bg}>
-                                    <View style={styles.second_childbg}>
-                                        {/* <View style={styles.third_childbg}>
-                                            <Image style={styles.child_bg_img} />
-                                            <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Lilibeth</Text>
-                                        </View> */}
-
-                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                            <View style={{ width: responsiveWidth(46), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(14), marginVertical: moderateVerticalScale(10), }}>
-                                                <Image style={{ width: responsiveWidth(15), height: responsiveHeight(7.5), resizeMode: "center" }} source={require("../../../assets/shark.png")} />
-                                                <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>Shark</Text>
-                                            </View>
-                                        </View>
-
-                                        <View style={styles.text_container}>
-                                            <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center" }}>
-                                                {/* Your text content here */}
-                                                DEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERS
-                                            </Text>
-                                        </View>
-
-
-
-                                    </View>
-                                </View>
-                            </View>
-                        </ImageBackground>
+                    <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
+                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
+                            <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
+                        </View>
+                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
                     </View>
                 </View>
 
-                <View style={{ justifyContent: "center", alignItems: "center", paddingBottom: responsiveWidth(35) }}>
-                    <SettingButton image={require("../../../assets/profilenext-icon.png")} />
+                <View style={{ paddingVertical: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
+                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@chrislee" userchoice="Tag" />
+                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@Cedrick101" userchoice="Tag" />
+                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@itsmeMike" userchoice="Tag" />
+                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@christine02" userchoice="Tag" />
+                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@deniseperkins" userchoice="Tag" />
+                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@nolanjames_1" userchoice="Tag" />
                 </View>
 
-
-
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), alignItems: "center" }}>
-                        <TouchableOpacity style={styles.first_view}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/456-img.png")} />
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>1.5k</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.second_view}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/1.5k-img.png")} />
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300", }}>456</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/message-icon.png")} />
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>1.1k</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.third_view}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>Share</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{ paddingTop: responsiveWidth(55) }}>
+                    <TouchableButton backgroundColor={TextColorGreen} color="#FFF" text="Tag" />
                 </View>
 
-                <TouchableButton backgroundColor={TextColorGreen} color="#FFF" text="Tag Friends" />
-
-            </View>
+            </ScrollView>
         </ImageBackground>
 
     )
-};
+}
 
+
+
+
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        height: "100%",
+        flex: 1,
+    },
+    first_container: {
+        paddingTop: responsiveWidth(6),
+        paddingVertical: moderateVerticalScale(12),
+        flexDirection: 'row',
+        marginLeft: "auto",
+        width: responsiveWidth(95),
+        alignItems: "center"
+    },
+    back_button: {
+        borderRadius: 10,
+        width: responsiveWidth(12.9),
+        height: responsiveHeight(6.3),
+        backgroundColor: "#395E66",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    left_arrow: {
+        width: responsiveWidth(5),
+        height: responsiveHeight(2.5),
+        resizeMode: "center"
+    },
+    categories_text_container: {
+        paddingHorizontal: moderateScale(20)
+    },
+    categories_text: {
+        color: "#E44173",
+        fontSize: responsiveFontSize(2.4),
+        fontWeight: "600",
+        letterSpacing: 0.36
+    },
+    text_Input_container: {
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: moderateVerticalScale(2)
+    },
+    text_input_child: {
+        flexDirection: 'row',
+        width: responsiveWidth(90),
+    },
+    input_field: {
+        paddingLeft: 30,
+        width: responsiveWidth(70),
+        backgroundColor: '#FFF',
+        color: "#000",
+        borderRadius: 50,
+    },
+    add_button: {
+        borderRadius: 50,
+        width: responsiveWidth(21.5),
+        height: responsiveHeight(7),
+        backgroundColor: '#395E66',
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    add_text: {
+        fontSize: responsiveFontSize(1.9),
+        color: "#FFF",
+        fontWeight: "500",
+        textAlign: "center",
+        letterSpacing: -0.2
+    }
+})
 
 
 export default TagFriends;
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: SecondaryColor,
-        flex: 1,
-    },
-    img: {
-        resizeMode: "center"
-    },
-    img_background_content: {
-        width: responsiveWidth(90),
-        height: responsiveHeight(32),
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    bg_content: {
-        backgroundColor: TextColorGreen,
-        justifyContent: "center",
-        alignItems: "center",
-        width: responsiveWidth(78),
-        height: responsiveHeight(29),
-        marginLeft: responsiveWidth(1),
-        marginTop: responsiveWidth(1.5)
-    },
-    child_bg: {
-        backgroundColor: pinkColor,
-        width: responsiveWidth(70),
-        height: responsiveHeight(27),
-        marginTop: responsiveWidth(0),
-        borderRadius: 18,
-    },
-
-    second_childbg: {
-        marginLeft: "auto",
-        width: responsiveWidth(67)
-    },
-
-    third_childbg: {
-        flexDirection: "row",
-        width: responsiveWidth(21),
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: moderateVerticalScale(8)
-    },
-    child_bg_img: {
-        width: responsiveWidth(6.25),
-        height: responsiveHeight(3.5),
-        resizeMode: "center",
-    },
-    text_container: {
-        paddingTop: responsiveWidth(4),
-    },
-    second_container: {
-        position: 'relative',
-        bottom: responsiveWidth(5),
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    sec_container_firstchild: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingHorizontal: moderateVerticalScale(50),
-        width: responsiveWidth(92),
-        marginLeft: responsiveWidth(1),
-        backgroundColor: "#E44173",
-        height: responsiveHeight(7.5),
-    },
-    third_container: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    fourth_container: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: responsiveWidth(36),
-    },
-
-    first_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    second_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    third_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    sophia_container: {
-        flexDirection: "row",
-        width: responsiveWidth(21),
-        justifyContent: "space-between",
-        alignItems: "center",
-        margin: responsiveWidth(2.8)
-    },
-    img_backgroung_content: {
-        // height: responsiveHeight(34),
-        justifyContent: "center",
-        alignItems: "center",
-        flex: 1,
-        // backgroundColor: "orange"
-    },
-});
-
-

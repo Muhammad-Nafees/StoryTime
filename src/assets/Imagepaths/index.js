@@ -247,6 +247,7 @@ export const Img_Paths = {
     HOME_FRAME: require("../../assets/home-frame.png"),
     BG_FRAME: require("../../assets/background-frame-img.png"),
     PLAYFLOW_FRAME: require("../../assets/border-frame.png"),
+    PROFILE_BG_FRAME: require("../../assets/profilebg-frame.png"),
 
     // BORDERS FRAME-------
     // PLAY FLOW SECTION IMAGES
@@ -254,6 +255,7 @@ export const Img_Paths = {
     EXTEND_STORY_IMG: require("../../assets/extend-story-img.png"),
     // PROFILE---------
     BG_CONTAINER: require("../../assets/bgcontainer.png"),
-    SETTINGS_ICON: require("../../assets/settingsicon.png")
+    SETTINGS_ICON: require("../../assets/settingsicon.png"),
+    BG_URL_PAGE: require("../../assets/bgurlpageProfile.png")
 
 };

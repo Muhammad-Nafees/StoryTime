@@ -22,7 +22,7 @@ const Profile = () => {
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
             <ScrollView>
                 <ImageBackground style={{ width: "100%", height: responsiveHeight(35) }} source={BG_CONTAINER}>
-                    <View style={{ flexDirection: "row", justifyContent: 'space-around', }}>
+                    <View style={{ flexDirection: "row", justifyContent: 'space-evenly', }}>
                         <View style={{ paddingTop: responsiveWidth(6) }}>
                             <BackButton onPress={() => navigation?.goBack()} />
                         </View>
@@ -30,8 +30,14 @@ const Profile = () => {
                             <Image style={{ width: 180, height: 200, resizeMode: "center" }} source={require("../../../assets/bgoliver.png")} />
                         </View>
                         <View style={{ paddingTop: responsiveWidth(6) }}>
+                            <TouchableOpacity style={styles.back_button}>
+                                <Image style={styles.left_arrow} source={require("../../../assets/incognito-icon.png")} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ paddingTop: responsiveWidth(6) }}>
                             <SettingButton image={SETTINGS_ICON} />
                         </View>
+
                     </View>
                 </ImageBackground>
 
@@ -82,5 +88,18 @@ const styles = StyleSheet.create({
     third_view: {
         justifyContent: "center",
         alignItems: "center"
+    },
+    back_button: {
+        borderRadius: 10,
+        width: responsiveWidth(12.9),
+        height: responsiveHeight(6.3),
+        backgroundColor: "rgba(57, 94, 102, 0.5)",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    left_arrow: {
+        width: responsiveWidth(6),
+        height: responsiveHeight(3),
+        resizeMode: "center"
     },
 }) 

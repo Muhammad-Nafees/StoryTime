@@ -20,6 +20,6 @@ const AddFriendUsers = ({ profileimage, text, userchoice }) => {
             </TouchableOpacity>
         </View>
     )
-}
+};
 
 export default AddFriendUsers;
