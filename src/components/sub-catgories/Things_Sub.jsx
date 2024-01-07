@@ -7,6 +7,7 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
 
 const Things_Sub = () => {
     const { LUDO_ICON,
@@ -26,7 +27,7 @@ const Things_Sub = () => {
         ANIMAL_BUTTERFLY,
         SAND_CASTLE_ICON,
         TREASURE_ICON } = Img_Paths;
-
+    const navigation = useNavigation();
     return (
         <>
             <View style={styles.first_container}>

@@ -26,8 +26,6 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
     const { FEED_CHAT } = NavigationsString;
     const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome)
 
-
-
     return (
         <View style={styles.container}>
             <View style={{ width: responsiveWidth(90), }}>
@@ -35,7 +33,10 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                     width: SCREENWIDTH * 0.9,
                     height: SCREENWIDTH * 0.7,
                 }]} resizeMode="contain" source={HOME_FRAME}>
-                    <View style={styles.bg_content}>
+                    <View style={[styles.bg_content, {
+                        height: SCREENHEIGHT * 0.29,
+                        height: SCREENWIDTH * 0.595,
+                    }]}>
                         {
                             type == "lilibeth" ?
                                 <>
@@ -74,9 +75,11 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                                                 <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{text}</Text>
                                             </View>
 
-                                            <View style={{ width: responsiveWidth(60), borderRadius: 10, height: responsiveHeight(7.5), justifyContent: "space-around", flexDirection: "row", backgroundColor: "#FFF", alignItems: "center", paddingHorizontal: moderateVerticalScale(14) }}>
-                                                <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>www.facebook.com/oli....</Text>
+                                            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+                                                <Image style={{ width: 30, height: 30, resizeMode: "center", }} source={require("../assets/profileurl_icon.png")} />
+                                                <Text style={{ color: "#FFF", fontWeight: "300", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(6) }}>Url</Text>
                                             </View>
+
                                         </View>
                                     </View>
                                 </>
@@ -155,6 +158,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
 };
 
 
+
 const styles = StyleSheet.create({
 
     container: {
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
-        height: responsiveHeight(28.6),
+        // height: responsiveHeight(28.6),
         marginLeft: responsiveWidth(1),
         marginTop: responsiveWidth(0.5),
     },
@@ -185,6 +189,14 @@ const styles = StyleSheet.create({
         height: responsiveHeight(28),
         marginTop: responsiveWidth(2),
         borderRadius: 18,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 
     second_childbg: {

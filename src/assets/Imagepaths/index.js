@@ -12,7 +12,8 @@ export const Img_Paths = {
     HOME_FRAME: require("../../assets/home-frame.png"),
     PLAY_STORY_IMG: require("../../assets/playstory-time.png"),
     HOME_FOCUSED: require("../../assets/home_focused.png"),
-
+    EYE_ICON: require("../../assets/eye-icon.png"),
+    NOT_EYE_ICON: require("../../assets/not-eye-icon.png"),
 
     // Categories File-----
 
@@ -256,6 +257,7 @@ export const Img_Paths = {
     // PROFILE---------
     BG_CONTAINER: require("../../assets/bgcontainer.png"),
     SETTINGS_ICON: require("../../assets/settingsicon.png"),
-    BG_URL_PAGE: require("../../assets/bgurlpageProfile.png")
+    BG_URL_PAGE: require("../../assets/bgurlpageProfile.png"),
+    BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
 
 };

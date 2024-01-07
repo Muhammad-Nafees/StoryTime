@@ -30,7 +30,7 @@ const Countries_Sub = () => {
         NEWZEALAND_ICON,
         INDIA_ICON,
         TREASURE_ICON } = Img_Paths;
-    const navigation = useNavigation()
+    const navigation = useNavigation();
     return (
         <>
             <View style={styles.first_container}>

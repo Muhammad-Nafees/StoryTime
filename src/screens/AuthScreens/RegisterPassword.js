@@ -75,7 +75,7 @@ const RegisterPassword = ({ route }) => {
             }}
         >
 
-            {({ values, errors, handleChange, handleSubmit, setFieldValue }) => (
+            {({ values, errors, handleChange, handleSubmit, setFieldValue, touched, setFieldTouched, isValid }) => (
                 <>
                     <View style={styles.container}>
 
@@ -97,27 +97,29 @@ const RegisterPassword = ({ route }) => {
                                         value={values.password}
                                         onChangeText={handleChange("password")}
                                         type="password"
+                                        onBlur={() => setFieldTouched("password")}
                                         placeholderText="Type here" />
                                 </View>
 
+                                <View style={{ height: responsiveHeight(3.2) }}>
+                                    {touched.password && errors.password &&
+                                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
+                                            <View style={{ flexDirection: "row", }}>
+                                                <View>
+                                                    <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                        <Path
+                                                            d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                        />
+                                                    </Svg>
+                                                </View>
+                                                <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                    <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
+                                                </View>
+                                            </View>
 
-                                {errors.password &&
-                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
-                                        <View style={{ flexDirection: "row", }}>
-                                            <View>
-                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                    <Path
-                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                    />
-                                                </Svg>
-                                            </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
-                                            </View>
                                         </View>
-
-                                    </View>
-                                }
+                                    }
+                                </View>
 
                                 {/* <View */}
                                 {/* Confirm Password------------ */}
@@ -130,11 +132,13 @@ const RegisterPassword = ({ route }) => {
                                         showPassword={showPassword}
                                         value={values.confirmPassword}
                                         onChangeText={handleChange("confirmPassword")}
+                                        onBlur={() => setFieldTouched("confirmPassword")}
                                         type="password" placeholderText="Type here" />
                                 </View>
 
 
-                                {errors.confirmPassword &&
+
+                                {touched.confirmPassword && errors.confirmPassword &&
                                     <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
                                         <View style={{ flexDirection: "row", }}>
                                             <View>
@@ -148,7 +152,6 @@ const RegisterPassword = ({ route }) => {
                                                 <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.confirmPassword}</Text>
                                             </View>
                                         </View>
-
                                     </View>
                                 }
 

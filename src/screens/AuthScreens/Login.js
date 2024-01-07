@@ -28,7 +28,8 @@ const Login = ({ route }) => {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEmail, setIsEmail] = useState("")
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
     const login_user = useSelector((state) => state?.authSlice?.user)
 
@@ -66,7 +67,7 @@ const Login = ({ route }) => {
 
                     if (responseData?.data) {
                         setIsLoading(false)
-                    }
+                    };
 
                     const statusCode = responseData?.statusCode;
                     const message = responseData?.message;
@@ -84,28 +85,26 @@ const Login = ({ route }) => {
                             position: "top",
                             visibilityTime: 2500
                         })
-                    }
+                    };
                     if (error) {
                         setIsLoading(false)
+                        setIsEmail(message)
                         Toast.show({
                             type: "error",
                             text1: message,
                             position: "top",
                             visibilityTime: 2500,
-
                         })
-                    }
+                    };
                     return responseData;
                 }
                 catch (err) {
                     console.log(err)
-                }
+                };
             }}
         >
 
-
-
-            {({ values, errors, handleChange, handleSubmit }) => (
+            {({ values, errors, handleChange, handleSubmit, setFieldTouched, isValid, touched }) => (
 
                 <View style={styles.container}>
                     <ScrollView>
@@ -113,48 +112,41 @@ const Login = ({ route }) => {
                             <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
                         </View>
 
-                        <View style={{ paddingBottom: moderateVerticalScale(12) }}>
+                        <View style={{ paddingBottom: moderateVerticalScale(6) }}>
                             <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                                 <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Email</Text>
                             </View>
+
                             <TextInputField
                                 value={values.email}
                                 onChangeText={handleChange('email')}
                                 placeholderText="Type here"
+                                onBlur={() => setFieldTouched("email")}
                             />
 
-                            {errors.email &&
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
-                                    <View style={{ flexDirection: "row", }}>
-                                        <View>
-                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                <Path
-                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                />
-                                            </Svg>
-                                        </View>
-                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
+                            <View style={{ height: responsiveHeight(3), }}>
+                                {touched.email && errors.email && (
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                        <View style={{ flexDirection: "row", }}>
+
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                            }
-
-
-
-                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
+                                )
+                                }
                             </View>
-                            <TextInputField
-                                value={values.password}
-                                onChangeText={handleChange('password')}
-                                onPress={toggleShowPassword}
-                                showPassword={showPassword}
-                                placeholderText="Type here"
-                                type="password"
-                            />
 
-                            {errors.password &&
+
+                            {/* {isEmail &&
                                 <View style={{ width: responsiveWidth(90), marginLeft: 'auto', }}>
                                     <View style={{ flexDirection: "row", }}>
                                         <View>
@@ -165,11 +157,47 @@ const Login = ({ route }) => {
                                             </Svg>
                                         </View>
                                         <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
+                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{isEmail}</Text>
                                         </View>
                                     </View>
                                 </View>
-                            }
+                            } */}
+
+                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingTop: responsiveWidth(1) }}>
+                                <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
+                            </View>
+
+                            <TextInputField
+                                value={values.password}
+                                onChangeText={handleChange('password')}
+                                onPress={toggleShowPassword}
+                                showPassword={showPassword}
+                                placeholderText="Type here"
+                                type="password"
+                                onBlur={() => setFieldTouched("password")}
+                            />
+
+                            <View style={{ height: responsiveHeight(3), }}>
+                                {touched.password && errors.password && (
+                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                        <View style={{ flexDirection: "row", }}>
+
+                                            <View>
+                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                    <Path
+                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                    />
+                                                </Svg>
+                                            </View>
+                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                )
+                                }
+                            </View>
+
                         </View>
 
                         <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>

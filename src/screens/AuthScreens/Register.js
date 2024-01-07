@@ -47,6 +47,7 @@ import {
   userinfoState,
 } from '../../../store/slices/userInfoState_Slice';
 import PhoneInput from 'react-native-phone-number-input';
+import UserNameExist from '../../components/UserNameExist';
 
 const Register = () => {
   const { CREATE_ACCOUNT_ICON } = Img_Paths;
@@ -59,6 +60,7 @@ const Register = () => {
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('')
+  const [isVisible, setVisible] = useState(false)
   const dispatch = useDispatch();
   const phoneInput = useRef(null);
 
@@ -79,10 +81,10 @@ const Register = () => {
     navigation.navigate(REGISTER_USER_INFO);
     dispatch(userinfoState(countryCode));
     dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-
   };
 
-  console.log("phoneinp---", phoneInput)
+
+  // console.log("phoneinp---", phoneInput)
 
   return (
     <Formik

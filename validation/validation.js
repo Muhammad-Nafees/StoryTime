@@ -19,12 +19,6 @@ export const validationSignUp = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Email is required')
-    .test('is-com', 'Must end with .com', value => {
-      if (value && !value.endsWith('.com')) {
-        return false;
-      }
-      return true;
-    })
     .matches(
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
       'Must be a valid email',
@@ -49,12 +43,6 @@ export const validationUserLogin = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Email is required')
-    .test('is-com', 'Must end with .com', value => {
-      if (value && !value.endsWith('.com')) {
-        return false;
-      }
-      return true;
-    })
     .matches(
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
       'Must be a valid email',
@@ -69,12 +57,6 @@ export const validationforgetEmail = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Email is required')
-    .test('is-com', 'Must end with .com', value => {
-      if (value && !value.endsWith('.com')) {
-        return false;
-      }
-      return true;
-    })
     .matches(
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
       'Must be a valid email',

@@ -11,28 +11,40 @@ import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import { CategoriesData } from '../../../../dummyData/DummyData';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../../../store/slices/getCategoriesSlice';
 
 
 const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
+    const state = useSelector((state) => state.getcategories);
+    console.log("state", state)
     const [randomItem, setRandomItem] = useState(null);
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getCategories())
+    }, [])
 
     const handleRandomClick = () => {
         const RandomInd = Math.floor(Math.random() * CategoriesData.length)
         setRandomItem(RandomInd)
-    }
+    };
 
     const handleStoryUser = (id) => {
         navigation.navigate("SubCategories", { id: id },)
-    }
+    };
+
+
 
     return (
 
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>
+
                 {/* Frame Content Close----------- */}
 
                 <View style={styles.first_container}>
@@ -41,6 +53,7 @@ const Categories = () => {
                         <Text style={styles.categories_text}>Categories</Text>
                     </View>
                 </View>
+
                 {/* IMainnputField-----*/}
                 <MainInputField placeholder="Username" />
                 {/* MainInputField----- */}
@@ -78,7 +91,6 @@ const Categories = () => {
                         </View>
                     ))}
                 </View>
-
 
                 <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>
                     <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>

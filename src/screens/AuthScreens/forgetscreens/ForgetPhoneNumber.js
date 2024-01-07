@@ -8,6 +8,7 @@ import {
     StyleSheet,
     Button,
     Alert,
+    ScrollView,
 } from 'react-native';
 import {
     FourthColor,
@@ -76,42 +77,45 @@ const ForgetPhoneNumber = () => {
             }) => (
 
                 <View style={styles.container}>
+                    <ScrollView>
 
-                    <View style={styles.img_container}>
-                        <Image style={styles.img_child} source={FORGET_BG_IMG} />
-                    </View>
-
-                    {/* Password------------ */}
-
-                    <View>
-                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                            <ForgetCustomInput
-                                value={values.phone}
-                                error={errors.phone}
-                                touched={touched.phone}
-                                handleChange={handleChange('phone')}
-                                setFieldValue={setFieldValue}
-                                phoneInput={phoneInput}
-                                setIsError={setIsError}
-                                setFieldError={setFieldError}
-                                setFormatText={setFormatText}
-                                isError={isError}
-                                setPhoneCode={setPhoneCode}
-                                setPhoneError={setPhoneError}
-                                isLoading={isLoading}
-                                handleSubmit={handleSubmit}
-                                isValid={isValid}
-                                dirty={dirty}
-                            />
+                        <View style={styles.img_container}>
+                            <Image style={styles.img_child} source={FORGET_BG_IMG} />
                         </View>
 
-                        {/* Confirm Password------------ */}
+                        {/* Password------------ */}
 
-                        {/* Next and Back------------ */}
+                        <View>
+                            <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                <ForgetCustomInput
+                                    value={values.phone}
+                                    error={errors.phone}
+                                    touched={touched.phone}
+                                    handleChange={handleChange('phone')}
+                                    setFieldValue={setFieldValue}
+                                    phoneInput={phoneInput}
+                                    setIsError={setIsError}
+                                    setFieldError={setFieldError}
+                                    setFormatText={setFormatText}
+                                    isError={isError}
+                                    setPhoneCode={setPhoneCode}
+                                    setPhoneError={setPhoneError}
+                                    isLoading={isLoading}
+                                    handleSubmit={handleSubmit}
+                                    isValid={isValid}
+                                    dirty={dirty}
+                                />
+                            </View>
 
-                    </View>
-                    <Toast />
+                            {/* Confirm Password------------ */}
+
+                            {/* Next and Back------------ */}
+
+                        </View>
+                        <Toast />
+                    </ScrollView>
                 </View>
+
             )}
         </Formik>
     );

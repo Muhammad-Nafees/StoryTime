@@ -9,6 +9,7 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
 
 const Travel_Sub = () => {
     const { LUDO_ICON,
@@ -20,6 +21,7 @@ const Travel_Sub = () => {
         SCOOTER_ICON,
         birthda
     } = Img_Paths;
+    const navigation = useNavigation();
 
     return (
         <>

@@ -5,6 +5,7 @@ import Register from "./slices/Register_Slice";
 import authSlice from "./slices/authSlice";
 import userinfostate from "./slices/userInfoState_Slice";
 import userinfocity from "./slices/userinfoCity";
+import getcategories from "./slices/getCategoriesSlice";
 
 const store = configureStore({
     reducer: {
@@ -13,8 +14,9 @@ const store = configureStore({
         Register: Register,
         authSlice: authSlice,
         userinfostate: userinfostate,
-        userinfocity: userinfocity
+        userinfocity: userinfocity,
+        getcategories: getcategories
     }
-})
+});
 
 export default store;

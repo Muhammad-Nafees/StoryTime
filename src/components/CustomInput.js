@@ -7,9 +7,11 @@ import { FourthColor, TextinputColor } from '../screens/Styles/Style';
 import _ from 'lodash';
 import { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
+import UserNameExist from './UserNameExist';
 
 const CustomInput = (props) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isVisible, setVisible] = useState(false)
 
   const handleInputFocus = () => {
     setIsFocused(true);
@@ -32,6 +34,7 @@ const CustomInput = (props) => {
         } else if (fieldName === 'email') {
           setFieldError('Email already exists');
         }
+
       } else {
         setFieldError('');
         setFieldError('');
@@ -124,9 +127,13 @@ const CustomInput = (props) => {
         </View>
       )}
 
+      {/* {isVisible && <UserNameExist setVisible={setVisible} isVisible={isVisible} text="Back" onPress={() => navigation.goBack()} />} */}
+
     </View>
   );
 };
+
+
 
 export default CustomInput;
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
+import React, { useRef } from 'react'
+import { Dimensions, Image, Animated, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -12,8 +12,6 @@ import TouchableButton from '../../../components/TouchableButton';
 
 
 
-
-
 const VoiceToTextProfile = () => {
 
     const { width, height } = Dimensions.get('window');
@@ -22,6 +20,15 @@ const VoiceToTextProfile = () => {
     const SCREENHEIGHT = Dimensions.get("window").height
     const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
     const navigation = useNavigation();
+
+    const animation = useRef(new Animated.Value(0)).current;
+
+    const startToggling = () => {
+        Animated.spring(animation, {
+            toValue: 1,
+            useNativeDriver: true,
+        })
+    };
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -37,7 +44,7 @@ const VoiceToTextProfile = () => {
                         <View>
                             <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
                                 <View style={{ justifyContent: "space-between", flexDirection: "row", alignItems: "center", width: responsiveWidth(46) }}>
-                                    <Text style={{ color: "#000", }}>Posted by:</Text>
+                                    <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9) }}>Posted by:</Text>
                                     <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(18), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
                                         <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>@chrislee</Text>
                                     </View>
@@ -47,12 +54,14 @@ const VoiceToTextProfile = () => {
                                     <View>
                                         <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.7} style={{ paddingLeft: 2, width: 50, height: 24, borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
+
+                                    {/* <View> */}
+                                    <TouchableOpacity activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
                                         <View style={{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }} />
                                     </TouchableOpacity>
+                                    {/* </View> */}
+
                                 </View>
-
-
                             </View>
                         </View>
 

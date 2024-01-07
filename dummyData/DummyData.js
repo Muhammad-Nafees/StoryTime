@@ -18,7 +18,7 @@ export const FlatListData = [
         text: "Chris",
     },
     {
-        img: require("../src/assets/fifth-img.png"),
+        img: require("../src/assets/third-img.png"),
         text: "Alma",
     },
 ];

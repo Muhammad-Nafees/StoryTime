@@ -11,64 +11,78 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { profile_oliverPierce } from '../../../../dummyData/DummyData';
 import ProfileOliverData from '../../../components/ProfileOliverData';
 import RecordingOliverData from '../../../components/RecordingOliverData';
+import IncognitoMode from '../../../components/IncognitoMode';
+import Svg, { Defs, Filter, Rect, FeFlood, FeColorMatrix, FeOffset, FeGaussianBlur, FeComposite, FeBlend } from 'react-native-svg';
 
 const Profile = () => {
+
     const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
     const navigation = useNavigation();
     const { FEED_CHAT, } = NavigationsString;
-    const [isContent, setIsContent] = useState(0)
+    const [isContent, setIsContent] = useState(0);
+    const [changeMode, setChangeMode] = useState(0);
+
+
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-            <ScrollView>
-                <ImageBackground style={{ width: "100%", height: responsiveHeight(35) }} source={BG_CONTAINER}>
-                    <View style={{ flexDirection: "row", justifyContent: 'space-evenly', }}>
-                        <View style={{ paddingTop: responsiveWidth(6) }}>
-                            <BackButton onPress={() => navigation?.goBack()} />
-                        </View>
-                        <View style={{ height: responsiveHeight(35), justifyContent: "center", alignItems: "center" }}>
-                            <Image style={{ width: 180, height: 200, resizeMode: "center" }} source={require("../../../assets/bgoliver.png")} />
-                        </View>
-                        <View style={{ paddingTop: responsiveWidth(6) }}>
-                            <TouchableOpacity style={styles.back_button}>
-                                <Image style={styles.left_arrow} source={require("../../../assets/incognito-icon.png")} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ paddingTop: responsiveWidth(6) }}>
-                            <SettingButton image={SETTINGS_ICON} />
-                        </View>
+        <>
+            {
+                changeMode === 0 ?
+                    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+                        <ScrollView>
+                            <ImageBackground style={{ width: "100%", height: responsiveHeight(35) }} source={BG_CONTAINER}>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-evenly', }}>
+                                    <View style={{ paddingTop: responsiveWidth(6) }}>
+                                        <BackButton onPress={() => navigation?.goBack()} />
+                                    </View>
+                                    <View style={{ height: responsiveHeight(35), justifyContent: "center", alignItems: "center" }}>
+                                        <Image style={{ width: 180, height: 200, resizeMode: "center" }} source={require("../../../assets/bgoliver.png")} />
 
+                                    </View>
+
+                                    {/* Incognito Icon----- */}
+
+                                    <View style={{ paddingTop: responsiveWidth(6) }}>
+                                        <TouchableOpacity onPress={() => setChangeMode(1)} style={[styles.back_button, { backgroundColor: changeMode == 1 ? TextColorGreen : "rgba(57, 94, 102, 0.5)" }]}>
+                                            <Image style={styles.left_arrow} source={require("../../../assets/incognito-icon.png")} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ paddingTop: responsiveWidth(6) }}>
+                                        <SettingButton image={SETTINGS_ICON} />
+                                    </View>
+                                </View>
+                            </ImageBackground>
+
+                            <View style={{ paddingVertical: moderateVerticalScale(10), justifyContent: "center", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", width: responsiveWidth(91), justifyContent: "space-around" }}>
+                                    <TouchableOpacity onPress={() => setIsContent(0)} style={{ justifyContent: "center", alignItems: "center", borderRadius: 10, paddingVertical: moderateVerticalScale(14), backgroundColor: isContent == 1 ? "rgba(0.2235, 0.3686, 0.4, 0.2)" : TextColorGreen, width: responsiveWidth(45) }}>
+                                        <Image style={{ width: 22, height: 22, resizeMode: "center" }} source={require("../../../assets/recordingProfile.png")} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => setIsContent(1)} style={{ borderRadius: 10, paddingVertical: moderateVerticalScale(14), justifyContent: "center", alignItems: "center", backgroundColor: isContent == 0 ? "rgba(0.2235, 0.3686, 0.4, 0.2)" : TextColorGreen, width: responsiveWidth(45) }}>
+                                        <Image style={{ width: 22, height: 22, resizeMode: "center" }} source={require("../../../assets/videoprofile.png")} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                            <View>
+                                {isContent === 0 ?
+                                    <ProfileOliverData />
+                                    :
+                                    <RecordingOliverData />
+                                }
+                            </View>
+
+                        </ScrollView>
                     </View>
-                </ImageBackground>
+                    :
+                    <IncognitoMode setChangeMode={setChangeMode} />
+            }
+        </>
 
-                <View style={{ paddingVertical: moderateVerticalScale(10), justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ flexDirection: "row", width: responsiveWidth(91), justifyContent: "space-around" }}>
-                        <TouchableOpacity onPress={() => setIsContent(0)} style={{ justifyContent: "center", alignItems: "center", borderRadius: 10, paddingVertical: moderateVerticalScale(14), backgroundColor: isContent == 1 ? "rgba(0.2235, 0.3686, 0.4, 0.2)" : TextColorGreen, width: responsiveWidth(45) }}>
-                            <Image style={{ width: 22, height: 22, resizeMode: "center" }} source={require("../../../assets/recordingProfile.png")} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setIsContent(1)} style={{ borderRadius: 10, paddingVertical: moderateVerticalScale(14), justifyContent: "center", alignItems: "center", backgroundColor: isContent == 0 ? "rgba(0.2235, 0.3686, 0.4, 0.2)" : TextColorGreen, width: responsiveWidth(45) }}>
-                            <Image style={{ width: 22, height: 22, resizeMode: "center" }} source={require("../../../assets/videoprofile.png")} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View>
-                    {isContent === 0 ?
-                        <ProfileOliverData />
-                        :
-                        <RecordingOliverData />
-                    }
-                </View>
-
-
-            </ScrollView>
-        </View>
     )
 };
 
 
-
-export default Profile;
 
 const styles = StyleSheet.create({
     fourth_container: {
@@ -93,7 +107,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: responsiveWidth(12.9),
         height: responsiveHeight(6.3),
-        backgroundColor: "rgba(57, 94, 102, 0.5)",
         justifyContent: "center",
         alignItems: "center"
     },
@@ -102,4 +115,6 @@ const styles = StyleSheet.create({
         height: responsiveHeight(3),
         resizeMode: "center"
     },
-}) 
+});
+
+export default Profile;

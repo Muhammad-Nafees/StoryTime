@@ -11,6 +11,7 @@ import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 import MainInputField from '../MainInputField'
+import { useNavigation } from '@react-navigation/native'
 
 const School_Sub = () => {
 
@@ -26,6 +27,7 @@ const School_Sub = () => {
         DESKCHAIR_ICON,
         PENCIL_ICON,
     } = Img_Paths;
+    const navigation = useNavigation();
 
     return (
         <>

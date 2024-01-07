@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, } from 'react-native'
 import React from 'react'
 import { profile_oliverPierce } from '../../dummyData/DummyData'
 import { SecondaryColor, TextColorGreen } from '../screens/Styles/Style'
@@ -8,7 +8,11 @@ import { useNavigation } from '@react-navigation/native'
 
 
 const ProfileOliverData = () => {
+
     const navigation = useNavigation();
+    const SCREENHEIGHT = Dimensions.get("window").height;
+    const SCREENWIDTH = Dimensions.get("window").width;
+
     return (
         <>
             {
@@ -18,7 +22,7 @@ const ProfileOliverData = () => {
                             <TouchableOpacity onPress={() => navigation?.navigate("profileStack", {
                                 screen: "VoiceToTextProfile"
                             })} style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
-                                <Image style={{ width: 30, height: 30, resizeMode: "center" }} source={item.image1} />
+                                <Image style={{ width: SCREENWIDTH * 0.1, height: SCREENHEIGHT * 0.1, resizeMode: "center" }} source={item.image1} />
                                 <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2) }}>{item.text1}</Text>
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(40), }}>

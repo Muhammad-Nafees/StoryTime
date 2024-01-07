@@ -144,7 +144,7 @@ const CustomInputForgetEmail = (props,) => {
                 )}
             </View>
 
-            <View>
+            <View style={{ paddingTop: responsiveWidth(80) }}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
                     <Text

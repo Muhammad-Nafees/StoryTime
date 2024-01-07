@@ -36,8 +36,8 @@ const Home = () => {
                         <View>
                             <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                         </View>
-                        <View style={{ flexDirection: 'row', }}>
 
+                        <View style={{ flexDirection: 'row', }}>
                             <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
                                 <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                             </TouchableOpacity>
@@ -51,6 +51,9 @@ const Home = () => {
                 </View>
 
 
+                <View style={{ width: responsiveWidth(94), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
+                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "900", }}>My Friend’s Story Time</Text>
+                </View>
 
                 <View style={styles.flatlist_container}>
                     <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
@@ -61,7 +64,7 @@ const Home = () => {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(10), }}>
+                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
                                             <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
                                         </TouchableOpacity>
                                         <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
@@ -110,7 +113,8 @@ const styles = StyleSheet.create({
     },
     pause_img: {
         resizeMode: "center"
-    }
+    },
+
 });
 
 export default Home;

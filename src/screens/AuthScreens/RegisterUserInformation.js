@@ -30,9 +30,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
-import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,8 +60,20 @@ const RegisterUserInformation = ({ }) => {
     const { height } = Dimensions.get('window');
     const namesArray = userdata?.data?.map(item => item.name);
     const namesCities = userdatacity?.data?.map((item) => item?.name)
+    const SCREENWIDTH = Dimensions.get("window").width
+    const SCREENHEIGHT = Dimensions.get("window").height
 
+    const units = {
+        vw: SCREENWIDTH.width / 100,
+        vh: SCREENHEIGHT.height / 100,
+    };
 
+    //       export const { width, height } = Dimensions.get('screen'); 
+    //  export const windowSizes = Dimensions.get('window'); 
+
+    //  export const sW = width, 
+    //    sH = height, 
+    //    wW = windowSizes.width, 
 
     return (
         <Formik
@@ -92,8 +102,6 @@ const RegisterUserInformation = ({ }) => {
                 handleSubmit,
                 setFieldValue,
                 handleChange,
-                isValid,
-                dirty,
             }) => (
 
                 <SafeAreaView style={{ flex: 1 }}>
@@ -108,7 +116,7 @@ const RegisterUserInformation = ({ }) => {
                         {/* City------------ */}
 
                         <View>
-                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                            <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
                                 <Text style={[styles.text, { color: FourthColor }]}>State</Text>
                             </View>
 
@@ -122,6 +130,9 @@ const RegisterUserInformation = ({ }) => {
                                 <SelectDropdown
                                     data={namesArray}
                                     defaultButtonText="Select here"
+                                    // searchPlaceHolder='grey'
+                                    // searchPlaceHolderColor='grey'
+
                                     buttonStyle={[
                                         {
                                             width: '80%',
@@ -132,13 +143,16 @@ const RegisterUserInformation = ({ }) => {
                                         },
                                         errors.state && { borderColor: 'red', borderWidth: 2 },
                                     ]}
-                                    rowTextStyle={{ textAlign: 'left', fontSize: responsiveFontSize(1.9) }}
-                                    rowStyle={{ paddingHorizontal: 8 }}
-                                    dropdownStyle={{ borderRadius: 10 }}
+                                    rowTextStyle={{ textAlign: 'left', fontSize: responsiveFontSize(1.9), }}
+                                    rowStyle={{ paddingHorizontal: 8, }}
+                                    dropdownStyle={{ borderRadius: 10, }}
                                     buttonTextStyle={{
                                         textAlign: 'left',
                                         fontSize: responsiveFontSize(1.9),
                                     }}
+                                    renderDropdownIcon={() => (
+                                        <Image style={{ width: 16, height: 16, resizeMode: "center" }} source={require("../../assets/bottom-icon.png")} />
+                                    )}
                                     onSelect={(selectedItem, index) => {
                                         setFieldValue('state', selectedItem);
                                         const cities = userdata?.data?.find((data) => data?.name === selectedItem)
@@ -163,7 +177,7 @@ const RegisterUserInformation = ({ }) => {
                             {/* State----------- */}
 
                             <View>
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
                                     <Text style={[styles.text, { color: FourthColor }]}>City</Text>
                                 </View>
                                 <View
@@ -175,6 +189,11 @@ const RegisterUserInformation = ({ }) => {
                                     <SelectDropdown
                                         data={namesCities}
                                         defaultButtonText="Select here"
+                                        // plac
+                                        // searchPlaceHolderColor={"red"}
+                                        renderDropdownIcon={() => (
+                                            <Image style={{ width: 16, height: 16, resizeMode: "center" }} source={require("../../assets/bottom-icon.png")} />
+                                        )}
                                         buttonStyle={[
                                             {
                                                 width: '80%',
@@ -185,7 +204,7 @@ const RegisterUserInformation = ({ }) => {
                                             },
                                             errors.state && { borderColor: 'red', borderWidth: 2 },
                                         ]}
-                                        rowTextStyle={{ textAlign: 'left', fontSize: 14 }}
+                                        rowTextStyle={{ textAlign: 'left', fontSize: responsiveFontSize(1.9) }}
                                         rowStyle={{ paddingHorizontal: 8 }}
                                         dropdownStyle={{ borderRadius: 10 }}
                                         buttonTextStyle={{
@@ -207,7 +226,7 @@ const RegisterUserInformation = ({ }) => {
                             </View>
 
                             <View>
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
+                                <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
                                     <Text style={[styles.text, { color: FourthColor }]}>
                                         Zip Code
                                     </Text>

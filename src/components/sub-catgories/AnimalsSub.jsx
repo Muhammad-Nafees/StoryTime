@@ -6,6 +6,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
+import { useNavigation } from '@react-navigation/native'
 
 const Animals_Sub = ({ }) => {
     const navigation = useNavigation()

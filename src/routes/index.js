@@ -12,7 +12,6 @@ const Routes = () => {
     const userToken = useSelector((state) => state?.authSlice?.accessToken);
 
     useEffect(() => {
-
         const authenticateUser = async () => {
 
             try {
