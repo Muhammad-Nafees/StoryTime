@@ -21,6 +21,9 @@ import School_Sub from '../../../components/sub-catgories/School_Sub';
 import Vehicles_Sub from '../../../components/sub-catgories/Vehicles_Sub';
 import Element_Sub from '../../../components/sub-catgories/Elements_Sub';
 import Countries_Sub from '../../../components/sub-catgories/Countries_Sub';
+import MainInputField from '../../../components/MainInputField';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../../../store/slices/getCategoriesSlice';
 
 
 
@@ -33,6 +36,16 @@ const SubCategories = ({ route }) => {
     const { PROFILE, ADD_PLAYERS } = NavigationsString;
     const navigation = useNavigation();
     const id = route?.params?.id;
+    const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON, } = Img_Paths;
+    const { PLAYER_SEQUENCE } = NavigationsString;
+    const { data, loading } = useSelector((state) => state.getcategories);
+    const SubcategoriesData = data?.data?.categories;
+    const dispatch = useDispatch();
+    console.log("id-", id)
+
+    useEffect(() => {
+        dispatch(getCategories(id))
+    }, []);
 
 
     return (
@@ -40,93 +53,76 @@ const SubCategories = ({ route }) => {
             <ScrollView>
 
                 {/* Things SubCategory */}
-                {
-                    id === 0 &&
-                    <>
-                        <Human_Sub />
-                    </>
-                }
+
+                <View style={styles.first_container}>
+                    <BackButton onPress={() => navigation.goBack()} />
+                    <View style={styles.categories_text_container}>
+                        <Text style={styles.categories_text}>Humans</Text>
+                    </View>
+                </View>
+
+                {/* IMainnputField-----*/}
+
+                <MainInputField placeholder="Username" />
+
+                {/* MainInputField----- */}
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                    {
+                        SubcategoriesData?.map((category) => (
+                            console.log("category", category),
+                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                    mainbgColor={TextColorGreen}
+                                    backgroundColor="rgba(199, 152, 97, 1)"
+                                />
+                            </View>
+                        ))
+                    }
+                </View>
+
+                {/* <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ width: responsiveWidth(90), flexDirection: 'row', alignItems: "center", flexWrap: "wrap" }}>
+                        <View style={{ marginHorizontal: moderateScale(10), }}>
+                            <Text style={{ color: "#393939", fontWeight: "500", textAlign: "center" }}>Players:</Text>
+                        </View>
+                        <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
+                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@chrislee</Text>
+                        </View>
+                        <View style={{ marginHorizontal: moderateVerticalScale(6), backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
+                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
+                        </View>
+                        <View style={{ marginTop: responsiveWidth(2), backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
+                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@its me Like</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ paddingTop: responsiveWidth(2), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
+                        <StoryUsers onPress={() => navigation.navigate(PLAYER_SEQUENCE)} images={TEACHER_ICON} text="Teacher" mainbgColor="#395E66" backgroundColor="#56B6A4" />
+                        <StoryUsers images={POLICE_ICON} text="Police" mainbgColor="#395E66" backgroundColor="#56B6A4" />
+                        <StoryUsers images={FAMILY_ICON} text="Family" mainbgColor="#395E66" backgroundColor="#56B6A4" />
+                    </View>
+                    <View style={{ paddingTop: responsiveWidth(3), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
+                        {/* <StoryUsers images={ANIMAL_OSTRICH} text="Ostrich" mainbgColor="#395E66" backgroundColor="#56B6A4" /> */}
+                {/* <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" />
+                    </View>
+                </View> */}
+
                 {/* Things SubCategory */}
 
-                {
-                    id === 1 &&
-                    <>
-                        <Things_Sub />
-                    </>
-                }
-                {/* Things SubCategory */}
-
-                {
-                    id === 2 &&
-                    <>
-                        <Animals_Sub />
-                    </>
-                }
-
-                {
-                    id === 3 &&
-                    <>
-                        <Places_Sub />
-                    </>
-                }
-
-                {
-                    id === 4 &&
-                    <>
-                        <Food_Sub />
-                    </>
-                }
-
-                {
-                    id === 5 &&
-                    <>
-                        <Work_Sub />
-                    </>
-                }
-
-                {
-                    id === 6 &&
-                    <>
-                        <Event_Sub />
-                    </>
-                }
-
-                {
-                    id === 7 &&
-                    <>
-                        <Travel_Sub />
-                    </>
-                }
-
-                {
-                    id === 8 &&
-                    <>
-                        <School_Sub />
-                    </>
-                }
-
-                {
-                    id === 9 &&
-                    <>
-                        <Vehicles_Sub />
-                    </>
-                }
-
-                {
-                    id === 10 &&
-                    <>
-                        <Element_Sub />
-                    </>
-                }
-
-                {
-                    id === 11 &&
-                    <>
-                        <Countries_Sub />
-                    </>
-                }
-
-
+                {/* {
+                        categoriesData?.map((category) => (
+                            console.log("category", category),
+                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                    mainbgColor={TextColorGreen}
+                                    backgroundColor="rgba(199, 152, 97, 1)"
+                                />
+                            </View>
+                        ))
+                    } */}
 
             </ScrollView>
         </ImageBackground>

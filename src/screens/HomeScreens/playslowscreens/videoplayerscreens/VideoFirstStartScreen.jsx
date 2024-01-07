@@ -6,6 +6,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../../../../constants/NavigationsString'
+import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
 
 
 
@@ -47,7 +48,7 @@ const VideoFirstStartScreen = () => {
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
                     </View>
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", letterSpacing: -5 }}>Dog</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>Dog</Text>
                     </View>
                 </View>
 
@@ -97,8 +98,8 @@ const styles = StyleSheet.create({
     start: {
         paddingVertical: moderateVerticalScale(8),
         color: PrimaryColor,
-        fontWeight: "800",
-        fontSize: responsiveFontSize(4.3)
+        fontSize: responsiveFontSize(4.8),
+        fontFamily: PassionOne_Regular.passionOne
     }
 
 

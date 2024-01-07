@@ -1,11 +1,12 @@
-import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
-import { Img_Paths } from '../../../assets/Imagepaths'
-import { PrimaryColor, TextColorGreen } from '../../Styles/Style'
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
-import { useNavigation } from '@react-navigation/native'
-import NavigationsString from '../../../constants/NavigationsString'
+import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useNavigation } from '@react-navigation/native';
+import NavigationsString from '../../../constants/NavigationsString';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 
@@ -15,9 +16,8 @@ const SecondPlayFlowScreen = () => {
     const navigation = useNavigation();
     // const SCREENWIDTH = Dimensions.get("window").width;
     const windowWidth = Dimensions.get('window').width;
-    const { THIRDSCREENPLAYFLOW, FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.95
-
+    const { FIRST_USER } = NavigationsString;
+    const squareSize = windowWidth * 0.95;
 
     return (
 
@@ -35,17 +35,19 @@ const SecondPlayFlowScreen = () => {
                     borderRadius: squareSize / 2,
                 }]}>
 
-                    <View>
+                    <View style={{ paddingBottom: moderateVerticalScale(30) }}>
                         <Image style={styles.img_dog} source={require("../../../assets/dog-playflow.png")} />
                     </View>
-                    <View style={{ paddingVertical: moderateVerticalScale(20), }}>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
+
+                    <View style={{ paddingVertical: moderateVerticalScale(10), }}>
+                        <Text style={{ fontSize: responsiveFontSize(3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
                     </View>
 
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", letterSpacing: -5 }}>Dog</Text>
+                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>Dog</Text>
                     </View>
                 </View>
+
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
                 <View>
@@ -85,17 +87,17 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        width: responsiveWidth(21),
-        height: responsiveHeight(10),
+        width: responsiveWidth(22),
+        height: responsiveHeight(11),
         resizeMode: "center"
     },
     start: {
-        paddingVertical: moderateVerticalScale(8),
+        paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
-        fontWeight: "800",
-        fontSize: responsiveFontSize(4.3)
+        // fontWeight: "800",
+        fontSize: responsiveFontSize(4.8),
+        fontFamily: PassionOne_Regular.passionOne,
     }
-
 
 })
 export default SecondPlayFlowScreen;

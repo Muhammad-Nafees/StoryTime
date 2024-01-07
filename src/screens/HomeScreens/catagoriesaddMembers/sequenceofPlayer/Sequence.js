@@ -16,15 +16,15 @@ const Sequence = () => {
     const { FIRSTSCREENPLAYFLOW } = NavigationsString;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const { SPLASH_SCREEN_IMAGE } = Img_Paths
-    const counters = useSelector((state) => state?.SequencePlayer?.counters)
-
+    const { SPLASH_SCREEN_IMAGE } = Img_Paths;
+    const counters = useSelector((state) => state?.SequencePlayer?.counters);
     const { LEFT_ARROW_IMG } = Img_Paths;
+
+
 
     const handlePress = (index) => {
 
         const newCounters = [...counters];
-        console.log("newcoun--", newCounters)
         if (newCounters[index] === null) {
             const existingValues = new Set(newCounters.filter(Boolean)); // Get existing values
             const availableValues = [1, 2, 3, 4,].filter((value) => !existingValues.has(value)); // Get available values
@@ -79,6 +79,7 @@ const Sequence = () => {
     ];
 
 
+
     return (
         <ImageBackground source={SPLASH_SCREEN_IMAGE} style={{ height: "100%", width: "100%" }}>
             <View style={{ justifyContent: "center", alignItems: "center", }}>
@@ -104,16 +105,20 @@ const Sequence = () => {
                     </TouchableOpacity>
                 </View>
 
-
-
                 <ScrollView style={{ height: responsiveHeight(72) }}>
                     {
                         sequenceplayers.map((item, index) => (
                             <>
-                                <View key={item.id} style={{ paddingVertical: 8, flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
-                                    <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor }}>
-                                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>
+                                <View key={item.id} style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+                                    <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ flexDirection: "row" }}>
+                                        <View style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor, flexDirection: 'row' }}>
+                                            <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>
+                                            <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
+                                                <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
+                                            </View>
+                                        </View>
                                     </TouchableOpacity>
+
                                     <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: item.backgroundColor, padding: moderateScale(14) }}>
                                         <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>{item.text}</Text>
                                     </View>

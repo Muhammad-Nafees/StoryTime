@@ -15,6 +15,7 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
+import { PassionOne_Regular } from '../../constants/GlobalFonts';
 
 
 
@@ -50,9 +51,8 @@ const Home = () => {
                     </View>
                 </View>
 
-
                 <View style={{ width: responsiveWidth(94), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "900", }}>My Friend’s Story Time</Text>
+                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3), fontFamily: PassionOne_Regular.passionOne }}>My Friend’s Story Time</Text>
                 </View>
 
                 <View style={styles.flatlist_container}>

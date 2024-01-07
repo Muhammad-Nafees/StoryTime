@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 import { get_Categories_Sub_Categories } from "../../services/api/categories";
 
-export const getCategories = createAsyncThunk("data/GetCategories", async () => {
+export const getCategories = createAsyncThunk("data/GetCategories", async id => {
 
     try {
-        const response = await get_Categories_Sub_Categories()
+        const response = await get_Categories_Sub_Categories(id);
         console.log("response---", response)
+        return response
 
     } catch (error) {
         console.log("error---", error)
     }
-
-})
+});
 
 const get_Categories = createSlice({
 
@@ -35,6 +35,7 @@ const get_Categories = createSlice({
         }),
 
             builder.addCase(getCategories.fulfilled, (state, { payload }) => {
+                state.data = payload
                 state.loading = false;
             }),
 
@@ -42,7 +43,6 @@ const get_Categories = createSlice({
                 state.error = true;
             })
     }
-
 })
 
 export default get_Categories.reducer;

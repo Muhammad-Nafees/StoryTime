@@ -1,16 +1,27 @@
-import { Base_Url, category_endpoint } from "../.."
+import { Base_Url, Subcategory, category_endpoint } from "../.."
 
 
+export const get_Categories_Sub_Categories = async (id = "") => {
 
-export const get_Categories_Sub_Categories = async () => {
+    let apiUrl = Base_Url + category_endpoint;
+    console.log("apiUrl-=-", apiUrl);
 
-    const responseData = await fetch(Base_Url + category_endpoint, {
+    if (id) {
+        apiUrl = apiUrl + Subcategory + id;
+        // console.log("apiUrlIf-=-", apiUrl)
+    } else {
+        apiUrl = Base_Url + category_endpoint;
+    };
+
+    const responseData = await fetch(apiUrl, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
         },
-    })
-    const response = await responseData.json()
-    console.log("res---", response)
+    });
+
+    const response = await responseData.json();
+    console.log("res---", response);
     return response;
-}
+
+};

@@ -10,6 +10,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
 
 
+
 const FirstScreenPlayFlow = () => {
 
     const { width, height } = Dimensions.get('window');
@@ -20,6 +21,7 @@ const FirstScreenPlayFlow = () => {
     const navigation = useNavigation();
 
     return (
+
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
                 {/* Back Button */}
@@ -40,7 +42,9 @@ const FirstScreenPlayFlow = () => {
 
 export default FirstScreenPlayFlow;
 
+
 const styles = StyleSheet.create({
+
     container: {
         backgroundColor: SecondaryColor,
         width: "100%",

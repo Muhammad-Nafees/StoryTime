@@ -19,15 +19,17 @@ const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
-    const state = useSelector((state) => state.getcategories);
-    console.log("state", state)
+    const { data, loading } = useSelector((state) => state.getcategories);
+    console.log("data", data?.data?.categories)
+    // console.log("loading", loading)
     const [randomItem, setRandomItem] = useState(null);
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const categoriesData = data?.data?.categories;
 
     useEffect(() => {
         dispatch(getCategories())
-    }, [])
+    }, []);
 
     const handleRandomClick = () => {
         const RandomInd = Math.floor(Math.random() * CategoriesData.length)
@@ -37,8 +39,6 @@ const Categories = () => {
     const handleStoryUser = (id) => {
         navigation.navigate("SubCategories", { id: id },)
     };
-
-
 
     return (
 
@@ -78,18 +78,24 @@ const Categories = () => {
 
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
 
-                    {randomItem === null && CategoriesData.map((category) => (
-                        <View key={category.id} style={{ backgroundColor: category.backgroundColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                            <StoryUsers onPress={() => handleStoryUser(category.id)} images={category.image} text={category.name} mainbgColor={category.backgroundColor} backgroundColor={category.subCategoryBGColor} />
-                        </View>
-                    ))}
+                    {
+                        categoriesData?.map((category) => (
+                            console.log("category", category),
+                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                    mainbgColor={TextColorGreen}
+                                    backgroundColor="rgba(199, 152, 97, 1)"
+                                />
+                            </View>
+                        ))
+                    }
 
-                    {randomItem !== null && CategoriesData.map((category) => (
+                    {/* {randomItem !== null && CategoriesData.map((category) => (
                         category.id === randomItem &&
                         <View key={category.id} style={{ backgroundColor: category.backgroundColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
                             <StoryUsers onPress={() => handleStoryUser(category.id)} images={category.image} text={category.name} mainbgColor={category.backgroundColor} backgroundColor={category.subCategoryBGColor} />
                         </View>
-                    ))}
+                    ))} */}
                 </View>
 
                 <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>

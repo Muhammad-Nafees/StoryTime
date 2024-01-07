@@ -8,3 +8,4 @@ export const stateandCity_endpoint = 'states';
 export const city_andpoint = 'cities';
 export const username_endpoint = 'user/check-availability';
 export const category_endpoint = 'category';
+export const Subcategory = '?parent=';

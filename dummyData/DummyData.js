@@ -59,7 +59,7 @@ export const CategoriesData = [
         id: 3
     },
     {
-        name: "Food",
+        name: "Foods",
         backgroundColor: TextColorGreen,
         image: require("../src/assets/Categories-image/fruit-icon.png"),
         subCategoryBGColor: "#8482D1",
@@ -91,7 +91,7 @@ export const CategoriesData = [
         id: 7
     },
     {
-        name: "School",
+        name: "Schools",
         backgroundColor: TextColorGreen,
         image: require("../src/assets/Categories-image/school-icon.png"),
         subCategoryBGColor: "#56C488",
