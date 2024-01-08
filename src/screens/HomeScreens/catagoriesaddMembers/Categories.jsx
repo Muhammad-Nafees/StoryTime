@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -13,6 +13,8 @@ import MainInputField from '../../../components/MainInputField';
 import { CategoriesData } from '../../../../dummyData/DummyData';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../../../../store/slices/getCategoriesSlice';
+import { randomCategory } from '../../../../store/slices/randomCategorySlice';
+
 
 
 const Categories = () => {
@@ -20,31 +22,37 @@ const Categories = () => {
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
     const { data, loading } = useSelector((state) => state.getcategories);
-    console.log("data", data?.data?.categories)
-    // console.log("loading", loading)
+    const randomRes = useSelector((state) => state?.randomCategory?.data);
     const [randomItem, setRandomItem] = useState(null);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const categoriesData = data?.data?.categories;
+    const RandomCateg = randomRes?.data?.categories;
 
-    useEffect(() => {
-        dispatch(getCategories())
-    }, []);
+    console.log("randomCat", RandomCateg);
+
+    // useEffect(() => {
+    // }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(getCategories());
+        }, [])
+    )
 
     const handleRandomClick = () => {
-        const RandomInd = Math.floor(Math.random() * CategoriesData.length)
-        setRandomItem(RandomInd)
+        dispatch(randomCategory())
+        // const RandomInd = Math.floor(Math.random() * CategoriesData.length)
+        // setRandomItem(RandomInd)
     };
 
     const handleStoryUser = (id) => {
-        navigation.navigate("SubCategories", { id: id },)
+        navigation.navigate("SubCategories", { id: id })
     };
 
     return (
-
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>
-
                 {/* Frame Content Close----------- */}
 
                 <View style={styles.first_container}>
@@ -78,7 +86,7 @@ const Categories = () => {
 
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
 
-                    {
+                    {loading ? <ActivityIndicator size={40} color={"#000"} /> :
                         categoriesData?.map((category) => (
                             console.log("category", category),
                             <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
@@ -89,14 +97,23 @@ const Categories = () => {
                             </View>
                         ))
                     }
-
-                    {/* {randomItem !== null && CategoriesData.map((category) => (
-                        category.id === randomItem &&
-                        <View key={category.id} style={{ backgroundColor: category.backgroundColor, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                            <StoryUsers onPress={() => handleStoryUser(category.id)} images={category.image} text={category.name} mainbgColor={category.backgroundColor} backgroundColor={category.subCategoryBGColor} />
-                        </View>
-                    ))} */}
                 </View>
+
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                    {
+                        RandomCateg?.map((category) => (
+                            console.log("category", category),
+                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                    mainbgColor={TextColorGreen}
+                                    backgroundColor="rgba(199, 152, 97, 1)"
+                                />
+                            </View>
+                        ))
+                    }
+                </View>
+
 
                 <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>
                     <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>

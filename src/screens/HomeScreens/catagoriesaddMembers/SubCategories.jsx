@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, Image, BackHandler, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -29,19 +29,18 @@ import { getCategories } from '../../../../store/slices/getCategoriesSlice';
 
 const SubCategories = ({ route }) => {
 
-    console.log("route---", route.params?.id)
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE } = Img_Paths;
-
     const { PROFILE, ADD_PLAYERS } = NavigationsString;
+
     const navigation = useNavigation();
     const id = route?.params?.id;
     const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON, } = Img_Paths;
     const { PLAYER_SEQUENCE } = NavigationsString;
     const { data, loading } = useSelector((state) => state.getcategories);
     const SubcategoriesData = data?.data?.categories;
+    const [isId, setIsId] = useState("")
     const dispatch = useDispatch();
-    console.log("id-", id)
 
     useEffect(() => {
         dispatch(getCategories(id))
@@ -67,17 +66,17 @@ const SubCategories = ({ route }) => {
 
                 {/* MainInputField----- */}
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
-
                     {
-                        SubcategoriesData?.map((category) => (
-                            console.log("category", category),
-                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
-                                    mainbgColor={TextColorGreen}
-                                    backgroundColor="rgba(199, 152, 97, 1)"
-                                />
-                            </View>
-                        ))
+                        loading ? <ActivityIndicator size={40} color={"#000"} /> :
+                            SubcategoriesData?.map((category) => (
+                                console.log("category", category),
+                                <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                    <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                        mainbgColor={TextColorGreen}
+                                        backgroundColor="rgba(199, 152, 97, 1)"
+                                    />
+                                </View>
+                            ))
                     }
                 </View>
 

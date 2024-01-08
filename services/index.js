@@ -9,3 +9,4 @@ export const city_andpoint = 'cities';
 export const username_endpoint = 'user/check-availability';
 export const category_endpoint = 'category';
 export const Subcategory = '?parent=';
+export const category_Random = "category/random";

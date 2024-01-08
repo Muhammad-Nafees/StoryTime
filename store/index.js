@@ -6,6 +6,7 @@ import authSlice from "./slices/authSlice";
 import userinfostate from "./slices/userInfoState_Slice";
 import userinfocity from "./slices/userinfoCity";
 import getcategories from "./slices/getCategoriesSlice";
+import randomCategory from "./slices/randomCategorySlice";
 
 const store = configureStore({
     reducer: {
@@ -15,7 +16,9 @@ const store = configureStore({
         authSlice: authSlice,
         userinfostate: userinfostate,
         userinfocity: userinfocity,
-        getcategories: getcategories
+        getcategories: getcategories,
+        randomCategory: randomCategory
+
     }
 });
 
