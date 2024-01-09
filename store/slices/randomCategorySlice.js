@@ -5,7 +5,7 @@ export const randomCategory = createAsyncThunk("data/randomCategory", async (id)
 
     try {
         const response = await get_Random(id);
-        console.log("response---", response)
+        console.log("responseRandomSlice---", response)
         return response;
 
     } catch (error) {

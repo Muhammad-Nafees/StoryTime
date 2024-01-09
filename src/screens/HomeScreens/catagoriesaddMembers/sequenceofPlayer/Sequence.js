@@ -109,7 +109,7 @@ const Sequence = () => {
                     {
                         sequenceplayers.map((item, index) => (
                             <>
-                                <View key={item.id} style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+                                <View key={index} style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
                                     <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ flexDirection: "row" }}>
                                         <View style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor, flexDirection: 'row' }}>
                                             <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>

@@ -23,27 +23,25 @@ const Categories = () => {
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
     const { data, loading } = useSelector((state) => state.getcategories);
     const randomRes = useSelector((state) => state?.randomCategory?.data);
-    const [randomItem, setRandomItem] = useState(null);
+    const loadingrandom = useSelector((state) => state?.randomCategory?.loading);
+    const [isRandom, setIsRandom] = useState(false);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const categoriesData = data?.data?.categories;
-    const RandomCateg = randomRes?.data?.categories;
+    const RandomCateg = randomRes?.data;
 
     console.log("randomCat", RandomCateg);
-
-    // useEffect(() => {
-    // }, [])
+    console.log("loadingrandom-=-", loadingrandom)
 
     useFocusEffect(
         useCallback(() => {
             dispatch(getCategories());
         }, [])
-    )
+    );
 
     const handleRandomClick = () => {
         dispatch(randomCategory())
-        // const RandomInd = Math.floor(Math.random() * CategoriesData.length)
-        // setRandomItem(RandomInd)
+        setIsRandom(true)
     };
 
     const handleStoryUser = (id) => {
@@ -84,34 +82,36 @@ const Categories = () => {
                     </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
 
-                    {loading ? <ActivityIndicator size={40} color={"#000"} /> :
-                        categoriesData?.map((category) => (
-                            console.log("category", category),
-                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
-                                    mainbgColor={TextColorGreen}
-                                    backgroundColor="rgba(199, 152, 97, 1)"
-                                />
-                            </View>
-                        ))
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+                    {
+                        loading ? <ActivityIndicator size={40} color={"#000"} /> : !isRandom ?
+                            categoriesData?.map((category) => (
+                                console.log("category", category),
+                                <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                    <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                        mainbgColor={TextColorGreen}
+                                        backgroundColor="rgba(199, 152, 97, 1)"
+                                    />
+                                </View>
+                            ))
+                            :
+                            Object.entries(randomRes).map(([key, category]) => (
+                                console.log("key---", key),
+                                <View key={key} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                    <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
+                                        <TouchableOpacity onPress={() => handleStoryUser(category?._id)} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "rgba(199, 152, 97, 1)", justifyContent: "center", alignItems: "center" }}>
+                                            <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={{ uri: "http://storytime.yameenyousuf.com/" + category?.image }} />
+                                        </TouchableOpacity>
+                                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{category?.name}</Text>
+                                    </View>
+                                </View>
+                            ))
+
                     }
                 </View>
 
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
-
-                    {
-                        RandomCateg?.map((category) => (
-                            console.log("category", category),
-                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
-                                    mainbgColor={TextColorGreen}
-                                    backgroundColor="rgba(199, 152, 97, 1)"
-                                />
-                            </View>
-                        ))
-                    }
                 </View>
 
 

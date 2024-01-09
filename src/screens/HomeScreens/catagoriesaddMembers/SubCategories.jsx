@@ -31,7 +31,6 @@ const SubCategories = ({ route }) => {
 
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE } = Img_Paths;
-    const { PROFILE, ADD_PLAYERS } = NavigationsString;
 
     const navigation = useNavigation();
     const id = route?.params?.id;
@@ -45,7 +44,6 @@ const SubCategories = ({ route }) => {
     useEffect(() => {
         dispatch(getCategories(id))
     }, []);
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -71,9 +69,9 @@ const SubCategories = ({ route }) => {
                             SubcategoriesData?.map((category) => (
                                 console.log("category", category),
                                 <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                    <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                                    <StoryUsers onPress={() => navigation.navigate(PLAYER_SEQUENCE)} images={category?.image} text={category?.name}
                                         mainbgColor={TextColorGreen}
-                                        backgroundColor="rgba(199, 152, 97, 1)"
+                                        backgroundColor="rgba(86, 182, 164, 1)"
                                     />
                                 </View>
                             ))
