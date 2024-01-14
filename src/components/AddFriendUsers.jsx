@@ -1,22 +1,44 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useId, useState } from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../assets/Imagepaths';
-import { moderateScale } from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { allusers, getAllUsers } from '../../store/slices/storyfeedslices/getAllUsersSlice';
+import { followandUnfollow, followunfollow } from '../../store/slices/storyfeedslices/followUnfollowSlice';
 
-const AddFriendUsers = ({ profileimage, text, userchoice }) => {
+const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowing }) => {
+    const dispatch = useDispatch();
+    const followState = useSelector((state) => state?.followandunfollow?.isFollowing)
+    // const [isFollowingstate, setIsFollowingState] = useState(false)
 
+    const userIdhandled = () => {
+        dispatch(followandUnfollow(userid))
+        // dispatch(followunfollow(isFollowing))
+        // setTimeout(() => {
+        //     dispatch(getAllUsers())
+        // }, timeout);
+        // console.log("userids======", userid)
+    };
+
+    // if (isFollowingstate == false) {
+    //     setIsFollowingState(isFollowingstate)
+    // } else {
+    //     setIsFollowingState(false)
+    // }
+
+    console.log("isFollowing=====", isFollowing)
 
     return (
-        <View style={{ paddingVertical: 3, flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
+        <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
             <View style={{ flexDirection: "row", width: responsiveWidth(31), justifyContent: "space-between", alignItems: "center" }}>
                 <Image style={{ width: responsiveWidth(11.5), height: responsiveHeight(5.5), resizeMode: "center" }} source={profileimage} />
-                <View style={{ paddingHorizontal: moderateScale(8), }}>
-                    <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>{text}</Text>
+                <View style={{ width: responsiveWidth(45), paddingLeft: moderateScale(8), }}>
+                    <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>{`@${username}`}</Text>
                 </View>
             </View>
-            <TouchableOpacity>
-                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{userchoice}</Text>
+            <TouchableOpacity onPress={() => userIdhandled()}>
+                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{!isFollowing ? userchoice : "Unfollow"}</Text>
             </TouchableOpacity>
         </View>
     )

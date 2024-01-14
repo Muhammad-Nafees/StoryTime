@@ -30,7 +30,7 @@ const Categories = () => {
     const categoriesData = data?.data?.categories;
     const RandomCateg = randomRes?.data;
 
-    console.log("randomCat", RandomCateg);
+    console.log("randomCat", RandomCateg?.name);
     console.log("loadingrandom-=-", loadingrandom)
 
     useFocusEffect(
@@ -82,7 +82,6 @@ const Categories = () => {
                     </View>
                 </View>
 
-
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
                     {
                         loading ? <ActivityIndicator size={40} color={"#000"} /> : !isRandom ?
@@ -96,24 +95,19 @@ const Categories = () => {
                                 </View>
                             ))
                             :
-                            Object.entries(randomRes).map(([key, category]) => (
-                                console.log("key---", key),
-                                <View key={key} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                    <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
-                                        <TouchableOpacity onPress={() => handleStoryUser(category?._id)} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "rgba(199, 152, 97, 1)", justifyContent: "center", alignItems: "center" }}>
-                                            <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={{ uri: "http://storytime.yameenyousuf.com/" + category?.image }} />
-                                        </TouchableOpacity>
-                                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{category?.name}</Text>
-                                    </View>
+                            <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
+                                    <TouchableOpacity onPress={() => handleStoryUser(RandomCateg?._id)} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "rgba(199, 152, 97, 1)", justifyContent: "center", alignItems: "center" }}>
+                                        <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={{ uri: "http://storytime.yameenyousuf.com/" + RandomCateg?.image }} />
+                                    </TouchableOpacity>
+                                    <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{RandomCateg?.name}</Text>
                                 </View>
-                            ))
-
+                            </View>
                     }
                 </View>
 
                 <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
                 </View>
-
 
                 <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>
                     <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>

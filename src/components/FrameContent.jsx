@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
@@ -6,25 +6,44 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../assets/Imagepaths'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
-import { useSelector } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { likedStoryFeed, likedstoryfeed } from '../../store/slices/storyfeedslices/likedStorySlice'
 import {
     Menu,
     MenuOptions,
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
+import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
+import { Base_Url } from '../../services'
+import { PassionOne_Regular } from '../constants/GlobalFonts'
 
 
+const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text, content, commentsCount, likes, dislikesCount, onPress, likedUserId, subCategoryname, subCategoryimage, username }) => {
 
-const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text }) => {
-
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height
-    const navigation = useNavigation()
-    const { HOME_FRAME, SHARE_BTN, } = Img_Paths
+    const SCREENWIDTH = Dimensions.get("window").width;
+    const SCREENHEIGHT = Dimensions.get("window").height;
+    const navigation = useNavigation();
+    const { HOME_FRAME, SHARE_BTN, } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
-    const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome)
+    const [likeCount, setLikeCount] = useState(0);
+    const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome);
+    const dispatch = useDispatch();
+
+    const storyLikedHandled = () => {
+        dispatch(likedStoryFeed(likedUserId))
+        if (likes > 0) {
+            return;
+        }
+        setLikeCount((prevLikeCount) => (prevLikeCount === 0 ? 1 : 0));
+    };
+
+    const commentsHandled = () => {
+        dispatch(likedstoryfeed(likedUserId))
+        navigation.navigate(FEED_CHAT)
+    }
+    // useEffect(() => {
+    // }, [])
 
     return (
         <View style={styles.container}>
@@ -38,58 +57,52 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                         height: SCREENWIDTH * 0.595,
                     }]}>
                         {
-                            type == "lilibeth" ?
-                                <>
-                                    <View style={styles.child_bg}>
-                                        <View style={styles.second_childbg}>
-                                            <View style={styles.third_childbg}>
-                                                <Image style={styles.child_bg_img} source={profileImage} />
-                                                <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Lilibeth</Text>
-                                            </View>
+                            type == "text" &&
+                            <>
+                                <View style={styles.child_bg}>
+                                    <View style={styles.second_childbg}>
+                                        <View style={styles.third_childbg}>
+                                            <Image style={styles.child_bg_img} source={profileImage} />
+                                            <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>{username}</Text>
+                                        </View>
 
-                                            <View style={styles.text_container}>
-                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
-                                                    {RecordingText}
-                                                </Text>
-                                            </View>
+                                        <View style={styles.text_container}>
+                                            <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
+                                                {content}
+                                            </Text>
                                         </View>
                                     </View>
-                                </>
-                                :
-                                null
+                                </View>
+                            </>
                         }
 
                         {
-                            type == "imp_bg_img" ?
-                                <>
-                                    <View style={styles.child_bg}>
-                                        <View style={styles.second_childbg}>
-                                            <View style={styles.third_childbg}>
-                                                <Image style={styles.child_bg_img} source={profileImage} />
-                                                <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Tiffany</Text>
-                                            </View>
-                                        </View>
-                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                            <View style={{ width: responsiveWidth(46), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(14), marginVertical: moderateVerticalScale(10), }}>
-                                                <Image style={{ width: responsiveWidth(15), height: responsiveHeight(7.5), resizeMode: "center" }} source={backgroundImage} />
-                                                <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{text}</Text>
-                                            </View>
-
-                                            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
-                                                <Image style={{ width: 30, height: 30, resizeMode: "center", }} source={require("../assets/profileurl_icon.png")} />
-                                                <Text style={{ color: "#FFF", fontWeight: "300", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(6) }}>Url</Text>
-                                            </View>
-
+                            type == "video" &&
+                            <>
+                                <View style={styles.child_bg}>
+                                    <View style={styles.second_childbg}>
+                                        <View style={styles.third_childbg}>
+                                            <Image style={styles.child_bg_img} source={profileImage} />
+                                            <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>Tiffany</Text>
                                         </View>
                                     </View>
-                                </>
-                                :
-                                null
+
+                                    <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                        <View style={{ width: responsiveWidth(46), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(10), height: responsiveHeight(7), marginVertical: moderateVerticalScale(10), }}>
+                                            <Image style={{ width: 30, height: 30, resizeMode: "contain", }} source={{ uri: "http://storytime.yameenyousuf.com/" + subCategoryimage }} />
+                                            <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2), fontFamily: PassionOne_Regular.passionOne }}>{subCategoryname}</Text>
+                                        </View>
+                                        <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+                                            <Image style={{ width: 30, height: 30, resizeMode: "center", }} source={require("../assets/profileurl_icon.png")} />
+                                            <Text style={{ color: "#FFF", fontWeight: "300", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(6) }}>Url</Text>
+                                        </View>
+                                    </View>
+
+                                </View>
+                            </>
                         }
                     </View>
                 </ImageBackground>
-
-
 
                 <View style={styles.second_container}>
                     <View style={styles.sec_container_firstchild}>
@@ -98,17 +111,17 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                             <View style={styles.third_container}>
                                 <View style={[styles.fourth_container]}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
-                                        <TouchableOpacity style={styles.first_view}>
+                                        <TouchableOpacity onPress={() => storyLikedHandled()} style={styles.first_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likes || likeCount}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.second_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>456</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{dislikesCount}</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
+                                        <TouchableOpacity onPress={commentsHandled} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.1k</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{commentsCount}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
@@ -142,8 +155,6 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text 
                                             </Menu>
                                         </TouchableOpacity>
                                     </View>
-
-
 
                                 </View>
                             </View>
@@ -206,10 +217,9 @@ const styles = StyleSheet.create({
 
     third_childbg: {
         flexDirection: "row",
-        width: responsiveWidth(21),
-        justifyContent: "space-between",
+        width: responsiveWidth(40),
         alignItems: "center",
-        paddingVertical: moderateVerticalScale(8)
+        paddingVertical: moderateVerticalScale(8),
     },
     child_bg_img: {
         width: responsiveWidth(6.25),

@@ -26,8 +26,8 @@ const RegisterPassword = ({ route }) => {
     const [isVisible, setVisible] = useState(false);
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
-    const firstuserData = useSelector((state) => state.Register.firstpageData);
-    const seconduserData = useSelector((state) => state.Register.secondpageData);
+    const firstuserData = useSelector((state) => state.authSlice.firstpageData);
+    const seconduserData = useSelector((state) => state.authSlice.secondpageData);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);

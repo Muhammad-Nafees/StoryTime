@@ -20,7 +20,7 @@ export const get_Categories_Sub_Categories = async (id) => {
     });
 
     const response = await responseData.json();
-    console.log("res---", response);
+    // console.log("res---", response);
     return response;
 };
 
@@ -28,11 +28,6 @@ export const get_Random = async (id) => {
 
     let apiUrl = Base_Url + category_Random;
 
-    // if (id) {
-    //     apiUrl = apiUrl + Subcategory + id;
-    // } else {
-    //     apiUrl = Base_Url + category_endpoint;
-    // };
 
     apiUrl = Base_Url + category_Random;
 
@@ -44,6 +39,6 @@ export const get_Random = async (id) => {
     });
 
     const response = await responseData.json();
-    console.log("res---", response);
+    // console.log("res---", response);
     return response;
 };

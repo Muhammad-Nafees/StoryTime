@@ -171,7 +171,7 @@ export const username_api = async (username, email, completePhone) => {
   if (completePhone !== '') {
     requestBody.completePhone = completePhone;
   }
-
+  console.log("requestbody=====", requestBody)
 
 
   const response = await fetch(Base_Url + username_endpoint, {

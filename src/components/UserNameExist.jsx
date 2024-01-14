@@ -12,7 +12,6 @@ import { Img_Paths } from '../assets/Imagepaths';
 const UserNameExist = ({ isVisible, setVisible, text, onPress }) => {
 
     const { BG_PLAYFLOW } = Img_Paths;
-
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             {/* <ImageBackground style={styles.container} source={BG_PLAYFLOW}> */}
@@ -31,7 +30,6 @@ const UserNameExist = ({ isVisible, setVisible, text, onPress }) => {
                             <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: "#FFF", }}>{text}</Text>
                         </TouchableOpacity>
                     </View>
-
 
                 </View>
             </View>

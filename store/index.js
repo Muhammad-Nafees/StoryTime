@@ -2,10 +2,16 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import SequencePlayer from "./slices/SequencePlayer";
 import RecordingData from "./slices/RecordingData";
 import authSlice from "./slices/authSlice";
-import userinfostate from "./slices/userInfoState_Slice";
-import userinfocity from "./slices/userinfoCity";
+import userinfostate from "./slices/authStatesandCity/userInfoState_Slice";
+import userinfocity from "./slices/authStatesandCity/userinfoCity";
 import getcategories from "./slices/getCategoriesSlice";
 import randomCategory from "./slices/randomCategorySlice";
+import storyfeed from "./slices/storyfeedslices/storyFeedSlice";
+import likedstoryfeed from "./slices/storyfeedslices/likedStorySlice";
+import getallUsers from "./slices/storyfeedslices/getAllUsersSlice";
+import followandunfollow from "./slices/storyfeedslices/followUnfollowSlice";
+import addComment from "./slices/storyfeedslices/addCommentSlice";
+import getComment from "./slices/storyfeedslices/getCommentsSlice";
 
 const store = configureStore({
     reducer: {
@@ -15,8 +21,13 @@ const store = configureStore({
         userinfostate: userinfostate,
         userinfocity: userinfocity,
         getcategories: getcategories,
-        randomCategory: randomCategory
-
+        randomCategory: randomCategory,
+        storyfeed: storyfeed,
+        likedstoryfeed: likedstoryfeed,
+        getallUsers: getallUsers,
+        followandunfollow: followandunfollow,
+        addComment: addComment,
+        getComment: getComment,
     }
 });
 

@@ -10,3 +10,11 @@ export const username_endpoint = 'user/check-availability';
 export const category_endpoint = 'category';
 export const Subcategory = '?parent=';
 export const category_Random = "category/random";
+export const storyfeed_Endpoint = "story";
+export const storyLikedfeed = "story/like/:"
+export const getAllUsers_endpoint = "user"
+export const follow_Unfollow_endpoint = "user/follow-toggle"
+export const addComment_endpoint = "story/add-comment"
+export const getComment_endpoint = "story/comments/:"
+
+// const url = `${Base_Url}story/comments/:${storyId}`;

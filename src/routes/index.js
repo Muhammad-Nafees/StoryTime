@@ -6,8 +6,8 @@ import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 
 
-const Routes = () => {
 
+const Routes = () => {
     const dispatch = useDispatch();
     const userToken = useSelector((state) => state?.authSlice?.accessToken);
 
@@ -24,7 +24,6 @@ const Routes = () => {
             }
         };
         authenticateUser();
-
     }, [dispatch]);
 
     return userToken ? <MainStack /> : <AuthStack />

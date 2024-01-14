@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions, TextInput, ActivityIndicator } from 'react-native'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
@@ -12,10 +12,10 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
-
-
-
-
+import { useDispatch, useSelector } from 'react-redux'
+import { addComment, addComments_func } from '../../store/slices/storyfeedslices/addCommentSlice'
+import { launchImageLibrary } from "react-native-image-picker"
+import { getComment } from '../../store/slices/storyfeedslices/getCommentsSlice'
 
 const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) => {
 
@@ -23,25 +23,69 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     const SCREENHEIGHT = Dimensions.get("window").height
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
+    const [media, setMedia] = useState("")
     const [inputText, setInputText] = useState('');
-    const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths
+    const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
+    const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
+    const story = useSelector((state) => state?.likedstoryfeed?.storyId)
+    // console.log("storyidComments===", storyId)
+    const loading = useSelector((state) => state?.getComment?.loading);
+    // console.log("getcommetnsUpate==========", getCommentsData);
+    const { width, height } = Dimensions.get('window');
+    const dispatch = useDispatch();
+    const storyId = story;
+    const text = inputText;
+
+    useEffect(() => {
+        dispatch(getComment(storyId))
+    }, []);
+
+    const optionsvideo = {
+        mediaType: 'photo',
+        multiple: true,
+    };
+
+    const imagePickerHadled = async () => {
+        launchImageLibrary(optionsvideo, response => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.assets && response.assets.length > 0) {
+                const file = {
+                    uri: response?.assets[0].uri,
+                    type: response?.assets[0].type,
+                    name: response?.assets[0].fileName
+                };
+                setMedia(file)
+                console.log("file=====", file)
+                console.log('Selected image URI: ', response.assets[0].uri);
+            }
+        });
+    };
+
+    const calculateTimeDifference = (updatedAt) => {
+        const currentTimestamp = new Date();
+        const updatedTimestamp = new Date(updatedAt);
+        const differenceInMilliseconds = currentTimestamp - updatedTimestamp;
+        const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
+        return `${differenceInMinutes}m ago`;
+    };
 
     const messageArrHandle = () => {
         if (inputText?.trim() !== "") {
-            const messageBoxarr = [inputText]
-            setMessages((prevVal) => [...prevVal, ...messageBoxarr])
+            dispatch(addComment({ story, text, media }))
+            // dispatch(getComment(storyId))
         }
         setInputText("")
-    }
+    };
 
     return (
-
         <View style={styles.container}>
             <View style={{ width: responsiveWidth(90), }}>
                 <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={HOME_FRAME}>
                     <View style={styles.bg_content}>
-
                         {
                             type == "lilibeth" ?
                                 <>
@@ -81,11 +125,11 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                 </ImageBackground>
 
                 {/* Comments Content */}
+
                 <View style={{ position: 'relative', bottom: responsiveWidth(5), right: moderateScale(6), }}>
                     <View style={{ width: responsiveWidth(92), marginLeft: responsiveWidth(1), backgroundColor: "#E44173", height: responsiveHeight(41), justifyContent: "center", alignItems: "center", }}>
 
                         <View style={styles.third_container}>
-
                             <View style={[styles.fourth_container]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                     <TouchableOpacity style={styles.first_view}>
@@ -135,64 +179,46 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                             </View>
                         </View>
 
-
-
                         <View style={{ width: responsiveWidth(89), backgroundColor: "#FFF", height: responsiveHeight(32), }}>
                             <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center", height: responsiveHeight(25.5) }}>
                                 <ScrollView nestedScrollEnabled={true}>
                                     {
-                                        messages?.map((item, index) => {
-                                            return (
+                                        !loading ?
+                                            getCommentsData?.map((item, index) => (
+                                                console.log("item==", item?.updatedAt),
                                                 <>
                                                     <View key={index} style={{ width: responsiveWidth(83), flexDirection: 'row', justifyContent: "space-between" }}>
                                                         <View style={{ justifyContent: "center", alignItems: "center" }}>
                                                             <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
                                                         </View>
                                                         <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
-                                                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Frank Darwin</Text>
-                                                            <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>{item}</Text>
+                                                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>{`${item?.user?.firstName} ${item?.user?.lastName}`}</Text>
+                                                            <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>{item?.text}</Text>
                                                         </View>
                                                     </View>
 
                                                     <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
                                                         <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(67), }}>
-                                                            <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>2m ago</Text>
+                                                            <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>{calculateTimeDifference(item?.updatedAt)}</Text>
                                                             <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                                                         </View>
                                                     </View>
                                                 </>
-                                            )
-                                        })
+                                            ))
+                                            :
+                                            <View style={{ height: height / 2, alignItems: "center" }}>
+                                                <ActivityIndicator size={40} color={'#000'} />
+                                            </View>
                                     }
                                 </ScrollView>
                             </View>
-
-                            {/* 
-                            <View style={{ paddingVertical: moderateVerticalScale(4), justifyContent: 'space-between', alignItems: 'flex-end', width: responsiveWidth(85) }}>
-                                <View style={{ width: responsiveWidth(67), flexDirection: 'row', justifyContent: "space-between" }}>
-                                    <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                        <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
-                                    </View>
-                                    <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(53), paddingVertical: moderateVerticalScale(6), paddingHorizontal: 10 }}>
-                                        <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>Elisabeth Perkins</Text>
-                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>Let’s set up another session!</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-                                    <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(55), }}>
-                                        <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>2m ago</Text>
-                                        <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
-                                    </View>
-                                </View>
-                            </View> */}
 
                             {/* TextInput Content------- */}
 
                             <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center", }}>
                                 <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(78), height: responsiveHeight(6) }}>
                                     <TextInput placeholder="Message" value={inputText} onChangeText={(val) => setInputText(val)} placeholderTextColor={"#000"} style={{ width: responsiveWidth(70), paddingLeft: 12, color: "#000", }} />
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={imagePickerHadled}>
                                         <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), resizeMode: "center", }} source={require("../assets/image-icon.png")} />
                                     </TouchableOpacity>
                                 </View>
@@ -246,7 +272,6 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         width: responsiveWidth(67)
     },
-
     third_childbg: {
         flexDirection: "row",
         width: responsiveWidth(21),

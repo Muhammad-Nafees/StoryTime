@@ -8,7 +8,10 @@ const initialState = {
     accessToken: null,
     refreshToken: null,
     forgetAccesstoken: null,
-    randomNumber: ""
+    randomNumber: "",
+    firstpageData: [],
+    secondpageData: [],
+    thirdpageData: [],
 };
 
 const authSlice = createSlice({
@@ -37,10 +40,27 @@ const authSlice = createSlice({
         },
         setRandomNumber: (state, action) => {
             state.randomNumber = action.payload
-        }
+        },
+        register: (state, action) => {
+            // state.token = action.payload;
+            state.firstpageData = action.payload
+            console.log("register---data", state.firstpageData);
+        },
+        registeruser_city: (state, action) => {
+            state.secondpageData = action.payload;
+
+            console.log("registercity", state.secondpageData)
+        },
+        registeruser_password: (state, action) => {
+            // state.token = action.payload;
+            state.thirdpageData = action.payload;
+            console.log("registerpassword", state.thirdpageData)
+
+        },
 
     },
 });
+
 
 
 export const {
@@ -54,7 +74,11 @@ export const {
     logout,
     login,
     forgetResetToken,
-    setRandomNumber
+    setRandomNumber,
+    register,
+    registeruser_city,
+
+    registeruser_password
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
-import { stateandcity_api, userandcity_api } from "../../services/api/auth_mdule/auth";
+import { stateandcity_api, userandcity_api } from "../../../services/api/auth_mdule/auth";
 
 export const userinfocity = createAsyncThunk("userinfocity/userinfo", async (statesinfo, thunkApi) => {
 

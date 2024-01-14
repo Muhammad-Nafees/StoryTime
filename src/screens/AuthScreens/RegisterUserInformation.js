@@ -34,11 +34,8 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    register,
-    registeruser_city,
-} from '../../../store/slices/Register_Slice';
-import { userinfocity } from '../../../store/slices/userinfoCity';
+import { registeruser_city, } from '../../../store/slices/authSlice';
+import { userinfocity } from '../../../store/slices/authStatesandCity/userinfoCity';
 import { Path, Svg } from 'react-native-svg';
 import { Formik } from 'formik';
 import { zipCodeValidation } from '../../../validation/validation';
