@@ -27,9 +27,10 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text,
     const { HOME_FRAME, SHARE_BTN, } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
     const [likeCount, setLikeCount] = useState(0);
-    const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome);
+    // const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome);
+    const LikedData = useSelector((state) => state?.likedstoryfeed?.data);
     const dispatch = useDispatch();
-
+    console.log("likedData====", LikedData)
     const storyLikedHandled = () => {
         dispatch(likedStoryFeed(likedUserId))
         if (likes > 0) {
@@ -42,6 +43,7 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text,
         dispatch(likedstoryfeed(likedUserId))
         navigation.navigate(FEED_CHAT)
     }
+
     // useEffect(() => {
     // }, [])
 

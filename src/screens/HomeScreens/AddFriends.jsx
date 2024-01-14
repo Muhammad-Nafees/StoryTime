@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
 import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -11,6 +11,7 @@ import StoryUsers from '../../components/StoryUsers';
 import AddFriendUsers from '../../components/AddFriendUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../../store/slices/storyfeedslices/getAllUsersSlice';
+import { getAllUsers_api } from '../../../services/api/storyfeed';
 
 
 const AddFiends = () => {
@@ -20,35 +21,68 @@ const AddFiends = () => {
     const navigation = useNavigation();
     const allusersState = useSelector((state) => state?.getallUsers)
     const isFollowing = useSelector((state) => state?.followandunfollow?.isFollowing)
-    const loading = useSelector((state) => state?.getallUsers?.loading);
+    // const loading = useSelector((state) => state?.getallUsers?.loading);
+    const [responseUsers, setResponseUsers] = useState()
     // console.log("FollowandUnfollow=====", isFollowing)
-    const AddFriensArr = allusersState?.data?.data?.users;
+    // const AddFriensArr = allusersState?.data?.data?.users;
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false)
     const [limit, setLimit] = useState(15);
     const [filteredData, setFilteredData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    console.log("prevPage==", allusersState?.data?.data?.pagination?.hasPrevPage)
+    // console.log("prevPage==", allusersState?.data?.data?.pagination?.hasPrevPage)
     console.log("LIMITcheckNum====", limit)
-    const prevPage = allusersState?.data?.data?.pagination?.hasPrevPage;
+    // const prevPage = allusersState?.data?.data?.pagination?.hasPrevPage;
 
-    const handleLoadMore = () => {
-        console.log("prevpage===", prevPage)
-        // if (prevPage) {
-        //     setLimit((prevlimit) => prevlimit + 5);
-        // }
-        if (limit > 100) {
-            setPage(2)
-            setLimit(0)
-            setLimit((prevlimit) => prevlimit + 5);
+    const handleLoadMore = async () => {
+        try {
+            setIsLoading(true);
+            setLimit((prevLimit) => prevLimit + 10);
+            console.log("limit====adad", limit);
+            if (limit > 100) {
+                setPage(page + 1);
+                setLimit(15); // Reset the limit to its initial value
+            }
+
+            const responseDataload = await getAllUsers_api({ pagination: page, limit: limit });
+            const nextpage = responseDataload?.data?.pagination?.hasPrevPage
+            // const pagination = responseData?.data;
+            console.log("paginatopn========", responseDataload?.data?.pagination?.hasNextPage)
+            // setResponseUsers();
+            setIsLoading(false);
+            // console.log("res=====", dataUsers);
+        } catch (error) {
+            console.log("error===", error);
+            setIsLoading(false);
         }
-        dispatch(getAllUsers({ pagination: page, limit: limit }))
-        setLimit((prevlimit) => prevlimit + 5);
     };
 
-    useEffect(() => {
-        dispatch(getAllUsers({ pagination: page, limit }))
-    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchUsers = async () => {
+                setIsLoading(true)
+                try {
+                    const responseData = await getAllUsers_api({ pagination: 1, limit: limit });
+                    const dataUsers = responseData?.data?.users;
+                    setResponseUsers(responseData?.data?.users)
+                    setIsLoading(false)
+                    console.log("res=====", responseData?.data?.users);
+                    return responseData;
+                } catch (error) {
+                    console.log("error===", error)
+                }
+                setIsLoading(false);
+            }
+            fetchUsers()
+        }, [limit])
+    )
+
+
+    // useEffect(() => {
+    //     dispatch(getAllUsers({ pagination: page, limit }))
+    // }, []);
 
     // const handleLike = (id) => {
     //     const temp = JSON.parse(JSON.stringify(data));// home page data 
@@ -59,7 +93,7 @@ const AddFiends = () => {
     //     }
 
     const filterUserData = () => {
-        const filteredData = AddFriensArr?.filter((item) => {
+        const filteredData = responseUsers?.filter((item) => {
             return item?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase())
         })
         setFilteredData(filteredData)
@@ -94,7 +128,7 @@ const AddFiends = () => {
                 {
                     <FlatList
                         scrollEnabled={true}
-                        data={searchQuery ? filteredData : AddFriensArr}
+                        data={searchQuery ? filteredData : responseUsers}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                             console.log("AddFriendsItem=====", item?.username),
@@ -103,7 +137,7 @@ const AddFiends = () => {
                             />
                         )}
                         ListFooterComponent={() => {
-                            if (!loading) {
+                            if (isLoading) {
                                 return (
                                     <View style={{ alignItems: 'center', height: height / 4, }}>
                                         <ActivityIndicator size={40} color={'#000'} />

@@ -32,6 +32,9 @@ import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { registeruser } from '../../../store/slices/Register_Slice';
+import { register } from '../../../store/slices/authSlice';
+
 import CustomInput from '../../components/CustomInput';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -39,12 +42,10 @@ import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
 import Svg, { Path } from 'react-native-svg';
 import Toast from 'react-native-toast-message';
-import { registeruser_city, register, registeruser_password } from '../../../store/slices/authSlice';
 import CustomPhoneInput from '../../components/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
 import PhoneInput from 'react-native-phone-number-input';
 import UserNameExist from '../../components/UserNameExist';
-import { username_api } from '../../../services/api/auth_mdule/auth';
 
 const Register = () => {
   const { CREATE_ACCOUNT_ICON } = Img_Paths;
@@ -61,33 +62,25 @@ const Register = () => {
   const dispatch = useDispatch();
   const phoneInput = useRef(null);
 
+
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
 
-  const handleFormSubmit = async (values) => {
-
-    try {
-      const responseData = await username_api(values.username);
-      console.log("resData=====", responseData)
-      if (responseData?.statusCode !== 200) {
-        setVisible(true)
-      }
-    } catch (error) {
-      console.log("err", error)
-    }
-
+  const handleFormSubmit = async values => {
     setIsLoading(true);
     setIsLoading(false);
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+    console.log("valid-=", checkValid)
 
-    if (values.username !== '' || emailError !== '' || checkValid === false) {
+    if (usernameError !== '' || emailError !== '' || phoneError === 'completePhone available' || checkValid === false) {
       return;
     }
+
     navigation.navigate(REGISTER_USER_INFO);
     dispatch(userinfoState(countryCode));
     dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-
   };
+
 
   // console.log("phoneinp---", phoneInput)
 
@@ -134,8 +127,6 @@ const Register = () => {
                   touched={touched.username}
                   initialTouched={true}
                   setFieldError={setUsernameError}
-                  isVisible={isVisible}
-                  setVisible={setVisible}
                   fieldName="username"
                   handleChange={text => setFieldValue('username', text)}
                 />

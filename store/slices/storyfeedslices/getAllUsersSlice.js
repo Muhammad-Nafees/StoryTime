@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 import { getAllUsers_api } from "../../../services/api/storyfeed";
 
 export const getAllUsers = createAsyncThunk("data/getAllUsers", async (pagination, limit) => {
-    console.log("pagination=====", pagination)
-    console.log("limit=====", limit)
-    try {
-        const response = await getAllUsers_api(pagination, limit);
-        return response;
-    } catch (error) {
-        console.log("error---", error)
-    }
+    // console.log("pagination=====", pagination)
+    // console.log("limit=====", limit)
+    // try {
+    //     const response = await getAllUsers_api(pagination, limit);
+    //     return response;
+    // } catch (error) {
+    //     console.log("error---", error)
+    // }
 
 });
 

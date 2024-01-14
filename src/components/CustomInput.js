@@ -8,13 +8,11 @@ import _ from 'lodash';
 import { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
-import { useNavigation } from '@react-navigation/native';
-
 
 const CustomInput = (props) => {
-
   const [isFocused, setIsFocused] = useState(false);
-  const navigation = useNavigation();
+  const [isVisible, setVisible] = useState(false)
+
   const handleInputFocus = () => {
     setIsFocused(true);
   };
@@ -23,23 +21,30 @@ const CustomInput = (props) => {
     setIsFocused(false);
   };
 
-  const debouncedApiCall = useRef(_.debounce(async (value, setFieldError, fieldName) => {
-    console.log("FldNames==", fieldName)
-    const response = await username_api(fieldName === 'email' ? value : ''
-    );
+  const debouncedApiCall = useRef(
+    _.debounce(async (value, setFieldError, fieldName) => {
+      const response = await username_api(
+        fieldName === 'username' ? value : '',
+        fieldName === 'email' ? value : ''
+      );
 
-    if (response?.statusCode !== 200) {
-      if (fieldName === 'email') {
-        // setVisible(true)
-        setFieldError('Email already exists');
+      if (response?.statusCode !== 200) {
+        if (fieldName === 'username') {
+          setFieldError('Username already exists');
+        } else if (fieldName === 'email') {
+          setFieldError('Email already exists');
+        }
+
+      } else {
+        setFieldError('');
+        setFieldError('');
       }
-    }
-  }, 850)
+    }, 850)
   ).current;
 
   const handleChangeText = async (text, fieldName) => {
     props.handleChange(text);
-    if (fieldName === 'email' && text !== '') {
+    if ((fieldName === 'username' && text !== '') || (fieldName === 'email' && text !== '')) {
       debouncedApiCall(text, props.setFieldError, fieldName);
     }
   };
@@ -90,7 +95,7 @@ const CustomInput = (props) => {
         />
       </View>
 
-      {/* {!props.error && props.customError && (
+      {!props.error && props.customError && (
         <View
           style={[
             {
@@ -104,7 +109,7 @@ const CustomInput = (props) => {
           <Icon name="alert-circle" size={22} color="red" />
           <Text style={[{ color: 'red' }]}>{props.customError}</Text>
         </View>
-      )} */}
+      )}
 
       {isFocused && props.error && (
         <View
@@ -122,11 +127,13 @@ const CustomInput = (props) => {
         </View>
       )}
 
-      {props.isVisible && <UserNameExist setVisible={props.setVisible} isVisible={props.isVisible} text="Back" onPress={() => props.setVisible(false)} />}
+      {/* {isVisible && <UserNameExist setVisible={setVisible} isVisible={isVisible} text="Back" onPress={() => navigation.goBack()} />} */}
 
     </View>
   );
 };
+
+
 
 export default CustomInput;
 
