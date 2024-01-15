@@ -60,6 +60,7 @@ const RegisterUserInformation = ({ }) => {
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
 
+    console.log("namesarray===", namesArray)
     const units = {
         vw: SCREENWIDTH.width / 100,
         vh: SCREENHEIGHT.height / 100,

@@ -70,9 +70,9 @@ const Register = () => {
   const countryCode = phoneInput?.current?.state?.countryCode;
 
   const handleFormSubmit = async (values) => {
-
+    dispatch(userinfoState(countryCode));
+    dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
     try {
-
       const responseData = await username_api({ username: values?.username })
       console.log("res==Data", responseData.statusCode)
       setStatusCodeusername(responseData.statusCode)
@@ -93,9 +93,6 @@ const Register = () => {
     setIsLoading(false);
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
     console.log("valid-=", checkValid)
-    dispatch(userinfoState(countryCode));
-    dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-
   };
 
   // console.log("phoneinp---", phoneInput)
@@ -186,7 +183,6 @@ const Register = () => {
                   isError={isError}
                   setPhoneCode={setPhoneCode}
                   setPhoneError={setPhoneError}
-
                   setphoneNumberStatusCode={setphoneNumberStatusCode}
                 />
 

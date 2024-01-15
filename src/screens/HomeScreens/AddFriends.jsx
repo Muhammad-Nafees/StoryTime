@@ -21,19 +21,15 @@ const AddFiends = () => {
     const navigation = useNavigation();
     const allusersState = useSelector((state) => state?.getallUsers)
     const isFollowing = useSelector((state) => state?.followandunfollow?.isFollowing)
-    // const loading = useSelector((state) => state?.getallUsers?.loading);
     const [responseUsers, setResponseUsers] = useState();
-    // console.log("FollowandUnfollow=====", isFollowing)
-    // const AddFriensArr = allusersState?.data?.data?.users;
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false)
     const [limit, setLimit] = useState(15);
     const [filteredData, setFilteredData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    // console.log("prevPage==", allusersState?.data?.data?.pagination?.hasPrevPage)
     console.log("LIMITcheckNum====", limit)
-    // const prevPage = allusersState?.data?.data?.pagination?.hasPrevPage;
+
 
     const handleLoadMore = async () => {
         try {
@@ -55,7 +51,6 @@ const AddFiends = () => {
     };
 
 
-
     useFocusEffect(
         useCallback(() => {
             const fetchUsers = async () => {
@@ -73,9 +68,8 @@ const AddFiends = () => {
                 setIsLoading(false);
             }
             fetchUsers()
-        }, [limit])
+        }, [])
     )
-
 
     // useEffect(() => {
     //     dispatch(getAllUsers({ pagination: page, limit }))
@@ -88,6 +82,7 @@ const AddFiends = () => {
     //     temp[likedItemIndex].likeCount += 1; // likeCount is for example
     //     setData(temp);
     //     }
+
 
     const filterUserData = () => {
         const filteredData = responseUsers?.filter((item) => {
@@ -129,7 +124,7 @@ const AddFiends = () => {
                         data={searchQuery ? filteredData : responseUsers}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
-                            console.log("AddFriendsItem=====", item?.username),
+                            console.log("AddFriendsItem=====", item?.isFollowing),
                             <AddFriendUsers key={index} profileimage={FIRST_PROFILE} username={item?.username} userid={item?._id}
                                 userchoice="Follow" isFollowing={item?.isFollowing}
                             />

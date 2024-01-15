@@ -6,26 +6,16 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useDispatch, useSelector } from 'react-redux';
 import { allusers, getAllUsers } from '../../store/slices/storyfeedslices/getAllUsersSlice';
 import { followandUnfollow, followunfollow } from '../../store/slices/storyfeedslices/followUnfollowSlice';
+import { follow_unfollow_api } from '../../services/api/storyfeed';
 
 const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowing }) => {
     const dispatch = useDispatch();
-    const followState = useSelector((state) => state?.followandunfollow?.isFollowing)
-    // const [isFollowingstate, setIsFollowingState] = useState(false)
 
-    const userIdhandled = () => {
-        dispatch(followandUnfollow(userid))
-        // dispatch(followunfollow(isFollowing))
-        // setTimeout(() => {
-        //     dispatch(getAllUsers())
-        // }, timeout);
-        // console.log("userids======", userid)
+    const userIdhandled = async () => {
+        const responseData = await follow_unfollow_api(userid);
+        console.log("resData", responseData)
+        return responseData
     };
-
-    // if (isFollowingstate == false) {
-    //     setIsFollowingState(isFollowingstate)
-    // } else {
-    //     setIsFollowingState(false)
-    // }
 
     console.log("isFollowing=====", isFollowing)
 

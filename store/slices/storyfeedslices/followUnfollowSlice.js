@@ -3,14 +3,14 @@ import { follow_unfollow_api } from "../../../services/api/storyfeed";
 
 export const followandUnfollow = createAsyncThunk("data/followUnfollow", async userids => {
 
-    try {
-        const response = await follow_unfollow_api(userids);
-        console.log("sliceFollowandunFollow", response)
-        return response;
+    // try {
+    //     const response = await follow_unfollow_api(userids);
+    //     console.log("sliceFollowandunFollow", response)
+    //     return response;
 
-    } catch (error) {
-        console.log("error---", error)
-    }
+    // } catch (error) {
+    //     console.log("error---", error)
+    // }
 });
 
 const follow_and_Unfollow_Slice = createSlice({
