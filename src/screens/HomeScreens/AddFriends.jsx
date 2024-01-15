@@ -22,7 +22,7 @@ const AddFiends = () => {
     const allusersState = useSelector((state) => state?.getallUsers)
     const isFollowing = useSelector((state) => state?.followandunfollow?.isFollowing)
     // const loading = useSelector((state) => state?.getallUsers?.loading);
-    const [responseUsers, setResponseUsers] = useState()
+    const [responseUsers, setResponseUsers] = useState();
     // console.log("FollowandUnfollow=====", isFollowing)
     // const AddFriensArr = allusersState?.data?.data?.users;
     const dispatch = useDispatch();
@@ -42,16 +42,12 @@ const AddFiends = () => {
             console.log("limit====adad", limit);
             if (limit > 100) {
                 setPage(page + 1);
-                setLimit(15); // Reset the limit to its initial value
+                setLimit(15);
             }
-
             const responseDataload = await getAllUsers_api({ pagination: page, limit: limit });
             const nextpage = responseDataload?.data?.pagination?.hasPrevPage
-            // const pagination = responseData?.data;
             console.log("paginatopn========", responseDataload?.data?.pagination?.hasNextPage)
-            // setResponseUsers();
             setIsLoading(false);
-            // console.log("res=====", dataUsers);
         } catch (error) {
             console.log("error===", error);
             setIsLoading(false);
@@ -59,12 +55,13 @@ const AddFiends = () => {
     };
 
 
+
     useFocusEffect(
         useCallback(() => {
             const fetchUsers = async () => {
                 setIsLoading(true)
                 try {
-                    const responseData = await getAllUsers_api({ pagination: 1, limit: limit });
+                    const responseData = await getAllUsers_api({ pagination: page, limit: limit });
                     const dataUsers = responseData?.data?.users;
                     setResponseUsers(responseData?.data?.users)
                     setIsLoading(false)
@@ -98,6 +95,7 @@ const AddFiends = () => {
         })
         setFilteredData(filteredData)
     };
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

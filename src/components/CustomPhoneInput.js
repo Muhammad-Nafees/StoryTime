@@ -25,17 +25,20 @@ const CustomPhoneInput = ({
   setPhoneError,
   disabled = false,
   extraStyles,
-  setFormatText
+  setFormatText,
+  setphoneNumberStatusCode
 }) => {
 
   console.log("error", error)
   console.log("isError", isError)
+
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
   const debouncedApiCall = useRef(_.debounce(async (phoneNumber, setFieldError) => {
     const code = phoneInput?.current?.state?.code;
-    const response = await username_api('', '', `+${code}${phoneNumber}`);
-    setResponse(response?.statusCode)
+    setResponse(response?.status)
+    const response = await username_api({ completePhone: `+${code}${phoneNumber}` });
+    setphoneNumberStatusCode(response.statusCode)
     if (response?.statusCode !== 200) {
       setPhoneError("Phone Number already exists")
       setFieldError('phoneNo', `Phone Number already exists`);
@@ -110,8 +113,7 @@ const CustomPhoneInput = ({
         )}
       </Field>
 
-
-      {!response ?
+      {
         (value !== "" && !isFocused && (!error || !isError)) && (
           <View
             style={{
@@ -124,8 +126,7 @@ const CustomPhoneInput = ({
             <Icon name="alert-circle" size={22} color="red" />
             <Text style={{ color: 'red' }}>{error || isError}</Text>
           </View>
-        ) : null
-      }
+        )}
 
     </View>
   );

@@ -9,9 +9,9 @@ import { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
 
-const CustomInput = (props) => {
+const CustomInput = (props,) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [isVisible, setVisible] = useState(false)
+  // const [isVisible, setVisible] = useState(false)
 
   const handleInputFocus = () => {
     setIsFocused(true);
@@ -23,17 +23,18 @@ const CustomInput = (props) => {
 
   const debouncedApiCall = useRef(
     _.debounce(async (value, setFieldError, fieldName) => {
-      const response = await username_api(
-        fieldName === 'username' ? value : '',
-        fieldName === 'email' ? value : ''
-      );
-
+      console.log("============", value, fieldName)
+      const response = await username_api({ email: fieldName === 'email' ? value : '' });
+      props.setEmailstatusCode(response.statusCode)
       if (response?.statusCode !== 200) {
-        if (fieldName === 'username') {
-          setFieldError('Username already exists');
-        } else if (fieldName === 'email') {
+        if (fieldName === 'email') {
           setFieldError('Email already exists');
         }
+        // if (fieldName === 'username') {
+        //   setFieldError('Username already exists');
+        // } else if (fieldName === 'email') {
+        //   setFieldError('Email already exists');
+        // }
 
       } else {
         setFieldError('');
@@ -44,7 +45,7 @@ const CustomInput = (props) => {
 
   const handleChangeText = async (text, fieldName) => {
     props.handleChange(text);
-    if ((fieldName === 'username' && text !== '') || (fieldName === 'email' && text !== '')) {
+    if (fieldName === 'email' && text !== '') {
       debouncedApiCall(text, props.setFieldError, fieldName);
     }
   };
@@ -127,13 +128,11 @@ const CustomInput = (props) => {
         </View>
       )}
 
-      {/* {isVisible && <UserNameExist setVisible={setVisible} isVisible={isVisible} text="Back" onPress={() => navigation.goBack()} />} */}
+      {props.isVisible && <UserNameExist setVisible={props.setVisible} isVisible={props.isVisible} text="Back" onPress={() => props.setVisible(false)} />}
 
     </View>
   );
 };
-
-
 
 export default CustomInput;
 

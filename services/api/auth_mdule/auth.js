@@ -157,29 +157,16 @@ export const userandcity_api = async statesinfo => {
   }
 };
 
-export const username_api = async (username, email, completePhone) => {
+export const username_api = async (data) => {
+  console.log("=========data", data)
   const requestBody = {};
-
-  if (username !== '') {
-    requestBody.username = username;
-  }
-
-  if (email !== '') {
-    requestBody.email = email;
-  }
-
-  if (completePhone !== '') {
-    requestBody.completePhone = completePhone;
-  }
-  console.log("requestbody=====", requestBody)
-
 
   const response = await fetch(Base_Url + username_endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(data),
   });
 
   const responseData = await response.json();
