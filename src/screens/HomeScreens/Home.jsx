@@ -19,6 +19,9 @@ const Home = () => {
     const loading = useSelector((state) => state?.storyfeed?.loading)
     const likedStoryfeed = useSelector((state) => state?.likedstoryfeed?.data)
     const StoriesArr = storyFeedstate?.stories;
+    console.log("lieStoryFeed====", likedStoryfeed?._id)
+    console.log("storyFeedstate====", storyFeedstate)
+
 
     useFocusEffect(
         useCallback(() => {
@@ -82,7 +85,7 @@ const Home = () => {
                 {
                     !loading ?
                         StoriesArr?.map((item, index) => (
-                            console.log("item====", item),
+                            console.log("item====", item?.likedByMe),
                             <FrameContent
                                 key={index}
                                 type={item?.type}
@@ -95,23 +98,15 @@ const Home = () => {
                                 subCategoryname={item?.subCategory?.name}
                                 subCategoryimage={item?.subCategory?.image}
                                 username={item?.creator?.username}
+                                likedByMe={item?.likedByMe}
+                                dislikesByMe={item?.dislikesByMe}
+                                likedapiId={likedStoryfeed?._id}
                             />
                         )) :
                         <View style={{ justifyContent: "center", alignItems: "center", height: height / 2 }}>
                             <ActivityIndicator size={40} color={"#000"} />
                         </View>
                 }
-
-                {/* <FrameContent
-                    text="Shark"
-                    type="imp_bg_img"
-                    profile_text="Sophia"
-                    backgroundImage={SHARK_ICON}
-                    profileImage={require("../../assets/sophia-img.png")} />
-                <FrameContent
-                    type="lilibeth"
-                    profileImage={require("../../assets/avatar-inn.png")}
-                /> */}
 
                 {/* <FrameContent text="Whale" type="imp_bg_img" profile_text="Alfred" backgroundImage={FISH_ICON} profileImage={require("../../assets/porter-img.png")} /> */}
 

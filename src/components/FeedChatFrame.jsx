@@ -13,25 +13,27 @@ import {
     MenuTrigger,
 } from 'react-native-popup-menu';
 import { useDispatch, useSelector } from 'react-redux'
-import { addComment, addComments_func } from '../../store/slices/storyfeedslices/addCommentSlice'
+import { addComment } from '../../store/slices/storyfeedslices/addCommentSlice'
 import { launchImageLibrary } from "react-native-image-picker"
 import { getComment } from '../../store/slices/storyfeedslices/getCommentsSlice'
+import GetComments from './GetComments'
 
 const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) => {
 
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height
+    const SCREENWIDTH = Dimensions.get("window").width;
+    const SCREENHEIGHT = Dimensions.get("window").height;
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
-    const [media, setMedia] = useState("")
+    const [media, setMedia] = useState("");
     const [inputText, setInputText] = useState('');
     const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
     const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
-    const story = useSelector((state) => state?.likedstoryfeed?.storyId)
-    // console.log("storyidComments===", storyId)
+    const story = useSelector((state) => state?.likedstoryfeed?.storyId);
+    const [isComment, setIsComment] = useState(false);
     const loading = useSelector((state) => state?.getComment?.loading);
-    // console.log("getcommetnsUpate==========", getCommentsData);
+    const getCommentstoryId = useSelector((state) => state?.getComment?.getCommentstoryId);
+
     const { width, height } = Dimensions.get('window');
     const dispatch = useDispatch();
     const storyId = story;
@@ -65,18 +67,11 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
         });
     };
 
-    const calculateTimeDifference = (updatedAt) => {
-        const currentTimestamp = new Date();
-        const updatedTimestamp = new Date(updatedAt);
-        const differenceInMilliseconds = currentTimestamp - updatedTimestamp;
-        const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
-        return `${differenceInMinutes}m ago`;
-    };
 
     const messageArrHandle = () => {
         if (inputText?.trim() !== "") {
             dispatch(addComment({ story, text, media }))
-            // dispatch(getComment(storyId))
+            dispatch(getComment(storyId))
         }
         setInputText("")
     };
@@ -95,7 +90,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                                 <Image style={styles.child_bg_img} source={profileImage} />
                                                 <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Lilibeth</Text>
                                             </View>
-
                                             <View style={styles.text_container}>
                                                 <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16 }}>
                                                     Suddenly his friend saw him start to move strangely. The shark attacked Wilson so hard his entire body flew out of the water, and multiple eyewitnesses observed the whole situation. His friend and some others grabbed him when the shark attempted to drag him under.
@@ -185,25 +179,17 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                     {
                                         !loading ?
                                             getCommentsData?.map((item, index) => (
-                                                console.log("item==", item?.updatedAt),
-                                                <>
-                                                    <View key={index} style={{ width: responsiveWidth(83), flexDirection: 'row', justifyContent: "space-between" }}>
-                                                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                                            <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center", borderRadius: 50 }} source={FRANKIN_DRAWEN} />
-                                                        </View>
-                                                        <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
-                                                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>{`${item?.user?.firstName} ${item?.user?.lastName}`}</Text>
-                                                            <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>{item?.text}</Text>
-                                                        </View>
-                                                    </View>
-
-                                                    <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-                                                        <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(67), }}>
-                                                            <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>{calculateTimeDifference(item?.updatedAt)}</Text>
-                                                            <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
-                                                        </View>
-                                                    </View>
-                                                </>
+                                                console.log("item==", item?.story),
+                                                <GetComments
+                                                    key={index}
+                                                    text={item?.text}
+                                                    firstName={item?.user?.firstName}
+                                                    lastName={item?.user?.lastName}
+                                                    updatedAt={item?.updatedAt}
+                                                    getCommentsstoryId={item?.story}
+                                                    addCommentsstoryId={addComment.story}
+                                                    isComment={isComment}
+                                                />
                                             ))
                                             :
                                             <View style={{ height: height / 2, alignItems: "center" }}>
@@ -226,6 +212,8 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                     <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/send-btn.png")} />
                                 </TouchableOpacity>
                             </View>
+
+
 
                         </View>
                     </View>

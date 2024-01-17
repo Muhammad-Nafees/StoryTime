@@ -3,13 +3,18 @@ import React from 'react'
 import { pinkColor } from '../screens/Styles/Style';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { useNavigation } from '@react-navigation/native';
+import { Img_Paths } from '../assets/Imagepaths';
+import NavigationsString from '../constants/NavigationsString';
 
 const MainInputField = ({ placeholder }) => {
+    const navigation = useNavigation();
+    const { ADD_PLAYERS } = NavigationsString
     return (
         <View style={styles.text_Input_container}>
             <View style={styles.text_input_child}>
                 <TextInput placeholder={placeholder} placeholderTextColor={"#000"} style={styles.input_field} />
-                <TouchableOpacity style={styles.add_button}>
+                <TouchableOpacity onPress={() => navigation.navigate(ADD_PLAYERS)} style={styles.add_button}>
                     <Text style={styles.add_text}>Add</Text>
                 </TouchableOpacity>
             </View>

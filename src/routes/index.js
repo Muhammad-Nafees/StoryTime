@@ -6,14 +6,12 @@ import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 
 
-
 const Routes = () => {
     const dispatch = useDispatch();
     const userToken = useSelector((state) => state?.authSlice?.accessToken);
 
     useEffect(() => {
         const authenticateUser = async () => {
-
             try {
                 const accessToken = await AsyncStorage.getItem('isLoggedIn');
                 if (accessToken) {

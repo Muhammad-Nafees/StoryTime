@@ -9,21 +9,8 @@ import { followandUnfollow, followunfollow } from '../../store/slices/storyfeeds
 import { follow_unfollow_api } from '../../services/api/storyfeed';
 
 
-const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowing }) => {
+const AddPlayersCatgories = ({ profileimage, username, userchoice, }) => {
     const dispatch = useDispatch();
-    const [idFollowing, setIdFollowing] = useState(isFollowing);
-
-    const userIdhandled = async () => {
-        const responseData = await follow_unfollow_api(userid);
-        setIdFollowing(responseData?.data?.following);
-        if (responseData?.data?.following == userid) {
-            setIdFollowing(true)
-        }
-        console.log("resData", responseData?.data?.following)
-        return responseData;
-    };
-
-    // console.log("isFollowing=====", isFollowing)
 
     return (
         <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
@@ -34,10 +21,10 @@ const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowin
                 </View>
             </View>
             <TouchableOpacity onPress={() => userIdhandled()}>
-                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{!idFollowing ? userchoice : "Unfollow"}</Text>
+                <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{userchoice}</Text>
             </TouchableOpacity>
         </View>
     )
 };
 
-export default React.memo(AddFriendUsers);
+export default AddPlayersCatgories;

@@ -12,6 +12,7 @@ import AddFriendUsers from '../../components/AddFriendUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../../store/slices/storyfeedslices/getAllUsersSlice';
 import { getAllUsers_api } from '../../../services/api/storyfeed';
+import { boolean } from 'yup';
 
 
 const AddFiends = () => {
@@ -21,75 +22,74 @@ const AddFiends = () => {
     const navigation = useNavigation();
     const allusersState = useSelector((state) => state?.getallUsers)
     const isFollowing = useSelector((state) => state?.followandunfollow?.isFollowing)
-    const [responseUsers, setResponseUsers] = useState();
+    const [responseUsers, setResponseUsers] = useState([]);
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false)
-    const [limit, setLimit] = useState(15);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [HasMorePages, setHasMorePages] = useState(false);
+    const [stopLimit, setStopLimit] = useState();
+    const [limit, setLimit] = useState(40);
     const [filteredData, setFilteredData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    console.log("LIMITcheckNum====", limit)
-
+    // console.log("LIMITcheckNum====", limit);
+    // console.log("hasMorePages=====", HasMorePages);
 
     const handleLoadMore = async () => {
-        try {
-            setIsLoading(true);
-            setLimit((prevLimit) => prevLimit + 10);
-            console.log("limit====adad", limit);
-            if (limit > 100) {
-                setPage(page + 1);
-                setLimit(15);
-            }
-            const responseDataload = await getAllUsers_api({ pagination: page, limit: limit });
-            const nextpage = responseDataload?.data?.pagination?.hasPrevPage
-            console.log("paginatopn========", responseDataload?.data?.pagination?.hasNextPage)
-            setIsLoading(false);
-        } catch (error) {
-            console.log("error===", error);
-            setIsLoading(false);
+        if (isLoading) {
+            return;
         }
+
+        setIsLoading(true);
+        setLimit((prevLimit) => {
+            const newLimit = prevLimit + 15;
+            if (newLimit >= 100) {
+                setPage((prevPage) => prevPage + 1);
+                return 10; // Reset limit to 10
+            }
+            return newLimit;
+        });
+        setIsLoadMore(true);
     };
 
 
-    useFocusEffect(
-        useCallback(() => {
-            const fetchUsers = async () => {
-                setIsLoading(true)
-                try {
-                    const responseData = await getAllUsers_api({ pagination: page, limit: limit });
-                    const dataUsers = responseData?.data?.users;
-                    setResponseUsers(responseData?.data?.users)
-                    setIsLoading(false)
-                    console.log("res=====", responseData?.data?.users);
-                    return responseData;
-                } catch (error) {
-                    console.log("error===", error)
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setIsLoading(true);
+            try {
+                const responseData = await getAllUsers_api({ pagination: page, limit });
+                const data = responseData?.data?.users;
+                console.log("dataLength=======", data?.length)
+                if (data?.length > 0) {
+                    setResponseUsers((prevData) => [...prevData, ...data]);
+                    setHasMorePages(responseData?.data?.pagination?.perPage);
+                    setStopLimit(responseData?.data?.pagination?.hasNextPage);
+                } else {
+                    setHasMorePages(false);
+                    setStopLimit(false);
                 }
+
+            } catch (error) {
+                // console.log("error--===", error);
+            } finally {
                 setIsLoading(false);
+                setIsLoadMore(false);
             }
-            fetchUsers()
-        }, [])
-    )
-
-    // useEffect(() => {
-    //     dispatch(getAllUsers({ pagination: page, limit }))
-    // }, []);
-
-    // const handleLike = (id) => {
-    //     const temp = JSON.parse(JSON.stringify(data));// home page data 
-    //     const likedItemIndex = temp.findIndex(e => e._id === id);
-    //     if(likedItemIndex < 0)return;
-    //     temp[likedItemIndex].likeCount += 1; // likeCount is for example
-    //     setData(temp);
-    //     }
+        };
+        fetchUsers();
+    }, [limit, page, isLoadMore])
 
 
-    const filterUserData = () => {
+    const filterUserData = useCallback(() => {
         const filteredData = responseUsers?.filter((item) => {
             return item?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase())
         })
         setFilteredData(filteredData)
-    };
+    }, [searchQuery, responseUsers]);
+
+    useEffect(() => {
+        filterUserData();
+    }, [filterUserData]);
 
 
     return (
@@ -124,7 +124,6 @@ const AddFiends = () => {
                         data={searchQuery ? filteredData : responseUsers}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
-                            console.log("AddFriendsItem=====", item?.isFollowing),
                             <AddFriendUsers key={index} profileimage={FIRST_PROFILE} username={item?.username} userid={item?._id}
                                 userchoice="Follow" isFollowing={item?.isFollowing}
                             />
@@ -140,9 +139,11 @@ const AddFiends = () => {
                             return null;
                         }}
                         onEndReached={() => {
-                            handleLoadMore();
+                            if (stopLimit && HasMorePages) {
+                                handleLoadMore()
+                            }
                         }}
-                        onEndReachedThreshold={0}
+                        onEndReachedThreshold={0.3}
                     />
                 }
             </View>

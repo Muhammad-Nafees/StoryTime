@@ -8,6 +8,7 @@ import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import AddFriendUsers from '../../../components/AddFriendUsers';
 import TouchableButton from '../../../components/TouchableButton';
+import AddPlayersCatgories from '../../../components/AddPlayers_Categories';
 
 const AddPlayers = () => {
     const { width, height } = Dimensions.get('window');
@@ -21,32 +22,36 @@ const AddPlayers = () => {
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <ScrollView>
                 {/* Frame Content Close----------- */}
-
-                <View style={styles.first_container}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
-                        <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-                    </TouchableOpacity>
-                    <View style={styles.categories_text_container}>
-                        <Text style={styles.categories_text}>Add Players</Text>
-                    </View>
-                </View>
-
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
-                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
-                            <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
+                <View style={{ height: responsiveHeight(57) }}>
+                    <View style={styles.first_container}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
+                            <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
+                        </TouchableOpacity>
+                        <View style={styles.categories_text_container}>
+                            <Text style={styles.categories_text}>Add Players</Text>
                         </View>
-                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
                     </View>
-                </View>
 
-                <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
-                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@diane101" userchoice="Add" />
-                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@nolanjames" userchoice="Add" />
-                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@christine02" userchoice="Add" />
-                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@adamadam" userchoice="Add" />
-                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@markyyy" userchoice="Add" />
-                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@jeniffer.p" userchoice="Add" />
+                    <View style={{ justifyContent: "center", alignItems: "center" }}>
+                        <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
+                            <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: moderateVerticalScale(14), }}>
+                                <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
+                            </View>
+                            <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
+                        </View>
+                    </View>
+
+                    <View style={[styles.categories_text_container, { paddingTop: responsiveWidth(6) }]}>
+                        <Text style={styles.categories_text}>Friends</Text>
+                    </View>
+
+                    <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
+                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                    </View>
                 </View>
 
                 <View style={{ paddingTop: responsiveWidth(60), }}>

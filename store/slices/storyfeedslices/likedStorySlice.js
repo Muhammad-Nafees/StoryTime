@@ -3,13 +3,13 @@ import { storyLikedFeed } from "../../../services/api/storyfeed";
 
 export const likedStoryFeed = createAsyncThunk("data/likedstoryfeed", async (storyId) => {
 
-    try {
-        const response = await storyLikedFeed(storyId);
-        console.log("response====", response)
-        return response.data;
-    } catch (error) {
-        console.log("error---", error)
-    }
+    // try {
+    //     const response = await storyLikedFeed(storyId);
+    //     console.log("response====", response)
+    //     return response.data;
+    // } catch (error) {
+    //     console.log("error---", error)
+    // }
 });
 
 const likedstory_feed_slice = createSlice({

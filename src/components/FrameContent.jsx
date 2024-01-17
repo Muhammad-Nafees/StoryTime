@@ -17,35 +17,60 @@ import {
 import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
+import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed'
 
 
-const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text, content, commentsCount, likes, dislikesCount, onPress, likedUserId, subCategoryname, subCategoryimage, username }) => {
+const FrameContent = ({ type, profileImage, text, content, commentsCount, likes, dislikesCount, onPress, likedUserId, subCategoryname, subCategoryimage, username, likedByMe, likedapiId, dislikesByMe }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width;
     const SCREENHEIGHT = Dimensions.get("window").height;
     const navigation = useNavigation();
     const { HOME_FRAME, SHARE_BTN, } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
-    const [likeCount, setLikeCount] = useState(0);
-    // const RecordingText = useSelector((state) => state?.RecordingData?.recordingTextToHome);
+    const [likeCount, setLikeCount] = useState(likedByMe);
+    const [dislikeCount, setdisLikeCount] = useState(dislikesByMe);
+
     const LikedData = useSelector((state) => state?.likedstoryfeed?.data);
     const dispatch = useDispatch();
-    console.log("likedData====", LikedData)
-    const storyLikedHandled = () => {
-        dispatch(likedStoryFeed(likedUserId))
-        if (likes > 0) {
-            return;
+
+    const storyLikedHandled = async () => {
+
+        try {
+            const responseData = await storyLikedFeed(likedUserId)
+            console.log("resData===", responseData?.data?._id)
+
+            setLikeCount((prevLikeCount) => {
+                if (responseData?.data?._id === likedUserId) {
+                    return !prevLikeCount;
+                } else {
+                    return prevLikeCount;
+                }
+            });
+            return responseData;
+        } catch (error) {
         }
-        setLikeCount((prevLikeCount) => (prevLikeCount === 0 ? 1 : 0));
+    };
+
+    const storydisLikedHandled = async () => {
+        try {
+            const responseData = await storydisLikedFeed(likedUserId)
+            console.log("resData===", responseData?.data?._id)
+            setdisLikeCount((prevLikeCount) => {
+                if (responseData?.data?._id === likedUserId) {
+                    return !prevLikeCount;
+                } else {
+                    return prevLikeCount;
+                }
+            });
+            return responseData;
+        } catch (error) {
+        }
     };
 
     const commentsHandled = () => {
         dispatch(likedstoryfeed(likedUserId))
         navigation.navigate(FEED_CHAT)
-    }
-
-    // useEffect(() => {
-    // }, [])
+    };
 
     return (
         <View style={styles.container}>
@@ -115,11 +140,11 @@ const FrameContent = ({ type, profile_text, backgroundImage, profileImage, text,
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                         <TouchableOpacity onPress={() => storyLikedHandled()} style={styles.first_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likes || likeCount}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likeCount ? 1 : 0}</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.second_view}>
+                                        <TouchableOpacity onPress={() => storydisLikedHandled()} style={styles.second_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{dislikesCount}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{dislikeCount ? 1 : 0}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={commentsHandled} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />

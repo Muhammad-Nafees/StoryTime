@@ -36,6 +36,7 @@ import { Path, Svg } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import * as Yup from 'yup';
+import ResetPasswordModal from '../../../components/forget-screens-modal/ResetpasswordModal';
 
 export const validationForgetConfirmPassword = Yup.object().shape({
     newPassword: Yup.string()
@@ -53,6 +54,8 @@ const ForgetConfirmPassword = () => {
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const { FORGET_BG_IMG } = Img_Paths;
     const { LOGIN } = NavigationsString;
+    const [isVisible, setVisible] = useState(false);
+
     const [isLoading, setIsLoading] = useState(false);
     const forgetuserToken = useSelector(
         state => state?.authSlice?.forgetAccesstoken,
@@ -66,7 +69,6 @@ const ForgetConfirmPassword = () => {
     const toggleShowPasswordConfir = () => {
         setShowPasswordConfirm(!showPasswordConfirm);
     };
-
 
     return (
         <Formik
@@ -86,7 +88,7 @@ const ForgetConfirmPassword = () => {
                         forgetuserToken,
                     );
                     if (response?.statusCode === 200) {
-
+                        setVisible(true)
                         setIsLoading(false),
                             Toast.show({
                                 type: 'success',
@@ -250,6 +252,15 @@ const ForgetConfirmPassword = () => {
                                 />
                             </View>
                         </View>
+
+                        {isVisible && (
+                            <ResetPasswordModal
+                                setVisible={setVisible}
+                                isVisible={isVisible}
+                                text="Reset Password Complete!"
+                                onPress={() => { }}
+                            />
+                        )}
                         <Toast />
                     </ScrollView>
                 </View>

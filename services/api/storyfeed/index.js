@@ -20,7 +20,7 @@ export const fetchallFeedStories = async () => {
 };
 
 export const storyLikedFeed = async (storyId) => {
-
+    console.log("storyId==", storyId)
     try {
         const url = `${Base_Url}story/like/${storyId}`;
         const responseData = await fetch(url, {
@@ -38,6 +38,27 @@ export const storyLikedFeed = async (storyId) => {
 
     }
 };
+
+export const storydisLikedFeed = async (storyId) => {
+    console.log("storyId==", storyId)
+    try {
+        const url = `${Base_Url}story/dislike/${storyId}`;
+        const responseData = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const response = await responseData.json();
+        console.log("feedCategoryResponse========", response)
+        return response;
+    }
+    catch (error) {
+        console.log("err===", error)
+
+    }
+};
+
 
 export const getAllUsers_api = async (paginations) => {
     try {

@@ -24,6 +24,7 @@ const RegisterPassword = ({ route }) => {
     const [response, setResponse] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setVisible] = useState(false);
+    const [firstPasswordError, setFirstPasswordError] = useState("")
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
     const firstuserData = useSelector((state) => state.authSlice.firstpageData);
@@ -45,7 +46,6 @@ const RegisterPassword = ({ route }) => {
             }}
             validationSchema={validationUserPassword}
             onSubmit={async (values) => {
-
                 setIsLoading(true)
                 const responseData = await registerapi(firstuserData, seconduserData, values)
                 const statusCode = responseData?.statusCode;
@@ -53,8 +53,8 @@ const RegisterPassword = ({ route }) => {
                 const error = responseData?.stack;
                 const message = responseData?.message;
                 if (statusCode === 200) {
-                    setVisible(true)
-                    setIsLoading(false)
+                    setVisible(true);
+                    setIsLoading(false);
                     Toast.show({
                         type: "error",
                         text1: message,
@@ -63,6 +63,7 @@ const RegisterPassword = ({ route }) => {
                     })
                 }
                 if (error) {
+                    setFirstPasswordError(message)
                     Toast.show({
                         type: "error",
                         text1: message,

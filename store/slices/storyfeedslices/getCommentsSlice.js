@@ -21,11 +21,13 @@ const getCommentsSlice = createSlice({
         data: [],
         error: null,
         loading: false,
+        getCommentstoryId: ""
         // isFollowing: false
     },
 
     reducers: {
         getComments_func: (state, { payload }) => {
+            state.getCommentstoryId = payload
         },
     },
 
