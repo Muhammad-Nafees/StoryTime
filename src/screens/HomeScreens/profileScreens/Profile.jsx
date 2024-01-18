@@ -48,7 +48,7 @@ const Profile = () => {
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ paddingTop: responsiveWidth(6) }}>
-                                        <SettingButton  onpress={()=> navigation.navigate(SETTING)} image={SETTINGS_ICON} />
+                                        <SettingButton  onPress={()=> navigation.navigate(SETTING)} image={SETTINGS_ICON} />
                                     </View>
                                 </View>
                             </ImageBackground>

@@ -37,6 +37,7 @@ export default NavigationString = {
     VIDEO_FOURTH_STORY: "VideoFourthStory",
     VIDEO_FOURTH_USER: "VideoFourthUser",
     FIRST_USER: "FirstUser",
-    SETTING: "Setting"
+    SETTING: "Setting",
+    NOTIFICATION: "Notification"
 
 };
