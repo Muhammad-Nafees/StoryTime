@@ -27,22 +27,24 @@ const AddFiends = () => {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadMore, setIsLoadMore] = useState(false);
-    const [HasMorePages, setHasMorePages] = useState(false);
+    const [HasMorePages, setHasMorePages] = useState();
     const [stopLimit, setStopLimit] = useState();
+    const [isData, setIsData] = useState([])
     const [limit, setLimit] = useState(40);
     const [filteredData, setFilteredData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     // console.log("LIMITcheckNum====", limit);
     // console.log("hasMorePages=====", HasMorePages);
 
+    console.log("hasmorepages===", HasMorePages)
+    console.log("stoplimit===", stopLimit)
     const handleLoadMore = async () => {
         if (isLoading) {
             return;
         }
-
         setIsLoading(true);
         setLimit((prevLimit) => {
-            const newLimit = prevLimit + 15;
+            const newLimit = prevLimit + 5;
             if (newLimit >= 100) {
                 setPage((prevPage) => prevPage + 1);
                 return 10; // Reset limit to 10
@@ -59,14 +61,15 @@ const AddFiends = () => {
             try {
                 const responseData = await getAllUsers_api({ pagination: page, limit });
                 const data = responseData?.data?.users;
-                console.log("dataLength=======", data?.length)
-                if (data?.length > 0) {
-                    setResponseUsers((prevData) => [...prevData, ...data]);
+                setIsData(data)
+                console.log("dataLength=======", data?.length);
+                if (data && data.length > 0) {
+                    setResponseUsers(prevData => [...prevData, ...data]);
                     setHasMorePages(responseData?.data?.pagination?.perPage);
-                    setStopLimit(responseData?.data?.pagination?.hasNextPage);
+                    setStopLimit(responseData?.data?.pagination?.currentPage);
                 } else {
-                    setHasMorePages(false);
-                    setStopLimit(false);
+                    console.log("No users found");
+                    return;
                 }
 
             } catch (error) {
@@ -78,7 +81,6 @@ const AddFiends = () => {
         };
         fetchUsers();
     }, [limit, page, isLoadMore])
-
 
     const filterUserData = useCallback(() => {
         const filteredData = responseUsers?.filter((item) => {
@@ -139,8 +141,8 @@ const AddFiends = () => {
                             return null;
                         }}
                         onEndReached={() => {
-                            if (stopLimit && HasMorePages) {
-                                handleLoadMore()
+                            if (isData && isData?.length > 0) {
+                                handleLoadMore();
                             }
                         }}
                         onEndReachedThreshold={0.3}
