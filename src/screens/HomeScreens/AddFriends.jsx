@@ -30,7 +30,7 @@ const AddFiends = () => {
     const [HasMorePages, setHasMorePages] = useState();
     const [stopLimit, setStopLimit] = useState();
     const [isData, setIsData] = useState([])
-    const [limit, setLimit] = useState(40);
+    const [limit, setLimit] = useState(10);
     const [filteredData, setFilteredData] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -40,21 +40,27 @@ const AddFiends = () => {
     console.log("hasmorepages===", HasMorePages)
     console.log("stoplimit===", stopLimit)
     const handleLoadMore = async () => {
+
         if (isLoading) {
             return;
         }
-        setIsLoading(true);
-        setLimit((prevLimit) => {
-            const newLimit = prevLimit + 5;
-            if (newLimit >= 100) {
-                setPage((prevPage) => prevPage + 1);
-                return 10; // Reset limit to 10
-            }
-            return newLimit;
-        });
-        setIsLoadMore(true);
-    };
+        if (HasMorePages && isData) {
+            setPage((prevPage) => prevPage + 1);
+        } else {
+            setIsLoading(false)
+        }
 
+        // setIsLoading(true);
+        // setLimit((prevLimit) => {
+        //     const newLimit = prevLimit + 5;
+        //     if (newLimit >= 100) {
+        //         setPage((prevPage) => prevPage + 1);
+        //         return 10; // Reset limit to 10
+        //     }
+        //     return newLimit;
+        // });
+        // setIsLoadMore(true);
+    };
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -80,7 +86,7 @@ const AddFiends = () => {
             }
         };
         fetchUsers();
-    }, [limit, page, isLoadMore])
+    }, [page,])
 
     const filterUserData = useCallback(() => {
         const filteredData = responseUsers?.filter((item) => {
@@ -97,7 +103,6 @@ const AddFiends = () => {
         setIsRefreshing(true)
         setPage(1)
     }
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -138,7 +143,6 @@ const AddFiends = () => {
                                 userchoice="Follow" isFollowing={item?.isFollowing}
                             />
                         )}
-
                         ListFooterComponent={() => {
                             if (isLoading) {
                                 return (
@@ -150,9 +154,9 @@ const AddFiends = () => {
                             return null;
                         }}
                         onEndReached={() => {
-                            if (isData && isData?.length > 0) {
-                                handleLoadMore();
-                            }
+                            // if (isData && isData?.length > 0) {
+                            handleLoadMore();
+                            // }
                         }}
                         onEndReachedThreshold={0.3}
                     />

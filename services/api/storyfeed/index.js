@@ -1,18 +1,18 @@
 import { Base_Url, addComment_endpoint, follow_Unfollow_endpoint, getAllUsers_endpoint, getComment_endpoint, storyLikedfeed, storyfeed_Endpoint } from "../.."
 
 
-export const fetchallFeedStories = async () => {
+export const fetchallFeedStories = async (paginations) => {
+    const { limit, pagination } = paginations;
+    console.log("===Apipage========", paginations)
+
     try {
-
-
-        const responseData = await fetch(Base_Url + storyfeed_Endpoint, {
+        const responseData = await fetch(Base_Url + storyfeed_Endpoint + `?page=${pagination}&limit=${limit}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         const response = await responseData.json();
-        console.log("feedCategoryResponse========", response)
         return response;
     } catch (error) {
         console.log(error)

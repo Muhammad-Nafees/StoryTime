@@ -9,8 +9,23 @@ import { followandUnfollow, followunfollow } from '../../store/slices/storyfeeds
 import { follow_unfollow_api } from '../../services/api/storyfeed';
 
 
-const AddPlayersCatgories = ({ profileimage, username, userchoice, }) => {
+const AddFriends_Categories = ({ profileimage, username, userchoice, item, userid }) => {
+
     const dispatch = useDispatch();
+    // console.log("item========", item)
+    // console.log("username===", username)
+    // console.log("userid===", userid)
+    const [previousData, setPreviousData] = useState([])
+
+    const addFriendHandler = () => {
+        if (username && userid) {
+            previousData.push({ username, userid })
+            setPreviousData((PrevData) => PrevData)
+        };
+
+        console.log("previousData=======", previousData)
+        // console.log("friendaArryy", FriendsArray)
+    };
 
     return (
         <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
@@ -20,11 +35,13 @@ const AddPlayersCatgories = ({ profileimage, username, userchoice, }) => {
                     <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>{`@${username}`}</Text>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => userIdhandled()}>
+
+            <TouchableOpacity onPress={() => addFriendHandler()}>
                 <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>{userchoice}</Text>
             </TouchableOpacity>
         </View>
+
     )
 };
 
-export default AddPlayersCatgories;
+export default AddFriends_Categories;

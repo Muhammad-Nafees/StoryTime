@@ -10,7 +10,7 @@ import * as Progress from 'react-native-progress';
 
 
 
-const VerifyingCodeModal = ({ isVisible, setVisible, text, onPress, statusCodeForget }) => {
+const VerifyingCodeModal = ({ isVisible, setVisible, onPress, statusCodeForget }) => {
 
     const { BG_PLAYFLOW } = Img_Paths;
 

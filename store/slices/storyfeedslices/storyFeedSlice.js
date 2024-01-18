@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 import { fetchallFeedStories } from "../../../services/api/storyfeed";
 
-export const storyFeed = createAsyncThunk("data/storyFeed", async id => {
+export const storyFeed = createAsyncThunk("data/storyFeed", async (pagination) => {
 
-    try {
-        const response = await fetchallFeedStories();
-        return response.data;
+    // try {
+    //     const response = await fetchallFeedStories(pagination);
+    //     return response.data;
 
-    } catch (error) {
-        console.log("error---", error)
-    }
+    // } catch (error) {
+    //     console.log("error---", error)
+    // }
 });
 
 const story_Feed_slice = createSlice({

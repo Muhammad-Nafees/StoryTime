@@ -16,5 +16,4 @@ export const getAllUsers_endpoint = "user"
 export const follow_Unfollow_endpoint = "user/follow-toggle"
 export const addComment_endpoint = "story/add-comment"
 export const getComment_endpoint = "story/comments/:"
-
-// const url = `${Base_Url}story/comments/:${storyId}`;
+export const addFriends_endpoint = "user/friends"

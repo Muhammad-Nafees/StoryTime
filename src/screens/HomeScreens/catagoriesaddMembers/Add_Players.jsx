@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
@@ -6,16 +6,33 @@ import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsive
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import AddFriendUsers from '../../../components/AddFriendUsers';
 import TouchableButton from '../../../components/TouchableButton';
-import AddPlayersCatgories from '../../../components/AddPlayers_Categories';
+import AddFriends_Categories from '../../../components/AddPlayers_Categories';
+import { addFriends_api } from '../../../../services/api/add-members';
 
 const AddPlayers = () => {
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
         SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
+    const [Responseapi, setResponseapi] = useState([])
     const navigation = useNavigation();
+
+    const addFriends_api_handler = async () => {
+        try {
+            const responseData = await addFriends_api();
+            // console.log("resaddplayersPage=====", responseData?.data?.users);
+            setResponseapi(responseData?.data?.users)
+            return responseData;
+        } catch (error) {
+            console.log("err=====", error)
+        }
+    };
+
+
+    useEffect(() => {
+        addFriends_api_handler()
+    }, []);
 
 
     return (
@@ -46,11 +63,16 @@ const AddPlayers = () => {
                     </View>
 
                     <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
-                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
-                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
-                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
-                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
-                        <AddPlayersCatgories username="Nafees" userchoice="Add" profileimage={FIRST_PROFILE} />
+                        <ScrollView>
+                            {
+                                Responseapi?.map((item, index) => {
+                                    console.log("itemAddfrieds====", item)
+                                    return (
+                                        <AddFriends_Categories key={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
+                                    )
+                                })
+                            }
+                        </ScrollView>
                     </View>
                 </View>
 
@@ -64,7 +86,6 @@ const AddPlayers = () => {
 
     )
 };
-
 
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Text,
     View,
@@ -20,7 +20,7 @@ import {
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TouchableButton from '../../../components/TouchableButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
@@ -54,6 +54,12 @@ const OtpForget = ({ route }) => {
             return inputRefs.current[index - 1]?.focus();
         }
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            setVisible(false)
+        }, [])
+    )
 
     const handleBackspace = (event, index) => {
         const { nativeEvent } = event;
@@ -101,10 +107,6 @@ const OtpForget = ({ route }) => {
             if (response?.statusCode === 200) {
                 setStatusCodeForget(true);
                 navigation.navigate(FORGET_CONFIRM_PASSWORD);
-                Toast.show({
-                    type: 'success',
-                    text1: response?.message,
-                });
                 dispatch(forgetResetToken(response?.data?.accessToken));
                 setIsLoading(false);
             } else if (response?.stack) {
@@ -262,7 +264,6 @@ const OtpForget = ({ route }) => {
                 <VerifyingCodeModal
                     setVisible={setVisible}
                     isVisible={isVisible}
-                    text="Login"
                     onPress={() => { }}
                     statusCodeForget={statusCodeForget}
                 />
@@ -272,6 +273,7 @@ const OtpForget = ({ route }) => {
         </ScrollView>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

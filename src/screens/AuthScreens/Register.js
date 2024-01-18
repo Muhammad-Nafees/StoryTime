@@ -249,6 +249,8 @@ const Register = () => {
                       text="Back"
                     />
                   </View>
+
+
                 </View>
               </View>
             </View>

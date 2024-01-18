@@ -5,7 +5,6 @@ import { setAccessToken } from '../../store/slices/authSlice';
 import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 
-
 const Routes = () => {
     const dispatch = useDispatch();
     const userToken = useSelector((state) => state?.authSlice?.accessToken);
