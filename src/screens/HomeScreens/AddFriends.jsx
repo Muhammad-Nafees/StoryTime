@@ -32,6 +32,7 @@ const AddFiends = () => {
     const [isData, setIsData] = useState([])
     const [limit, setLimit] = useState(40);
     const [filteredData, setFilteredData] = useState([]);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     // console.log("LIMITcheckNum====", limit);
     // console.log("hasMorePages=====", HasMorePages);
@@ -62,7 +63,6 @@ const AddFiends = () => {
                 const responseData = await getAllUsers_api({ pagination: page, limit });
                 const data = responseData?.data?.users;
                 setIsData(data)
-                console.log("dataLength=======", data?.length);
                 if (data && data.length > 0) {
                     setResponseUsers(prevData => [...prevData, ...data]);
                     setHasMorePages(responseData?.data?.pagination?.perPage);
@@ -92,6 +92,11 @@ const AddFiends = () => {
     useEffect(() => {
         filterUserData();
     }, [filterUserData]);
+
+    const onRefresh = () => {
+        setIsRefreshing(true)
+        setPage(1)
+    }
 
 
     return (
@@ -123,13 +128,17 @@ const AddFiends = () => {
                 {
                     <FlatList
                         scrollEnabled={true}
+                        contentContainerStyle={{ paddingBottom: responsiveWidth(40) }}
                         data={searchQuery ? filteredData : responseUsers}
                         keyExtractor={(item, index) => index.toString()}
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
                         renderItem={({ item, index }) => (
                             <AddFriendUsers key={index} profileimage={FIRST_PROFILE} username={item?.username} userid={item?._id}
                                 userchoice="Follow" isFollowing={item?.isFollowing}
                             />
                         )}
+
                         ListFooterComponent={() => {
                             if (isLoading) {
                                 return (
@@ -149,7 +158,6 @@ const AddFiends = () => {
                     />
                 }
             </View>
-
             {/* </ScrollView> */}
         </ImageBackground>
 
