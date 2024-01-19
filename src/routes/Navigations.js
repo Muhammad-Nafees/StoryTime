@@ -30,10 +30,11 @@ import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoi
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
+import { Setting } from '../screens';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE } = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,SETTING} = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -128,19 +129,21 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT } = NavigationsString;
+  const { HOME, FEED_CHAT,SETTING } = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
+      <Stack.Screen name={SETTING} component={Setting} />
+
     </Stack.Navigator>
   );
 };
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT } = NavigationsString;
+  const { HOME, FEED_CHAT,SETTING} = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="TagFriends" component={TagFriends} />

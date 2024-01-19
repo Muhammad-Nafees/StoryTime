@@ -18,7 +18,7 @@ const Profile = () => {
 
     const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
     const navigation = useNavigation();
-    const { FEED_CHAT, } = NavigationsString;
+    const { FEED_CHAT,SETTING } = NavigationsString;
     const [isContent, setIsContent] = useState(0);
     const [changeMode, setChangeMode] = useState(0);
 
@@ -48,7 +48,7 @@ const Profile = () => {
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ paddingTop: responsiveWidth(6) }}>
-                                        <SettingButton image={SETTINGS_ICON} />
+                                        <SettingButton  onpress={()=> navigation.navigate(SETTING)} image={SETTINGS_ICON} />
                                     </View>
                                 </View>
                             </ImageBackground>
