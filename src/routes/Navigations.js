@@ -30,7 +30,7 @@ import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoi
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { Notification, Setting } from '../screens';
+import { Notification, Setting, SubscriptionDetails } from '../screens';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -129,7 +129,7 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT,SETTING,NOTIFICATION } = NavigationsString;
+  const { HOME, FEED_CHAT,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS } = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Profile} />
@@ -137,6 +137,8 @@ const ProfileStacksBottom = () => {
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
       <Stack.Screen name={SETTING} component={Setting} />
       <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
+
 
     </Stack.Navigator>
   );

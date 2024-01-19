@@ -3,15 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
   TouchableOpacity,
   Image,
 } from 'react-native';
 import {Switch} from 'react-native-switch';
 import {useNavigation} from '@react-navigation/native';
-import BackButton from '../../../components/BackButton';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
@@ -20,17 +16,11 @@ import {
 } from 'react-native-responsive-dimensions';
 import {
   FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  ThirdColor,
-  pinkColor,
 } from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {SPACING} from '../../../constants/Constant';
 import Typography from '../../../components/Typography';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 const NotificationOptBox = ({title, sectionName = ''}) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -67,7 +57,7 @@ const NotificationOptBox = ({title, sectionName = ''}) => {
 
 const Notification = () => {
   const navigation = useNavigation();
-  const {SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG} = Img_Paths;
+  const {LEFT_ARROW_IMG} = Img_Paths;
 
   return (
     <BackgroundWrapper>

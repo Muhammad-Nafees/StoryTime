@@ -10,4 +10,4 @@ export { default as OtpForget } from "../screens/AuthScreens/forgetscreens/OtpFo
 export { default as ForgetConfirmPassword } from "../screens/AuthScreens/forgetscreens/ForgetConfirmPassword"
 export { default as Setting } from "./HomeScreens/setting/Setting"
 export { default as Notification } from "./HomeScreens/setting/Notification"
-
+export { default as SubscriptionDetails } from "./HomeScreens/setting/SubscriptionDetails"

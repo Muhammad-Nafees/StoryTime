@@ -7,7 +7,7 @@ import {
 } from 'react-native-responsive-dimensions';
 
 const Typography = props => {
-  const {mt, ml, mr, mb, style,size, children,lh, ...rest} = props || {};
+  const {mt, ml, mr, mb, style,size, children,lh,clr,thin,heavy,bold, ...rest} = props || {};
 
   const styleComponent = [
     {
@@ -20,15 +20,17 @@ const Typography = props => {
       //   ...(h3 && {fontSize: 18}),
       //   ...(h4 && {fontSize: 16}),
       //   ...(h5 && {fontSize: 14}),
-      //   ...(thin && {fontWeight: '200'}),
-      //   ...(heavy && {fontWeight: '500'}),
-      //   ...(bold && {fontWeight: 'bold'}),
+        ...(thin && {fontWeight: '200'}),
+        ...(heavy && {fontWeight: '500'}),
+        ...(bold && {fontWeight: 'bold'}),
       ...(size && {fontSize: size}),
       ...(lh && {lineHeight: lh}),
       ...(mt && {marginTop: mt}),
       ...(ml && {marginLeft: ml}),
       ...(mr && {marginRight: mr}),
       ...(mb && {marginBottom: mb}),
+      ...(clr && {color: clr}),
+
       //   ...(center && {textAlign: 'center'}),
     },
     style,
