@@ -62,7 +62,6 @@ const authSlice = createSlice({
 });
 
 
-
 export const {
     setuserRole,
     setAccountType,

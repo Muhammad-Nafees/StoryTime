@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
@@ -110,7 +110,7 @@ const FrameContent = ({ type, profileImage, text, content, commentsCount, likes,
                                     <View style={styles.second_childbg}>
                                         <View style={styles.third_childbg}>
                                             <Image style={styles.child_bg_img} source={profileImage} />
-                                            <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>Tiffany</Text>
+                                            <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>{username}</Text>
                                         </View>
                                     </View>
 
@@ -303,4 +303,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FrameContent;
+export default memo(FrameContent);

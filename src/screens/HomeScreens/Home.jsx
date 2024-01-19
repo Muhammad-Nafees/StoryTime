@@ -10,7 +10,6 @@ import NavigationsString from '../../constants/NavigationsString';
 import { FlatListData } from '../../../dummyData/DummyData';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
-import { storyFeed, storyfeed } from '../../../store/slices/storyfeedslices/storyFeedSlice';
 import { fetchallFeedStories } from '../../../services/api/storyfeed';
 
 const Home = () => {
@@ -31,9 +30,15 @@ const Home = () => {
     const { ADD_FRIENDS } = NavigationsString;
     const [responseUsers, setResponseUsers] = useState([]);
     const [isLoadMore, setIsLoadMore] = useState(false)
-
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const navigation = useNavigation();
 
+
+    useFocusEffect(
+        useCallback(() => {
+            setIsLoadMore(true)
+        }, [])
+    );
 
     useFocusEffect(
         useCallback(() => {
@@ -47,25 +52,27 @@ const Home = () => {
                         setResponseUsers(prevData => [...prevData, ...data]);
                         setHasMorePages(responseData?.data?.pagination?.hasNextPage);
                     } else {
-                        console.log("No users found");
                         return;
                     }
                 } catch (error) {
-                    console.log("error--===", error);
                 } finally {
                     setIsLoading(false);
-                    setIsLoadMore(false);
                 }
             };
             fetchUsers();
-        }, [page])
+        }, [page, isLoadMore])
     );
 
     const handleLoadMore = async () => {
         if (HasMorePages) {
             setPage((prevPage) => prevPage + 1);
+            setIsLoadMore(true)
         }
-        console.log("checkpage====", page, limit);
+    };
+
+    const onRefresh = () => {
+        setIsRefreshing(true)
+        setPage(1)
     };
 
 
@@ -97,11 +104,12 @@ const Home = () => {
 
             <View style={styles.flatlist_container}>
                 <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
                     <FlatList
                         data={FlatListData}
                         scrollEnabled={true}
                         horizontal
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
                         renderItem={({ item, index }) => {
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
@@ -161,16 +169,12 @@ const Home = () => {
                     </View>
             }
 
-
-            {/* <FrameContent text="Whale" type="imp_bg_img" profile_text="Alfred" backgroundImage={FISH_ICON} profileImage={require("../../assets/porter-img.png")} /> */}
-
             {/* Frame Content Close----------- */}
 
             {/* </ScrollView> */}
         </ImageBackground>
     )
 };
-
 
 const styles = StyleSheet.create({
     container: {

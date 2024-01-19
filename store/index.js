@@ -10,7 +10,6 @@ import storyfeed from "./slices/storyfeedslices/storyFeedSlice";
 import likedstoryfeed from "./slices/storyfeedslices/likedStorySlice";
 import getallUsers from "./slices/storyfeedslices/getAllUsersSlice";
 import followandunfollow from "./slices/storyfeedslices/followUnfollowSlice";
-import addComment from "./slices/storyfeedslices/addCommentSlice";
 import getComment from "./slices/storyfeedslices/getCommentsSlice";
 
 const store = configureStore({
@@ -26,7 +25,6 @@ const store = configureStore({
         likedstoryfeed: likedstoryfeed,
         getallUsers: getallUsers,
         followandunfollow: followandunfollow,
-        addComment: addComment,
         getComment: getComment,
     }
 });

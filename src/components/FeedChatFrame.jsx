@@ -15,8 +15,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { addComment } from '../../store/slices/storyfeedslices/addCommentSlice'
 import { launchImageLibrary } from "react-native-image-picker"
-import { getComment } from '../../store/slices/storyfeedslices/getCommentsSlice'
+// import { getComments_func } from '../../store/slices/storyfeedslices/getCommentsSlice'
 import GetComments from './GetComments'
+import { add_comment_api, get_Comment_api } from '../../services/api/storyfeed'
 
 const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) => {
 
@@ -24,24 +25,20 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     const SCREENHEIGHT = Dimensions.get("window").height;
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
-    const [media, setMedia] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
+    const [media, setMedia] = useState();
     const [inputText, setInputText] = useState('');
     const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
     const { FEED_CHAT } = NavigationsString;
-    const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
+    // const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
     const story = useSelector((state) => state?.likedstoryfeed?.storyId);
     const [isComment, setIsComment] = useState(false);
-    const loading = useSelector((state) => state?.getComment?.loading);
-    const getCommentstoryId = useSelector((state) => state?.getComment?.getCommentstoryId);
-
+    const [responseMedia, setResponseMedia] = useState();
+    const [userCommentsData, setuserCommentsData] = useState([])
     const { width, height } = Dimensions.get('window');
     const dispatch = useDispatch();
     const storyId = story;
     const text = inputText;
-
-    useEffect(() => {
-        dispatch(getComment(storyId))
-    }, []);
 
     const optionsvideo = {
         mediaType: 'photo',
@@ -67,14 +64,36 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
         });
     };
 
-
-    const messageArrHandle = () => {
-        if (inputText?.trim() !== "") {
-            dispatch(addComment({ story, text, media }))
-            dispatch(getComment(storyId))
+    const fetchaddDataComments = async () => {
+        try {
+            const response = await add_comment_api({ story, text, media });
+            fetchDatagetComments();
+            setResponseMedia(response?.data?.media)
+            console.log("addComme==", response.data?.media)
+            return response.data;
+        } catch (error) {
+            console.log("error---", error)
         }
-        setInputText("")
     };
+
+    const fetchDatagetComments = async () => {
+        try {
+            setIsLoading(true)
+            const response = await get_Comment_api(storyId);
+            setuserCommentsData(response?.data?.comments);
+            setIsLoading(false);
+            console.log("addComment=====", response.data);
+            setInputText("");
+            return response?.data
+        } catch (error) {
+            console.log("error---", error)
+        }
+    };
+
+    useEffect(() => {
+        fetchDatagetComments();
+    }, []);
+
 
     return (
         <View style={styles.container}>
@@ -177,18 +196,21 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                             <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center", height: responsiveHeight(25.5) }}>
                                 <ScrollView nestedScrollEnabled={true}>
                                     {
-                                        !loading ?
-                                            getCommentsData?.map((item, index) => (
-                                                console.log("item==", item?.story),
+                                        !isLoading ?
+                                            userCommentsData?.map((item, index) => (
+                                                console.log("id====", item?.id),
+                                                console.log("id2==", item?._id),
                                                 <GetComments
                                                     key={index}
                                                     text={item?.text}
+                                                    commentsUserid={item?._id}
+                                                    commentsUserid2={item?.id}
                                                     firstName={item?.user?.firstName}
                                                     lastName={item?.user?.lastName}
                                                     updatedAt={item?.updatedAt}
                                                     getCommentsstoryId={item?.story}
-                                                    addCommentsstoryId={addComment.story}
                                                     isComment={isComment}
+                                                    mediacommentPic={responseMedia}
                                                 />
                                             ))
                                             :
@@ -208,11 +230,11 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                         <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), resizeMode: "center", }} source={require("../assets/image-icon.png")} />
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity onPress={messageArrHandle} style={{ justifyContent: "center", alignItems: "center", }}>
+
+                                <TouchableOpacity onPress={fetchaddDataComments} style={{ justifyContent: "center", alignItems: "center", }}>
                                     <Image style={{ width: responsiveWidth(7), height: responsiveHeight(3.5), resizeMode: "center" }} source={require("../assets/send-btn.png")} />
                                 </TouchableOpacity>
                             </View>
-
 
 
                         </View>

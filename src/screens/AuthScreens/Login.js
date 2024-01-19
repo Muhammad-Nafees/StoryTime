@@ -22,7 +22,7 @@ import { Path, Svg } from 'react-native-svg';
 
 
 
-const Login = ({ route }) => {
+const Login = () => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -31,8 +31,6 @@ const Login = ({ route }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isEmail, setIsEmail] = useState("")
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
-    const login_user = useSelector((state) => state?.authSlice?.user)
-
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -145,24 +143,6 @@ const Login = ({ route }) => {
                                 }
                             </View>
 
-
-                            {/* {isEmail &&
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', }}>
-                                    <View style={{ flexDirection: "row", }}>
-                                        <View>
-                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                <Path
-                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                />
-                                            </Svg>
-                                        </View>
-                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{isEmail}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            } */}
-
                             <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingTop: responsiveWidth(1) }}>
                                 <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Password</Text>
                             </View>
@@ -181,7 +161,6 @@ const Login = ({ route }) => {
                                 {touched.password && errors.password && (
                                     <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
                                         <View style={{ flexDirection: "row", }}>
-
                                             <View>
                                                 <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
                                                     <Path
@@ -241,6 +220,7 @@ const Login = ({ route }) => {
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
+
                     <Toast />
                 </View>
             )}

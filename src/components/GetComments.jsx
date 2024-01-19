@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, ImageBackground } from 'react-native'
 import { responsiveWidth, responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { getComments_func } from '../../store/slices/storyfeedslices/getCommentsSlice';
+import { Base_Url } from '../../services';
 
-
-const GetComments = ({ text, firstName, lastName, updatedAt, getCommentsstoryId, addCommentsstoryId, isComment }) => {
+const GetComments = ({ text, firstName, lastName, updatedAt, getCommentsstoryId, isComment, mediacommentPic, commentsUserid, commentsUserid2 }) => {
     const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
     const dispatch = useDispatch()
 
@@ -15,14 +15,21 @@ const GetComments = ({ text, firstName, lastName, updatedAt, getCommentsstoryId,
         const currentTimestamp = new Date();
         const updatedTimestamp = new Date(updatedAt);
         const differenceInMilliseconds = currentTimestamp - updatedTimestamp;
-        const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
-        return `${differenceInMinutes}m ago`;
+        const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+        const differenceInMinutes = Math.floor(differenceInSeconds / 60);
+        const differenceInHours = Math.floor(differenceInMinutes / 60);
+        const differenceInDays = Math.floor(differenceInHours / 24);
+        const [isCommentPic, setIsCommentPic] = useState(false)
+        if (differenceInDays > 0) {
+            return `${differenceInDays}day ago`;
+        } else if (differenceInHours > 0) {
+            return `${differenceInHours}h ago`;
+        } else {
+            return `${differenceInMinutes}m ago`;
+        }
     };
 
 
-    // useEffect(() => {
-    //     dispatch(getComments_func(getCommentsstoryId))
-    // }, [])
 
     return (
         <>
@@ -33,6 +40,11 @@ const GetComments = ({ text, firstName, lastName, updatedAt, getCommentsstoryId,
                 <View style={{ backgroundColor: "#FFDCE7", borderRadius: 6, width: responsiveWidth(70), paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10) }}>
                     <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(4) }}>{`${firstName} ${lastName}`}</Text>
                     <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.6) }}>{text}</Text>
+                    {
+                        mediacommentPic && commentsUserid === commentsUserid2 && (
+                            <Image style={{ width: 100, height: 100, resizeMode: "contain" }} source={{ uri: "http://storytime.yameenyousuf.com/" + mediacommentPic }} />
+                        )
+                    }
                 </View>
             </View>
 
@@ -42,8 +54,9 @@ const GetComments = ({ text, firstName, lastName, updatedAt, getCommentsstoryId,
                     <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                 </View>
             </View>
+
         </>
     )
-}
+};
 
 export default GetComments;

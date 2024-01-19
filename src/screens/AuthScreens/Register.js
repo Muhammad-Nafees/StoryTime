@@ -23,30 +23,22 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
-import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import CountryPicker from 'react-native-country-picker-modal';
-import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
-import { registeruser } from '../../../store/slices/Register_Slice';
 import { register } from '../../../store/slices/authSlice';
 
 import CustomInput from '../../components/CustomInput';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
-import Svg, { Path } from 'react-native-svg';
 import Toast from 'react-native-toast-message';
 import CustomPhoneInput from '../../components/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
-import PhoneInput from 'react-native-phone-number-input';
-import UserNameExist from '../../components/UserNameExist';
 import { username_api } from '../../../services/api/auth_mdule/auth';
+
 
 const Register = () => {
   const { CREATE_ACCOUNT_ICON } = Img_Paths;
@@ -69,33 +61,10 @@ const Register = () => {
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
 
-  const handleFormSubmit = async (values) => {
-    dispatch(userinfoState(countryCode));
-    dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-    try {
-      const responseData = await username_api({ username: values?.username })
-      console.log("res==Data", responseData.statusCode)
-      setStatusCodeusername(responseData.statusCode)
+  // const handleFormSubmit = async (values) => {
 
-      if (responseData?.statusCode !== 200) {
-        setVisible(true)
-      }
-      if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
-        return;
-      }
-      navigation.navigate(REGISTER_USER_INFO);
-      return responseData;
-    } catch (error) {
-      console.log(error)
-    }
 
-    setIsLoading(true);
-    setIsLoading(false);
-    const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
-    console.log("valid-=", checkValid)
-  };
-
-  // console.log("phoneinp---", phoneInput)
+  // };
 
   return (
     <Formik
@@ -109,7 +78,27 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
-      onSubmit={handleFormSubmit}>
+      onSubmit={async (values) => {
+        try {
+          dispatch(userinfoState(countryCode));
+          dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
+          const responseData = await username_api({ username: values?.username })
+          setStatusCodeusername(responseData.statusCode)
+
+          if (responseData?.statusCode !== 200) {
+            setVisible(true)
+          }
+          if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
+            return;
+          }
+          navigation.navigate(REGISTER_USER_INFO);
+          return responseData;
+        } catch (error) {
+        }
+        setIsLoading(true);
+        setIsLoading(false);
+        const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+      }}>
       {({
         values,
         errors,
@@ -117,8 +106,6 @@ const Register = () => {
         handleSubmit,
         setFieldValue,
         touched,
-        isValid,
-        dirty,
         setFieldError,
       }) => (
         <>
@@ -250,7 +237,6 @@ const Register = () => {
                     />
                   </View>
 
-
                 </View>
               </View>
             </View>
@@ -261,8 +247,6 @@ const Register = () => {
     </Formik>
   );
 };
-
-
 
 export default Register;
 

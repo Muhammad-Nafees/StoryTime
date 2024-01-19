@@ -1,4 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import {
   PopUpStart,
@@ -39,7 +39,12 @@ const AuthStack = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={POPUP_START}>
+      <Stack.Navigator
+        screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        }}
+        initialRouteName={POPUP_START}
+      >
         <Stack.Screen
           name={POPUP_START}
           component={PopUpStart}

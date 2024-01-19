@@ -108,7 +108,7 @@ export const add_comment_api = async (formsdata) => {
     const formData = new FormData();
     formData.append('text', text);
     formData.append('story', story);
-    // formData.append('media', media);
+    formData.append('media', media);
 
     try {
         const responseData = await fetch(Base_Url + addComment_endpoint, {
