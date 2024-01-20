@@ -161,8 +161,6 @@ const ProfileScreens = () => {
 };
 
 
-
-
 const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;

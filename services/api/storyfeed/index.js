@@ -100,15 +100,20 @@ export const follow_unfollow_api = async (userids) => {
 };
 
 export const add_comment_api = async (formsdata) => {
-
-    const { story, text, media } = formsdata;
-    console.log("mediaApiInn==========", media)
-    console.log("textapi==========", text)
-    console.log("storyapi==========", story)
     const formData = new FormData();
-    formData.append('text', text);
-    formData.append('story', story);
-    formData.append('media', media);
+
+    if (formsdata.story) {
+        formData.append('story', formsdata.story);
+    }
+    if (formsdata.media) {
+        formData.append('media', formsdata.media);
+    }
+    if (formsdata.text) {
+        formData.append('text', formsdata.text);
+    }
+    if (formsdata.parent) {
+        formData.append('parent', formsdata.parent);
+    }
 
     try {
         const responseData = await fetch(Base_Url + addComment_endpoint, {
