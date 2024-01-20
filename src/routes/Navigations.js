@@ -30,7 +30,11 @@ import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoi
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { Notification, Setting, SubscriptionDetails } from '../screens';
+import { FAQ, Notification, Setting, SubscriptionDetails } from '../screens';
+import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
+import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
+
+
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -46,6 +50,29 @@ const Navigations = () => {
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
+      <Stack.Screen
+          name="GuestStack"
+          component={GuestStack}
+          options={{ headerShown: false }}
+        />
+    </Stack.Navigator>
+  );
+};
+
+const GuestStack = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TermsAndConditions"
+        component={TermsAndConditions}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PrivacyAndPolicy"
+        component={PrivacyAndPolicy}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -98,8 +125,6 @@ const PLayFlowScreens = () => {
   );
 };
 
-
-
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
@@ -129,7 +154,7 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS } = NavigationsString;
+  const { HOME, FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS } = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Profile} />
@@ -138,8 +163,7 @@ const ProfileStacksBottom = () => {
       <Stack.Screen name={SETTING} component={Setting} />
       <Stack.Screen name={NOTIFICATION} component={Notification} />
       <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
-
-
+      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
     </Stack.Navigator>
   );
 };
@@ -154,9 +178,6 @@ const ProfileScreens = () => {
     </Stack.Navigator>
   );
 };
-
-
-
 
 const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;

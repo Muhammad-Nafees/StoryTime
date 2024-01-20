@@ -32,7 +32,6 @@ import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
-import { registeruser } from '../../../store/slices/Register_Slice';
 import { register } from '../../../store/slices/authSlice';
 
 import CustomInput from '../../components/CustomInput';

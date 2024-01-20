@@ -39,6 +39,7 @@ export default NavigationString = {
     FIRST_USER: "FirstUser",
     SETTING: "Setting",
     NOTIFICATION: "Notification",
-    SUBSCRIPTION_DETAILS: "SubscriptionDetails"
+    SUBSCRIPTION_DETAILS: "SubscriptionDetails",
+    FAQ_ROUTE: "Faq"
 
 };
