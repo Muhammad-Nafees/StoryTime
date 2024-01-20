@@ -1,16 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {Switch} from 'react-native-switch';
 import {useNavigation} from '@react-navigation/native';
-import BackButton from '../../../components/BackButton';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
@@ -19,18 +16,48 @@ import {
 } from 'react-native-responsive-dimensions';
 import {
   FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  ThirdColor,
-  pinkColor,
 } from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import Typography from '../../../components/Typography';
+
+const NotificationOptBox = ({title, sectionName = ''}) => {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  return (
+    <View style={styles.box_container}>
+      <View style={styles.box}>
+        {!!sectionName && (
+          <Typography size={14} mb={moderateScale(10)}>
+            {sectionName}
+          </Typography>
+        )}
+        <View style={styles.row}>
+          <Typography>{title}</Typography>
+          <Switch
+            value={isEnabled}
+            onValueChange={toggleSwitch}
+            circleSize={25}
+            barHeight={15}
+            backgroundActive={'#68AEBD'}
+            backgroundInactive={'#D4D4D4'}
+            circleActiveColor={'#2F4F56'}
+            circleInActiveColor={'#68AEBD'}
+            changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+            renderActiveText={false}
+            renderInActiveText={false}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const Notification = () => {
   const navigation = useNavigation();
-  const {SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG} = Img_Paths;
+  const {LEFT_ARROW_IMG} = Img_Paths;
 
   return (
     <BackgroundWrapper>
@@ -44,6 +71,19 @@ const Notification = () => {
           <Text style={styles.categories_text}>Notifications</Text>
         </View>
       </View>
+      <Typography style={styles.typography_spacing}>
+        Control your notifications depending on your prefereces.
+      </Typography>
+      <Typography style={styles.typography_spacing} mb={moderateScale(20)}>
+        If you disable this notification, you will not get notify when someone
+        messages you.
+      </Typography>
+      <NotificationOptBox title={'System Notifications'} />
+      <NotificationOptBox title={'In-App Notifications'} />
+      <NotificationOptBox
+        title={'Enable App Vibrations'}
+        sectionName={'Vibrations'}
+      />
     </BackgroundWrapper>
   );
 };
@@ -84,5 +124,25 @@ const styles = StyleSheet.create({
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),
+  },
+  typography_spacing: {
+    paddingVertical: moderateVerticalScale(12),
+    paddingHorizontal: moderateScale(20),
+  },
+  box: {
+    marginHorizontal: moderateScale(10),
+    paddingVertical: moderateVerticalScale(30),
+
+    borderBottomColor: '#EBEBEB',
+    borderBottomWidth: 2,
+  },
+  row: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+  },
+  box_container: {
+    marginHorizontal: moderateScale(20),
+    backgroundColor: '#F3F3F3',
   },
 });

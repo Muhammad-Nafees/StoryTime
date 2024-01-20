@@ -26,37 +26,25 @@ const {width, height} = Dimensions.get('window');
 
 const Setting = () => {
   const navigation = useNavigation();
-  const {LEFT_ARROW_IMG} = Img_Paths;
-  const { TERMSANDCONDITIONS } = NavigationsString;
+  const {LEFT_ARROW_IMG ,SETTING_USER} = Img_Paths;
+  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER } = NavigationsString;
 
 
   const generalData = [
     {key: '1', text: 'Profile', iconName: 'ProfileIcon'},
-    {key: '2', text: 'Notifications', iconName: 'Notifications'},
+    {key: '2', text: 'Notifications', iconName: 'Notifications',routeName: NOTIFICATION},
     {key: '3', text: 'Payment Settings', iconName: 'PaymentSettings'},
-    {key: '4', text: 'Subscriptions', iconName: 'Subscription'},
+    {key: '4', text: 'Subscriptions', iconName: 'Subscription',routeName: SUBSCRIPTION_DETAILS},
     {key: '5', text: 'Report a problem', iconName: 'ReportAProblem'},
-    {key: '6', text: 'Block Users', iconName: 'BlockUser'},
+    {key: '6', text: 'Block Users', iconName: 'BlockUser',routeName: BLOCK_USER},
     {key: '7', text: 'Delete Account', iconName: 'DeleteAccount'},
   ];
   const legalData = [
-    {key: '1', text: 'Terms & Conditions', iconName: 'TermsConditions'},
-    {key: '2', text: 'Privacy Policy', iconName: 'PrivacyPolicy'},
-    {key: '3', text: 'FAQ', iconName: 'FAQ'},
+    {key: '8', text: 'Terms & Conditions', iconName: 'TermsConditions',stack:'GuestStack',routeName:'TermsAndConditions'},
+    {key: '9', text: 'Privacy Policy', iconName: 'PrivacyPolicy',stack:'GuestStack',routeName:'PrivacyAndPolicy'},
+    {key: '10', text: 'FAQ', iconName: 'FAQ',routeName: FAQ_ROUTE},
   ];
 
-  const renderItem = ({item}) => {
-   
-        switch (item) {
-          case 'Terms & Conditions':
-            return (
-              navigation.navigate(TERMSANDCONDITIONS)
-            );
-        
-          default:
-            return null;
-        }
-  }
   return (
     <BackgroundWrapper>
       <View style={styles.first_container}>
@@ -78,8 +66,9 @@ const Setting = () => {
         }}>
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
-            style={{width: 57, height: 57, resizeMode: 'contain'}}
-            source={require('../../../assets/oliver.png')}
+            style={{width: 57, height: 57}}
+            source={SETTING_USER}
+            resizeMode = {'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
             <Text
@@ -116,7 +105,7 @@ const Setting = () => {
           renderItem={({item, index}) => (
             <ListView
               item={item}
-              isLastItem={index !== generalData.length - 1} onPress={()=>renderItem(item.text)}
+              isLastItem={index !== generalData.length - 1} 
             />
           )}
           keyExtractor={item => item.key}
@@ -136,7 +125,7 @@ const Setting = () => {
         <FlatList
           data={legalData}
           renderItem={({item, index}) => (
-            <ListView item={item} isLastItem={index !== legalData.length - 1} onPress={()=>renderItem(item.text)}/>
+            <ListView item={item} isLastItem={index !== legalData.length - 1}/>
           )}
           keyExtractor={item => item.key}
         />

@@ -13,7 +13,6 @@ import Subscription from "../../assets/svgIcons/paymentSetting.svg"
 import ReportAProblem from "../../assets/svgIcons/reportProblem.svg"
 
 const SvgIcons = ({name, height, width,backgroundColor='transparent'}) => {
-  console.log("name",name)
 
 switch (name) {
     case 'ProfileIcon': return( <ProfileIcon width={width} height={height} style={{backgroundColor:backgroundColor}}/>);

@@ -1,7 +1,12 @@
 import React from 'react';
 import {Img_Paths} from '../assets/Imagepaths';
 import {
+    FourthColor,
+    PrimaryColor,
     SecondaryColor,
+    TextColorGreen,
+    ThirdColor,
+    pinkColor,
   } from '../screens/Styles/Style';
 import {
   StyleSheet,
@@ -10,23 +15,24 @@ import {
   ScrollView,
 } from 'react-native';
 
-const BackgroundWrapper = (props) => {
-  const {children, contentContainerStyle} = props
-  const {SPLASH_SCREEN_IMAGE} = Img_Paths;
+const ElementsBgWrapper = ({children}) => {
+  const {BG_IMAGE_ELEMENTS} = Img_Paths;
   return (
-    <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+    <ImageBackground style={styles.container} source={BG_IMAGE_ELEMENTS}>
       <SafeAreaView>
-        <ScrollView contentContainerStyle={{...(contentContainerStyle || {})}}>{children}</ScrollView>
+        {children}
       </SafeAreaView>
     </ImageBackground>
   );
 };
 
-export default BackgroundWrapper;
+export default ElementsBgWrapper;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: SecondaryColor,
     flex: 1,
+    width: "100%",
+    height: "100%",
   },
 });
