@@ -9,3 +9,6 @@ export { default as ForgetPhoneNumber } from "../screens/AuthScreens/forgetscree
 export { default as OtpForget } from "../screens/AuthScreens/forgetscreens/OtpForget"
 export { default as ForgetConfirmPassword } from "../screens/AuthScreens/forgetscreens/ForgetConfirmPassword"
 export { default as Setting } from "./HomeScreens/setting/Setting"
+export { default as Notification } from "./HomeScreens/setting/Notification"
+export { default as TermsAndConditions } from "./HomeScreens/setting/TermsAndConditions"
+
