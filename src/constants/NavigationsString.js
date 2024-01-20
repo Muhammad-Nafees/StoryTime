@@ -39,6 +39,4 @@ export default NavigationString = {
     FIRST_USER: "FirstUser",
     SETTING: "Setting",
     NOTIFICATION: "Notification",
-    TERMSANDCONDITIONS:"TermsAndConditions"
-
 };
