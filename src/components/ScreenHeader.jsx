@@ -14,7 +14,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 
-const ScreenHeader = ({title}) => {
+const ScreenHeader = ({title,clr}) => {
 
     const navigation = useNavigation();
     const {LEFT_ARROW_IMG} = Img_Paths;
@@ -34,7 +34,7 @@ const ScreenHeader = ({title}) => {
       <View style={{paddingHorizontal: moderateScale(14)}}>
         <Text
           style={{
-            color: '#000',
+            color: clr || '#000',
             fontWeight: '600',
             fontSize: responsiveFontSize(2.5),
           }}>
