@@ -33,12 +33,13 @@ import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
+import BlockUser from '../screens/HomeScreens/setting/BlockUser';
 
 
 
 const Navigations = () => {
   const Stack = createStackNavigator();
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,  FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,PROFILE } = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,  FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,PROFILE, BLOCK_USER } = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -55,6 +56,8 @@ const Navigations = () => {
       <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
+      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
+
       <Stack.Screen
           name="GuestStack"
           component={GuestStack}
@@ -165,7 +168,6 @@ const ProfileStacksBottom = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
-
     </Stack.Navigator>
   );
 };

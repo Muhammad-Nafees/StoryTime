@@ -11,6 +11,7 @@ export { default as ForgetConfirmPassword } from "../screens/AuthScreens/forgets
 
 export { default as FAQ } from "./HomeScreens/setting/FAQ"
 export { default as Setting } from "./HomeScreens/setting/Setting"
+export { default as BlockUser } from "./HomeScreens/setting/BlockUser"
 export { default as Notification } from "./HomeScreens/setting/Notification"
 export { default as SettingsProfile } from "./HomeScreens/setting/SettingsProfile"
 export { default as SubscriptionDetails } from "./HomeScreens/setting/SubscriptionDetails"

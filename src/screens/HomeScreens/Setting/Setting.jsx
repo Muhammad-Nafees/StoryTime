@@ -26,8 +26,8 @@ const {width, height} = Dimensions.get('window');
 
 const Setting = () => {
   const navigation = useNavigation();
-  const {LEFT_ARROW_IMG} = Img_Paths;
-  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, PROFILE } = NavigationsString;
+  const {LEFT_ARROW_IMG ,SETTING_USER} = Img_Paths;
+  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE } = NavigationsString;
 
 
   const generalData = [
@@ -36,7 +36,7 @@ const Setting = () => {
     {key: '3', text: 'Payment Settings', iconName: 'PaymentSettings'},
     {key: '4', text: 'Subscriptions', iconName: 'Subscription',routeName: SUBSCRIPTION_DETAILS},
     {key: '5', text: 'Report a problem', iconName: 'ReportAProblem'},
-    {key: '6', text: 'Block Users', iconName: 'BlockUser'},
+    {key: '6', text: 'Block Users', iconName: 'BlockUser',routeName: BLOCK_USER},
     {key: '7', text: 'Delete Account', iconName: 'DeleteAccount'},
   ];
   const legalData = [
@@ -66,8 +66,9 @@ const Setting = () => {
         }}>
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
-            style={{width: 57, height: 57, resizeMode: 'contain'}}
-            source={require('../../../assets/oliver.png')}
+            style={{width: 57, height: 57}}
+            source={SETTING_USER}
+            resizeMode = {'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
             <Text

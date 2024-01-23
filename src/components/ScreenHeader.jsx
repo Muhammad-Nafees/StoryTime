@@ -4,9 +4,9 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import BackButton from './BackButton';
 import {Img_Paths} from '../assets/Imagepaths';
+import {useNavigation} from '@react-navigation/native';
 
 import {
   responsiveFontSize,

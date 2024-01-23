@@ -11,13 +11,12 @@ const {width, height} = Dimensions.get('window');
 
 const ListView = ({item, isLastItem}) => {
   const navigation = useNavigation();
-  const {NOTIFICATION} = NavigationsString;
 
   const handleOnPress = () => {
     if (item.stack) {
       navigation.navigate(item.stack, {
         screen: item.routeName,
-    })
+      });
     } else if (item.routeName) {
       navigation.navigate(item.routeName);
     }
