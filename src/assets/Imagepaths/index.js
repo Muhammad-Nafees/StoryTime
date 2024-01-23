@@ -262,6 +262,9 @@ export const Img_Paths = {
 
     //settings
     SETTING_USER: require("../../assets/oliver.png"),
-    BLOCK_USER: require("../../assets/lilibeth.png")
+    BLOCK_USER: require("../../assets/lilibeth.png"),
+    //DUMMYS
+    AVATAR: require("../../assets/avatar.png"),
+    DROP_ICON: require("../../assets/bottom-icon.png")
 
 };

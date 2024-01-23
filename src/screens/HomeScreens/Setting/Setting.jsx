@@ -27,11 +27,10 @@ const {width, height} = Dimensions.get('window');
 const Setting = () => {
   const navigation = useNavigation();
   const {LEFT_ARROW_IMG ,SETTING_USER} = Img_Paths;
-  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER } = NavigationsString;
-
+  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE } = NavigationsString;
 
   const generalData = [
-    {key: '1', text: 'Profile', iconName: 'ProfileIcon'},
+    {key: '1', text: 'Profile', iconName: 'ProfileIcon',routeName: PROFILE},
     {key: '2', text: 'Notifications', iconName: 'Notifications',routeName: NOTIFICATION},
     {key: '3', text: 'Payment Settings', iconName: 'PaymentSettings'},
     {key: '4', text: 'Subscriptions', iconName: 'Subscription',routeName: SUBSCRIPTION_DETAILS},

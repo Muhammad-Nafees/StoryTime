@@ -30,7 +30,7 @@ import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoi
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails } from '../screens';
+import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import BlockUser from '../screens/HomeScreens/setting/BlockUser';
@@ -39,7 +39,7 @@ import BlockUser from '../screens/HomeScreens/setting/BlockUser';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,SETTING} = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE} = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -155,7 +155,7 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,BLOCK_USER} = NavigationsString;
+  const { HOME, FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,BLOCK_USER,PROFILE} = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Profile} />
@@ -166,6 +166,8 @@ const ProfileStacksBottom = () => {
       <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
+      <Stack.Screen name={PROFILE} component={SettingsProfile} />
+
     </Stack.Navigator>
   );
 };

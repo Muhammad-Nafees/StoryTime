@@ -11,6 +11,8 @@ import ForwardArrow from "../../assets/svgIcons/forwardArrow.svg"
 import Notifications from "../../assets/svgIcons/notification.svg"
 import Subscription from "../../assets/svgIcons/paymentSetting.svg"
 import ReportAProblem from "../../assets/svgIcons/reportProblem.svg"
+import PencilEdit from "../../assets/svgIcons/pencil_edit.svg"
+
 
 const SvgIcons = ({name, height, width,backgroundColor='transparent'}) => {
 
@@ -27,6 +29,8 @@ switch (name) {
     case 'TermsConditions': return( <TermsConditions width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'PrivacyPolicy': return( <PrivacyPolicy width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'FAQ': return( <FAQ width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
+    case 'PencilEdit': return( <PencilEdit width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
+
 
 
     default:
