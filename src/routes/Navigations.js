@@ -39,7 +39,7 @@ import BlockUser from '../screens/HomeScreens/setting/BlockUser';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE} = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,  FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,PROFILE, BLOCK_USER } = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -51,6 +51,13 @@ const Navigations = () => {
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
+      <Stack.Screen name={SETTING} component={Setting} />
+      <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
+      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
+      <Stack.Screen name={PROFILE} component={SettingsProfile} />
+      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
+
       <Stack.Screen
           name="GuestStack"
           component={GuestStack}
@@ -155,19 +162,12 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,BLOCK_USER,PROFILE} = NavigationsString;
+  const { HOME} = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
-      <Stack.Screen name={SETTING} component={Setting} />
-      <Stack.Screen name={NOTIFICATION} component={Notification} />
-      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
-      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
-      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
-      <Stack.Screen name={PROFILE} component={SettingsProfile} />
-
     </Stack.Navigator>
   );
 };

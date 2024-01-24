@@ -1,12 +1,11 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Image,
   FlatList,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import ListView from '../../../components/ListView';
@@ -16,32 +15,62 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import Typography from '../../../components/Typography';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import NavigationsString from '../../../constants/NavigationsString';
-import {SecondaryColor, FourthColor, Red02 } from '../../Styles/Style';
+import {SecondaryColor, FourthColor, Red02} from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { SPACING } from '../../../constants/Constant';
 
 const {width, height} = Dimensions.get('window');
 
 const Setting = () => {
   const navigation = useNavigation();
-  const {LEFT_ARROW_IMG ,SETTING_USER} = Img_Paths;
-  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE } = NavigationsString;
+  const {LEFT_ARROW_IMG, SETTING_USER} = Img_Paths;
+  const {NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE} =
+    NavigationsString;
 
   const generalData = [
-    {key: '1', text: 'Profile', iconName: 'ProfileIcon',routeName: PROFILE},
-    {key: '2', text: 'Notifications', iconName: 'Notifications',routeName: NOTIFICATION},
+    {key: '1', text: 'Profile', iconName: 'ProfileIcon', routeName: PROFILE},
+    {
+      key: '2',
+      text: 'Notifications',
+      iconName: 'Notifications',
+      routeName: NOTIFICATION,
+    },
     {key: '3', text: 'Payment Settings', iconName: 'PaymentSettings'},
-    {key: '4', text: 'Subscriptions', iconName: 'Subscription',routeName: SUBSCRIPTION_DETAILS},
+    {
+      key: '4',
+      text: 'Subscriptions',
+      iconName: 'Subscription',
+      routeName: SUBSCRIPTION_DETAILS,
+    },
     {key: '5', text: 'Report a problem', iconName: 'ReportAProblem'},
-    {key: '6', text: 'Block Users', iconName: 'BlockUser',routeName: BLOCK_USER},
+    {
+      key: '6',
+      text: 'Block Users',
+      iconName: 'BlockUser',
+      routeName: BLOCK_USER,
+    },
     {key: '7', text: 'Delete Account', iconName: 'DeleteAccount'},
   ];
   const legalData = [
-    {key: '8', text: 'Terms & Conditions', iconName: 'TermsConditions',stack:'GuestStack',routeName:'TermsAndConditions'},
-    {key: '9', text: 'Privacy Policy', iconName: 'PrivacyPolicy',stack:'GuestStack',routeName:'PrivacyAndPolicy'},
-    {key: '10', text: 'FAQ', iconName: 'FAQ',routeName: FAQ_ROUTE},
+    {
+      key: '8',
+      text: 'Terms & Conditions',
+      iconName: 'TermsConditions',
+      stack: 'GuestStack',
+      routeName: 'TermsAndConditions',
+    },
+    {
+      key: '9',
+      text: 'Privacy Policy',
+      iconName: 'PrivacyPolicy',
+      stack: 'GuestStack',
+      routeName: 'PrivacyAndPolicy',
+    },
+    {key: '10', text: 'FAQ', iconName: 'FAQ', routeName: FAQ_ROUTE},
   ];
 
   return (
@@ -53,7 +82,7 @@ const Setting = () => {
           <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
         </TouchableOpacity>
         <View style={styles.categories_text_container}>
-          <Text style={styles.categories_text}>Settings</Text>
+          <Typography style={styles.categories_text}>Settings</Typography>
         </View>
       </View>
       <View
@@ -61,78 +90,74 @@ const Setting = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginHorizontal: responsiveWidth(6),
-          width:width-50,
+          width: width - 50,
         }}>
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
             style={{width: 57, height: 57}}
             source={SETTING_USER}
-            resizeMode = {'contain'}
+            resizeMode={'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
-            <Text
+            <Typography
               style={{
                 fontSize: 14,
                 fontWeight: 600,
                 marginTop: responsiveWidth(3),
               }}>
               Oliver Pierce
-            </Text>
-            <Text style={{fontSize: 12, fontWeight: 600}}>
+            </Typography>
+            <Typography style={{fontSize: 12, fontWeight: 600}}>
               oliverpierce@gmail.com
-            </Text>
+            </Typography>
           </View>
         </View>
-        <TouchableOpacity
-        activeOpacity={0.3}>
-        <View style={styles.svgIcon}>
-          <SvgIcons name={'PencilIcon'} width={18} height={18} />
-        </View>
+        <TouchableOpacity activeOpacity={0.3}>
+          <View style={styles.svgIcon}>
+            <SvgIcons name={'PencilIcon'} width={18} height={18} />
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.listView}>
-        <Text
+        <Typography
           style={{
             fontWeight: '400',
             fontSize: 14,
             marginBottom: responsiveWidth(4),
           }}>
           GENERAL
-        </Text>
+        </Typography>
         <FlatList
           data={generalData}
           renderItem={({item, index}) => (
             <ListView
               item={item}
-              isLastItem={index !== generalData.length - 1} 
+              isLastItem={index !== generalData.length - 1}
             />
           )}
           keyExtractor={item => item.key}
         />
       </View>
       <View style={styles.listView}>
-        <Text
+        <Typography
           style={{
             fontWeight: '400',
             fontSize: 14,
             marginBottom: responsiveWidth(4),
-
           }}>
           LEGAL TERMS
-        </Text>
+        </Typography>
 
         <FlatList
           data={legalData}
           renderItem={({item, index}) => (
-            <ListView item={item} isLastItem={index !== legalData.length - 1}/>
+            <ListView item={item} isLastItem={index !== legalData.length - 1} />
           )}
           keyExtractor={item => item.key}
         />
       </View>
-      <TouchableOpacity 
-      activeOpacity={0.3}
-      style={styles.btn}>
-        <Text style={styles.txt}>Log out</Text>
+      <TouchableOpacity activeOpacity={0.3} style={styles.btn}>
+        <Typography style={styles.txt}>Log out</Typography>
       </TouchableOpacity>
     </BackgroundWrapper>
   );
@@ -185,13 +210,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     backgroundColor: Red02,
-    width:width-70,
-    alignSelf:"center"
+    width: width - 70,
+    alignSelf: 'center',
+    marginBottom:SPACING*2
   },
-  svgIcon:{
-    marginTop:"auto",
-    marginBottom:"auto",
-    },
+  svgIcon: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
   txt: {
     fontSize: 14,
     fontWeight: '600',
