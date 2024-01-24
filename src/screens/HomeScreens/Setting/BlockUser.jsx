@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useMemo, useEffect} from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {moderateScale} from 'react-native-size-matters';
 import {
@@ -8,26 +8,56 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
+import CustomModal from '../../../components/BlockModal';
 import ScreenHeader from '../../../components/ScreenHeader';
+import {getBlockList} from '../../../../services/api/settings';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import CustomModal from '../../../components/BlockModal';
+import Typography from '../../../components/Typography';
 
 const BlockUser = () => {
   const {BLOCK_USER} = Img_Paths;
   const blockModalRef = useRef(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [users, setUsers] = useState({
+    data: [],
+    loading: false,
+  });
 
-  const blocklist = [
-    {
-      name: 'Lilibeth',
-      imageUrl: BLOCK_USER,
-    },
-    {
-      name: 'Lilibeth',
-      imageUrl: BLOCK_USER,
-    },
-  ];
+  const DATA = useMemo(() => users?.data, [users]);
+  const LOADING = useMemo(() => users?.loading, [users]);
+
+  useEffect(() => {
+    fetchBlockedUsers();
+  }, []);
+
+  const fetchBlockedUsers = async () => {
+    try {
+      setUsers(prevState => ({
+        ...(prevState || {}),
+        loading: true,
+      }));
+      const responseData = await getBlockList();
+      const data = responseData?.data || [];
+      setUsers({
+        loading: false,
+        data: data,
+      });
+    } catch (error) {
+      console.log('error ==> ', error?.message);
+      setUsers(prevState => ({
+        ...(prevState || {}),
+        loading: false,
+      }));
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  const keyExtractor = (_, index) => `blocked-users.${index}`;
+
   const modalOpen = item => {
     if (blockModalRef.current) {
       blockModalRef.current.open(item);
@@ -59,17 +89,35 @@ const BlockUser = () => {
     );
   };
 
-  return (
-    <BackgroundWrapper
-      contentContainerStyle={{
-        paddingHorizontal: moderateScale(20),
-      }}>
-      <ScreenHeader title={'Blocklist'} />
+  const renderEmpty = () => {
+    return LOADING && DATA?.length < 1 && !isRefreshing ? (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size={'large'}/>
+      </View>
+    ) : DATA?.length < 1 && !LOADING && !isRefreshing ? (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Typography center size={15}>
+          Nothing to show
+        </Typography>
+      </View>
+    ) : null;
+  };
 
+  return (
+    <BackgroundWrapper disableScrollView coverScreen>
+      <ScreenHeader title={'Blocklist'} />
       <FlatList
-        data={blocklist}
+        data={DATA}
+        contentContainerStyle={{
+          flex:1,
+          paddingHorizontal: moderateScale(20),
+        }}
         renderItem={renderItem}
-        keyExtractor={item => item.key}
+        onEndReachedThreshold={2}
+        keyExtractor={keyExtractor}
+        removeClippedSubviews={true}
+        ListEmptyComponent={renderEmpty}
+        showsVerticalScrollIndicator={false}
       />
       <CustomModal ref={blockModalRef} />
     </BackgroundWrapper>
