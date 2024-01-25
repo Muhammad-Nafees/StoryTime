@@ -265,7 +265,7 @@ export const Img_Paths = {
     BLOCK_USER: require("../../assets/lilibeth.png"),
     //DUMMYS
     AVATAR: require("../../assets/avatar.png"),
-    DROP_ICON: require("../../assets/bottom-icon.png")
-  
+    DROP_ICON: require("../../assets/bottom-icon.png"),
+    DEFAULT_ICON: require("../../assets/defaultIcon.png")
 
 };

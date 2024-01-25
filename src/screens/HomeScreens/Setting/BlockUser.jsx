@@ -18,7 +18,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
 
 const BlockUser = () => {
-  const {BLOCK_USER} = Img_Paths;
+  const {DEFAULT_ICON} = Img_Paths;
   const blockModalRef = useRef(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [users, setUsers] = useState({
@@ -77,7 +77,7 @@ const BlockUser = () => {
         <View style={{flexDirection: 'row'}}>
           <Image
             style={{width: 33, height: 33}}
-            source={item.imageUrl}
+            source={item?.profileImage?profileImage:DEFAULT_ICON}
             resizeMode={'contain'}
           />
 
