@@ -41,8 +41,8 @@ export default NavigationString = {
     NOTIFICATION: "Notification",
     SUBSCRIPTION_DETAILS: "SubscriptionDetails",
     FAQ_ROUTE: "Faq",
-    PROFILE: "SettingsProfile",
-    BLOCK_USER: "BlockUser"
+    BLOCK_USER: "BlockUser",
+    PROFILE: "SettingsProfile"
 
 
 };

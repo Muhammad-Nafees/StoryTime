@@ -18,7 +18,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
 
 const BlockUser = () => {
-  const {BLOCK_USER} = Img_Paths;
+  const {DEFAULT_ICON} = Img_Paths;
   const blockModalRef = useRef(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [users, setUsers] = useState({
@@ -40,7 +40,7 @@ const BlockUser = () => {
         loading: true,
       }));
       const responseData = await getBlockList();
-      const data = responseData?.data || [];
+      const data = responseData?.data?.blockUsers || [];
       setUsers({
         loading: false,
         data: data,
@@ -65,6 +65,7 @@ const BlockUser = () => {
   };
 
   const renderItem = ({item}) => {
+    console.log("item",item)
     return (
       <View
         style={{
@@ -76,11 +77,11 @@ const BlockUser = () => {
         <View style={{flexDirection: 'row'}}>
           <Image
             style={{width: 33, height: 33}}
-            source={item.imageUrl}
+            source={item?.profileImage?profileImage:DEFAULT_ICON}
             resizeMode={'contain'}
           />
 
-          <Text style={styles.txt}>{item.name} </Text>
+          <Text style={styles.txt}>{item.username} </Text>
         </View>
         <TouchableOpacity activeOpacity={0.3} onPress={() => modalOpen(item)}>
           <Text>Unblock</Text>

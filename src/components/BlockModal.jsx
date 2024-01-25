@@ -1,4 +1,5 @@
 import Modal from 'react-native-modal';
+import {Img_Paths} from '../assets/Imagepaths';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
@@ -11,7 +12,8 @@ const BlockModal = forwardRef((props, ref) => {
   const [isVisible, setIsVisible] = useState(false);
   const [item, setItem] = useState(null);
   const itemValue = item ? item : null;
-  
+  const {DEFAULT_ICON} = Img_Paths;
+
   const open = item => {
     setIsVisible(true);
     setItem(item);
@@ -49,7 +51,7 @@ const BlockModal = forwardRef((props, ref) => {
             alignSelf: 'center',
             marginVertical: responsiveWidth(4),
           }}
-          source={itemValue?.imageUrl}
+          source={itemValue?.profileImage?profileImage:DEFAULT_ICON}
           resizeMode={'contain'}
         />
         <Text
@@ -59,7 +61,7 @@ const BlockModal = forwardRef((props, ref) => {
             textAlign: 'center',
             lineHeight: 20,
           }}>
-          {itemValue?.name}
+          {itemValue?.username}
         </Text>
         <Text
           style={{
