@@ -19,6 +19,5 @@ export const getComment_endpoint = "story/comments/:"
 export const block_list_endpoint = "user/block-list"
 export const unblock_endpoint = "user/block"
 export const notifications_endpoint = "user/notifications"
-
-
+export const logout_endpoint = "auth/logout"
 

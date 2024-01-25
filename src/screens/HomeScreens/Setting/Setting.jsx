@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  StyleSheet,
   View,
-  TouchableOpacity,
   Image,
   FlatList,
   Dimensions,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import ListView from '../../../components/ListView';
@@ -15,13 +15,13 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import LogoutBtn from '../../../components/LogoutBtn';
 import Typography from '../../../components/Typography';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import NavigationsString from '../../../constants/NavigationsString';
 import {SecondaryColor, FourthColor, Red02} from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import { SPACING } from '../../../constants/Constant';
 
 const {width, height} = Dimensions.get('window');
 
@@ -156,9 +156,7 @@ const Setting = () => {
           keyExtractor={item => item.key}
         />
       </View>
-      <TouchableOpacity activeOpacity={0.3} style={styles.btn}>
-        <Typography style={styles.txt}>Log out</Typography>
-      </TouchableOpacity>
+      <LogoutBtn/>
     </BackgroundWrapper>
   );
 };
@@ -205,23 +203,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginHorizontal: responsiveWidth(6),
   },
-  btn: {
-    marginTop: 10,
-    borderRadius: 5,
-    paddingVertical: 10,
-    backgroundColor: Red02,
-    width: width - 70,
-    alignSelf: 'center',
-    marginBottom:SPACING*2
-  },
   svgIcon: {
     marginTop: 'auto',
     marginBottom: 'auto',
-  },
-  txt: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: 'white',
   },
 });

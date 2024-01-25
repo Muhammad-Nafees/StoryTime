@@ -32,8 +32,10 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.user = action.payload;
         },
-        logout: (state) => {
-            state.isAuthenticated = false;
+        logout: (state,action) => {
+            Object.keys(initialState).forEach(key => {
+                state[key] = initialState[key];
+            });
         },
         forgetResetToken: (state, action) => {
             state.forgetAccesstoken = action.payload
