@@ -10,7 +10,7 @@ const BackButton = ({ leftarrow, onPress }) => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={onPress} style={styles.back_button}>
+        <TouchableOpacity activeOpacity={0.3} onPress={onPress} style={styles.back_button}>
             <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
         </TouchableOpacity>
     )

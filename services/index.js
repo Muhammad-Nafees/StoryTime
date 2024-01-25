@@ -17,4 +17,8 @@ export const follow_Unfollow_endpoint = "user/follow-toggle"
 export const addComment_endpoint = "story/add-comment"
 export const getComment_endpoint = "story/comments/:"
 export const block_list_endpoint = "user/block-list"
+export const unblock_endpoint = "user/block"
+export const notifications_endpoint = "user/notifications"
+
+
 

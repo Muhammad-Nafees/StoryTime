@@ -2,6 +2,7 @@ import Modal from 'react-native-modal';
 import {Img_Paths} from '../assets/Imagepaths';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
+import {unBlockUser} from '../../services/api/settings';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
 import {
   PrimaryColor,
@@ -9,6 +10,7 @@ import {
 } from '../screens/Styles/Style';
 
 const BlockModal = forwardRef((props, ref) => {
+  const {removeUnblockUserFromList} = props
   const [isVisible, setIsVisible] = useState(false);
   const [item, setItem] = useState(null);
   const itemValue = item ? item : null;
@@ -26,6 +28,18 @@ const BlockModal = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => {
     return {open};
   });
+
+  const unblockUser = async (item) => {
+    try {
+      const responseData = await unBlockUser(item._id); 
+      const blockId = responseData?.data?.blockId;
+      removeUnblockUserFromList(blockId);
+      close();
+      console.log("🚀 ~ unblockUser ~ responseData:", responseData)  
+    } catch (error) {
+      console.log('error ==> ', error?.message);
+    }
+  }
 
   return (
     <Modal
@@ -90,7 +104,8 @@ const BlockModal = forwardRef((props, ref) => {
               height: 48,
               alignItems: 'center',
               paddingTop: responsiveWidth(3),
-            }}>
+            }}
+            onPress={()=>unblockUser(itemValue)}>
             <Text
               style={{
                 fontSize: 12,
@@ -102,7 +117,7 @@ const BlockModal = forwardRef((props, ref) => {
               Unblock
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{flex: 1, paddingTop: responsiveWidth(3)}}>
+          <TouchableOpacity style={{flex: 1, paddingTop: responsiveWidth(3)}} onPress={()=>close()}>
             <Text
               style={{
                 fontSize: 12,

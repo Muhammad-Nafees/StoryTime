@@ -63,7 +63,14 @@ const BlockUser = () => {
       blockModalRef.current.open(item);
     }
   };
-
+  const removeUnblockUserFromList =(blockId)=>{
+    let blockList = DATA.filter(item => item._id !== blockId)
+    setUsers(prevState => ({
+      ...(prevState || {}),
+      data: blockList,
+    }));
+    console.log('blocklist',blockList ,blockId)
+  }
   const renderItem = ({item}) => {
     console.log("item",item)
     return (
@@ -120,7 +127,7 @@ const BlockUser = () => {
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
       />
-      <CustomModal ref={blockModalRef} />
+      <CustomModal ref={blockModalRef} removeUnblockUserFromList={removeUnblockUserFromList} />
     </BackgroundWrapper>
   );
 };

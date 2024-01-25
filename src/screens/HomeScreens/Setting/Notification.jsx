@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {Switch} from 'react-native-switch';
-import {useNavigation} from '@react-navigation/native';
 import {Img_Paths} from '../../../assets/Imagepaths';
+import {useNavigation} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -18,14 +19,36 @@ import {
   FourthColor,
   SecondaryColor,
 } from '../../Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
+import {notificationToggle} from '../../../../services/api/settings';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 
 const NotificationOptBox = ({title, sectionName = ''}) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState(null);
 
+  const titleToKeyMapping = {
+    'System Notifications': 'systemNotification',
+    'In-App Notifications': 'inAppNotifications',
+    'Enable App Vibrations': 'appVibrations',
+  };
+  const key = titleToKeyMapping[title];
+
+  const toggleSwitch = async (apiKey = null) => {
+      setIsEnabled(previousState => !previousState)    
+      let response = await notificationToggle(apiKey)  
+      //console.log("responsekey",response,key)
+  }
+
+  const getInitialToggleValue = async () => {
+      let response = await notificationToggle()  
+      setIsEnabled(response.data.settings[key])
+  }
+
+  useEffect(() => {
+    getInitialToggleValue()
+  }, [])
+  
   return (
     <View style={styles.box_container}>
       <View style={styles.box}>
@@ -36,9 +59,10 @@ const NotificationOptBox = ({title, sectionName = ''}) => {
         )}
         <View style={styles.row}>
           <Typography>{title}</Typography>
+          {isEnabled !== null?
           <Switch
             value={isEnabled}
-            onValueChange={toggleSwitch}
+            onValueChange={()=>toggleSwitch(key)}
             circleSize={25}
             barHeight={15}
             backgroundActive={'#68AEBD'}
@@ -48,7 +72,8 @@ const NotificationOptBox = ({title, sectionName = ''}) => {
             changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
             renderActiveText={false}
             renderInActiveText={false}
-          />
+          />:<ActivityIndicator/>
+          }
         </View>
       </View>
     </View>
@@ -81,7 +106,7 @@ const Notification = () => {
       <NotificationOptBox title={'System Notifications'} />
       <NotificationOptBox title={'In-App Notifications'} />
       <NotificationOptBox
-        title={'Enable App Vibrations'}
+        title={'Enable App Vibrations'} 
         sectionName={'Vibrations'}
       />
     </BackgroundWrapper>
