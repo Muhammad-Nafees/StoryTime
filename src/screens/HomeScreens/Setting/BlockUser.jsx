@@ -40,7 +40,7 @@ const BlockUser = () => {
         loading: true,
       }));
       const responseData = await getBlockList();
-      const data = responseData?.data || [];
+      const data = responseData?.data?.blockUsers || [];
       setUsers({
         loading: false,
         data: data,
@@ -65,6 +65,7 @@ const BlockUser = () => {
   };
 
   const renderItem = ({item}) => {
+    console.log("item",item)
     return (
       <View
         style={{
@@ -80,7 +81,7 @@ const BlockUser = () => {
             resizeMode={'contain'}
           />
 
-          <Text style={styles.txt}>{item.name} </Text>
+          <Text style={styles.txt}>{item.username} </Text>
         </View>
         <TouchableOpacity activeOpacity={0.3} onPress={() => modalOpen(item)}>
           <Text>Unblock</Text>
