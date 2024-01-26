@@ -7,6 +7,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { useSelector } from 'react-redux';
 
 
 
@@ -15,12 +16,13 @@ const SecondPlayFlowScreen = () => {
     const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
     // const SCREENWIDTH = Dimensions.get("window").width;
+    const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
 
-    return (
 
+    return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <View style={styles.backplay_flow}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), paddingTop: responsiveWidth(12), }}>
@@ -44,7 +46,7 @@ const SecondPlayFlowScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>Dog</Text>
+                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>{randomName}</Text>
                     </View>
                 </View>
 

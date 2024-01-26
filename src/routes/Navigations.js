@@ -47,7 +47,7 @@ const Navigations = () => {
       <Stack.Screen name={ADD_FRIENDS} component={AddFiends} />
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
-      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
+      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
     </Stack.Navigator>
   );
 };
@@ -140,25 +140,25 @@ const ProfileStacksBottom = () => {
       headerShown: false
     }}>
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
+      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
     </Stack.Navigator>
   );
 };
 
-const ProfileScreens = () => {
-  const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT } = NavigationsString;
-  return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
-      <Stack.Screen name="TagFriends" component={TagFriends} />
-      <Stack.Screen name="AddUrl" component={AddUrl} />
-    </Stack.Navigator>
-  );
-};
+// const ProfileScreens = () => {
+//   const Stack = createStackNavigator();
+//   const { HOME, FEED_CHAT } = NavigationsString;
+//   return (
+//     <Stack.Navigator initialRouteName="Profile" screenOptions={{
+//       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+//       headerShown: false
+//     }}>
+//       <Stack.Screen name="TagFriends" component={TagFriends} />
+//       <Stack.Screen name="AddUrl" component={AddUrl} />
+//     </Stack.Navigator>
+//   );
+// };
 
 
 const BottomTavNavigator = () => {

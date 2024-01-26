@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions, TextInput, ActivityIndicator } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions, TextInput, ActivityIndicator, FlatList } from 'react-native'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen, pinkColor } from '../screens/Styles/Style'
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
@@ -20,6 +20,7 @@ import GetComments from './GetComments'
 import { add_comment_api, get_Comment_api } from '../../services/api/storyfeed'
 import NoComment from './comments/NoComments'
 import Toast from 'react-native-toast-message'
+import CustomAttachmentDialog from './comments/CustomAttachedDialog'
 
 const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) => {
 
@@ -31,17 +32,25 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     const [media, setMedia] = useState(null);
     const [inputText, setInputText] = useState('');
     const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
-    const { FEED_CHAT } = NavigationsString;
+    const { FEED_CHAT, HOME } = NavigationsString;
     // const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
     const story = useSelector((state) => state?.likedstoryfeed?.storyId);
+    const likecountRTK = useSelector((state) => state?.likedstoryfeed?.likeCount);
     const [isComment, setIsComment] = useState(false);
+    const [HasMorePages, setHasMorePages] = useState();
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [loadingPage, setLoadingPage] = useState(false)
     const [isReplyingId, setIsReplyingId] = useState();
+    const [isLaodMore, setIsLoadMore] = useState(false)
     const [responseMedia, setResponseMedia] = useState(null);
-    const [commentsCount, setCommentsCount] = useState(0)
+    const [commentsCount, setCommentsCount] = useState(0);
     const [userCommentsData, setuserCommentsData] = useState([])
     const [isReply, setIsReply] = useState(false);
     const { width, height } = Dimensions.get('window');
     const inputRef = useRef();
+    const bottomSCroll = useRef();
 
     const storyId = story;
     const text = inputText;
@@ -50,8 +59,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
         mediaType: 'photo',
         multiple: true,
     };
-
-
 
     const imagePickerHadled = async () => {
         launchImageLibrary(optionsvideo, response => {
@@ -69,6 +76,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
             }
         });
     };
+
 
     const fetchaddDataComments = async () => {
         if (inputText.trim() === "") {
@@ -98,7 +106,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
             }
         };
 
-
         try {
             setIsLoading(true)
             const response = await add_comment_api(ReqBody);
@@ -109,19 +116,25 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
         } catch (error) {
             console.log("error---", error)
         }
-
-        setIsReply(false)
     };
-
 
     const fetchDatagetComments = async () => {
         try {
-            const response = await get_Comment_api(storyId);
-            setIsLoading(false);
-            setuserCommentsData(response?.data?.comments);
+            const response = await get_Comment_api({ page, limit, storyId });
+            setHasMorePages(response?.data?.pagination?.hasNextPage);
+            const sortComments = response.data?.comments.sort((sortA, sortB) => {
+                const dateA = new Date(sortA.createdAt);
+                const dateB = new Date(sortB.createdAt);
+                return dateA - dateB;
+            });
+            bottomSCroll.current.scrollToEnd({ animated: true });
+            setuserCommentsData(sortComments);
             setCommentsCount(response?.data?.commentsCount)
+            setIsLoading(false);
+            setIsReply(false)
+            setMedia(null);
             setInputText("");
-            return response?.data
+            return response?.data;
         } catch (error) {
             console.log("error---", error)
         }
@@ -129,13 +142,24 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
 
     useEffect(() => {
         fetchDatagetComments();
-    }, []);
+    }, [page, loadingPage, isLaodMore]);
 
+
+    // console.log("userDatacmts===", userCommentsData);
+    const onRefresh = () => {
+        setIsRefreshing(true)
+        setPage(1)
+    }
+
+    const handleLoadMore = async () => {
+        setIsLoadMore(true)
+        setLimit(commentsCount);
+    };
 
 
     return (
-        <>
 
+        <>
             <View style={styles.container}>
                 <View style={{ width: responsiveWidth(90), }}>
                     <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={HOME_FRAME}>
@@ -193,7 +217,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
                                             <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>456</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => navigation.navigate(FEED_CHAT)} style={styles.third_view}>
+                                        <TouchableOpacity onPress={() => navigation.navigate(HOME)} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
                                             <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{commentsCount}</Text>
                                         </TouchableOpacity>
@@ -233,20 +257,32 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                             </View>
 
                             <View style={{ width: responsiveWidth(89), backgroundColor: "#FFF", height: responsiveHeight(32), }}>
-                                <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center", height: responsiveHeight(25.5) }}>
-                                    <ScrollView nestedScrollEnabled={true}>
 
+                                <View style={{ paddingTop: responsiveWidth(4), paddingVertical: moderateVerticalScale(8), alignItems: "center", height: responsiveHeight(25.5) }}>
+                                    {!isLaodMore && commentsCount > 2 && (
+                                        <TouchableOpacity onPress={handleLoadMore}>
+                                            <Text
+                                                style={{
+                                                    color: 'rgba(40, 88, 144, 1)',
+                                                    fontWeight: '500',
+                                                    fontSize: 12,
+                                                }}>
+                                                {' '}
+                                                View {commentsCount - 2} more comments
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )}
+
+                                    <ScrollView keyboardShouldPersistTaps="always" ref={bottomSCroll} nestedScrollEnabled={true}>
                                         {
-                                            userCommentsData && userCommentsData?.length > 0 ?
-                                                userCommentsData?.map((item, index) => (
-                                                    console.log("id2==", item?._id),
+                                            userCommentsData && userCommentsData?.length > 0
+                                                ? userCommentsData?.map((item, index) => (
                                                     <GetComments
                                                         key={index}
                                                         text={item?.text}
                                                         commentsUserid={item?._id}
                                                         firstName={item?.user?.firstName}
                                                         lastName={item?.user?.lastName}
-                                                        updatedAt={item?.updatedAt}
                                                         getCommentsstoryId={item?.story}
                                                         isComment={isComment}
                                                         media={item?.media}
@@ -255,20 +291,54 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                                         inputRef={inputRef}
                                                         setIsReplyingId={setIsReplyingId}
                                                         setIsReply={setIsReply}
-
+                                                        createdAt={item?.createdAt}
                                                     />
                                                 ))
-                                                :
-                                                <NoComment />
+                                                : userCommentsData?.length === 0
+                                                    ? <ActivityIndicator size={22} color={"#000"} />
+                                                    : <NoComment />
                                         }
+
                                     </ScrollView>
                                 </View>
 
-                                {/* <View style={{ height: height / 2, alignItems: "center" }}>
-                                                <ActivityIndicator size={40} color={'#000'} />
-                                            </View>  */}
-
                                 {/* TextInput Content------- */}
+
+                                <View style={{ backgroundColor: 'black', position: 'absolute', bottom: 50, left: 6, }}>
+                                    {media && !isReply && (
+                                        <>
+                                            <CustomAttachmentDialog
+                                                message="Photo Attached"
+                                                showCancel={true}
+                                                onCancel={() => setMedia(null)}
+                                            />
+                                        </>
+                                    )}
+
+                                    {isReply && (
+                                        <>
+                                            <CustomAttachmentDialog
+                                                message="Replying"
+                                                showCancel={true}
+                                                onCancel={() => setIsReply(false)}
+                                            />
+                                        </>
+                                    )}
+
+                                    {isReply && media && (
+                                        <>
+                                            <CustomAttachmentDialog
+                                                message="Photo Attached in Reply"
+                                                showCancel={true}
+                                                onCancel={() => {
+                                                    setIsReply(false),
+                                                        setMedia(null)
+                                                }
+                                                }
+                                            />
+                                        </>
+                                    )}
+                                </View>
 
                                 <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center", }}>
                                     <View style={{ backgroundColor: "#FFDCE7", flexDirection: 'row', alignItems: "center", width: responsiveWidth(78), height: responsiveHeight(6) }}>
@@ -404,3 +474,42 @@ const styles = StyleSheet.create({
 })
 
 export default FeedChatFrame;
+
+{/* <FlatList
+                                                data={userCommentsData}
+                                                keyExtractor={(item, index) => index.toString()}
+                                                nestedScrollEnabled={true}
+                                                renderItem={({ item, index }) => (
+                                                    <GetComments
+                                                        key={index}
+                                                        text={item?.text}
+                                                        commentsUserid={item?._id}
+                                                        firstName={item?.user?.firstName}
+                                                        lastName={item?.user?.lastName}
+                                                        getCommentsstoryId={item?.story}
+                                                        isComment={isComment}
+                                                        media={item?.media}
+                                                        replies={item?.replies}
+                                                        isReplying={isReplyingId}
+                                                        inputRef={inputRef}
+                                                        setIsReplyingId={setIsReplyingId}
+                                                        setIsReply={setIsReply}
+                                                        createdAt={item?.createdAt}
+                                                    />
+                                                )}
+                                                ListFooterComponent={() => {
+                                                    if (loadingPage) {
+                                                        return (
+                                                            <View style={{ alignItems: 'center', }}>
+                                                                <ActivityIndicator size={40} color={'#000'} />
+                                                            </View>
+                                                        );
+                                                    }
+                                                    return null;
+                                                }}
+                                                onEndReached={() => {
+                                                    handleLoadMore();
+                                                }}
+                                                onEndReachedThreshold={0.3}
+                                            /> */}
+

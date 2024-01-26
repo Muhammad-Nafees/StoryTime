@@ -61,11 +61,6 @@ const Register = () => {
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
 
-  // const handleFormSubmit = async (values) => {
-
-
-  // };
-
   return (
     <Formik
       initialValues={{

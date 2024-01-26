@@ -28,11 +28,7 @@ const AddFiends = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    // console.log("LIMITcheckNum====", limit);
-    // console.log("hasMorePages=====", HasMorePages);
 
-    console.log("hasmorepages===", HasMorePages)
-    console.log("stoplimit===", stopLimit)
     const handleLoadMore = async () => {
         if (isLoading) {
             return;
@@ -53,21 +49,21 @@ const AddFiends = () => {
                 setIsData(data)
                 if (data && data.length > 0) {
                     setResponseUsers(prevData => [...prevData, ...data]);
-                    setHasMorePages(responseData?.data?.pagination?.perPage);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
                     setStopLimit(responseData?.data?.pagination?.currentPage);
                 } else {
                     console.log("No users found");
                     return;
                 }
             } catch (error) {
-                // console.log("error--===", error);
             } finally {
                 setIsLoading(false);
                 setIsLoadMore(false);
             }
         };
         fetchUsers();
-    }, [page])
+    }, [page, isRefreshing])
+
 
     const filterUserData = useCallback(() => {
         const filteredData = responseUsers?.filter((item) => {
@@ -80,10 +76,13 @@ const AddFiends = () => {
         filterUserData();
     }, [filterUserData]);
 
-    const onRefresh = () => {
-        setIsRefreshing(true)
-        setPage(1)
-    }
+    const onRefresh = useCallback(() => {
+        setIsRefreshing(true);
+        setPage(1);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -110,6 +109,7 @@ const AddFiends = () => {
             </View>
 
             <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
+
                 {
                     <FlatList
                         scrollEnabled={true}
@@ -139,9 +139,9 @@ const AddFiends = () => {
                         onEndReachedThreshold={0.3}
                     />
                 }
+
             </View>
         </ImageBackground>
-
     )
 };
 

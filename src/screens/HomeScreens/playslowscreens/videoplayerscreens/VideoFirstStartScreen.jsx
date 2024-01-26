@@ -7,6 +7,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
+import { useSelector } from 'react-redux'
 
 
 
@@ -17,8 +18,9 @@ const VideoFirstStartScreen = () => {
     const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
+    const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
 
-
+    console.log("randomName---", randomName);
 
     return (
 
@@ -48,11 +50,9 @@ const VideoFirstStartScreen = () => {
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
                     </View>
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>Dog</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
                     </View>
                 </View>
-
-
 
                 <View style={{ paddingVertical: moderateVerticalScale(45) }} />
                 <View>
@@ -66,7 +66,6 @@ const VideoFirstStartScreen = () => {
         </ImageBackground>
     )
 };
-
 
 
 const styles = StyleSheet.create({

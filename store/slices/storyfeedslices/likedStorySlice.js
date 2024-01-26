@@ -9,16 +9,19 @@ const likedstory_feed_slice = createSlice({
         data: [],
         error: null,
         loading: false,
-        storyId: ""
+        storyId: "",
+        likeCount: 0,
     },
 
     reducers: {
         likedstoryfeed: (state, { payload }) => {
-            state.storyId = payload;
-            console.log("reduxstate===", state?.storyId)
+            state.storyId = payload
         },
+        likedCountapi: (state, action) => {
+            console.log("likecount---", state.likeCount)
+            state.likeCount = action.payload;
+        }
     },
-
 });
 
 export default likedstory_feed_slice.reducer;
