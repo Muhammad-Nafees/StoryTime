@@ -43,7 +43,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const SettingsProfile = () => {
   const navigation = useNavigation()
-  const {BG_CONTAINER, AVATAR, DROP_ICON} = Img_Paths;
+  const {BG_CONTAINER, AVATAR, DROP_ICON,DEFAULT_ICON} = Img_Paths;
 
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
@@ -55,17 +55,18 @@ const SettingsProfile = () => {
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
+  const {user} = useSelector(state => state?.authSlice);
 
   const handleFormSubmit = async values => {};
 
   return (
     <BackgroundWrapper>
-      <ImageBackground source={BG_CONTAINER} style={styles.bg_img_container}>
+      <ImageBackground source={user.data.user.coverImage?user.data.user.coverImage:BG_CONTAINER} style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>
       <View style={{width: SCREEN_WIDTH}}>
         <View style={styles.avatar_wrapper}>
-          <Image source={AVATAR} style={styles.avatar} resizeMode="stretch" />
+          <Image source={user.data.user.profileImage?user.data.user.profileImage:DEFAULT_ICON} style={styles.avatar} resizeMode="stretch" />
           <View style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
           </View>
@@ -396,6 +397,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 4,
     borderColor: '#395E66',
+    backgroundColor:'white'
   },
   avatar: {
     height: '100%',

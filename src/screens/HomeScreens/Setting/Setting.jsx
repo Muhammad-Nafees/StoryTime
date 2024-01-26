@@ -21,16 +21,18 @@ import SvgIcons from '../../../components/svgIcon/svgIcons';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import NavigationsString from '../../../constants/NavigationsString';
 import {SecondaryColor, FourthColor, Red02} from '../../Styles/Style';
+import { useDispatch, useSelector } from 'react-redux';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 
 const {width, height} = Dimensions.get('window');
 
 const Setting = () => {
   const navigation = useNavigation();
-  const {LEFT_ARROW_IMG, SETTING_USER} = Img_Paths;
+  const {LEFT_ARROW_IMG, DEFAULT_ICON} = Img_Paths;
   const {NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE} =
     NavigationsString;
-
+  const {user} = useSelector(state => state?.authSlice);
+  console.log("user",user)
   const generalData = [
     {key: '1', text: 'Profile', iconName: 'ProfileIcon', routeName: PROFILE},
     {
@@ -95,7 +97,7 @@ const Setting = () => {
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
             style={{width: 57, height: 57}}
-            source={SETTING_USER}
+            source={user.data.user.profileImage?user.data.user.profileImage:DEFAULT_ICON}
             resizeMode={'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
@@ -105,14 +107,15 @@ const Setting = () => {
                 fontWeight: 600,
                 marginTop: responsiveWidth(3),
               }}>
-              Oliver Pierce
+              {user.data.user.username}
             </Typography>
             <Typography style={{fontSize: 12, fontWeight: 600}}>
-              oliverpierce@gmail.com
+              {user.data.user.email}
             </Typography>
           </View>
         </View>
-        <TouchableOpacity activeOpacity={0.3}>
+        <TouchableOpacity activeOpacity={0.3}
+        onPress={()=>navigation.navigate(PROFILE)}>
           <View style={styles.svgIcon}>
             <SvgIcons name={'PencilIcon'} width={18} height={18} />
           </View>
