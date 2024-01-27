@@ -10,6 +10,7 @@ import TouchableButton from '../../../../components/TouchableButton'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { UpdateSequencePlayers } from '../../../../../store/slices/SequencePlayer'
+import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
 
 const Sequence = () => {
 
@@ -18,67 +19,45 @@ const Sequence = () => {
     const dispatch = useDispatch();
     const { SPLASH_SCREEN_IMAGE } = Img_Paths;
     const counters = useSelector((state) => state?.SequencePlayer?.counters);
+    const addedUsers = useSelector((state) => state.addPlayers.addFriends);
+    const [randomNumbers, setRandomNumbers] = useState([])
     const { LEFT_ARROW_IMG } = Img_Paths;
-
-
+    const [selectedIndices, setSelectedIndices] = useState([]);
 
     const handlePress = (index) => {
+        const updatedIndices = [...selectedIndices];
 
-        const newCounters = [...counters];
-        if (newCounters[index] === null) {
-            const existingValues = new Set(newCounters.filter(Boolean)); // Get existing values
-            const availableValues = [1, 2, 3, 4,].filter((value) => !existingValues.has(value)); // Get available values
-            if (availableValues.length > 0) {
-                newCounters[index] = availableValues[0];
-            }
+        const selectedIndex = updatedIndices.indexOf(index);
+
+        if (selectedIndex !== -1) {
+            // If the index is already selected, remove it
+            updatedIndices.splice(selectedIndex, 1);
         } else {
-            newCounters[index] = null;
+            // If the index is not selected, add it
+            updatedIndices.push(index);
         }
-        dispatch(UpdateSequencePlayers(newCounters));
+
+        // Update the state with individual counts for each selected index
+        const numberedIndices = updatedIndices.reduce((acc, val, idx) => {
+            acc[val] = idx + 1;
+            return acc;
+        }, {});
+
+        console.log("selecindex----", selectedIndex);
+        console.log("updaed-----", numberedIndices);
+
+        // Update the state
+        setSelectedIndices(updatedIndices);
     };
 
-
-
     const handlesequence = () => {
-        const filterlength = counters.filter(Boolean).length;
-        if (filterlength === counters.length) {
+        const allValuesSelected = selectedIndices.length === addedUsers.length;
+        if (allValuesSelected) {
             navigation.navigate("PLayFlowScreens", {
                 screen: FIRSTSCREENPLAYFLOW,
             })
         }
     };
-
-
-
-    const sequenceplayers = [
-        {
-            text: "@Cedrick101",
-            backgroundColor: TextColorGreen,
-            textindex: counters[0],
-            id: 0
-        },
-        {
-            text: "@Cedrick101",
-            backgroundColor: TextColorGreen,
-            textindex: counters[1],
-            id: 1
-        }
-        ,
-        {
-            text: "@Cedrick101",
-            backgroundColor: TextColorGreen,
-            textindex: counters[2],
-            id: 2
-        },
-        {
-            text: "@oliverpierce",
-            backgroundColor: "#E44173",
-            textindex: counters[3],
-            id: 3
-        },
-    ];
-
-
 
     return (
         <ImageBackground source={SPLASH_SCREEN_IMAGE} style={{ height: "100%", width: "100%" }}>
@@ -107,21 +86,24 @@ const Sequence = () => {
 
                 <ScrollView style={{ height: responsiveHeight(72) }}>
                     {
-                        sequenceplayers.map((item, index) => (
+                        addedUsers.map((item, index) => (
                             <>
                                 <View key={index} style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
                                     <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ flexDirection: "row" }}>
-                                        <View style={{ backgroundColor: item.textindex ? item.backgroundColor : null, justifyContent: "center", alignItems: "center", width: responsiveWidth(13), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: item.backgroundColor, flexDirection: 'row' }}>
-                                            <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.5) }}>{item.textindex}</Text>
-                                            <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
+                                        <View style={{ backgroundColor: TextColorGreen, justifyContent: "center", alignItems: "center", width: responsiveWidth(14), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen, flexDirection: 'row' }}>
+                                            <Text style={{ color: "#FFF", fontFamily: PassionOne_Regular.passionOne, fontSize: responsiveFontSize(4) }}>
+                                                {selectedIndices.includes(index) ? selectedIndices.indexOf(index) + 1 : ''}
+                                            </Text>
+                                            {/* <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
                                                 <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
-                                            </View>
+                                            </View> */}
                                         </View>
                                     </TouchableOpacity>
 
-                                    <View style={{ width: responsiveWidth(73), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: item.backgroundColor, padding: moderateScale(14) }}>
-                                        <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>{item.text}</Text>
+                                    <View style={{ width: responsiveWidth(71), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: TextColorGreen, padding: moderateScale(14) }}>
+                                        <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>{item.username}</Text>
                                     </View>
+
                                 </View>
                             </>
                         ))

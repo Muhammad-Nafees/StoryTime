@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dimensions, Image, BackHandler, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -24,6 +24,8 @@ import Countries_Sub from '../../../components/sub-catgories/Countries_Sub';
 import MainInputField from '../../../components/MainInputField';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../../../../store/slices/getCategoriesSlice';
+import { get_Categories_Sub_Categories, get_Random } from '../../../../services/api/categories';
+import { randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -34,16 +36,64 @@ const SubCategories = ({ route }) => {
 
     const navigation = useNavigation();
     const id = route?.params?.id;
+    const name = route?.params?.name;
     const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON, } = Img_Paths;
     const { PLAYER_SEQUENCE } = NavigationsString;
-    const { data, loading } = useSelector((state) => state.getcategories);
-    const SubcategoriesData = data?.data?.categories;
-    const [isId, setIsId] = useState("")
+    // const { data, loading } = useSelector((state) => state.getcategories);
+    const addUsersGame = useSelector((state) => state.addPlayers.addFriends);
+    const [isId, setIsId] = useState("");
+    const [responsesubCategories, setResponseSubCategories] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
+    const [isTriggered, setIsTriggered] = useState(false);
+    const [responseRandomsub, setresponseRandomsub] = useState();
     const dispatch = useDispatch();
 
+
     useEffect(() => {
-        dispatch(getCategories(id))
+        const fetchSubcategories = async () => {
+            setIsLoading(true)
+            try {
+                const response = await get_Categories_Sub_Categories(id);
+                setIsLoading(false)
+                setResponseSubCategories(response?.data?.categories);
+                return response
+            } catch (error) {
+                console.log("error---", error)
+            }
+        }
+        fetchSubcategories();
     }, []);
+
+    const handleRandomSub_category = async () => {
+        try {
+            const response = await get_Random(id);
+            dispatch(randomNames(response?.data?.name));
+            navigation.navigate(PLAYER_SEQUENCE);
+            return response;
+        } catch (error) {
+            console.log("error---", error)
+        };
+    };
+
+    const handleStoryUser = (name) => {
+        navigation.navigate(PLAYER_SEQUENCE);
+        dispatch(randomNames(name))
+    };
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         setIsTriggered(false)
+    //     }, [])
+    // );
+
+
+    // useEffect(() => {
+    //     if (isTriggered) {
+
+    //     }
+    // }, [isTriggered]);
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -54,7 +104,7 @@ const SubCategories = ({ route }) => {
                 <View style={styles.first_container}>
                     <BackButton onPress={() => navigation.goBack()} />
                     <View style={styles.categories_text_container}>
-                        <Text style={styles.categories_text}>Humans</Text>
+                        <Text style={styles.categories_text}>{name}</Text>
                     </View>
                 </View>
 
@@ -63,63 +113,54 @@ const SubCategories = ({ route }) => {
                 <MainInputField placeholder="Username" />
 
                 {/* MainInputField----- */}
-                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ width: responsiveWidth(90), flexDirection: 'row', alignItems: "center", flexWrap: "wrap" }}>
+                        <View style={{ marginHorizontal: moderateScale(10), }}>
+                            <Text style={{ color: "#393939", fontWeight: "500", textAlign: "center" }}>Players:</Text>
+                        </View>
+
+                        {
+                            addUsersGame?.map((item, index) => (
+                                <View style={{ margin: 4, backgroundColor: "#395E66", paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
+                                    <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>{`@${item.username}`}</Text>
+                                </View>
+                            ))
+                        }
+
+                    </View>
+                </View>
+
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: moderateScale(10), }}>
+
                     {
-                        loading ? <ActivityIndicator size={40} color={"#000"} /> :
-                            SubcategoriesData?.map((category) => (
-                                console.log("category", category),
+                        !isLoading ?
+                            responsesubCategories?.map((category) => (
                                 <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                    <StoryUsers onPress={() => navigation.navigate(PLAYER_SEQUENCE)} images={category?.image} text={category?.name}
+                                    <StoryUsers onPress={() => handleStoryUser(category?.name)} images={category?.image} text={category?.name}
                                         mainbgColor={TextColorGreen}
                                         backgroundColor="rgba(86, 182, 164, 1)"
                                     />
                                 </View>
                             ))
+                            :
+                            <View style={{ flex: 1, }}>
+                                <ActivityIndicator size={40} color={"#000"} />
+                            </View>
+                    }
+                    {
+                        !isLoading &&
+                        <View style={{ paddingLeft: moderateScale(5), paddingVertical: moderateVerticalScale(10) }}>
+                            <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
+                                <TouchableOpacity onPress={() => handleRandomSub_category()} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "#EE5F8A", justifyContent: "center", alignItems: "center" }}>
+                                    <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={LUDO_ICON} />
+                                </TouchableOpacity>
+                                <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Random</Text>
+                            </View>
+                        </View>
                     }
                 </View>
 
-                {/* <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ width: responsiveWidth(90), flexDirection: 'row', alignItems: "center", flexWrap: "wrap" }}>
-                        <View style={{ marginHorizontal: moderateScale(10), }}>
-                            <Text style={{ color: "#393939", fontWeight: "500", textAlign: "center" }}>Players:</Text>
-                        </View>
-                        <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@chrislee</Text>
-                        </View>
-                        <View style={{ marginHorizontal: moderateVerticalScale(6), backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
-                        </View>
-                        <View style={{ marginTop: responsiveWidth(2), backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@its me Like</Text>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ paddingTop: responsiveWidth(2), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <StoryUsers onPress={() => navigation.navigate(PLAYER_SEQUENCE)} images={TEACHER_ICON} text="Teacher" mainbgColor="#395E66" backgroundColor="#56B6A4" />
-                        <StoryUsers images={POLICE_ICON} text="Police" mainbgColor="#395E66" backgroundColor="#56B6A4" />
-                        <StoryUsers images={FAMILY_ICON} text="Family" mainbgColor="#395E66" backgroundColor="#56B6A4" />
-                    </View>
-                    <View style={{ paddingTop: responsiveWidth(3), flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        {/* <StoryUsers images={ANIMAL_OSTRICH} text="Ostrich" mainbgColor="#395E66" backgroundColor="#56B6A4" /> */}
-                {/* <StoryUsers images={LUDO_ICON} text="Random" mainbgColor="#E44173" backgroundColor="#EE5F8A" />
-                    </View>
-                </View> */}
-
-                {/* Things SubCategory */}
-
-                {/* {
-                        categoriesData?.map((category) => (
-                            console.log("category", category),
-                            <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
-                                    mainbgColor={TextColorGreen}
-                                    backgroundColor="rgba(199, 152, 97, 1)"
-                                />
-                            </View>
-                        ))
-                    } */}
 
             </ScrollView>
         </ImageBackground>

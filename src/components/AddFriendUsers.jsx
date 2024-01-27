@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useId, useState } from 'react'
+import React, { memo, useId, useState } from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -40,4 +40,4 @@ const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowin
     )
 };
 
-export default React.memo(AddFriendUsers);
+export default memo(AddFriendUsers);

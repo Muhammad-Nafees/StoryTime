@@ -22,12 +22,9 @@ const RecordingData = createSlice({
         recordingVideo(state, { payload }) {
             state.saveRecordingVideo = payload,
                 console.log("videorecordingRed", state.saveRecordingVideo)
-
         }
     }
-
 });
-
 
 
 export default RecordingData.reducer;

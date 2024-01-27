@@ -30,15 +30,15 @@ const RecordingOliverData = () => {
                                 </TouchableOpacity>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(37), }}>
                                     <TouchableOpacity style={styles.first_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={item.image2} />
+                                        <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center" }} source={item.image2} />
                                         <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{item.text2}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.second_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={item.imgae3} />
+                                        <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center" }} source={item.imgae3} />
                                         <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{item.text3}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.third_view}>
-                                        <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={item.imgae4} />
+                                        <Image style={{ width: responsiveWidth(9), height: responsiveHeight(4.5), resizeMode: "center" }} source={item.imgae4} />
                                         <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{item.text4}</Text>
                                     </TouchableOpacity>
                                 </View>

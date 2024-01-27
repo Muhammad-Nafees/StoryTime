@@ -23,28 +23,19 @@ const randomCategorySlice = createSlice({
         data: [],
         error: null,
         loading: false,
+        randomid: "",
+        randomName: ""
     },
 
     reducers: {
         get_random: (state, { payload }) => {
-            state.data = payload;
+            const { randomName, randomId } = payload;
+            console.log("randomnameRTK----", randomName)
+            console.log("randomidRTK----", randomId)
+            state.randomid = payload;
         },
     },
 
-    extraReducers: (builder) => {
-        builder.addCase(randomCategory.pending, (state, action) => {
-            state.loading = true;
-        }),
-
-            builder.addCase(randomCategory.fulfilled, (state, { payload }) => {
-                state.data = payload
-                state.loading = false;
-            }),
-
-            builder.addCase(randomCategory.rejected, (state, action) => {
-                state.error = true;
-            })
-    }
 });
 
 export default randomCategorySlice.reducer;

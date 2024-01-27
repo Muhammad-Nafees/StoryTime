@@ -12,8 +12,9 @@ import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import { CategoriesData } from '../../../../dummyData/DummyData';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategories } from '../../../../store/slices/getCategoriesSlice';
-import { randomCategory } from '../../../../store/slices/randomCategorySlice';
+import { get_Categories_Sub_Categories, get_Random } from '../../../../services/api/categories';
+import RandomCategories from '../../../components/customCategories/RandomCategories';
+import { get_random } from '../../../../store/slices/randomCategorySlice';
 
 
 
@@ -21,32 +22,62 @@ const Categories = () => {
 
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON, } = Img_Paths;
-    const { data, loading } = useSelector((state) => state.getcategories);
+    // const { data, loading } = useSelector((state) => state.getcategories);
     const randomRes = useSelector((state) => state?.randomCategory?.data);
     const loadingrandom = useSelector((state) => state?.randomCategory?.loading);
     const [isRandom, setIsRandom] = useState(false);
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch();
-    const categoriesData = data?.data?.categories;
-    const RandomCateg = randomRes?.data;
+    const [responseCategories, setResponseCategories] = useState()
+    const [responseRandom, setResponseRandom] = useState("")
+    const [randomName, setRandomName] = useState("");
+    const [randomId, setRandomId] = useState("")
+    const [isTriggered, setIsTriggered] = useState(false);
+    const addUsersGame = useSelector((state) => state.addPlayers.addFriends);
 
-    console.log("randomCat", RandomCateg?.name);
-    console.log("loadingrandom-=-", loadingrandom)
+
+    // Get Categories Api ----------
 
     useFocusEffect(
         useCallback(() => {
-            dispatch(getCategories());
+            const fetchUsers = async () => {
+                setIsLoading(true)
+                try {
+                    const response = await get_Categories_Sub_Categories();
+                    setIsLoading(false);
+                    setResponseCategories(response.data?.categories)
+                    return response;
+                } catch (error) {
+                    console.log("error---", error)
+                }
+            }
+            fetchUsers();
         }, [])
     );
 
-    const handleRandomClick = () => {
-        dispatch(randomCategory())
-        setIsRandom(true)
+    const handleRandomClick = async () => {
+        try {
+            const response = await get_Random();
+            console.log("res", response.data)
+            navigation.navigate("SubCategories", { id: response?.data?._id, name: response?.data?.name })
+            setRandomId(response?.data?._id)
+            setRandomName(response?.data?.name)
+            return response;
+        } catch (error) {
+
+        };
     };
 
-    const handleStoryUser = (id) => {
-        navigation.navigate("SubCategories", { id: id })
+    const handleStoryUser = (id, name) => {
+        navigation.navigate("SubCategories", { id: id, name: name });
     };
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         setIsTriggered(false)
+    //     }, [])
+    // );
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -69,54 +100,51 @@ const Categories = () => {
                         <View style={{ marginHorizontal: moderateScale(10), }}>
                             <Text style={{ color: "#393939", fontWeight: "500", textAlign: "center" }}>Players:</Text>
                         </View>
-
-                        <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@chrislee</Text>
-                        </View>
-                        <View style={{ marginHorizontal: 6, backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@Cedrick101</Text>
-                        </View>
-                        <View style={{ backgroundColor: "#395E66", paddingHorizontal: 14, paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>@alfred</Text>
-                        </View>
+                        {
+                            addUsersGame?.map((item, index) => (
+                                <View style={{ margin: 4, backgroundColor: "#395E66", paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40 }}>
+                                    <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>{`@${item.username}`}</Text>
+                                </View>
+                            ))
+                        }
                     </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: moderateScale(4), }}>
                     {
-                        loading ? <ActivityIndicator size={40} color={"#000"} /> : !isRandom ?
-                            categoriesData?.map((category) => (
-                                console.log("category", category),
-                                <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                    <StoryUsers onPress={() => handleStoryUser(category?.id)} images={category?.image} text={category?.name}
+                        !isLoading ?
+                            responseCategories?.map((category) => (
+                                <View key={category?.id} style={{ backgroundColor: TextColorGreen, width: responsiveWidth(30), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
+                                    <StoryUsers onPress={() => handleStoryUser(category?.id, category?.name)} images={category?.image} text={category?.name}
                                         mainbgColor={TextColorGreen}
                                         backgroundColor="rgba(199, 152, 97, 1)"
                                     />
                                 </View>
                             ))
                             :
-                            <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2) }}>
-                                <View style={{ backgroundColor: TextColorGreen, width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
-                                    <TouchableOpacity onPress={() => handleStoryUser(RandomCateg?._id)} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "rgba(199, 152, 97, 1)", justifyContent: "center", alignItems: "center" }}>
-                                        <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={{ uri: "http://storytime.yameenyousuf.com/" + RandomCateg?.image }} />
-                                    </TouchableOpacity>
-                                    <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{RandomCateg?.name}</Text>
-                                </View>
+                            <View style={{ flex: 1, }}>
+                                <ActivityIndicator size={40} color={"#000"} />
                             </View>
                     }
+
+                    {
+                        !isLoading &&
+                        <View style={{ paddingLeft: moderateScale(5), paddingVertical: moderateVerticalScale(10) }}>
+                            <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
+                                <TouchableOpacity onPress={() => handleRandomClick()} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "#EE5F8A", justifyContent: "center", alignItems: "center" }}>
+                                    <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={LUDO_ICON} />
+                                </TouchableOpacity>
+                                <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Random</Text>
+                            </View>
+                        </View>
+                    }
+
+
                 </View>
 
-                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
-                </View>
-
-                <View style={{ paddingLeft: moderateScale(10), paddingVertical: moderateVerticalScale(10) }}>
-                    <View style={{ backgroundColor: "#E44173", width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: "center", }}>
-                        <TouchableOpacity onPress={() => handleRandomClick()} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), backgroundColor: "#EE5F8A", justifyContent: "center", alignItems: "center" }}>
-                            <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), resizeMode: "center" }} source={LUDO_ICON} />
-                        </TouchableOpacity>
-                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Random</Text>
-                    </View>
-                </View>
+                {/* <RandomCategories
+                    responseRandom={responseRandom}
+                /> */}
 
             </ScrollView>
         </ImageBackground>
