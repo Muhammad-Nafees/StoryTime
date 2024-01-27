@@ -52,6 +52,8 @@ const SettingsProfile = () => {
   const countryCode = phoneInput?.current?.state?.countryCode;
   const {userdata, loading} = useSelector(state => state?.userinfostate);
   const {userdatacity} = useSelector(state => state?.userinfocity);
+  const {user} = useSelector(state => state?.authSlice);
+  console.log("🚀 ~ SettingsProfile ~ userdata:", user?.data)
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
