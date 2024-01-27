@@ -27,14 +27,15 @@ const CustomPhoneInput = ({
   extraStyles,
   setFormatText,
   setphoneNumberStatusCode,
+  defaultCode
 }) => {
-
   console.log("error", error)
   console.log("isError", isError)
 
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
   const [statusCodePhone, setStatusCodePhone] = useState()
+
   const debouncedApiCall = useRef(_.debounce(async (phoneNumber, setFieldError) => {
     const code = phoneInput?.current?.state?.code;
     setResponse(response?.status)
@@ -88,7 +89,7 @@ const CustomPhoneInput = ({
             ref={phoneInput}
             disabled={disabled}
             placeholder=" "
-            defaultCode={'AU'}
+            defaultCode={defaultCode || 'AU'}
             onChangeFormattedText={(text) => setFormatText(text)}
             containerStyle={styles.phoneContainer}
             textContainerStyle={styles.phoneTextContainer}

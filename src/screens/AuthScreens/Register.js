@@ -61,6 +61,16 @@ const Register = () => {
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
 
+  const validate = (values) => {
+    return (
+      values.email &&
+      values.firstName &&
+      values.lastName &&
+      values.phoneNo &&
+      values.username
+    )
+  }
+
   return (
     <Formik
       initialValues={{
@@ -73,6 +83,8 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
+      // validator={() => ({})}
+      // onSubmit={values => console.log(values)}
       onSubmit={async (values) => {
         try {
           dispatch(userinfoState(countryCode));
@@ -93,7 +105,8 @@ const Register = () => {
         setIsLoading(true);
         setIsLoading(false);
         const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
-      }}>
+      }}
+      >
       {({
         values,
         errors,
@@ -184,16 +197,11 @@ const Register = () => {
 
                 <View style={{ paddingVertical: responsiveWidth(6) }}>
                   <TouchableOpacity
+                    // onPress={()=>console.log("err",errors)}
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),
-                      backgroundColor:
-                        values.email &&
-                          values.firstName &&
-                          values.lastName &&
-                          values.phoneNo &&
-                          values.username
-                          ? '#395E66'
+                      backgroundColor: validate(values)? '#395E66'
                           : 'rgba(57, 94, 102, 0.6)',
                       borderRadius: 10,
                       borderWidth: 1,
@@ -202,15 +210,8 @@ const Register = () => {
                       alignItems: 'center',
                       height: responsiveHeight(6.6),
                     }}
-                    disabled={
-                      !(
-                        values.email &&
-                        values.firstName &&
-                        values.lastName &&
-                        values.phoneNo &&
-                        values.username
-                      )
-                    }>
+                    // disabled={!validate(values)}
+                    >
                     <Text
                       style={{
                         fontSize: responsiveFontSize(1.9),
