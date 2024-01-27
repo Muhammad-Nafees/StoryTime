@@ -23,10 +23,12 @@ const Profile = () => {
     const [changeMode, setChangeMode] = useState(0);
 
 
-
     return (
         <>
-            {
+            {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: "#000", }}>Profile Screen is Coming</Text>
+            </View> */}
+             {
                 changeMode === 0 ?
                     <View style={{ flex: 1, backgroundColor: '#FFF' }}>
                         <ScrollView>
@@ -76,7 +78,7 @@ const Profile = () => {
                     </View>
                     :
                     <IncognitoMode setChangeMode={setChangeMode} />
-            }
+            } 
         </>
 
     )

@@ -10,64 +10,69 @@ import NavigationsString from '../../constants/NavigationsString';
 import { FlatListData } from '../../../dummyData/DummyData';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
-import { storyFeed, storyfeed } from '../../../store/slices/storyfeedslices/storyFeedSlice';
 import { fetchallFeedStories } from '../../../services/api/storyfeed';
+
 
 const Home = () => {
 
     const dispatch = useDispatch()
-    const storyFeedstate = useSelector((state) => state?.storyfeed?.data)
-    const loading = useSelector((state) => state?.storyfeed?.loading)
-    const likedStoryfeed = useSelector((state) => state?.likedstoryfeed?.data)
-    const StoriesArr = storyFeedstate?.stories;
-
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, } = Img_Paths;
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingMain, setIsLoadingMain] = useState(true)
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [HasMorePages, setHasMorePages] = useState();
-    const [isData, setIsData] = useState([]);
     const { ADD_FRIENDS } = NavigationsString;
     const [responseUsers, setResponseUsers] = useState([]);
-    const [isLoadMore, setIsLoadMore] = useState(false)
-
+    const [isData, setIsData] = useState([])
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const navigation = useNavigation();
 
 
-    useFocusEffect(
-        useCallback(() => {
-            const fetchUsers = async () => {
-                setIsLoading(true);
-                try {
-                    const responseData = await fetchallFeedStories({ pagination: page, limit });
-                    const data = responseData?.data?.stories;
-                    setIsData(data)
-                    if (data && data.length > 0) {
-                        setResponseUsers(prevData => [...prevData, ...data]);
-                        setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-                    } else {
-                        console.log("No users found");
-                        return;
-                    }
-                } catch (error) {
-                    console.log("error--===", error);
-                } finally {
-                    setIsLoading(false);
-                    setIsLoadMore(false);
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const responseData = await fetchallFeedStories({ pagination: page, limit });
+                const data = responseData?.data?.stories;
+                setIsData(data);
+                if (data && data.length > 0) {
+                    setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
                 }
-            };
-            fetchUsers();
-        }, [page])
-    );
+                setIsLoadingMain(false);
+                setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                return responseData;
+            } catch (error) {
+            } finally {
+                setIsLoadingMain(false);
+                setIsRefreshing(false);
+            }
+        };
+        fetchUsers();
+    }, [page, isRefreshing,])
 
-    const handleLoadMore = async () => {
-        if (HasMorePages) {
+
+
+    const handleLoadMore = useCallback(() => {
+        if (HasMorePages && isData) {
+            setIsLoading(true);
             setPage((prevPage) => prevPage + 1);
+        } else {
+            setIsLoading(false);
         }
-        console.log("checkpage====", page, limit);
-    };
+    }, [HasMorePages])
 
+
+    const onRefresh = () => {
+
+        setIsRefreshing(true);
+        setPage(1);
+        setResponseUsers([]);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 1000);
+    }
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -83,9 +88,9 @@ const Home = () => {
                             <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                         </TouchableOpacity>
 
-                        <View>
+                        <TouchableOpacity>
                             <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
-                        </View>
+                        </TouchableOpacity>
 
                     </View>
                 </View>
@@ -97,11 +102,12 @@ const Home = () => {
 
             <View style={styles.flatlist_container}>
                 <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
                     <FlatList
                         data={FlatListData}
                         scrollEnabled={true}
                         horizontal
+                        // onRefresh={onRefresh}
+                        // refreshing={isRefreshing}
                         renderItem={({ item, index }) => {
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
@@ -116,15 +122,16 @@ const Home = () => {
                 </View>
             </View>
 
-            {/* Frame Content Start----------- */}
-
             {
-                !loading ?
+                !isLoadingMain ?
                     <FlatList
                         data={responseUsers}
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
                         scrollEnabled={true}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
+                            // console.log("items---", item),
                             <FrameContent
                                 key={index}
                                 type={item?.type}
@@ -133,19 +140,21 @@ const Home = () => {
                                 likedUserId={item?._id}
                                 commentsCount={item?.commentsCount}
                                 likes={item?.likesCount}
-                                dislikesCount={item?.dislikesCount}
                                 subCategoryname={item?.subCategory?.name}
                                 subCategoryimage={item?.subCategory?.image}
                                 username={item?.creator?.username}
                                 likedByMe={item?.likedByMe}
+                                likesCountuser={item?.likesCount}
+                                likeslength={item?.likes}
+                                dislikeslength={item?.dislikes}
+                                dislikesCount={item?.dislikesCount}
                                 dislikesByMe={item?.dislikesByMe}
-                                likedapiId={likedStoryfeed?._id}
                             />
                         )}
                         ListFooterComponent={() => {
                             if (isLoading) {
                                 return (
-                                    <View style={{ alignItems: 'center', height: height / 4, }}>
+                                    <View style={{ alignItems: 'center', height: height / 3, }}>
                                         <ActivityIndicator size={40} color={'#000'} />
                                     </View>
                                 );
@@ -156,13 +165,20 @@ const Home = () => {
                         onEndReachedThreshold={0.3}
                     />
                     :
-                    <View style={{ justifyContent: "center", alignItems: "center", height: height / 2 }}>
-                        <ActivityIndicator size={40} color={"#000"} />
+                    <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
+                        <ActivityIndicator size={30} color={'#000'} />
                     </View>
             }
 
+            {/* Frame Content Start----------- */}
 
-            {/* <FrameContent text="Whale" type="imp_bg_img" profile_text="Alfred" backgroundImage={FISH_ICON} profileImage={require("../../assets/porter-img.png")} /> */}
+            {/* 
+            {
+                {/* !loading ? */}
+            {/* <View style={{ justifyContent: "center", alignItems: "center", height: height / 2 }}>
+                        <ActivityIndicator size={40} color={"#000"} />
+                    </View>
+             */}
 
             {/* Frame Content Close----------- */}
 
@@ -170,7 +186,6 @@ const Home = () => {
         </ImageBackground>
     )
 };
-
 
 const styles = StyleSheet.create({
     container: {

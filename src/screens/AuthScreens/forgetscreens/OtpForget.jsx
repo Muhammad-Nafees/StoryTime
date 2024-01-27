@@ -78,13 +78,9 @@ const OtpForget = ({ route }) => {
             setOtp(response?.data?.code);
 
             if (response?.statusCode === 200) {
-                // Toast.show({
-                //     type: 'success',
-                //     text1: String(response?.data?.code),
-                // });
                 setIsLoading(false);
                 setVisible(false);
-                navigation.navigate(FORGET_CONFIRM_PASSWORD);
+                // navigation.navigate(FORGET_CONFIRM_PASSWORD);
             } else if (response?.stack) {
                 Toast.show({
                     type: 'error',
@@ -100,13 +96,13 @@ const OtpForget = ({ route }) => {
     const otp_forget_api = async () => {
         setIsLoading(true);
         setVisible(true);
-
         try {
             const response = await otp_forget(otptext);
-
             if (response?.statusCode === 200) {
                 setStatusCodeForget(true);
-                navigation.navigate(FORGET_CONFIRM_PASSWORD);
+                setTimeout(() => {
+                    navigation.navigate(FORGET_CONFIRM_PASSWORD);
+                }, 1500);
                 dispatch(forgetResetToken(response?.data?.accessToken));
                 setIsLoading(false);
             } else if (response?.stack) {
@@ -122,7 +118,6 @@ const OtpForget = ({ route }) => {
             console.log(err);
         }
     };
-
 
     useEffect(() => {
         const seconds = timeLeft % 60;
@@ -142,6 +137,8 @@ const OtpForget = ({ route }) => {
         }
         return () => clearInterval(countdown);
     }, [timeLeft]);
+
+
 
     return (
         <ScrollView>

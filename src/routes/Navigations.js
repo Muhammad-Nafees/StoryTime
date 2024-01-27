@@ -1,4 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/Home';
@@ -43,7 +43,10 @@ const Navigations = () => {
 
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false
+      }}
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
       <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
@@ -81,9 +84,11 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
     </Stack.Navigator>
   );
 };
+
 
 
 const PLayFlowScreens = () => {
@@ -93,21 +98,16 @@ const PLayFlowScreens = () => {
     FIRST_USER,
     SECONDSCREENPLAYFLOW,
     VIDEO_SECOND_USER,
-    THIRDSCREENPLAYFLOW,
-    EXTENDSTORY,
-    SECONDUSER_NEXT_PLAY,
-    CONTINUE_AND_NEXTPLAYER,
-    THIRD_USER,
-    THIRD_EXTEND_STORY,
-    FOURTH_USER,
-    FOURTH_USER_STORY,
     VIDEO_FIRST_SCREEN,
     VIDEO_FIRST_USER,
     SECOND_USER_STORY,
   } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      headerShown: false
+    }}>
       <Stack.Screen
         name={FIRSTSCREENPLAYFLOW}
         component={FirstScreenPlayFlow}
@@ -137,7 +137,10 @@ const HomeStackBottom = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      headerShown: false
+    }}>
       <Stack.Screen name={HOME} component={Home} />
       <Stack.Screen name={FEED_CHAT} component={FeedChat} />
     </Stack.Navigator>
@@ -151,7 +154,10 @@ const CategoriesStackBottom = () => {
   const { CATEGORIES } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      headerShown: false
+    }}>
       <Stack.Screen name={CATEGORIES} component={Categories} />
       <Stack.Screen name="SubCategories" component={SubCategories} />
     </Stack.Navigator>
@@ -164,24 +170,31 @@ const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
   const { HOME} = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Profile" screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      headerShown: false
+    }}>
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
+      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
     </Stack.Navigator>
   );
 };
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT,SETTING} = NavigationsString;
+  const { HOME, FEED_CHAT } = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Profile" screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      headerShown: false
+    }}>
       <Stack.Screen name="TagFriends" component={TagFriends} />
       <Stack.Screen name="AddUrl" component={AddUrl} />
     </Stack.Navigator>
   );
 };
+
 
 const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;

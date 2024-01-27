@@ -43,11 +43,9 @@ const ForgetPhoneNumber = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
     const [formatText, setFormatText] = useState('');
-    const [countryCode, setCountryCode] = useState({});
     const [phoneCode, setPhoneCode] = useState('');
     const [isError, setIsError] = useState('')
     const [phoneError, setPhoneError] = useState('');
-
     const { FORGET_BG_IMG } = Img_Paths;
     const phoneInput = useRef()
     const toggleCountryPicker = () => {
@@ -59,10 +57,6 @@ const ForgetPhoneNumber = () => {
         <Formik
             initialValues={{ phone: '' }}
             onSubmit={async values => {
-                // const { phone } = values;
-                // console.log(phone);
-                // setIsLoading(true);
-                // const code = phoneCode;
             }}>
             {({
                 values,

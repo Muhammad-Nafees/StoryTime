@@ -80,7 +80,6 @@ export const getAllUsers_api = async (paginations) => {
 };
 
 export const follow_unfollow_api = async (userids) => {
-    console.log("useridsapi-====", userids)
     try {
 
         const responseData = await fetch(Base_Url + follow_Unfollow_endpoint, {
@@ -100,15 +99,20 @@ export const follow_unfollow_api = async (userids) => {
 };
 
 export const add_comment_api = async (formsdata) => {
-
-    const { story, text, media } = formsdata;
-    console.log("mediaApiInn==========", media)
-    console.log("textapi==========", text)
-    console.log("storyapi==========", story)
     const formData = new FormData();
-    formData.append('text', text);
-    formData.append('story', story);
-    // formData.append('media', media);
+
+    if (formsdata.story) {
+        formData.append('story', formsdata.story);
+    }
+    if (formsdata.media) {
+        formData.append('media', formsdata.media);
+    }
+    if (formsdata.text) {
+        formData.append('text', formsdata.text);
+    }
+    if (formsdata.parent) {
+        formData.append('parent', formsdata.parent);
+    };
 
     try {
         const responseData = await fetch(Base_Url + addComment_endpoint, {
@@ -125,20 +129,20 @@ export const add_comment_api = async (formsdata) => {
             return jsonData;
 
         } else {
-            // Agar response successful nahi hai, toh error handle karein
             throw new Error(`Request failed with status: ${responseData.status}`);
         }
     } catch (error) {
         console.error("Error:", error);
-        throw error; // Calling code mein error handle karne ke liye error ko dobara throw karein
+        throw error;
     }
 };
 
-export const get_Comment_api = async (storyId) => {
-    console.log("storyidGetComment=========", storyId)
 
+export const get_Comment_api = async (paginations) => {
+    const { storyId, page, limit, } = paginations;
+    console.log("=====================", page, limit, storyId);
     try {
-        const url = `${Base_Url}story/comments/${storyId}`;
+        const url = `${Base_Url}story/comments/${storyId}?page=${page}&limit=${limit}`;
         console.log("url===", url)
         const responseData = await fetch(url, {
             method: "GET",

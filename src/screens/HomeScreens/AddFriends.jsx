@@ -1,18 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../components/FrameContent';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import StoryUsers from '../../components/StoryUsers';
 import AddFriendUsers from '../../components/AddFriendUsers';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../../../store/slices/storyfeedslices/getAllUsersSlice';
 import { getAllUsers_api } from '../../../services/api/storyfeed';
-import { boolean } from 'yup';
 
 
 const AddFiends = () => {
@@ -29,18 +23,13 @@ const AddFiends = () => {
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [HasMorePages, setHasMorePages] = useState();
     const [stopLimit, setStopLimit] = useState();
-    const [isData, setIsData] = useState([])
+    const [isData, setIsData] = useState([]);
     const [limit, setLimit] = useState(10);
     const [filteredData, setFilteredData] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    // console.log("LIMITcheckNum====", limit);
-    // console.log("hasMorePages=====", HasMorePages);
 
-    console.log("hasmorepages===", HasMorePages)
-    console.log("stoplimit===", stopLimit)
     const handleLoadMore = async () => {
-
         if (isLoading) {
             return;
         }
@@ -49,17 +38,6 @@ const AddFiends = () => {
         } else {
             setIsLoading(false)
         }
-
-        // setIsLoading(true);
-        // setLimit((prevLimit) => {
-        //     const newLimit = prevLimit + 5;
-        //     if (newLimit >= 100) {
-        //         setPage((prevPage) => prevPage + 1);
-        //         return 10; // Reset limit to 10
-        //     }
-        //     return newLimit;
-        // });
-        // setIsLoadMore(true);
     };
 
     useEffect(() => {
@@ -71,22 +49,21 @@ const AddFiends = () => {
                 setIsData(data)
                 if (data && data.length > 0) {
                     setResponseUsers(prevData => [...prevData, ...data]);
-                    setHasMorePages(responseData?.data?.pagination?.perPage);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
                     setStopLimit(responseData?.data?.pagination?.currentPage);
                 } else {
                     console.log("No users found");
                     return;
                 }
-
             } catch (error) {
-                // console.log("error--===", error);
             } finally {
                 setIsLoading(false);
                 setIsLoadMore(false);
             }
         };
         fetchUsers();
-    }, [page,])
+    }, [page, isRefreshing])
+
 
     const filterUserData = useCallback(() => {
         const filteredData = responseUsers?.filter((item) => {
@@ -99,14 +76,16 @@ const AddFiends = () => {
         filterUserData();
     }, [filterUserData]);
 
-    const onRefresh = () => {
-        setIsRefreshing(true)
-        setPage(1)
-    }
+    const onRefresh = useCallback(() => {
+        setIsRefreshing(true);
+        setPage(1);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            {/* <ScrollView> */}
             {/* Frame Content Close----------- */}
             <View style={styles.first_container}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
@@ -130,6 +109,7 @@ const AddFiends = () => {
             </View>
 
             <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
+
                 {
                     <FlatList
                         scrollEnabled={true}
@@ -154,17 +134,14 @@ const AddFiends = () => {
                             return null;
                         }}
                         onEndReached={() => {
-                            // if (isData && isData?.length > 0) {
                             handleLoadMore();
-                            // }
                         }}
                         onEndReachedThreshold={0.3}
                     />
                 }
-            </View>
-            {/* </ScrollView> */}
-        </ImageBackground>
 
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -174,10 +151,6 @@ const styles = StyleSheet.create({
         height: "100%",
         flex: 1,
     },
-    // flatListContainer: {
-    //     flex: 1,
-    //     // ... aur baki styles
-    // },
     first_container: {
         paddingTop: responsiveWidth(6),
         paddingVertical: moderateVerticalScale(12),

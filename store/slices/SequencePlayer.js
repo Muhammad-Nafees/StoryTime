@@ -16,7 +16,5 @@ const sequenceplayer = createSlice({
 
 });
 
-
-
 export const { UpdateSequencePlayers } = sequenceplayer.actions;
 export default sequenceplayer.reducer;

@@ -40,6 +40,7 @@ const CustomInput = (props,) => {
         setFieldError('');
         setFieldError('');
       }
+
     }, 850)
   ).current;
 

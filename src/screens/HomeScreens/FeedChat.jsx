@@ -3,7 +3,6 @@ import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, Style
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
@@ -86,7 +85,6 @@ const FeedChat = () => {
                             />
                         </View>
                     </View>
-
                     {/* Frame Content Start----------- */}
                     <View>
                         <FeedChatFrame type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
