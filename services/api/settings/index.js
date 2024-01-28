@@ -51,3 +51,8 @@ export const notificationToggle = async (key = null) => {
     return response;
 };
 
+export const getUserProfileData = async () => {
+    let apiUrl = Base_Url + notifications_endpoint; //params here
+    console.log(apiUrl);
+    
+}

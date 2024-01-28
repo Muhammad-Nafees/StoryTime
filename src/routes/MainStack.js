@@ -5,6 +5,7 @@ import Navigations from "./Navigations";
 
 
 const MainStack = () => {
+    console.log('MainStack')
 
     const Stack = createStackNavigator()
 

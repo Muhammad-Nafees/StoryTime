@@ -17,6 +17,8 @@ const SecondPlayFlowScreen = () => {
     const navigation = useNavigation();
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
+    const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    console.log(storyUserImage)
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
@@ -38,7 +40,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} source={require("../../../assets/dog-playflow.png")} />
+                        <Image style={styles.img_dog} source={{uri:storyUserImage}} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>

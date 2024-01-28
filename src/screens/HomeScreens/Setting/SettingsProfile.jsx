@@ -37,13 +37,13 @@ import {
 import SelectDropdown from 'react-native-select-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
 import TextInputField from '../../../components/TextInputField';
-import {Path, Svg} from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
-
+import UploadImage from '../../../components/UploadImage';
 
 const SettingsProfile = () => {
   const navigation = useNavigation()
   const {BG_CONTAINER, AVATAR, DROP_ICON,DEFAULT_ICON} = Img_Paths;
+  const uploadImageRef = useRef(null);
 
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
@@ -59,21 +59,27 @@ const SettingsProfile = () => {
 
   const handleFormSubmit = async values => {};
 
+  const modalOpen = item => {
+    if (uploadImageRef.current) {
+      uploadImageRef.current.open();
+    }
+  };
+
   return (
     <BackgroundWrapper>
-      <ImageBackground source={user.data.user.coverImage?user.data.user.coverImage:BG_CONTAINER} style={styles.bg_img_container}>
+      <ImageBackground source={user?.data?.user.coverImage?user.data.user.coverImage:BG_CONTAINER} style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>
       <View style={{width: SCREEN_WIDTH}}>
         <View style={styles.avatar_wrapper}>
-          <Image source={user.data.user.profileImage?user.data.user.profileImage:DEFAULT_ICON} style={styles.avatar} resizeMode="stretch" />
-          <View style={styles.icon_container}>
+          <Image source={user?.data?.user.profileImage?user?.data.user.profileImage:DEFAULT_ICON} style={styles.avatar} resizeMode="stretch" />
+          <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
-          </View>
+          </TouchableOpacity>
         </View>
-        <View style={styles.icon_container2}>
+        <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <Formik
@@ -372,6 +378,7 @@ const SettingsProfile = () => {
           </>
         )}
       </Formik>
+      <UploadImage uploadImageRef={uploadImageRef}/>
     </BackgroundWrapper>
   );
 };

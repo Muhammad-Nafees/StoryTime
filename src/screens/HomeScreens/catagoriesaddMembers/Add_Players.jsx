@@ -31,14 +31,19 @@ const AddPlayers = () => {
     const addFriends_api_handler = async () => {
         try {
             const responseData = await addFriends_api();
+            console.log("onnn",responseData.data.users)
             setResponseapi(responseData.data.users);
-
             return responseData;
         } catch (error) {
             console.log("err", error)
         }
     };
 
+    const removeAdduserList =(responseData)=>{
+        let AddList = Responseapi.filter(item => item._id !== responseData.userid)
+        setResponseapi(AddList);
+        console.log('blocklist',AddList)
+      }
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
@@ -106,7 +111,7 @@ const AddPlayers = () => {
                                 Responseapi?.map((item, index) => {
                                     console.log("index====", index);
                                     return (
-                                        <AddFriends_Categories key={index} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
+                                        <AddFriends_Categories key={index} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
                                     )
                                 })
                             }

@@ -4,7 +4,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     addFriends: [],
     userId: "",
-    randomnames: ""
+    randomnames: "",
+    storyUserImage:""
 }
 
 const addPlayers = createSlice({
@@ -41,6 +42,11 @@ const addPlayers = createSlice({
         randomNames: (state, payload) => {
             state.randomnames = payload
             console.log("state-random---", state.randomnames)
+        },
+
+        setStoryUserImage: (state, payload) => {
+            state.storyUserImage = payload
+            console.log("state-storyUser---", state.storyUserImage)
         }
 
     },
@@ -50,7 +56,8 @@ export const {
     addFriends,
     removeUser,
     userId,
-    randomNames
+    randomNames,
+    setStoryUserImage
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

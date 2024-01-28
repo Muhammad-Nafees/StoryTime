@@ -125,6 +125,8 @@ const VideoFirstUser = () => {
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
 
+            <Text style={{marginBottom:'auto',marginTop:"auto",alignSelf:'center',fontWeight:'bold',fontSize:18}}>Play Flow Coming Soon</Text>
+{/* 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
@@ -198,7 +200,7 @@ const VideoFirstUser = () => {
             {
                 isVisible &&
                 <SaveVideo isVisible={isVisible} setIsVisible={setIsVisible} />
-            }
+            } */}
 
         </ImageBackground>
     )

@@ -1,5 +1,5 @@
-export const Base_Url = 'http://storytime.yameenyousuf.com/api/';
-// export const Base_Url = 'http://3.128.201.197/storytime/';
+// export const Base_Url = 'http://storytime.yameenyousuf.com/api/';
+export const Base_Url = 'http://3.128.201.197/storytime/api/'
 export const register_endpoint = 'auth/register';
 export const login_andpoint = 'auth/login';
 export const reset_email_endpoint = 'auth/send-code';
@@ -21,4 +21,5 @@ export const block_list_endpoint = "user/block-list"
 export const unblock_endpoint = "user/block"
 export const notifications_endpoint = "user/notifications"
 export const logout_endpoint = "auth/logout"
+export const user_profile = "user/profile"
 

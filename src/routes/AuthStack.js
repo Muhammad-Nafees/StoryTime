@@ -21,6 +21,7 @@ import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
 
 const AuthStack = () => {
+  console.log('AuthStack')
   const {
     POPUP_START,
     SPLASH_SCREEN,
