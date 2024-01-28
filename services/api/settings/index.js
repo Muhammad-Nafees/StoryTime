@@ -73,6 +73,7 @@ export const getUserProfileData = async uid => {
 export const updateUserProfileData = async (payload) => {
     try {
         let apiUrl = Base_Url + update_profile
+          console.log("🚀 ~ updateUserProfileData ~ apiUrl:", apiUrl)
           // Convert payload object to FormData
           const formData = new FormData();
           for (const key in payload) {
@@ -84,7 +85,7 @@ export const updateUserProfileData = async (payload) => {
         const requestOptions = {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
           },
           body: formData,
         };

@@ -71,6 +71,7 @@ const SettingsProfile = () => {
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name);
+  console.log('🚀 ~ SettingsProfile ~ namesArray:', namesArray);
   const namesCities = userdatacity?.data?.map(item => item?.name);
   const {user} = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
@@ -96,22 +97,23 @@ const SettingsProfile = () => {
   const getData = async () => {
     const uid = user?.data?.user?._id;
     let {data} = await getUserProfileData(uid);
+    console.log('🚀 ~ getData ~ data:', data);
 
     const payload = {
       username: data?.username || '',
       firstName: data?.firstName || '',
       lastName: data?.lastName || '',
-      // phoneCode: data?.countryCode || "",
-      // countryCode:  data?.countryCode || "",
+      phoneCode: data?.phoneCode || '',
+      countryCode: data?.countryCode || '',
       phoneNo: data?.phoneNo || '',
       email: data?.email || '',
-      zipCode: data?.city || '',
-      state: data?.city || '',
       city: data?.city || '',
+      state: data?.state || '',
+      zipCode: data?.zipCode || '',
     };
     setinitialData(payload);
     setCountryCodeState(data?.countryCode);
-    dispatch(userinfoState(data?.countryCode));
+    dispatch(userinfoState(data?.countryCode)); ///look
   };
 
   useEffect(() => {
@@ -146,11 +148,15 @@ const SettingsProfile = () => {
             style={styles.avatar}
             resizeMode="stretch"
           />
-          <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container}>
+          <TouchableOpacity
+            onPress={() => modalOpen()}
+            style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container2}>
+        <TouchableOpacity
+          onPress={() => modalOpen()}
+          style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
         </TouchableOpacity>
       </View>
@@ -172,6 +178,7 @@ const SettingsProfile = () => {
           setFieldError,
         }) => (
           <>
+          {console.log("values",values.state)}
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <CustomInput
                 label="Username"
@@ -261,6 +268,7 @@ const SettingsProfile = () => {
                   <SelectDropdown
                     data={namesCities}
                     defaultButtonText="Select here"
+                    defaultValue={values.city}
                     // plac
                     // searchPlaceHolderColor={"red"}
                     renderDropdownIcon={() => (
@@ -314,12 +322,10 @@ const SettingsProfile = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <SelectDropdown
+                 {namesArray?.length >0 && <SelectDropdown
                     data={namesArray}
                     defaultButtonText="Select here"
-                    // searchPlaceHolder='grey'
-                    // searchPlaceHolderColor='grey'
-
+                    defaultValue={values.state}
                     buttonStyle={[
                       {
                         width: '80%',
@@ -366,7 +372,7 @@ const SettingsProfile = () => {
                     rowTextForSelection={(item, index) => {
                       return item;
                     }}
-                  />
+                  />}
                 </View>
               </>
 
@@ -426,26 +432,16 @@ const SettingsProfile = () => {
                       letterSpacing: 0.28,
                       color: 'white',
                     }}>
-                    Next
+                    Save
                   </Text>
                 </TouchableOpacity>
-
-                <View style={{marginVertical: SPACING * 2}}>
-                  <TouchableButton
-                    onPress={() => navigation.goBack()}
-                    backgroundColor="#FFF"
-                    borderWidth="1"
-                    color="#395E66"
-                    text="Back"
-                  />
-                </View>
               </View>
             </View>
             {/* <Toast /> */}
           </>
         )}
       </Formik>
-      <UploadImage uploadImageRef={uploadImageRef}/>
+      <UploadImage uploadImageRef={uploadImageRef} />
     </BackgroundWrapper>
   );
 };
