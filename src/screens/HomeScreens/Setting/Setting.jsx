@@ -107,10 +107,10 @@ const Setting = () => {
                 fontWeight: 600,
                 marginTop: responsiveWidth(3),
               }}>
-              {user?.data?.user.username}
+              {user?.data?.user?.username}
             </Typography>
             <Typography style={{fontSize: 12, fontWeight: 600}}>
-              {user?.data?.user.email}
+              {user?.data?.user?.email}
             </Typography>
           </View>
         </View>

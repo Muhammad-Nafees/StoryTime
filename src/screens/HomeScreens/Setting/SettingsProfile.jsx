@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import ScreenHeader from '../../../components/ScreenHeader';
@@ -22,8 +22,9 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {Formik} from 'formik';
-import {validationSignUp} from '../../../../validation/validation';
+import {validationSettingsProfile} from '../../../../validation/validation';
 import CustomInput from '../../../components/CustomInput';
+import UploadImage from '../../../components/UploadImage';
 import CustomPhoneInput from '../../../components/CustomPhoneInput';
 import TouchableButton from '../../../components/TouchableButton';
 import {
@@ -37,27 +38,87 @@ import {
 import SelectDropdown from 'react-native-select-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
 import TextInputField from '../../../components/TextInputField';
-import { useNavigation } from '@react-navigation/native';
-import UploadImage from '../../../components/UploadImage';
+import {Path, Svg} from 'react-native-svg';
+import {useNavigation} from '@react-navigation/native';
+import {
+  getUserProfileData,
+  updateUserProfileData,
+} from '../../../../services/api/settings';
+import {userinfocity} from '../../../../store/slices/authStatesandCity/userinfoCity';
+import {
+  userinfoState,
+  userdata,
+} from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
 
 const SettingsProfile = () => {
-  const navigation = useNavigation()
-  const {BG_CONTAINER, AVATAR, DROP_ICON,DEFAULT_ICON} = Img_Paths;
-  const uploadImageRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const {BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON} = Img_Paths;
 
+  const uploadImageRef = useRef(null);
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
 
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
+
+  const [formatText, setFormatText] = useState('');
+  const [countryCodeState, setCountryCodeState] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
+
   const {userdata, loading} = useSelector(state => state?.userinfostate);
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name);
+  console.log('🚀 ~ SettingsProfile ~ namesArray:', namesArray);
   const namesCities = userdatacity?.data?.map(item => item?.name);
   const {user} = useSelector(state => state?.authSlice);
+  const [initialData, setinitialData] = useState({
+    username: '',
+    firstName: '',
+    lastName: '',
+    phoneNo: '',
+    email: '',
+    role: 'user',
+    fcmToken: '1234567',
+    zipCode: '',
+    state: '',
+    city: '',
+  });
 
-  const handleFormSubmit = async values => {};
+  const handleFormSubmit = async values => {
+    console.log('values', values);
+    const res = await updateUserProfileData(values);
+    console.log('🚀 ~ handleFormSubmit ~ res:', res);
+    navigation.goBack();
+  };
+
+  const getData = async () => {
+    const uid = user?.data?.user?._id;
+    let {data} = await getUserProfileData(uid);
+    console.log('🚀 ~ getData ~ data:', data);
+
+    const payload = {
+      username: data?.username || '',
+      firstName: data?.firstName || '',
+      lastName: data?.lastName || '',
+      phoneCode: data?.phoneCode || '',
+      countryCode: data?.countryCode || '',
+      phoneNo: data?.phoneNo || '',
+      email: data?.email || '',
+      city: data?.city || '',
+      state: data?.state || '',
+      zipCode: data?.zipCode || '',
+    };
+    setinitialData(payload);
+    setCountryCodeState(data?.countryCode);
+    dispatch(userinfoState(data?.countryCode)); ///look
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const modalOpen = item => {
     if (uploadImageRef.current) {
@@ -67,32 +128,43 @@ const SettingsProfile = () => {
 
   return (
     <BackgroundWrapper>
-      <ImageBackground source={user?.data?.user.coverImage?user.data.user.coverImage:BG_CONTAINER} style={styles.bg_img_container}>
+      <ImageBackground
+        source={
+          user?.data?.user?.coverImage
+            ? user?.data?.user?.coverImage
+            : BG_CONTAINER
+        }
+        style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>
       <View style={{width: SCREEN_WIDTH}}>
         <View style={styles.avatar_wrapper}>
-          <Image source={user?.data?.user.profileImage?user?.data.user.profileImage:DEFAULT_ICON} style={styles.avatar} resizeMode="stretch" />
-          <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container}>
+          <Image
+            source={
+              user?.data?.user?.profileImage
+                ? user?.data?.user?.profileImage
+                : DEFAULT_ICON
+            }
+            style={styles.avatar}
+            resizeMode="stretch"
+          />
+          <TouchableOpacity
+            onPress={() => modalOpen()}
+            style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container2}>
+        <TouchableOpacity
+          onPress={() => modalOpen()}
+          style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
         </TouchableOpacity>
       </View>
 
       <Formik
-        initialValues={{
-          username: '',
-          firstName: '',
-          lastName: '',
-          phoneNo: '',
-          email: '',
-          role: 'user',
-          fcmToken: '1234567',
-        }}
-        validationSchema={validationSignUp}
+        enableReinitialize
+        initialValues={initialData}
+        validationSchema={validationSettingsProfile}
         onSubmit={handleFormSubmit}>
         {({
           values,
@@ -106,6 +178,7 @@ const SettingsProfile = () => {
           setFieldError,
         }) => (
           <>
+          {console.log("values",values.state)}
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <CustomInput
                 label="Username"
@@ -146,25 +219,24 @@ const SettingsProfile = () => {
                 handleChange={text => setFieldValue('lastName', text)}
               />
 
-              <CustomPhoneInput
-                value={values.phoneNo}
-                error={errors.phoneNo}
-                touched={touched.phoneNo}
-                handleChange={handleChange('phoneNo')}
-                setFieldValue={setFieldValue}
-                phoneInput={phoneInput}
-                setIsError={setIsError}
-                setFieldError={setFieldError}
-                isError={isError}
-                // setPhoneCode={undefined}
-                // countryCode={undefined}
-                // placeholder={undefined}
-                // setPhoneError={undefined}
-                // extraStyles={undefined}
-                // setFormatText={undefined}
-                // setphoneNumberStatusCode={undefined}
-                // setphoneNumberStatusCode={setphoneNumberStatusCode}
-              />
+              {countryCodeState && (
+                <CustomPhoneInput
+                  value={values.phoneNo}
+                  error={errors.phoneNo}
+                  touched={touched.phoneNo}
+                  handleChange={handleChange('phoneNo')}
+                  setFieldValue={setFieldValue}
+                  phoneInput={phoneInput}
+                  setIsError={setIsError}
+                  setFieldError={setFieldError}
+                  setFormatText={setFormatText}
+                  isError={isError}
+                  defaultCode={countryCodeState}
+                  setPhoneCode={setCountryCodeState}
+                  setPhoneError={setPhoneError}
+                  setphoneNumberStatusCode={setphoneNumberStatusCode}
+                />
+              )}
 
               <CustomInput
                 label="Email Address"
@@ -181,8 +253,6 @@ const SettingsProfile = () => {
               />
             </View>
             <View>
-
-
               {/* City----------- */}
 
               <View>
@@ -198,6 +268,7 @@ const SettingsProfile = () => {
                   <SelectDropdown
                     data={namesCities}
                     defaultButtonText="Select here"
+                    defaultValue={values.city}
                     // plac
                     // searchPlaceHolderColor={"red"}
                     renderDropdownIcon={() => (
@@ -239,70 +310,71 @@ const SettingsProfile = () => {
                   />
                 </View>
               </View>
-               {/* State----------- */}
+              {/* State----------- */}
               <>
-              <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                <Text style={[styles.text, {color: FourthColor}]}>State</Text>
-              </View>
+                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
+                  <Text style={[styles.text, {color: FourthColor}]}>State</Text>
+                </View>
 
-              <View
-                style={{
-                  paddingVertical: 12,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <SelectDropdown
-                  data={namesArray}
-                  defaultButtonText="Select here"
-                  // searchPlaceHolder='grey'
-                  // searchPlaceHolderColor='grey'
-
-                  buttonStyle={[
-                    {
-                      width: '80%',
-                      backgroundColor: TextinputColor,
-                      borderRadius: 10,
-                      justifyContent: 'flex-start',
-                      paddingHorizontal: 25,
-                    },
-                    errors.state && {borderColor: 'red', borderWidth: 2},
-                  ]}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    fontSize: responsiveFontSize(1.9),
-                  }}
-                  rowStyle={{paddingHorizontal: 8}}
-                  dropdownStyle={{borderRadius: 10}}
-                  buttonTextStyle={{
-                    textAlign: 'left',
-                    fontSize: responsiveFontSize(1.9),
-                  }}
-                  renderDropdownIcon={() => (
-                    <Image
-                      style={{width: 16, height: 16, resizeMode: 'center'}}
-                      source={DROP_ICON}
-                    />
-                  )}
-                  onSelect={(selectedItem, index) => {
-                    setFieldValue('state', selectedItem);
-                    // const cities = userdata?.data?.find((data) => data?.name === selectedItem)
-                    // if (cities) {
-                    //     dispatch(userinfocity({
-                    //         countryCode: cities?.countryCode,
-                    //         isoCode: cities?.isoCode
-                    //     }))
-                    // }
-                  }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item;
-                  }}
-                />
-              </View>
+                <View
+                  style={{
+                    paddingVertical: 12,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                 {namesArray?.length >0 && <SelectDropdown
+                    data={namesArray}
+                    defaultButtonText="Select here"
+                    defaultValue={values.state}
+                    buttonStyle={[
+                      {
+                        width: '80%',
+                        backgroundColor: TextinputColor,
+                        borderRadius: 10,
+                        justifyContent: 'flex-start',
+                        paddingHorizontal: 25,
+                      },
+                      errors.state && {borderColor: 'red', borderWidth: 2},
+                    ]}
+                    rowTextStyle={{
+                      textAlign: 'left',
+                      fontSize: responsiveFontSize(1.9),
+                    }}
+                    rowStyle={{paddingHorizontal: 8}}
+                    dropdownStyle={{borderRadius: 10}}
+                    buttonTextStyle={{
+                      textAlign: 'left',
+                      fontSize: responsiveFontSize(1.9),
+                    }}
+                    renderDropdownIcon={() => (
+                      <Image
+                        style={{width: 16, height: 16, resizeMode: 'center'}}
+                        source={DROP_ICON}
+                      />
+                    )}
+                    onSelect={(selectedItem, index) => {
+                      setFieldValue('state', selectedItem);
+                      const cities = userdata?.data?.find(
+                        data => data?.name === selectedItem,
+                      );
+                      if (cities) {
+                        dispatch(
+                          userinfocity({
+                            countryCode: cities?.countryCode,
+                            isoCode: cities?.isoCode,
+                          }),
+                        );
+                      }
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />}
+                </View>
               </>
-
 
               <View>
                 <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
@@ -320,65 +392,56 @@ const SettingsProfile = () => {
                 />
               </View>
 
-
-            <View style={{ paddingVertical: responsiveWidth(6),alignSelf:'center' }}>
-                  <TouchableOpacity
-                    // onPress={handleSubmit}
+              <View
+                style={{
+                  paddingVertical: responsiveWidth(6),
+                  alignSelf: 'center',
+                }}>
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={{
+                    width: responsiveWidth(80),
+                    backgroundColor:
+                      values.email &&
+                      values.firstName &&
+                      values.lastName &&
+                      values.phoneNo &&
+                      values.username
+                        ? '#395E66'
+                        : 'rgba(57, 94, 102, 0.6)',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#395E66',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: responsiveHeight(6.6),
+                  }}
+                  disabled={
+                    !(
+                      values.email &&
+                      values.firstName &&
+                      values.lastName &&
+                      values.phoneNo &&
+                      values.username
+                    )
+                  }>
+                  <Text
                     style={{
-                      width: responsiveWidth(80),
-                      backgroundColor:
-                        values.email &&
-                          values.firstName &&
-                          values.lastName &&
-                          values.phoneNo &&
-                          values.username
-                          ? '#395E66'
-                          : 'rgba(57, 94, 102, 0.6)',
-                      borderRadius: 10,
-                      borderWidth: 1,
-                      borderColor: '#395E66',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: responsiveHeight(6.6),
-                    }}
-                    disabled={
-                      !(
-                        values.email &&
-                        values.firstName &&
-                        values.lastName &&
-                        values.phoneNo &&
-                        values.username
-                      )
-                    }>
-                    <Text
-                      style={{
-                        fontSize: responsiveFontSize(1.9),
-                        fontWeight: '600',
-                        letterSpacing: 0.28,
-                        color: 'white',
-                      }}>
-                      Next
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View style={{ marginVertical: SPACING*2 }}>
-                    <TouchableButton
-                      onPress={() => navigation.goBack()}
-                      backgroundColor="#FFF"
-                      borderWidth="1"
-                      color="#395E66"
-                      text="Back"
-                    />
-                  </View>
-
-
-                </View>
+                      fontSize: responsiveFontSize(1.9),
+                      fontWeight: '600',
+                      letterSpacing: 0.28,
+                      color: 'white',
+                    }}>
+                    Save
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
             {/* <Toast /> */}
           </>
         )}
       </Formik>
-      <UploadImage uploadImageRef={uploadImageRef}/>
+      <UploadImage uploadImageRef={uploadImageRef} />
     </BackgroundWrapper>
   );
 };
@@ -404,7 +467,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 4,
     borderColor: '#395E66',
-    backgroundColor:'white'
+    backgroundColor: 'white',
   },
   avatar: {
     height: '100%',

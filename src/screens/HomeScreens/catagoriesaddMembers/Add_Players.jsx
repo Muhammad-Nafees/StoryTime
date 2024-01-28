@@ -31,7 +31,6 @@ const AddPlayers = () => {
     const addFriends_api_handler = async () => {
         try {
             const responseData = await addFriends_api();
-            console.log("onnn",responseData.data.users)
             setResponseapi(responseData.data.users);
             return responseData;
         } catch (error) {

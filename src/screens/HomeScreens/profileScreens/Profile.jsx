@@ -25,10 +25,10 @@ const Profile = () => {
 
     return (
         <>
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ color: "#000", }}>Profile Screen is Coming</Text>
-            </View>
-            {/* {
+            </View> */}
+             {
                 changeMode === 0 ?
                     <View style={{ flex: 1, backgroundColor: '#FFF' }}>
                         <ScrollView>
@@ -43,7 +43,7 @@ const Profile = () => {
                                     </View>
 
                                     {/* Incognito Icon----- */}
-            {/* 
+
                                     <View style={{ paddingTop: responsiveWidth(6) }}>
                                         <TouchableOpacity onPress={() => setChangeMode(1)} style={[styles.back_button, { backgroundColor: changeMode == 1 ? TextColorGreen : "rgba(57, 94, 102, 0.5)" }]}>
                                             <Image style={styles.left_arrow} source={require("../../../assets/incognito-icon.png")} />
@@ -78,7 +78,7 @@ const Profile = () => {
                     </View>
                     :
                     <IncognitoMode setChangeMode={setChangeMode} />
-            {/* } */}
+            } 
         </>
 
     )

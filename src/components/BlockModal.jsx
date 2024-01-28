@@ -35,7 +35,6 @@ const BlockModal = forwardRef((props, ref) => {
       const blockId = responseData?.data?.blockId;
       removeUnblockUserFromList(blockId);
       close();
-      console.log("🚀 ~ unblockUser ~ responseData:", responseData)  
     } catch (error) {
       console.log('error ==> ', error?.message);
     }
