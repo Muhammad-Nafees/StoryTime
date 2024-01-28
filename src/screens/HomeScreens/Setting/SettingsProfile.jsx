@@ -24,6 +24,7 @@ import {
 import {Formik} from 'formik';
 import {validationSettingsProfile} from '../../../../validation/validation';
 import CustomInput from '../../../components/CustomInput';
+import UploadImage from '../../../components/UploadImage';
 import CustomPhoneInput from '../../../components/CustomPhoneInput';
 import TouchableButton from '../../../components/TouchableButton';
 import {
@@ -54,6 +55,7 @@ const SettingsProfile = () => {
   const navigation = useNavigation();
   const {BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON} = Img_Paths;
 
+  const uploadImageRef = useRef(null);
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
 
@@ -94,34 +96,6 @@ const SettingsProfile = () => {
   const getData = async () => {
     const uid = user?.data?.user?._id;
     let {data} = await getUserProfileData(uid);
-    console.log('🚀 ~ getData ~ data:', data);
-    const a = {
-      _id: '658d8870e3755fe661270f45',
-      card: null,
-      city: 'Azad Kashmir',
-      countryCode: 'PK',
-      createdAt: '2023-12-28T14:38:40.581Z',
-      email: 'ramaishar.24@gmail.com',
-      firstName: 'Ramaisha',
-      isActive: true,
-      isDeleted: false,
-      lastName: 'Rehman',
-      mode: 'public',
-      noOfFollowers: 0,
-      noOfFollowings: 14,
-      phoneCode: '+92',
-      phoneNo: '3352147474',
-      role: 'user',
-      settings: {
-        appVibrations: true,
-        inAppNotifications: false,
-        systemNotification: true,
-      },
-      state: 'Bhimbar',
-      updatedAt: '2024-01-27T13:15:18.716Z',
-      username: 'Ramaisha',
-      zipCode: '12342',
-    };
 
     const payload = {
       username: data?.username || '',
@@ -143,6 +117,12 @@ const SettingsProfile = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const modalOpen = item => {
+    if (uploadImageRef.current) {
+      uploadImageRef.current.open();
+    }
+  };
 
   return (
     <BackgroundWrapper>
@@ -166,13 +146,13 @@ const SettingsProfile = () => {
             style={styles.avatar}
             resizeMode="stretch"
           />
-          <View style={styles.icon_container}>
+          <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
-          </View>
+          </TouchableOpacity>
         </View>
-        <View style={styles.icon_container2}>
+        <TouchableOpacity onPress={()=>modalOpen()} style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <Formik
@@ -465,6 +445,7 @@ const SettingsProfile = () => {
           </>
         )}
       </Formik>
+      <UploadImage uploadImageRef={uploadImageRef}/>
     </BackgroundWrapper>
   );
 };

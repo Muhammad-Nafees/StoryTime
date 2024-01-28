@@ -19,6 +19,7 @@ const VideoFirstStartScreen = () => {
     const { VIDEO_FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
+    const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
 
     console.log("randomName---", randomName);
 
@@ -43,7 +44,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} source={require("../../../../assets/dog-playflow.png")} />
+                        }]} source={{uri:storyUserImage}} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>

@@ -151,8 +151,10 @@ const FirstUser = () => {
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
             {/* BACK BUTTON AND TIMER */}
+            <Text style={{marginBottom:'auto',marginTop:"auto",alignSelf:'center',fontWeight:'bold',fontSize:18}}>Play Flow Coming Soon</Text>
 
-            <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
+
+            {/* <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
@@ -203,7 +205,7 @@ const FirstUser = () => {
             <View>
                 <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @cedrick101" backgroundColor={TextColorGreen} color="#FFF" />
                 <TouchableButton text="Save Story" color={TextColorGreen} />
-            </View>
+            </View> */}
 
         </ImageBackground>
     )

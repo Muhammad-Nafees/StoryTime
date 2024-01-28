@@ -97,7 +97,7 @@ const Setting = () => {
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
             style={{width: 57, height: 57}}
-            source={user?.data?.user?.profileImage?user?.data?.user?.profileImage:DEFAULT_ICON}
+            source={user?.data?.user.profileImage?user?.data?.user.profileImage:DEFAULT_ICON}
             resizeMode={'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
