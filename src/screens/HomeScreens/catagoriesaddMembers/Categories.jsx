@@ -29,11 +29,7 @@ const Categories = () => {
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch();
-    const [responseCategories, setResponseCategories] = useState()
-    const [responseRandom, setResponseRandom] = useState("")
-    const [randomName, setRandomName] = useState("");
-    const [randomId, setRandomId] = useState("")
-    const [isTriggered, setIsTriggered] = useState(false);
+    const [responseCategories, setResponseCategories] = useState([])
     const addUsersGame = useSelector((state) => state.addPlayers.addFriends);
 
 
@@ -61,8 +57,6 @@ const Categories = () => {
             const response = await get_Random();
             console.log("res", response.data)
             navigation.navigate("SubCategories", { id: response?.data?._id, name: response?.data?.name })
-            setRandomId(response?.data?._id)
-            setRandomName(response?.data?.name)
             return response;
         } catch (error) {
 
@@ -72,12 +66,6 @@ const Categories = () => {
     const handleStoryUser = (id, name) => {
         navigation.navigate("SubCategories", { id: id, name: name });
     };
-
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         setIsTriggered(false)
-    //     }, [])
-    // );
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -139,12 +127,7 @@ const Categories = () => {
                         </View>
                     }
 
-
                 </View>
-
-                {/* <RandomCategories
-                    responseRandom={responseRandom}
-                /> */}
 
             </ScrollView>
         </ImageBackground>

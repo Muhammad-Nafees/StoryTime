@@ -29,20 +29,6 @@ const get_Categories = createSlice({
         },
     },
 
-    extraReducers: (builder) => {
-        builder.addCase(getCategories.pending, (state, action) => {
-            state.loading = true;
-        }),
-
-            builder.addCase(getCategories.fulfilled, (state, { payload }) => {
-                state.data = payload
-                state.loading = false;
-            }),
-
-            builder.addCase(getCategories.rejected, (state, action) => {
-                state.error = true;
-            })
-    }
 })
 
 export default get_Categories.reducer;

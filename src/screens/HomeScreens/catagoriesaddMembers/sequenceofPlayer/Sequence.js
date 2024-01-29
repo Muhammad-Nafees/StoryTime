@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BackButton from '../../../../components/BackButton'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import NavigationsString from '../../../../constants/NavigationsString'
@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { UpdateSequencePlayers } from '../../../../../store/slices/SequencePlayer'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Sequence = () => {
 
@@ -19,37 +20,37 @@ const Sequence = () => {
     const dispatch = useDispatch();
     const { SPLASH_SCREEN_IMAGE } = Img_Paths;
     const counters = useSelector((state) => state?.SequencePlayer?.counters);
+    // const endUser = useSelector((state) => state?.authSlice?.username)
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
-    const [randomNumbers, setRandomNumbers] = useState([])
+    const [endUser, setEndUser] = useState("")
+    const [arrnumbers, setArrNumbers] = useState();
     const { LEFT_ARROW_IMG } = Img_Paths;
     const [selectedIndices, setSelectedIndices] = useState([]);
+    const [userCounts, setUserCounts] = useState({});
 
+    // const handlePress = (index) => {
+
+
+    // };
     const handlePress = (index) => {
-        const updatedIndices = [...selectedIndices];
+        const newUserCounts = { ...userCounts };
 
-        const selectedIndex = updatedIndices.indexOf(index);
-        console.log("selectedIndex-----", selectedIndex);
-
-        if (selectedIndex !== -1) {
-            // If the index is already selected, remove it
-            updatedIndices.splice(selectedIndex, 1);
+        if (newUserCounts[index] !== undefined) {
+            // Remove the count if the user already has one
+            delete newUserCounts[index];
         } else {
-            // If the index is not selected, add it
-            updatedIndices.push(index);
+            // Check if there are available numbers, assign the next available count
+            const availableNumbers = Array.from({ length: addedUsers.length }, (_, i) => i + 1)
+                .filter(number => !Object.values(newUserCounts).includes(number));
+
+            if (availableNumbers.length > 0) {
+                newUserCounts[index] = availableNumbers[0];
+            }
         }
 
-        // Update the state with individual counts for each selected index
-        const numberedIndices = updatedIndices.reduce((acc, val, idx) => {
-            acc[val] = idx + 1;
-            return acc;
-        }, {});
-
-        console.log("selecindex----", selectedIndex);
-        console.log("updaed-----", numberedIndices);
-
-        // Update the state
-        setSelectedIndices(updatedIndices);
+        setUserCounts(newUserCounts);
     };
+
 
     const handlesequence = () => {
         const allValuesSelected = selectedIndices.length === addedUsers.length;
@@ -59,6 +60,17 @@ const Sequence = () => {
             })
         }
     };
+
+    const getUserName = async () => {
+        const enduserlog = await AsyncStorage.getItem("username");
+        setEndUser(enduserlog)
+        console.log("enduser---seq", enduserlog);
+    };
+
+    useEffect(() => {
+        getUserName();
+    }, [])
+
 
     return (
         <ImageBackground source={SPLASH_SCREEN_IMAGE} style={{ height: "100%", width: "100%" }}>
@@ -93,11 +105,16 @@ const Sequence = () => {
                                     <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ flexDirection: "row" }}>
                                         <View style={{ backgroundColor: TextColorGreen, justifyContent: "center", alignItems: "center", width: responsiveWidth(14), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: TextColorGreen, flexDirection: 'row' }}>
                                             <Text style={{ color: "#FFF", fontFamily: PassionOne_Regular.passionOne, fontSize: responsiveFontSize(4) }}>
-                                                {selectedIndices.includes(index) ? selectedIndices.indexOf(index) + 1 : ''}
+                                                {userCounts[index] !== undefined ? userCounts[index] : ""}
                                             </Text>
-                                            {/* <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
-                                                <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
-                                            </View> */}
+
+                                            {
+                                                userCounts[index] !== undefined &&
+                                                <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
+                                                    <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
+                                                </View>
+                                            }
+
                                         </View>
                                     </TouchableOpacity>
 
@@ -109,17 +126,40 @@ const Sequence = () => {
                             </>
                         ))
                     }
+
+                    <View style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
+                        <TouchableOpacity activeOpacity={0.7} style={{ flexDirection: "row" }}>
+                            <View style={{ justifyContent: "center", alignItems: "center", width: responsiveWidth(14), height: responsiveHeight(6), borderWidth: 4, borderRadius: 10, borderColor: "rgba(228, 65, 115, 1)", flexDirection: 'row' }}>
+                                <Text style={{ color: "#FFF", fontFamily: PassionOne_Regular.passionOne, fontSize: responsiveFontSize(4) }}>
+                                    {/* {selectedIndices.includes(index) ? selectedIndices.indexOf(index) + 1 : ''} */}
+                                </Text>
+
+                                {/* {
+                                    selectedIndices.includes(index) &&
+                                    <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
+                                        <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
+                                    </View>
+                                } */}
+
+                            </View>
+                        </TouchableOpacity>
+
+                        <View style={{ width: responsiveWidth(71), borderLeftColor: "#000", borderLeftWidth: 4, backgroundColor: "rgba(228, 65, 115, 1)", padding: moderateScale(14) }}>
+                            <Text style={{ color: "#FFFFFF", fontWeight: "500", fontSize: responsiveFontSize(1.9) }}>{`@${endUser}`}</Text>
+                        </View>
+
+                    </View>
                 </ScrollView>
 
 
                 <View style={{ paddingTop: responsiveWidth(5) }}>
                     <TouchableButton onPress={() => handlesequence()} backgroundColor={TextColorGreen} text="Next" color="#FFF" />
                 </View>
+
             </View>
         </ImageBackground>
 
     )
 };
-
 
 export default Sequence;

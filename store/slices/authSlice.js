@@ -12,6 +12,7 @@ const initialState = {
     firstpageData: [],
     secondpageData: [],
     thirdpageData: [],
+    username: ""
 };
 
 const authSlice = createSlice({
@@ -42,8 +43,9 @@ const authSlice = createSlice({
             state.randomNumber = action.payload
         },
         register: (state, action) => {
-            // state.token = action.payload;
-            state.firstpageData = action.payload
+            const { username } = state.firstpageData;
+            console.log("username", username)
+            state.firstpageData = action.payload;
             console.log("register---data", state.firstpageData);
         },
         registeruser_city: (state, action) => {
@@ -52,12 +54,22 @@ const authSlice = createSlice({
             console.log("registercity", state.secondpageData)
         },
         registeruser_password: (state, action) => {
-            // state.token = action.payload;
             state.thirdpageData = action.payload;
             console.log("registerpassword", state.thirdpageData)
-
         },
+        usernameSequence: (state, { payload }) => {
+            state.username = payload;
 
+            // AsyncStorage.setItem('username', payload)
+            //     .then(() => {
+            //         console.log('Username saved to AsyncStorage');
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error saving username to AsyncStorage:', error);
+            //     });
+
+            console.log("----------usernameauh--", state.username)
+        }
     },
 });
 
@@ -76,7 +88,7 @@ export const {
     setRandomNumber,
     register,
     registeruser_city,
-
+    usernameSequence,
     registeruser_password
 } = authSlice.actions;
 

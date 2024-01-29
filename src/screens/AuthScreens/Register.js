@@ -28,7 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
-import { register } from '../../../store/slices/authSlice';
+import { register, usernameSequence } from '../../../store/slices/authSlice';
 
 import CustomInput from '../../components/CustomInput';
 import { Formik } from 'formik';
@@ -73,27 +73,33 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
+
       onSubmit={async (values) => {
+
         try {
           dispatch(userinfoState(countryCode));
           dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-          const responseData = await username_api({ username: values?.username })
-          setStatusCodeusername(responseData.statusCode)
+          const responseData = await username_api({ username: values?.username });
+          setStatusCodeusername(responseData.statusCode);
 
           if (responseData?.statusCode !== 200) {
             setVisible(true)
-          }
+          };
+
           if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
             return;
-          }
+          };
+
           navigation.navigate(REGISTER_USER_INFO);
           return responseData;
         } catch (error) {
+
         }
         setIsLoading(true);
         setIsLoading(false);
         const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
       }}>
+
       {({
         values,
         errors,
@@ -108,11 +114,13 @@ const Register = () => {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
+
               <View style={styles.img_container}>
                 <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
               </View>
 
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+
                 <CustomInput
                   label="Username"
                   placeholder="Type here"

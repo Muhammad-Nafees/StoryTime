@@ -6,7 +6,7 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import { login } from '../../../store/slices/authSlice';
+import { login, usernameSequence } from '../../../store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -31,6 +31,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isEmail, setIsEmail] = useState("")
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -62,6 +63,9 @@ const Login = () => {
 
                     const responseData = await response.json();
                     dispatch(login(responseData))
+                    console.log("resdata---", responseData.data?.user?.username)
+                    await AsyncStorage.setItem("username", responseData.data?.user?.username);
+                    dispatch(usernameSequence(responseData?.data?.user?.username));
 
                     if (responseData?.data) {
                         setIsLoading(false)
@@ -84,6 +88,7 @@ const Login = () => {
                             visibilityTime: 2500
                         })
                     };
+
                     if (error) {
                         setIsLoading(false)
                         setIsEmail(message)
