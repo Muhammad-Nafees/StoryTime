@@ -167,7 +167,7 @@ const Register = () => {
 
                 <CustomPhoneInput
                   value={values.phoneNo}
-                  error={errors.phoneNo}
+                  error={errors.phoneNo} //validation schema
                   touched={touched.phoneNo}
                   handleChange={handleChange('phoneNo')}
                   setFieldValue={setFieldValue}
