@@ -28,6 +28,7 @@ const Sequence = () => {
         const updatedIndices = [...selectedIndices];
 
         const selectedIndex = updatedIndices.indexOf(index);
+        console.log("selectedIndex-----", selectedIndex);
 
         if (selectedIndex !== -1) {
             // If the index is already selected, remove it
@@ -84,9 +85,9 @@ const Sequence = () => {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView style={{ height: responsiveHeight(72) }}>
+                <ScrollView style={{ height: responsiveHeight(75) }}>
                     {
-                        addedUsers.map((item, index) => (
+                        addedUsers?.map((item, index) => (
                             <>
                                 <View key={index} style={{ paddingVertical: moderateVerticalScale(8), flexDirection: "row", justifyContent: 'space-between', width: responsiveWidth(90) }}>
                                     <TouchableOpacity onPress={() => handlePress(index)} activeOpacity={0.7} style={{ flexDirection: "row" }}>
@@ -110,10 +111,10 @@ const Sequence = () => {
                     }
                 </ScrollView>
 
-                <View>
+
+                <View style={{ paddingTop: responsiveWidth(5) }}>
                     <TouchableButton onPress={() => handlesequence()} backgroundColor={TextColorGreen} text="Next" color="#FFF" />
                 </View>
-
             </View>
         </ImageBackground>
 

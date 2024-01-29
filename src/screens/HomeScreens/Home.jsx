@@ -31,23 +31,27 @@ const Home = () => {
     const navigation = useNavigation();
 
 
+
     useEffect(() => {
         const fetchUsers = async () => {
-            try {
-                const responseData = await fetchallFeedStories({ pagination: page, limit });
-                const data = responseData?.data?.stories;
-                setIsData(data);
-                if (data && data.length > 0) {
-                    setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
+            if (!isRefreshing) {
+                try {
+                    const responseData = await fetchallFeedStories({ pagination: page, limit });
+                    const data = responseData?.data?.stories;
+                    setIsData(data);
+                    if (data && data.length > 0) {
+                        setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
+                    }
+                    setIsLoadingMain(false);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                    return responseData;
+                } catch (error) {
+                } finally {
+                    setIsLoadingMain(false);
+                    setIsRefreshing(false);
                 }
-                setIsLoadingMain(false);
-                setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-                return responseData;
-            } catch (error) {
-            } finally {
-                setIsLoadingMain(false);
-                setIsRefreshing(false);
             }
+
         };
         fetchUsers();
     }, [page, isRefreshing,])
@@ -55,7 +59,8 @@ const Home = () => {
 
 
     const handleLoadMore = useCallback(() => {
-        if (HasMorePages && isData) {
+        console.log("HasMorePages-----", HasMorePages);
+        if (HasMorePages) {
             setIsLoading(true);
             setPage((prevPage) => prevPage + 1);
         } else {
@@ -65,14 +70,15 @@ const Home = () => {
 
 
     const onRefresh = () => {
-
         setIsRefreshing(true);
         setPage(1);
         setResponseUsers([]);
         setTimeout(() => {
             setIsRefreshing(false);
         }, 1000);
-    }
+    };
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

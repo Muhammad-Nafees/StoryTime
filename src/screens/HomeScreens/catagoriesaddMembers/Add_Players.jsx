@@ -26,7 +26,7 @@ const AddPlayers = () => {
     const [inputText, setInputText] = useState("");
     const userId = useSelector((state) => state.addPlayers.userId)
 
-    console.log("userId0000", userId);
+    // console.log("userId0000", userId);
 
     const addFriends_api_handler = async () => {
         try {
@@ -68,9 +68,9 @@ const AddPlayers = () => {
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* Frame Content Close----------- */}
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView>
 
-                <View style={{ height: responsiveHeight(57) }}>
+                <View style={{ flex: 1 }}>
                     <View style={styles.first_container}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
                             <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
@@ -101,7 +101,6 @@ const AddPlayers = () => {
                             <Text style={styles.categories_text}>Friends</Text>
                         </View>
                         <ScrollView>
-
                             {
                                 Responseapi?.map((item, index) => {
                                     console.log("index====", index);
@@ -114,21 +113,19 @@ const AddPlayers = () => {
                     </View>
                 </View>
 
-                <View style={{ paddingTop: responsiveWidth(60), }}>
-                    <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
-                </View>
-
             </ScrollView>
+            <View style={{ paddingBottom: 30 }}>
+                <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
+            </View>
+
         </ImageBackground>
 
     )
 };
 
-
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        height: "100%",
+
         flex: 1,
     },
     first_container: {
