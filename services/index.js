@@ -1,4 +1,5 @@
-export const Base_Url = 'http://storytime.yameenyousuf.com/api/';
+export const base = "http://storytime.yameenyousuf.com/"
+export const Base_Url = base+'api/';
 // export const Base_Url = 'http://3.128.201.197/storytime/api/'
 export const register_endpoint = 'auth/register';
 export const login_andpoint = 'auth/login';

@@ -71,30 +71,56 @@ export const getUserProfileData = async uid => {
 };
 
 export const updateUserProfileData = async (payload) => {
-    try {
-        let apiUrl = Base_Url + update_profile
-          console.log("🚀 ~ updateUserProfileData ~ apiUrl:", apiUrl)
-          // Convert payload object to FormData
-          const formData = new FormData();
-          for (const key in payload) {
-              if (payload.hasOwnProperty(key)) {
-                  formData.append(key, payload[key]);
-                }
-            }
+  try {
+      let apiUrl = Base_Url + update_profile;
+      console.log("🚀 ~ updateUserProfileData ~ apiUrl:", apiUrl);
       
-        const requestOptions = {
+      // Convert payload object to FormData
+      const formData = new FormData();
+      for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+              if (key === 'profileImage') {
+                  // Check if profileImage exists in the payload
+                  if (payload.profileImage) {
+                    const fileName = `profile_${Date.now()}.jpg`; 
+                      formData.append('profileImage', {
+                          uri: payload.profileImage,
+                          type: 'image/jpeg', // Adjust according to the file type
+                          name: fileName // Adjust the file name if needed
+                      });
+                  }
+              } else if (key === 'coverImage') {
+                // Check if coverImage exists in the payload
+                if (payload.coverImage) {
+                  const fileName = `cover_${Date.now()}.jpg`; 
+                    formData.append('coverImage', {
+                        uri: payload.coverImage,
+                        type: 'image/jpeg', // Adjust according to the file type
+                        name: fileName // Adjust the file name if needed
+                    });
+                }
+            } else {
+                  formData.append(key, payload[key]);
+              }
+          }
+      }
+      
+      console.log("🚀 ~ updateUserProfileData ~ formData:", formData);
+      
+      const requestOptions = {
           method: 'PUT',
           headers: {
-            'Content-Type': 'multipart/form-data',
+              'Content-Type': 'multipart/form-data',
           },
           body: formData,
-        };
-        const responseData = await fetch(apiUrl, requestOptions);
-        const response = await responseData.json();
-        return response;
-        
-    } catch (error) {
-        console.log("🚀 ~ updateUserProfileData ~ error:", error)
-        
-    }
-  };
+      };
+      
+      const responseData = await fetch(apiUrl, requestOptions);
+      const response = await responseData.json();
+      return response;
+      
+  } catch (error) {
+      console.log("🚀 ~ updateUserProfileData ~ error:", error);
+  }
+};
+

@@ -49,13 +49,18 @@ import {
   userinfoState,
   userdata,
 } from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
+import { base } from '../../../../services';
+import { login } from '../../../../store/slices/authSlice';
+
 
 const SettingsProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON} = Img_Paths;
 
-  const uploadImageRef = useRef(null);
+  const uploadProfileImageRef = useRef(null);
+  const uploadCoverImageRef = useRef(null);
+
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
 
@@ -71,10 +76,8 @@ const SettingsProfile = () => {
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
-  console.log('🚀 ~ SettingsProfile ~ namesArray:', namesArray);
   const namesCities = userdatacity?.data?.map(item => item?.name);
-  console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
-  const [countries, setCountries] = useState([])
+
 
   const {user} = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
@@ -87,11 +90,13 @@ const SettingsProfile = () => {
     state: '',
     city: '',
   });
+const [profileImage, setProfileImage] = useState(null)
+const [coverImage, setCoverImage] = useState(null)
 
   const handleFormSubmit = async values => {
-    console.log('values', values);
-    const res = await updateUserProfileData(values);
-    console.log('🚀 ~ handleFormSubmit ~ res:', res);
+    const payload = {...(values || {}),...(profileImage?.uri && {profileImage : profileImage?.uri}), ...(coverImage?.uri && {coverImage : coverImage?.uri})}
+    const response = await updateUserProfileData(payload);
+    dispatch(login(response))
     navigation.goBack();
   };
 
@@ -112,6 +117,12 @@ const SettingsProfile = () => {
       state: data?.state || '',
       zipCode: data?.zipCode || '',
     };
+    if(data?.profileImage){
+      setProfileImage({uri :`${base}${data?.profileImage}`})
+    }
+    if(data?.coverImage){
+      setCoverImage({uri :`${base}${data?.coverImage}`})
+    }
     handleCountryCodeChange(data?.countryCode);
     handleInitCity(data?.city)
     setinitialData(payload);
@@ -141,42 +152,35 @@ const SettingsProfile = () => {
     getData();
   }, []);
 
-  const modalOpen = item => {
-    if (uploadImageRef.current) {
-      uploadImageRef.current.open();
+  const modalOpen = ref => {
+    if (ref.current) {
+      ref.current.open();
     }
+ 
   };
 
   return (
     <BackgroundWrapper>
       <ImageBackground
-        source={
-          user?.data?.user?.coverImage
-            ? user?.data?.user?.coverImage
-            : BG_CONTAINER
-        }
+        source={coverImage?.uri ?{uri : coverImage?.uri} : BG_CONTAINER}
         style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>
       <View style={{width: SCREEN_WIDTH}}>
         <View style={styles.avatar_wrapper}>
           <Image
-            source={
-              user?.data?.user?.profileImage
-                ? user?.data?.user?.profileImage
-                : DEFAULT_ICON
-            }
+            source={profileImage?.uri ?{uri : profileImage?.uri} : DEFAULT_ICON}
             style={styles.avatar}
-            resizeMode="stretch"
+            resizeMode='contain'
           />
           <TouchableOpacity
-            onPress={() => modalOpen()}
+            onPress={() => modalOpen(uploadProfileImageRef)}
             style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => modalOpen()}
+          onPress={() => modalOpen(uploadCoverImageRef)}
           style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
         </TouchableOpacity>
@@ -473,7 +477,8 @@ const SettingsProfile = () => {
           </>
         )}
       </Formik>
-      <UploadImage uploadImageRef={uploadImageRef} />
+      <UploadImage uploadImageRef={uploadProfileImageRef} setImage={setProfileImage} />
+      <UploadImage uploadImageRef={uploadCoverImageRef} setImage={setCoverImage} />
     </BackgroundWrapper>
   );
 };
@@ -505,6 +510,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     alignSelf: 'center',
+    borderRadius:100
     // backgroundColor:'red',
   },
   icon_container: {

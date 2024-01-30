@@ -23,6 +23,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import {SecondaryColor, FourthColor, Red02} from '../../Styles/Style';
 import { useDispatch, useSelector } from 'react-redux';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { base } from '../../../../services';
 
 const {width, height} = Dimensions.get('window');
 
@@ -75,6 +76,8 @@ const Setting = () => {
     {key: '10', text: 'FAQ', iconName: 'FAQ', routeName: FAQ_ROUTE},
   ];
 
+  const USER = user?.data?.user || user?.data
+
   return (
     <BackgroundWrapper>
       <View style={styles.first_container}>
@@ -96,8 +99,9 @@ const Setting = () => {
         }}>
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
-            style={{width: 57, height: 57}}
-            source={user?.data?.user.profileImage?user?.data?.user.profileImage:DEFAULT_ICON}
+            style={{width: 57, height: 57,borderRadius:100}}
+            source={USER?.profileImage ?{uri : `${base}${USER?.profileImage}`} : DEFAULT_ICON}
+            // source={USER?.profileImage ? USER?.profileImage:DEFAULT_ICON}
             resizeMode={'contain'}
           />
           <View style={{marginLeft: responsiveWidth(3)}}>
@@ -107,10 +111,10 @@ const Setting = () => {
                 fontWeight: 600,
                 marginTop: responsiveWidth(3),
               }}>
-              {user?.data?.user?.username}
+              {USER?.username}
             </Typography>
             <Typography style={{fontSize: 12, fontWeight: 600}}>
-              {user?.data?.user?.email}
+              {USER?.email}
             </Typography>
           </View>
         </View>
