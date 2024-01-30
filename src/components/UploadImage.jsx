@@ -8,26 +8,29 @@ import {
   } from '../screens/Styles/Style';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
+const UploadImage = ({uploadImageRef,setImage}) => {
 
-const UploadImage = ({uploadImageRef}) => {
-  const [image, setImage] = useState(null);
-  const openImagePicker = () => {
-    const options = {
-      cropping: true,
-      mediaType: 'photo',
-      cropperCircleOverlay: true,
-      // Add other options as needed
-    };
+  const openImagePicker = async () => {
+    try {
+      const options = {
+        cropping: true,
+        mediaType: 'photo',
+        cropperCircleOverlay: true,
+        // Add other options as needed
+      };
 
-    ImageCropPicker.openPicker(options)
-      .then((response) => {
-        if (!response.didCancel) {
-          setImage({ uri: response.path });
-        }
-      })
-      .catch((error) => {
-        console.log('Error in opening image picker:', error);
-      });
+      const response = await ImageCropPicker.openPicker(options);
+
+      if (!response.didCancel) {
+        setImage({ uri: response.path });
+        return response.path; 
+      } else {
+        return null; // Return null if the user cancels
+      }
+    } catch (error) {
+      console.log('Error in opening image picker:', error);
+      return null; 
+    }
   };
 
   return (

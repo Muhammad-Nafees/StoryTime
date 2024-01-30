@@ -113,7 +113,7 @@ const CustomInput = (props,) => {
         </View>
       )}
 
-      {isFocused && props.error && (
+      {props.error && (
         <View
           style={[
             {

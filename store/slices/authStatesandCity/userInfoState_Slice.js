@@ -23,13 +23,19 @@ const userinfo_state = createSlice({
     initialState: {
         userdata: [],
         loading: false,
-        error: null
+        error: null,
+        userImage:""
     },
 
     reducers: {
         userdata: (state, action) => {
             state.userdata = action.payload
-        }
+        },
+
+        setUserImage: (state, action)  => {
+            state.userImage = action.payload;
+            console.log("userImage======", state?.userImage)
+        },
     },
 
 
@@ -52,4 +58,4 @@ const userinfo_state = createSlice({
 
 
 export default userinfo_state.reducer;
-export const { userdata } = userinfo_state.actions;
+export const { userdata, setUserImage } = userinfo_state.actions;

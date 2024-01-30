@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import ScreenHeader from '../../../components/ScreenHeader';
@@ -55,7 +55,9 @@ const SettingsProfile = () => {
   const navigation = useNavigation();
   const {BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON} = Img_Paths;
 
-  const uploadImageRef = useRef(null);
+  const uploadProfileImageRef = useRef(null);
+  const uploadCoverImageRef = useRef(null);
+
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
 
@@ -70,9 +72,12 @@ const SettingsProfile = () => {
   const {userdata, loading} = useSelector(state => state?.userinfostate);
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
-  const namesArray = userdata?.data?.map(item => item.name);
+  const namesArray = userdata?.data?.map(item => item.name); //state names
   console.log('🚀 ~ SettingsProfile ~ namesArray:', namesArray);
   const namesCities = userdatacity?.data?.map(item => item?.name);
+  console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
+  const [countries, setCountries] = useState([])
+
   const {user} = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
     username: '',
@@ -80,12 +85,12 @@ const SettingsProfile = () => {
     lastName: '',
     phoneNo: '',
     email: '',
-    role: 'user',
-    fcmToken: '1234567',
     zipCode: '',
     state: '',
     city: '',
   });
+const [profileImage, setProfileImage] = useState(null)
+const [coverImage, setCoverImage] = useState(null)
 
   const handleFormSubmit = async values => {
     console.log('values', values);
@@ -111,28 +116,49 @@ const SettingsProfile = () => {
       state: data?.state || '',
       zipCode: data?.zipCode || '',
     };
+    handleCountryCodeChange(data?.countryCode);
+    handleInitCity(data?.city)
     setinitialData(payload);
-    setCountryCodeState(data?.countryCode);
-    dispatch(userinfoState(data?.countryCode)); ///look
+  };
+
+  const handleInitCity = (cityName) =>{
+    const cities = userdata?.data?.find(
+      data => data?.name === cityName,
+    );
+    if (cities) {
+      dispatch(
+        userinfocity({
+          countryCode: cities?.countryCode,
+          isoCode: cities?.isoCode,
+        }),
+      );
+    }
+  }
+
+  const handleCountryCodeChange = countryCode => {
+    setCountryCodeState(countryCode);
+    dispatch(userinfoState(countryCode)); ///look
+
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  const modalOpen = item => {
-    if (uploadImageRef.current) {
-      uploadImageRef.current.open();
+  const modalOpen = ref => {
+    if (ref.current) {
+      ref.current.open();
     }
+ 
   };
 
   return (
     <BackgroundWrapper>
       <ImageBackground
         source={
-          user?.data?.user?.coverImage
-            ? user?.data?.user?.coverImage
-            : BG_CONTAINER
+              coverImage
+             || user?.data?.user?.coverImage
+             || BG_CONTAINER
         }
         style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
@@ -140,22 +166,21 @@ const SettingsProfile = () => {
       <View style={{width: SCREEN_WIDTH}}>
         <View style={styles.avatar_wrapper}>
           <Image
-            source={
+            source={profileImage ||
               user?.data?.user?.profileImage
-                ? user?.data?.user?.profileImage
-                : DEFAULT_ICON
+                 || DEFAULT_ICON
             }
             style={styles.avatar}
             resizeMode="stretch"
           />
           <TouchableOpacity
-            onPress={() => modalOpen()}
+            onPress={() => modalOpen(uploadProfileImageRef)}
             style={styles.icon_container}>
             <SvgIcons name={'PencilEdit'} width={40} height={40} />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => modalOpen()}
+          onPress={() => modalOpen(uploadCoverImageRef)}
           style={styles.icon_container2}>
           <SvgIcons name={'PencilEdit'} width={40} height={40} />
         </TouchableOpacity>
@@ -178,7 +203,7 @@ const SettingsProfile = () => {
           setFieldError,
         }) => (
           <>
-          {console.log("values",values.state)}
+            {console.log('values', values.state)}
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <CustomInput
                 label="Username"
@@ -232,7 +257,7 @@ const SettingsProfile = () => {
                   setFormatText={setFormatText}
                   isError={isError}
                   defaultCode={countryCodeState}
-                  setPhoneCode={setCountryCodeState}
+                  setPhoneCode={handleCountryCodeChange}
                   setPhoneError={setPhoneError}
                   setphoneNumberStatusCode={setphoneNumberStatusCode}
                 />
@@ -255,126 +280,137 @@ const SettingsProfile = () => {
             <View>
               {/* City----------- */}
 
-              <View>
-                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                  <Text style={[styles.text, {color: FourthColor}]}>City</Text>
+              {namesCities?.length > 0 && (
+                <View>
+                  <View
+                    style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
+                    <Text style={[styles.text, {color: FourthColor}]}>
+                      City
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      paddingVertical: 12,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <SelectDropdown
+                      data={namesCities}
+                      defaultButtonText="Select here"
+                      defaultValue={values.city}
+                      // plac
+                      // searchPlaceHolderColor={"red"}
+                      renderDropdownIcon={() => (
+                        <Image
+                          style={{width: 16, height: 16, resizeMode: 'center'}}
+                          source={DROP_ICON}
+                        />
+                      )}
+                      buttonStyle={[
+                        {
+                          width: '80%',
+                          backgroundColor: TextinputColor,
+                          borderRadius: 10,
+                          justifyContent: 'flex-start',
+                          paddingHorizontal: 25,
+                        },
+                        errors.state && {borderColor: 'red', borderWidth: 2},
+                      ]}
+                      rowTextStyle={{
+                        textAlign: 'left',
+                        fontSize: responsiveFontSize(1.9),
+                      }}
+                      rowStyle={{paddingHorizontal: 8}}
+                      dropdownStyle={{borderRadius: 10}}
+                      buttonTextStyle={{
+                        textAlign: 'left',
+                        fontSize: responsiveFontSize(1.9),
+                      }}
+                      onSelect={(selectedItem, index) => {
+                        setFieldValue('city', selectedItem);
+                        console.log('selectitem', selectedItem);
+                      }}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                  </View>
                 </View>
-                <View
-                  style={{
-                    paddingVertical: 12,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  {namesCities?.length >0 &&<SelectDropdown
-                    data={namesCities}
-                    defaultButtonText="Select here"
-                    defaultValue={values.city}
-                    // plac
-                    // searchPlaceHolderColor={"red"}
-                    renderDropdownIcon={() => (
-                      <Image
-                        style={{width: 16, height: 16, resizeMode: 'center'}}
-                        source={DROP_ICON}
-                      />
-                    )}
-                    buttonStyle={[
-                      {
-                        width: '80%',
-                        backgroundColor: TextinputColor,
-                        borderRadius: 10,
-                        justifyContent: 'flex-start',
-                        paddingHorizontal: 25,
-                      },
-                      errors.state && {borderColor: 'red', borderWidth: 2},
-                    ]}
-                    rowTextStyle={{
-                      textAlign: 'left',
-                      fontSize: responsiveFontSize(1.9),
-                    }}
-                    rowStyle={{paddingHorizontal: 8}}
-                    dropdownStyle={{borderRadius: 10}}
-                    buttonTextStyle={{
-                      textAlign: 'left',
-                      fontSize: responsiveFontSize(1.9),
-                    }}
-                    onSelect={(selectedItem, index) => {
-                      setFieldValue('city', selectedItem);
-                      console.log('selectitem', selectedItem);
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item;
-                    }}
-                  />}
-                </View>
-              </View>
-              {/* State----------- */}
-              <>
-                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                  <Text style={[styles.text, {color: FourthColor}]}>State</Text>
-                </View>
+              )}
 
-                <View
-                  style={{
-                    paddingVertical: 12,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                 {namesArray?.length >0 && <SelectDropdown
-                    data={namesArray}
-                    defaultButtonText="Select here"
-                    defaultValue={values.state}
-                    buttonStyle={[
-                      {
-                        width: '80%',
-                        backgroundColor: TextinputColor,
-                        borderRadius: 10,
-                        justifyContent: 'flex-start',
-                        paddingHorizontal: 25,
-                      },
-                      errors.state && {borderColor: 'red', borderWidth: 2},
-                    ]}
-                    rowTextStyle={{
-                      textAlign: 'left',
-                      fontSize: responsiveFontSize(1.9),
-                    }}
-                    rowStyle={{paddingHorizontal: 8}}
-                    dropdownStyle={{borderRadius: 10}}
-                    buttonTextStyle={{
-                      textAlign: 'left',
-                      fontSize: responsiveFontSize(1.9),
-                    }}
-                    renderDropdownIcon={() => (
-                      <Image
-                        style={{width: 16, height: 16, resizeMode: 'center'}}
-                        source={DROP_ICON}
-                      />
-                    )}
-                    onSelect={(selectedItem, index) => {
-                      setFieldValue('state', selectedItem);
-                      const cities = userdata?.data?.find(
-                        data => data?.name === selectedItem,
-                      );
-                      if (cities) {
-                        dispatch(
-                          userinfocity({
-                            countryCode: cities?.countryCode,
-                            isoCode: cities?.isoCode,
-                          }),
+              {/* State----------- */}
+              {namesArray?.length > 0 && (
+                <>
+                  <View
+                    style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
+                    <Text style={[styles.text, {color: FourthColor}]}>
+                      State
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      paddingVertical: 12,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <SelectDropdown
+                      data={namesArray}
+                      defaultButtonText="Select here"
+                      defaultValue={values.state}
+                      buttonStyle={[
+                        {
+                          width: '80%',
+                          backgroundColor: TextinputColor,
+                          borderRadius: 10,
+                          justifyContent: 'flex-start',
+                          paddingHorizontal: 25,
+                        },
+                        errors.state && {borderColor: 'red', borderWidth: 2},
+                      ]}
+                      rowTextStyle={{
+                        textAlign: 'left',
+                        fontSize: responsiveFontSize(1.9),
+                      }}
+                      rowStyle={{paddingHorizontal: 8}}
+                      dropdownStyle={{borderRadius: 10}}
+                      buttonTextStyle={{
+                        textAlign: 'left',
+                        fontSize: responsiveFontSize(1.9),
+                      }}
+                      renderDropdownIcon={() => (
+                        <Image
+                          style={{width: 16, height: 16, resizeMode: 'center'}}
+                          source={DROP_ICON}
+                        />
+                      )}
+                      onSelect={(selectedItem, index) => {
+                        setFieldValue('state', selectedItem);
+                        const cities = userdata?.data?.find(
+                          data => data?.name === selectedItem,
                         );
-                      }
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item;
-                    }}
-                  />}
-                </View>
-              </>
+                        if (cities) {
+                          dispatch(
+                            userinfocity({
+                              countryCode: cities?.countryCode,
+                              isoCode: cities?.isoCode,
+                            }),
+                          );
+                        }
+                      }}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                  </View>
+                </>
+              )}
 
               <View>
                 <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
@@ -441,7 +477,8 @@ const SettingsProfile = () => {
           </>
         )}
       </Formik>
-      <UploadImage uploadImageRef={uploadImageRef} />
+      <UploadImage uploadImageRef={uploadProfileImageRef} setImage={setProfileImage} />
+      <UploadImage uploadImageRef={uploadCoverImageRef} setImage={setCoverImage} />
     </BackgroundWrapper>
   );
 };

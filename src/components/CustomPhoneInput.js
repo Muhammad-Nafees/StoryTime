@@ -29,8 +29,7 @@ const CustomPhoneInput = ({
   setphoneNumberStatusCode,
   defaultCode
 }) => {
-  console.log("error", error)
-  console.log("isError", isError)
+  console.log("error && isError", error,"//",isError)
 
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
@@ -43,7 +42,8 @@ const CustomPhoneInput = ({
     setphoneNumberStatusCode(response?.statusCode)
     setStatusCodePhone(response?.statusCode)
     if (response?.statusCode !== 200) {
-      setPhoneError("Phone Number already exists")
+      setPhoneError("Phone Number already exists") //no need for this
+      setIsError("Phone Number already exists")
       setFieldError('phoneNo', `Phone Number already exists`);
     }
   }, 300)
@@ -125,7 +125,7 @@ const CustomPhoneInput = ({
       {/* )} */}
 
       {
-        value !== "" && !isFocused && (error || isError) &&
+        value !== ""  && (error || isError) &&
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 2, }}>
           <Icon name="alert-circle" size={22} color="red" />
           <Text style={{ color: 'red' }}>{error || isError}</Text>
