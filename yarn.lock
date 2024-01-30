@@ -7423,6 +7423,11 @@ react-native-gesture-handler@^2.14.0, "react-native-gesture-handler@>= 1.0.0":
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-image-crop-picker@^0.40.2:
+  version "0.40.2"
+  resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.2.tgz"
+  integrity sha512-u9iceozX8985vtZV5ozLMfNuCDjtm00GivExSxKwZmwv2wZYyv30VJkKhVJffVYsujvIzMfSCaWJPBsb5nSfZg==
+
 react-native-image-pan-zoom@^2.1.12:
   version "2.1.12"
   resolved "https://registry.npmjs.org/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.12.tgz"
@@ -7578,7 +7583,7 @@ react-native-web@*, react-native-web@0.9.x:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.4"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.55.x", "react-native@>= 0.60.2", react-native@>=0.29, react-native@>=0.44.1, react-native@>=0.57, react-native@>=0.59, react-native@>=0.59.0, react-native@>=0.65.0, react-native@0.72.7:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.55.x", "react-native@>= 0.60.2", react-native@>=0.29, react-native@>=0.40.0, react-native@>=0.44.1, react-native@>=0.57, react-native@>=0.59, react-native@>=0.59.0, react-native@>=0.65.0, react-native@0.72.7:
   version "0.72.7"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.7.tgz"
   integrity sha512-dqVFojOO9rOvyFbbM3/v9/GJR355OSuBhEY4NQlMIRc2w0Xch5MT/2uPoq3+OvJ+5h7a8LFAco3fucSffG0FbA==

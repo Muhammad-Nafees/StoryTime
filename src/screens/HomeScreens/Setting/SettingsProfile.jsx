@@ -265,7 +265,7 @@ const SettingsProfile = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <SelectDropdown
+                  {namesCities?.length >0 &&<SelectDropdown
                     data={namesCities}
                     defaultButtonText="Select here"
                     defaultValue={values.city}
@@ -307,7 +307,7 @@ const SettingsProfile = () => {
                     rowTextForSelection={(item, index) => {
                       return item;
                     }}
-                  />
+                  />}
                 </View>
               </View>
               {/* State----------- */}
