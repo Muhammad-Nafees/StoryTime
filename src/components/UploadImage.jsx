@@ -1,14 +1,35 @@
-import React from 'react'
+import React, {useState} from 'react'
 import SvgIcons from './svgIcon/svgIcons';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet ,TouchableOpacity} from 'react-native'
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
     Black02,
     White
   } from '../screens/Styles/Style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import ImageCropPicker from 'react-native-image-crop-picker';
+
 
 const UploadImage = ({uploadImageRef}) => {
+  const [image, setImage] = useState(null);
+  const openImagePicker = () => {
+    const options = {
+      cropping: true,
+      mediaType: 'photo',
+      cropperCircleOverlay: true,
+      // Add other options as needed
+    };
+
+    ImageCropPicker.openPicker(options)
+      .then((response) => {
+        if (!response.didCancel) {
+          setImage({ uri: response.path });
+        }
+      })
+      .catch((error) => {
+        console.log('Error in opening image picker:', error);
+      });
+  };
+
   return (
     <RBSheet
     ref={uploadImageRef}
@@ -31,7 +52,7 @@ const UploadImage = ({uploadImageRef}) => {
       },
     }}>
   
-     <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}}> 
+     <TouchableOpacity onPress={openImagePicker} style={{flexDirection:'row',alignItems:'center'}}> 
         <View style={styles.svgIcon}>
             <SvgIcons name={'UploadImage'} width={24} height={24} />
           </View>
