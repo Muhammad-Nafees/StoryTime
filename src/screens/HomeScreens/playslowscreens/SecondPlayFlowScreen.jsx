@@ -23,7 +23,6 @@ const SecondPlayFlowScreen = () => {
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
 
-
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <View style={styles.backplay_flow}>
@@ -40,7 +39,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} source={{uri:storyUserImage}} />
+                        <Image style={styles.img_dog} source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>

@@ -25,7 +25,6 @@ import VideoSecondUser from '../screens/HomeScreens/playslowscreens/videoplayers
 import VideoFourthUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
-import SecondUser from '../screens/HomeScreens/playslowscreens/SecondUser';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
@@ -33,13 +32,17 @@ import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
-import BlockUser from '../screens/HomeScreens/setting/BlockUser';
+import BlockUser from '../screens/HomeScreens/Setting/BlockUser';
+import { useSelector } from 'react-redux';
+const addedUsers = useSelector(state => state.addPlayers.addFriends);
 
 
 
 const Navigations = () => {
+
   const Stack = createStackNavigator();
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE,  FAQ_ROUTE,SETTING,NOTIFICATION,SUBSCRIPTION_DETAILS,PROFILE, BLOCK_USER } = NavigationsString;
+
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER } = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -62,10 +65,10 @@ const Navigations = () => {
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
 
       <Stack.Screen
-          name="GuestStack"
-          component={GuestStack}
-          options={{ headerShown: false }}
-        />
+        name="GuestStack"
+        component={GuestStack}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -117,8 +120,16 @@ const PLayFlowScreens = () => {
         component={SecondPlayFlowScreen}
       />
       <Stack.Screen name={FIRST_USER} component={FirstUser} />
-      <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
-      <Stack.Screen name="SecondUsertext" component={SecondUser} />
+
+      {/* {
+        addedUsers.map((user, index) => (
+          console.log("",user),
+          <Stack.Screen key={index} name={FIRST_USER} component={FirstUser} initialParams={{ user }} />
+        ))
+      } */}
+
+      {/* <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} /> */}
+      {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 
       {/* VIDEOS---------SCR*** */}
 
@@ -147,7 +158,7 @@ const HomeStackBottom = () => {
   );
 };
 
-// Categories Bottom And Stack Screens
+// Categories Bottom And Stack Screens---
 
 const CategoriesStackBottom = () => {
   const Stack = createStackNavigator();
@@ -168,7 +179,7 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME} = NavigationsString;
+  const { HOME } = NavigationsString;
   return (
     <Stack.Navigator initialRouteName="Profile" screenOptions={{
       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const initialState = {
     addFriends: [],
     userId: "",
     randomnames: "",
-    storyUserImage:""
-}
+    storyUserImage: ""
+};
 
 const addPlayers = createSlice({
     name: 'addFriends',
@@ -18,20 +17,18 @@ const addPlayers = createSlice({
             const { userid } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
-                // If user does not exist, push to the array
                 state.addFriends.push(action.payload);
             } else {
                 console.log("User with the same userid already exists in the array");
             }
         },
+
         removeUser: (state, action) => {
             const { userid } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (isUserExist) {
-                // If user does not exist, push to the array
                 state.addFriends.pop(action.payload);
             }
-            console.log("addFriendstate-----", state.addFriends)
         },
 
         userId: (state, action) => {

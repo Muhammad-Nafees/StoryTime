@@ -17,6 +17,7 @@ import { recordingData } from '../../../../store/slices/RecordingData';
 
 const FirstUser = () => {
 
+
     let longPressTimeout;
     const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
@@ -30,8 +31,10 @@ const FirstUser = () => {
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
     const dispatch = useDispatch();
-    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
+    const RecordingText = useSelector((state) => state.RecordingData.recordingText);
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
 
+    console.log("addsusers-==", addedUsers)
 
     const handleStart = () => {
         setTimeLeft(120);
@@ -79,6 +82,7 @@ const FirstUser = () => {
     }, []);
 
     // onSpeechStart----------
+
     const onspeechStart = (e) => {
         console.log(e);
         setStarted(true)
@@ -92,7 +96,6 @@ const FirstUser = () => {
     };
 
     // onSpeechResult----------
-
 
     const onspeechResult = useCallback((e) => {
         dispatch(recordingData(e.value[0]));
@@ -136,25 +139,28 @@ const FirstUser = () => {
         setIsLongPress(false);
         setIsPressed(false);
         stopRecording()
-        console.log("pressout")
+        // console.log("pressout")
     };
+
     // const onPressnext = () => {
     //     if (currentIndex < counters.length - 1) {
     //         setCurrentIndex(currentIndex + 1); // Increment index if within range
     //     }
-    // }    
+    // }
+
     const onPressNext = () => {
         navigation.navigate("FirstUserStorytext")
-    }
+    };
 
     return (
+
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
             {/* BACK BUTTON AND TIMER */}
-            <Text style={{marginBottom:'auto',marginTop:"auto",alignSelf:'center',fontWeight:'bold',fontSize:18}}>Play Flow Coming Soon</Text>
 
+            {/* <Text style={{ marginBottom: 'auto', marginTop: "auto", color: "#000", alignSelf: 'center', fontWeight: 'bold', fontSize: 18 }}>Play Flow Coming Soon</Text> */}
 
-            {/* <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
+            <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
@@ -180,10 +186,12 @@ const FirstUser = () => {
                         </ScrollView>
 
                         <View>
+
                             {
                                 !started &&
                                 <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
                             }
+
                         </View>
 
 
@@ -205,18 +213,19 @@ const FirstUser = () => {
             <View>
                 <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @cedrick101" backgroundColor={TextColorGreen} color="#FFF" />
                 <TouchableButton text="Save Story" color={TextColorGreen} />
-            </View> */}
+            </View>
 
         </ImageBackground>
+
     )
 };
-
 
 
 const styles = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
+        flex: 1,
         backgroundColor: "#FFF"
     },
     backplay_flow: {

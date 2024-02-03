@@ -44,7 +44,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} source={{uri:storyUserImage}} />
+                        }]} source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>

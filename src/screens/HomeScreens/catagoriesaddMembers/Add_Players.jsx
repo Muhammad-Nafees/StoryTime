@@ -26,7 +26,6 @@ const AddPlayers = () => {
     const [inputText, setInputText] = useState("");
     const userId = useSelector((state) => state.addPlayers.userId)
 
-    console.log("userId0000", userId);
 
     const addFriends_api_handler = async () => {
         try {
@@ -38,11 +37,11 @@ const AddPlayers = () => {
         }
     };
 
-    const removeAdduserList =(responseData)=>{
+    const removeAdduserList = (responseData) => {
         let AddList = Responseapi.filter(item => item._id !== responseData.userid)
         setResponseapi(AddList);
-        console.log('blocklist',AddList)
-      }
+        console.log('blocklist', AddList)
+    }
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
@@ -69,6 +68,7 @@ const AddPlayers = () => {
         navigation.navigate(CATEGORIES);
     };
 
+    console.log("userId0000", userId);
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* Frame Content Close----------- */}

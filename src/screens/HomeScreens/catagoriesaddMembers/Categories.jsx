@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -19,32 +19,31 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import FrameContent from '../../../components/FrameContent';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
-import {CategoriesData} from '../../../../dummyData/DummyData';
-import {useDispatch, useSelector} from 'react-redux';
+import { CategoriesData } from '../../../../dummyData/DummyData';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
 import RandomCategories from '../../../components/customCategories/RandomCategories';
-import {get_random} from '../../../../store/slices/randomCategorySlice';
+import { get_random } from '../../../../store/slices/randomCategorySlice';
 
 const Categories = () => {
-  const {width, height} = Dimensions.get('window');
-  const {SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON} = Img_Paths;
-  // const { data, loading } = useSelector((state) => state.getcategories);
+  const { width, height } = Dimensions.get('window');
+  const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON } = Img_Paths;
   const randomRes = useSelector(state => state?.randomCategory?.data);
   const loadingrandom = useSelector(state => state?.randomCategory?.loading);
   const [isRandom, setIsRandom] = useState(false);
@@ -88,18 +87,13 @@ const Categories = () => {
       setRandomId(response?.data?._id);
       setRandomName(response?.data?.name);
       return response;
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleStoryUser = (id, name) => {
-    navigation.navigate('SubCategories', {id: id, name: name});
+    navigation.navigate('SubCategories', { id: id, name: name });
   };
 
-  // useFocusEffect(
-  //     useCallback(() => {
-  //         setIsTriggered(false)
-  //     }, [])
-  // );
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -130,7 +124,7 @@ const Categories = () => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
+            <View style={{ marginHorizontal: moderateScale(10) }}>
               <Text
                 style={{
                   color: '#393939',
@@ -178,8 +172,8 @@ const Categories = () => {
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
+                  borderWidth: 3,
+                  borderColor: "#5797A5"
                 }}>
                 <StoryUsers
                   onPress={() => handleStoryUser(category?.id, category?.name)}
@@ -191,7 +185,7 @@ const Categories = () => {
               </View>
             ))
           ) : (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <ActivityIndicator size={40} color={'#000'} />
             </View>
           )}

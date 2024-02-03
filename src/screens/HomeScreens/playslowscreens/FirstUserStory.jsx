@@ -37,7 +37,6 @@ const FirstUserStory = () => {
 };
 
 
-
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
