@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {SecondaryColor, ThirdColor} from '../screens/Styles/Style';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
 import {
   responsiveHeight,
   responsiveFontSize,
@@ -18,9 +18,10 @@ const TouchableButton = ({
   type,
   isValid,
   dirty,
+  timeLeft
 }) => {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         disabled={type === 'register' ? !isValid || !dirty : null}
         onPress={onPress}

@@ -33,9 +33,6 @@ import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import BlockUser from '../screens/HomeScreens/Setting/BlockUser';
-import { useSelector } from 'react-redux';
-const addedUsers = useSelector(state => state.addPlayers.addFriends);
-
 
 
 const Navigations = () => {
@@ -121,14 +118,7 @@ const PLayFlowScreens = () => {
       />
       <Stack.Screen name={FIRST_USER} component={FirstUser} />
 
-      {/* {
-        addedUsers.map((user, index) => (
-          console.log("",user),
-          <Stack.Screen key={index} name={FIRST_USER} component={FirstUser} initialParams={{ user }} />
-        ))
-      } */}
-
-      {/* <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} /> */}
+      <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
       {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 
       {/* VIDEOS---------SCR*** */}
@@ -157,7 +147,7 @@ const HomeStackBottom = () => {
     </Stack.Navigator>
   );
 };
-
+``
 // Categories Bottom And Stack Screens---
 
 const CategoriesStackBottom = () => {

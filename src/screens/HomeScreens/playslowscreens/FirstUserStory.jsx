@@ -27,7 +27,7 @@ const FirstUserStory = () => {
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText text="Extend Your Story Time" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Next Player" onPress={() => navigation.navigate("SecondUsertext")} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText text="Next Player" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
             </View>

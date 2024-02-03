@@ -69,6 +69,7 @@ const AddPlayers = () => {
     };
 
     console.log("userId0000", userId);
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* Frame Content Close----------- */}

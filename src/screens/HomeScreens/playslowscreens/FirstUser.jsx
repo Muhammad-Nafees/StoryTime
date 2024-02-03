@@ -13,7 +13,9 @@ import UserNames from '../../../components/UserNames';
 import { useDispatch, useSelector } from 'react-redux';
 import FirstScreen from '../../../components/FirstScreen';
 import { recordingData } from '../../../../store/slices/RecordingData';
-
+import CustomPlayFlowButton from '../../../components/CustomPlayFlowButton';
+import SaveStoryBtn from '../../../components/SaveStoryBtn';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 const FirstUser = () => {
 
@@ -30,29 +32,29 @@ const FirstUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
-    const dispatch = useDispatch();
-    const RecordingText = useSelector((state) => state.RecordingData.recordingText);
     const addedUsers = useSelector(state => state.addPlayers.addFriends);
 
-    console.log("addsusers-==", addedUsers)
+    const dispatch = useDispatch();
+    const RecordingText = useSelector((state) => state.RecordingData.recordingText);
+    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
+
+    // console.log("addsusers-==", addedUsers.length)
 
     const handleStart = () => {
         setTimeLeft(120);
         startRecognizing()
     };
-
     // Timer 2 Minutes-----
 
     useEffect(() => {
         let countdown;
-
         if (timeLeft !== null && timeLeft > 0) {
             countdown = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);
             }, 1000);
         } else if (timeLeft === 0) {
             clearInterval(countdown);
-        }
+        };
 
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
     }, [timeLeft]);
@@ -70,6 +72,7 @@ const FirstUser = () => {
         }
     }, [timeLeft]);
 
+    // console.log("timetext-==", timeText)
     // ----------XXXXXXXXXX----------
 
     useEffect(() => {
@@ -138,18 +141,20 @@ const FirstUser = () => {
         clearTimeout(longPressTimeout);
         setIsLongPress(false);
         setIsPressed(false);
-        stopRecording()
-        // console.log("pressout")
+        stopRecording();
     };
 
-    // const onPressnext = () => {
-    //     if (currentIndex < counters.length - 1) {
-    //         setCurrentIndex(currentIndex + 1); // Increment index if within range
-    //     }
-    // }
+    // const onPressNext = () => {
+    //     navigation.navigate("FirstUserStorytext");
+
+    // };
 
     const onPressNext = () => {
-        navigation.navigate("FirstUserStorytext")
+        const currentIndex = addedUsers.indexOf(currentDisplayUser);
+        console.log("currentIndex---", currentIndex)
+        const nextIndex = (currentIndex + 1) % addedUsers.length; // Circular rotation to the first user when reaching the end
+        console.log("nextiedx-=", nextIndex)
+        setCurrentDisplayUser(addedUsers[nextIndex]);
     };
 
     return (
@@ -157,8 +162,6 @@ const FirstUser = () => {
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
             {/* BACK BUTTON AND TIMER */}
-
-            {/* <Text style={{ marginBottom: 'auto', marginTop: "auto", color: "#000", alignSelf: 'center', fontWeight: 'bold', fontSize: 18 }}>Play Flow Coming Soon</Text> */}
 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
@@ -177,23 +180,20 @@ const FirstUser = () => {
                 <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
                     <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
 
-                        <UserNames username="@chrislee" />
+                        <UserNames currentDisplayUser={currentDisplayUser} />
 
                         <ScrollView>
                             <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.1), lineHeight: 20, fontWeight: "700", textAlign: "center" }}>{RecordingText}</Text>
+                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>{RecordingText}</Text>
                             </View>
                         </ScrollView>
 
                         <View>
-
                             {
                                 !started &&
-                                <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.1), textAlign: "center" }}> Hold microphone icon and share your story</Text>
+                                <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontSize: responsiveFontSize(2.1), textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}> Hold microphone icon and share your story</Text>
                             }
-
                         </View>
-
 
                     </View>
                 </View>
@@ -210,9 +210,10 @@ const FirstUser = () => {
                 </TouchableOpacity>
             </View>
 
-            <View>
-                <TouchableButton onPress={onPressNext} isLongPress={isLongPress} text="Next Player: @cedrick101" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton text="Save Story" color={TextColorGreen} />
+            <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} currentDisplayUser={currentDisplayUser} />
+
+            <View style={{ paddingTop: responsiveWidth(6) }}>
+                <SaveStoryBtn text="Save Story" color={TextColorGreen} />
             </View>
 
         </ImageBackground>
