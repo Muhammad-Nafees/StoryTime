@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,8 @@ import { Img_Paths } from "../../../assets/Imagepaths/index";
 import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
 
 
 const FirstUserStory = () => {
@@ -18,6 +20,28 @@ const FirstUserStory = () => {
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
+    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
+    const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
+
+    const nextUserHandler = () => {
+        // const currentIndex = addedUsers.indexOf(currentDisplayUser);
+        // const nextIndex = (currentIndex + 1) % addedUsers.length;
+        // const nextPlayer = (currentIndex + 2) % addedUsers.length;
+        navigation.navigate(FIRST_USER);
+
+        // if (currentIndex !== addedUsers?.length - 1) {
+        //     setCurrentDisplayUser(addedUsers[nextIndex]);
+        //     setIsNextUser(addedUsers[nextPlayer]);
+        //     dispatch(currentUserplay({ currentDisplayUser: currentDisplayUser?.username }))
+        //     dispatch(isNextUserplay({ isNextUser: isNextUser?.username }))
+        //     console.log("firstuserstoryext--------cons", currentDisplayUser);
+        // } else {
+        //     console.log("add players Game Completed");
+        // }
+    };
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -26,8 +50,8 @@ const FirstUserStory = () => {
                 <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Next Player" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText text="Extend Your Story Time" onPress={() => navigation.navigate(FIRST_USER, { extentCounting: 30 })} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
+                        <VoiceToText text="Next Player" onPress={nextUserHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
             </View>

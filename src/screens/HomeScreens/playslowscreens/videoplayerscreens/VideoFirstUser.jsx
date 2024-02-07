@@ -7,7 +7,6 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
-import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
 import { Camera, getCameraFormat, useCameraDevices, } from "react-native-vision-camera"

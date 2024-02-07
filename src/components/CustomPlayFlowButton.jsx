@@ -13,16 +13,17 @@ const CustomPlayFlowButton = ({
     backgroundColor,
     timeLeft,
     color,
-    currentDisplayUser
+    isNextUser,
+    isCancelingStory
 }) => {
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity
                 onPress={onPress}
-                disabled={timeLeft == 0 ? false : true}
+                disabled={timeLeft == 0 || !isCancelingStory ? false : true}
                 style={{
                     width: responsiveWidth(80),
-                    backgroundColor: timeLeft == 0 ? backgroundColor : "rgba(57, 94, 102, 0.3)",
+                    backgroundColor: timeLeft == 0 || !isCancelingStory ? backgroundColor : "rgba(57, 94, 102, 0.3)",
                     borderRadius: 10,
                     borderColor: '#395E66',
                     justifyContent: 'center',
@@ -31,7 +32,7 @@ const CustomPlayFlowButton = ({
                 }}>
 
                 <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
-                    Next Player: @cedrick101
+                    {`Next Player: @${isNextUser?.username}`}
                 </Text>
             </TouchableOpacity>
         </View>

@@ -114,6 +114,7 @@ const Sequence = () => {
 
   const handleShuffle = () => {
     const length = sequenceUser?.length
+    console.log("length-----", length);
 
     const numbers = Array.from({ length }, (_, index) => index); // Create an array [0, 1, 2, ..., length - 1]
     const randomArray = [];
@@ -123,10 +124,8 @@ const Sequence = () => {
       const randomNumber = numbers.splice(randomIndex, 1)[0]; // Remove and get the number at the random index
       randomArray.push(randomNumber); // Add the number to the random array
     }
-    // console.log("🚀 ~ handleShuffle ~ randomArray:", randomArray)
     setSelectedIndices(randomArray)
   };
-
 
 
   return (
@@ -244,7 +243,8 @@ const Sequence = () => {
                     </Text>
                   </View>
                 </View>
-              </>)
+              </>
+            )
           })}
         </ScrollView>
 
@@ -254,6 +254,8 @@ const Sequence = () => {
             backgroundColor={TextColorGreen}
             text="Next"
             color="#FFF"
+            sequenceUser={sequenceUser}
+            selectedIndices={selectedIndices}
           />
         </View>
       </View>

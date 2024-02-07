@@ -60,7 +60,7 @@ const CustomInput = (props,) => {
     height: verticalScale(50),
     textAlignVertical: 'center',
     paddingHorizontal: 20,
-    color: 'black',
+    color: '#000',
     fontWeight: '400',
   };
 

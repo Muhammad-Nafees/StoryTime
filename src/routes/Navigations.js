@@ -22,11 +22,8 @@ import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videop
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
 import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
 import VideoSecondUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondUser';
-import VideoFourthUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
-import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
-import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
@@ -117,8 +114,8 @@ const PLayFlowScreens = () => {
         component={SecondPlayFlowScreen}
       />
       <Stack.Screen name={FIRST_USER} component={FirstUser} />
-
       <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
+
       {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 
       {/* VIDEOS---------SCR*** */}
@@ -147,7 +144,7 @@ const HomeStackBottom = () => {
     </Stack.Navigator>
   );
 };
-``
+
 // Categories Bottom And Stack Screens---
 
 const CategoriesStackBottom = () => {

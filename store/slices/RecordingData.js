@@ -13,7 +13,7 @@ const RecordingData = createSlice({
     reducers: {
         recordingData(state, action) {
             state.recordingText = action.payload,
-                console.log("stateRec--=-=", state)
+                console.log("stateRec--=-=", state.recordingText)
         },
         recordingToHome(state, { payload }) {
             state.recordingTextToHome = payload,

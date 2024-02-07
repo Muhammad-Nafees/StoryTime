@@ -7,7 +7,6 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
-import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
 
@@ -61,76 +60,6 @@ const VideoSecondUser = () => {
 
     // ----------XXXXXXXXXX----------
 
-    useEffect(() => {
-        Voice.onSpeechStart = onspeechStart;
-        Voice.onSpeechEnd = onspeechEnd;
-        Voice.onSpeechResults = onspeechResult;
-        return () => {
-            Voice.destroy().then(Voice.removeAllListeners);
-        };
-    }, []);
-
-    // onSpeechStart-----------
-
-    const onspeechStart = (e) => {
-        console.log(e);
-        setStarted(true)
-    };
-
-    // onSpeechEnd-----------
-
-    const onspeechEnd = (e) => {
-        console.log(e);
-        setEnded(e.value)
-    };
-
-    // onSpeechResult----------
-
-    const onspeechResult = (e) => {
-        setResult(e.value[0])
-    };
-
-    // Start Recording And Convert Text----------
-
-    const startRecognizing = async () => {
-        try {
-            await Voice.start('en-US');
-            handlePressIn()
-        } catch (error) {
-            console.log("err", error);
-        }
-    };
-
-    // Stop Recording---------
-
-    const stopRecording = async () => {
-
-        try {
-            await Voice.stop();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // Handle Press In----------
-
-    const handlePressIn = () => {
-        longPressTimeout = setTimeout(() => {
-            setIsLongPress(true);
-            // Perform actions or start voice recognition on long press
-        }, 1000); // Set your desired duration for long press
-    };
-
-    // Handle Press out----------
-
-    const handlePressOut = () => {
-        clearTimeout(longPressTimeout);
-        setIsLongPress(false);
-        setIsPressed(false);
-        stopRecording()
-    };
-
-
 
     const onPressnext = () => {
         navigation.navigate(VIDEO_THIRD_STORY)
@@ -181,7 +110,7 @@ const VideoSecondUser = () => {
                     setIsPressed(true);
                     handleStart();
                 }}
-                    onPressOut={handlePressOut}
+
                     activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
                 </TouchableOpacity>
