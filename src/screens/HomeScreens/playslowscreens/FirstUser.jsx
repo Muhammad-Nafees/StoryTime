@@ -5,13 +5,16 @@ import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Voice from "@react-native-community/voice";
+import Voice from "@react-native-voice/voice";
 import UserNames from '../../../components/UserNames';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordingData } from '../../../../store/slices/RecordingData';
+import { recordingData, resetRecordingData } from '../../../../store/slices/RecordingData';
 import CustomPlayFlowButton from '../../../components/CustomPlayFlowButton';
-import SaveStoryBtn from '../../../components/SaveStoryBtn';
+import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import SaveStory from '../../../components/playFlow/SaveStory';
+import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
+import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const FirstUser = ({ route }) => {
@@ -23,61 +26,87 @@ const FirstUser = ({ route }) => {
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState("")
-    const [result, setResult] = useState("");
-    // const [recordingText, setRecordingText] = useState([])
+    const [result, setResult] = useState([])
     const [isPressed, setIsPressed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
     const addedUsers = useSelector(state => state.addPlayers.addFriends);
+    const checkUserTrueorFalse = useSelector(state => state.addPlayers.checkTrueOrFalse);
+    const extendCounting = useSelector(state => state?.addPlayers?.extendCounting);
+    const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
     const dispatch = useDispatch();
-    const textrecordUsers = useSelector((state) => state.RecordingData.recordingText);
+    const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const [recordingText, setRecordingText] = useState([])
     const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
     const [isNext, setIsNext] = useState(true);
     const [isFirstCall, setIsFirstCall] = useState(false);
     const [isCancelingStory, setisCancelingStory] = useState(true);
-    const extendCount = route?.params?.extentCounting;
+    const [saveStoryModal, setSaveStoryModal] = useState(false);
+    const [isVisible, setVisible] = useState(false);
+    const [partialResults, setPartialResults] = useState([]);
+    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
+    const checkTrue = route?.params?.checkValue;
+    console.log("profileusers", profileUsersStories)
+    // const isEmptyArray = route?.params?.isEmptyArray;
 
-    console.log("textusers=====", textrecordUsers);
+    // console.log("displayuser--", currentDisplayUser)
+    // console.log("textusers=====", textrecordUsers);
+    // const IdUsers = addedUsers.map((item) => item?.userid)
+    // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
 
+    // console.log("isEmptyArray=====", isEmptyArray);
+    // console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
 
     const handleStart = () => {
-
         if (timeLeft !== 0) {
-            setIsFirstCall(!isFirstCall)
+            // setIsFirstCall(!isFirstCall)
             setIsPressed(true);
             startRecognizing();
 
             if (timeLeft === null) {
-                setTimeLeft(120);
+                setTimeLeft(10);
             };
 
-            if (isFirstCall) {
-                clearTimeout(longPressTimeout);
-                setIsLongPress(false);
-                setIsPressed(false);
-                stopRecording();
-                console.log("IN If cond")
-            };
+            // if (isFirstCall) {
+            //     clearTimeout(longPressTimeout);
+            //     setIsLongPress(false);
+            //     setIsPressed(false);
+            //     stopRecording();
+            //     console.log("IN If cond")
+            // };
 
             if (timeLeft !== null && timeLeft > 0) {
                 setisCancelingStory(false);
                 setTimeLeft(null);
             };
-            console.log("isfirstcall", isFirstCall)
+
         };
     };
+
     // Timer 2 Minutes ---------
+    useFocusEffect(
+        useCallback(() => {
+            setTimeLeft(null);
+            if (extendStoryTrueOrFalse) {
+                setRecordingText([]);
+            }
+            dispatch(checkTrueOrFalse(false));
+        }, [])
+    );
 
     useEffect(() => {
         let countdown;
-        if (extendCount) {
-            setTimeLeft(extendCount);
-        };
-        if (timeLeft !== null && timeLeft > 0) {
+        if (extendStoryTrueOrFalse && timeLeft == null) {
+            setTimeLeft(extendCounting);
+            // handleStart();
+            startRecognizing();
+            setIsPressed(true);
+        }
 
+        if (timeLeft !== null && timeLeft > 0) {
             countdown = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);
             }, 1000);
@@ -91,8 +120,7 @@ const FirstUser = ({ route }) => {
         };
         return () => clearInterval(countdown);
 
-    }, [timeLeft, extendCount]);
-
+    }, [timeLeft,]);
 
     useEffect(() => {
         if (timeLeft === null) {
@@ -109,9 +137,13 @@ const FirstUser = ({ route }) => {
     // ----------XXXXXXXXXX----------
 
     useEffect(() => {
+
         Voice.onSpeechStart = onspeechStart;
         Voice.onSpeechEnd = onspeechEnd;
         Voice.onSpeechResults = onspeechResult;
+        Voice.onSpeechPartialResults = onSpeechPartialResults
+        Voice.onSpeechRecognized = onSpeechRecognized
+        console.log("Voice----", Voice)
 
         return () => {
             Voice.destroy().then(Voice.removeAllListeners);
@@ -121,39 +153,59 @@ const FirstUser = ({ route }) => {
     // onSpeechStart----------
 
     const onspeechStart = (e) => {
-        // console.log(e);
+        console.log("speechstart---", e)
         setStarted(true)
     };
 
     // onSpeechEnd----------
 
     const onspeechEnd = (e) => {
-        // console.log(e);
         setEnded(e.value)
+        console.log("eeeend----", e)
     };
 
     //---------- onSpeechResult----------
 
-    const onspeechResult = (e) => {
-        console.log("eeeee-", e)
-        const text = e.value[0]
+    const onspeechResult = useCallback((e) => {
+        const text = e?.value[0];
         dispatch(recordingData(text));
         if (text) {
-            setResult(text);
+            setRecordingText((prevVal) => [...prevVal, ...text]);
         }
-        console.log("text", text)
-    }
+    }, [dispatch]);
+
+
+
+    const onSpeechPartialResults = (e) => {
+        console.log('onSpeechPartialResults: ', e);
+        setPartialResults(e.value);
+    };
+
+
+    const onSpeechRecognized = (e) => {
+        console.log("onSpeechRecognized", e)
+    };
+
 
     // ---------- Start Recording And Convert Text ----------
 
     const startRecognizing = async () => {
         try {
-            await Voice.start('en-US');
+            await Voice.start('en-US', {
+                "RECOGNIZER_ENGINE": "GOOGLE",
+                "EXTRA_PARTIAL_RESULTS": true
+            });
             handlePressIn();
+
         } catch (error) {
             console.log("err", error);
         }
     };
+
+
+    // useEffect(() => {
+
+    // }, [])
 
     // -------- Stop Recording --------
 
@@ -174,106 +226,119 @@ const FirstUser = ({ route }) => {
         }, 1000);
     };
 
+
     // ---------- Handle Press out ----------
 
-    // const handlePressOut = () => {
-    //     clearTimeout(longPressTimeout);
-    //     setIsLongPress(false);
-    //     setIsPressed(false);
-    //     stopRecording();
-    // };
-
     const onPressNext = () => {
-
-        const currentIndex = addedUsers.indexOf(currentDisplayUser);
-        const nextIndex = (currentIndex + 1) % addedUsers.length;
-        const nextPlayer = (currentIndex + 2) % addedUsers.length;
-
-        if (currentIndex !== addedUsers?.length - 1) {
-            setCurrentDisplayUser(addedUsers[nextIndex]);
-            setIsNextUser(addedUsers[nextPlayer])
-            navigation.navigate("FirstUserStorytext");
-            if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0) {
-                return setIsNext(false);
-            };
-
-        } else {
-            console.log("add players in Game Completed");
-        }
+        navigation.navigate("FirstUserStorytext");
     };
 
 
+    useFocusEffect(
+        useCallback(() => {
+            if (checkUserTrueorFalse) {
+                const currentIndex = addedUsers.indexOf(currentDisplayUser);
+                const nextIndex = (currentIndex + 1) % addedUsers.length;
+                const nextPlayer = (currentIndex + 2) % addedUsers.length;
+
+                if (currentIndex !== addedUsers?.length - 1) {
+                    setCurrentDisplayUser(addedUsers[nextIndex]);
+                    setIsNextUser(addedUsers[nextPlayer])
+                    if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0) {
+                        return setIsNext(false);
+                    };
+
+                } else {
+                    console.log("add players in Game Completed");
+                }
+            }
+        }, [checkUserTrueorFalse])
+    )
+
+
+
+    const saveStoryhandler = () => {
+        setSaveStoryModal(true);
+        setVisible(true); // Set isVisible to true to open the modal
+    };
+
 
     return (
-        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+        <>
 
-            {/* BACK BUTTON AND TIMER */}
+            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
-            <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
-                <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
-                        <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
-                    </TouchableOpacity>
-                    <View>
-                        {
-                            isCancelingStory &&
-                            <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
-                                <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
-                            </View>
-                        }
-                    </View>
-                </View>
-            </View>
+                {/* BACK BUTTON AND TIMER */}
 
-
-
-            <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
-                <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                    <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
-
-                        <UserNames currentDisplayUser={currentDisplayUser} />
-
-                        <ScrollView>
-                            <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>{result}</Text>
-                            </View>
-                        </ScrollView>
-
+                <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
+                    <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
+                            <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
+                        </TouchableOpacity>
                         <View>
                             {
-                                !started &&
-                                <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontSize: responsiveFontSize(2.1), textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}> Hold microphone icon and share your story</Text>
+                                isCancelingStory &&
+                                <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
+                                    <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
+                                </View>
                             }
                         </View>
-
                     </View>
                 </View>
+
+
+                <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
+                    <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
+                        <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
+
+                            <UserNames currentDisplayUser={currentDisplayUser} />
+
+                            <ScrollView>
+                                <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
+                                    <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>{recordingText}</Text>
+                                </View>
+                            </ScrollView>
+
+                            <View>
+                                {
+                                    !started &&
+                                    <Text style={{ paddingHorizontal: moderateScale(32), lineHeight: moderateScale(22), color: "#FFF", fontSize: responsiveFontSize(2.1), textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}> Hold microphone icon and share your story</Text>
+                                }
+                            </View>
+
+                        </View>
+                    </View>
+                </ImageBackground>
+
+                <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => {
+                        handleStart();
+                    }}
+                        activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                        <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
+                    </TouchableOpacity>
+                </View>
+
+                {
+                    isNext &&
+                    <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
+                }
+
+                <View style={{ paddingTop: responsiveWidth(6) }}>
+                    <SaveStoryBtn onPress={saveStoryhandler} text="Save Story" color={TextColorGreen} isNext={isNext} />
+                </View>
+
+                {
+                    saveStoryModal && (
+                        <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
+                    )
+                }
+
             </ImageBackground>
 
-            <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => {
-                    handleStart();
-                }}
-                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
-                    <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
-                </TouchableOpacity>
-            </View>
-
-            {
-                isNext &&
-                <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
-            }
-
-            <View style={{ paddingTop: responsiveWidth(6) }}>
-                <SaveStoryBtn text="Save Story" color={TextColorGreen} />
-            </View>
-
-        </ImageBackground>
-
+        </>
     )
 };
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -326,7 +391,6 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(1),
         // marginBottom: responsiveWidth(2.5)
     },
-
-})
+});
 
 export default FirstUser;

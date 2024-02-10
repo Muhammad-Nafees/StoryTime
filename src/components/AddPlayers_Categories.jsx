@@ -6,12 +6,12 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useDispatch, useSelector } from 'react-redux';
 import { addFriends, userId } from '../../store/slices/addplayers/addPlayersSlice';
 
-const AddFriends_Categories = ({ profileimage, username, userchoice, userid, indexNo,removeAdduserList }) => {
+const AddFriends_Categories = ({ profileimage, username, userchoice, userid, indexNo, removeAdduserList }) => {
 
     const dispatch = useDispatch();
     const [friendsArr, setFriendsArr] = useState([]);
 
-    // console.log("addedUsers----", addedUsers)
+    console.log("userid----", userid)
 
     const addFriendHandler = () => {
         const friend = { username, userid };

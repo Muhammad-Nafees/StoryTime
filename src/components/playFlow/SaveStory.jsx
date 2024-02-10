@@ -1,61 +1,73 @@
-import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
-import { useNavigation } from '@react-navigation/native';
+import React from 'react'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from "../../../assets/Imagepaths/index";
-import BackButton from '../../../components/BackButton';
-import NavigationsString from '../../../constants/NavigationsString';
-import VoiceToText from '../../../components/VoiceToText';
+import { Img_Paths } from "../../assets/Imagepaths/index";
+import BackButton from '../BackButton';
+import NavigationsString from '../../constants/NavigationsString';
+import TouchableButton from '../TouchableButton';
+import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
-import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { recordingToHome } from '../../../store/slices/RecordingData';
+import RNFetchBlob from 'rn-fetch-blob';
+import Pdf from 'react-native-pdf';
 
-
-const FirstUserStory = () => {
+const SaveStory = ({ isVisible, setVisible }) => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { FIRST_USER } = NavigationsString;
+    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+
+    const RecordingText = useSelector((state) => state.recordingData.recordingText)
     const dispatch = useDispatch();
-    const addedUsers = useSelector(state => state?.addPlayers.addFriends);
-    const userId = useSelector(state => state?.addPlayers?.userId);
-    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
-    const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
-    // const [isUserCheckAvail, setIsUserCheckAvail] = useState(true);
 
-    let checkTrueval = true;
-
-    const nextUserHandler = () => {
-        dispatch(checkTrueOrFalse(checkTrueval))
-        // console.log("isUserCheckAvail:", isUserCheckAvail);
-        navigation.navigate(FIRST_USER);
-        // console.log("userId:", userId);
-    }
-
-    const extendStoryHandler = () => {
-        dispatch(extendStoryCheck(checkTrueval))
-        navigation.navigate(FIRST_USER);
+    const saveStoryhandler = () => {
+        setSaveStoryModal(true);
+        setVisibleSavePhone(true); // Set isVisible to true to open the modal
     };
 
-    return (
-        <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-            <View>
-                {/* Back Button */}
-                <BackButton onPress={() => navigation.goBack()} />
-                <View style={styles.container}>
-                    <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" onPress={extendStoryHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Next Player" onPress={nextUserHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
-                    </View>
-                </View>
-            </View>
-        </ImageBackground>
+    // const downloadFile = () => {
+    //     const date = new Date();
+    //     const fileDir = RNFS.DownloadDirectoryPath;
 
+    //     const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
+    //     const recordingText = RecordingText;
+    //     RNFS.writeFile(filePath, recordingText, 'utf8')
+    //         .then((success) => {
+    //             console.log('File saved at: ', filePath);
+    //             Alert.alert('File downloaded successfully');
+    //         })
+    //         .catch((err) => {
+    //             console.error(err);
+    //             Alert.alert('Error in downloading file');
+    //         });
+    // }
+
+
+
+    return (
+        <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
+            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+                <View>
+                    {/* Back Button */}
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                        <BackButton onPress={() => setVisible(false)} />
+                    </View>
+                    <View style={styles.container}>
+                        <TouchableButton onPress={saveStoryhandler} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                        <TouchableButton text="Save as Pdf" color={"#FFF"} />
+                    </View>
+
+                </View>
+
+
+            </ImageBackground>
+        </Modal>
     )
 };
 
@@ -63,8 +75,7 @@ const FirstUserStory = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
-        width: "100%",
-        height: "100%",
+
         flex: 1,
     },
     img: {
@@ -98,7 +109,6 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(5),
         borderRadius: 18,
     },
-
     second_childbg: {
         marginLeft: "auto",
         width: responsiveWidth(67)
@@ -167,4 +177,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FirstUserStory;
+export default SaveStory;

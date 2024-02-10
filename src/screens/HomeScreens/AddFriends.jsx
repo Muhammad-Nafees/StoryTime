@@ -62,7 +62,7 @@ const AddFiends = () => {
             }
         };
         fetchUsers();
-    }, [page, isRefreshing])
+    }, [page, isRefreshing]);
 
 
     const filterUserData = useCallback(() => {

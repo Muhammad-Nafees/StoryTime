@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import SequencePlayer from "./slices/SequencePlayer";
-import RecordingData from "./slices/RecordingData";
+import recordingData from "./slices/RecordingData";
 import authSlice from "./slices/authSlice";
 import userinfostate from "./slices/authStatesandCity/userInfoState_Slice";
 import userinfocity from "./slices/authStatesandCity/userinfoCity";
@@ -16,7 +16,7 @@ import startGame from "./slices/playflow/startGameSlice"
 const store = configureStore({
     reducer: {
         SequencePlayer: SequencePlayer,
-        RecordingData: RecordingData,
+        recordingData: recordingData,
         authSlice: authSlice,
         userinfostate: userinfostate,
         userinfocity: userinfocity,

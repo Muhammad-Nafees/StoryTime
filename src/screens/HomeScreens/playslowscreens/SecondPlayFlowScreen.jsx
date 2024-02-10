@@ -7,7 +7,8 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetRecordingData } from '../../../../store/slices/RecordingData';
 
 
 
@@ -22,6 +23,11 @@ const SecondPlayFlowScreen = () => {
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
+    const dispatch = useDispatch()
+    const onpressNextHandler = () => {
+        navigation.navigate(FIRST_USER)
+        dispatch(resetRecordingData())
+    }
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -49,12 +55,13 @@ const SecondPlayFlowScreen = () => {
                     <View>
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>{randomName}</Text>
                     </View>
+
                 </View>
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate(FIRST_USER)}>
+                    <TouchableOpacity onPress={onpressNextHandler}>
                         <Image source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>

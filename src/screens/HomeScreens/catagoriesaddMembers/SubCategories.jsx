@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -20,53 +20,41 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import FrameContent from '../../../components/FrameContent';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
-import Human_Sub from '../../../components/sub-catgories/Human_Sub';
-import Things_Sub from '../../../components/sub-catgories/Things_Sub';
-import Animals_Sub from '../../../components/sub-catgories/AnimalsSub';
-import Places_Sub from '../../../components/sub-catgories/Places_Sub';
-import Food_Sub from '../../../components/sub-catgories/Foods_Sub';
-import Work_Sub from '../../../components/sub-catgories/Work_Sub';
-import Event_Sub from '../../../components/sub-catgories/Event_Sub';
-import Travel_Sub from '../../../components/sub-catgories/Travel_Sub';
-import School_Sub from '../../../components/sub-catgories/School_Sub';
-import Vehicles_Sub from '../../../components/sub-catgories/Vehicles_Sub';
-import Element_Sub from '../../../components/sub-catgories/Elements_Sub';
-import Countries_Sub from '../../../components/sub-catgories/Countries_Sub';
 import MainInputField from '../../../components/MainInputField';
-import {useDispatch, useSelector} from 'react-redux';
-import {getCategories} from '../../../../store/slices/getCategoriesSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../../../store/slices/getCategoriesSlice';
 import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
-import {randomNames} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
 
-const SubCategories = ({route}) => {
-  const {width, height} = Dimensions.get('window');
-  const {SPLASH_SCREEN_IMAGE} = Img_Paths;
+const SubCategories = ({ route }) => {
+  const { width, height } = Dimensions.get('window');
+  const { SPLASH_SCREEN_IMAGE } = Img_Paths;
 
   const navigation = useNavigation();
   const id = route?.params?.id;
   const name = route?.params?.name;
-  const {TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON} = Img_Paths;
-  const {PLAYER_SEQUENCE} = NavigationsString;
-  // const { data, loading } = useSelector((state) => state.getcategories);
+  const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON } = Img_Paths;
+  const { PLAYER_SEQUENCE } = NavigationsString;
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const [isId, setIsId] = useState('');
   const [responsesubCategories, setResponseSubCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [isTriggered, setIsTriggered] = useState(false);
   const [responseRandomsub, setresponseRandomsub] = useState();
   const dispatch = useDispatch();
@@ -75,7 +63,7 @@ const SubCategories = ({route}) => {
     const fetchSubcategories = async () => {
       setIsLoading(true);
       try {
-        const response = await get_Categories_Sub_Categories(id);
+        const response = await get_Categories_Sub_Categories({ page2: page, id: id });
         setIsLoading(false);
         setResponseSubCategories(response?.data?.categories);
         return response;
@@ -114,6 +102,7 @@ const SubCategories = ({route}) => {
   //     }
   // }, [isTriggered]);
 
+
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <ScrollView>
@@ -145,7 +134,7 @@ const SubCategories = ({route}) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
+            <View style={{ marginHorizontal: moderateScale(10) }}>
               <Text
                 style={{
                   color: '#393939',
@@ -185,17 +174,10 @@ const SubCategories = ({route}) => {
           }}>
           {!isLoading ? (
             responsesubCategories?.map(category => (
-              <View
-                key={category?.id}
+              <View key={category?.id}
                 style={{
                   backgroundColor: TextColorGreen,
-                  width: responsiveWidth(29),
-                  borderRadius: 10,
-                  height: responsiveHeight(18.5),
-                  alignItems: 'center',
-                  margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
+                  width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2), borderWidth: 3, borderColor: "#5797A5"
                 }}>
                 <StoryUsers
                   onPress={() => handleStoryUser(category?.name)}
@@ -207,7 +189,7 @@ const SubCategories = ({route}) => {
               </View>
             ))
           ) : (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <ActivityIndicator size={40} color={'#000'} />
             </View>
           )}

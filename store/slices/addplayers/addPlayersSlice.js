@@ -4,7 +4,10 @@ const initialState = {
     addFriends: [],
     userId: "",
     randomnames: "",
-    storyUserImage: ""
+    storyUserImage: "",
+    checkTrueOrFalse: false,
+    extendStoryCheck: false,
+    extendCounting: 30
 };
 
 const addPlayers = createSlice({
@@ -15,6 +18,7 @@ const addPlayers = createSlice({
 
         addFriends: (state, action) => {
             const { userid } = action.payload;
+            // state.userId = userid;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
@@ -32,8 +36,9 @@ const addPlayers = createSlice({
         },
 
         userId: (state, action) => {
-            state.userId = action.payload
-            console.log("state.--", state.userId)
+            state.userId = action.payload;
+            const isUserExist = state.addFriends.some((friend) => friend.userid === action.payload);
+            console.log("state.--", isUserExist)
         },
 
         randomNames: (state, payload) => {
@@ -44,6 +49,12 @@ const addPlayers = createSlice({
         setStoryUserImage: (state, payload) => {
             state.storyUserImage = payload
             console.log("state-storyUser---", state.storyUserImage)
+        },
+        checkTrueOrFalse: (state, { payload }) => {
+            state.checkTrueOrFalse = payload
+        },
+        extendStoryCheck: (state, { payload }) => {
+            state.extendStoryCheck = payload
         }
 
     },
@@ -54,7 +65,9 @@ export const {
     removeUser,
     userId,
     randomNames,
-    setStoryUserImage
+    checkTrueOrFalse,
+    setStoryUserImage,
+    extendStoryCheck
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

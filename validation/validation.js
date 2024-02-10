@@ -66,7 +66,7 @@ export const validationforgetEmail = Yup.object().shape({
 
 export const zipCodeValidation = Yup.object().shape({
   zipCode: Yup.string()
-    .min(5, 'Zip code should have more than 4 characters')
+    .min(4, 'Zip code should have more than 3 characters')
     .required('Zip code is required'),
 });
 

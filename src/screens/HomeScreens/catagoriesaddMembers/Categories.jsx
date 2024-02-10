@@ -55,8 +55,8 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
+  const [page, setPage] = useState(1);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
-
   // Get Categories Api ----------
 
   useFocusEffect(
@@ -64,7 +64,7 @@ const Categories = () => {
       const fetchUsers = async () => {
         setIsLoading(true);
         try {
-          const response = await get_Categories_Sub_Categories();
+          const response = await get_Categories_Sub_Categories({ page: page });
           setIsLoading(false);
           setResponseCategories(response.data?.categories);
           return response;
@@ -93,7 +93,6 @@ const Categories = () => {
   const handleStoryUser = (id, name) => {
     navigation.navigate('SubCategories', { id: id, name: name });
   };
-
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

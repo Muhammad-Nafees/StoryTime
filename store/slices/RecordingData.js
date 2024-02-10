@@ -1,31 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 
+const initialState = {
+    recordingText: [],
+    saveDatatoProfile: [],
+}
+
 const RecordingData = createSlice({
     name: "Recording_Data",
-
-    initialState: {
-        recordingText: [],
-        recordingTextToHome: [],
-        saveRecordingVideo: []
-    },
+    initialState,
 
     reducers: {
-        recordingData(state, action) {
-            state.recordingText = action.payload,
-                console.log("stateRec--=-=", state.recordingText)
+        recordingData: (state, action) => {
+            state.recordingText.push(action.payload);
+            console.log("stateRec--=-=", action.payload);
         },
-        recordingToHome(state, { payload }) {
-            state.recordingTextToHome = payload,
-                console.log("saveTextrecorHOm", state.recordingTextToHome)
+        resetRecordingData: (state) => {
+            state.recordingText = []
         },
-        recordingVideo(state, { payload }) {
-            state.saveRecordingVideo = payload,
-                console.log("videorecordingRed", state.saveRecordingVideo)
+        SaveDataToProfile: (state, action) => {
+            state.saveDatatoProfile = action.payload;
+        },
+        resetSaveDataToProfile: (state) => {
+            state.saveDatatoProfile = []
         }
+
+        // recordingToHome(state, { payload }) {
+        //     state.recordingTextToHome = payload,
+        //         console.log("saveTextrecorHOm", state.recordingTextToHome)
+        // },
+        // recordingVideo(state, { payload }) {
+        //     state.saveRecordingVideo = payload,
+        //         console.log("videorecordingRed", state.saveRecordingVideo)
+        // }
     }
 });
 
-
 export default RecordingData.reducer;
-export const { recordingData, recordingToHome, recordingVideo } = RecordingData.actions
+export const { recordingData, resetRecordingData, SaveDataToProfile, resetSaveDataToProfile } = RecordingData.actions

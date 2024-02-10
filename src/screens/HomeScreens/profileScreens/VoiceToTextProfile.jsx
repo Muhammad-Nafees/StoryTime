@@ -9,6 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';
 import TouchableButton from '../../../components/TouchableButton';
+import { useSelector } from 'react-redux';
 
 
 
@@ -20,6 +21,7 @@ const VoiceToTextProfile = () => {
     const SCREENHEIGHT = Dimensions.get("window").height
     const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
     const navigation = useNavigation();
+    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
 
     const animation = useRef(new Animated.Value(0)).current;
 
@@ -86,12 +88,14 @@ const VoiceToTextProfile = () => {
                                                         <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>Shark</Text>
                                                     </View>
                                                 </View>
+
                                                 <View style={styles.text_container}>
                                                     <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center" }}>
                                                         {/* Your text content here */}
-                                                        DEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERSDEVELOPERS
+                                                        {profileUsersStories}
                                                     </Text>
                                                 </View>
+
                                             </View>
                                         </View>
                                     </View>

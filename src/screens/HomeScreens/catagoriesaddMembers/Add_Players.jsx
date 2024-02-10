@@ -40,8 +40,9 @@ const AddPlayers = () => {
     const removeAdduserList = (responseData) => {
         let AddList = Responseapi.filter(item => item._id !== responseData.userid)
         setResponseapi(AddList);
-        console.log('blocklist', AddList)
-    }
+        // console.log('blocklist', AddList)
+    };
+
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
@@ -68,7 +69,7 @@ const AddPlayers = () => {
         navigation.navigate(CATEGORIES);
     };
 
-    console.log("userId0000", userId);
+    // console.log("userId0000", userId);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -97,8 +98,8 @@ const AddPlayers = () => {
                     <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
 
                         {
-                            addedUsers.map((item, index) => (
-                                <RemoveUsers_Categories key={index} item={item} userid={item.userid} username={item.username} />
+                            addedUsers?.map((item, index) => (
+                                <RemoveUsers_Categories key={item?.userid} item={item} userid={item.userid} username={item.username} />
                             ))
                         }
 
@@ -111,10 +112,11 @@ const AddPlayers = () => {
                                 Responseapi?.map((item, index) => {
                                     console.log("index====", index);
                                     return (
-                                        <AddFriends_Categories key={index} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
+                                        <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
                                     )
                                 })
                             }
+
                         </ScrollView>
                     </View>
                 </View>

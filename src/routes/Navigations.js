@@ -30,6 +30,8 @@ import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import BlockUser from '../screens/HomeScreens/Setting/BlockUser';
+import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
+import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 
 
 const Navigations = () => {
@@ -81,7 +83,7 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
+      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
   );
 };
@@ -173,11 +175,13 @@ const ProfileStacksBottom = () => {
       headerShown: false
     }}>
       <Stack.Screen name="Profile" component={Profile} />
-      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
+      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };
+
+
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
