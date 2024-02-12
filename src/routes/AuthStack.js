@@ -19,6 +19,8 @@ import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndCond
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
+import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
+
 
 const AuthStack = () => {
   const {
@@ -32,8 +34,7 @@ const AuthStack = () => {
     FORGET_PHONE_NO,
     OTP_FORGET,
     FORGET_CONFIRM_PASSWORD,
-    FRAME_CONTENT,
-  } = NavigationsString;
+    FRAME_CONTENT  } = NavigationsString;
 
   const Stack = createStackNavigator();
 
@@ -118,6 +119,7 @@ const AuthStack = () => {
 
 const GuestStack = () => {
   const Stack = createStackNavigator();
+  const { CATEGORIES } = NavigationsString;
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -135,6 +137,7 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={CATEGORIES} component={Categories} />
     </Stack.Navigator>
   );
 };

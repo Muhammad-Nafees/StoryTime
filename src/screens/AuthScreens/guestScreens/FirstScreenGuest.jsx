@@ -26,7 +26,7 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 const FirstScreenGuest = () => {
     const { SPLASH_SCREEN_IMAGE, GET_STARTED_IMAGE, STORY_TIME_IMG } = Img_Paths;
-    const { } = NavigationsString;
+    const { CATEGORIES } = NavigationsString;
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -47,7 +47,9 @@ const FirstScreenGuest = () => {
             </View>
 
             <View style={styles.container_img}>
-                <TouchableOpacity disabled={!toggleCheckBox}>
+                <TouchableOpacity disabled={!toggleCheckBox}
+                onPress={()=>{ navigation.navigate(CATEGORIES) }}
+                >
                     <Image
                         style={{
                             marginVertical: moderateVerticalScale(12),
