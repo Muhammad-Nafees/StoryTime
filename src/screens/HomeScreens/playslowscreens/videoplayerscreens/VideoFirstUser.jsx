@@ -239,11 +239,6 @@ const VideoFirstUser = () => {
                                 </>
                         }
 
-                        {/* {
-                             path&&(
-                                <
-                             )
-                        } */}
 
                     </View>
                 </ImageBackground>
