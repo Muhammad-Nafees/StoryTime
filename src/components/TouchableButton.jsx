@@ -21,6 +21,7 @@ const TouchableButton = ({
   timeLeft,
   sequenceUser,
   selectedIndices,
+
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -28,7 +29,7 @@ const TouchableButton = ({
         disabled={type === 'register' ? !isValid || !dirty : null}
         onPress={onPress}
         style={{
-          width: type == "savestoryphone" ? responsiveWidth(70) : responsiveWidth(80),
+          width: type == "savestoryphone" || "savevideo" ? responsiveWidth(70) : responsiveWidth(80),
           backgroundColor: selectedIndices?.length === sequenceUser?.length ? backgroundColor : "rgba(57, 94, 102, 0.3)",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,

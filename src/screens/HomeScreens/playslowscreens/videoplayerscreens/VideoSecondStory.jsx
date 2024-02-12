@@ -8,6 +8,8 @@ import { Img_Paths } from "../../../../assets/Imagepaths/index";
 import BackButton from '../../../../components/BackButton';
 import NavigationsString from '../../../../constants/NavigationsString';
 import VoiceToText from '../../../../components/VoiceToText';
+import { useDispatch } from 'react-redux';
+import { checkVideoTrue } from '../../../../../store/slices/RecordingData';
 
 
 const VideoSecondStory = () => {
@@ -16,10 +18,19 @@ const VideoSecondStory = () => {
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER } = NavigationsString;
+    const { VIDEO_FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
 
+    const extendVideoHandler = () => {
+        navigation.navigate(VIDEO_FIRST_USER)
+    }
+
+    const nextPlayerHandler = () => {
+        dispatch(checkVideoTrue(true))
+        navigation.navigate(VIDEO_FIRST_USER)
+    }
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -28,8 +39,8 @@ const VideoSecondStory = () => {
                 <BackButton />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText onPress={() => navigation.navigate(VIDEO_SECOND_USER)} text="Next Player" BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText onPress={extendVideoHandler} text="Extend Your Story Time" BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
+                        <VoiceToText onPress={nextPlayerHandler} text="Next Player" BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
             </View>

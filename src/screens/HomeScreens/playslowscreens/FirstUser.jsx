@@ -49,7 +49,8 @@ const FirstUser = ({ route }) => {
     const [partialResults, setPartialResults] = useState([]);
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const checkTrue = route?.params?.checkValue;
-    console.log("profileusers", profileUsersStories)
+    console.log("profileusers", profileUsersStories);
+
     // const isEmptyArray = route?.params?.isEmptyArray;
 
     // console.log("displayuser--", currentDisplayUser)
@@ -58,14 +59,13 @@ const FirstUser = ({ route }) => {
     // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
 
     // console.log("isEmptyArray=====", isEmptyArray);
-    // console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
+    console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
 
     const handleStart = () => {
         if (timeLeft !== 0) {
             // setIsFirstCall(!isFirstCall)
             setIsPressed(true);
             startRecognizing();
-
             if (timeLeft === null) {
                 setTimeLeft(10);
             };
@@ -87,15 +87,6 @@ const FirstUser = ({ route }) => {
     };
 
     // Timer 2 Minutes ---------
-    useFocusEffect(
-        useCallback(() => {
-            setTimeLeft(null);
-            if (extendStoryTrueOrFalse) {
-                setRecordingText([]);
-            }
-            dispatch(checkTrueOrFalse(false));
-        }, [])
-    );
 
     useEffect(() => {
         let countdown;
@@ -105,6 +96,11 @@ const FirstUser = ({ route }) => {
             startRecognizing();
             setIsPressed(true);
         }
+
+        if (extendStoryTrueOrFalse === false && timeLeft == null) {
+            setRecordingText([]);
+        };
+
 
         if (timeLeft !== null && timeLeft > 0) {
             countdown = setInterval(() => {
@@ -122,6 +118,7 @@ const FirstUser = ({ route }) => {
 
     }, [timeLeft,]);
 
+
     useEffect(() => {
         if (timeLeft === null) {
             setTimeText('02:00');
@@ -137,13 +134,11 @@ const FirstUser = ({ route }) => {
     // ----------XXXXXXXXXX----------
 
     useEffect(() => {
-
         Voice.onSpeechStart = onspeechStart;
         Voice.onSpeechEnd = onspeechEnd;
         Voice.onSpeechResults = onspeechResult;
         Voice.onSpeechPartialResults = onSpeechPartialResults
         Voice.onSpeechRecognized = onSpeechRecognized
-        console.log("Voice----", Voice)
 
         return () => {
             Voice.destroy().then(Voice.removeAllListeners);
@@ -157,7 +152,7 @@ const FirstUser = ({ route }) => {
         setStarted(true)
     };
 
-    // onSpeechEnd----------
+    // onSpeechEnd ----------
 
     const onspeechEnd = (e) => {
         setEnded(e.value)
@@ -185,6 +180,14 @@ const FirstUser = ({ route }) => {
     const onSpeechRecognized = (e) => {
         console.log("onSpeechRecognized", e)
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            setTimeLeft(null);
+            setIsPressed(false);
+            dispatch(checkTrueOrFalse(false));
+        }, [])
+    );
 
 
     // ---------- Start Recording And Convert Text ----------

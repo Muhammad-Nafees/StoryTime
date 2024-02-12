@@ -28,19 +28,20 @@ const FirstUserStory = () => {
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
     // const [isUserCheckAvail, setIsUserCheckAvail] = useState(true);
 
-    let checkTrueval = true;
 
     const nextUserHandler = () => {
-        dispatch(checkTrueOrFalse(checkTrueval))
-        // console.log("isUserCheckAvail:", isUserCheckAvail);
-        navigation.navigate(FIRST_USER);
-        // console.log("userId:", userId);
-    }
-
-    const extendStoryHandler = () => {
-        dispatch(extendStoryCheck(checkTrueval))
+        let checkTrueval = true;
+        dispatch(checkTrueOrFalse(checkTrueval));
+        dispatch(extendStoryCheck(false));
         navigation.navigate(FIRST_USER);
     };
+
+
+    const extendStoryHandler = () => {
+        navigation.navigate(FIRST_USER, { extentCounting: 30 });
+        dispatch(extendStoryCheck(true));
+    };
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>

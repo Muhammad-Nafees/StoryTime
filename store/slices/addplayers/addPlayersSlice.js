@@ -6,7 +6,7 @@ const initialState = {
     randomnames: "",
     storyUserImage: "",
     checkTrueOrFalse: false,
-    extendStoryCheck: false,
+    extendStoryCheck: null,
     extendCounting: 30
 };
 
