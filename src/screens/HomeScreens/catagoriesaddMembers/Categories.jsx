@@ -19,7 +19,7 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation ,useRoute} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -56,9 +56,55 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
+  const [filterCategory, setFilteredCategory] = useState(null);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
 
   // Get Categories Api ----------
+const route = useRoute();
+const { params } = route;
+const flow = params?.flow;
+console.log(flow)
+
+const fetchCategoriesUntilFound = async (searchTerm) => {
+  let page = 1;
+  let found = false;
+  let result = [];
+
+  try {
+    while (!found) {
+      const response = await get_Categories_Sub_Categories(page);
+
+      if (response.data && response.data.categories) {
+        const responseArray = response.data.categories;
+
+        const filteredCategories = responseArray.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        console.log('filter',filteredCategories)
+        if (filteredCategories.length > 0) {
+          result = result.concat(filteredCategories);
+          found = true;
+        } else if (responseArray.length > 0) {
+          result = result.concat(responseArray);
+          page++;
+        } else {
+          // No more data available
+          break;
+        }
+      } else {
+        // Handle the case where the response structure is unexpected
+        console.error('Unexpected API response format:', response);
+        break;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+
+  return result;
+};
+const callFunction =async (searchTerm)=>{
+  const categories = await fetchCategoriesUntilFound(searchTerm);
+  console.log("test",categories);
+}
 
   useFocusEffect(
     useCallback(() => {
@@ -74,7 +120,8 @@ const Categories = () => {
         }
       };
       fetchUsers();
-    }, []),
+      callFunction('animals')  
+     }, []),
   );
 
   const handleRandomClick = async () => {
@@ -168,29 +215,33 @@ const Categories = () => {
             paddingHorizontal: moderateScale(4),
           }}>
           {!isLoading ? (
-            responseCategories?.map(category => (
-              <View
-                key={category?.id}
-                style={{
-                  backgroundColor: TextColorGreen,
-                  width: responsiveWidth(30),
-                  borderRadius: 10,
-                  height: responsiveHeight(18.5),
-                  alignItems: 'center',
-                  margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
-                }}>
-                <StoryUsers
-                  onPress={() => handleStoryUser(category?.id, category?.name)}
-                  images={category?.image}
-                  text={category?.name}
-                  mainbgColor={TextColorGreen}
-                  backgroundColor="rgba(199, 152, 97, 1)"
-                />
-              </View>
-            ))
-          ) : (
+           responseCategories?.map(category => (
+            <View
+              key={category?.id}
+              style={{
+                backgroundColor:TextColorGreen,
+                width: responsiveWidth(30),
+                borderRadius: 10,
+                height: responsiveHeight(18.5),
+                alignItems: 'center',
+                margin: responsiveWidth(1.2),
+                borderWidth: 3,
+                borderColor: "#5797A5",
+                opacity: (category?.name === "Animals" && flow === "guest") ? null : 0.5,
+              }}
+            >
+              <StoryUsers
+                onPress={() => handleStoryUser(category?.id, category?.name)}
+                images={category?.image}
+                text={category?.name}
+                mainbgColor={TextColorGreen}
+                backgroundColor="rgba(199, 152, 97, 1)"
+                disabled={(category?.name !== "Animals" || flow === "guest")}
+              />
+            </View>
+          ))     
+          ) 
+          : (
             <View style={{flex: 1}}>
               <ActivityIndicator size={40} color={'#000'} />
             </View>

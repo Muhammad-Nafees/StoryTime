@@ -137,7 +137,8 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={CATEGORIES} component={Categories} />
+      <Stack.Screen name={CATEGORIES} component={Categories}
+      options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
