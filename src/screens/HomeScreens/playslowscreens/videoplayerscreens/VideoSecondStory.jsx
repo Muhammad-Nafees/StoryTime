@@ -9,7 +9,7 @@ import BackButton from '../../../../components/BackButton';
 import NavigationsString from '../../../../constants/NavigationsString';
 import VoiceToText from '../../../../components/VoiceToText';
 import { useDispatch } from 'react-redux';
-import { checkVideoTrue } from '../../../../../store/slices/RecordingData';
+import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../../store/slices/RecordingData';
 
 
 const VideoSecondStory = () => {
@@ -23,14 +23,22 @@ const VideoSecondStory = () => {
     const dispatch = useDispatch();
 
 
-    const extendVideoHandler = () => {
-        navigation.navigate(VIDEO_FIRST_USER)
-    }
-
     const nextPlayerHandler = () => {
         dispatch(checkVideoTrue(true))
+        navigation.navigate(VIDEO_FIRST_USER);
+        dispatch(extendStoryCheckVideo(true));
+        dispatch(extendVideo(false));
+    };
+
+    const extendVideoHandler = async () => {
+        // await camera.current.resumeRecording()
         navigation.navigate(VIDEO_FIRST_USER)
-    }
+        dispatch(extendStoryCheckVideo(false));
+        dispatch(extendVideo(true));
+
+    };
+
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>

@@ -1,29 +1,31 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
+import { SecondaryColor, ThirdColor } from '../../screens/Styles/Style';
 import {
     responsiveHeight,
     responsiveFontSize,
     responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
-const CustomPlayFlowButton = ({
+const CustomVideoPlayFlowButton = ({
     text,
     onPress,
     backgroundColor,
     timeLeft,
     color,
     isNextUser,
-    isCancelingStory
+    // isCancelingStory
 }) => {
+
+    console.log("TIMELEFT======", timeLeft)
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity
                 onPress={onPress}
-                disabled={timeLeft == 0 || !isCancelingStory ? false : true}
+                disabled={timeLeft == 0 ? false : true}
                 style={{
                     width: responsiveWidth(80),
-                    backgroundColor: timeLeft == 0 || !isCancelingStory ? backgroundColor : "rgba(57, 94, 102, 0.3)",
+                    backgroundColor: timeLeft == 0 ? backgroundColor : "rgba(57, 94, 102, 0.3)",
                     borderRadius: 10,
                     borderColor: '#395E66',
                     justifyContent: 'center',
@@ -39,4 +41,4 @@ const CustomPlayFlowButton = ({
     );
 };
 
-export default CustomPlayFlowButton;
+export default CustomVideoPlayFlowButton;

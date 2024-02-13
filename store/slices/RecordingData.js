@@ -4,8 +4,11 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
     recordingText: [],
     saveDatatoProfile: [],
-    saveRecordingVideo: [],
-    checkVideoTrueorFalse: false
+    saveRecordingVideo: "",
+    checkVideoTrueorFalse: false,
+    extendStoryCheckVideo: null,
+    extendVideo: null,
+    extendCountingVideo: 30
 }
 
 const RecordingData = createSlice({
@@ -27,10 +30,19 @@ const RecordingData = createSlice({
             state.saveDatatoProfile = []
         },
         saveRecordingVideoUser: (state, { payload }) => {
-            state.saveRecordingVideo.push(payload)
+            state.saveRecordingVideo = payload
         },
         checkVideoTrue: (state, action) => {
             state.checkVideoTrueorFalse = action.payload
+        },
+        extendStoryCheckVideo: (state, { payload }) => {
+            state.extendStoryCheckVideo = payload
+        },
+        resetVideoRecording: (state) => {
+            state.saveRecordingVideo = ""
+        },
+        extendVideo: (state, { payload }) => {
+            state.extendVideo = payload
         }
 
         // recordingToHome(state, { payload }) {
@@ -45,4 +57,4 @@ const RecordingData = createSlice({
 });
 
 export default RecordingData.reducer;
-export const { recordingData, resetRecordingData, SaveDataToProfile, resetSaveDataToProfile, saveRecordingVideoUser, checkVideoTrue } = RecordingData.actions
+export const { recordingData, resetRecordingData, SaveDataToProfile, resetSaveDataToProfile, saveRecordingVideoUser, checkVideoTrue, extendStoryCheckVideo, resetVideoRecording, extendVideo } = RecordingData.actions

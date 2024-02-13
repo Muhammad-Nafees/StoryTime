@@ -78,6 +78,7 @@ android {
     defaultConfig {
         applicationId "com.moadventure_mobile"
         minSdkVersion rootProject.ext.minSdkVersion
+        // targetSdkVersion rootProject.ext.targetSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"

@@ -9,7 +9,7 @@ import Voice from "@react-native-voice/voice";
 import UserNames from '../../../components/UserNames';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordingData, resetRecordingData } from '../../../../store/slices/RecordingData';
-import CustomPlayFlowButton from '../../../components/CustomPlayFlowButton';
+import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStory from '../../../components/playFlow/SaveStory';
@@ -67,7 +67,7 @@ const FirstUser = ({ route }) => {
             setIsPressed(true);
             startRecognizing();
             if (timeLeft === null) {
-                setTimeLeft(10);
+                setTimeLeft(120);
             };
 
             // if (isFirstCall) {

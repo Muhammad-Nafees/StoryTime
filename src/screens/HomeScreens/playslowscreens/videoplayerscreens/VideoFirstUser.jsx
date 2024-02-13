@@ -9,11 +9,13 @@ import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
-import { Camera, getCameraFormat, useCameraDevices, } from "react-native-vision-camera"
+import { Camera, getCameraFormat, useCameraDevices, useCameraDevice } from "react-native-vision-camera"
 import SaveVideo from '../../../../components/SaveVideo';
-import { checkVideoTrue, recordingVideo, saveRecordingVideoUser } from '../../../../../store/slices/RecordingData';
+import { checkVideoTrue, extendStoryCheckVideo, recordingVideo, saveRecordingVideoUser } from '../../../../../store/slices/RecordingData';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomPlayFlowButton from '../../../../components/CustomPlayFlowButton';
+import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
+import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
+import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
 
 
 const VideoFirstUser = () => {
@@ -26,19 +28,28 @@ const VideoFirstUser = () => {
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
     const [showCamera, setShowCamera] = useState(false)
-    const [path, setPath] = useState([])
+    const [path, setPath] = useState("")
     const [isVisible, setIsVisible] = useState(false)
     const recordingVideo = useSelector((state) => state.recordingData.saveRecordingVideo)
     const [currentCamera, setCurrentCamera] = useState('back');
-    const devices = Camera.getAvailableCameraDevices();
     const addedUsers = useSelector(state => state.addPlayers.addFriends);
     const checkVideoisTrue = useSelector(state => state.recordingData.checkVideoTrueorFalse);
+    const extendStoryCheckVideoTrue = useSelector(state => state.recordingData.extendStoryCheckVideo);
+    const extendVideoCheck = useSelector(state => state.recordingData.extendVideo);
+
+    const extendCountingVideo = useSelector(state => state.recordingData.extendCountingVideo);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
     const [isNext, setIsNext] = useState(true);
+    const [isActive, setIsActive] = useState(false);
     const cameraRef = useRef(null);
     const dispatch = useDispatch()
-    const { SECOND_USER_STORY } = NavigationsString
+    const devices = Camera.getAvailableCameraDevices();
+    const { SECOND_USER_STORY } = NavigationsString;
+    // const devices = useCameraDevice("back", {
+    //     physicalDevices: ["ultra-wide-angle-camera"],
+    // })
+
 
     const getCameraDetails = () => {
         return devices.find(camera => camera.position === currentCamera);
@@ -47,6 +58,7 @@ const VideoFirstUser = () => {
     console.log("path---", path)
     console.log("recordingVideo---", recordingVideo);
     console.log("currentDisplayUser---", currentDisplayUser);
+    console.log("extend-video-check-true", extendStoryCheckVideoTrue)
 
     const activeCamera = getCameraDetails();
 
@@ -54,16 +66,26 @@ const VideoFirstUser = () => {
         await Camera.requestCameraPermission()
         await Camera.requestMicrophonePermission()
     }
-
-
-
     useEffect(() => {
         checkpermission()
-    }, [])
+    }, []);
+
 
     // Timer 2 Minutes
 
+
     useEffect(() => {
+        // if (extendStoryCheckVideo == true) {
+        //     setTimeLeft(extendCountingVideo)
+        //     // setIsPressed(true);
+        //     resumeRecording();
+        //     console.log("Extend-story-call")
+        // };
+
+        // if (isNext && timeLeft == 0) {
+        //     stopRecordings();
+        // }
+
         let countdown;
 
         if (timeLeft !== null && timeLeft > 0) {
@@ -73,8 +95,11 @@ const VideoFirstUser = () => {
         } else if (timeLeft === 0) {
             clearInterval(countdown);
             setIsPressed(false);
+            pauseRecordings();
             // dispatch(saveRecordingVideoUser(path))
-            stopRecording();
+            // stopRecordings();
+            // pauseRecordings()
+            // pauseRecordings()
         }
 
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
@@ -110,47 +135,69 @@ const VideoFirstUser = () => {
 
     const toggleCamera = () => {
         const newCamera = currentCamera === 'back' ? 'front' : 'back';
+        console.log("NEWCAMERA====", newCamera)
         setCurrentCamera(newCamera);
     };
 
     const recordVideos = useCallback(() => {
-        setIsPressed(true);
         if (!cameraRef.current) {
             return;
         }
 
         cameraRef.current.startRecording({
-            videoBitRate: 'high',
+            videoCodec: 'h264',
+            // videoBitRate: 'extra-low',
             onRecordingFinished: (video) => {
                 const pathVideo = video.path;
                 setPath(pathVideo)
                 dispatch(saveRecordingVideoUser(pathVideo))
             },
-            onRecordingError: (error) => console.error("err", error),
+            onRecordingError: (error) => console.error("ON-RECORD-ERR-----", error),
         });
 
     }, [cameraRef, path]);
 
-    const stopRecording = async () => {
-        await cameraRef.current?.stopRecording();
+
+    // console.log("cameraref====", cameraRef.current)
+
+
+    const stopRecordings = async () => {
+
+        try {
+            await cameraRef.current?.stopRecording();
+            console.log("Stop-Recording-Function_Called")
+        } catch (error) {
+            console.log("RECORDINGESTOPErr------", error)
+        }
         // setTimeLeft(null);
     };
 
-    const saverecordingvideo = () => {
-        setIsVisible(true)
-    }
-
-    const handleStart = () => {
-
-        if (timeLeft == null) {
-            setTimeLeft(15);
-            recordVideos()
+    const resumeRecording = async () => {
+        try {
+            await cameraRef.current.resumeRecording()
+            console.log("RESUME_REC--")
+        } catch (error) {
+            console.log("ERR-RESUME_REC--", error)
         }
     };
 
-    const onpressNextHandler = () => {
-        navigation.navigate(SECOND_USER_STORY)
+
+    const pauseRecordings = async () => {
+        try {
+            await cameraRef.current.pauseRecording();
+            console.log("PAUSEERecording---")
+        } catch (error) {
+            console.log("PAUSEERR---", error)
+        }
     }
+
+
+    const saverecordingvideo = () => {
+        setIsVisible(true)
+        stopRecordings()
+
+    }
+
 
 
     useFocusEffect(
@@ -163,7 +210,10 @@ const VideoFirstUser = () => {
                 if (currentIndex !== addedUsers?.length - 1) {
                     setCurrentDisplayUser(addedUsers[nextIndex]);
                     setIsNextUser(addedUsers[nextPlayer])
-                    if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0) {
+                    if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0 && timeLeft == 0) {
+                        // stopRecordings();
+                        // dispatch(saveRecordingVideoUser(path));
+                        console.log("CALLED-STOP-RECORDING And----")
                         return setIsNext(false);
                     };
 
@@ -174,20 +224,68 @@ const VideoFirstUser = () => {
         }, [checkVideoisTrue])
     )
 
+    useFocusEffect(
+        useCallback(() => {
+            setIsActive(true)
+            return () => {
+                setIsActive(false)
+            }
+        }, [])
+    )
+
+    console.log("Is Active :", isActive);
 
     useFocusEffect(
         useCallback(() => {
             setTimeLeft(null);
             setIsPressed(false);
             dispatch(checkVideoTrue(false));
+            return () => {
+                dispatch(extendStoryCheckVideo(false));
+            }
+            // dispatch(extendStoryCheckVideo(false));
         }, [])
     );
+
+    const handleStart = () => {
+
+        if (extendStoryCheckVideoTrue == true) {
+            resumeRecording();
+            setIsPressed(true);
+            setTimeLeft(120);
+            // console.log("is next :", isNext);
+        } else if (extendVideoCheck == true) {
+            resumeRecording();
+            setIsPressed(true);
+            setTimeLeft(30);
+            console.log("ExtendCheck-----")
+        }
+
+        if (timeLeft !== 0) {
+            // if (timeLeft == null) {
+            if (extendStoryCheckVideoTrue == null) {
+                setIsPressed(true);
+                setTimeLeft(120);
+                recordVideos();
+            }
+
+            // resumeRecording();
+            // stopRecordings()
+            // }
+        }
+
+    };
+
+
+    const onpressNextHandler = () => {
+        navigation.navigate(SECOND_USER_STORY)
+    }
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
-
-            <Text style={{ marginBottom: 'auto', marginTop: "auto", alignSelf: 'center', fontWeight: 'bold', fontSize: 18 }}>Play Flow Coming Soon</Text>
 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
@@ -229,10 +327,9 @@ const VideoFirstUser = () => {
                                             ref={cameraRef}
                                             style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
                                             device={activeCamera}
-                                            isActive={true}
+                                            isActive={isActive}
                                             video={true}
                                             resizeMode='cover'
-                                            photo={true}
                                         />
 
                                     </View>
@@ -259,12 +356,20 @@ const VideoFirstUser = () => {
                 </TouchableOpacity>
             </View>
 
-            <View>
-                {isNext &&
-                    <CustomPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />
-                }
-                <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} />
+            {/* <View> */}
+
+            {
+                isNext &&
+                <CustomVideoPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />
+            }
+
+            {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
+
+            <View style={{ paddingTop: responsiveWidth(6) }}>
+                <SaveStoryBtn onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} />
             </View>
+
+            {/* </View> */}
 
             {
                 isVisible &&
@@ -275,8 +380,6 @@ const VideoFirstUser = () => {
         </ImageBackground>
     )
 };
-
-
 
 const styles = StyleSheet.create({
     container: {

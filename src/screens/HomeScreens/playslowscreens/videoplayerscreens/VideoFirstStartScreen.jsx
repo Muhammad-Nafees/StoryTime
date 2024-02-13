@@ -7,7 +7,8 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
 
 
 
@@ -20,7 +21,7 @@ const VideoFirstStartScreen = () => {
     const squareSize = windowWidth * 0.95;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
-
+    const dispatch = useDispatch();
     console.log("randomName---", randomName);
 
     return (
@@ -57,7 +58,13 @@ const VideoFirstStartScreen = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(45) }} />
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate(VIDEO_FIRST_USER)}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate(VIDEO_FIRST_USER)
+                        dispatch(resetVideoRecording())
+                        dispatch(extendStoryCheckVideo(null));
+                        dispatch(extendVideo(null));
+                    }
+                    }>
                         <Image source={require("../../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>
