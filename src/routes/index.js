@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { setAccessToken } from '../../store/slices/authSlice';
+import { setAccessToken, login } from '../../store/slices/authSlice';
 import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 
@@ -11,15 +11,14 @@ const Routes = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-
     const authenticateUser = async () => {
       try {
         const accessToken = await AsyncStorage.getItem('isLoggedIn');
-        if (isMounted) {
+        const userData = await AsyncStorage.getItem('userData');
+
           dispatch(setAccessToken(accessToken));
+          dispatch(login(JSON.parse(userData)));
           setLoading(false);
-        }
       } catch (error) {
         console.error('Error authenticating user:', error);
         setLoading(false);
@@ -28,10 +27,6 @@ const Routes = () => {
 
     authenticateUser();
 
-    // Cleanup function to avoid state updates on unmounted component
-    return () => {
-      isMounted = false;
-    };
   }, [dispatch]);
 
   if (loading) {

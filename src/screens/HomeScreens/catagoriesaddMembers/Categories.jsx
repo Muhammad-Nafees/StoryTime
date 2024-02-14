@@ -19,7 +19,11 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation ,useRoute} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -40,6 +44,7 @@ import {
 } from '../../../../services/api/categories';
 import RandomCategories from '../../../components/customCategories/RandomCategories';
 import {get_random} from '../../../../store/slices/randomCategorySlice';
+import {BlurView} from '@react-native-community/blur';
 
 const Categories = () => {
   const {width, height} = Dimensions.get('window');
@@ -60,68 +65,71 @@ const Categories = () => {
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
 
   // Get Categories Api ----------
-const route = useRoute();
-const { params } = route;
-const flow = params?.flow;
-console.log(flow)
+  const route = useRoute();
+  const {params} = route;
+  const flow = params?.flow;
+  console.log(flow);
 
-const fetchCategoriesUntilFound = async (searchTerm) => {
-  let page = 1;
-  let found = false;
-  let result = [];
+  const fetchCategoriesUntilFound = async searchTerm => {
+    let page = 1;
+    let found = false;
+    let result = [];
 
-  try {
-    while (!found) {
-      const response = await get_Categories_Sub_Categories(page);
+    try {
+      while (!found) {
+        const response = await get_Categories_Sub_Categories(page);
 
-      if (response.data && response.data.categories) {
-        const responseArray = response.data.categories;
+        if (response.data && response.data.categories) {
+          const responseArray = response.data.categories;
 
-        const filteredCategories = responseArray.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
-        console.log('filter',filteredCategories)
-        if (filteredCategories.length > 0) {
-          result = result.concat(filteredCategories);
-          found = true;
-        } else if (responseArray.length > 0) {
-          result = result.concat(responseArray);
-          page++;
+          const filteredCategories = responseArray.filter(category =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          console.log('filter', filteredCategories);
+          if (filteredCategories.length > 0) {
+            result = result.concat(filteredCategories);
+            found = true;
+          } else if (responseArray.length > 0) {
+            result = result.concat(responseArray);
+            page++;
+          } else {
+            // No more data available
+            break;
+          }
         } else {
-          // No more data available
+          // Handle the case where the response structure is unexpected
+          console.error('Unexpected API response format:', response);
           break;
         }
-      } else {
-        // Handle the case where the response structure is unexpected
-        console.error('Unexpected API response format:', response);
-        break;
       }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
 
-  return result;
-};
-const callFunction =async (searchTerm)=>{
-  const categories = await fetchCategoriesUntilFound(searchTerm);
-  console.log("test",categories);
-}
+    return result;
+  };
+  const callFunction = async searchTerm => {
+    const categories = await fetchCategoriesUntilFound(searchTerm);
+    console.log('test', categories);
+  };
+
+  const fetchUsers = async (page = 1) => {
+    setIsLoading(true);
+    try {
+      const response = await get_Categories_Sub_Categories(page);
+      setIsLoading(false);
+      setResponseCategories(response.data?.categories);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
-      const fetchUsers = async () => {
-        setIsLoading(true);
-        try {
-          const response = await get_Categories_Sub_Categories();
-          setIsLoading(false);
-          setResponseCategories(response.data?.categories);
-          return response;
-        } catch (error) {
-          console.log('error---', error);
-        }
-      };
       fetchUsers();
-      callFunction('animals')  
-     }, []),
+      callFunction('animals');
+    }, []),
   );
 
   const handleRandomClick = async () => {
@@ -147,6 +155,10 @@ const callFunction =async (searchTerm)=>{
   //         setIsTriggered(false)
   //     }, [])
   // );
+
+  const validate = (category) => {
+    return category?.name !== 'Animals' || flow === 'guest'
+  }
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -215,33 +227,45 @@ const callFunction =async (searchTerm)=>{
             paddingHorizontal: moderateScale(4),
           }}>
           {!isLoading ? (
-           responseCategories?.map(category => (
-            <View
-              key={category?.id}
-              style={{
-                backgroundColor:TextColorGreen,
-                width: responsiveWidth(30),
-                borderRadius: 10,
-                height: responsiveHeight(18.5),
-                alignItems: 'center',
-                margin: responsiveWidth(1.2),
-                borderWidth: 3,
-                borderColor: "#5797A5",
-                opacity: (category?.name === "Animals" && flow === "guest") ? null : 0.5,
-              }}
-            >
-              <StoryUsers
-                onPress={() => handleStoryUser(category?.id, category?.name)}
-                images={category?.image}
-                text={category?.name}
-                mainbgColor={TextColorGreen}
-                backgroundColor="rgba(199, 152, 97, 1)"
-                disabled={(category?.name !== "Animals" || flow === "guest")}
-              />
-            </View>
-          ))     
-          ) 
-          : (
+            responseCategories?.map(category => (
+              <View
+                key={category?.id}
+                style={{
+                  backgroundColor: TextColorGreen,
+                  width: responsiveWidth(30),
+                  borderRadius: 10,
+                  height: responsiveHeight(18.5),
+                  alignItems: 'center',
+                  margin: responsiveWidth(1.2),
+                  borderWidth:!!validate(category)? 0 : 3,
+                  borderColor: '#5797A5',
+                }}>
+                <StoryUsers
+                  onPress={() => handleStoryUser(category?.id, category?.name)}
+                  images={category?.image}
+                  text={category?.name}
+                  mainbgColor={TextColorGreen}
+                  backgroundColor="rgba(199, 152, 97, 1)"
+                  disabled={validate(category)}
+                />
+          
+             <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
+                    <View style={styles.blur_content_container}>
+                  <Text style={{
+                    alignSelf:'center'
+                  }}>TALA</Text>
+
+                    </View>
+                </BlurView>
+                    </View>
+                  </View>
+            ))
+          ) : (
             <View style={{flex: 1}}>
               <ActivityIndicator size={40} color={'#000'} />
             </View>
@@ -372,6 +396,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.2,
   },
+  blur_view: {
+    flex:1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius:10,
+    overflow:'hidden'
+  },
+  blur_content_container:{
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  }
+
 });
 
 export default Categories;
