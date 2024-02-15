@@ -33,20 +33,13 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
         }}
         disabled={disabled}
       >
-    {disabled && (
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-            {/* You can replace the following Text with an Image component or your lock icon */}
-            <View style={{ marginTop: 'auto', marginBottom: 'auto',}}>
-            <SvgIcons name={'Lock'} width={47} height={47} />
-          </View>   
-        </View>
-        )}
         <Image
           style={{ width: 90, height: 80, borderRadius: 10 }}
           resizeMode="cover"
           source={{ uri: imageLink }}
         />
       </TouchableOpacity>
+      <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{text}</Text>
     </View>
   );
 };

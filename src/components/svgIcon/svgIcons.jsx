@@ -14,6 +14,7 @@ import ForwardArrow from "../../assets/svgIcons/forwardArrow.svg"
 import Notifications from "../../assets/svgIcons/notification.svg"
 import Subscription from "../../assets/svgIcons/paymentSetting.svg"
 import ReportAProblem from "../../assets/svgIcons/reportProblem.svg"
+import Search from "../../assets/svgIcons/search.svg"
 
 const SvgIcons = ({name, height, width,backgroundColor='transparent'}) => {
 
@@ -33,6 +34,7 @@ switch (name) {
     case 'PencilEdit': return( <PencilEdit width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'UploadImage': return( <UploadImage width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'Lock': return( <Lock width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
+    case 'Search': return( <Search width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
 
 
 

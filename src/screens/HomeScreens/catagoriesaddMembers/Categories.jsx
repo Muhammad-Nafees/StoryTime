@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState,useRef} from 'react';
 import {
   Dimensions,
   Image,
@@ -36,6 +36,8 @@ import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
+import SearchField from '../../../components/SearchField';
+
 import {CategoriesData} from '../../../../dummyData/DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -62,9 +64,10 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
-  const [filterCategory, setFilteredCategory] = useState(null);
+  const [filteredCategories, setFilteredCategories] = useState([]);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const {user} = useSelector(state => state?.authSlice);
+  console.log("🚀 ~ Categories ~ user:", user)
 
   // Get Categories Api ----------
   // const route = useRoute();
@@ -75,7 +78,7 @@ const Categories = () => {
   const fetchCategoriesUntilFound = async searchTerm => {
     let page = 1;
     let found = false;
-    let result = [];
+    let array = []
 
     try {
       while (!found) {
@@ -83,16 +86,18 @@ const Categories = () => {
 
         if (response.data && response.data.categories) {
           const responseArray = response.data.categories;
+          array= [...array,...responseArray]
 
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
           console.log('filter', filteredCategories);
           if (filteredCategories.length > 0) {
-            result = result.concat(filteredCategories);
+            array = array.filter(el=> !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            setResponseCategories([filteredCategories?.[0],...array]);
+            setIsLoading(false);
             found = true;
           } else if (responseArray.length > 0) {
-            result = result.concat(responseArray);
             page++;
           } else {
             // No more data available
@@ -108,20 +113,19 @@ const Categories = () => {
       console.error('Error fetching categories:', error);
     }
 
-    return result;
-  };
-  const callFunction = async searchTerm => {
-    const categories = await fetchCategoriesUntilFound(searchTerm);
-    console.log('test', categories);
+    return array;
   };
 
   const fetchUsers = async (page = 1) => {
     setIsLoading(true);
     try {
+      if (!user) {
+        fetchCategoriesUntilFound('animals');
+        return;
+      }
       const response = await get_Categories_Sub_Categories(page);
-      setIsLoading(false);
       setResponseCategories(response.data?.categories);
-      return response;
+      setIsLoading(false);
     } catch (error) {
       console.log('error---', error);
     }
@@ -130,7 +134,6 @@ const Categories = () => {
   useFocusEffect(
     useCallback(() => {
       fetchUsers();
-      callFunction('animals');
     }, []),
   );
 
@@ -158,10 +161,16 @@ const Categories = () => {
   //     }, [])
   // );
 
-  const validate = (category) => {
-    return category?.name !== 'Animals' || !!user
-  }
-
+  const isCategoryBlurred = (category) => {
+    return category?.name !== 'Animals' && !user
+  } 
+  const handleSearch = searchTerm => {
+    const filtered = responseCategories.filter(category =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCategories(filtered);
+  };
+  
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <ScrollView>
@@ -175,9 +184,10 @@ const Categories = () => {
         </View>
 
         {/* IMainnputField-----*/}
+       { user?
+       <>
         <MainInputField placeholder="Username" />
-        {/* MainInputField----- */}
-
+        
         <View
           style={{
             paddingVertical: moderateVerticalScale(6),
@@ -218,7 +228,10 @@ const Categories = () => {
               </View>
             ))}
           </View>
-        </View>
+        </View></>:
+        <SearchField placeholder="Search" onSearch={handleSearch} />
+        }
+
 
         <View
           style={{
@@ -229,7 +242,7 @@ const Categories = () => {
             paddingHorizontal: moderateScale(4),
           }}>
           {!isLoading ? (
-            responseCategories?.map(category => (
+            responseCategories?.map((category, index) => (
               <View
                 key={category?.id}
                 style={{
@@ -239,7 +252,7 @@ const Categories = () => {
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:!!validate(category)? 0 : 3,
+                  borderWidth: !!isCategoryBlurred(category) ? 0 : 3,
                   borderColor: '#5797A5',
                 }}>
                 <StoryUsers
@@ -248,10 +261,10 @@ const Categories = () => {
                   text={category?.name}
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(199, 152, 97, 1)"
-                  disabled={validate(category)}
+                  disabled={!!isCategoryBlurred(category)}
                 />
           
-             <View style={styles.blur_wrapper}>
+            {!!isCategoryBlurred(category) && <View style={styles.blur_wrapper}>
                 <BlurView
                   style={styles.blur_view}
                   blurAmount={10}
@@ -262,9 +275,9 @@ const Categories = () => {
                     <SvgIcons name={'Lock'} width={47} height={47} />
                     </View>
                     </View>
-                </BlurView>
-                    </View>
-                  </View>
+                  </BlurView>
+                </View>}
+              </View>
             ))
           ) : (
             <View style={{flex: 1}}>
@@ -398,19 +411,18 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   blur_view: {
-    flex:1,
+    flex: 1,
   },
   blur_wrapper: {
     position: 'absolute',
     width: responsiveWidth(30),
     height: responsiveHeight(18.5),
-    borderRadius:10,
-    overflow:'hidden'
+    borderRadius: 10,
+    overflow: 'hidden',
   },
-  blur_content_container:{
+  blur_content_container: {
     backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
-  }
-
+  },
 });
 
 export default Categories;
