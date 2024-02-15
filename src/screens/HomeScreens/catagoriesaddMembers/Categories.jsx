@@ -19,7 +19,11 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -40,6 +44,8 @@ import {
 } from '../../../../services/api/categories';
 import RandomCategories from '../../../components/customCategories/RandomCategories';
 import {get_random} from '../../../../store/slices/randomCategorySlice';
+import {BlurView} from '@react-native-community/blur';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const Categories = () => {
   const {width, height} = Dimensions.get('window');
@@ -56,24 +62,75 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
+  const [filterCategory, setFilteredCategory] = useState(null);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
+  const {user} = useSelector(state => state?.authSlice);
 
   // Get Categories Api ----------
+  // const route = useRoute();
+  // const {params} = route;
+  // const flow = params?.flow;
+  // console.log(flow);
+
+  const fetchCategoriesUntilFound = async searchTerm => {
+    let page = 1;
+    let found = false;
+    let result = [];
+
+    try {
+      while (!found) {
+        const response = await get_Categories_Sub_Categories(page);
+
+        if (response.data && response.data.categories) {
+          const responseArray = response.data.categories;
+
+          const filteredCategories = responseArray.filter(category =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          console.log('filter', filteredCategories);
+          if (filteredCategories.length > 0) {
+            result = result.concat(filteredCategories);
+            found = true;
+          } else if (responseArray.length > 0) {
+            result = result.concat(responseArray);
+            page++;
+          } else {
+            // No more data available
+            break;
+          }
+        } else {
+          // Handle the case where the response structure is unexpected
+          console.error('Unexpected API response format:', response);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+
+    return result;
+  };
+  const callFunction = async searchTerm => {
+    const categories = await fetchCategoriesUntilFound(searchTerm);
+    console.log('test', categories);
+  };
+
+  const fetchUsers = async (page = 1) => {
+    setIsLoading(true);
+    try {
+      const response = await get_Categories_Sub_Categories(page);
+      setIsLoading(false);
+      setResponseCategories(response.data?.categories);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
-      const fetchUsers = async () => {
-        setIsLoading(true);
-        try {
-          const response = await get_Categories_Sub_Categories();
-          setIsLoading(false);
-          setResponseCategories(response.data?.categories);
-          return response;
-        } catch (error) {
-          console.log('error---', error);
-        }
-      };
       fetchUsers();
+      callFunction('animals');
     }, []),
   );
 
@@ -100,6 +157,10 @@ const Categories = () => {
   //         setIsTriggered(false)
   //     }, [])
   // );
+
+  const validate = (category) => {
+    return category?.name !== 'Animals' || !!user
+  }
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -178,8 +239,8 @@ const Categories = () => {
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
+                  borderWidth:!!validate(category)? 0 : 3,
+                  borderColor: '#5797A5',
                 }}>
                 <StoryUsers
                   onPress={() => handleStoryUser(category?.id, category?.name)}
@@ -187,8 +248,23 @@ const Categories = () => {
                   text={category?.name}
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(199, 152, 97, 1)"
+                  disabled={validate(category)}
                 />
-              </View>
+          
+             <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
+                    <View style={styles.blur_content_container}>
+                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
+                    <SvgIcons name={'Lock'} width={47} height={47} />
+                    </View>
+                    </View>
+                </BlurView>
+                    </View>
+                  </View>
             ))
           ) : (
             <View style={{flex: 1}}>
@@ -321,6 +397,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.2,
   },
+  blur_view: {
+    flex:1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius:10,
+    overflow:'hidden'
+  },
+  blur_content_container:{
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  }
+
 });
 
 export default Categories;
