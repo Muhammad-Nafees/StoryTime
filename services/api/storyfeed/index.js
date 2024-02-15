@@ -157,3 +157,36 @@ export const get_Comment_api = async (paginations) => {
         console.log(error)
     }
 };
+
+
+export const createStory_api = async ({ creator, category, subCategory, contributors, content }) => {
+    console.log("creatorsss=====", creator, category, subCategory, contributors, content)
+    // const { storyId, page, limit, } = paginations;
+    // console.log("=====================", page, limit, storyId);
+    // console.log("url===", url);
+
+    try {
+        const url = Base_Url + "story";
+        const responseData = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "text",
+                creator,
+                category,
+                subCategory,
+                contributors,
+                content
+            })
+        });
+        const response = await responseData.json()
+        console.log("response=====", response)
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+

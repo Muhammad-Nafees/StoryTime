@@ -2,12 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { verticalScale } from 'react-native-size-matters';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 import { FourthColor, TextinputColor } from '../screens/Styles/Style';
 import _ from 'lodash';
 import { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
+import { Inter_Regular } from '../constants/GlobalFonts';
 
 const CustomInput = (props,) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -53,15 +54,18 @@ const CustomInput = (props,) => {
 
   const inputStyle = {
     width: responsiveWidth(80),
-    backgroundColor: TextinputColor,
+    color: "rgba(0,0,0,1)",
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     height: verticalScale(50),
     textAlignVertical: 'center',
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     color: '#000',
     fontWeight: '400',
+    paddingLeft: 28,
+    fontFamily: Inter_Regular.Inter_Regular,
+    fontSize: responsiveFontSize(1.8)
   };
 
   return (

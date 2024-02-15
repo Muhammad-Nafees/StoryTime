@@ -40,6 +40,7 @@ import {
 } from '../../../../services/api/categories';
 import RandomCategories from '../../../components/customCategories/RandomCategories';
 import { get_random } from '../../../../store/slices/randomCategorySlice';
+import { setCategoriesId } from '../../../../store/slices/getCategoriesSlice';
 
 const Categories = () => {
   const { width, height } = Dimensions.get('window');
@@ -84,6 +85,7 @@ const Categories = () => {
         id: response?.data?._id,
         name: response?.data?.name,
       });
+      console.log("response_id", response?.data?._id)
       setRandomId(response?.data?._id);
       setRandomName(response?.data?.name);
       return response;
@@ -91,6 +93,8 @@ const Categories = () => {
   };
 
   const handleStoryUser = (id, name) => {
+    console.log("id----", id);
+    dispatch(setCategoriesId(id))
     navigation.navigate('SubCategories', { id: id, name: name });
   };
 

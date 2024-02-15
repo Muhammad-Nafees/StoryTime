@@ -158,9 +158,6 @@ const VideoFirstUser = () => {
     }, [cameraRef, path]);
 
 
-    // console.log("cameraref====", cameraRef.current)
-
-
     const stopRecordings = async () => {
 
         try {
@@ -193,9 +190,8 @@ const VideoFirstUser = () => {
 
 
     const saverecordingvideo = () => {
-        setIsVisible(true)
-        stopRecordings()
-
+        setIsVisible(true);
+        stopRecordings();
     }
 
 
@@ -252,20 +248,19 @@ const VideoFirstUser = () => {
         if (extendStoryCheckVideoTrue == true) {
             resumeRecording();
             setIsPressed(true);
-            setTimeLeft(120);
+            setTimeLeft(30);
             // console.log("is next :", isNext);
         } else if (extendVideoCheck == true) {
             resumeRecording();
             setIsPressed(true);
             setTimeLeft(30);
-            console.log("ExtendCheck-----")
         }
 
         if (timeLeft !== 0) {
             // if (timeLeft == null) {
             if (extendStoryCheckVideoTrue == null) {
                 setIsPressed(true);
-                setTimeLeft(120);
+                setTimeLeft(30);
                 recordVideos();
             }
 

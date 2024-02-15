@@ -29,7 +29,7 @@ const CustomPhoneInput = ({
   setphoneNumberStatusCode,
   defaultCode
 }) => {
-  console.log("error && isError", error,"//",isError)
+  // console.log("error && isError", error,"//",isError)
 
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
@@ -88,7 +88,7 @@ const CustomPhoneInput = ({
           <PhoneInput
             ref={phoneInput}
             disabled={disabled}
-            placeholder=" "
+            placeholder=""
             defaultCode={defaultCode || 'AU'}
             onChangeFormattedText={(text) => setFormatText(text)}
             containerStyle={styles.phoneContainer}
@@ -125,7 +125,7 @@ const CustomPhoneInput = ({
       {/* )} */}
 
       {
-        value !== ""  && (error || isError) &&
+        value !== "" && (error || isError) &&
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 2, }}>
           <Icon name="alert-circle" size={22} color="red" />
           <Text style={{ color: 'red' }}>{error || isError}</Text>

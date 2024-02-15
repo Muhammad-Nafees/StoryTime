@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { UpdateSequencePlayers } from '../../../../../store/slices/SequencePlayer';
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Sequence = () => {
   const { FIRSTSCREENPLAYFLOW } = NavigationsString;
@@ -32,12 +33,23 @@ const Sequence = () => {
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
-
-
   const [randomNumbers, setRandomNumbers] = useState([]);
   const { LEFT_ARROW_IMG } = Img_Paths;
   const [selectedIndices, setSelectedIndices] = useState([]);
+  const [isUsername, setIsUsername] = useState("")
   const [userCounts, setUserCounts] = useState({});
+
+  // AsyncStorage.getItem("isUsername").then((res) => {
+  //   console.log("token", res)
+  //   setIsUsername(res)
+
+  // }).catch((err) => console.log(err));
+
+  // console.log("isuername=====", isUsername)
+  //  const userNamehandler 
+
+  // AsyncStorage.setItem("isUsername",USER?.username);
+
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
 
   console.log("🚀 ~ Sequence ~ selectedIndices:", selectedIndices);
@@ -258,6 +270,7 @@ const Sequence = () => {
             selectedIndices={selectedIndices}
           />
         </View>
+
       </View>
     </ImageBackground>
   );

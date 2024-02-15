@@ -21,6 +21,8 @@ const TouchableButton = ({
   timeLeft,
   sequenceUser,
   selectedIndices,
+  validate,
+  values
 
 }) => {
   return (
@@ -29,8 +31,9 @@ const TouchableButton = ({
         disabled={type === 'register' ? !isValid || !dirty : null}
         onPress={onPress}
         style={{
-          width: type == "savestoryphone" || "savevideo" ? responsiveWidth(70) : responsiveWidth(80),
+          width: type == "savestoryphone" ? responsiveWidth(70) : responsiveWidth(80),
           backgroundColor: selectedIndices?.length === sequenceUser?.length ? backgroundColor : "rgba(57, 94, 102, 0.3)",
+          // backgroundColor:  "red" : "green",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,
           borderColor: borderWidth == '1' ? '#395E66' : null,

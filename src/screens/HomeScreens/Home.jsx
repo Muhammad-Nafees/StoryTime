@@ -48,6 +48,7 @@ const Home = () => {
     }, [])
 
 
+    // console.log("arrBooleanCHeck===-=-==", !![]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -83,7 +84,7 @@ const Home = () => {
         } else {
             setIsLoading(false);
         }
-    }, [HasMorePages])
+    }, [HasMorePages]);
 
 
     const onRefresh = () => {

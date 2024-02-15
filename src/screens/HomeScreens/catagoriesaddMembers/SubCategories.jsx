@@ -34,7 +34,7 @@ import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategories } from '../../../../store/slices/getCategoriesSlice';
+import { getCategories, setSubCategoriesId } from '../../../../store/slices/getCategoriesSlice';
 import {
   get_Categories_Sub_Categories,
   get_Random,
@@ -85,9 +85,11 @@ const SubCategories = ({ route }) => {
     }
   };
 
-  const handleStoryUser = name => {
+  const handleStoryUser = (id, name) => {
     navigation.navigate(PLAYER_SEQUENCE);
     dispatch(randomNames(name));
+    dispatch(setSubCategoriesId(id))
+    console.log("subCategiryId", id)
   };
 
   // useFocusEffect(
@@ -146,7 +148,7 @@ const SubCategories = ({ route }) => {
             </View>
 
             {addUsersGame?.map((item, index) => (
-              <View
+              <View key={index}
                 style={{
                   margin: 4,
                   backgroundColor: '#395E66',
@@ -180,7 +182,7 @@ const SubCategories = ({ route }) => {
                   width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2), borderWidth: 3, borderColor: "#5797A5"
                 }}>
                 <StoryUsers
-                  onPress={() => handleStoryUser(category?.name)}
+                  onPress={() => handleStoryUser(category?._id, category?.name)}
                   images={category?.image}
                   text={category?.name}
                   mainbgColor={TextColorGreen}

@@ -17,6 +17,8 @@ import SaveStory from './SaveStory';
 import SaveStoryBtn from './SaveStoryBtn';
 import SaveAsPdf from './SaveAsPdf';
 import StoryTimeSaved from './StoryTimeSaved';
+import { createStory_api } from '../../../services/api/storyfeed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
@@ -31,22 +33,42 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [saveStoryModalsecond, setSaveStoryModalsecond] = useState(false);
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
+    const subCategoryId = useSelector((state) => state?.getcategories?.subcategoriesId);
+    const playerContributorsId = useSelector((state) => state?.getcategories?.playerscontributorsIds);
+    console.log("categoryId-----", categoryId);
+    console.log("subCategoryId-----", subCategoryId)
+    console.log("playerContributorsId-----", playerContributorsId);
+    console.log("textrecordUsers-----", textrecordUsers);
+
+    const convertStr = textrecordUsers.join()
+    console.log("convertstr----", convertStr)
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
 
     const saveStoryhandler = () => {
         setSaveStoryModal(true);
         setVisiblePdf(true);
     };
 
-    const handleSaveStories = () => {
-        dispatch(SaveDataToProfile(textrecordUsers));
-        setSaveStoryModalsecond(true);
-        setVisibleSavePhone(true)
-        console.log("Users Stories save to profile");
-    };
+    const handleSaveStories = async () => {
 
+        try {
+            const userLoginId = await AsyncStorage.getItem("isUserId");
+            const responseData = await createStory_api({ creator: userLoginId, category: categoryId, subCategory: subCategoryId, contributors: playerContributorsId, content: convertStr });
+            console.log("storyresData====", responseData)
+            dispatch(SaveDataToProfile(textrecordUsers));
+            setSaveStoryModalsecond(true);
+            setVisibleSavePhone(true);
+            console.log("Users Stories save to profile");
+            console.log("isLoginUserId-----", userLoginId)
+            return responseData;
+        } catch (error) {
+            console.log("error", error)
+        }
+
+    };
 
 
     return (

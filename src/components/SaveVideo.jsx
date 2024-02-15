@@ -66,8 +66,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
     const downloadRecording = async () => {
         try {
             const destinationPath = `${RNFS.DownloadDirectoryPath}/downloaded_video.mp4`;
-            setSaveStoryModalsecond(true);
-            setVisibleSavePhone(true)
+
 
             const sourcePath = `file://${recordedVideo}`;
 
@@ -75,9 +74,10 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
                 console.error('Recording path not found.');
                 return;
             }
-
             await RNFS.copyFile(sourcePath, destinationPath);
             console.log('Video downloaded successfully:', destinationPath);
+            setSaveStoryModalsecond(true);
+            setVisibleSavePhone(true)
 
         } catch (error) {
             console.error('Error downloading recording:', error);

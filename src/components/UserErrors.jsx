@@ -16,10 +16,10 @@ const UserErrors = ({ isVisible, setVisible, text, onPress }) => {
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-                <View style={{ width: responsiveWidth(80), height: responsiveHeight(20), backgroundColor: "#FFF", borderRadius: 30 }}>
+                <View style={{ width: responsiveWidth(80), height: responsiveHeight(21), backgroundColor: "#FFF", borderRadius: 30 }}>
 
-                    <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12) }}>
-                        <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 42, width: 42, justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(16) }}>
+                        <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 42, width: 42, justifyContent: "center", alignItems: "center", }}>
                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center", }} source={require("../assets/456-img.png")} />
                         </View>
                         <Text style={{ fontSize: responsiveFontSize(1.9), color: "#000" }}>Account Created</Text>

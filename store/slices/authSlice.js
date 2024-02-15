@@ -12,6 +12,7 @@ const initialState = {
     firstpageData: [],
     secondpageData: [],
     thirdpageData: [],
+    userLoginid: ""
 };
 
 const authSlice = createSlice({
@@ -32,7 +33,7 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.user = action.payload;
         },
-        logout: (state,action) => {
+        logout: (state, action) => {
             Object.keys(initialState).forEach(key => {
                 state[key] = initialState[key];
             });
@@ -50,15 +51,16 @@ const authSlice = createSlice({
         },
         registeruser_city: (state, action) => {
             state.secondpageData = action.payload;
-
             console.log("registercity", state.secondpageData)
         },
         registeruser_password: (state, action) => {
             // state.token = action.payload;
             state.thirdpageData = action.payload;
             console.log("registerpassword", state.thirdpageData)
-
         },
+        userLoginid: (state, { payload }) => {
+            state.userLoginid = payload
+        }
 
     },
 });
@@ -78,7 +80,7 @@ export const {
     setRandomNumber,
     register,
     registeruser_city,
-
+    userLoginid,
     registeruser_password
 } = authSlice.actions;
 

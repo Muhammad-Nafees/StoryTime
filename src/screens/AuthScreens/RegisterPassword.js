@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, SafeAreaView, ScrollView } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../Styles/Style';
 import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
 import TextInputField from '../../components/TextInputField';
@@ -37,6 +37,13 @@ const RegisterPassword = ({ route }) => {
     const toggleconfirmshowpassword = () => {
         setConfirmShowPassword(!confirmShowPassword);
     };
+
+    const validate = (values) => {
+        return (
+            values.password &&
+            values.confirmPassword
+        )
+    }
 
     return (
         <Formik
@@ -159,7 +166,45 @@ const RegisterPassword = ({ route }) => {
                                 {/* Next and Back------------ */}
 
                                 <View style={{ paddingTop: responsiveWidth(60) }}>
-                                    <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Create" />
+                                    {/* <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Create" validate={validate} values={values} /> */}
+                                    {/*  */}
+
+                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                        <TouchableOpacity
+                                            disabled={validate(values) ? false : true}
+                                            onPress={handleSubmit}
+                                            style={{
+                                                width: responsiveWidth(80),
+                                                backgroundColor: validate(values) ? TextColorGreen : "rgba(57, 94, 102, 0.3)",
+                                                borderRadius: 10,
+                                                //   borderWidth: borderWidth == '1' ? 1 : 0,
+                                                //   borderColor: borderWidth == '1' ? '#395E66' : null,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                height: responsiveHeight(6.6),
+                                            }}>
+                                            {/* {isLoading ? (
+          <ActivityIndicator color={'#FFF'} />
+        ) : ( */}
+
+                                            {
+                                                !isLoading ? (
+                                                    <Text
+                                                        style={{
+                                                            fontSize: responsiveFontSize(1.9),
+                                                            fontWeight: '600',
+                                                            letterSpacing: 0.28,
+                                                            color: "#FFF",
+                                                        }}>
+                                                        create
+                                                    </Text>
+                                                ) :
+                                                    <ActivityIndicator color={'#FFF'} />
+                                            }
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    {/*  */}
                                     <View style={{ marginVertical: 7 }}>
                                         <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
                                     </View>

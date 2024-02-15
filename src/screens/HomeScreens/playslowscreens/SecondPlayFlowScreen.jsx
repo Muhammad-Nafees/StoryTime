@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
     circle_container: {
         paddingVertical: moderateVerticalScale(10),
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // backgroundColor: 'orange'
     },
     sub_circle: {
         backgroundColor: TextColorGreen,

@@ -15,6 +15,7 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStory from '../../../components/playFlow/SaveStory';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { SCREEN_HEIGHT } from '../../../constants/Constant';
 
 
 const FirstUser = ({ route }) => {
@@ -59,6 +60,7 @@ const FirstUser = ({ route }) => {
     // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
 
     // console.log("isEmptyArray=====", isEmptyArray);
+
     console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
 
     const handleStart = () => {
@@ -67,7 +69,7 @@ const FirstUser = ({ route }) => {
             setIsPressed(true);
             startRecognizing();
             if (timeLeft === null) {
-                setTimeLeft(120);
+                setTimeLeft(10);
             };
 
             // if (isFirstCall) {
@@ -229,7 +231,6 @@ const FirstUser = ({ route }) => {
         }, 1000);
     };
 
-
     // ---------- Handle Press out ----------
 
     const onPressNext = () => {
@@ -256,8 +257,7 @@ const FirstUser = ({ route }) => {
                 }
             }
         }, [checkUserTrueorFalse])
-    )
-
+    );
 
 
     const saveStoryhandler = () => {
@@ -279,18 +279,20 @@ const FirstUser = ({ route }) => {
                             <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
                         </TouchableOpacity>
                         <View>
+
                             {
                                 isCancelingStory &&
                                 <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
                                     <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
                                 </View>
                             }
+
                         </View>
                     </View>
                 </View>
 
 
-                <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
+                <ImageBackground style={[styles.img_backgroung_content,]} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
                         <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
 
@@ -313,29 +315,32 @@ const FirstUser = ({ route }) => {
                     </View>
                 </ImageBackground>
 
-                <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                    <TouchableOpacity onPress={() => {
-                        handleStart();
-                    }}
-                        activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
-                        <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
-                    </TouchableOpacity>
+                <View style={{ height: responsiveHeight(35) }}>
+                    <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
+                        <TouchableOpacity onPress={() => {
+                            handleStart();
+                        }}
+                            activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                            <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
+                        </TouchableOpacity>
+                    </View>
+
+                    {
+                        isNext &&
+                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
+                    }
+
+                    <View style={{ paddingTop: responsiveWidth(6) }}>
+                        <SaveStoryBtn onPress={saveStoryhandler} text="Save Story" color={TextColorGreen} isNext={isNext} />
+                    </View>
+
+                    {
+                        saveStoryModal && (
+                            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
+                        )
+                    }
                 </View>
 
-                {
-                    isNext &&
-                    <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
-                }
-
-                <View style={{ paddingTop: responsiveWidth(6) }}>
-                    <SaveStoryBtn onPress={saveStoryhandler} text="Save Story" color={TextColorGreen} isNext={isNext} />
-                </View>
-
-                {
-                    saveStoryModal && (
-                        <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
-                    )
-                }
 
             </ImageBackground>
 
@@ -378,19 +383,21 @@ const styles = StyleSheet.create({
         fontSize: responsiveFontSize(4.3)
     },
     img_backgroung_content: {
-        width: responsiveWidth(100),
-        height: responsiveHeight(45),
+        // width: responsiveWidth(90),
+        height: SCREEN_HEIGHT * 0.42,
         justifyContent: "center",
         alignItems: "center",
-        marginVertical: moderateVerticalScale(6)
+        marginVertical: moderateVerticalScale(6),
+        // backgroundColor: "orange"
     },
     bg_content: {
         // backgroundColor: PrimaryColor,
         justifyContent: "center",
         alignItems: "center",
-        width: responsiveWidth(76),
+        width: responsiveWidth(74),
         height: responsiveHeight(42),
-        marginLeft: responsiveWidth(1),
+        marginLeft: responsiveWidth(0.9),
+        // marginRight: responsiveWidth(2),
         marginTop: responsiveWidth(1),
         // marginBottom: responsiveWidth(2.5)
     },
