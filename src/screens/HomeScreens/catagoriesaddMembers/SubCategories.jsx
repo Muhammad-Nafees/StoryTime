@@ -52,8 +52,13 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import {randomNames} from '../../../../store/slices/addplayers/addPlayersSlice';
+import {BlurView} from '@react-native-community/blur';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const SubCategories = ({route}) => {
+
+  const {user} = useSelector(state => state?.authSlice);
+
   const {width, height} = Dimensions.get('window');
   const {SPLASH_SCREEN_IMAGE} = Img_Paths;
 
@@ -70,6 +75,8 @@ const SubCategories = ({route}) => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [responseRandomsub, setresponseRandomsub] = useState();
   const dispatch = useDispatch();
+
+  const allowedCategories = ["Shark","Whale","Cow"]
 
   useEffect(() => {
     const fetchSubcategories = async () => {
@@ -100,6 +107,10 @@ const SubCategories = ({route}) => {
   const handleStoryUser = name => {
     navigation.navigate(PLAYER_SEQUENCE);
     dispatch(randomNames(name));
+  };
+
+  const isCategoryBlurred = (category) => {
+    return !allowedCategories.includes(category?.name) && !user
   };
 
   // useFocusEffect(
@@ -181,7 +192,7 @@ const SubCategories = ({route}) => {
             flexWrap: 'wrap',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            paddingHorizontal: moderateScale(10),
+            paddingHorizontal: moderateScale(4),
           }}>
           {!isLoading ? (
             responsesubCategories?.map(category => (
@@ -189,21 +200,38 @@ const SubCategories = ({route}) => {
                 key={category?.id}
                 style={{
                   backgroundColor: TextColorGreen,
-                  width: responsiveWidth(29),
+                  width: responsiveWidth(30),
                   borderRadius: 10,
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
+                  borderWidth: !!isCategoryBlurred(category) ? 0 : 3,
+                  borderColor: '#5797A5',
                 }}>
                 <StoryUsers
-                  onPress={() => handleStoryUser(category?.name)}
+                  onPress={() => handleStoryUser(category?.id, category?.name)}
                   images={category?.image}
                   text={category?.name}
                   mainbgColor={TextColorGreen}
-                  backgroundColor="rgba(86, 182, 164, 1)"
+                  backgroundColor="rgba(199, 152, 97, 1)"
+                  disabled={!!isCategoryBlurred(category)}
                 />
+          
+            {!!isCategoryBlurred(category) && 
+            <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
+                    <View style={styles.blur_content_container}>
+                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
+                    <SvgIcons name={'Lock'} width={47} height={47} />
+                    </View>
+                    </View>
+                  </BlurView>
+                </View>
+                }
               </View>
             ))
           ) : (
@@ -331,6 +359,19 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
 });
 

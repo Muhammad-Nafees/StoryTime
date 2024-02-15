@@ -67,7 +67,6 @@ const Categories = () => {
   const [filteredCategories, setFilteredCategories] = useState([]);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const {user} = useSelector(state => state?.authSlice);
-  console.log("🚀 ~ Categories ~ user:", user)
 
   // Get Categories Api ----------
   // const route = useRoute();
@@ -152,7 +151,6 @@ const Categories = () => {
   };
 
   const handleStoryUser = (id, name) => {
-    console.log("🚀 ~ handleStoryUser ~ id, name:", id, name)
     navigation.navigate('SubCategories', {id: id, name: name});
   };
 
