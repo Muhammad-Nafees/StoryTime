@@ -163,31 +163,47 @@ const Categories = () => {
 
   const isCategoryBlurred = (category) => {
     return category?.name !== 'Animals' && !user
-  } 
+  };
+
   const handleSearch = searchTerm => {
     const filtered = responseCategories.filter(category =>
       category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredCategories(filtered);
   };
+
+  const generateRandomNumber = (numDigits) => {
+    const min = Math.pow(10, numDigits - 1); // Minimum value with specified number of digits
+    const max = Math.pow(10, numDigits) - 1; // Maximum value with specified number of digits
+    return Math.floor(Math.random() * (max - min + 1)) + min; // Generate random number within range
+  };
   
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <ScrollView>
         {/* Frame Content Close----------- */}
-
+      <View style={{flexDirection:'row',justifyContent:"space-between",marginHorizontal:responsiveWidth(5),marginBottom:moderateVerticalScale(10)}}>
         <View style={styles.first_container}>
+       
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.categories_text_container}>
             <Text style={styles.categories_text}>Categories</Text>
-          </View>
+          </View>   
         </View>
 
+      {!user?
+          <View style={{marginTop:moderateVerticalScale(10)}}>
+        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
+          <SvgIcons name={'Guest'} width={36} height={36} />
+        </View>
+          <Text style={styles.text}>Guest{generateRandomNumber(4)}</Text>
+        </View>:<></>}
+    </View>
+   
         {/* IMainnputField-----*/}
        { user?
        <>
-        <MainInputField placeholder="Username" />
-        
+        <MainInputField placeholder="Username" />        
         <View
           style={{
             paddingVertical: moderateVerticalScale(6),
@@ -231,7 +247,6 @@ const Categories = () => {
         </View></>:
         <SearchField placeholder="Search" onSearch={handleSearch} />
         }
-
 
         <View
           style={{
@@ -351,8 +366,6 @@ const styles = StyleSheet.create({
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
     flexDirection: 'row',
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
     alignItems: 'center',
   },
   back_button: {
@@ -422,6 +435,11 @@ const styles = StyleSheet.create({
   },
   blur_content_container: {
     backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
+  text: {
+    fontSize: 10,
+    color: 'black',
+    textAlign:'center'
   },
 });
 
