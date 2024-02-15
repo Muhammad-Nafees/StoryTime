@@ -64,7 +64,6 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
-  const [filteredCategories, setFilteredCategories] = useState([]);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const {user} = useSelector(state => state?.authSlice);
   console.log("🚀 ~ Categories ~ user:", user)
@@ -152,7 +151,8 @@ const Categories = () => {
   };
 
   const handleStoryUser = (id, name) => {
-    navigation.navigate('SubCategories', {id: id, name: name});
+    console.log("🚀 ~ handleStoryUser ~ id, name:", id, name)
+    navigation.navigate('SubCategories', {id: id, name: name,guestNumber:guestNumber});
   };
 
   // useFocusEffect(
@@ -166,18 +166,24 @@ const Categories = () => {
   };
 
   const handleSearch = searchTerm => {
-    const filtered = responseCategories.filter(category =>
-      category.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCategories(filtered);
+    if(!!searchTerm){
+      const filtered = responseCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setResponseCategories(filtered);
+      return
+    }
+    fetchUsers();
   };
 
-  const generateRandomNumber = (numDigits) => {
-    const min = Math.pow(10, numDigits - 1); // Minimum value with specified number of digits
-    const max = Math.pow(10, numDigits) - 1; // Maximum value with specified number of digits
-    return Math.floor(Math.random() * (max - min + 1)) + min; // Generate random number within range
-  };
-  
+  const generateRandomNumber = useMemo(() => {
+    return (numDigits) => {
+      const min = Math.pow(10, numDigits - 1); // Minimum value with specified number of digits
+      const max = Math.pow(10, numDigits) - 1; // Maximum value with specified number of digits
+      return Math.floor(Math.random() * (max - min + 1)) + min; // Generate random number within range
+    };
+  }, []);
+  const guestNumber = generateRandomNumber(4)
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <ScrollView>
@@ -196,7 +202,7 @@ const Categories = () => {
         <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
           <SvgIcons name={'Guest'} width={36} height={36} />
         </View>
-          <Text style={styles.text}>Guest{generateRandomNumber(4)}</Text>
+          <Text style={styles.text}>Guest2456</Text>
         </View>:<></>}
     </View>
    

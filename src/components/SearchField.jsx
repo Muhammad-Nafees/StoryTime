@@ -9,7 +9,7 @@ const SearchField = ({ placeholder, onSearch }) => {
 
   const handleSearch = text => {
     setSearchTerm(text);
-    onSearch(text || placeholder);
+    onSearch(text);
   };
 
   return (

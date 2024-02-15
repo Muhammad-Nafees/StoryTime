@@ -45,6 +45,7 @@ import Vehicles_Sub from '../../../components/sub-catgories/Vehicles_Sub';
 import Element_Sub from '../../../components/sub-catgories/Elements_Sub';
 import Countries_Sub from '../../../components/sub-catgories/Countries_Sub';
 import MainInputField from '../../../components/MainInputField';
+import SearchField from '../../../components/SearchField';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCategories} from '../../../../store/slices/getCategoriesSlice';
 import {
@@ -52,8 +53,9 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import {randomNames} from '../../../../store/slices/addplayers/addPlayersSlice';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
-const SubCategories = ({route}) => {
+const SubCategories = ({route,guestNumber}) => {
   const {width, height} = Dimensions.get('window');
   const {SPLASH_SCREEN_IMAGE} = Img_Paths;
 
@@ -70,21 +72,23 @@ const SubCategories = ({route}) => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [responseRandomsub, setresponseRandomsub] = useState();
   const dispatch = useDispatch();
+  const {user} = useSelector(state => state?.authSlice);
+
+  const fetchSubcategories = async () => {
+    setIsLoading(true);
+    try {
+      const response = await get_Categories_Sub_Categories(1,id);
+      setIsLoading(false);
+      setResponseSubCategories(response?.data?.categories);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchSubcategories = async () => {
-      setIsLoading(true);
-      try {
-        const response = await get_Categories_Sub_Categories(id);
-        setIsLoading(false);
-        setResponseSubCategories(response?.data?.categories);
-        return response;
-      } catch (error) {
-        console.log('error---', error);
-      }
-    };
     fetchSubcategories();
-  }, []);
+  }, [id]);
 
   const handleRandomSub_category = async () => {
     try {
@@ -100,6 +104,17 @@ const SubCategories = ({route}) => {
   const handleStoryUser = name => {
     navigation.navigate(PLAYER_SEQUENCE);
     dispatch(randomNames(name));
+  };
+
+  const handleSearch = searchTerm => {
+    if(!!searchTerm){
+      const filtered = responsesubCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setResponseSubCategories(filtered);
+      return
+    }
+    fetchSubcategories();
   };
 
   // useFocusEffect(
@@ -119,19 +134,28 @@ const SubCategories = ({route}) => {
       <ScrollView>
         {/* Things SubCategory */}
 
+        <View style={{flexDirection:'row',justifyContent:"space-between",marginHorizontal:responsiveWidth(5),marginBottom:moderateVerticalScale(10)}}>
         <View style={styles.first_container}>
+       
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.categories_text_container}>
             <Text style={styles.categories_text}>{name}</Text>
-          </View>
+          </View>   
         </View>
 
+      {!user?
+          <View style={{marginTop:moderateVerticalScale(10)}}>
+        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
+          <SvgIcons name={'Guest'} width={36} height={36} />
+        </View>
+          <Text style={styles.text}>Guest2456</Text>
+        </View>:<></>}
+    </View>
+
         {/* IMainnputField-----*/}
-
+     {user? 
+     <>
         <MainInputField placeholder="Username" />
-
-        {/* MainInputField----- */}
-
         <View
           style={{
             paddingVertical: moderateVerticalScale(6),
@@ -173,7 +197,8 @@ const SubCategories = ({route}) => {
               </View>
             ))}
           </View>
-        </View>
+        </View></>:
+        <SearchField placeholder="Search" onSearch={handleSearch} />}
 
         <View
           style={{
@@ -273,8 +298,6 @@ const styles = StyleSheet.create({
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
     flexDirection: 'row',
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
     alignItems: 'center',
   },
   back_button: {
@@ -331,6 +354,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  text: {
+    fontSize: 10,
+    color: 'black',
+    textAlign:'center'
   },
 });
 

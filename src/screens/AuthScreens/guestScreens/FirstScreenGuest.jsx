@@ -48,7 +48,7 @@ const FirstScreenGuest = () => {
 
             <View style={styles.container_img}>
                 <TouchableOpacity disabled={!toggleCheckBox}
-                    onPress={() => navigation.navigate(CATEGORIES, { flow : "guest" })}
+                    onPress={() => navigation.navigate("CategoriesTab")}
                     >
                     <Image
                         style={{
