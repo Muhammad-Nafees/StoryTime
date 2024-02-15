@@ -53,9 +53,10 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import {randomNames} from '../../../../store/slices/addplayers/addPlayersSlice';
+import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 
-const SubCategories = ({route,guestNumber}) => {
+const SubCategories = ({route}) => {
   const {width, height} = Dimensions.get('window');
   const {SPLASH_SCREEN_IMAGE} = Img_Paths;
 
@@ -77,7 +78,7 @@ const SubCategories = ({route,guestNumber}) => {
   const fetchSubcategories = async () => {
     setIsLoading(true);
     try {
-      const response = await get_Categories_Sub_Categories(1,id);
+      const response = await get_Categories_Sub_Categories(1, id);
       setIsLoading(false);
       setResponseSubCategories(response?.data?.categories);
       return response;
@@ -85,6 +86,8 @@ const SubCategories = ({route,guestNumber}) => {
       console.log('error---', error);
     }
   };
+
+  const allowedCategories = ['Shark', 'Whale', 'Cow'];
 
   useEffect(() => {
     fetchSubcategories();
@@ -106,13 +109,16 @@ const SubCategories = ({route,guestNumber}) => {
     dispatch(randomNames(name));
   };
 
+  const isCategoryBlurred = category => {
+    return !allowedCategories.includes(category?.name) && !user;
+  };
   const handleSearch = searchTerm => {
-    if(!!searchTerm){
+    if (!!searchTerm) {
       const filtered = responsesubCategories.filter(category =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+        category.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setResponseSubCategories(filtered);
-      return
+      return;
     }
     fetchSubcategories();
   };
@@ -134,71 +140,87 @@ const SubCategories = ({route,guestNumber}) => {
       <ScrollView>
         {/* Things SubCategory */}
 
-        <View style={{flexDirection:'row',justifyContent:"space-between",marginHorizontal:responsiveWidth(5),marginBottom:moderateVerticalScale(10)}}>
-        <View style={styles.first_container}>
-       
-          <BackButton onPress={() => navigation.goBack()} />
-          <View style={styles.categories_text_container}>
-            <Text style={styles.categories_text}>{name}</Text>
-          </View>   
-        </View>
-
-      {!user?
-          <View style={{marginTop:moderateVerticalScale(10)}}>
-        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
-          <SvgIcons name={'Guest'} width={36} height={36} />
-        </View>
-          <Text style={styles.text}>Guest2456</Text>
-        </View>:<></>}
-    </View>
-
-        {/* IMainnputField-----*/}
-     {user? 
-     <>
-        <MainInputField placeholder="Username" />
         <View
           style={{
-            paddingVertical: moderateVerticalScale(6),
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginHorizontal: responsiveWidth(5),
+            marginBottom: moderateVerticalScale(10),
           }}>
-          <View
-            style={{
-              width: responsiveWidth(90),
-              flexDirection: 'row',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
-              <Text
-                style={{
-                  color: '#393939',
-                  fontWeight: '500',
-                  textAlign: 'center',
-                }}>
-                Players:
-              </Text>
+          <View style={styles.first_container}>
+            <BackButton onPress={() => navigation.goBack()} />
+            <View style={styles.categories_text_container}>
+              <Text style={styles.categories_text}>{name}</Text>
             </View>
+          </View>
 
-            {addUsersGame?.map((item, index) => (
+          {!user ? (
+            <View style={{marginTop: moderateVerticalScale(10)}}>
               <View
                 style={{
-                  margin: 4,
-                  backgroundColor: '#395E66',
-                  paddingHorizontal: moderateScale(14),
-                  paddingVertical: moderateVerticalScale(4.5),
-                  borderRadius: 40,
+                  marginBottom: 'auto',
+                  marginTop: 'auto',
+                  marginLeft: 5,
                 }}>
-                <Text
-                  style={{
-                    color: '#FFF',
-                    fontSize: responsiveFontSize(1.9),
-                  }}>{`@${item.username}`}</Text>
+                <SvgIcons name={'Guest'} width={36} height={36} />
               </View>
-            ))}
-          </View>
-        </View></>:
-        <SearchField placeholder="Search" onSearch={handleSearch} />}
+              <Text style={styles.text}>Guest2456</Text>
+            </View>
+          ) : (
+            <></>
+          )}
+        </View>
+
+        {/* IMainnputField-----*/}
+        {user ? (
+          <>
+            <MainInputField placeholder="Username" />
+            <View
+              style={{
+                paddingVertical: moderateVerticalScale(6),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  width: responsiveWidth(90),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}>
+                <View style={{marginHorizontal: moderateScale(10)}}>
+                  <Text
+                    style={{
+                      color: '#393939',
+                      fontWeight: '500',
+                      textAlign: 'center',
+                    }}>
+                    Players:
+                  </Text>
+                </View>
+
+                {addUsersGame?.map((item, index) => (
+                  <View
+                    style={{
+                      margin: 4,
+                      backgroundColor: '#395E66',
+                      paddingHorizontal: moderateScale(14),
+                      paddingVertical: moderateVerticalScale(4.5),
+                      borderRadius: 40,
+                    }}>
+                    <Text
+                      style={{
+                        color: '#FFF',
+                        fontSize: responsiveFontSize(1.9),
+                      }}>{`@${item.username}`}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </>
+        ) : (
+          <SearchField placeholder="Search" onSearch={handleSearch} />
+        )}
 
         <View
           style={{
@@ -206,7 +228,7 @@ const SubCategories = ({route,guestNumber}) => {
             flexWrap: 'wrap',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            paddingHorizontal: moderateScale(10),
+            paddingHorizontal: moderateScale(4),
           }}>
           {!isLoading ? (
             responsesubCategories?.map(category => (
@@ -214,21 +236,45 @@ const SubCategories = ({route,guestNumber}) => {
                 key={category?.id}
                 style={{
                   backgroundColor: TextColorGreen,
-                  width: responsiveWidth(29),
+                  width: responsiveWidth(30),
                   borderRadius: 10,
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:3,
-                  borderColor:"#5797A5"
+                  borderWidth: !!isCategoryBlurred(category) ? 0 : 3,
+                  borderColor: '#5797A5',
                 }}>
                 <StoryUsers
-                  onPress={() => handleStoryUser(category?.name)}
+                  onPress={() => handleStoryUser(category?.id, category?.name)}
                   images={category?.image}
                   text={category?.name}
                   mainbgColor={TextColorGreen}
-                  backgroundColor="rgba(86, 182, 164, 1)"
+                  backgroundColor="rgba(199, 152, 97, 1)"
+                  disabled={!!isCategoryBlurred(category)}
                 />
+
+                {!!isCategoryBlurred(category) && (
+                  <View style={styles.blur_wrapper}>
+                    <BlurView
+                      style={styles.blur_view}
+                      blurAmount={10}
+                      overlayColor="transparent">
+                      <View style={styles.blur_content_container}>
+                        <View
+                          style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            top: responsiveHeight(5),
+                          }}>
+                          <SvgIcons name={'Lock'} width={47} height={47} />
+                        </View>
+                      </View>
+                    </BlurView>
+                  </View>
+                )}
               </View>
             ))
           ) : (
@@ -355,10 +401,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.2,
   },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
   text: {
     fontSize: 10,
     color: 'black',
-    textAlign:'center'
+    textAlign: 'center',
   },
 });
 

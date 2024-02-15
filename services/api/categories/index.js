@@ -2,8 +2,6 @@ import { Base_Url, Subcategory, category_Random, category_endpoint } from "../..
 
 
 export const get_Categories_Sub_Categories = async (page = 1, id = null) => {
-console.log("🚀 ~ constget_Categories_Sub_Categories= ~ id:", id)
-
     let apiUrl;
 
     if (id !== undefined && id !== null) {
