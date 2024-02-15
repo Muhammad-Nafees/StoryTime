@@ -45,6 +45,7 @@ import {
 import RandomCategories from '../../../components/customCategories/RandomCategories';
 import {get_random} from '../../../../store/slices/randomCategorySlice';
 import {BlurView} from '@react-native-community/blur';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const Categories = () => {
   const {width, height} = Dimensions.get('window');
@@ -63,9 +64,14 @@ const Categories = () => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [filterCategory, setFilteredCategory] = useState(null);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
+  const {user} = useSelector(state => state?.authSlice);
+  console.log("🚀 ~ Categories ~ user:", user)
 
   // Get Categories Api ----------
-  let flow = 'guest';
+  // const route = useRoute();
+  // const {params} = route;
+  // const flow = params?.flow;
+  // console.log(flow);
 
   const fetchCategoriesUntilFound = async searchTerm => {
     let page = 1;
@@ -111,7 +117,7 @@ const Categories = () => {
   const fetchUsers = async (page = 1) => {
     setIsLoading(true);
     try {
-      if (flow === 'guest') {
+      if (!user) {
         fetchCategoriesUntilFound('animals');
         return;
       }
@@ -153,9 +159,9 @@ const Categories = () => {
   //     }, [])
   // );
 
-  const isCategoryBlurred = category => {
-    return category?.name !== 'Animals' && flow === 'guest';
-  };
+  const isCategoryBlurred = (category) => {
+    return category?.name !== 'Animals' && !user
+  }
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -245,19 +251,17 @@ const Categories = () => {
                   backgroundColor="rgba(199, 152, 97, 1)"
                   disabled={!!isCategoryBlurred(category)}
                 />
-
-               {!!isCategoryBlurred(category)&& <View style={styles.blur_wrapper}>
-                  <BlurView
-                    style={styles.blur_view}
-                    blurAmount={10}
-                    overlayColor="transparent">
+          
+            {!!isCategoryBlurred(category) && <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
                     <View style={styles.blur_content_container}>
-                      <Text
-                        style={{
-                          alignSelf: 'center',
-                        }}>
-                        TALA
-                      </Text>
+                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
+                    <SvgIcons name={'Lock'} width={47} height={47} />
+                    </View>
                     </View>
                   </BlurView>
                 </View>}
