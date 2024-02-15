@@ -75,7 +75,7 @@ const SubCategories = ({route}) => {
     const fetchSubcategories = async () => {
       setIsLoading(true);
       try {
-        const response = await get_Categories_Sub_Categories(id);
+        const response = await get_Categories_Sub_Categories(1,id);
         setIsLoading(false);
         setResponseSubCategories(response?.data?.categories);
         return response;
@@ -84,7 +84,7 @@ const SubCategories = ({route}) => {
       }
     };
     fetchSubcategories();
-  }, []);
+  }, [id]);
 
   const handleRandomSub_category = async () => {
     try {

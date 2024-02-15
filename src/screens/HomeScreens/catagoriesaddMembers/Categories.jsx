@@ -152,6 +152,7 @@ const Categories = () => {
   };
 
   const handleStoryUser = (id, name) => {
+    console.log("🚀 ~ handleStoryUser ~ id, name:", id, name)
     navigation.navigate('SubCategories', {id: id, name: name});
   };
 
@@ -165,10 +166,14 @@ const Categories = () => {
     return category?.name !== 'Animals' && !user
   } 
   const handleSearch = searchTerm => {
-    const filtered = responseCategories.filter(category =>
-      category.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCategories(filtered);
+    if(!!searchTerm){
+      const filtered = responseCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setResponseCategories(filtered);
+      return
+    }
+    fetchUsers();
   };
   
   return (
