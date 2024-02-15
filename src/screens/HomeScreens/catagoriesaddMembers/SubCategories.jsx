@@ -45,6 +45,7 @@ import Vehicles_Sub from '../../../components/sub-catgories/Vehicles_Sub';
 import Element_Sub from '../../../components/sub-catgories/Elements_Sub';
 import Countries_Sub from '../../../components/sub-catgories/Countries_Sub';
 import MainInputField from '../../../components/MainInputField';
+import SearchField from '../../../components/SearchField';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCategories} from '../../../../store/slices/getCategoriesSlice';
 import {
@@ -56,9 +57,6 @@ import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const SubCategories = ({route}) => {
-
-  const {user} = useSelector(state => state?.authSlice);
-
   const {width, height} = Dimensions.get('window');
   const {SPLASH_SCREEN_IMAGE} = Img_Paths;
 
@@ -75,21 +73,23 @@ const SubCategories = ({route}) => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [responseRandomsub, setresponseRandomsub] = useState();
   const dispatch = useDispatch();
+  const {user} = useSelector(state => state?.authSlice);
 
-  const allowedCategories = ["Shark","Whale","Cow"]
+  const fetchSubcategories = async () => {
+    setIsLoading(true);
+    try {
+      const response = await get_Categories_Sub_Categories(1, id);
+      setIsLoading(false);
+      setResponseSubCategories(response?.data?.categories);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
+    }
+  };
+
+  const allowedCategories = ['Shark', 'Whale', 'Cow'];
 
   useEffect(() => {
-    const fetchSubcategories = async () => {
-      setIsLoading(true);
-      try {
-        const response = await get_Categories_Sub_Categories(1,id);
-        setIsLoading(false);
-        setResponseSubCategories(response?.data?.categories);
-        return response;
-      } catch (error) {
-        console.log('error---', error);
-      }
-    };
     fetchSubcategories();
   }, [id]);
 
@@ -109,8 +109,18 @@ const SubCategories = ({route}) => {
     dispatch(randomNames(name));
   };
 
-  const isCategoryBlurred = (category) => {
-    return !allowedCategories.includes(category?.name) && !user
+  const isCategoryBlurred = category => {
+    return !allowedCategories.includes(category?.name) && !user;
+  };
+  const handleSearch = searchTerm => {
+    if (!!searchTerm) {
+      const filtered = responsesubCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setResponseSubCategories(filtered);
+      return;
+    }
+    fetchSubcategories();
   };
 
   // useFocusEffect(
@@ -130,61 +140,87 @@ const SubCategories = ({route}) => {
       <ScrollView>
         {/* Things SubCategory */}
 
-        <View style={styles.first_container}>
-          <BackButton onPress={() => navigation.goBack()} />
-          <View style={styles.categories_text_container}>
-            <Text style={styles.categories_text}>{name}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginHorizontal: responsiveWidth(5),
+            marginBottom: moderateVerticalScale(10),
+          }}>
+          <View style={styles.first_container}>
+            <BackButton onPress={() => navigation.goBack()} />
+            <View style={styles.categories_text_container}>
+              <Text style={styles.categories_text}>{name}</Text>
+            </View>
           </View>
+
+          {user ? (
+            <View style={{marginTop: moderateVerticalScale(10)}}>
+              <View
+                style={{
+                  marginBottom: 'auto',
+                  marginTop: 'auto',
+                  marginLeft: 5,
+                }}>
+                <SvgIcons name={'Guest'} width={36} height={36} />
+              </View>
+              <Text style={styles.text}>Guest2456</Text>
+            </View>
+          ) : (
+            <></>
+          )}
         </View>
 
         {/* IMainnputField-----*/}
-
-        <MainInputField placeholder="Username" />
-
-        {/* MainInputField----- */}
-
-        <View
-          style={{
-            paddingVertical: moderateVerticalScale(6),
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              width: responsiveWidth(90),
-              flexDirection: 'row',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
-              <Text
-                style={{
-                  color: '#393939',
-                  fontWeight: '500',
-                  textAlign: 'center',
-                }}>
-                Players:
-              </Text>
-            </View>
-
-            {addUsersGame?.map((item, index) => (
+        {user ? (
+          <>
+            <MainInputField placeholder="Username" />
+            <View
+              style={{
+                paddingVertical: moderateVerticalScale(6),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <View
                 style={{
-                  margin: 4,
-                  backgroundColor: '#395E66',
-                  paddingHorizontal: moderateScale(14),
-                  paddingVertical: moderateVerticalScale(4.5),
-                  borderRadius: 40,
+                  width: responsiveWidth(90),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
                 }}>
-                <Text
-                  style={{
-                    color: '#FFF',
-                    fontSize: responsiveFontSize(1.9),
-                  }}>{`@${item.username}`}</Text>
+                <View style={{marginHorizontal: moderateScale(10)}}>
+                  <Text
+                    style={{
+                      color: '#393939',
+                      fontWeight: '500',
+                      textAlign: 'center',
+                    }}>
+                    Players:
+                  </Text>
+                </View>
+
+                {addUsersGame?.map((item, index) => (
+                  <View
+                    style={{
+                      margin: 4,
+                      backgroundColor: '#395E66',
+                      paddingHorizontal: moderateScale(14),
+                      paddingVertical: moderateVerticalScale(4.5),
+                      borderRadius: 40,
+                    }}>
+                    <Text
+                      style={{
+                        color: '#FFF',
+                        fontSize: responsiveFontSize(1.9),
+                      }}>{`@${item.username}`}</Text>
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
-        </View>
+            </View>
+          </>
+        ) : (
+          <SearchField placeholder="Search" onSearch={handleSearch} />
+        )}
 
         <View
           style={{
@@ -216,22 +252,29 @@ const SubCategories = ({route}) => {
                   backgroundColor="rgba(199, 152, 97, 1)"
                   disabled={!!isCategoryBlurred(category)}
                 />
-          
-            {!!isCategoryBlurred(category) && 
-            <View style={styles.blur_wrapper}>
-                <BlurView
-                  style={styles.blur_view}
-                  blurAmount={10}
-                  overlayColor='transparent'
-                  >
-                    <View style={styles.blur_content_container}>
-                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
-                    <SvgIcons name={'Lock'} width={47} height={47} />
-                    </View>
-                    </View>
-                  </BlurView>
-                </View>
-                }
+
+                {!!isCategoryBlurred(category) && (
+                  <View style={styles.blur_wrapper}>
+                    <BlurView
+                      style={styles.blur_view}
+                      blurAmount={10}
+                      overlayColor="transparent">
+                      <View style={styles.blur_content_container}>
+                        <View
+                          style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            top: responsiveHeight(5),
+                          }}>
+                          <SvgIcons name={'Lock'} width={47} height={47} />
+                        </View>
+                      </View>
+                    </BlurView>
+                  </View>
+                )}
               </View>
             ))
           ) : (
@@ -301,8 +344,6 @@ const styles = StyleSheet.create({
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
     flexDirection: 'row',
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
     alignItems: 'center',
   },
   back_button: {
@@ -372,6 +413,11 @@ const styles = StyleSheet.create({
   },
   blur_content_container: {
     backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
+  text: {
+    fontSize: 10,
+    color: 'black',
+    textAlign: 'center',
   },
 });
 

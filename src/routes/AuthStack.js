@@ -182,7 +182,7 @@ const CategoriesTab = () => {
                     height: responsiveHeight(3),
                     resizeMode: 'center',
                   }}
-                  source={HOME_FOCUSED}
+                  source={require('../assets/book_focused.png')}
                 />
               ) : (
                 <Image
@@ -191,7 +191,7 @@ const CategoriesTab = () => {
                     height: responsiveHeight(3),
                     resizeMode: 'center',
                   }}
-                  source={require('../assets/home-icon-bottom.png')}
+                  source={require('../assets/book_focused.png')}
                 />
               )}
             </View>
