@@ -29,7 +29,6 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
           height: responsiveHeight(11),
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor:'#56B6A4',
         }}
         disabled={disabled}
       >

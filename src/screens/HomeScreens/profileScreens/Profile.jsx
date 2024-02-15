@@ -9,20 +9,20 @@ import {
   ScrollView,
   ScrollViewBase,
 } from 'react-native';
-import React, {useState} from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import React, { useState } from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/BackButton';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
-import {SecondaryColor, TextColorGreen} from '../../Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { SecondaryColor, TextColorGreen } from '../../Styles/Style';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import NavigationsString from '../../../constants/NavigationsString';
-import {profile_oliverPierce} from '../../../../dummyData/DummyData';
+import { profile_oliverPierce } from '../../../../dummyData/DummyData';
 import ProfileOliverData from '../../../components/ProfileOliverData';
 import RecordingOliverData from '../../../components/RecordingOliverData';
 import IncognitoMode from '../../../components/IncognitoMode';
@@ -39,23 +39,23 @@ import Svg, {
 } from 'react-native-svg';
 
 const Profile = () => {
-  const {BG_CONTAINER, SHARE_BTN, SETTINGS_ICON} = Img_Paths;
+  const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
   const navigation = useNavigation();
-  const {FEED_CHAT, SETTING} = NavigationsString;
+  const { FEED_CHAT, SETTING } = NavigationsString;
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
 
   return (
     <>
       {changeMode === 0 ? (
-        <View style={{flex: 1, backgroundColor: '#FFF'}}>
+        <View style={{ flex: 1, backgroundColor: '#FFF' }}>
           <ScrollView>
             <ImageBackground
-              style={{width: '100%', height: responsiveHeight(35)}}
+              style={{ width: '100%', height: responsiveHeight(35) }}
               source={BG_CONTAINER}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <View style={{paddingTop: responsiveWidth(6)}}>
+                style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                <View style={{ paddingTop: responsiveWidth(6) }}>
                   <BackButton onPress={() => navigation?.goBack()} />
                 </View>
                 <View
@@ -65,14 +65,14 @@ const Profile = () => {
                     alignItems: 'center',
                   }}>
                   <Image
-                    style={{width: 180, height: 200, resizeMode: 'center'}}
+                    style={{ width: 180, height: 200, resizeMode: 'center' }}
                     source={require('../../../assets/bgoliver.png')}
                   />
                 </View>
 
                 {/* Incognito Icon----- */}
 
-                <View style={{paddingTop: responsiveWidth(6)}}>
+                <View style={{ paddingTop: responsiveWidth(6) }}>
                   <TouchableOpacity
                     onPress={() => setChangeMode(1)}
                     style={[
@@ -90,7 +90,7 @@ const Profile = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={{paddingTop: responsiveWidth(6)}}>
+                <View style={{ paddingTop: responsiveWidth(6) }}>
                   <SettingButton
                     onPress={() => navigation.navigate(SETTING)}
                     image={SETTINGS_ICON}
@@ -125,7 +125,7 @@ const Profile = () => {
                     width: responsiveWidth(45),
                   }}>
                   <Image
-                    style={{width: 22, height: 22, resizeMode: 'center'}}
+                    style={{ width: 22, height: 22, resizeMode: 'center' }}
                     source={require('../../../assets/recordingProfile.png')}
                   />
                 </TouchableOpacity>
@@ -143,7 +143,7 @@ const Profile = () => {
                     width: responsiveWidth(45),
                   }}>
                   <Image
-                    style={{width: 22, height: 22, resizeMode: 'center'}}
+                    style={{ width: 22, height: 22, resizeMode: 'center' }}
                     source={require('../../../assets/videoprofile.png')}
                   />
                 </TouchableOpacity>
@@ -165,11 +165,6 @@ const Profile = () => {
     </>
   );
 
-  // return (
-  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-  //               <Text style={{ color: "#000", }}>Profile Screen is Coming</Text>
-  //           </View> 
-  // )
 };
 
 const styles = StyleSheet.create({

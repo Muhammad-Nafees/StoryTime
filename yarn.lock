@@ -1627,7 +1627,7 @@
     socks-proxy-agent "^8.0.1"
 
 "@npmcli/arborist@^7.2.1":
-  version "7.2.2"
+  version "7.3.1"
   dependencies:
     "@isaacs/string-locale-compare" "^1.1.0"
     "@npmcli/fs" "^3.1.0"
@@ -1656,7 +1656,7 @@
     parse-conflict-json "^3.0.0"
     proc-log "^3.0.0"
     promise-all-reject-late "^1.0.0"
-    promise-call-limit "^1.0.2"
+    promise-call-limit "^3.0.1"
     read-package-json-fast "^3.0.2"
     semver "^7.3.7"
     ssri "^10.0.5"
@@ -1664,7 +1664,7 @@
     walk-up-path "^3.0.1"
 
 "@npmcli/config@^8.0.2":
-  version "8.0.3"
+  version "8.1.0"
   dependencies:
     "@npmcli/map-workspaces" "^3.0.2"
     ci-info "^4.0.0"
@@ -1686,7 +1686,7 @@
     semver "^7.3.5"
 
 "@npmcli/git@^5.0.0", "@npmcli/git@^5.0.3":
-  version "5.0.3"
+  version "5.0.4"
   dependencies:
     "@npmcli/promise-spawn" "^7.0.0"
     lru-cache "^10.0.1"
@@ -1736,8 +1736,8 @@
     proc-log "^3.0.0"
     semver "^7.5.3"
 
-"@npmcli/promise-spawn@^7.0.0":
-  version "7.0.0"
+"@npmcli/promise-spawn@^7.0.0", "@npmcli/promise-spawn@^7.0.1":
+  version "7.0.1"
   dependencies:
     which "^4.0.0"
 
@@ -1746,13 +1746,13 @@
   dependencies:
     postcss-selector-parser "^6.0.10"
 
-"@npmcli/run-script@^7.0.0", "@npmcli/run-script@^7.0.2":
-  version "7.0.2"
+"@npmcli/run-script@^7.0.0", "@npmcli/run-script@^7.0.2", "@npmcli/run-script@^7.0.4":
+  version "7.0.4"
   dependencies:
     "@npmcli/node-gyp" "^3.0.0"
+    "@npmcli/package-json" "^5.0.0"
     "@npmcli/promise-spawn" "^7.0.0"
     node-gyp "^10.0.0"
-    read-package-json-fast "^3.0.0"
     which "^4.0.0"
 
 "@pkgjs/parseargs@^0.11.0":
@@ -1766,6 +1766,11 @@
   integrity sha512-JL0w36KuFHFCvnbOXRekqVAUplmOyT/OuCQkogo6X98MtpSaJOKEAeZnYO8JB0U/RIEixZaGI5px73YbRm/oag==
   dependencies:
     merge-options "^3.0.4"
+
+"@react-native-camera-roll/camera-roll@^7.4.0":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@react-native-camera-roll/camera-roll/-/camera-roll-7.4.1.tgz"
+  integrity sha512-IoJ4QuyPpKX+EnBTjwdXGuq0GHhBjrhI22fNQtrjGnQEp3D+IsHPGTHEYkc93PxuXKKt+13TtVzL/n67juUi5A==
 
 "@react-native-community/blur@^4.4.0":
   version "4.4.0"
@@ -2127,26 +2132,37 @@
   resolved "https://registry.npmjs.org/@sideway/pinpoint/-/pinpoint-2.0.0.tgz"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@sigstore/bundle@^2.1.0":
-  version "2.1.0"
+"@sigstore/bundle@^2.1.1":
+  version "2.1.1"
   dependencies:
     "@sigstore/protobuf-specs" "^0.2.1"
+
+"@sigstore/core@^0.2.0":
+  version "0.2.0"
 
 "@sigstore/protobuf-specs@^0.2.1":
   version "0.2.1"
 
-"@sigstore/sign@^2.1.0":
-  version "2.2.0"
+"@sigstore/sign@^2.2.1":
+  version "2.2.1"
   dependencies:
-    "@sigstore/bundle" "^2.1.0"
+    "@sigstore/bundle" "^2.1.1"
+    "@sigstore/core" "^0.2.0"
     "@sigstore/protobuf-specs" "^0.2.1"
     make-fetch-happen "^13.0.0"
 
-"@sigstore/tuf@^2.1.0", "@sigstore/tuf@^2.2.0":
-  version "2.2.0"
+"@sigstore/tuf@^2.3.0":
+  version "2.3.0"
   dependencies:
     "@sigstore/protobuf-specs" "^0.2.1"
-    tuf-js "^2.1.0"
+    tuf-js "^2.2.0"
+
+"@sigstore/verify@^0.1.0":
+  version "0.1.0"
+  dependencies:
+    "@sigstore/bundle" "^2.1.1"
+    "@sigstore/core" "^0.2.0"
+    "@sigstore/protobuf-specs" "^0.2.1"
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
@@ -2664,10 +2680,7 @@ archy@~1.0.0:
   version "1.0.0"
 
 are-we-there-yet@^4.0.0:
-  version "4.0.1"
-  dependencies:
-    delegates "^1.0.0"
-    readable-stream "^4.1.0"
+  version "4.0.2"
 
 argparse@^1.0.7:
   version "1.0.10"
@@ -3078,8 +3091,8 @@ bytes@3.0.0:
   resolved "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz"
   integrity sha512-pMhOfFDPiv9t5jjIXkHosWmkSyQbvsgEVNkz0ERHbuLh2T/7j4Mqqpz523Fe8MVY89KC6Sh/QfS2sM+SjgFDcw==
 
-cacache@^18.0.0, cacache@^18.0.1:
-  version "18.0.1"
+cacache@^18.0.0, cacache@^18.0.2:
+  version "18.0.2"
   dependencies:
     "@npmcli/fs" "^3.1.0"
     fs-minipass "^3.0.0"
@@ -3649,9 +3662,6 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
-
-delegates@^1.0.0:
-  version "1.0.0"
 
 denodeify@^1.2.1:
   version "1.2.1"
@@ -5830,7 +5840,7 @@ libnpmaccess@^8.0.1:
     npm-registry-fetch "^16.0.0"
 
 libnpmdiff@^6.0.3:
-  version "6.0.4"
+  version "6.0.6"
   dependencies:
     "@npmcli/arborist" "^7.2.1"
     "@npmcli/disparity-colors" "^3.0.0"
@@ -5843,7 +5853,7 @@ libnpmdiff@^6.0.3:
     tar "^6.2.0"
 
 libnpmexec@^7.0.4:
-  version "7.0.5"
+  version "7.0.7"
   dependencies:
     "@npmcli/arborist" "^7.2.1"
     "@npmcli/run-script" "^7.0.2"
@@ -5858,7 +5868,7 @@ libnpmexec@^7.0.4:
     walk-up-path "^3.0.1"
 
 libnpmfund@^5.0.1:
-  version "5.0.2"
+  version "5.0.4"
   dependencies:
     "@npmcli/arborist" "^7.2.1"
 
@@ -5875,7 +5885,7 @@ libnpmorg@^6.0.1:
     npm-registry-fetch "^16.0.0"
 
 libnpmpack@^6.0.3:
-  version "6.0.4"
+  version "6.0.6"
   dependencies:
     "@npmcli/arborist" "^7.2.1"
     "@npmcli/run-script" "^7.0.2"
@@ -5883,7 +5893,7 @@ libnpmpack@^6.0.3:
     pacote "^17.0.4"
 
 libnpmpublish@^9.0.2:
-  version "9.0.3"
+  version "9.0.4"
   dependencies:
     ci-info "^4.0.0"
     normalize-package-data "^6.0.0"
@@ -5891,7 +5901,7 @@ libnpmpublish@^9.0.2:
     npm-registry-fetch "^16.0.0"
     proc-log "^3.0.0"
     semver "^7.3.7"
-    sigstore "^2.1.0"
+    sigstore "^2.2.0"
     ssri "^10.0.5"
 
 libnpmsearch@^7.0.0:
@@ -6659,7 +6669,7 @@ npm-package-arg@^11.0.0, npm-package-arg@^11.0.1:
     validate-npm-package-name "^5.0.0"
 
 npm-packlist@^8.0.0:
-  version "8.0.1"
+  version "8.0.2"
   dependencies:
     ignore-walk "^6.0.4"
 
@@ -6698,10 +6708,10 @@ npm-run-path@^4.0.1:
 npm-user-validate@^2.0.0:
   version "2.0.0"
 
-npm@^10.2.5:
-  version "10.2.5"
-  resolved "https://registry.npmjs.org/npm/-/npm-10.2.5.tgz"
-  integrity sha512-lXdZ7titEN8CH5YJk9C/aYRU9JeDxQ4d8rwIIDsvH3SMjLjHTukB2CFstMiB30zXs4vCrPN2WH6cDq1yHBeJAw==
+npm@^10.4.0:
+  version "10.4.0"
+  resolved "https://registry.npmjs.org/npm/-/npm-10.4.0.tgz"
+  integrity sha512-RS7Mx0OVfXlOcQLRePuDIYdFCVBPCNapWHplDK+mh7GDdP/Tvor4ocuybRRPSvfcRb2vjRJt1fHCqw3cr8qACQ==
   dependencies:
     "@isaacs/string-locale-compare" "^1.1.0"
     "@npmcli/arborist" "^7.2.1"
@@ -6709,12 +6719,12 @@ npm@^10.2.5:
     "@npmcli/fs" "^3.1.0"
     "@npmcli/map-workspaces" "^3.0.4"
     "@npmcli/package-json" "^5.0.0"
-    "@npmcli/promise-spawn" "^7.0.0"
-    "@npmcli/run-script" "^7.0.2"
-    "@sigstore/tuf" "^2.2.0"
+    "@npmcli/promise-spawn" "^7.0.1"
+    "@npmcli/run-script" "^7.0.4"
+    "@sigstore/tuf" "^2.3.0"
     abbrev "^2.0.0"
     archy "~1.0.0"
-    cacache "^18.0.1"
+    cacache "^18.0.2"
     chalk "^5.3.0"
     ci-info "^4.0.0"
     cli-columns "^4.0.0"
@@ -6757,7 +6767,7 @@ npm@^10.2.5:
     npm-user-validate "^2.0.0"
     npmlog "^7.0.1"
     p-map "^4.0.0"
-    pacote "^17.0.5"
+    pacote "^17.0.6"
     parse-conflict-json "^3.0.1"
     proc-log "^3.0.0"
     qrcode-terminal "^0.12.0"
@@ -6765,7 +6775,6 @@ npm@^10.2.5:
     semver "^7.5.4"
     spdx-expression-parse "^3.0.1"
     ssri "^10.0.5"
-    strip-ansi "^7.1.0"
     supports-color "^9.4.0"
     tar "^6.2.0"
     text-table "~0.2.0"
@@ -6979,8 +6988,8 @@ p-try@^2.0.0:
   resolved "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pacote@^17.0.0, pacote@^17.0.4, pacote@^17.0.5:
-  version "17.0.5"
+pacote@^17.0.0, pacote@^17.0.4, pacote@^17.0.6:
+  version "17.0.6"
   dependencies:
     "@npmcli/git" "^5.0.0"
     "@npmcli/installed-package-contents" "^2.0.1"
@@ -6997,7 +7006,7 @@ pacote@^17.0.0, pacote@^17.0.4, pacote@^17.0.5:
     promise-retry "^2.0.1"
     read-package-json "^7.0.0"
     read-package-json-fast "^3.0.0"
-    sigstore "^2.0.0"
+    sigstore "^2.2.0"
     ssri "^10.0.0"
     tar "^6.1.11"
 
@@ -7125,7 +7134,7 @@ plist@^3.0.5:
     xmlbuilder "^15.1.1"
 
 postcss-selector-parser@^6.0.10:
-  version "6.0.13"
+  version "6.0.15"
   dependencies:
     cssesc "^3.0.0"
     util-deprecate "^1.0.2"
@@ -7190,8 +7199,8 @@ process@^0.11.10:
 promise-all-reject-late@^1.0.0:
   version "1.0.1"
 
-promise-call-limit@^1.0.2:
-  version "1.0.2"
+promise-call-limit@^3.0.1:
+  version "3.0.1"
 
 promise-inflight@^1.0.1:
   version "1.0.1"
@@ -7428,6 +7437,11 @@ react-native-gesture-handler@^2.14.0, "react-native-gesture-handler@>= 1.0.0":
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-html-to-pdf@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/react-native-html-to-pdf/-/react-native-html-to-pdf-0.12.0.tgz"
+  integrity sha512-Yb5WO9SfF86s5Yv9PqXQ7fZDr9zZOJ+6jtweT9zFLraPNHWX7pSxe2dSkeg3cGiNrib65ZXGN6ksHymfYLFSSg==
+
 react-native-image-crop-picker@^0.40.2:
   version "0.40.2"
   resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.2.tgz"
@@ -7449,6 +7463,11 @@ react-native-image-zoom-viewer@^3.0.1:
   integrity sha512-la6s5DNSuq4GCRLsi5CZ29FPjgTpdCuGIRdO5T9rUrAtxrlpBPhhSnHrbmPVxsdtOUvxHacTh2Gfa9+RraMZQA==
   dependencies:
     react-native-image-pan-zoom "^2.1.12"
+
+react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
 react-native-modal@^13.0.1:
   version "13.0.1"
@@ -7567,10 +7586,10 @@ react-native-vector-icons@^10.0.2:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native-vision-camera@^3.6.16:
-  version "3.6.16"
-  resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-3.6.16.tgz"
-  integrity sha512-MyQ9uFNJhfQBBrZwV44ok2iviqjXpSDUYZfXkSadbsrCYjn6/7bQFaNT8GZfT8KBX+cruaO7Zu2EoZ8v2ZMCaA==
+react-native-vision-camera@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-3.8.2.tgz"
+  integrity sha512-MY39l2e3hNRPUefn2JPShOFExcw0PblbAcUGvJrIfS9pMzdIyceo0umRAx8lOGXzDUAdb+xy/tFWb8zGxKimCQ==
 
 react-native-web@*, react-native-web@0.9.x:
   version "0.9.13"
@@ -7706,15 +7725,6 @@ readable-stream@^3.4.0:
     inherits "^2.0.3"
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
-
-readable-stream@^4.1.0:
-  version "4.4.2"
-  dependencies:
-    abort-controller "^3.0.0"
-    buffer "^6.0.3"
-    events "^3.3.0"
-    process "^0.11.10"
-    string_decoder "^1.3.0"
 
 readable-stream@~2.3.6:
   version "2.3.8"
@@ -8126,13 +8136,15 @@ signal-exit@^4.0.1:
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
 
-sigstore@^2.0.0, sigstore@^2.1.0:
-  version "2.1.0"
+sigstore@^2.2.0:
+  version "2.2.0"
   dependencies:
-    "@sigstore/bundle" "^2.1.0"
+    "@sigstore/bundle" "^2.1.1"
+    "@sigstore/core" "^0.2.0"
     "@sigstore/protobuf-specs" "^0.2.1"
-    "@sigstore/sign" "^2.1.0"
-    "@sigstore/tuf" "^2.1.0"
+    "@sigstore/sign" "^2.2.1"
+    "@sigstore/tuf" "^2.3.0"
+    "@sigstore/verify" "^0.1.0"
 
 simple-plist@^1.1.0:
   version "1.3.1"
@@ -8430,7 +8442,7 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
-strip-ansi@^7.0.1, strip-ansi@^7.1.0:
+strip-ansi@^7.0.1:
   version "7.1.0"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.1.0.tgz"
   integrity sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==
@@ -8631,8 +8643,8 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-tuf-js@^2.1.0:
-  version "2.1.0"
+tuf-js@^2.2.0:
+  version "2.2.0"
   dependencies:
     "@tufjs/models" "2.0.0"
     debug "^4.3.4"

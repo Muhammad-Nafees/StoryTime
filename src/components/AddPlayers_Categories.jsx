@@ -5,19 +5,22 @@ import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFriends, userId } from '../../store/slices/addplayers/addPlayersSlice';
+import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
 
-const AddFriends_Categories = ({ profileimage, username, userchoice, userid, indexNo,removeAdduserList }) => {
+const AddFriends_Categories = ({ profileimage, username, userchoice, userid, indexNo, removeAdduserList }) => {
 
     const dispatch = useDispatch();
     const [friendsArr, setFriendsArr] = useState([]);
 
-    // console.log("addedUsers----", addedUsers)
+    console.log("userid----", userid)
 
     const addFriendHandler = () => {
-        const friend = { username, userid };
+        const friend = { username, userid, };
         dispatch(addFriends(friend));
-        dispatch(userId(userid))
-        removeAdduserList(friend)
+        dispatch(userId(userid));
+        dispatch(playerContributorsIds(userid));
+        removeAdduserList(friend);
+        console.log("Add-button-Pressed")
     };
 
 

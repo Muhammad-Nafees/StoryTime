@@ -21,29 +21,31 @@ const get_Categories = createSlice({
         data: [],
         error: null,
         loading: false,
+        categoriesId: "",
+        subcategoriesId: "",
+        playerscontributorsIds: []
     },
 
     reducers: {
         get_categories: (state, { payload }) => {
             state.data = payload;
         },
+        setCategoriesId: (state, action) => {
+            state.categoriesId = action.payload;
+            console.log("payload----getCategories", action.payload)
+        },
+        setSubCategoriesId: (state, action) => {
+            state.subcategoriesId = action.payload
+            console.log("payload----subCategories", action.payload)
+        },
+        playerContributorsIds: (state, { payload }) => {
+            state.playerscontributorsIds.push(payload);
+            console.log("playerscontributorsIds------", state.playerscontributorsIds)
+        }
     },
 
-    extraReducers: (builder) => {
-        builder.addCase(getCategories.pending, (state, action) => {
-            state.loading = true;
-        }),
+});
 
-            builder.addCase(getCategories.fulfilled, (state, { payload }) => {
-                state.data = payload
-                state.loading = false;
-            }),
-
-            builder.addCase(getCategories.rejected, (state, action) => {
-                state.error = true;
-            })
-    }
-})
 
 export default get_Categories.reducer;
-export const { get_categories } = get_Categories.actions;
+export const { get_categories, setCategoriesId, setSubCategoriesId, playerContributorsIds } = get_Categories.actions;

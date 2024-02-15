@@ -6,7 +6,7 @@ import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import { login } from '../../../store/slices/authSlice';
+import { login, setRefreshToken, userLoginid } from '../../../store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -19,21 +19,26 @@ import { setAccessToken } from '../../../store/slices/authSlice';
 import Toast from 'react-native-toast-message';
 import { validationUserLogin } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
+import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
 
 
 
 const Login = () => {
 
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const [showPassword, setShowPassword] = useState(false);
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
     const [isLoading, setIsLoading] = useState(false);
     const [isEmail, setIsEmail] = useState("")
+    const [showPassword, setShowPassword] = useState(false);
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+
     const toggleShowPassword = () => {
+        // console.log("setShowPassword---=====", setShowPassword);
         setShowPassword(!showPassword);
     };
+
 
     return (
         <Formik
@@ -46,9 +51,7 @@ const Login = () => {
             validationSchema={validationUserLogin}
             onSubmit={async (values) => {
                 setIsLoading(true)
-
                 try {
-
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
                         method: 'POST',
@@ -72,22 +75,35 @@ const Login = () => {
                     const message = responseData?.message;
                     const accessToken = responseData?.data?.accessToken;
                     const refreshToken = responseData?.data?.refreshToken;
-                    console.log("refreshToke----", refreshToken)
+                    const username = responseData?.data?.user?.username;
+                    const userLoginId = responseData?.data?.user?._id;
                     const error = responseData?.stack;
 
                     if (statusCode === 200) {
-                        await AsyncStorage.setItem("isLoggedIn", accessToken)
-                        dispatch(setAccessToken(accessToken))
+                        await AsyncStorage.setItem("isLoggedIn", accessToken);
+                        await AsyncStorage.setItem("isUsername", username);
+                        await AsyncStorage.setItem("isUserId", userLoginId);
+                        console.log("Username===", username);
+                        dispatch(setAccessToken(accessToken));
+                        dispatch(setRefreshToken(refreshToken));
+                        dispatch(userLoginid(userLoginId));
                         Toast.show({
                             type: "success",
                             text1: message,
                             position: "top",
                             visibilityTime: 2500
                         })
-                    };
+                    }
+
+                    // } else if (statusCode === 401) {
+                    //     const responseRefresh = await refresh_token_api(refreshToken)
+                    //     console.log("responseReresh=====", responseRefresh)
+                    //     return responseRefresh
+                    // };
+
                     if (error) {
                         setIsLoading(false)
-                        setIsEmail(message)
+                        setIsEmail(message);
                         Toast.show({
                             type: "error",
                             text1: message,
@@ -95,6 +111,7 @@ const Login = () => {
                             visibilityTime: 2500,
                         })
                     };
+
                     return responseData;
                 }
                 catch (err) {
@@ -107,6 +124,7 @@ const Login = () => {
 
                 <View style={styles.container}>
                     <ScrollView>
+
                         <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
                             <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
                         </View>
@@ -118,7 +136,10 @@ const Login = () => {
 
                             <TextInputField
                                 value={values.email}
+                                // onPress={toggleShowPassword}
+                                showPassword={showPassword}
                                 onChangeText={handleChange('email')}
+                                setShowPassword={setShowPassword}
                                 placeholderText="Type here"
                                 onBlur={() => setFieldTouched("email")}
                             />
@@ -153,6 +174,7 @@ const Login = () => {
                                 onChangeText={handleChange('password')}
                                 onPress={toggleShowPassword}
                                 showPassword={showPassword}
+                                setShowPassword={setShowPassword}
                                 placeholderText="Type here"
                                 type="password"
                                 onBlur={() => setFieldTouched("password")}
@@ -181,11 +203,11 @@ const Login = () => {
                         </View>
 
                         <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)} style={{ justifyContent: 'center', alignItems: 'center', }}>
-                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Forgot password?</Text>
+                            <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(2) }}>Forgot password?</Text>
                         </TouchableOpacity>
 
                         <View style={{ paddingVertical: moderateVerticalScale(14) }}>
-                            <TouchableButton isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
+                            <TouchableButton type="login" isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
                         </View>
 
                         <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>

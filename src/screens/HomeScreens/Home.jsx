@@ -11,6 +11,7 @@ import { FlatListData } from '../../../dummyData/DummyData';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../services/api/storyfeed';
+import { addFriends_api } from '../../../services/api/add-members';
 
 
 const Home = () => {
@@ -25,29 +26,50 @@ const Home = () => {
     const [HasMorePages, setHasMorePages] = useState();
     const { ADD_FRIENDS } = NavigationsString;
     const [responseUsers, setResponseUsers] = useState([]);
-    const [isData, setIsData] = useState([])
+    const [isData, setIsData] = useState([]);
+    const [Responseapi, setResponseapi] = useState([]);
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const navigation = useNavigation();
 
 
     useEffect(() => {
-        const fetchUsers = async () => {
+
+        const addFriends_api_handler = async () => {
             try {
-                const responseData = await fetchallFeedStories({ pagination: page, limit });
-                const data = responseData?.data?.stories;
-                setIsData(data);
-                if (data && data.length > 0) {
-                    setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
-                }
-                setIsLoadingMain(false);
-                setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                const responseData = await addFriends_api();
+                setResponseapi(responseData.data.users);
                 return responseData;
             } catch (error) {
-            } finally {
-                setIsLoadingMain(false);
-                setIsRefreshing(false);
+                console.log("err", error)
             }
+        };
+        addFriends_api_handler()
+    }, [])
+
+
+    // console.log("arrBooleanCHeck===-=-==", !![]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (!isRefreshing) {
+                try {
+                    const responseData = await fetchallFeedStories({ pagination: page, limit });
+                    const data = responseData?.data?.stories;
+                    setIsData(data);
+                    if (data && data.length > 0) {
+                        setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
+                    }
+                    setIsLoadingMain(false);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                    return responseData;
+                } catch (error) {
+                } finally {
+                    setIsLoadingMain(false);
+                    setIsRefreshing(false);
+                }
+            }
+
         };
         fetchUsers();
     }, [page, isRefreshing,])
@@ -55,24 +77,26 @@ const Home = () => {
 
 
     const handleLoadMore = useCallback(() => {
-        if (HasMorePages && isData) {
+        console.log("HasMorePages-----", HasMorePages);
+        if (HasMorePages) {
             setIsLoading(true);
             setPage((prevPage) => prevPage + 1);
         } else {
             setIsLoading(false);
         }
-    }, [HasMorePages])
+    }, [HasMorePages]);
 
 
     const onRefresh = () => {
-
         setIsRefreshing(true);
         setPage(1);
         setResponseUsers([]);
         setTimeout(() => {
             setIsRefreshing(false);
         }, 1000);
-    }
+    };
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -103,7 +127,7 @@ const Home = () => {
             <View style={styles.flatlist_container}>
                 <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
                     <FlatList
-                        data={FlatListData}
+                        data={Responseapi}
                         scrollEnabled={true}
                         horizontal
                         // onRefresh={onRefresh}
@@ -112,9 +136,9 @@ const Home = () => {
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
                                     <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
-                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
+                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../assets/first-img.png")} />
                                     </TouchableOpacity>
-                                    <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
+                                    <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
                                 </View>
                             )
                         }}
@@ -131,7 +155,6 @@ const Home = () => {
                         scrollEnabled={true}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
-                            // console.log("items---", item),
                             <FrameContent
                                 key={index}
                                 type={item?.type}

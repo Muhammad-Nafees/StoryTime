@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import SequencePlayer from "./slices/SequencePlayer";
-import RecordingData from "./slices/RecordingData";
+import recordingData from "./slices/RecordingData";
 import authSlice from "./slices/authSlice";
 import userinfostate from "./slices/authStatesandCity/userInfoState_Slice";
 import userinfocity from "./slices/authStatesandCity/userinfoCity";
@@ -11,11 +11,12 @@ import getallUsers from "./slices/storyfeedslices/getAllUsersSlice";
 import followandunfollow from "./slices/storyfeedslices/followUnfollowSlice";
 import getComment from "./slices/storyfeedslices/getCommentsSlice";
 import addPlayers from "./slices/addplayers/addPlayersSlice"
+import startGame from "./slices/playflow/startGameSlice"
 
 const store = configureStore({
     reducer: {
         SequencePlayer: SequencePlayer,
-        RecordingData: RecordingData,
+        recordingData: recordingData,
         authSlice: authSlice,
         userinfostate: userinfostate,
         userinfocity: userinfocity,
@@ -25,7 +26,8 @@ const store = configureStore({
         getallUsers: getallUsers,
         followandunfollow: followandunfollow,
         getComment: getComment,
-        addPlayers: addPlayers
+        addPlayers: addPlayers,
+        startGame: startGame
     }
 });
 

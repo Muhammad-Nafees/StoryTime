@@ -4,16 +4,18 @@ import { Img_Paths } from '../../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
-import Voice from "@react-native-voice/voice";
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
-import { Camera, getCameraFormat, useCameraDevices, } from "react-native-vision-camera"
+import { Camera, getCameraFormat, useCameraDevices, useCameraDevice } from "react-native-vision-camera"
 import SaveVideo from '../../../../components/SaveVideo';
-import { recordingVideo } from '../../../../../store/slices/RecordingData';
-import { useDispatch } from 'react-redux';
+import { checkVideoTrue, extendStoryCheckVideo, recordingVideo, saveRecordingVideoUser } from '../../../../../store/slices/RecordingData';
+import { useDispatch, useSelector } from 'react-redux';
+import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
+import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
+import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
 
 
 const VideoFirstUser = () => {
@@ -26,30 +28,64 @@ const VideoFirstUser = () => {
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
     const [showCamera, setShowCamera] = useState(false)
-    const [path, setPath] = useState({})
+    const [path, setPath] = useState("")
     const [isVisible, setIsVisible] = useState(false)
+    const recordingVideo = useSelector((state) => state.recordingData.saveRecordingVideo)
     const [currentCamera, setCurrentCamera] = useState('back');
-    const devices = Camera.getAvailableCameraDevices();
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
+    const checkVideoisTrue = useSelector(state => state.recordingData.checkVideoTrueorFalse);
+    const extendStoryCheckVideoTrue = useSelector(state => state.recordingData.extendStoryCheckVideo);
+    const extendVideoCheck = useSelector(state => state.recordingData.extendVideo);
+
+    const extendCountingVideo = useSelector(state => state.recordingData.extendCountingVideo);
+    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
+    const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
+    const [isNext, setIsNext] = useState(true);
+    const [isActive, setIsActive] = useState(false);
     const cameraRef = useRef(null);
     const dispatch = useDispatch()
+    const devices = Camera.getAvailableCameraDevices();
+    const { SECOND_USER_STORY } = NavigationsString;
+    // const devices = useCameraDevice("back", {
+    //     physicalDevices: ["ultra-wide-angle-camera"],
+    // })
+
 
     const getCameraDetails = () => {
         return devices.find(camera => camera.position === currentCamera);
     };
 
+    console.log("path---", path)
+    console.log("recordingVideo---", recordingVideo);
+    console.log("currentDisplayUser---", currentDisplayUser);
+    console.log("extend-video-check-true", extendStoryCheckVideoTrue)
+
     const activeCamera = getCameraDetails();
+
     const checkpermission = async () => {
         await Camera.requestCameraPermission()
         await Camera.requestMicrophonePermission()
     }
-
     useEffect(() => {
         checkpermission()
-    }, [])
+    }, []);
+
 
     // Timer 2 Minutes
 
+
     useEffect(() => {
+        // if (extendStoryCheckVideo == true) {
+        //     setTimeLeft(extendCountingVideo)
+        //     // setIsPressed(true);
+        //     resumeRecording();
+        //     console.log("Extend-story-call")
+        // };
+
+        // if (isNext && timeLeft == 0) {
+        //     stopRecordings();
+        // }
+
         let countdown;
 
         if (timeLeft !== null && timeLeft > 0) {
@@ -58,10 +94,17 @@ const VideoFirstUser = () => {
             }, 1000);
         } else if (timeLeft === 0) {
             clearInterval(countdown);
+            setIsPressed(false);
+            pauseRecordings();
+            // dispatch(saveRecordingVideoUser(path))
+            // stopRecordings();
+            // pauseRecordings()
+            // pauseRecordings()
         }
 
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
     }, [timeLeft]);
+
 
     useEffect(() => {
         if (timeLeft === null) {
@@ -76,57 +119,169 @@ const VideoFirstUser = () => {
         }
     }, [timeLeft]);
 
-    const handlePressOut = () => {
-        setIsPressed(false);
-        stopRecording()
-        dispatch(recordingVideo(path))
-        if (isPressed) {
-            Alert.alert("Video Recorded Successfully")
-        }
-    };
+    // const handlePressOut = () => {
+    //     setIsPressed(false);
+    //     stopRecording()
+    //     dispatch(recordingVideo(path))
+    //     if (isPressed) {
+    //         Alert.alert("Video Recorded Successfully")
+    //     }
+    // };
 
     useEffect(() => {
         setShowCamera(true)
-    }, [])
+    }, []);
+
 
     const toggleCamera = () => {
         const newCamera = currentCamera === 'back' ? 'front' : 'back';
+        console.log("NEWCAMERA====", newCamera)
         setCurrentCamera(newCamera);
     };
 
-
-
     const recordVideos = useCallback(() => {
-        setIsPressed(true);
         if (!cameraRef.current) {
             return;
         }
+
         cameraRef.current.startRecording({
-            onRecordingFinished: (video) => setPath(video.path),
-            onRecordingError: (error) => console.error("err", error),
+            videoCodec: 'h264',
+            // videoBitRate: 'extra-low',
+            onRecordingFinished: (video) => {
+                const pathVideo = video.path;
+                setPath(pathVideo)
+                dispatch(saveRecordingVideoUser(pathVideo))
+            },
+            onRecordingError: (error) => console.error("ON-RECORD-ERR-----", error),
         });
 
     }, [cameraRef, path]);
 
-    const stopRecording = async () => {
-        await cameraRef.current?.stopRecording();
+
+    const stopRecordings = async () => {
+
+        try {
+            await cameraRef.current?.stopRecording();
+            console.log("Stop-Recording-Function_Called")
+        } catch (error) {
+            console.log("RECORDINGESTOPErr------", error)
+        }
+        // setTimeLeft(null);
     };
 
-    const saverecordingvideo = () => {
-        setIsVisible(true)
+    const resumeRecording = async () => {
+        try {
+            await cameraRef.current.resumeRecording()
+            console.log("RESUME_REC--")
+        } catch (error) {
+            console.log("ERR-RESUME_REC--", error)
+        }
+    };
+
+
+    const pauseRecordings = async () => {
+        try {
+            await cameraRef.current.pauseRecording();
+            console.log("PAUSEERecording---")
+        } catch (error) {
+            console.log("PAUSEERR---", error)
+        }
     }
 
+
+    const saverecordingvideo = () => {
+        setIsVisible(true);
+        stopRecordings();
+    }
+
+
+
+    useFocusEffect(
+        useCallback(() => {
+            if (checkVideoisTrue) {
+                const currentIndex = addedUsers.indexOf(currentDisplayUser);
+                const nextIndex = (currentIndex + 1) % addedUsers.length;
+                const nextPlayer = (currentIndex + 2) % addedUsers.length;
+
+                if (currentIndex !== addedUsers?.length - 1) {
+                    setCurrentDisplayUser(addedUsers[nextIndex]);
+                    setIsNextUser(addedUsers[nextPlayer])
+                    if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0 && timeLeft == 0) {
+                        // stopRecordings();
+                        // dispatch(saveRecordingVideoUser(path));
+                        console.log("CALLED-STOP-RECORDING And----")
+                        return setIsNext(false);
+                    };
+
+                } else {
+                    console.log("add players in Game Completed");
+                }
+            }
+        }, [checkVideoisTrue])
+    )
+
+    useFocusEffect(
+        useCallback(() => {
+            setIsActive(true)
+            return () => {
+                setIsActive(false)
+            }
+        }, [])
+    )
+
+    console.log("Is Active :", isActive);
+
+    useFocusEffect(
+        useCallback(() => {
+            setTimeLeft(null);
+            setIsPressed(false);
+            dispatch(checkVideoTrue(false));
+            return () => {
+                dispatch(extendStoryCheckVideo(false));
+            }
+            // dispatch(extendStoryCheckVideo(false));
+        }, [])
+    );
+
     const handleStart = () => {
-        setTimeLeft(120);
-        recordVideos()
+
+        if (extendStoryCheckVideoTrue == true) {
+            resumeRecording();
+            setIsPressed(true);
+            setTimeLeft(30);
+            // console.log("is next :", isNext);
+        } else if (extendVideoCheck == true) {
+            resumeRecording();
+            setIsPressed(true);
+            setTimeLeft(30);
+        }
+
+        if (timeLeft !== 0) {
+            // if (timeLeft == null) {
+            if (extendStoryCheckVideoTrue == null) {
+                setIsPressed(true);
+                setTimeLeft(30);
+                recordVideos();
+            }
+
+            // resumeRecording();
+            // stopRecordings()
+            // }
+        }
+
     };
+
+
+    const onpressNextHandler = () => {
+        navigation.navigate(SECOND_USER_STORY)
+    }
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
 
-            <Text style={{marginBottom:'auto',marginTop:"auto",alignSelf:'center',fontWeight:'bold',fontSize:18}}>Play Flow Coming Soon</Text>
-{/* 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
@@ -140,13 +295,14 @@ const VideoFirstUser = () => {
                 </View>
             </View>
 
+
             <View>
                 <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
                         {
                             !showCamera ?
                                 <ImageBackground style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }} source={require("../../../../assets/bgImage-video.png")}>
-                                    <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+                                    <UserNames backgroundColor="rgba(0,0,0,0.5)" />
                                     <View>
                                         {
                                             !activeCamera &&
@@ -159,21 +315,23 @@ const VideoFirstUser = () => {
                                 <>
                                     <View>
                                         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999 }}>
-                                            <UserNames backgroundColor="rgba(0,0,0,0.5)" username="@Cedrick101" />
+                                            <UserNames backgroundColor="rgba(0,0,0,0.5)" currentDisplayUser={currentDisplayUser} />
                                         </View>
 
                                         <Camera
                                             ref={cameraRef}
                                             style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
                                             device={activeCamera}
-                                            isActive={true}
+                                            isActive={isActive}
                                             video={true}
                                             resizeMode='cover'
-                                            photo={true}
                                         />
+
                                     </View>
                                 </>
                         }
+
+
                     </View>
                 </ImageBackground>
 
@@ -184,29 +342,39 @@ const VideoFirstUser = () => {
             </View>
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity
-                    onLongPress={handleStart}
-                    onPressOut={handlePressOut}
-                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH / 3, height: responsiveHeight(15), borderRadius: responsiveWidth(50), justifyContent: 'center', alignItems: "center" }}>
+                <TouchableOpacity onPress={() => {
+                    handleStart();
+                }}
+                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
+                    {/* <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} /> */}
                 </TouchableOpacity>
             </View>
 
-            <View>
-                <TouchableButton text="Next Player: @oliverpierce" backgroundColor={TextColorGreen} color="#FFF" />
-                <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} />
+            {/* <View> */}
+
+            {
+                isNext &&
+                <CustomVideoPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />
+            }
+
+            {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
+
+            <View style={{ paddingTop: responsiveWidth(6) }}>
+                <SaveStoryBtn onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} />
             </View>
+
+            {/* </View> */}
 
             {
                 isVisible &&
-                <SaveVideo isVisible={isVisible} setIsVisible={setIsVisible} />
-            } */}
+                <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
+            }
+
 
         </ImageBackground>
     )
 };
-
-
 
 const styles = StyleSheet.create({
     container: {

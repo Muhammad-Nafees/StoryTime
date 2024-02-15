@@ -30,8 +30,8 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import FrameContent from '../../../components/FrameContent';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
@@ -50,9 +50,8 @@ import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const Categories = () => {
-  const {width, height} = Dimensions.get('window');
-  const {SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON} = Img_Paths;
-  // const { data, loading } = useSelector((state) => state.getcategories);
+  const { width, height } = Dimensions.get('window');
+  const { SPLASH_SCREEN_IMAGE, LOCATION_ICON, LUDO_ICON } = Img_Paths;
   const randomRes = useSelector(state => state?.randomCategory?.data);
   const loadingrandom = useSelector(state => state?.randomCategory?.loading);
   const [isRandom, setIsRandom] = useState(false);
@@ -64,6 +63,7 @@ const Categories = () => {
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
   const [isTriggered, setIsTriggered] = useState(false);
+  const [page, setPage] = useState(1);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const {user} = useSelector(state => state?.authSlice);
 
@@ -143,10 +143,11 @@ const Categories = () => {
         id: response?.data?._id,
         name: response?.data?.name,
       });
+      console.log("response_id", response?.data?._id)
       setRandomId(response?.data?._id);
       setRandomName(response?.data?.name);
       return response;
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleStoryUser = (id, name) => {
@@ -173,15 +174,23 @@ const Categories = () => {
     }
     fetchUsers();
   };
-
   const generateRandomNumber = useMemo(() => {
     return (numDigits) => {
-      const min = Math.pow(10, numDigits - 1); // Minimum value with specified number of digits
-      const max = Math.pow(10, numDigits) - 1; // Maximum value with specified number of digits
-      return Math.floor(Math.random() * (max - min + 1)) + min; // Generate random number within range
+      const min = Math.pow(10, numDigits - 1);
+      const max = Math.pow(10, numDigits) - 1;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     };
   }, []);
-  const guestNumber = generateRandomNumber(4)
+
+  const guestNumberRef = useRef(null);
+  useEffect(() => {
+    if (!guestNumberRef.current) {
+      const guestNumber = generateRandomNumber(4);
+      guestNumberRef.current = guestNumber;
+    }
+  }, [generateRandomNumber]);
+  const guestNumber = guestNumberRef.current;
+
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <ScrollView>
@@ -195,12 +204,12 @@ const Categories = () => {
           </View>   
         </View>
 
-      {!user?
+    {!user?
           <View style={{marginTop:moderateVerticalScale(10)}}>
         <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
           <SvgIcons name={'Guest'} width={36} height={36} />
         </View>
-          <Text style={styles.text}>Guest2456</Text>
+          <Text style={styles.text}>Guest{guestNumber}</Text>
         </View>:<></>}
     </View>
    
@@ -221,7 +230,7 @@ const Categories = () => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
+            <View style={{ marginHorizontal: moderateScale(10) }}>
               <Text
                 style={{
                   color: '#393939',
@@ -299,7 +308,7 @@ const Categories = () => {
               </View>
             ))
           ) : (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <ActivityIndicator size={40} color={'#000'} />
             </View>
           )}

@@ -106,7 +106,7 @@ const Register = () => {
         setIsLoading(false);
         const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
       }}
-      >
+    >
       {({
         values,
         errors,
@@ -167,7 +167,7 @@ const Register = () => {
 
                 <CustomPhoneInput
                   value={values.phoneNo}
-                  error={errors.phoneNo} //validation schema
+                  error={errors.phoneNo}
                   touched={touched.phoneNo}
                   handleChange={handleChange('phoneNo')}
                   setFieldValue={setFieldValue}
@@ -201,8 +201,8 @@ const Register = () => {
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),
-                      backgroundColor: validate(values)? '#395E66'
-                          : 'rgba(57, 94, 102, 0.6)',
+                      backgroundColor: validate(values) ? '#395E66'
+                        : 'rgba(57, 94, 102, 0.6)',
                       borderRadius: 10,
                       borderWidth: 1,
                       borderColor: '#395E66',
@@ -210,8 +210,8 @@ const Register = () => {
                       alignItems: 'center',
                       height: responsiveHeight(6.6),
                     }}
-                    // disabled={!validate(values)}
-                    >
+                  // disabled={!validate(values)}
+                  >
                     <Text
                       style={{
                         fontSize: responsiveFontSize(1.9),

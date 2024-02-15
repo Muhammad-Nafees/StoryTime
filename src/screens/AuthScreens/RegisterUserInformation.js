@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -30,31 +30,33 @@ import {
 } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {useDispatch, useSelector} from 'react-redux';
-import {registeruser_city} from '../../../store/slices/authSlice';
-import {userinfocity} from '../../../store/slices/authStatesandCity/userinfoCity';
-import {Path, Svg} from 'react-native-svg';
-import {Formik} from 'formik';
-import {zipCodeValidation} from '../../../validation/validation';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { registeruser_city } from '../../../store/slices/authSlice';
+import { userinfocity } from '../../../store/slices/authStatesandCity/userinfoCity';
+import { Path, Svg } from 'react-native-svg';
+import { Formik } from 'formik';
+import { zipCodeValidation } from '../../../validation/validation';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const RegisterUserInformation = ({}) => {
-  const {REGISTER_PASSWORD} = NavigationsString;
+const RegisterUserInformation = ({ }) => {
+  const { REGISTER_PASSWORD } = NavigationsString;
   const [currentvalueState, setCurrentValueState] = useState('Select here');
   const [currentvalue, setCurrentValue] = useState('');
   const [isopenState, setIsOpenState] = useState(false);
   const [isOpenCity, setIsOpenCity] = useState(false);
   const [currentvalueCity, setCurrentValueCity] = useState('Selected Here');
   const [isLoading, setIsLoading] = useState(false);
+  const [changeColor, setChangeColor] = useState("#AAA")
+  const [secondChangeColor, setSecondChangeColor] = useState("#AAA")
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {userdata, loading} = useSelector(state => state?.userinfostate);
-  const {userdatacity} = useSelector(state => state?.userinfocity);
+  const { userdata, loading } = useSelector(state => state?.userinfostate);
+  const { userdatacity } = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
-  const {height} = Dimensions.get('window');
+  const { height } = Dimensions.get('window');
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
   const SCREENWIDTH = Dimensions.get('window').width;
@@ -82,7 +84,7 @@ const RegisterUserInformation = ({}) => {
       }}
       validationSchema={zipCodeValidation}
       validateOnChange={false}
-      onSubmit={async (values, {setSubmitting}) => {
+      onSubmit={async (values, { setSubmitting }) => {
         dispatch(
           registeruser_city({
             state: values.state,
@@ -101,7 +103,7 @@ const RegisterUserInformation = ({}) => {
         setFieldValue,
         handleChange,
       }) => (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.container}>
             <View style={styles.img_container}>
               <Image
@@ -113,8 +115,8 @@ const RegisterUserInformation = ({}) => {
             <View>
               {/* State----------- */}
 
-              <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                <Text style={[styles.text, {color: FourthColor}]}>State</Text>
+              <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                <Text style={[styles.text, { color: FourthColor }]}>State</Text>
               </View>
 
               <View
@@ -137,25 +139,29 @@ const RegisterUserInformation = ({}) => {
                       justifyContent: 'flex-start',
                       paddingHorizontal: 25,
                     },
-                    errors.state && {borderColor: 'red', borderWidth: 2},
+                    errors.state && { borderColor: 'red', borderWidth: 2 },
                   ]}
                   rowTextStyle={{
                     textAlign: 'left',
                     fontSize: responsiveFontSize(1.9),
                   }}
-                  rowStyle={{paddingHorizontal: 8}}
-                  dropdownStyle={{borderRadius: 10}}
+                  rowStyle={{ paddingHorizontal: 8 }}
+                  dropdownStyle={{ borderRadius: 10 }}
                   buttonTextStyle={{
                     textAlign: 'left',
                     fontSize: responsiveFontSize(1.9),
+                    color: changeColor
                   }}
                   renderDropdownIcon={() => (
                     <Image
-                      style={{width: 16, height: 16, resizeMode: 'center'}}
+                      style={{ width: 16, height: 16, resizeMode: 'center' }}
                       source={require('../../assets/bottom-icon.png')}
                     />
                   )}
                   onSelect={(selectedItem, index) => {
+                    if (selectedItem) {
+                      setChangeColor("#000")
+                    }
                     setFieldValue('state', selectedItem);
                     const cities = userdata?.data?.find(
                       data => data?.name === selectedItem,
@@ -179,8 +185,8 @@ const RegisterUserInformation = ({}) => {
               </View>
               {/* City------------ */}
               <View>
-                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                  <Text style={[styles.text, {color: FourthColor}]}>City</Text>
+                <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                  <Text style={[styles.text, { color: FourthColor }]}>City</Text>
                 </View>
                 <View
                   style={{
@@ -195,10 +201,11 @@ const RegisterUserInformation = ({}) => {
                     // searchPlaceHolderColor={"red"}
                     renderDropdownIcon={() => (
                       <Image
-                        style={{width: 16, height: 16, resizeMode: 'center'}}
+                        style={{ width: 16, height: 16, resizeMode: 'center' }}
                         source={require('../../assets/bottom-icon.png')}
                       />
                     )}
+
                     buttonStyle={[
                       {
                         width: '80%',
@@ -207,19 +214,24 @@ const RegisterUserInformation = ({}) => {
                         justifyContent: 'flex-start',
                         paddingHorizontal: 25,
                       },
-                      errors.state && {borderColor: 'red', borderWidth: 2},
+
+                      errors.state && { borderColor: 'red', borderWidth: 2 },
                     ]}
                     rowTextStyle={{
                       textAlign: 'left',
                       fontSize: responsiveFontSize(1.9),
                     }}
-                    rowStyle={{paddingHorizontal: 8}}
-                    dropdownStyle={{borderRadius: 10}}
+                    rowStyle={{ paddingHorizontal: 8 }}
+                    dropdownStyle={{ borderRadius: 10, }}
                     buttonTextStyle={{
                       textAlign: 'left',
                       fontSize: responsiveFontSize(1.9),
+                      color: secondChangeColor
                     }}
                     onSelect={(selectedItem, index) => {
+                      if (selectedItem) {
+                        setSecondChangeColor("#000")
+                      }
                       setFieldValue('city', selectedItem);
                       console.log('selectitem', selectedItem);
                     }}
@@ -234,8 +246,8 @@ const RegisterUserInformation = ({}) => {
               </View>
 
               <View>
-                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                  <Text style={[styles.text, {color: FourthColor}]}>
+                <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                  <Text style={[styles.text, { color: FourthColor }]}>
                     Zip Code
                   </Text>
                 </View>
@@ -256,7 +268,7 @@ const RegisterUserInformation = ({}) => {
                     marginLeft: 'auto',
                     paddingBottom: responsiveWidth(2),
                   }}>
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <View>
                       <Svg
                         width={20}
@@ -266,7 +278,7 @@ const RegisterUserInformation = ({}) => {
                         <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                       </Svg>
                     </View>
-                    <View style={{paddingHorizontal: moderateScale(5)}}>
+                    <View style={{ paddingHorizontal: moderateScale(5) }}>
                       <Text
                         style={{
                           color: 'red',
@@ -283,7 +295,7 @@ const RegisterUserInformation = ({}) => {
 
             {/* Next and Back------------ */}
 
-            <View style={{marginTop: responsiveWidth(30)}}>
+            <View style={{ marginTop: responsiveWidth(30) }}>
               <TouchableButton
                 onPress={
                   values.city !== '' && values.state !== '' && values.zip !== ''
@@ -298,7 +310,7 @@ const RegisterUserInformation = ({}) => {
                 color="#FFF"
                 text="Next"
               />
-              <View style={{paddingVertical: moderateVerticalScale(7)}}>
+              <View style={{ paddingVertical: moderateVerticalScale(7) }}>
                 <TouchableButton
                   onPress={() => navigation.goBack()}
                   backgroundColor="#FFF"

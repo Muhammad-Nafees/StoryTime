@@ -1,66 +1,36 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from "../assets/Imagepaths/index";
-import BackButton from '../components/BackButton';
-import NavigationsString from '../constants/NavigationsString';
-import TouchableButton from './TouchableButton';
-import RNFS from 'react-native-fs';
-import { useDispatch, useSelector } from 'react-redux';
-import { recordingToHome } from '../../store/slices/RecordingData';
-import RNFetchBlob from 'rn-fetch-blob';
-import Pdf from 'react-native-pdf';
-
-const SaveStory = ({ isVisible, setVisible }) => {
-
-    const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
-    const navigation = useNavigation();
-    const RecordingText = useSelector((state) => state.RecordingData.recordingText)
-    const dispatch = useDispatch()
-
-    const saveVoicetoHome = () => {
-        dispatch(recordingToHome(RecordingText))
-        Alert.alert("Recording Text Saved to Home")
-    }
-
-    const downloadFile = () => {
-        const date = new Date();
-        const fileDir = RNFS.DownloadDirectoryPath;
-
-        const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
-        const recordingText = RecordingText;
-        RNFS.writeFile(filePath, recordingText, 'utf8')
-            .then((success) => {
-                console.log('File saved at: ', filePath);
-                Alert.alert('File downloaded successfully');
-            })
-            .catch((err) => {
-                console.error(err);
-                Alert.alert('Error in downloading file');
-            });
-    }
+import { Img_Paths } from '../../assets/Imagepaths';
+import { Circle, Path, Svg } from 'react-native-svg';
 
 
+const StoryTimeSaved = ({ isVisible, setVisible, text, onPress, textButton }) => {
+
+    const { BG_PLAYFLOW } = Img_Paths;
 
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-                <View>
-                    {/* Back Button */}
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                        <BackButton onPress={() => setVisible(false)} />
+                <View style={{ width: responsiveWidth(80), height: responsiveHeight(24), backgroundColor: "#FFF", borderRadius: 30 }}>
+
+                    <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12) }}>
+                        <Svg width="35" height="34" viewBox="0 0 35 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
+                            <Path d="M24.5 13L14.875 22L10.5 17.9091" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </Svg>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), color: "#000", textAlign: "center", lineHeight: 24 }}>{text}</Text>
                     </View>
-                    <View style={styles.container}>
-                        <TouchableButton onPress={saveVoicetoHome} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        <TouchableButton onPress={downloadFile} text="Save as Pdf" color={"#FFF"} />
+
+                    <View style={{ justifyContent: "center", alignItems: "center" }}>
+                        <TouchableOpacity onPress={() => setVisible(false)} style={{ width: responsiveWidth(60), backgroundColor: TextColorGreen, borderRadius: 10, justifyContent: "center", alignItems: "center", height: responsiveHeight(6.6) }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: "#FFF", }}>{textButton}</Text>
+                        </TouchableOpacity>
                     </View>
+
 
                 </View>
             </ImageBackground>
@@ -71,20 +41,22 @@ const SaveStory = ({ isVisible, setVisible }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: SecondaryColor,
+        backgroundColor: "#000",
         width: "100%",
         height: "100%",
         flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
     },
     img: {
         resizeMode: "center"
     },
-    container: {
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: moderateVerticalScale(10),
-        flex: 1
-    },
+    // container: {
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     paddingVertical: moderateVerticalScale(10),
+    //     flex: 1
+    // },
     img_backgroung_content: {
         width: responsiveWidth(90),
         height: responsiveHeight(32),
@@ -175,4 +147,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SaveStory;
+export default StoryTimeSaved;

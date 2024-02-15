@@ -188,7 +188,7 @@ const FrameContent = ({
                                                     />
                                                 </MenuTrigger>
 
-                                                <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, } }}>
+                                                <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: responsiveWidth(10), width: responsiveWidth(45) } }}>
                                                     <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
                                                     </MenuOption>
@@ -241,19 +241,13 @@ const styles = StyleSheet.create({
         height: responsiveHeight(28),
         marginTop: responsiveWidth(2),
         borderRadius: 18,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+
     },
 
     second_childbg: {
         marginLeft: "auto",
-        width: responsiveWidth(69)
+        width: responsiveWidth(69),
+
     },
 
     third_childbg: {

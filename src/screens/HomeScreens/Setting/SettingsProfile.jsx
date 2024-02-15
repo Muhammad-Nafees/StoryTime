@@ -6,8 +6,8 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useRef, useEffect, useMemo} from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import ScreenHeader from '../../../components/ScreenHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -21,8 +21,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Formik} from 'formik';
-import {validationSettingsProfile} from '../../../../validation/validation';
+import { Formik } from 'formik';
+import { validationSettingsProfile } from '../../../../validation/validation';
 import CustomInput from '../../../components/CustomInput';
 import UploadImage from '../../../components/UploadImage';
 import CustomPhoneInput from '../../../components/CustomPhoneInput';
@@ -36,15 +36,15 @@ import {
   ThirdColor,
 } from '../../Styles/Style';
 import SelectDropdown from 'react-native-select-dropdown';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TextInputField from '../../../components/TextInputField';
-import {Path, Svg} from 'react-native-svg';
-import {useNavigation} from '@react-navigation/native';
+import { Path, Svg } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 import {
   getUserProfileData,
   updateUserProfileData,
 } from '../../../../services/api/settings';
-import {userinfocity} from '../../../../store/slices/authStatesandCity/userinfoCity';
+import { userinfocity } from '../../../../store/slices/authStatesandCity/userinfoCity';
 import {
   userinfoState,
   userdata,
@@ -56,7 +56,7 @@ import { login } from '../../../../store/slices/authSlice';
 const SettingsProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON} = Img_Paths;
+  const { BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON } = Img_Paths;
 
   const uploadProfileImageRef = useRef(null);
   const uploadCoverImageRef = useRef(null);
@@ -72,14 +72,14 @@ const SettingsProfile = () => {
   const [phoneError, setPhoneError] = useState('');
   const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
 
-  const {userdata, loading} = useSelector(state => state?.userinfostate);
-  const {userdatacity} = useSelector(state => state?.userinfocity);
+  const { userdata, loading } = useSelector(state => state?.userinfostate);
+  const { userdatacity } = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
   const namesCities = userdatacity?.data?.map(item => item?.name);
 
 
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
     username: '',
     firstName: '',
@@ -90,11 +90,11 @@ const SettingsProfile = () => {
     state: '',
     city: '',
   });
-const [profileImage, setProfileImage] = useState(null)
-const [coverImage, setCoverImage] = useState(null)
+  const [profileImage, setProfileImage] = useState(null)
+  const [coverImage, setCoverImage] = useState(null)
 
   const handleFormSubmit = async values => {
-    const payload = {...(values || {}),...(profileImage?.uri && {profileImage : profileImage?.uri}), ...(coverImage?.uri && {coverImage : coverImage?.uri})}
+    const payload = { ...(values || {}), ...(profileImage?.uri && { profileImage: profileImage?.uri }), ...(coverImage?.uri && { coverImage: coverImage?.uri }) }
     const response = await updateUserProfileData(payload);
     dispatch(login(response))
     navigation.goBack();
@@ -102,7 +102,7 @@ const [coverImage, setCoverImage] = useState(null)
 
   const getData = async () => {
     const uid = user?.data?.user?._id;
-    let {data} = await getUserProfileData(uid);
+    let { data } = await getUserProfileData(uid);
     console.log('🚀 ~ getData ~ data:', data);
 
     const payload = {
@@ -117,18 +117,19 @@ const [coverImage, setCoverImage] = useState(null)
       state: data?.state || '',
       zipCode: data?.zipCode || '',
     };
-    if(data?.profileImage){
-      setProfileImage({uri :`${base}${data?.profileImage}`})
+
+    if (data?.profileImage) {
+      setProfileImage({ uri: `${base}${data?.profileImage}` })
     }
-    if(data?.coverImage){
-      setCoverImage({uri :`${base}${data?.coverImage}`})
+    if (data?.coverImage) {
+      setCoverImage({ uri: `${base}${data?.coverImage}` })
     }
     handleCountryCodeChange(data?.countryCode);
     handleInitCity(data?.city)
     setinitialData(payload);
   };
 
-  const handleInitCity = (cityName) =>{
+  const handleInitCity = (cityName) => {
     const cities = userdata?.data?.find(
       data => data?.name === cityName,
     );
@@ -156,20 +157,20 @@ const [coverImage, setCoverImage] = useState(null)
     if (ref.current) {
       ref.current.open();
     }
- 
+
   };
 
   return (
     <BackgroundWrapper>
       <ImageBackground
-        source={coverImage?.uri ?{uri : coverImage?.uri} : BG_CONTAINER}
+        source={coverImage?.uri ? { uri: coverImage?.uri } : BG_CONTAINER}
         style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>
-      <View style={{width: SCREEN_WIDTH}}>
+      <View style={{ width: SCREEN_WIDTH }}>
         <View style={styles.avatar_wrapper}>
           <Image
-            source={profileImage?.uri ?{uri : profileImage?.uri} : DEFAULT_ICON}
+            source={profileImage?.uri ? { uri: profileImage?.uri } : DEFAULT_ICON}
             style={styles.avatar}
             resizeMode='contain'
           />
@@ -204,7 +205,7 @@ const [coverImage, setCoverImage] = useState(null)
         }) => (
           <>
             {console.log('values', values.state)}
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <CustomInput
                 label="Username"
                 placeholder="Type here"
@@ -283,8 +284,8 @@ const [coverImage, setCoverImage] = useState(null)
               {namesCities?.length > 0 && (
                 <View>
                   <View
-                    style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                    <Text style={[styles.text, {color: FourthColor}]}>
+                    style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                    <Text style={[styles.text, { color: FourthColor }]}>
                       City
                     </Text>
                   </View>
@@ -302,7 +303,7 @@ const [coverImage, setCoverImage] = useState(null)
                       // searchPlaceHolderColor={"red"}
                       renderDropdownIcon={() => (
                         <Image
-                          style={{width: 16, height: 16, resizeMode: 'center'}}
+                          style={{ width: 16, height: 16, resizeMode: 'center' }}
                           source={DROP_ICON}
                         />
                       )}
@@ -314,14 +315,14 @@ const [coverImage, setCoverImage] = useState(null)
                           justifyContent: 'flex-start',
                           paddingHorizontal: 25,
                         },
-                        errors.state && {borderColor: 'red', borderWidth: 2},
+                        errors.state && { borderColor: 'red', borderWidth: 2 },
                       ]}
                       rowTextStyle={{
                         textAlign: 'left',
                         fontSize: responsiveFontSize(1.9),
                       }}
-                      rowStyle={{paddingHorizontal: 8}}
-                      dropdownStyle={{borderRadius: 10}}
+                      rowStyle={{ paddingHorizontal: 8 }}
+                      dropdownStyle={{ borderRadius: 10 }}
                       buttonTextStyle={{
                         textAlign: 'left',
                         fontSize: responsiveFontSize(1.9),
@@ -345,8 +346,8 @@ const [coverImage, setCoverImage] = useState(null)
               {namesArray?.length > 0 && (
                 <>
                   <View
-                    style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                    <Text style={[styles.text, {color: FourthColor}]}>
+                    style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                    <Text style={[styles.text, { color: FourthColor }]}>
                       State
                     </Text>
                   </View>
@@ -369,21 +370,21 @@ const [coverImage, setCoverImage] = useState(null)
                           justifyContent: 'flex-start',
                           paddingHorizontal: 25,
                         },
-                        errors.state && {borderColor: 'red', borderWidth: 2},
+                        errors.state && { borderColor: 'red', borderWidth: 2 },
                       ]}
                       rowTextStyle={{
                         textAlign: 'left',
                         fontSize: responsiveFontSize(1.9),
                       }}
-                      rowStyle={{paddingHorizontal: 8}}
-                      dropdownStyle={{borderRadius: 10}}
+                      rowStyle={{ paddingHorizontal: 8 }}
+                      dropdownStyle={{ borderRadius: 10 }}
                       buttonTextStyle={{
                         textAlign: 'left',
                         fontSize: responsiveFontSize(1.9),
                       }}
                       renderDropdownIcon={() => (
                         <Image
-                          style={{width: 16, height: 16, resizeMode: 'center'}}
+                          style={{ width: 16, height: 16, resizeMode: 'center' }}
                           source={DROP_ICON}
                         />
                       )}
@@ -413,8 +414,8 @@ const [coverImage, setCoverImage] = useState(null)
               )}
 
               <View>
-                <View style={{width: responsiveWidth(89), marginLeft: 'auto'}}>
-                  <Text style={[styles.text, {color: FourthColor}]}>
+                <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
+                  <Text style={[styles.text, { color: FourthColor }]}>
                     Zip Code
                   </Text>
                 </View>
@@ -439,10 +440,10 @@ const [coverImage, setCoverImage] = useState(null)
                     width: responsiveWidth(80),
                     backgroundColor:
                       values.email &&
-                      values.firstName &&
-                      values.lastName &&
-                      values.phoneNo &&
-                      values.username
+                        values.firstName &&
+                        values.lastName &&
+                        values.phoneNo &&
+                        values.username
                         ? '#395E66'
                         : 'rgba(57, 94, 102, 0.6)',
                     borderRadius: 10,
@@ -510,7 +511,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     alignSelf: 'center',
-    borderRadius:100
+    borderRadius: 100
     // backgroundColor:'red',
   },
   icon_container: {
