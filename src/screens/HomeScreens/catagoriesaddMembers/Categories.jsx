@@ -65,15 +65,12 @@ const Categories = () => {
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
 
   // Get Categories Api ----------
-  const route = useRoute();
-  const {params} = route;
-  const flow = params?.flow;
-  console.log(flow);
+  let flow = 'guest';
 
   const fetchCategoriesUntilFound = async searchTerm => {
     let page = 1;
     let found = false;
-    let result = [];
+    let array = []
 
     try {
       while (!found) {
@@ -81,16 +78,18 @@ const Categories = () => {
 
         if (response.data && response.data.categories) {
           const responseArray = response.data.categories;
+          array= [...array,...responseArray]
 
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
           console.log('filter', filteredCategories);
           if (filteredCategories.length > 0) {
-            result = result.concat(filteredCategories);
+            array = array.filter(el=> !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            setResponseCategories([filteredCategories?.[0],...array]);
+            setIsLoading(false);
             found = true;
           } else if (responseArray.length > 0) {
-            result = result.concat(responseArray);
             page++;
           } else {
             // No more data available
@@ -108,18 +107,17 @@ const Categories = () => {
 
     return result;
   };
-  const callFunction = async searchTerm => {
-    const categories = await fetchCategoriesUntilFound(searchTerm);
-    console.log('test', categories);
-  };
 
   const fetchUsers = async (page = 1) => {
     setIsLoading(true);
     try {
+      if (flow === 'guest') {
+        fetchCategoriesUntilFound('animals');
+        return;
+      }
       const response = await get_Categories_Sub_Categories(page);
-      setIsLoading(false);
       setResponseCategories(response.data?.categories);
-      return response;
+      setIsLoading(false);
     } catch (error) {
       console.log('error---', error);
     }
@@ -128,7 +126,6 @@ const Categories = () => {
   useFocusEffect(
     useCallback(() => {
       fetchUsers();
-      callFunction('animals');
     }, []),
   );
 
@@ -156,9 +153,9 @@ const Categories = () => {
   //     }, [])
   // );
 
-  const validate = (category) => {
-    return category?.name !== 'Animals' || flow === 'guest'
-  }
+  const isCategoryBlurred = category => {
+    return category?.name !== 'Animals' && flow === 'guest';
+  };
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -237,7 +234,7 @@ const Categories = () => {
                   height: responsiveHeight(18.5),
                   alignItems: 'center',
                   margin: responsiveWidth(1.2),
-                  borderWidth:!!validate(category)? 0 : 3,
+                  borderWidth: !!isCategoryBlurred(category) ? 0 : 3,
                   borderColor: '#5797A5',
                 }}>
                 <StoryUsers
@@ -246,24 +243,25 @@ const Categories = () => {
                   text={category?.name}
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(199, 152, 97, 1)"
-                  disabled={validate(category)}
+                  disabled={!!isCategoryBlurred(category)}
                 />
-          
-             <View style={styles.blur_wrapper}>
-                <BlurView
-                  style={styles.blur_view}
-                  blurAmount={10}
-                  overlayColor='transparent'
-                  >
-                    <View style={styles.blur_content_container}>
-                  <Text style={{
-                    alignSelf:'center'
-                  }}>TALA</Text>
 
+               {!!isCategoryBlurred(category)&& <View style={styles.blur_wrapper}>
+                  <BlurView
+                    style={styles.blur_view}
+                    blurAmount={10}
+                    overlayColor="transparent">
+                    <View style={styles.blur_content_container}>
+                      <Text
+                        style={{
+                          alignSelf: 'center',
+                        }}>
+                        TALA
+                      </Text>
                     </View>
-                </BlurView>
-                    </View>
-                  </View>
+                  </BlurView>
+                </View>}
+              </View>
             ))
           ) : (
             <View style={{flex: 1}}>
@@ -397,19 +395,18 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   blur_view: {
-    flex:1,
+    flex: 1,
   },
   blur_wrapper: {
     position: 'absolute',
     width: responsiveWidth(30),
     height: responsiveHeight(18.5),
-    borderRadius:10,
-    overflow:'hidden'
+    borderRadius: 10,
+    overflow: 'hidden',
   },
-  blur_content_container:{
+  blur_content_container: {
     backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
-  }
-
+  },
 });
 
 export default Categories;
