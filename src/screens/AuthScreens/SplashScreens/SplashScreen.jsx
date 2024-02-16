@@ -1,30 +1,28 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
-import { PrimaryColor, SecondaryColor, ThirdColor } from '../../Styles/Style';
+import { SecondaryColor, } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import AuthImage from '../../../components/AuthImage';
-import TouchableButton from '../../../components/TouchableButton';
-
+import NavigationsString from '../../../constants/NavigationsString';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 
 const SplashScreen = () => {
+    const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths
+    const { LOGIN } = NavigationsString
 
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
 
     return (
-
-        <ImageBackground style={styles.container} source={require("../../../assets/splash-bg.png")}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={require("../../../assets/story-time.png")} />
+        <ImageBackground style={styles.container} source={BG_IMAGE_ELEMENTS}>
+            <View style={styles.story_time_container}>
+                <Image style={[styles.img, { width: width * 0.8, height: height * 0.3, }]} source={STORY_TIME_IMG} />
             </View>
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <AuthImage ImageSource={require("../../../assets/background-frame-img.png")} />
-                <AuthImage onPress={() => navigation.navigate("Login")} ImageSource={require("../../../assets/login-img.png")} />
-            </View>
-
-            <View style={{ marginTop: 22 }}>
-                <TouchableButton color="#FFF" backgroundColor="#395E66" text="Subscribe for AD FREE experience" />
+                <AuthImage onPress={() => navigation.navigate("GuestStack")} ImageSource={BG_FRAME} />
+                <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
 
         </ImageBackground>
@@ -37,11 +35,16 @@ export default SplashScreen;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
+        flex: 1,
         width: "100%",
         height: "100%",
     },
     img: {
-        marginVertical: 8,
-        resizeMode: "center"
+        marginVertical: moderateVerticalScale(8),
+        resizeMode: "center",
+    },
+    story_time_container: {
+        justifyContent: "center",
+        alignItems: "center"
     }
 })

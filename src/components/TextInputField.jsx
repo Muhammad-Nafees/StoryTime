@@ -1,33 +1,68 @@
-import React from 'react'
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions"
-import { FourthColor, SecondaryColor, TextinputColor, ThirdColor } from '../screens/Styles/Style'
-import Icon from "react-native-vector-icons/Feather"
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {
+  FourthColor,
+  SecondaryColor,
+  TextinputColor,
+  ThirdColor,
+} from '../screens/Styles/Style';
+import Icon from 'react-native-vector-icons/Feather';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths';
 
-const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value }) => {
+const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value, onBlur, setShowPassword, }) => {
 
-    return (
+  const { NOT_EYE_ICON, EYE_ICON } = Img_Paths;
 
-        <View style={{ justifyContent: "center", alignItems: "center", marginVertical: 12, }}>
-            <View style={{ flexDirection: type == "password" ? "row" : null, width: responsiveWidth(80), backgroundColor: TextinputColor, borderRadius: 12, height: responsiveHeight(6.5), justifyContent: "center", alignItems: "center", }}>
-                <TextInput placeholder={placeholderText}
-                    onChangeText={onChangeText}
-                    value={value}
-                    placeholderTextColor="#AAAAAA"
-                    secureTextEntry={!showPassword}
-                    style={{ color: "#000", width: type == "password" ? 235 : 260 }} />
+  console.log("onChangeText", value);
+  // console.log("checkState====", checkState)
 
-                {
-                    type == "password" &&
-                    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-                        <Icon name={!showPassword ? "eye" : "eye-off"} size={22} color="#AAAAAA" />
-                    </TouchableOpacity>
-                }
 
-            </View>
-        </View>
+  return (
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: moderateVerticalScale(10),
+      }}>
+      <View
+        style={{
+          flexDirection: type == 'password' ? 'row' : null,
+          width: responsiveWidth(80),
+          backgroundColor: TextinputColor,
+          borderRadius: 12,
+          height: responsiveHeight(6.5),
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
 
-    )
-}
+        <TextInput
+          placeholder={placeholderText}
+          onChangeText={onChangeText}
+          onBlur={onBlur}
+          value={value}
+          keyboardType={type === 'zipcode' ? 'decimal-pad' : 'default'}
+          placeholderTextColor="#AAAAAA"
+          secureTextEntry={type == 'password' ? !showPassword : null}
+          style={{
+            color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 8 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
+          }}
+        />
 
-export default TextInputField
+        {type == 'password' && (
+          <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+            <Image style={{ height: 20, width: 20, resizeMode: "center" }} source={!showPassword ? EYE_ICON : NOT_EYE_ICON} />
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
+};
+
+
+export default TextInputField;

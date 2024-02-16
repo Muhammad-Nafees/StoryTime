@@ -1,85 +1,121 @@
-import React, { useState } from 'react'
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native'
-import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor } from '../../Styles/Style';
-import { responsiveFontSize, responsiveWidth, responsiveHeight } from "react-native-responsive-dimensions"
+import React, { useState } from 'react';
+import {
+    Text,
+    View,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Button,
+    Alert,
+    ActivityIndicator,
+} from 'react-native';
+import {
+    FourthColor,
+    PrimaryColor,
+    SecondaryColor,
+    TextColorGreen,
+    TextinputColor,
+    ThirdColor,
+} from '../../Styles/Style';
+import {
+    responsiveFontSize,
+    responsiveWidth,
+    responsiveHeight,
+} from 'react-native-responsive-dimensions';
 
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
-
+import NavigationsString from '../../../constants/NavigationsString';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import reset_email from '../../../../services/api/auth_mdule/auth';
+import Toast from 'react-native-toast-message';
+import { Formik } from 'formik';
+import { validationforgetEmail } from '../../../../validation/validation';
+import { Path, Svg } from 'react-native-svg';
+import _ from 'lodash';
+import CustomInputForgetEmail from '../../../components/CustomInputForgetEmail';
 
 
 const ForgetEmail = () => {
-
-    const navigation = useNavigation()
+    const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
+    const { FORGET_BG_IMG } = Img_Paths;
+    const [EmailError, setEmailError] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
+    const navigation = useNavigation();
 
     return (
+        <Formik
+            initialValues={{
+                email: '',
+            }}
+            validationSchema={validationforgetEmail}
+            onSubmit={async values => {
 
-        <View style={styles.container}>
-            <View style={styles.img_container}>
-                <Image style={styles.img_child} source={require("../../../assets/forget-bg-img.png")} />
-            </View>
+            }}>
+            {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue, dirty, isValid }) => (
 
-            {/* Password------------ */}
+                <>
+                    <View style={styles.container}>
+                        <View style={styles.img_container}>
+                            <Image style={styles.img_child} source={FORGET_BG_IMG} />
+                        </View>
 
-            <View>
-                <View>
-                    <View style={{ width: "90%", marginLeft: "auto" }}>
-                        <Text style={{ color: FourthColor, fontWeight: "600" }}>Email Address</Text>
+                        {/* Password------------ */}
+
+                        <View>
+                            <View>
+                                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                    <CustomInputForgetEmail
+                                        label="Email Adress"
+                                        placeholder="Type here"
+                                        value={values.email}
+                                        error={errors.email}
+                                        touched={touched.email}
+                                        initialTouched={true}
+                                        setFieldError={setFieldError}
+                                        erroremail={errors?.email}
+                                        handleSubmit={handleSubmit}
+                                        fieldName="email"
+                                        dirty={dirty}
+                                        isValid={isValid}
+                                        handleChange={text => setFieldValue('email', text)}
+                                    />
+                                </View>
+                            </View>
+                            {/* Next------------ */}
+
+                        </View>
+                        <Toast />
                     </View>
-                    <TextInputField placeholderText="Type here" />
-                </View>
-
-                {/* Confirm Password------------ */}
-
-                {/* Next------------ */}
-
-                <View style={{ marginTop: responsiveWidth(85) }}>
-                    <Text style={{ color: TextColorGreen, fontWeight: "600", textAlign: "center", marginVertical: 20 }}>Use phone number instead</Text>
-                    <TouchableButton onPress={() => navigation.navigate("ForgetPhoneNumber")} backgroundColor="#395E66" color="#FFF" text="Next" />
-                </View>
-
-            </View>
-
-        </View>
-    )
-}
-
-
+                </>
+            )}
+        </Formik>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: SecondaryColor
+        width: '100%',
+        height: '100%',
+        backgroundColor: SecondaryColor,
     },
     text: {
         fontSize: responsiveFontSize(1.8),
-        fontWeight: "400"
+        fontWeight: '400',
     },
     img_container: {
-        marginVertical: 22,
-        justifyContent: "center",
-        alignItems: "center"
+        paddingVertical: moderateVerticalScale(22),
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     img_child: {
         width: responsiveWidth(50),
         height: responsiveHeight(20),
-        resizeMode: "center"
+        resizeMode: 'center',
     },
-    text_container: {
-        marginTop: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "90%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-
-})
-
+});
 
 export default ForgetEmail;
-
-
