@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import { validationUserLogin } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 
 
@@ -261,8 +262,9 @@ const styles = StyleSheet.create({
         backgroundColor: SecondaryColor,
     },
     text: {
-        fontSize: responsiveFontSize(1.8),
+        fontSize: responsiveFontSize(1.7),
         fontWeight: '400',
+        fontFamily: Inter_Regular.Inter_Regular
     },
     img_container: {
         paddingVertical: moderateVerticalScale(8),
@@ -277,7 +279,7 @@ const styles = StyleSheet.create({
     text_container: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: responsiveWidth(90),
+        width: responsiveWidth(95),
         justifyContent: 'center',
         alignItems: 'center',
     },

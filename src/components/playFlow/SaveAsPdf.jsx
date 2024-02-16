@@ -64,14 +64,55 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                 <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                     <BackButton onPress={() => setIsVisiblePdf(false)} />
                 </View>
+
                 {/* Back Button */}
+
                 <View style={{ flex: 1, justifyContent: "center" }}>
                     <View style={styles.container2}>
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                         <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
 
                         <View style={{ paddingVertical: 12, }}>
-                            <TouchableButton onPress={createPDF} type="savestoryphone" backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                            {/* <TouchableButton onPress={createPDF} type="savestoryphone" backgroundColor={TextColorGreen} text="Save" color="#FFF" /> */}
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity
+                                    // disabled={}
+                                    onPress={createPDF}
+                                    style={{
+                                        width: responsiveWidth(70),
+                                        backgroundColor: TextColorGreen,
+                                        // backgroundColor:  "red" : "green",
+                                        borderRadius: 10,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: responsiveHeight(6.6),
+                                    }}>
+
+                                    <Text
+                                        style={{
+                                            fontSize: responsiveFontSize(1.9),
+                                            fontWeight: '600',
+                                            letterSpacing: 0.28,
+                                            color: "#FFF",
+                                        }}>
+                                        Save
+                                    </Text>
+
+                                    {/* {isLoading ? (
+          <ActivityIndicator color={'#FFF'} />
+        ) : (
+          <Text
+            style={{
+              fontSize: responsiveFontSize(1.9),
+              fontWeight: '600',
+              letterSpacing: 0.28,
+              color: color,
+            }}>
+            {text}
+          </Text>
+        )} */}
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
                         <SaveStoryBtn onPress={() => setIsVisiblePdf(false)} text="No" />

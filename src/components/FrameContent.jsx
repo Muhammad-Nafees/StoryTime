@@ -18,7 +18,7 @@ import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
 import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed'
-
+import LinearGradient from "react-native-linear-gradient"
 
 const FrameContent = ({
     type,
@@ -104,7 +104,7 @@ const FrameContent = ({
                         {
                             type == "text" &&
                             <>
-                                <View style={styles.child_bg}>
+                                <LinearGradient colors={["rgba(234, 137, 167, 1)", 'rgba(0,0,0,0.4)',]} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }} locations={[0.8, 1,]} style={[styles.child_bg,]}>
                                     <View style={styles.second_childbg}>
                                         <View style={styles.third_childbg}>
                                             <Image style={styles.child_bg_img} source={profileImage} />
@@ -117,14 +117,14 @@ const FrameContent = ({
                                             </Text>
                                         </View>
                                     </View>
-                                </View>
+                                </LinearGradient>
                             </>
                         }
 
                         {
                             type == "video" &&
                             <>
-                                <View style={styles.child_bg}>
+                                <LinearGradient colors={["rgba(234, 137, 167, 1)", 'rgba(0,0,0,0.4)',]} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }} locations={[0.8, 1,]} style={styles.child_bg}>
                                     <View style={styles.second_childbg}>
                                         <View style={styles.third_childbg}>
                                             <Image style={styles.child_bg_img} source={profileImage} />
@@ -143,7 +143,7 @@ const FrameContent = ({
                                         </View>
                                     </View>
 
-                                </View>
+                                </LinearGradient>
                             </>
                         }
                     </View>
@@ -188,7 +188,7 @@ const FrameContent = ({
                                                     />
                                                 </MenuTrigger>
 
-                                                <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: responsiveWidth(10), width: responsiveWidth(45) } }}>
+                                                <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: responsiveWidth(8), width: responsiveWidth(42), } }}>
                                                     <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
                                                     </MenuOption>
@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
         marginTop: responsiveWidth(0.5),
     },
     child_bg: {
-        backgroundColor: pinkColor,
         width: responsiveWidth(71),
         height: responsiveHeight(28),
         marginTop: responsiveWidth(2),

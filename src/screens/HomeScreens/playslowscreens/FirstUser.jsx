@@ -27,7 +27,6 @@ const FirstUser = ({ route }) => {
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState("")
-    const [result, setResult] = useState([])
     const [isPressed, setIsPressed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
@@ -51,7 +50,7 @@ const FirstUser = ({ route }) => {
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const checkTrue = route?.params?.checkValue;
     console.log("profileusers", profileUsersStories);
-
+    console.log("ended====", ended)
     // const isEmptyArray = route?.params?.isEmptyArray;
 
     // console.log("displayuser--", currentDisplayUser)
@@ -62,27 +61,36 @@ const FirstUser = ({ route }) => {
     // console.log("isEmptyArray=====", isEmptyArray);
 
     console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
+    const stringText = recordingText.toString();
+    // Remove commas from the string
+    const cleanedText = stringText.replace(/,/g, "");
+    // Output the cleaned text
+    console.log("cleanedText=====", cleanedText)
+
 
     const handleStart = () => {
         if (timeLeft !== 0) {
             // setIsFirstCall(!isFirstCall)
             setIsPressed(true);
-            startRecognizing();
             if (timeLeft === null) {
+                startRecognizing();
                 setTimeLeft(10);
             };
 
-            // if (isFirstCall) {
-            //     clearTimeout(longPressTimeout);
-            //     setIsLongPress(false);
-            //     setIsPressed(false);
-            //     stopRecording();
-            //     console.log("IN If cond")
-            // };
+            // console.log("isFirstCall-----", isFirstCall);
+
+            if (isFirstCall) {
+                clearTimeout(longPressTimeout);
+                setIsLongPress(false);
+                setIsPressed(false);
+                stopRecording();
+                console.log("STOP RECORDING-----")
+            };
 
             if (timeLeft !== null && timeLeft > 0) {
                 setisCancelingStory(false);
-                setTimeLeft(null);
+                setIsFirstCall(true);
+                setTimeLeft(0);
             };
 
         };
@@ -147,10 +155,11 @@ const FirstUser = ({ route }) => {
         };
     }, []);
 
+
     // onSpeechStart----------
 
     const onspeechStart = (e) => {
-        console.log("speechstart---", e)
+        console.log("START SPEECH CALLED---", e)
         setStarted(true)
     };
 
@@ -158,19 +167,19 @@ const FirstUser = ({ route }) => {
 
     const onspeechEnd = (e) => {
         setEnded(e.value)
-        console.log("eeeend----", e)
+        console.log("SPEECH END CALLED----", e)
     };
 
     //---------- onSpeechResult----------
 
     const onspeechResult = useCallback((e) => {
         const text = e?.value[0];
+
         dispatch(recordingData(text));
         if (text) {
             setRecordingText((prevVal) => [...prevVal, ...text]);
         }
     }, [dispatch]);
-
 
 
     const onSpeechPartialResults = (e) => {
@@ -188,9 +197,12 @@ const FirstUser = ({ route }) => {
             setTimeLeft(null);
             setIsPressed(false);
             dispatch(checkTrueOrFalse(false));
+            return () => {
+                setIsFirstCall(false);
+                setisCancelingStory(true);
+            }
         }, [])
     );
-
 
     // ---------- Start Recording And Convert Text ----------
 
@@ -201,7 +213,7 @@ const FirstUser = ({ route }) => {
                 "EXTRA_PARTIAL_RESULTS": true
             });
             handlePressIn();
-
+            console.log("Start Recognizing Value====")
         } catch (error) {
             console.log("err", error);
         }
@@ -294,13 +306,13 @@ const FirstUser = ({ route }) => {
 
                 <ImageBackground style={[styles.img_backgroung_content,]} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                        <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
+                        <View style={{ borderRadius: 20, width: responsiveWidth(69), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
 
                             <UserNames currentDisplayUser={currentDisplayUser} />
 
                             <ScrollView>
                                 <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                    <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>{recordingText}</Text>
+                                    <Text style={{ paddingTop: responsiveWidth(3), color: isFirstCall ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,1)", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne, }}>{cleanedText}</Text>
                                 </View>
                             </ScrollView>
 
@@ -317,10 +329,12 @@ const FirstUser = ({ route }) => {
 
                 <View style={{ height: responsiveHeight(35) }}>
                     <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity onPress={() => {
-                            handleStart();
-                        }}
-                            activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                        <TouchableOpacity
+                            disabled={isFirstCall ? true : false}
+                            onPress={() => {
+                                handleStart();
+                            }}
+                            activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: isFirstCall ? "rgba(87, 150, 164, 0.3)" : TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
                             <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
                         </TouchableOpacity>
                     </View>

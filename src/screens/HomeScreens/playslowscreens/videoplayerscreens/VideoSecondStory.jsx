@@ -35,7 +35,6 @@ const VideoSecondStory = () => {
         navigation.navigate(VIDEO_FIRST_USER)
         dispatch(extendStoryCheckVideo(false));
         dispatch(extendVideo(true));
-
     };
 
 

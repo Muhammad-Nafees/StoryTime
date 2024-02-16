@@ -71,10 +71,9 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     };
 
 
+
     return (
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
-
-            {/* <View style={{ backgroundColor: "orange" }}> */}
 
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
 
@@ -108,10 +107,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 Successfully Saved!" textButton="Back" />
                 }
 
-
-
             </ImageBackground>
-            {/* </View> */}
         </Modal>
     )
 };
