@@ -50,7 +50,9 @@ const Sequence = () => {
 
   // AsyncStorage.setItem("isUsername",USER?.username);
 
-  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
+  const sequenceUser = useMemo(() =>
+    [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })],
+    [USER, addedUsers],);
 
   console.log("🚀 ~ Sequence ~ selectedIndices:", selectedIndices);
 
