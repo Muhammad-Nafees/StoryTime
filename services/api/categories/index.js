@@ -1,14 +1,17 @@
 import { Base_Url, Subcategory, category_Random, category_endpoint } from "../.."
 
 
-export const get_Categories_Sub_Categories = async (page = 1, id = null) => {
+export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
+    // console.log("page-", page, id,)
+    console.log("page subcategory====", page2,)
+    console.log("page====", page,)
     let apiUrl;
 
-    if (id !== undefined && id !== null) {
-        apiUrl = Base_Url + `category?parent=${id}&page=${page}`;
-      } else {
-        apiUrl = Base_Url + category_endpoint + `?page=${page}`;
-      }
+    if (id) {
+        apiUrl = Base_Url + `category?parent=${id}&page=${page2}&limit=${15}`;
+    } else {
+        apiUrl = `${Base_Url + category_endpoint}?page=${page}&limit=${10}`;
+    };
 
     const responseData = await fetch(apiUrl, {
         method: "GET",

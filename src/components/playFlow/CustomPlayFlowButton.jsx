@@ -33,9 +33,12 @@ const CustomPlayFlowButton = ({
                     height: responsiveHeight(6.6),
                 }}>
 
+                { isNextUser?
                 <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
-                    {`Next Player: @${isNextUser?.username}`}
-                </Text>
+                {`Next Player: @${isNextUser?.username}`}
+                </Text>: <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
+                 Next Player
+                </Text>}
             </TouchableOpacity>
         </View>
     );

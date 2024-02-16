@@ -197,14 +197,15 @@ const Register = () => {
 
                 <View style={{ paddingVertical: responsiveWidth(6) }}>
                   <TouchableOpacity
+                    disabled={!validate(values) ? true : false}
                     // onPress={()=>console.log("err",errors)}
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),
                       backgroundColor: validate(values) ? '#395E66'
-                        : 'rgba(57, 94, 102, 0.6)',
+                        : 'rgba(57, 94, 102, 0.4)',
                       borderRadius: 10,
-                      borderWidth: 1,
+                      // borderWidth: 1,
                       borderColor: '#395E66',
                       justifyContent: 'center',
                       alignItems: 'center',

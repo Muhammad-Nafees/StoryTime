@@ -16,6 +16,7 @@ import SaveStory from '../../../components/playFlow/SaveStory';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT } from '../../../constants/Constant';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 
 const FirstUser = ({ route }) => {
@@ -27,13 +28,13 @@ const FirstUser = ({ route }) => {
     const SCREENWIDTH = Dimensions.get("window").width;
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState("")
-    const [result, setResult] = useState([])
     const [isPressed, setIsPressed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [timeText, setTimeText] = useState('02:00');
     const [IsRecording, setIsRecording] = useState(false)
     const [isLongPress, setIsLongPress] = useState(false);
     const addedUsers = useSelector(state => state.addPlayers.addFriends);
+    const {user} = useSelector(state => state?.authSlice);
     const checkUserTrueorFalse = useSelector(state => state.addPlayers.checkTrueOrFalse);
     const extendCounting = useSelector(state => state?.addPlayers?.extendCounting);
     const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
@@ -51,7 +52,7 @@ const FirstUser = ({ route }) => {
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const checkTrue = route?.params?.checkValue;
     console.log("profileusers", profileUsersStories);
-
+    console.log("ended====", ended)
     // const isEmptyArray = route?.params?.isEmptyArray;
 
     // console.log("displayuser--", currentDisplayUser)
@@ -62,27 +63,36 @@ const FirstUser = ({ route }) => {
     // console.log("isEmptyArray=====", isEmptyArray);
 
     console.log("extendStoryTrueOrFalse=====", extendStoryTrueOrFalse);
+    const stringText = recordingText.toString();
+    // Remove commas from the string
+    const cleanedText = stringText.replace(/,/g, "");
+    // Output the cleaned text
+    console.log("cleanedText=====", cleanedText)
+
 
     const handleStart = () => {
         if (timeLeft !== 0) {
             // setIsFirstCall(!isFirstCall)
             setIsPressed(true);
-            startRecognizing();
             if (timeLeft === null) {
+                startRecognizing();
                 setTimeLeft(10);
             };
 
-            // if (isFirstCall) {
-            //     clearTimeout(longPressTimeout);
-            //     setIsLongPress(false);
-            //     setIsPressed(false);
-            //     stopRecording();
-            //     console.log("IN If cond")
-            // };
+            // console.log("isFirstCall-----", isFirstCall);
+
+            if (isFirstCall) {
+                clearTimeout(longPressTimeout);
+                setIsLongPress(false);
+                setIsPressed(false);
+                stopRecording();
+                console.log("STOP RECORDING-----")
+            };
 
             if (timeLeft !== null && timeLeft > 0) {
                 setisCancelingStory(false);
-                setTimeLeft(null);
+                setIsFirstCall(true);
+                setTimeLeft(0);
             };
 
         };
@@ -147,10 +157,11 @@ const FirstUser = ({ route }) => {
         };
     }, []);
 
+
     // onSpeechStart----------
 
     const onspeechStart = (e) => {
-        console.log("speechstart---", e)
+        console.log("START SPEECH CALLED---", e)
         setStarted(true)
     };
 
@@ -158,19 +169,19 @@ const FirstUser = ({ route }) => {
 
     const onspeechEnd = (e) => {
         setEnded(e.value)
-        console.log("eeeend----", e)
+        console.log("SPEECH END CALLED----", e)
     };
 
     //---------- onSpeechResult----------
 
     const onspeechResult = useCallback((e) => {
         const text = e?.value[0];
+
         dispatch(recordingData(text));
         if (text) {
             setRecordingText((prevVal) => [...prevVal, ...text]);
         }
     }, [dispatch]);
-
 
 
     const onSpeechPartialResults = (e) => {
@@ -188,9 +199,12 @@ const FirstUser = ({ route }) => {
             setTimeLeft(null);
             setIsPressed(false);
             dispatch(checkTrueOrFalse(false));
+            return () => {
+                setIsFirstCall(false);
+                setisCancelingStory(true);
+            }
         }, [])
     );
-
 
     // ---------- Start Recording And Convert Text ----------
 
@@ -201,7 +215,7 @@ const FirstUser = ({ route }) => {
                 "EXTRA_PARTIAL_RESULTS": true
             });
             handlePressIn();
-
+            console.log("Start Recognizing Value====")
         } catch (error) {
             console.log("err", error);
         }
@@ -234,7 +248,8 @@ const FirstUser = ({ route }) => {
     // ---------- Handle Press out ----------
 
     const onPressNext = () => {
-        navigation.navigate("FirstUserStorytext");
+        user?
+        navigation.navigate("FirstUserStorytext"):null
     };
 
 
@@ -274,18 +289,23 @@ const FirstUser = ({ route }) => {
                 {/* BACK BUTTON AND TIMER */}
 
                 <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
-                    <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
+                    <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width:isCancelingStory?responsiveWidth(60):responsiveWidth(90), justifyContent: 'space-between', alignItems: "center" }}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                             <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../assets/back-playflowicon.png")} />
                         </TouchableOpacity>
                         <View>
 
                             {
-                                isCancelingStory &&
+                            isCancelingStory? ( 
                                 <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
                                     <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
                                 </View>
-                            }
+                                ):( 
+                                !user?<TouchableOpacity  
+                                style={{ borderRadius: 10, borderWidth: 4, borderColor:TextColorGreen, backgroundColor:TextColorGreen, paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(25) }}>
+                                    <Text style={{color:'white',fontWeight: '400',fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular}}>Done</Text>
+                                </TouchableOpacity>:<></>
+                            )}
 
                         </View>
                     </View>
@@ -294,13 +314,14 @@ const FirstUser = ({ route }) => {
 
                 <ImageBackground style={[styles.img_backgroung_content,]} resizeMode="center" source={PLAYFLOW_FRAME}>
                     <View activeOpacity={0.9} style={[styles.bg_content, { backgroundColor: TextColorGreen, }]}>
-                        <View style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
-
-                            <UserNames currentDisplayUser={currentDisplayUser} />
+                        <View style={{ borderRadius: 20, width: responsiveWidth(69), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }}>
+                            {user?
+                            <UserNames currentDisplayUser={currentDisplayUser} />:<></>
+                            }
 
                             <ScrollView>
                                 <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                                    <Text style={{ paddingTop: responsiveWidth(3), color: "#FFF", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>{recordingText}</Text>
+                                    <Text style={{ paddingTop: responsiveWidth(3), color: isFirstCall ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,1)", fontSize: responsiveFontSize(2.2), lineHeight: 20, textAlign: "center", fontFamily: PassionOne_Regular.passionOne, }}>{cleanedText}</Text>
                                 </View>
                             </ScrollView>
 
@@ -317,17 +338,21 @@ const FirstUser = ({ route }) => {
 
                 <View style={{ height: responsiveHeight(35) }}>
                     <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity onPress={() => {
-                            handleStart();
-                        }}
-                            activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                        <TouchableOpacity
+                            disabled={isFirstCall ? true : false}
+                            onPress={() => {
+                                handleStart();
+                            }}
+                            activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: isFirstCall ? "rgba(87, 150, 164, 0.3)" : TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
                             <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} />
                         </TouchableOpacity>
                     </View>
 
                     {
-                        isNext &&
-                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
+                        isNext && user?
+                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />:
+                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isCancelingStory={isCancelingStory} />
+
                     }
 
                     <View style={{ paddingTop: responsiveWidth(6) }}>

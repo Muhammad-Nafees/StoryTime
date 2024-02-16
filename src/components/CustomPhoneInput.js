@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,6 +8,8 @@ import { responsiveFontSize, responsiveScreenFontSize, responsiveWidth } from 'r
 import { FourthColor, TextinputColor } from '../screens/Styles/Style';
 import { username_api } from '../../services/api/auth_mdule/auth';
 import _ from 'lodash';
+import { Path, Svg } from 'react-native-svg';
+import { Inter_Regular } from '../constants/GlobalFonts';
 
 const CustomPhoneInput = ({
   handleChange,
@@ -88,14 +90,15 @@ const CustomPhoneInput = ({
           <PhoneInput
             ref={phoneInput}
             disabled={disabled}
-            placeholder=""
+            placeholder=" "
             defaultCode={defaultCode || 'AU'}
             onChangeFormattedText={(text) => setFormatText(text)}
             containerStyle={styles.phoneContainer}
             textContainerStyle={styles.phoneTextContainer}
             textInputStyle={styles.phoneTextInput}
-            flagButtonStyle={{ width: 87 }}
+            flagButtonStyle={{ width: 90 }}
             value={value}
+            codeTextStyle={{ color: "rgba(170, 170, 170, 1)", fontFamily: Inter_Regular.Inter_Regular, fontWeight: "400", fontSize: responsiveFontSize(1.8) }}
             onChangeText={phoneNumber => {
               handleChange(phoneNumber);
               setFieldError('phoneNo', '');
@@ -107,7 +110,11 @@ const CustomPhoneInput = ({
                 setIsError('Invalid phone number');
               }
             }}
-
+            renderDropdownImage={
+              <Svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <Path d="M17.3625 1.21094L10.8425 7.73094C10.0725 8.50094 8.81246 8.50094 8.04246 7.73094L1.52246 1.21094" stroke="#696969" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+              </Svg>
+            }
             onChangeCountry={country => {
               setPhoneCode(country.callingCode);
               console.log(country.callingCode, 'phoneCode');
@@ -144,6 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: TextinputColor,
     color: FourthColor,
     height: 40,
+
   },
   phoneTextInput: {
     padding: 0,
@@ -160,6 +168,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(80),
     backgroundColor: 'rgba(232, 232, 232, 1)',
     borderRadius: 12,
+
   },
 });
 

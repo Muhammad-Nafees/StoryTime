@@ -38,14 +38,18 @@ const VideoFirstUser = () => {
     const extendVideoCheck = useSelector(state => state.recordingData.extendVideo);
 
     const extendCountingVideo = useSelector(state => state.recordingData.extendCountingVideo);
+    const {user} = useSelector(state => state?.authSlice);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
     const [isNext, setIsNext] = useState(true);
     const [isActive, setIsActive] = useState(false);
+    const [isFirstCall, setIsFirstCall] = useState(false);
+    const [isCancelingStory, setisCancelingStory] = useState(true);
     const cameraRef = useRef(null);
     const dispatch = useDispatch()
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
+
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
     // })
@@ -58,7 +62,7 @@ const VideoFirstUser = () => {
     console.log("path---", path)
     console.log("recordingVideo---", recordingVideo);
     console.log("currentDisplayUser---", currentDisplayUser);
-    console.log("extend-video-check-true", extendStoryCheckVideoTrue)
+    // console.log("extend-video-check-true", extendStoryCheckVideoTrue)
 
     const activeCamera = getCameraDetails();
 
@@ -186,13 +190,13 @@ const VideoFirstUser = () => {
         } catch (error) {
             console.log("PAUSEERR---", error)
         }
-    }
+    };
 
 
     const saverecordingvideo = () => {
         setIsVisible(true);
         stopRecordings();
-    }
+    };
 
 
 
@@ -218,7 +222,7 @@ const VideoFirstUser = () => {
                 }
             }
         }, [checkVideoisTrue])
-    )
+    );
 
     useFocusEffect(
         useCallback(() => {
@@ -227,7 +231,7 @@ const VideoFirstUser = () => {
                 setIsActive(false)
             }
         }, [])
-    )
+    );
 
     console.log("Is Active :", isActive);
 
@@ -238,45 +242,53 @@ const VideoFirstUser = () => {
             dispatch(checkVideoTrue(false));
             return () => {
                 dispatch(extendStoryCheckVideo(false));
+                setIsFirstCall(false);
+                setisCancelingStory(true);
             }
             // dispatch(extendStoryCheckVideo(false));
         }, [])
     );
 
+
     const handleStart = () => {
 
-        if (extendStoryCheckVideoTrue == true) {
-            resumeRecording();
-            setIsPressed(true);
-            setTimeLeft(30);
-            // console.log("is next :", isNext);
-        } else if (extendVideoCheck == true) {
-            resumeRecording();
-            setIsPressed(true);
-            setTimeLeft(30);
-        }
+        if (timeLeft > 0) {
+            dispatch(extendStoryCheckVideo(false));
+            setisCancelingStory(false);
+            setIsFirstCall(true);
+            setIsPressed(false);
+            setTimeLeft(0);
+            console.log("CALLED CANCELING=============");
+        };
 
-        if (timeLeft !== 0) {
-            // if (timeLeft == null) {
-            if (extendStoryCheckVideoTrue == null) {
+        if (timeLeft == null) {
+
+            if (extendStoryCheckVideoTrue == true) {
+                resumeRecording();
+                setIsPressed(true);
+                setTimeLeft(30);
+                console.log("EXTEND VIDEO----");
+            } else if (extendVideoCheck == true) {
+                resumeRecording();
+                setIsPressed(true);
+                setTimeLeft(30);
+                console.log("RESUME VIDEO-----")
+            };
+
+            if (timeLeft == null && extendStoryCheckVideoTrue == null) {
                 setIsPressed(true);
                 setTimeLeft(30);
                 recordVideos();
+                console.log("START VIDEO-----")
             }
-
-            // resumeRecording();
-            // stopRecordings()
-            // }
         }
-
     };
+
 
 
     const onpressNextHandler = () => {
         navigation.navigate(SECOND_USER_STORY)
-    }
-
-
+    };
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -288,13 +300,17 @@ const VideoFirstUser = () => {
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../../assets/back-playflowicon.png")} />
                     </TouchableOpacity>
                     <View>
-                        <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
-                            <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
-                        </View>
+
+                        {
+                            isCancelingStory &&
+                            <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
+                                <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
+                            </View>
+                        }
+
                     </View>
                 </View>
             </View>
-
 
             <View>
                 <ImageBackground style={styles.img_backgroung_content} resizeMode="center" source={PLAYFLOW_FRAME}>
@@ -302,6 +318,7 @@ const VideoFirstUser = () => {
                         {
                             !showCamera ?
                                 <ImageBackground style={{ borderRadius: 20, width: responsiveWidth(72), height: responsiveHeight(39), backgroundColor: "#EA89A7", alignItems: "center", justifyContent: "space-between", paddingBottom: responsiveWidth(6) }} source={require("../../../../assets/bgImage-video.png")}>
+
                                     <UserNames backgroundColor="rgba(0,0,0,0.5)" />
                                     <View>
                                         {
@@ -314,7 +331,7 @@ const VideoFirstUser = () => {
                                 :
                                 <>
                                     <View>
-                                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999 }}>
+                                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999, justifyContent: "center", alignItems: "center" }}>
                                             <UserNames backgroundColor="rgba(0,0,0,0.5)" currentDisplayUser={currentDisplayUser} />
                                         </View>
 
@@ -331,7 +348,6 @@ const VideoFirstUser = () => {
                                 </>
                         }
 
-
                     </View>
                 </ImageBackground>
 
@@ -342,10 +358,12 @@ const VideoFirstUser = () => {
             </View>
 
             <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => {
-                    handleStart();
-                }}
-                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                <TouchableOpacity
+                    disabled={isFirstCall ? true : false}
+                    onPress={() => {
+                        handleStart();
+                    }}
+                    activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: isFirstCall ? "rgba(87, 150, 164, 0.3)" : TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
                     {/* <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} /> */}
                 </TouchableOpacity>

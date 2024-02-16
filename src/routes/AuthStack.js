@@ -30,6 +30,13 @@ import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
 import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
+import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
+import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
+import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
+import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
+import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
+
+
 import {Img_Paths} from '../assets/Imagepaths';
 
 const AuthStack = () => {
@@ -128,7 +135,7 @@ const AuthStack = () => {
 
 const GuestStack = () => {
   const Stack = createStackNavigator();
-  const {CATEGORIES} = NavigationsString;
+  const {FIRSTSCREENPLAYFLOW,SECONDSCREENPLAYFLOW,VIDEO_FIRST_SCREEN,FIRST_USER,VIDEO_FIRST_USER} = NavigationsString;
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -151,6 +158,33 @@ const GuestStack = () => {
         component={CategoriesTab}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name={FIRSTSCREENPLAYFLOW}
+        component={FirstScreenPlayFlow}
+        options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name={SECONDSCREENPLAYFLOW}
+        component={SecondPlayFlowScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={VIDEO_FIRST_SCREEN}
+        component={VideoFirstStartScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen 
+      name={FIRST_USER} 
+      component={FirstUser}
+      options={{headerShown: false}}
+      />
+
+      <Stack.Screen 
+      name={VIDEO_FIRST_USER} 
+      component={VideoFirstUser} 
+      options={{headerShown: false}}
+      />
+
     </Stack.Navigator>
   );
 };
