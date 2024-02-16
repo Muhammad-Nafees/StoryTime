@@ -23,31 +23,22 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
-import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
-import CountryPicker from 'react-native-country-picker-modal';
-import PhoneNumber from '../../components/PhoneNumber';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
-import { registeruser } from '../../../store/slices/Register_Slice';
-import { register } from '../../../store/slices/Register_Slice';
+import { register } from '../../../store/slices/authSlice';
+
 import CustomInput from '../../components/CustomInput';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
-import Svg, { Path } from 'react-native-svg';
 import Toast from 'react-native-toast-message';
 import CustomPhoneInput from '../../components/CustomPhoneInput';
-import {
-  userdata,
-  userinfoState,
-} from '../../../store/slices/userInfoState_Slice';
-import PhoneInput from 'react-native-phone-number-input';
-import UserNameExist from '../../components/UserNameExist';
+import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
+import { username_api } from '../../../services/api/auth_mdule/auth';
+
 
 const Register = () => {
   const { CREATE_ACCOUNT_ICON } = Img_Paths;
@@ -59,32 +50,26 @@ const Register = () => {
   const [formatText, setFormatText] = useState("")
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [phoneError, setPhoneError] = useState('')
-  const [isVisible, setVisible] = useState(false)
+  const [statusCodeusername, setStatusCodeusername] = useState();
+  const [emailstatusCode, setEmailstatusCode] = useState();
+  const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState();
+  const [phoneError, setPhoneError] = useState('');
+  const [isVisible, setVisible] = useState(false);
   const dispatch = useDispatch();
   const phoneInput = useRef(null);
-
 
   const phoneCode = phoneInput?.current?.state?.code;
   const countryCode = phoneInput?.current?.state?.countryCode;
 
-  const handleFormSubmit = async values => {
-    setIsLoading(true);
-    setIsLoading(false);
-    const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
-    console.log("valid-=", checkValid)
-
-    if (usernameError !== '' || emailError !== '' || phoneError === 'completePhone available' || checkValid === false) {
-      return;
-    }
-
-    navigation.navigate(REGISTER_USER_INFO);
-    dispatch(userinfoState(countryCode));
-    dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-  };
-
-
-  // console.log("phoneinp---", phoneInput)
+  const validate = (values) => {
+    return (
+      values.email &&
+      values.firstName &&
+      values.lastName &&
+      values.phoneNo &&
+      values.username
+    )
+  }
 
   return (
     <Formik
@@ -98,7 +83,30 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
-      onSubmit={handleFormSubmit}>
+      // validator={() => ({})}
+      // onSubmit={values => console.log(values)}
+      onSubmit={async (values) => {
+        try {
+          dispatch(userinfoState(countryCode));
+          dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
+          const responseData = await username_api({ username: values?.username })
+          setStatusCodeusername(responseData.statusCode)
+
+          if (responseData?.statusCode !== 200) {
+            setVisible(true)
+          }
+          if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
+            return;
+          }
+          navigation.navigate(REGISTER_USER_INFO);
+          return responseData;
+        } catch (error) {
+        }
+        setIsLoading(true);
+        setIsLoading(false);
+        const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+      }}
+    >
       {({
         values,
         errors,
@@ -106,8 +114,6 @@ const Register = () => {
         handleSubmit,
         setFieldValue,
         touched,
-        isValid,
-        dirty,
         setFieldError,
       }) => (
         <>
@@ -129,6 +135,8 @@ const Register = () => {
                   touched={touched.username}
                   initialTouched={true}
                   setFieldError={setUsernameError}
+                  isVisible={isVisible}
+                  setVisible={setVisible}
                   fieldName="username"
                   handleChange={text => setFieldValue('username', text)}
                 />
@@ -170,6 +178,7 @@ const Register = () => {
                   isError={isError}
                   setPhoneCode={setPhoneCode}
                   setPhoneError={setPhoneError}
+                  setphoneNumberStatusCode={setphoneNumberStatusCode}
                 />
 
                 <CustomInput
@@ -181,39 +190,29 @@ const Register = () => {
                   touched={touched.email}
                   initialTouched={true}
                   setFieldError={setEmailError}
+                  setEmailstatusCode={setEmailstatusCode}
                   fieldName="email"
                   handleChange={text => setFieldValue('email', text)}
                 />
 
                 <View style={{ paddingVertical: responsiveWidth(6) }}>
                   <TouchableOpacity
+                    disabled={!validate(values) ? true : false}
+                    // onPress={()=>console.log("err",errors)}
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),
-                      backgroundColor:
-                        values.email &&
-                          values.firstName &&
-                          values.lastName &&
-                          values.phoneNo &&
-                          values.username
-                          ? '#395E66'
-                          : 'rgba(57, 94, 102, 0.6)',
+                      backgroundColor: validate(values) ? '#395E66'
+                        : 'rgba(57, 94, 102, 0.4)',
                       borderRadius: 10,
-                      borderWidth: 1,
+                      // borderWidth: 1,
                       borderColor: '#395E66',
                       justifyContent: 'center',
                       alignItems: 'center',
                       height: responsiveHeight(6.6),
                     }}
-                    disabled={
-                      !(
-                        values.email &&
-                        values.firstName &&
-                        values.lastName &&
-                        values.phoneNo &&
-                        values.username
-                      )
-                    }>
+                  // disabled={!validate(values)}
+                  >
                     <Text
                       style={{
                         fontSize: responsiveFontSize(1.9),
@@ -234,6 +233,7 @@ const Register = () => {
                       text="Back"
                     />
                   </View>
+
                 </View>
               </View>
             </View>
@@ -244,8 +244,6 @@ const Register = () => {
     </Formik>
   );
 };
-
-
 
 export default Register;
 

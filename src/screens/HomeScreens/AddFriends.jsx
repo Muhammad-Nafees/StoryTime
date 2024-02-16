@@ -1,63 +1,149 @@
-import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
-import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../components/FrameContent';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import StoryUsers from '../../components/StoryUsers';
 import AddFriendUsers from '../../components/AddFriendUsers';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers_api } from '../../../services/api/storyfeed';
+
 
 const AddFiends = () => {
     const { width, height } = Dimensions.get('window');
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
         SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
-    const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+    const allusersState = useSelector((state) => state?.getallUsers)
+    const isFollowing = useSelector((state) => state?.followandunfollow?.isFollowing)
+    const [responseUsers, setResponseUsers] = useState([]);
+    const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [HasMorePages, setHasMorePages] = useState();
+    const [stopLimit, setStopLimit] = useState();
+    const [isData, setIsData] = useState([]);
+    const [limit, setLimit] = useState(10);
+    const [filteredData, setFilteredData] = useState([]);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
+    const handleLoadMore = async () => {
+        if (isLoading) {
+            return;
+        }
+        if (HasMorePages && isData) {
+            setPage((prevPage) => prevPage + 1);
+        } else {
+            setIsLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setIsLoading(true);
+            try {
+                const responseData = await getAllUsers_api({ pagination: page, limit });
+                const data = responseData?.data?.users;
+                setIsData(data)
+                if (data && data.length > 0) {
+                    setResponseUsers(prevData => [...prevData, ...data]);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                    setStopLimit(responseData?.data?.pagination?.currentPage);
+                } else {
+                    console.log("No users found");
+                    return;
+                }
+            } catch (error) {
+            } finally {
+                setIsLoading(false);
+                setIsLoadMore(false);
+            }
+        };
+        fetchUsers();
+    }, [page, isRefreshing]);
+
+
+    const filterUserData = useCallback(() => {
+        const filteredData = responseUsers?.filter((item) => {
+            return item?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+        })
+        setFilteredData(filteredData)
+    }, [searchQuery, responseUsers]);
+
+    useEffect(() => {
+        filterUserData();
+    }, [filterUserData]);
+
+    const onRefresh = useCallback(() => {
+        setIsRefreshing(true);
+        setPage(1);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            <ScrollView>
-                {/* Frame Content Close----------- */}
+            {/* Frame Content Close----------- */}
+            <View style={styles.first_container}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
+                    <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
+                </TouchableOpacity>
+                <View style={styles.categories_text_container}>
+                    <Text style={styles.categories_text}>Add Friends</Text>
+                </View>
+            </View>
 
-                <View style={styles.first_container}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
-                        <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-                    </TouchableOpacity>
-                    <View style={styles.categories_text_container}>
-                        <Text style={styles.categories_text}>Add Friends</Text>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
+                    <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
+                        <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
                     </View>
+                    <TextInput value={searchQuery} onChangeText={(text) => {
+                        setSearchQuery(text);
+                        filterUserData();
+                    }} placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000", width: 240, }} />
                 </View>
+            </View>
 
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
-                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
-                            <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
-                        </View>
-                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
-                    </View>
-                </View>
+            <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
 
-                <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
-                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@diane101" userchoice="Follow" />
-                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@nolanjames" userchoice="Follow" />
-                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@christine02" userchoice="Follow" />
-                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@adamadam" userchoice="Follow" />
-                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@markyyy" userchoice="Follow" />
-                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@jeniffer.p" userchoice="Follow" />
-                </View>
+                {
+                    <FlatList
+                        scrollEnabled={true}
+                        contentContainerStyle={{ paddingBottom: responsiveWidth(40) }}
+                        data={searchQuery ? filteredData : responseUsers}
+                        keyExtractor={(item, index) => index.toString()}
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
+                        renderItem={({ item, index }) => (
+                            <AddFriendUsers key={index} profileimage={FIRST_PROFILE} username={item?.username} userid={item?._id}
+                                userchoice="Follow" isFollowing={item?.isFollowing}
+                            />
+                        )}
+                        ListFooterComponent={() => {
+                            if (isLoading) {
+                                return (
+                                    <View style={{ alignItems: 'center', height: height / 4, }}>
+                                        <ActivityIndicator size={40} color={'#000'} />
+                                    </View>
+                                );
+                            }
+                            return null;
+                        }}
+                        onEndReached={() => {
+                            handleLoadMore();
+                        }}
+                        onEndReachedThreshold={0.3}
+                    />
+                }
 
-            </ScrollView>
+            </View>
         </ImageBackground>
-
     )
-}
-
-
-
+};
 
 const styles = StyleSheet.create({
     container: {

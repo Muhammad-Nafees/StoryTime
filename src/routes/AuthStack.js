@@ -1,5 +1,5 @@
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import {
   PopUpStart,
   SplashScreen,
@@ -39,71 +39,77 @@ const AuthStack = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={POPUP_START}>
+      <Stack.Navigator
+        screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        }}
+        initialRouteName={POPUP_START}
+      >
         <Stack.Screen
           name={POPUP_START}
           component={PopUpStart}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
+
         />
         <Stack.Screen
           name={SPLASH_SCREEN}
           component={SplashScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="GuestStack"
           component={GuestStack}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={LOGIN}
           component={Login}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TermsAndConditionsStack"
           component={TermsAndConditionsStack}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER}
           component={Register}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER_USER_INFO}
           component={RegisterUserInformation}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER_PASSWORD}
           component={RegisterPassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_EMAIL}
           component={ForgetEmail}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_PHONE_NO}
           component={ForgetPhoneNumber}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={OTP_FORGET}
           component={OtpForget}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_CONFIRM_PASSWORD}
           component={ForgetConfirmPassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FRAME_CONTENT}
           component={FrameContent}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -117,17 +123,17 @@ const GuestStack = () => {
       <Stack.Screen
         name="FirstScreenGuest"
         component={FirstScreenGuest}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PrivacyAndPolicy"
         component={PrivacyAndPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -141,12 +147,12 @@ const TermsAndConditionsStack = () => {
       <Stack.Screen
         name="LoginTermsAndConditions"
         component={LoginTermsAnd_Conditions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="LoginPrivacyAndPolicy"
         component={LoginPrivacyAndPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

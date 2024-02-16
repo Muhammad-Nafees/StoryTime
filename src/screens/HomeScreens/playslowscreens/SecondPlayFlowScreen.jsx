@@ -7,6 +7,8 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetRecordingData } from '../../../../store/slices/RecordingData';
 
 
 
@@ -15,12 +17,19 @@ const SecondPlayFlowScreen = () => {
     const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
     // const SCREENWIDTH = Dimensions.get("window").width;
+    const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
+    const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    console.log(storyUserImage)
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
+    const dispatch = useDispatch()
+    const onpressNextHandler = () => {
+        navigation.navigate(FIRST_USER)
+        dispatch(resetRecordingData())
+    }
 
     return (
-
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <View style={styles.backplay_flow}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), paddingTop: responsiveWidth(12), }}>
@@ -36,7 +45,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} source={require("../../../assets/dog-playflow.png")} />
+                        <Image style={styles.img_dog} source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>
@@ -44,14 +53,15 @@ const SecondPlayFlowScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>Dog</Text>
+                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>{randomName}</Text>
                     </View>
+
                 </View>
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate(FIRST_USER)}>
+                    <TouchableOpacity onPress={onpressNextHandler}>
                         <Image source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>
@@ -77,7 +87,8 @@ const styles = StyleSheet.create({
     circle_container: {
         paddingVertical: moderateVerticalScale(10),
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // backgroundColor: 'orange'
     },
     sub_circle: {
         backgroundColor: TextColorGreen,

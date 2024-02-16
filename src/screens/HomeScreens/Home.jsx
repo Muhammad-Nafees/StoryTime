@@ -1,95 +1,214 @@
-import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
 import { FlatListData } from '../../../dummyData/DummyData';
-
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-} from 'react-native-popup-menu';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchallFeedStories } from '../../../services/api/storyfeed';
+import { addFriends_api } from '../../../services/api/add-members';
 
 
 const Home = () => {
 
+    const dispatch = useDispatch()
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, SHARK_ICON, FISH_ICON } = Img_Paths;
+    const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, } = Img_Paths;
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingMain, setIsLoadingMain] = useState(true)
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const [HasMorePages, setHasMorePages] = useState();
     const { ADD_FRIENDS } = NavigationsString;
+    const [responseUsers, setResponseUsers] = useState([]);
+    const [isData, setIsData] = useState([]);
+    const [Responseapi, setResponseapi] = useState([]);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const navigation = useNavigation();
+
+
+    useEffect(() => {
+
+        const addFriends_api_handler = async () => {
+            try {
+                const responseData = await addFriends_api();
+                setResponseapi(responseData.data.users);
+                return responseData;
+            } catch (error) {
+                console.log("err", error)
+            }
+        };
+        addFriends_api_handler()
+    }, [])
+
+
+    // console.log("arrBooleanCHeck===-=-==", !![]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (!isRefreshing) {
+                try {
+                    const responseData = await fetchallFeedStories({ pagination: page, limit });
+                    const data = responseData?.data?.stories;
+                    setIsData(data);
+                    if (data && data.length > 0) {
+                        setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
+                    }
+                    setIsLoadingMain(false);
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                    return responseData;
+                } catch (error) {
+                } finally {
+                    setIsLoadingMain(false);
+                    setIsRefreshing(false);
+                }
+            }
+
+        };
+        fetchUsers();
+    }, [page, isRefreshing,])
+
+
+
+    const handleLoadMore = useCallback(() => {
+        console.log("HasMorePages-----", HasMorePages);
+        if (HasMorePages) {
+            setIsLoading(true);
+            setPage((prevPage) => prevPage + 1);
+        } else {
+            setIsLoading(false);
+        }
+    }, [HasMorePages]);
+
+
+    const onRefresh = () => {
+        setIsRefreshing(true);
+        setPage(1);
+        setResponseUsers([]);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 1000);
+    };
 
 
 
     return (
-        <ScrollView>
-            <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+            {/* <ScrollView> */}
+            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
+                <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
+                    <View>
+                        <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
+                    </View>
 
-                <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
-                    <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
-                        <View>
-                            <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
-                        </View>
+                    <View style={{ flexDirection: 'row', }}>
+                        <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
+                            <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
+                        </TouchableOpacity>
 
-                        <View style={{ flexDirection: 'row', }}>
-                            <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
-                                <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
-                            </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
+                        </TouchableOpacity>
 
-                            <View>
-                                <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
-                            </View>
-
-                        </View>
                     </View>
                 </View>
+            </View>
 
-                <View style={{ width: responsiveWidth(94), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
-                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3), fontFamily: PassionOne_Regular.passionOne }}>My Friend’s Story Time</Text>
+            <View style={{ width: responsiveWidth(94), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
+                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3), fontFamily: PassionOne_Regular.passionOne }}>My Friend’s Story Time</Text>
+            </View>
+
+            <View style={styles.flatlist_container}>
+                <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
+                    <FlatList
+                        data={Responseapi}
+                        scrollEnabled={true}
+                        horizontal
+                        // onRefresh={onRefresh}
+                        // refreshing={isRefreshing}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <View style={{ justifyContent: "center", alignItems: "center", }}>
+                                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
+                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../assets/first-img.png")} />
+                                    </TouchableOpacity>
+                                    <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
+                                </View>
+                            )
+                        }}
+                    />
                 </View>
+            </View>
 
-                <View style={styles.flatlist_container}>
-                    <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
-                        <FlatList
-                            data={FlatListData}
-                            horizontal
-                            renderItem={({ item, index }) => {
+            {
+                !isLoadingMain ?
+                    <FlatList
+                        data={responseUsers}
+                        onRefresh={onRefresh}
+                        refreshing={isRefreshing}
+                        scrollEnabled={true}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => (
+                            <FrameContent
+                                key={index}
+                                type={item?.type}
+                                profileImage={require("../../assets/avatar-inn.png")}
+                                content={item.content}
+                                likedUserId={item?._id}
+                                commentsCount={item?.commentsCount}
+                                likes={item?.likesCount}
+                                subCategoryname={item?.subCategory?.name}
+                                subCategoryimage={item?.subCategory?.image}
+                                username={item?.creator?.username}
+                                likedByMe={item?.likedByMe}
+                                likesCountuser={item?.likesCount}
+                                likeslength={item?.likes}
+                                dislikeslength={item?.dislikes}
+                                dislikesCount={item?.dislikesCount}
+                                dislikesByMe={item?.dislikesByMe}
+                            />
+                        )}
+                        ListFooterComponent={() => {
+                            if (isLoading) {
                                 return (
-                                    <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                        <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
-                                            <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
-                                        </TouchableOpacity>
-                                        <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
+                                    <View style={{ alignItems: 'center', height: height / 3, }}>
+                                        <ActivityIndicator size={40} color={'#000'} />
                                     </View>
-                                )
-                            }}
-                        />
+                                );
+                            }
+                            return null;
+                        }}
+                        onEndReached={handleLoadMore}
+                        onEndReachedThreshold={0.3}
+                    />
+                    :
+                    <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
+                        <ActivityIndicator size={30} color={'#000'} />
                     </View>
-                </View>
+            }
 
-                {/* Frame Content Start----------- */}
+            {/* Frame Content Start----------- */}
 
-                <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
-                <FrameContent text="Shark" type="imp_bg_img" profile_text="Sophia" backgroundImage={SHARK_ICON} profileImage={require("../../assets/sophia-img.png")} />
-                <FrameContent type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
-                <FrameContent text="Whale" type="imp_bg_img" profile_text="Alfred" backgroundImage={FISH_ICON} profileImage={require("../../assets/porter-img.png")} />
+            {/* 
+            {
+                {/* !loading ? */}
+            {/* <View style={{ justifyContent: "center", alignItems: "center", height: height / 2 }}>
+                        <ActivityIndicator size={40} color={"#000"} />
+                    </View>
+             */}
 
-                {/* Frame Content Close----------- */}
+            {/* Frame Content Close----------- */}
 
-            </ImageBackground>
-        </ScrollView>
+            {/* </ScrollView> */}
+        </ImageBackground>
     )
 };
-
-
 
 const styles = StyleSheet.create({
     container: {

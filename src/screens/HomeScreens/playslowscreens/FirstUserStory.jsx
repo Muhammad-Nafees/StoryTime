@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,9 @@ import { Img_Paths } from "../../../assets/Imagepaths/index";
 import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
+import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const FirstUserStory = () => {
@@ -18,6 +21,27 @@ const FirstUserStory = () => {
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const addedUsers = useSelector(state => state?.addPlayers.addFriends);
+    const userId = useSelector(state => state?.addPlayers?.userId);
+    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
+    const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
+    // const [isUserCheckAvail, setIsUserCheckAvail] = useState(true);
+
+
+    const nextUserHandler = () => {
+        let checkTrueval = true;
+        dispatch(checkTrueOrFalse(checkTrueval));
+        dispatch(extendStoryCheck(false));
+        navigation.navigate(FIRST_USER);
+    };
+
+
+    const extendStoryHandler = () => {
+        navigation.navigate(FIRST_USER, { extentCounting: 30 });
+        dispatch(extendStoryCheck(true));
+    };
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -26,8 +50,8 @@ const FirstUserStory = () => {
                 <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" onPress={() => navigation.navigate(FIRST_USER)} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Next Player" onPress={() => navigation.navigate("SecondUsertext")} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText text="Extend Your Story Time" onPress={extendStoryHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
+                        <VoiceToText text="Next Player" onPress={nextUserHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
             </View>
@@ -35,7 +59,6 @@ const FirstUserStory = () => {
 
     )
 };
-
 
 
 const styles = StyleSheet.create({

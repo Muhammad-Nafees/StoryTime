@@ -15,17 +15,13 @@ import Icon from 'react-native-vector-icons/Feather';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../assets/Imagepaths';
 
-const TextInputField = ({
-  placeholderText,
-  type,
-  onPress,
-  showPassword,
-  onChangeText,
-  value,
-  onBlur,
-}) => {
+const TextInputField = ({ placeholderText, type, onPress, showPassword, onChangeText, value, onBlur, setShowPassword, }) => {
 
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths;
+
+  console.log("onChangeText", value);
+  // console.log("checkState====", checkState)
+
 
   return (
     <View
@@ -44,6 +40,7 @@ const TextInputField = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+
         <TextInput
           placeholder={placeholderText}
           onChangeText={onChangeText}
@@ -52,7 +49,9 @@ const TextInputField = ({
           keyboardType={type === 'zipcode' ? 'decimal-pad' : 'default'}
           placeholderTextColor="#AAAAAA"
           secureTextEntry={type == 'password' ? !showPassword : null}
-          style={{ color: '#000', width: type == 'password' ? 235 : 260 }}
+          style={{
+            color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 8 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
+          }}
         />
 
         {type == 'password' && (
@@ -64,5 +63,6 @@ const TextInputField = ({
     </View>
   );
 };
+
 
 export default TextInputField;

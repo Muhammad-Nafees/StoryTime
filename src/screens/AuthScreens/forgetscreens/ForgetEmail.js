@@ -25,7 +25,6 @@ import {
 } from 'react-native-responsive-dimensions';
 
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
@@ -54,15 +53,6 @@ const ForgetEmail = () => {
             }}
             validationSchema={validationforgetEmail}
             onSubmit={async values => {
-                // const handleNavigation = (code, email) => {
-                //     setTimeout(() => {
-                //         navigation.navigate(OTP_FORGET, {
-                //             code,
-                //             email,
-                //             type: 'email',
-                //         });
-                //     }, 1000);
-                // };
 
             }}>
             {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue, dirty, isValid }) => (
@@ -77,23 +67,6 @@ const ForgetEmail = () => {
 
                         <View>
                             <View>
-                                {/* <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                    <Text
-                                        style={{
-                                            color: FourthColor,
-                                            fontWeight: '600',
-                                            fontSize: responsiveFontSize(1.7),
-                                        }}>
-                                        Email Address
-                                    </Text>
-                                </View> */}
-                                {/* <TextInputField
-                                    placeholderText="Type here"
-                                    onChangeText={handleChange('email')}
-                                    value={values.email}
-                                    onChangeText={onChangeText}
-                                /> */}
-
                                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                                     <CustomInputForgetEmail
                                         label="Email Adress"
@@ -112,55 +85,6 @@ const ForgetEmail = () => {
                                     />
                                 </View>
                             </View>
-
-                            {/* {errors.email && (
-                                <View
-                                    style={{
-                                        width: responsiveWidth(90),
-                                        marginLeft: 'auto',
-                                        paddingBottom: responsiveWidth(2),
-                                    }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <View>
-                                            <Svg
-                                                width={20}
-                                                height={20}
-                                                viewBox="0 0 24 24"
-                                                fill="red">
-                                                <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                            </Svg>
-                                        </View>
-                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                            <Text
-                                                style={{
-                                                    color: 'red',
-                                                    fontSize: responsiveFontSize(1.7),
-                                                    fontWeight: '600',
-                                                }}>
-                                                {errors.email}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            )} */}
-
-
-                            {/* Confirm Password------------ */}
-
-                            {/* <TouchableButton
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                                onPress={() => {
-                                    values?.email !== '' ? values?.handleSubmit : null
-                                    handleSubmit();
-                                }}
-                                backgroundColor={
-                                    values?.email !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
-                                }
-                                color="#FFF"
-                                text="Next"
-                            /> */}
-
                             {/* Next------------ */}
 
                         </View>

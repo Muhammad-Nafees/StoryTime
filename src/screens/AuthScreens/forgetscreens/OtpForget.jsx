@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Text,
     View,
@@ -7,7 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    Alert,
+    ScrollView,
 } from 'react-native';
 import {
     FourthColor,
@@ -21,42 +20,46 @@ import {
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TouchableButton from '../../../components/TouchableButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import reset_email, {
-    otp_forget,
-} from '../../../../services/api/auth_mdule/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import reset_email, { otp_forget } from '../../../../services/api/auth_mdule/auth';
+import { useDispatch } from 'react-redux';
 import { forgetResetToken } from '../../../../store/slices/authSlice';
+import VerifyingCodeModal from '../../../components/forget-screens-modal/VerifyingCodeModal';
 import Toast from 'react-native-toast-message';
 
-const OtpForget = ({ length, value, disabled, onChange, route }) => {
+const OtpForget = ({ route }) => {
     const navigation = useNavigation();
     const { FORGET_CONFIRM_PASSWORD } = NavigationsString;
     const { FORGET_BG_IMG } = Img_Paths;
     const [otptext, setOtptext] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [timer, setTimer] = useState(30);
-    const inputRefs = useRef([]);
     const [timeLeft, setTimeLeft] = useState(30);
     const [timeText, setTimeText] = useState('30');
+    const [isVisible, setVisible] = useState(false);
+    const [statusCodeForget, setStatusCodeForget] = useState(false);
     const [otp, setOtp] = useState('');
     const dispatch = useDispatch();
-
-    console.log('route--', route?.params?.code);
+    const inputRefs = useRef([]);
 
     const handlechange = (text, index) => {
-        const updatedText =
-            otptext.slice(0, index) + text + otptext.slice(index + 1);
-
+        const updatedText = otptext.slice(0, index) + text + otptext.slice(index + 1);
         setOtptext(updatedText);
+
         if (text.length !== 0) {
             return inputRefs.current[index + 1]?.focus();
+        } else {
+            return inputRefs.current[index - 1]?.focus();
         }
-        return inputRefs.current[index - 1]?.focus();
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            setVisible(false)
+        }, [])
+    )
 
     const handleBackspace = (event, index) => {
         const { nativeEvent } = event;
@@ -67,21 +70,17 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
 
     const handleButtonClick = async () => {
         setTimeLeft(30);
-
         try {
             const response = await reset_email({
                 phone: route?.params?.phone,
                 email: route?.params?.email,
             });
-            console.log('res=-=-', response?.data?.code);
             setOtp(response?.data?.code);
+
             if (response?.statusCode === 200) {
-                route?.params?.code;
-                Toast.show({
-                    type: 'success',
-                    text1: String(response?.data?.code),
-                });
                 setIsLoading(false);
+                setVisible(false);
+                // navigation.navigate(FORGET_CONFIRM_PASSWORD);
             } else if (response?.stack) {
                 Toast.show({
                     type: 'error',
@@ -96,23 +95,24 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
 
     const otp_forget_api = async () => {
         setIsLoading(true);
+        setVisible(true);
         try {
             const response = await otp_forget(otptext);
-            console.log('response', response);
             if (response?.statusCode === 200) {
-                navigation.navigate(FORGET_CONFIRM_PASSWORD);
-                Toast.show({
-                    type: 'success',
-                    text1: response?.message,
-                });
+                setStatusCodeForget(true);
+                setTimeout(() => {
+                    navigation.navigate(FORGET_CONFIRM_PASSWORD);
+                }, 1500);
                 dispatch(forgetResetToken(response?.data?.accessToken));
                 setIsLoading(false);
             } else if (response?.stack) {
+                setStatusCodeForget(false);
                 Toast.show({
                     type: 'error',
                     text1: response?.message,
                 });
                 setIsLoading(false);
+                setVisible(false);
             }
         } catch (err) {
             console.log(err);
@@ -123,10 +123,11 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
         const seconds = timeLeft % 60;
         const formattedTime = `${seconds.toString()}`;
         setTimeText(formattedTime);
+
     }, [timeLeft]);
 
+    let countdown;
     useEffect(() => {
-        let countdown;
         if (timeLeft > 0) {
             countdown = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);
@@ -137,19 +138,15 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
         return () => clearInterval(countdown);
     }, [timeLeft]);
 
-    const handleResendClick = () => {
-        // handleButtonClick();
-    };
+
 
     return (
-        <View style={styles.container}>
-            <View style={styles.img_container}>
-                <Image style={styles.img_child} source={FORGET_BG_IMG} />
-            </View>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.img_container}>
+                    <Image style={styles.img_child} source={FORGET_BG_IMG} />
+                </View>
 
-            {/* Code------------ */}
-
-            <View>
                 <View>
                     <View
                         style={{
@@ -175,8 +172,6 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                             {otp ? otp : route?.params?.code}
                         </Text>
                     </View>
-
-                    {/* OtpPassword----------- */}
 
                     <View
                         style={{
@@ -213,7 +208,7 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                                     maxLength={1}
                                     contextMenuHidden
                                     selectTextOnFocus
-                                    editable={!disabled}
+                                    editable={!isLoading}
                                     keyboardType="decimal-pad"
                                     testID={`OTPInput-${index}`}
                                     onChangeText={text => handlechange(text, index)}
@@ -223,10 +218,6 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                         </View>
                     </View>
                 </View>
-
-                {/* Confirm Password------------ */}
-
-                {/* Next and Back------------ */}
 
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View
@@ -254,8 +245,8 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                             </Text>
                         </View>
                     </View>
+
                     <TouchableButton
-                        isLoading={isLoading}
                         onPress={otptext.length === 6 ? otp_forget_api : null}
                         backgroundColor={
                             otptext.length === 6 ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
@@ -265,20 +256,27 @@ const OtpForget = ({ length, value, disabled, onChange, route }) => {
                     />
                 </View>
             </View>
+
+            {isVisible && (
+                <VerifyingCodeModal
+                    setVisible={setVisible}
+                    isVisible={isVisible}
+                    onPress={() => { }}
+                    statusCodeForget={statusCodeForget}
+                />
+            )}
+
             <Toast />
-        </View>
+        </ScrollView>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
         backgroundColor: SecondaryColor,
-    },
-    text: {
-        fontSize: responsiveFontSize(1.8),
-        fontWeight: '400',
     },
     img_container: {
         paddingVertical: moderateVerticalScale(22),

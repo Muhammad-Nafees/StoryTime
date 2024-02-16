@@ -5,7 +5,8 @@ import { responsiveWidth, responsiveHeight } from "react-native-responsive-dimen
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-
+import { pinkColor } from '../../Styles/Style';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 const PopUpStart = () => {
@@ -14,9 +15,9 @@ const PopUpStart = () => {
         GET_STARTED_IMAGE,
         STORY_TIME_IMG
     } = Img_Paths
-    const { SPLASH_SCREEN } = NavigationsString
+    const { SPLASH_SCREEN } = NavigationsString;
     const { width, height } = Dimensions.get('window');
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     return (
 
@@ -29,18 +30,19 @@ const PopUpStart = () => {
                         height: height * 0.3,
                     }]} source={STORY_TIME_IMG} />
                 </View>
+
                 <View style={styles.container_img}>
                     <TouchableOpacity onPress={() => navigation.navigate(SPLASH_SCREEN)}>
-                        <Image style={{ paddingVertical: moderateVerticalScale(12), width: width * 0.3, height: height * 0.12, resizeMode: "center" }} source={require("../../../assets/play-btn.png")} />
+                        <Image style={{ width: width * 0.3, height: height * 0.13, resizeMode: "center" }} source={require("../../../assets/play-btn.png")} />
                     </TouchableOpacity>
-                    <Image style={styles.get_started} source={GET_STARTED_IMAGE} />
+                    <Text style={{ paddingVertical: 20, color: "rgba(228, 65, 115, 1)", fontFamily: PassionOne_Regular.passionOne, fontSize: 32, fontWeight: "600", textAlign: "center", }}>Get Started</Text>
+
                 </View>
             </View>
 
         </ImageBackground>
     )
-}
-
+};
 
 
 const styles = StyleSheet.create({
@@ -66,10 +68,11 @@ const styles = StyleSheet.create({
     get_started: {
         resizeMode: "center",
         width: responsiveWidth(50),
-        height: responsiveHeight(5),
+        height: responsiveHeight(10),
+        // backgroundColor: "red"
     }
-})
+});
+
 
 
 export default PopUpStart;
-

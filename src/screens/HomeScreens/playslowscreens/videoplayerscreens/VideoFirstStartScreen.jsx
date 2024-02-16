@@ -7,6 +7,8 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
+import { useDispatch, useSelector } from 'react-redux'
+import { extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
 
 
 
@@ -17,8 +19,10 @@ const VideoFirstStartScreen = () => {
     const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.95;
-
-
+    const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
+    const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    const dispatch = useDispatch();
+    console.log("randomName---", randomName);
 
     return (
 
@@ -41,22 +45,26 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} source={require("../../../../assets/dog-playflow.png")} />
+                        }]} source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
                     </View>
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>Dog</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
                     </View>
                 </View>
 
-
-
                 <View style={{ paddingVertical: moderateVerticalScale(45) }} />
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate(VIDEO_FIRST_USER)}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate(VIDEO_FIRST_USER)
+                        dispatch(resetVideoRecording())
+                        dispatch(extendStoryCheckVideo(null));
+                        dispatch(extendVideo(null));
+                    }
+                    }>
                         <Image source={require("../../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>
@@ -66,7 +74,6 @@ const VideoFirstStartScreen = () => {
         </ImageBackground>
     )
 };
-
 
 
 const styles = StyleSheet.create({

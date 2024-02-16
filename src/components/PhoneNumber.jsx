@@ -1,13 +1,13 @@
-import React, {useRef} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import {FourthColor, TextinputColor} from '../screens/Styles/Style';
-import {verticalScale} from 'react-native-size-matters';
+import { FourthColor, TextinputColor } from '../screens/Styles/Style';
+import { verticalScale } from 'react-native-size-matters';
 
 const PhoneNumber = ({
   value,
@@ -48,7 +48,7 @@ const PhoneNumber = ({
           onChangeCountry={val => {
             setCountryCode(val?.cca2), setPhoneCode(val.callingCode);
           }}
-          textStyle={{color: '#000'}}
+          textStyle={{ color: '#000' }}
         />
       </View>
     </>

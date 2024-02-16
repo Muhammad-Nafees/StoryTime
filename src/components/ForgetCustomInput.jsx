@@ -11,6 +11,8 @@ import _ from 'lodash';
 import TouchableButton from './TouchableButton';
 import NavigationsString from '../constants/NavigationsString';
 import { useNavigation } from '@react-navigation/native';
+import { Path, Svg } from 'react-native-svg';
+import { Inter_Regular } from '../constants/GlobalFonts';
 
 const ForgetCustomInput = ({
     handleChange,
@@ -84,6 +86,7 @@ const ForgetCustomInput = ({
                         disabled={disabled}
                         placeholder=" "
                         defaultCode={'AU'}
+                        codeTextStyle={{ color: "rgba(170, 170, 170, 1)", fontFamily: Inter_Regular.Inter_Regular, fontWeight: "400", fontSize: responsiveFontSize(1.8) }}
                         onChangeFormattedText={phone => {
                             handleChange(phone)
                             setFieldError('phone', '');
@@ -98,6 +101,11 @@ const ForgetCustomInput = ({
                         }
                         }
                         containerStyle={styles.phoneContainer}
+                        renderDropdownImage={
+                            <Svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <Path d="M17.3625 1.21094L10.8425 7.73094C10.0725 8.50094 8.81246 8.50094 8.04246 7.73094L1.52246 1.21094" stroke="#696969" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            </Svg>
+                        }
                         textContainerStyle={styles.phoneTextContainer}
                         textInputStyle={styles.phoneTextInput}
                         flagButtonStyle={{ width: 87 }}

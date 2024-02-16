@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
-import { stat } from 'react-native-fs';
+
 
 const initialState = {
     user: null,
@@ -8,7 +8,11 @@ const initialState = {
     accessToken: null,
     refreshToken: null,
     forgetAccesstoken: null,
-    randomNumber: ""
+    randomNumber: "",
+    firstpageData: [],
+    secondpageData: [],
+    thirdpageData: [],
+    userLoginid: ""
 };
 
 const authSlice = createSlice({
@@ -29,14 +33,33 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.user = action.payload;
         },
-        logout: (state) => {
-            state.isAuthenticated = false;
+        logout: (state, action) => {
+            Object.keys(initialState).forEach(key => {
+                state[key] = initialState[key];
+            });
         },
         forgetResetToken: (state, action) => {
             state.forgetAccesstoken = action.payload
         },
         setRandomNumber: (state, action) => {
             state.randomNumber = action.payload
+        },
+        register: (state, action) => {
+            // state.token = action.payload;
+            state.firstpageData = action.payload
+            console.log("register---data", state.firstpageData);
+        },
+        registeruser_city: (state, action) => {
+            state.secondpageData = action.payload;
+            console.log("registercity", state.secondpageData)
+        },
+        registeruser_password: (state, action) => {
+            // state.token = action.payload;
+            state.thirdpageData = action.payload;
+            console.log("registerpassword", state.thirdpageData)
+        },
+        userLoginid: (state, { payload }) => {
+            state.userLoginid = payload
         }
 
     },
@@ -54,7 +77,11 @@ export const {
     logout,
     login,
     forgetResetToken,
-    setRandomNumber
+    setRandomNumber,
+    register,
+    registeruser_city,
+    userLoginid,
+    registeruser_password
 } = authSlice.actions;
 
 export default authSlice.reducer;

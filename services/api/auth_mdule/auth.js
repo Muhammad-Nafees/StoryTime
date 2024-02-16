@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+
 import {
   Base_Url,
   city_andpoint,
@@ -7,11 +8,17 @@ import {
   reset_password_endpoint,
   reset_verify_code,
   stateandCity_endpoint,
-  username_endpoint
+  username_endpoint,
+  logout_endpoint
 } from '../..';
+import { useSelector } from 'react-redux';
+
+// const refreshToken = useSelector((state) => state?.authSlice?.refreshToken);
+// console.log(refreshToken)
 
 const reset_email = async (values) => {
   console.log('values---', values);
+
   try {
 
     const response = await fetch(Base_Url + reset_email_endpoint, {
@@ -20,6 +27,7 @@ const reset_email = async (values) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(values),
+
     });
 
     const responseData = await response.json();
@@ -70,6 +78,27 @@ export const reset_password = async (
     console.error('Error:', error);
   }
 };
+
+export const refresh_token_api = async (refreshToken) => {
+
+  try {
+    const response = await fetch(Base_Url + "auth/refresh-token", {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        refreshToken: refreshToken
+      }),
+    });
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 
 export const registerapi = async (firstpageData, secondpageData, values) => {
   const countryCode = firstpageData?.countryCode;
@@ -157,32 +186,39 @@ export const userandcity_api = async statesinfo => {
   }
 };
 
-export const username_api = async (username, email, completePhone) => {
+export const username_api = async (data) => {
+  console.log("=========data", data)
   const requestBody = {};
-
-  if (username !== '') {
-    requestBody.username = username;
-  }
-
-  if (email !== '') {
-    requestBody.email = email;
-  }
-
-  if (completePhone !== '') {
-    requestBody.completePhone = completePhone;
-  }
-
-
 
   const response = await fetch(Base_Url + username_endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(data),
   });
 
   const responseData = await response.json();
   console.log('usernameapi---', responseData);
   return responseData;
 };
+
+export const logout_user = async () => {
+  try {
+    let apiUrl = Base_Url + logout_endpoint;
+
+    const responseData = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const response = await responseData.json();
+    return response
+
+  } catch (error) {
+    Alert.alert("ERROR", "something went wrong")
+    return error
+  }
+}

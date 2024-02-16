@@ -260,4 +260,12 @@ export const Img_Paths = {
     BG_URL_PAGE: require("../../assets/bgurlpageProfile.png"),
     BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
 
+    //settings
+    SETTING_USER: require("../../assets/oliver.png"),
+    BLOCK_USER: require("../../assets/lilibeth.png"),
+    //DUMMYS
+    AVATAR: require("../../assets/avatar.png"),
+    DROP_ICON: require("../../assets/bottom-icon.png"),
+    DEFAULT_ICON: require("../../assets/defaultIcon.png")
+
 };
