@@ -12,6 +12,7 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 
 const AddPlayers = () => {
@@ -22,7 +23,8 @@ const AddPlayers = () => {
     const [Responseapi, setResponseapi] = useState([]);
     const navigation = useNavigation();
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
-    const { CATEGORIES } = NavigationsString
+    const { CATEGORIES } = NavigationsString;
+    const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
     const userId = useSelector((state) => state.addPlayers.userId)
 
@@ -46,7 +48,14 @@ const AddPlayers = () => {
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
-            console.log("responseData=======", responseData)
+            if (responseData?.data == null) {
+                setIsNoFriends(false)
+            } else {
+                setIsNoFriends(true)
+            }
+
+            console.log("responseData=======", responseData?.message)
+            console.log("responseData?.data=======", responseData?.data)
             setResponseapi(responseData.data?.users)
             return responseData
         } catch (error) {
@@ -56,8 +65,9 @@ const AddPlayers = () => {
     ).current;
 
 
+
     useEffect(() => {
-        addFriends_api_handler()
+        addFriends_api_handler();
     }, []);
 
     const lodashTextHandler = (text) => {
@@ -109,12 +119,17 @@ const AddPlayers = () => {
                         <ScrollView>
 
                             {
-                                Responseapi?.map((item, index) => {
-                                    console.log("index====", index);
-                                    return (
-                                        <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
-                                    )
-                                })
+                                !isNoFriends ?
+                                    (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
+                                        <Text style={{ fontSize: 22, color: "#000", textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>No Friends Found</Text>
+                                    </View>)
+                                    :
+                                    Responseapi?.map((item, index) => {
+                                        console.log("index====", index);
+                                        return (
+                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
+                                        )
+                                    })
                             }
 
                         </ScrollView>

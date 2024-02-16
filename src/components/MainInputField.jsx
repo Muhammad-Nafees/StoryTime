@@ -7,14 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Img_Paths } from '../assets/Imagepaths';
 import NavigationsString from '../constants/NavigationsString';
 
-const MainInputField = ({ placeholder }) => {
+const MainInputField = ({ placeholder, OnchangeText, onPress, inputValue }) => {
     const navigation = useNavigation();
-    const { ADD_PLAYERS } = NavigationsString
+    const { ADD_PLAYERS } = NavigationsString;
     return (
         <View style={styles.text_Input_container}>
             <View style={styles.text_input_child}>
-                <TextInput placeholder={placeholder} placeholderTextColor={"#000"} style={styles.input_field} />
-                <TouchableOpacity onPress={() => navigation.navigate(ADD_PLAYERS)} style={styles.add_button}>
+                <TextInput onChangeText={(value) => OnchangeText(value)} value={inputValue} placeholder={placeholder} placeholderTextColor={"#000"} style={styles.input_field} />
+                <TouchableOpacity onPress={onPress} style={styles.add_button}>
                     <Text style={styles.add_text}>Add</Text>
                 </TouchableOpacity>
             </View>

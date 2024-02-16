@@ -39,7 +39,9 @@ import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
-import { randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { addFriends_api } from '../../../../services/api/add-members';
+import Toast from 'react-native-toast-message';
 
 const SubCategories = ({ route }) => {
   const { width, height } = Dimensions.get('window');
@@ -58,9 +60,40 @@ const SubCategories = ({ route }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [HasMorePages, setHasMorePages] = useState(false);
   const [isTriggered, setIsTriggered] = useState(false);
+  const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [responseRandomsub, setresponseRandomsub] = useState();
   const [isLoadMore, setIsLodeMore] = useState(false)
   const dispatch = useDispatch();
+
+
+
+  const addFriends_api_handler = async () => {
+    try {
+      const responseData = await addFriends_api();
+      const usernameObj = responseData?.data?.users?.find((item) => item.username === isUsernameInputValue);
+      console.log("usernameObj=====", usernameObj);
+      if (usernameObj) {
+        const userid = usernameObj._id;
+        const username = usernameObj?.username;
+        console.log("username----", username)
+        dispatch(addFriends({ username, userid }));
+        // Now you have the _id of the matched user, you can use it as needed.
+        console.log("Matched User ID:", userid);
+        setIsUsernameInputValue("");
+      } else if (isUsernameInputValue?.length == 0) {
+        navigation.navigate(PLAYER_SEQUENCE)
+      }
+      else {
+        Toast.show({
+          type: "error",
+          text1: "Friends Not Found"
+        })
+      }
+      return responseData;
+    } catch (error) {
+      console.log("err", error)
+    }
+  };
 
 
 
@@ -152,8 +185,8 @@ const SubCategories = ({ route }) => {
       </View>
 
       {/* IMainnputField-----*/}
+      <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
 
-      <MainInputField placeholder="Username" />
 
       {/* MainInputField----- */}
 
@@ -183,18 +216,8 @@ const SubCategories = ({ route }) => {
 
           {addUsersGame?.map((item, index) => (
             <View key={index}
-              style={{
-                margin: 4,
-                backgroundColor: '#395E66',
-                paddingHorizontal: moderateScale(14),
-                paddingVertical: moderateVerticalScale(4.5),
-                borderRadius: 40,
-              }}>
-              <Text
-                style={{
-                  color: '#FFF',
-                  fontSize: responsiveFontSize(1.9),
-                }}>{`@${item.username}`}</Text>
+              style={{ margin: 4, backgroundColor: '#395E66', paddingHorizontal: moderateScale(14), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, }}>
+              <Text style={{ color: '#FFF', fontSize: responsiveFontSize(1.9), }}>{`@${item.username}`}</Text>
             </View>
           ))}
         </View>
@@ -207,7 +230,8 @@ const SubCategories = ({ route }) => {
           justifyContent: 'flex-start',
           // alignItems: 'center',
           paddingHorizontal: moderateScale(10),
-          paddingBottom: 200
+          // paddingBottom: 200
+          // backgroundColor: "orange"
         }}>
 
         <FlatList
@@ -215,6 +239,8 @@ const SubCategories = ({ route }) => {
           // nestedScrollEnabled
           scrollEnabled={true}
           numColumns={3}
+          contentContainerStyle={{ paddingBottom: 200 }}
+
           keyExtractor={(item, index) => index.toString()}
           onRefresh={onRefresh}
           refreshing={isRefreshing}
@@ -223,7 +249,13 @@ const SubCategories = ({ route }) => {
               <View key={item?.id}
                 style={{
                   backgroundColor: TextColorGreen,
-                  width: responsiveWidth(29), borderRadius: 10, height: responsiveHeight(18.5), alignItems: 'center', margin: responsiveWidth(1.2), borderWidth: 3, borderColor: "#5797A5"
+                  width: responsiveWidth(29),
+                  borderRadius: 10,
+                  height: responsiveHeight(18.5),
+                  alignItems: 'center',
+                  margin: responsiveWidth(1.2),
+                  borderWidth: 3,
+                  borderColor: "#5797A5"
                 }}>
                 <StoryUsers
                   onPress={() => handleStoryUser(item?._id, item?.name)}
@@ -235,68 +267,63 @@ const SubCategories = ({ route }) => {
               </View>
             </>
           )}
+          ListFooterComponent={() => (
+            <>
+              {!isLoading && (
+                <View style={{ alignItems: 'center', paddingBottom: moderateVerticalScale(10) }}>
+                  <TouchableOpacity
+                    onPress={() => handleRandomSub_category()}
+                    style={{
+                      backgroundColor: '#E44173',
+                      width: responsiveWidth(29),
+                      borderRadius: 10,
+                      height: responsiveHeight(18.5),
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        marginVertical: moderateVerticalScale(10),
+                        borderRadius: 10,
+                        width: responsiveWidth(25),
+                        height: responsiveHeight(11),
+                        backgroundColor: '#EE5F8A',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        style={{
+                          width: responsiveWidth(16),
+                          height: responsiveHeight(8),
+                          resizeMode: 'center',
+                        }}
+                        source={LUDO_ICON}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        color: '#FFF',
+                        fontWeight: '700',
+                        fontSize: responsiveFontSize(1.9),
+                      }}>
+                      Random
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
 
-          ListFooterComponent={() => {
-            if (isLoadMore) {
-              return (
-                <View style={{ alignItems: 'center', height: height / 4, }}>
+              {isLoadMore && (
+                <View style={{ alignItems: 'center', height: height / 4 }}>
                   <ActivityIndicator size={40} color={'#000'} />
                 </View>
-              );
-            }
-            return null;
-          }}
+              )}
+            </>
+          )}
+
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
         // onEndReachedThreshold={0.3}
         />
-
-        {!isLoading && (
-          <View
-            style={{
-              paddingLeft: moderateScale(5),
-              paddingVertical: moderateVerticalScale(10),
-            }}>
-            <View
-              style={{
-                backgroundColor: '#E44173',
-                width: responsiveWidth(29),
-                borderRadius: 10,
-                height: responsiveHeight(18.5),
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => handleRandomSub_category()}
-                style={{
-                  marginVertical: moderateVerticalScale(10),
-                  borderRadius: 10,
-                  width: responsiveWidth(25),
-                  height: responsiveHeight(11),
-                  backgroundColor: '#EE5F8A',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{
-                    width: responsiveWidth(16),
-                    height: responsiveHeight(8),
-                    resizeMode: 'center',
-                  }}
-                  source={LUDO_ICON}
-                />
-              </TouchableOpacity>
-              <Text
-                style={{
-                  color: '#FFF',
-                  fontWeight: '700',
-                  fontSize: responsiveFontSize(1.9),
-                }}>
-                Random
-              </Text>
-            </View>
-          </View>
-        )}
-
+        <Toast />
       </View>
       {/* </ScrollView> */}
     </ImageBackground>

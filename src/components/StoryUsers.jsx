@@ -21,8 +21,8 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, }) =>
     return (
         <>
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <TouchableOpacity onPress={handlePress} style={{ marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), justifyContent: "center", alignItems: "center" }}>
-                    <Image style={{ width: 90, height: 90, borderRadius: 10, resizeMode: "cover" }} resizeMode={"cover"} source={{ uri: "http://storytime.yameenyousuf.com/" + images }} />
+                <TouchableOpacity onPress={handlePress} style={{ backgroundColor: 'rgba(86, 182, 164, 1)', marginVertical: moderateVerticalScale(10), borderRadius: 10, width: responsiveWidth(25), height: responsiveHeight(11), justifyContent: "center", alignItems: "center" }}>
+                    <Image style={{ width: 60, height: 60, borderRadius: 10, resizeMode: "center" }} source={{ uri: "http://storytime.yameenyousuf.com/" + images }} />
                 </TouchableOpacity>
                 <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{text}</Text>
             </View>

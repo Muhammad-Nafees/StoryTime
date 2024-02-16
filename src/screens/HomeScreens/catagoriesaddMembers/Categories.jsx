@@ -39,6 +39,10 @@ import {
 import RandomCategories from '../../../components/customCategories/RandomCategories';
 import { get_random } from '../../../../store/slices/randomCategorySlice';
 import { setCategoriesId } from '../../../../store/slices/getCategoriesSlice';
+import { addFriends_api } from '../../../../services/api/add-members';
+import { addFriends } from '../../../../store/slices/addplayers/addPlayersSlice';
+import Toast from 'react-native-toast-message';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const Categories = () => {
   const { width, height } = Dimensions.get('window');
@@ -48,7 +52,6 @@ const Categories = () => {
   const [isRandom, setIsRandom] = useState(false);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
   const [responseCategories, setResponseCategories] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [HasMorePages, setHasMorePages] = useState(false);
@@ -56,17 +59,56 @@ const Categories = () => {
   const [isLoadMore, setIsLoadMore] = useState(false);
   const [randomName, setRandomName] = useState('');
   const [randomId, setRandomId] = useState('');
+  const [ResponseapiCategories, setResponseapiCategories] = useState([]);
   const [isTriggered, setIsTriggered] = useState(false);
+  const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [page, setPage] = useState(1);
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
-  const isFocused = useIsFocused()
+  const dispatch = useDispatch();
+  const { ADD_PLAYERS } = NavigationsString;
   // Get Categories Api ----------
+  // console.log("addUsersGame=====", addUsersGame);
+
+
+  const addFriends_api_handler = async () => {
+    try {
+      const responseData = await addFriends_api();
+      const usernameObj = responseData?.data?.users?.find((item) => item.username === isUsernameInputValue);
+      console.log("usernameObj=====", usernameObj);
+      if (usernameObj) {
+        const userid = usernameObj._id;
+        const username = usernameObj?.username;
+        console.log("username----", username)
+        dispatch(addFriends({ username, userid }));
+        // Now you have the _id of the matched user, you can use it as needed.
+        console.log("Matched User ID:", userid);
+        setIsUsernameInputValue("");
+      } else if (isUsernameInputValue?.length == 0) {
+        navigation.navigate(ADD_PLAYERS)
+      }
+      else {
+        Toast.show({
+          type: "error",
+          text1: "Friends Not Found"
+        })
+      }
+      return responseData;
+    } catch (error) {
+      console.log("err", error)
+    }
+  };
+
+  // const usernameId = responseData?.data?.users?.map((item) => item._id)
+  // useEffect(() => {
+  //   addFriends_api_handler()
+  // }, [])
 
   useEffect(() => {
 
     const fetchUsers = async () => {
       setIsLoading(true);
       try {
+
         const response = await get_Categories_Sub_Categories({ page: page });
         // const categoriesData = response?.data?.categories
         setIsLoading(false);
@@ -136,15 +178,17 @@ const Categories = () => {
     }
   };
 
+  // const usernameHandler = () => {
+  //   if (isUsernameInputValue?.length > 0) {
 
+  //     return
+  //   } else {
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setPage(1)
-  //   }, [])
-  // )
+  //     navigation.navigate(ADD_PLAYERS)
+  //   }
+  // }
 
-
+  console.log("USERNAME--TEXT===", isUsernameInputValue)
   console.log("pages-------------------", page)
 
   return (
@@ -160,7 +204,7 @@ const Categories = () => {
       </View>
 
       {/* IMainnputField-----*/}
-      <MainInputField placeholder="Username" />
+      <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
       {/* MainInputField----- */}
 
       <View
@@ -176,17 +220,18 @@ const Categories = () => {
             alignItems: 'center',
             flexWrap: 'wrap',
           }}>
-          <View style={{ marginHorizontal: moderateScale(10) }}>
+          <View>
             <Text
               style={{
                 color: '#393939',
-                fontWeight: '500',
+                fontWeight: '600',
                 textAlign: 'center',
+                fontSize: responsiveHeight(1.9),
+                fontFamily: Inter_Regular.Inter_Regular
               }}>
               Players:
             </Text>
           </View>
-
 
           {addUsersGame?.map((item, index) => (
             <View
@@ -201,6 +246,7 @@ const Categories = () => {
                 style={{
                   color: '#FFF',
                   fontSize: responsiveFontSize(1.9),
+                  fontFamily: Inter_Regular.Inter_Regular
                 }}>{`@${item.username}`}</Text>
             </View>
           ))}
@@ -212,46 +258,52 @@ const Categories = () => {
           // flexDirection: 'row',
           // flexWrap: 'wrap',
           justifyContent: 'flex-start',
-          // alignItems: 'flex-start',
+          // alignItems: 'flex-start', 
           paddingHorizontal: moderateScale(4),
-          backgroundColor: "orange"
-        }}>
-        {
-          !isLoading ?
-            <FlatList
-              data={responseCategories}
-              scrollEnabled={true}
-              numColumns={3}
-              nestedScrollEnabled
-              scrollsToTop
-              contentContainerStyle={{ paddingBottom: 200 }}
-              keyExtractor={(item, index) => index.toString()}
-              onRefresh={onRefresh}
-              refreshing={isRefreshing}
-              renderItem={({ item, index }) => (
-                <View
-                  key={item?.id}
-                  style={{
-                    backgroundColor: TextColorGreen,
-                    width: responsiveWidth(30),
-                    borderRadius: 10,
-                    height: responsiveHeight(18.5),
-                    alignItems: 'center',
-                    margin: responsiveWidth(1.2),
-                    borderWidth: 3,
-                    borderColor: "#5797A5",
-                  }}>
-                  <StoryUsers
-                    onPress={() => handleStoryUser(item?.id, item?.name)}
-                    images={item?.image}
-                    text={item?.name}
-                    mainbgColor={TextColorGreen}
-                    backgroundColor="rgba(199, 152, 97, 1)"
-                  />
-                </View>
-              )}
-              ListFooterComponent={() => (
-                <View style={{ alignItems: 'center', paddingBottom: moderateVerticalScale(10) }}>
+          // backgroundColor: "orange",
+        }}
+      >
+
+        <FlatList
+          data={responseCategories}
+          scrollEnabled={true}
+          numColumns={3}
+          nestedScrollEnabled
+          scrollsToTop
+          contentContainerStyle={{ paddingBottom: 200 }}
+          keyExtractor={(item, index) => index.toString()}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          renderItem={({ item, index }) => (
+            <View
+              key={item?.id}
+              style={{
+                backgroundColor: TextColorGreen,
+                width: responsiveWidth(30),
+                borderRadius: 10,
+                height: responsiveHeight(18.5),
+                alignItems: 'center',
+                margin: responsiveWidth(1.2),
+                borderWidth: 3,
+                borderColor: "#5797A5",
+              }}>
+              <StoryUsers
+                onPress={() => handleStoryUser(item?.id, item?.name)}
+                images={item?.image}
+                text={item?.name}
+                mainbgColor={TextColorGreen}
+                backgroundColor="rgba(199, 152, 97, 1)"
+              />
+            </View>
+          )}
+          ListFooterComponent={() => (
+            <>
+              {!isLoading && (
+                <View style={{
+                  //  backgroundColor: "red", 
+                  alignItems: 'center',
+                  paddingBottom: moderateVerticalScale(10)
+                }}>
                   <TouchableOpacity
                     onPress={() => handleRandomClick()}
                     style={{
@@ -291,17 +343,20 @@ const Categories = () => {
                   </TouchableOpacity>
                 </View>
               )}
-              onEndReached={() => handleLoadMore()}
-              onEndReachedThreshold={0.3}
-            />
-            :
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator size={40} color={'#000'} />
-            </View>
-        }
+
+              {isLoadMore && (
+                <View style={{ alignItems: 'center', height: height / 4 }}>
+                  <ActivityIndicator size={40} color={'#000'} />
+                </View>
+              )}
+            </>
+          )}
+          onEndReached={() => handleLoadMore()}
+          onEndReachedThreshold={0.3}
+        />
 
       </View>
-
+      <Toast />
       {/* <RandomCategories
                     responseRandom={responseRandom}
                 /> */}
