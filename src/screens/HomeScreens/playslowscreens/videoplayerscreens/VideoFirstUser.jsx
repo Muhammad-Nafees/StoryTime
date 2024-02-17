@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
+import {Inter_Regular} from '../../../../constants/GlobalFonts';
+import GuestModals from '../../../../components/GuestModals';
 
 
 const VideoFirstUser = () => {
@@ -38,6 +40,7 @@ const VideoFirstUser = () => {
     const extendVideoCheck = useSelector(state => state.recordingData.extendVideo);
 
     const extendCountingVideo = useSelector(state => state.recordingData.extendCountingVideo);
+    const {user} = useSelector(state => state?.authSlice);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
     const [isNext, setIsNext] = useState(true);
@@ -48,6 +51,10 @@ const VideoFirstUser = () => {
     const dispatch = useDispatch()
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
+    const GuestModalRef = useRef(null);
+    const GuestModalRefForAds = useRef(null);
+
+
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
     // })
@@ -285,26 +292,79 @@ const VideoFirstUser = () => {
 
 
     const onpressNextHandler = () => {
-        navigation.navigate(SECOND_USER_STORY)
+      user?  navigation.navigate(SECOND_USER_STORY) :null
     };
+
+    const modalOpen = (ref,heading, content, buttonText, text) => {
+        if (GuestModalRef.current) {
+          GuestModalRef.current.open(heading, content, buttonText, text);
+        }
+    }
+    
+    const saveBtnHandler = () =>{
+        if(!user){
+            modalOpen(
+                GuestModalRef,
+                'Get Story Time Premium',
+                'Subscribe now to save your Story to your profile',
+                'Subscribe',
+                'Back',
+              )
+              return
+        }
+        saverecordingvideo()
+      }
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
 
+        <ScrollView>
+
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
-                <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
+                <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: isCancelingStory ? responsiveWidth(60): responsiveWidth(90), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../../assets/back-playflowicon.png")} />
                     </TouchableOpacity>
                     <View>
 
                         {
-                            isCancelingStory &&
-                            <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
+                            isCancelingStory ?
+                           ( <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
                                 <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
                             </View>
-                        }
+                       ) : !user ? (
+                        <TouchableOpacity
+                        onPress={()=>{
+                            modalOpen(
+                                GuestModalRefForAds,
+                                'Support Story Time',
+                                'Watch the ad to \ncontinue playing',
+                                'Watch ads',
+                                'Subscribe for Ad FREE experience',
+                              )
+                          }}
+                            style={{
+                            borderRadius: 10,
+                            borderWidth: 4,
+                            borderColor: TextColorGreen,
+                            backgroundColor: TextColorGreen,
+                            paddingVertical: moderateVerticalScale(6),
+                            paddingHorizontal: moderateScale(25),
+                            }}>
+                            <Text
+                            style={{
+                                color: 'white',
+                                fontWeight: '400',
+                                fontSize: responsiveFontSize(1.9),
+                                fontFamily: Inter_Regular.Inter_Regular,
+                            }}>
+                            Done
+                            </Text>
+                        </TouchableOpacity>
+                        ) : (
+                        <></>
+                        )}
 
                     </View>
                 </View>
@@ -330,7 +390,11 @@ const VideoFirstUser = () => {
                                 <>
                                     <View>
                                         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999, justifyContent: "center", alignItems: "center" }}>
+                                           {user ? (
                                             <UserNames backgroundColor="rgba(0,0,0,0.5)" currentDisplayUser={currentDisplayUser} />
+                                            ) : (
+                                            <></>
+                                            )}
                                         </View>
 
                                         <Camera
@@ -376,17 +440,17 @@ const VideoFirstUser = () => {
 
             {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
-            <View style={{ paddingTop: responsiveWidth(6) }}>
-                <SaveStoryBtn onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} />
+            <View style={{ paddingTop: responsiveWidth(6)}}>
+                <SaveStoryBtn onPress={saveBtnHandler} text={!user? "Save to phone":"Save Story"} color={TextColorGreen} isNext={!user?false:isNext} />
             </View>
-
-            {/* </View> */}
 
             {
                 isVisible &&
                 <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
             }
-
+            <GuestModals ref={GuestModalRef}/>
+            <GuestModals ref={GuestModalRefForAds}></GuestModals>
+        </ScrollView>
 
         </ImageBackground>
     )

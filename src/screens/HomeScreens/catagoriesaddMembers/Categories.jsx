@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState ,useRef} from 'react';
 import {
   Dimensions,
   Image,
@@ -31,6 +31,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
+import SearchField from '../../../components/SearchField';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   get_Categories_Sub_Categories,
@@ -43,6 +44,8 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import { addFriends } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
+import {BlurView} from '@react-native-community/blur';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const Categories = () => {
   const { width, height } = Dimensions.get('window');
@@ -63,11 +66,63 @@ const Categories = () => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(''); //for guest search only
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
+  const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
-  // Get Categories Api ----------
-  // console.log("addUsersGame=====", addUsersGame);
+
+  const DATA = useMemo(() => {
+    if(!!searchTerm){
+      const filtered = responseCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return filtered
+    }
+    return responseCategories
+  }, [responseCategories,searchTerm])
+
+
+  const fetchCategoriesUntilFound = async searchTerm => {
+    let page = 1;
+    let found = false;
+    let array = []
+
+    try {
+      while (!found) {
+        const response = await get_Categories_Sub_Categories({page});
+
+        if (response.data && response.data.categories) {
+          const responseArray = response.data.categories;
+          array= [...array,...responseArray]
+
+          const filteredCategories = responseArray.filter(category =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          console.log('filter', filteredCategories);
+          if (filteredCategories.length > 0) {
+            array = array.filter(el=> !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            setResponseCategories([filteredCategories?.[0],...array]);
+            setIsLoading(false);
+            found = true;
+          } else if (responseArray.length > 0) {
+            page++;
+          } else {
+            // No more data available
+            break;
+          }
+        } else {
+          // Handle the case where the response structure is unexpected
+          console.error('Unexpected API response format:', response);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+
+    return array;
+  };
 
 
   const addFriends_api_handler = async () => {
@@ -102,35 +157,34 @@ const Categories = () => {
   // useEffect(() => {
   //   addFriends_api_handler()
   // }, [])
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    try {
+        if (!user) {
+          fetchCategoriesUntilFound('animals');
+          return;
+        }    
+     const response = await get_Categories_Sub_Categories({ page: page });
+      // const categoriesData = response?.data?.categories
+      setIsLoading(false);
+      setHasMorePages(response?.data?.pagination?.hasNextPage)
+      setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
 
-  useEffect(() => {
+      // if (categoriesData) {
+      // }
 
-    const fetchUsers = async () => {
-      setIsLoading(true);
-      try {
-
-        const response = await get_Categories_Sub_Categories({ page: page });
-        // const categoriesData = response?.data?.categories
-        setIsLoading(false);
-        setHasMorePages(response?.data?.pagination?.hasNextPage)
-        setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
-
-        // if (categoriesData) {
-        // }
-
-        setIsRefreshing(false);
-        return response;
-      } catch (error) {
-        console.log('error---', error);
-      }
-      finally {
-        setIsLoading(false);
-      }
+      setIsRefreshing(false);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
     }
+    finally {
+      setIsLoading(false);
+    }
+  }
+  useEffect(() => {
     fetchUsers();
   }, [page])
-
-
 
   const handleRandomClick = async () => {
     try {
@@ -147,18 +201,16 @@ const Categories = () => {
     } catch (error) { }
   };
 
-
-
   const handleStoryUser = (id, name) => {
     console.log("id----", id);
     dispatch(setCategoriesId(id))
-    navigation.navigate('SubCategories', { id: id, name: name });
+    navigation.navigate('SubCategories', { id: id, name: name, guestNumber:guestNumber });
   };
 
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
     setPage(1);
-    setResponseCategories([])
+    // setResponseCategories([]) //BUGGY LINE //COMMENTED OUT
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);
@@ -178,35 +230,59 @@ const Categories = () => {
     }
   };
 
-  // const usernameHandler = () => {
-  //   if (isUsernameInputValue?.length > 0) {
-
-  //     return
-  //   } else {
-
-  //     navigation.navigate(ADD_PLAYERS)
-  //   }
-  // }
-
   console.log("USERNAME--TEXT===", isUsernameInputValue)
   console.log("pages-------------------", page)
+
+  const isCategoryBlurred = (category) => {
+    return category?.name !== 'Animals' && !user
+  };
+
+  const generateRandomNumber = useMemo(() => {
+    return (numDigits) => {
+      const min = Math.pow(10, numDigits - 1);
+      const max = Math.pow(10, numDigits) - 1;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+  }, []);
+
+  const guestNumberRef = useRef(null);
+  useEffect(() => {
+    if (!guestNumberRef.current) {
+      const guestNumber = generateRandomNumber(4);
+      guestNumberRef.current = guestNumber;
+    }
+  }, [generateRandomNumber]);
+  const guestNumber = guestNumberRef.current;
+
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       {/* <ScrollView> */}
       {/* Frame Content Close----------- */}
 
-      <View style={styles.first_container}>
-        <BackButton onPress={() => navigation.goBack()} />
-        <View style={styles.categories_text_container}>
-          <Text style={styles.categories_text}>Categories</Text>
+      <View style={{flexDirection:'row',justifyContent:"space-between",marginHorizontal:responsiveWidth(5),marginBottom:moderateVerticalScale(10)}}>
+        <View style={styles.first_container}>
+       
+          <BackButton onPress={() => navigation.goBack()} />
+          <View style={styles.categories_text_container}>
+            <Text style={styles.categories_text}>Categories</Text>
+          </View>   
         </View>
-      </View>
+
+    {!user?
+          <View style={{marginTop:moderateVerticalScale(10)}}>
+        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
+          <SvgIcons name={'Guest'} width={36} height={36} />
+        </View>
+          <Text style={styles.text}>Guest{guestNumber}</Text>
+        </View>:<></>}
+    </View>
 
       {/* IMainnputField-----*/}
-      <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
       {/* MainInputField----- */}
-
+    {user?
+       <>
+      <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
       <View
         style={{
           paddingVertical: moderateVerticalScale(6),
@@ -251,8 +327,9 @@ const Categories = () => {
             </View>
           ))}
         </View>
-      </View>
-
+      </View></>:
+        <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        }
       <View
         style={{
           // flexDirection: 'row',
@@ -265,7 +342,7 @@ const Categories = () => {
       >
 
         <FlatList
-          data={responseCategories}
+          data={DATA}
           scrollEnabled={true}
           numColumns={3}
           nestedScrollEnabled
@@ -294,6 +371,21 @@ const Categories = () => {
                 mainbgColor={TextColorGreen}
                 backgroundColor="rgba(199, 152, 97, 1)"
               />
+               {!!isCategoryBlurred(item) && 
+               <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
+                    <View style={styles.blur_content_container}>
+                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
+                    <SvgIcons name={'Lock'} width={47} height={47} />
+                    </View>
+                    </View>
+                  </BlurView>
+                </View>
+                }
             </View>
           )}
           ListFooterComponent={() => (
@@ -376,8 +468,6 @@ const styles = StyleSheet.create({
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
     flexDirection: 'row',
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
     alignItems: 'center',
   },
   back_button: {
@@ -434,6 +524,25 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
+  text: {
+    fontSize: 10,
+    color: 'black',
+    textAlign:'center',
+    fontFamily: Inter_Regular.Inter_Regular
   },
 });
 

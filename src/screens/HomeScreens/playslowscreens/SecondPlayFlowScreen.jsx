@@ -22,7 +22,7 @@ const SecondPlayFlowScreen = () => {
     console.log(storyUserImage)
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.95;
+    const squareSize = windowWidth * 0.85;
     const dispatch = useDispatch()
     const onpressNextHandler = () => {
         navigation.navigate(FIRST_USER)

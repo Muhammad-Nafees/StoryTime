@@ -66,6 +66,7 @@ const Login = () => {
 
                     const responseData = await response.json();
                     dispatch(login(responseData))
+                    await AsyncStorage.setItem("userData", JSON.stringify(responseData))
 
                     if (responseData?.data) {
                         setIsLoading(false)

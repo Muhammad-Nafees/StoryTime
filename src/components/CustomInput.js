@@ -65,7 +65,8 @@ const CustomInput = (props,) => {
     fontWeight: '400',
     paddingLeft: 28,
     fontFamily: Inter_Regular.Inter_Regular,
-    fontSize: responsiveFontSize(1.8)
+    fontSize: responsiveFontSize(1.8),
+    backgroundColor: TextinputColor,
   };
 
   return (

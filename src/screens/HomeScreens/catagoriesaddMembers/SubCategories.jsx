@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   Dimensions,
   Image,
@@ -33,6 +33,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
+import SearchField from '../../../components/SearchField';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories, setSubCategoriesId } from '../../../../store/slices/getCategoriesSlice';
 import {
@@ -42,6 +43,9 @@ import {
 import { addFriends, randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
+import {BlurView} from '@react-native-community/blur';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SubCategories = ({ route }) => {
   const { width, height } = Dimensions.get('window');
@@ -50,8 +54,9 @@ const SubCategories = ({ route }) => {
   const navigation = useNavigation();
   const id = route?.params?.id;
   const name = route?.params?.name;
+  const guestNumber = route?.params?.guestNumber
   const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON } = Img_Paths;
-  const { PLAYER_SEQUENCE, ADD_PLAYERS } = NavigationsString;
+  const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS } = NavigationsString;
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const [isId, setIsId] = useState('');
   const [responsesubCategories, setResponseSubCategories] = useState([]);
@@ -63,8 +68,21 @@ const SubCategories = ({ route }) => {
   const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [responseRandomsub, setresponseRandomsub] = useState();
   const [isLoadMore, setIsLodeMore] = useState(false)
+  const [searchTerm, setSearchTerm] = useState(''); //for guest search only
+  const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   // const {  } = NavigationsString;
+
+  const allowedCategories = ['Shark', 'Whale', 'Cow'];
+  const DATA = useMemo(() => {
+    if(!!searchTerm){
+      const filtered = responsesubCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return filtered
+    }
+    return responsesubCategories
+  }, [responsesubCategories,searchTerm])
 
 
   const addFriends_api_handler = async () => {
@@ -96,23 +114,21 @@ const SubCategories = ({ route }) => {
     }
   };
 
-
+  const fetchSubcategories = async () => {
+    setIsLoading(true);
+    try {
+      const response = await get_Categories_Sub_Categories({ page2: page, id: id });
+      setIsLoading(false);
+      setHasMorePages(response?.data?.pagination?.hasNextPage)
+      console.log("morepages", HasMorePages)
+      setResponseSubCategories((prevValue) => [...prevValue, ...response?.data?.categories]);
+      return response;
+    } catch (error) {
+      console.log('error---', error);
+    }
+  };
 
   useEffect(() => {
-
-    const fetchSubcategories = async () => {
-      setIsLoading(true);
-      try {
-        const response = await get_Categories_Sub_Categories({ page2: page, id: id });
-        setIsLoading(false);
-        setHasMorePages(response?.data?.pagination?.hasNextPage)
-        console.log("morepages", HasMorePages)
-        setResponseSubCategories((prevValue) => [...prevValue, ...response?.data?.categories]);
-        return response;
-      } catch (error) {
-        console.log('error---', error);
-      }
-    };
     fetchSubcategories();
   }, [page]);
 
@@ -129,12 +145,11 @@ const SubCategories = ({ route }) => {
   };
 
   const handleStoryUser = (id, name) => {
-    navigation.navigate(PLAYER_SEQUENCE);
+    user?navigation.navigate(PLAYER_SEQUENCE):navigation.navigate(FIRSTSCREENPLAYFLOW);
     dispatch(randomNames(name));
     dispatch(setSubCategoriesId(id))
     console.log("subCategiryId", id)
   };
-
 
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
@@ -144,7 +159,6 @@ const SubCategories = ({ route }) => {
       setIsRefreshing(false);
     }, 1000);
   }, []);
-
 
   const handleLoadMore = async () => {
     console.log("HasMorePages=====", HasMorePages)
@@ -160,37 +174,42 @@ const SubCategories = ({ route }) => {
     }
   };
 
-  // useFocusEffect(
-  //     useCallback(() => {
-  //         setIsTriggered(false)
-  //     }, [])
-  // );
-
-  // useEffect(() => {
-  //     if (isTriggered) {
-
-  //     }
-  // }, [isTriggered]);
-
+  const isCategoryBlurred = category => {
+    return !allowedCategories.includes(category?.name) && !user;
+  };
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       {/* <ScrollView> */}
       {/* Things SubCategory */}
 
-      <View style={styles.first_container}>
-        <BackButton onPress={() => navigation.goBack()} />
-        <View style={styles.categories_text_container}>
-          <Text style={styles.categories_text}>{name}</Text>
+      <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginHorizontal: responsiveWidth(5),
+            marginBottom: moderateVerticalScale(10),
+          }}>
+          <View style={styles.first_container}>
+            <BackButton onPress={() => navigation.goBack()} />
+            <View style={styles.categories_text_container}>
+              <Text style={styles.categories_text}>{name}</Text>
+            </View>
+          </View>
+        {!user?
+          <View style={{marginTop:moderateVerticalScale(10)}}>
+        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
+          <SvgIcons name={'Guest'} width={36} height={36} />
         </View>
-      </View>
+          <Text style={styles.text}>Guest{guestNumber}</Text>
+        </View>:<></>}
+        </View>
 
       {/* IMainnputField-----*/}
+
+      {user ? (
+          <>
       <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
-
-
-      {/* MainInputField----- */}
-
       <View
         style={{
           paddingVertical: moderateVerticalScale(6),
@@ -223,6 +242,13 @@ const SubCategories = ({ route }) => {
           ))}
         </View>
       </View>
+          </>
+        ) : (
+          <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+        )}
+               
+      
 
       <View
         style={{
@@ -236,7 +262,7 @@ const SubCategories = ({ route }) => {
         }}>
 
         <FlatList
-          data={responsesubCategories}
+          data={DATA}
           // nestedScrollEnabled
           scrollEnabled={true}
           numColumns={3}
@@ -264,6 +290,22 @@ const SubCategories = ({ route }) => {
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(86, 182, 164, 1)"
                 />
+              {!!isCategoryBlurred(item) && 
+              <View style={styles.blur_wrapper}>
+                <BlurView
+                  style={styles.blur_view}
+                  blurAmount={10}
+                  overlayColor='transparent'
+                  >
+                  <View style={styles.blur_content_container}>
+                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
+                    <SvgIcons name={'Lock'} width={47} height={47} />
+                    </View>
+                    </View>
+                  </BlurView>
+                </View>
+                }
+
               </View>
             </>
           )}
@@ -341,8 +383,6 @@ const styles = StyleSheet.create({
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
     flexDirection: 'row',
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
     alignItems: 'center',
   },
   back_button: {
@@ -399,6 +439,25 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
+  text: {
+    fontSize: 10,
+    color: 'black',
+    textAlign:'center',
+    fontFamily: Inter_Regular.Inter_Regular
   },
 });
 

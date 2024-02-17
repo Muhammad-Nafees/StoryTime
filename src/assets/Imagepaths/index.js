@@ -250,6 +250,9 @@ export const Img_Paths = {
     BG_FRAME: require("../../assets/background-frame-img.png"),
     PLAYFLOW_FRAME: require("../../assets/border-frame.png"),
     PROFILE_BG_FRAME: require("../../assets/profilebg-frame.png"),
+    BG: require("../../assets/background-frame.png"),
+    BG_CLOCK: require("../../assets/bg-frame-with-clock.png"),
+
 
     // BORDERS FRAME-------
     // PLAY FLOW SECTION IMAGES
@@ -267,6 +270,6 @@ export const Img_Paths = {
     //DUMMYS
     AVATAR: require("../../assets/avatar.png"),
     DROP_ICON: require("../../assets/bottom-icon.png"),
-    DEFAULT_ICON: require("../../assets/defaultIcon.png")
-
+    DEFAULT_ICON: require("../../assets/defaultIcon.png"),
+    DEFAULT_COVER:require("../../assets/plain-grey-background.png")
 };
