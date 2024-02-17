@@ -73,6 +73,9 @@ const SubCategories = ({ route }) => {
   // const {  } = NavigationsString;
 
 
+  const allowedCategories = ['Shark', 'Whale', 'Cow'];
+
+
   const addFriends_api_handler = async () => {
     try {
       const responseData = await addFriends_api();
@@ -120,7 +123,6 @@ const SubCategories = ({ route }) => {
     fetchSubcategories();
   }, [page]);
 
-  const allowedCategories = ['Shark', 'Whale', 'Cow'];
 
   const handleRandomSub_category = async () => {
     try {
@@ -290,7 +292,8 @@ const SubCategories = ({ route }) => {
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(86, 182, 164, 1)"
                 />
-                  {!!isCategoryBlurred(item) && <View style={styles.blur_wrapper}>
+              {!!isCategoryBlurred(item) && 
+              <View style={styles.blur_wrapper}>
                 <BlurView
                   style={styles.blur_view}
                   blurAmount={10}
@@ -302,7 +305,8 @@ const SubCategories = ({ route }) => {
                     </View>
                     </View>
                   </BlurView>
-                </View>}
+                </View>
+                }
 
               </View>
             </>
@@ -437,6 +441,19 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   text: {
     fontSize: 10,

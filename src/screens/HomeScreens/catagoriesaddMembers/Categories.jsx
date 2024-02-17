@@ -70,11 +70,49 @@ const Categories = () => {
   const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
-  // Get Categories Api ----------
-  // console.log("addUsersGame=====", addUsersGame);
+
 
   const fetchCategoriesUntilFound = async searchTerm => {
+    let page = 1;
+    let found = false;
+    let array = []
+
+    try {
+      while (!found) {
+        const response = await get_Categories_Sub_Categories({page});
+
+        if (response.data && response.data.categories) {
+          const responseArray = response.data.categories;
+          array= [...array,...responseArray]
+
+          const filteredCategories = responseArray.filter(category =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          console.log('filter', filteredCategories);
+          if (filteredCategories.length > 0) {
+            array = array.filter(el=> !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            setResponseCategories([filteredCategories?.[0],...array]);
+            setIsLoading(false);
+            found = true;
+          } else if (responseArray.length > 0) {
+            page++;
+          } else {
+            // No more data available
+            break;
+          }
+        } else {
+          // Handle the case where the response structure is unexpected
+          console.error('Unexpected API response format:', response);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+
+    return array;
   };
+
 
   const addFriends_api_handler = async () => {
     try {
@@ -111,10 +149,10 @@ const Categories = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-        // if (!user) {
-        //   fetchCategoriesUntilFound('animals');
-        //   return;
-        // }    
+        if (!user) {
+          fetchCategoriesUntilFound('animals');
+          return;
+        }    
      const response = await get_Categories_Sub_Categories({ page: page });
       // const categoriesData = response?.data?.categories
       setIsLoading(false);
@@ -161,7 +199,7 @@ const Categories = () => {
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
     setPage(1);
-    setResponseCategories([])
+    // setResponseCategories([]) //BUGGY LINE //COMMENTED OUT
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);
@@ -332,7 +370,8 @@ const Categories = () => {
                 mainbgColor={TextColorGreen}
                 backgroundColor="rgba(199, 152, 97, 1)"
               />
-               {/* {!!isCategoryBlurred(category) && <View style={styles.blur_wrapper}>
+               {!!isCategoryBlurred(item) && 
+               <View style={styles.blur_wrapper}>
                 <BlurView
                   style={styles.blur_view}
                   blurAmount={10}
@@ -344,7 +383,8 @@ const Categories = () => {
                     </View>
                     </View>
                   </BlurView>
-                </View>} */}
+                </View>
+                }
             </View>
           )}
           ListFooterComponent={() => (
@@ -483,6 +523,19 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   text: {
     fontSize: 10,
