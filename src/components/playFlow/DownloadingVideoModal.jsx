@@ -1,112 +1,90 @@
-import React, { useState, } from 'react'
-import { Dimensions, Image, Platform, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, ProgressBarAndroid } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, progre, } from 'react-native'
+import { ProgressBar } from "@react-native-community/progress-bar-android"
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
-import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
+import { useNavigation, useNavigationBuilder, } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import TouchableButton from '../TouchableButton';
-import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveDataToProfile, recordingVideo } from '../../../store/slices/RecordingData';
-import RNFetchBlob from 'rn-fetch-blob';
-import { PassionOne_Regular } from '../../constants/GlobalFonts';
-import SaveStory from './SaveStory';
-import SaveStoryBtn from './SaveStoryBtn';
-import SaveAsPdf from './SaveAsPdf';
+import { Defs, G, Path, Rect, Svg } from 'react-native-svg';
+import { useEffect, useState } from 'react';
 import StoryTimeSaved from './StoryTimeSaved';
-import { createStory_api } from '../../../services/api/storyfeed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 
-const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
+
+const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
-    const [isVisiblePdf, setVisiblePdf] = useState(false);
+    const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
-    const [saveStoryModal, setSaveStoryModal] = useState(false);
-    const [saveStoryModalsecond, setSaveStoryModalsecond] = useState(false);
-    const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
+    const [saveStoryVideoModalAfterDownloading, setSaveStoryVideoModalAfterDownloading] = useState(false);
+    const [isVisibleVideoAfterDownloading, setIsVisibleVideoAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
-    const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
-    const subCategoryId = useSelector((state) => state?.getcategories?.subcategoriesId);
-    const playerContributorsId = useSelector((state) => state?.getcategories?.playerscontributorsIds);
-    console.log("categoryId-----", categoryId);
-    console.log("subCategoryId-----", subCategoryId)
-    console.log("playerContributorsId-----", playerContributorsId);
-    console.log("textrecordUsers-----", textrecordUsers);
-
-    const convertStr = textrecordUsers.join()
-    console.log("convertstr----", convertStr)
-
     const navigation = useNavigation();
-    const dispatch = useDispatch();
+    const [progress, setProgress] = useState(0);
 
-    const saveStoryhandler = () => {
-        setSaveStoryModal(true);
-        setVisiblePdf(true);
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress(prevProgress => {
+                if (prevProgress >= 100) {
+                    clearInterval(interval);
+                    setSaveStoryVideoModalAfterDownloading(true);
+                    setIsVisibleVideoAfterDownloading(true);
+                    return 100;
+                }
+                return prevProgress + 1;
+            });
+        }, 50);
 
-    const handleSaveStories = async () => {
-
-        try {
-            const userLoginId = await AsyncStorage.getItem("isUserId");
-            const responseData = await createStory_api({ creator: userLoginId, category: categoryId, subCategory: subCategoryId, contributors: playerContributorsId, content: convertStr });
-            console.log("storyresData====", responseData)
-            dispatch(SaveDataToProfile(textrecordUsers));
-            setSaveStoryModalsecond(true);
-            setVisibleSavePhone(true);
-            console.log("Users Stories save to profile");
-            console.log("isLoginUserId-----", userLoginId)
-            return responseData;
-        } catch (error) {
-            console.log("error", error)
-        }
-    };
-
+        return () => {
+            clearInterval(interval)
+        };
+    }, []);
 
 
     return (
-        <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
+        <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow} >
 
-            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+            {/* <View style={{ backgroundColor: "orange" }}> */}
+
+            <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
 
                 <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-                    <BackButton onPress={() => setIsVisible(false)} />
+                    <BackButton onPress={() => setIsVisibleFirstVideoFlow(false)} />
                 </View>
 
                 {/* Back Button */}
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.container2}>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-                        <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Save your story to your phone</Text>
 
-                        <View style={{ paddingVertical: 8, }}>
-                            <TouchableButton type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                <View style={{ flex: 1, justifyContent: "center", }}>
+                    <View style={{ flexDirection: 'row', backgroundColor: "#FFF", width: responsiveWidth(80), height: responsiveHeight(10), justifyContent: "space-between", alignItems: "center", borderRadius: 4 }}>
+                        <View style={{ width: responsiveWidth(80), justifyContent: "space-evenly", }}>
+                            <View style={{ flexDirection: 'row', justifyContent: "space-around", }}>
+                                <Text style={{ color: "#000", fontFamily: Inter_Regular.Inter_Regular, fontSize: responsiveFontSize(1.8) }}>Downloading Story Time</Text>
+                                <Text style={{ color: "#000", fontWeight: "600" }}>{progress}%</Text>
+                            </View>
+
+                            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(3) }}>
+                                <ProgressBar styleAttr="Horizontal" indeterminate={false} style={{ color: "rgba(4, 120, 87, 1)", width: responsiveWidth(65) }} progress={progress / 100} />
+                            </View>
+
                         </View>
-
-                        <SaveStoryBtn onPress={saveStoryhandler} text="Save as PDF" />
 
                     </View>
                 </View>
 
-                {
-                    saveStoryModal && (
-                        <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
-                    )
-                }
-
-                {saveStoryModalsecond &&
-                    <StoryTimeSaved isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time 
-Successfully Saved!" textButton="Back" />
+                {saveStoryVideoModalAfterDownloading &&
+                    <StoryTimeSaved isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
+Successfully Saved to your phone!" textButton="Back" />
                 }
 
             </ImageBackground>
+            {/* </View> */}
         </Modal>
     )
 };
@@ -147,7 +125,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         // flex: 1,
         backgroundColor: "#FFF",
-        height: responsiveHeight(28),
+        height: responsiveHeight(30),
         width: responsiveWidth(80),
         borderWidth: 4,
         borderColor: TextColorGreen
@@ -227,4 +205,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SaveStoryPhone;
+export default DownloadingVideoModal;

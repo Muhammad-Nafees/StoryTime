@@ -226,10 +226,7 @@ const Sequence = () => {
                           color: '#FFF',
                           fontFamily: PassionOne_Regular.passionOne,
                           fontSize: responsiveFontSize(4),
-                        }}>
-                        {selectedIndices.includes(index)
-                          ? selectedIndices.indexOf(index) + 1
-                          : ''}
+                        }}>{selectedIndices.includes(index) ? selectedIndices.indexOf(index) + 1 : ''}
                       </Text>
                       {/* <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
                         <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
@@ -251,7 +248,7 @@ const Sequence = () => {
                         fontWeight: '500',
                         fontSize: responsiveFontSize(1.9),
                       }}>
-                      {item?.username}
+                      {`@${item?.username}`}
                     </Text>
                   </View>
                 </View>

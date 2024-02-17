@@ -56,7 +56,7 @@ const FirstUser = ({ route }) => {
     // const isEmptyArray = route?.params?.isEmptyArray;
 
     // console.log("displayuser--", currentDisplayUser)
-    // console.log("textusers=====", textrecordUsers);
+    console.log("textrecordUsers=====", textrecordUsers);
     // const IdUsers = addedUsers.map((item) => item?.userid)
     // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
 
@@ -76,7 +76,7 @@ const FirstUser = ({ route }) => {
             setIsPressed(true);
             if (timeLeft === null) {
                 startRecognizing();
-                setTimeLeft(10);
+                setTimeLeft(30);
             };
 
             // console.log("isFirstCall-----", isFirstCall);
@@ -175,18 +175,34 @@ const FirstUser = ({ route }) => {
     //---------- onSpeechResult----------
 
     const onspeechResult = useCallback((e) => {
-        const text = e?.value[0];
+        console.log("ON SPEECH RESULT-----------", e);
+        // const text = e?.value[0];
 
-        dispatch(recordingData(text));
-        if (text) {
-            setRecordingText((prevVal) => [...prevVal, ...text]);
-        }
+        // dispatch(recordingData(text));
+        // if (text) {
+        //     setRecordingText((prevVal) => [...prevVal, ...text]);
+        // }
     }, [dispatch]);
 
-
     const onSpeechPartialResults = (e) => {
+        const text = e?.value[0];
+        console.log("text======Voice", e?.value[0]);
+        console.log("recordingTextState====", recordingText)
+        dispatch(recordingData(e?.value[0]));
+
+        if (e?.value[0]) {
+            setRecordingText((prevVal) => [...prevVal, e?.value[0]]);
+        }
         console.log('onSpeechPartialResults: ', e);
         setPartialResults(e.value);
+
+
+        const combinedText = e.value.join(" ");
+        // Combined text ko split karna taki har word ko alag karein
+        const words = combinedText.split(" ");
+        // Duplicate entries ko hata kar ek naya array banana
+        const uniqueWords = [];
+
     };
 
 
@@ -208,18 +224,32 @@ const FirstUser = ({ route }) => {
 
     // ---------- Start Recording And Convert Text ----------
 
+
     const startRecognizing = async () => {
+        const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000, }
         try {
-            await Voice.start('en-US', {
-                "RECOGNIZER_ENGINE": "GOOGLE",
-                "EXTRA_PARTIAL_RESULTS": true
-            });
+            await Voice.start('en-US', options);
             handlePressIn();
             console.log("Start Recognizing Value====")
         } catch (error) {
             console.log("err", error);
         }
     };
+
+
+
+    // const startRecognizing = async () => {
+    //     try {
+    //         await Voice.start('en-US', {
+    //             "RECOGNIZER_ENGINE": "GOOGLE",
+    //             "EXTRA_PARTIAL_RESULTS": true
+    //         });
+    //         handlePressIn();
+    //         console.log("Start Recognizing Value====")
+    //     } catch (error) {
+    //         console.log("err", error);
+    //     }
+    // };
 
 
     // useEffect(() => {
@@ -350,8 +380,9 @@ const FirstUser = ({ route }) => {
                     </View>
 
                     {
-                        isNext&&
+                        isNext &&
                         <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
+
                     }
 
                     <View style={{ paddingTop: responsiveWidth(6) }}>
