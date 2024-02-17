@@ -45,6 +45,7 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
 import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SubCategories = ({ route }) => {
   const { width, height } = Dimensions.get('window');
