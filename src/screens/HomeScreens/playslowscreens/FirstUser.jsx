@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, Image, Dimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState,useRef } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -17,6 +17,7 @@ import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
+import GuestModals from '../../../components/GuestModals';
 
 
 const FirstUser = ({ route }) => {
@@ -51,6 +52,7 @@ const FirstUser = ({ route }) => {
     const [partialResults, setPartialResults] = useState([]);
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const checkTrue = route?.params?.checkValue;
+    const GuestModalRef = useRef(null);
     console.log("profileusers", profileUsersStories);
     console.log("ended====", ended)
     // const isEmptyArray = route?.params?.isEmptyArray;
@@ -310,7 +312,11 @@ const FirstUser = ({ route }) => {
         setVisible(true); // Set isVisible to true to open the modal
     };
 
-
+    const modalOpen = (heading,content,buttonText,text) => {
+        if (GuestModalRef.current) {
+            GuestModalRef.current.open(heading,content,buttonText,text);
+        }
+      };
     return (
         <>
 
@@ -394,8 +400,15 @@ const FirstUser = ({ route }) => {
                             <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
                         )
                     }
+                    <TouchableOpacity  
+                    onPress={()=>modalOpen('Get Story Time Premium','Subscribe now to save your Story to your profile','Subscribe','Back')}
+                                style={{ borderRadius: 10, borderWidth: 4, borderColor:TextColorGreen, backgroundColor:TextColorGreen, paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(25) }}>
+                                    <Text style={{color:'white',fontWeight: '400',fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular}}>Done</Text>
+                         </TouchableOpacity>
                 </View>
-                
+
+                <GuestModals ref={GuestModalRef}></GuestModals>
+
                 </ScrollView>
 
 
