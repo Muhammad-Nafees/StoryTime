@@ -79,6 +79,8 @@ const FirstUser = ({route}) => {
   );
   const checkTrue = route?.params?.checkValue;
   const GuestModalRef = useRef(null);
+  const GuestModalRefForAds = useRef(null);
+
   console.log('profileusers', profileUsersStories);
   console.log('ended====', ended);
   // const isEmptyArray = route?.params?.isEmptyArray;
@@ -323,6 +325,7 @@ const FirstUser = ({route}) => {
   const saveBtnHandler = () =>{
     if(!user){
         modalOpen(
+            GuestModalRef,
             'Get Story Time Premium',
             'Subscribe now to save your Story to your profile',
             'Subscribe',
@@ -338,9 +341,9 @@ const FirstUser = ({route}) => {
     setVisible(true); // Set isVisible to true to open the modal
   };
 
-  const modalOpen = (heading, content, buttonText, text) => {
-    if (GuestModalRef.current) {
-      GuestModalRef.current.open(heading, content, buttonText, text);
+  const modalOpen = (ref,heading, content, buttonText, text) => {
+    if (ref.current) {
+      ref.current.open(heading, content, buttonText, text);
     }
   };
   return (
@@ -399,6 +402,15 @@ const FirstUser = ({route}) => {
                   </View>
                 ) : !user ? (
                   <TouchableOpacity
+                  onPress={()=>{
+                    modalOpen(
+                        GuestModalRefForAds,
+                        'Support Story Time',
+                        'Watch the ad to \ncontinue playing',
+                        'Watch ads',
+                        'Subscribe for Ad FREE experience',
+                      )
+                  }}
                     style={{
                       borderRadius: 10,
                       borderWidth: 4,
@@ -550,6 +562,7 @@ const FirstUser = ({route}) => {
           </View>
 
           <GuestModals ref={GuestModalRef}></GuestModals>
+          <GuestModals ref={GuestModalRefForAds}></GuestModals>
         </ScrollView>
       </ImageBackground>
     </>
