@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
+import {Inter_Regular} from '../../../../constants/GlobalFonts';
 
 
 const VideoFirstUser = () => {
@@ -287,7 +288,7 @@ const VideoFirstUser = () => {
 
 
     const onpressNextHandler = () => {
-        navigation.navigate(SECOND_USER_STORY)
+      user?  navigation.navigate(SECOND_USER_STORY) :null
     };
 
     return (
@@ -295,18 +296,40 @@ const VideoFirstUser = () => {
             {/* BACK BUTTON AND TIMER */}
 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
-                <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: responsiveWidth(60), justifyContent: 'space-between', alignItems: "center" }}>
+                <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: isCancelingStory ? responsiveWidth(60): responsiveWidth(90), justifyContent: 'space-between', alignItems: "center" }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(10), }}>
                         <Image style={{ width: responsiveWidth(5), height: responsiveHeight(2.5), resizeMode: "center" }} source={require("../../../../assets/back-playflowicon.png")} />
                     </TouchableOpacity>
                     <View>
 
                         {
-                            isCancelingStory &&
-                            <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
+                            isCancelingStory ?
+                           ( <View style={{ justifyContent: 'center', alignItems: "center", borderRadius: 10, borderWidth: 4, borderColor: "rgba(255, 153, 166, 1)", backgroundColor: 'rgba(255, 164, 164, 0.5)', paddingVertical: moderateVerticalScale(10), paddingHorizontal: moderateScale(12) }}>
                                 <Text style={{ fontWeight: '600', color: TextColorGreen, fontSize: responsiveFontSize(1.9) }}>Time :{timeText}</Text>
                             </View>
-                        }
+                       ) : !user ? (
+                        <TouchableOpacity
+                            style={{
+                            borderRadius: 10,
+                            borderWidth: 4,
+                            borderColor: TextColorGreen,
+                            backgroundColor: TextColorGreen,
+                            paddingVertical: moderateVerticalScale(6),
+                            paddingHorizontal: moderateScale(25),
+                            }}>
+                            <Text
+                            style={{
+                                color: 'white',
+                                fontWeight: '400',
+                                fontSize: responsiveFontSize(1.9),
+                                fontFamily: Inter_Regular.Inter_Regular,
+                            }}>
+                            Done
+                            </Text>
+                        </TouchableOpacity>
+                        ) : (
+                        <></>
+                        )}
 
                     </View>
                 </View>
@@ -332,7 +355,11 @@ const VideoFirstUser = () => {
                                 <>
                                     <View>
                                         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 9999, justifyContent: "center", alignItems: "center" }}>
+                                           {user ? (
                                             <UserNames backgroundColor="rgba(0,0,0,0.5)" currentDisplayUser={currentDisplayUser} />
+                                            ) : (
+                                            <></>
+                                            )}
                                         </View>
 
                                         <Camera
