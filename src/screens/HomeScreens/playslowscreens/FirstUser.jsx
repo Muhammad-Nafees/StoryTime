@@ -320,6 +320,19 @@ const FirstUser = ({route}) => {
     }, [checkUserTrueorFalse]),
   );
 
+  const saveBtnHandler = () =>{
+    if(!user){
+        modalOpen(
+            'Get Story Time Premium',
+            'Subscribe now to save your Story to your profile',
+            'Subscribe',
+            'Back',
+          )
+          return
+    }
+    saveStoryhandler()
+  }
+
   const saveStoryhandler = () => {
     setSaveStoryModal(true);
     setVisible(true); // Set isVisible to true to open the modal
@@ -524,43 +537,16 @@ const FirstUser = ({route}) => {
 
             <View style={{paddingTop: responsiveWidth(6)}}>
               <SaveStoryBtn
-                onPress={saveStoryhandler}
-                text="Save Story"
+                onPress={saveBtnHandler}
+                text={!user?"Save to phone":"Save Story"}
                 color={TextColorGreen}
-                isNext={isNext}
+                isNext={!user?false:isNext}
               />
             </View>
 
             {saveStoryModal && (
               <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
             )}
-            <TouchableOpacity
-              onPress={() =>
-                modalOpen(
-                  'Get Story Time Premium',
-                  'Subscribe now to save your Story to your profile',
-                  'Subscribe',
-                  'Back',
-                )
-              }
-              style={{
-                borderRadius: 10,
-                borderWidth: 4,
-                borderColor: TextColorGreen,
-                backgroundColor: TextColorGreen,
-                paddingVertical: moderateVerticalScale(6),
-                paddingHorizontal: moderateScale(25),
-              }}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontWeight: '400',
-                  fontSize: responsiveFontSize(1.9),
-                  fontFamily: Inter_Regular.Inter_Regular,
-                }}>
-                Done
-              </Text>
-            </TouchableOpacity>
           </View>
 
           <GuestModals ref={GuestModalRef}></GuestModals>
