@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   Dimensions,
   Image,
@@ -68,12 +68,21 @@ const SubCategories = ({ route }) => {
   const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [responseRandomsub, setresponseRandomsub] = useState();
   const [isLoadMore, setIsLodeMore] = useState(false)
+  const [searchTerm, setSearchTerm] = useState(''); //for guest search only
   const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   // const {  } = NavigationsString;
 
-
   const allowedCategories = ['Shark', 'Whale', 'Cow'];
+  const DATA = useMemo(() => {
+    if(!!searchTerm){
+      const filtered = responsesubCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return filtered
+    }
+    return responsesubCategories
+  }, [responsesubCategories,searchTerm])
 
 
   const addFriends_api_handler = async () => {
@@ -142,7 +151,6 @@ const SubCategories = ({ route }) => {
     console.log("subCategiryId", id)
   };
 
-
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
     setPage(1);
@@ -151,7 +159,6 @@ const SubCategories = ({ route }) => {
       setIsRefreshing(false);
     }, 1000);
   }, []);
-
 
   const handleLoadMore = async () => {
     console.log("HasMorePages=====", HasMorePages)
@@ -169,16 +176,6 @@ const SubCategories = ({ route }) => {
 
   const isCategoryBlurred = category => {
     return !allowedCategories.includes(category?.name) && !user;
-  };
-  const handleSearch = searchTerm => {
-    if (!!searchTerm) {
-      const filtered = responsesubCategories.filter(category =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      setResponseSubCategories(filtered);
-      return;
-    }
-    fetchSubcategories();
   };
 
   return (
@@ -247,7 +244,8 @@ const SubCategories = ({ route }) => {
       </View>
           </>
         ) : (
-          <SearchField placeholder="Search" onSearch={handleSearch} />
+          <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
         )}
                
       
@@ -264,7 +262,7 @@ const SubCategories = ({ route }) => {
         }}>
 
         <FlatList
-          data={responsesubCategories}
+          data={DATA}
           // nestedScrollEnabled
           scrollEnabled={true}
           numColumns={3}
