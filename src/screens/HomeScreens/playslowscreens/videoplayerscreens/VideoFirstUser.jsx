@@ -17,6 +17,7 @@ import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlow
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
 import {Inter_Regular} from '../../../../constants/GlobalFonts';
+import GuestModals from '../../../../components/GuestModals';
 
 
 const VideoFirstUser = () => {
@@ -50,6 +51,7 @@ const VideoFirstUser = () => {
     const dispatch = useDispatch()
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
+    const GuestModalRef = useRef(null);
 
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
@@ -291,9 +293,30 @@ const VideoFirstUser = () => {
       user?  navigation.navigate(SECOND_USER_STORY) :null
     };
 
+    const modalOpen = (heading, content, buttonText, text) => {
+        if (GuestModalRef.current) {
+          GuestModalRef.current.open(heading, content, buttonText, text);
+        }
+    }
+    
+    const saveBtnHandler = () =>{
+        if(!user){
+            modalOpen(
+                'Get Story Time Premium',
+                'Subscribe now to save your Story to your profile',
+                'Subscribe',
+                'Back',
+              )
+              return
+        }
+        saverecordingvideo()
+      }
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* BACK BUTTON AND TIMER */}
+
+        <ScrollView>
 
             <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                 <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width: isCancelingStory ? responsiveWidth(60): responsiveWidth(90), justifyContent: 'space-between', alignItems: "center" }}>
@@ -405,17 +428,16 @@ const VideoFirstUser = () => {
 
             {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
-            <View style={{ paddingTop: responsiveWidth(6) }}>
-                <SaveStoryBtn onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} />
+            <View style={{ paddingTop: responsiveWidth(6)}}>
+                <SaveStoryBtn onPress={saveBtnHandler} text={!user? "Save to phone":"Save Story"} color={TextColorGreen} isNext={!user?false:isNext} />
             </View>
-
-            {/* </View> */}
 
             {
                 isVisible &&
                 <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
             }
-
+            <GuestModals ref={GuestModalRef}/>
+        </ScrollView>
 
         </ImageBackground>
     )
