@@ -45,6 +45,7 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
 import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SubCategories = ({ route }) => {
   const { width, height } = Dimensions.get('window');
@@ -69,6 +70,9 @@ const SubCategories = ({ route }) => {
   const [isLoadMore, setIsLodeMore] = useState(false)
   const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
+
+  const allowedCategories = ['Shark', 'Whale', 'Cow'];
+
 
   const addFriends_api_handler = async () => {
     try {
@@ -116,7 +120,6 @@ const SubCategories = ({ route }) => {
     fetchSubcategories();
   }, [page]);
 
-  const allowedCategories = ['Shark', 'Whale', 'Cow'];
 
   const handleRandomSub_category = async () => {
     try {
@@ -287,7 +290,8 @@ const SubCategories = ({ route }) => {
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(86, 182, 164, 1)"
                 />
-                  {!!isCategoryBlurred(item) && <View style={styles.blur_wrapper}>
+              {!!isCategoryBlurred(item) && 
+              <View style={styles.blur_wrapper}>
                 <BlurView
                   style={styles.blur_view}
                   blurAmount={10}
@@ -299,7 +303,8 @@ const SubCategories = ({ route }) => {
                     </View>
                     </View>
                   </BlurView>
-                </View>}
+                </View>
+                }
 
               </View>
             </>
@@ -434,6 +439,19 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   text: {
     fontSize: 10,

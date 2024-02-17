@@ -15,7 +15,7 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStory from '../../../components/playFlow/SaveStory';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
-import { SCREEN_HEIGHT } from '../../../constants/Constant';
+import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 
@@ -287,6 +287,7 @@ const FirstUser = ({ route }) => {
             <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
                 {/* BACK BUTTON AND TIMER */}
+                <ScrollView>
 
                 <View style={{ paddingVertical: moderateVerticalScale(18), paddingHorizontal: moderateScale(22) }}>
                     <View style={{ paddingTop: responsiveWidth(5), flexDirection: "row", width:isCancelingStory?responsiveWidth(60):responsiveWidth(90), justifyContent: 'space-between', alignItems: "center" }}>
@@ -336,7 +337,7 @@ const FirstUser = ({ route }) => {
                     </View>
                 </ImageBackground>
 
-                <View style={{ height: responsiveHeight(35) }}>
+                <View style={{ height: responsiveHeight(35),marginBottom:SPACING*4 }}>
                     <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
                         <TouchableOpacity
                             disabled={isFirstCall ? true : false}
@@ -349,10 +350,8 @@ const FirstUser = ({ route }) => {
                     </View>
 
                     {
-                        isNext && user?
-                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />:
-                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isCancelingStory={isCancelingStory} />
-
+                        isNext&&
+                        <CustomPlayFlowButton onPress={onPressNext} isLongPress={isLongPress} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} isCancelingStory={isCancelingStory} />
                     }
 
                     <View style={{ paddingTop: responsiveWidth(6) }}>
@@ -365,6 +364,8 @@ const FirstUser = ({ route }) => {
                         )
                     }
                 </View>
+                
+                </ScrollView>
 
 
             </ImageBackground>
