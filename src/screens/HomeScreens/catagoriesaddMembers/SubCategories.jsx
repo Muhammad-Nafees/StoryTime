@@ -56,7 +56,7 @@ const SubCategories = ({ route }) => {
   const name = route?.params?.name;
   const guestNumber = route?.params?.guestNumber
   const { TEACHER_ICON, POLICE_ICON, FAMILY_ICON, LUDO_ICON } = Img_Paths;
-  const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW } = NavigationsString;
+  const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS } = NavigationsString;
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const [isId, setIsId] = useState('');
   const [responsesubCategories, setResponseSubCategories] = useState([]);
@@ -70,6 +70,8 @@ const SubCategories = ({ route }) => {
   const [isLoadMore, setIsLodeMore] = useState(false)
   const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
+  // const {  } = NavigationsString;
+
 
   const addFriends_api_handler = async () => {
     try {
@@ -85,7 +87,8 @@ const SubCategories = ({ route }) => {
         console.log("Matched User ID:", userid);
         setIsUsernameInputValue("");
       } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate(PLAYER_SEQUENCE)
+        navigation.navigate(ADD_PLAYERS)
+
       }
       else {
         Toast.show({
@@ -264,7 +267,6 @@ const SubCategories = ({ route }) => {
           scrollEnabled={true}
           numColumns={3}
           contentContainerStyle={{ paddingBottom: 200 }}
-
           keyExtractor={(item, index) => index.toString()}
           onRefresh={onRefresh}
           refreshing={isRefreshing}
@@ -361,8 +363,8 @@ const SubCategories = ({ route }) => {
           onEndReachedThreshold={0.3}
         // onEndReachedThreshold={0.3}
         />
-        <Toast />
       </View>
+      <Toast />
       {/* </ScrollView> */}
     </ImageBackground>
   );

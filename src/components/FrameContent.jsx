@@ -110,12 +110,13 @@ const FrameContent = ({
                                             <Image style={styles.child_bg_img} source={profileImage} />
                                             <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>{username}</Text>
                                         </View>
-
-                                        <View style={styles.text_container}>
-                                            <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
-                                                {content}
-                                            </Text>
-                                        </View>
+                                        <ScrollView>
+                                            <View style={styles.text_container}>
+                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
+                                                    {content}
+                                                </Text>
+                                            </View>
+                                        </ScrollView>
                                     </View>
                                 </LinearGradient>
                             </>
@@ -262,6 +263,7 @@ const styles = StyleSheet.create({
     },
     text_container: {
         paddingTop: responsiveWidth(3),
+        // height: responsiveHeight(25)
     },
     second_container: {
         position: 'relative',

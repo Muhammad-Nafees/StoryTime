@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     img_dog: {
         // width: responsiveWidth(21),
         // height: responsiveHeight(10),
-        resizeMode: "center"
+        resizeMode: "cover"
     },
     start: {
         paddingVertical: moderateVerticalScale(8),

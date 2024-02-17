@@ -27,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           // packages.add(new MainReactPackage());
           // packages.add(new RNHTMLtoPDFPackage());
+          
           return packages;
         }
 

@@ -14,6 +14,7 @@ export const Img_Paths = {
     HOME_FOCUSED: require("../../assets/home_focused.png"),
     EYE_ICON: require("../../assets/eye-icon.png"),
     NOT_EYE_ICON: require("../../assets/not-eye-icon.png"),
+    BGIMAGE_DOWNLOADING: require("../../assets/downloadingBgImage.png"),
 
     // Categories File-----
 

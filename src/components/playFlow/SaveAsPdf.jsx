@@ -16,6 +16,7 @@ import SaveStoryBtn from './SaveStoryBtn';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import StoryTimeSaved from './StoryTimeSaved';
+import DownloadingFlow from './DownloadingFlow';
 
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
@@ -24,28 +25,35 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
     const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
+    const [isVisibleDownloading, setIsVisibleDownloading] = useState(false);
+    const [saveStoryModalDownloading, setSaveStoryModalDownloading] = useState(false)
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-
+    console.log("textrecordusers", textrecordUsers)
     const createPDF = async () => {
 
         try {
             const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
             await RNFS.mkdir(folderPath);
 
-            const htmlContent = `<html><body><p>${textrecordUsers}</p></body></html>`;
+            const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
             const options = {
                 html: htmlContent,
-                fileName: 'textUsers', // PDF file ka naam
+                fileName: 'voicetotext', // PDF file ka naam
                 directory: folderPath,
             };
-
             const pdf = await RNHTMLtoPDF.convert(options);
-            console.log('PDF generated: ', pdf.filePath);
-            Alert.alert('PDF generated successfully!', `File saved at: ${pdf.filePath}`);
+            // console.log('PDF generated: ', pdf.filePath);
+            // Move the PDF file to desired directory
+            const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`; // Generate random number
+            // "/download_" +  + 
+            console.log("download dest :", downloadDest)
+            await RNFS.moveFile(pdf.filePath, downloadDest);
+            setIsVisibleDownloading(true);
+            setSaveStoryModalDownloading(true);
         } catch (error) {
             console.error('Error generating PDF: ', error);
             Alert.alert('Error generating PDF. Please try again.');
@@ -53,6 +61,28 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
     };
 
 
+    // const createPDF = async () => {
+    //     try {
+    //         const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
+    //         await RNFS.mkdir(folderPath);
+
+    //         const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
+    //         const options = {
+    //             html: htmlContent,
+    //             fileName: 'textUsers', // PDF file ka naam
+    //             directory: folderPath,
+    //         };
+
+    //         const pdf = await RNHTMLtoPDF.convert(options);
+    //         console.log('PDF generated: ', pdf.filePath);
+    //         setIsVisibleDownloading(true);
+    //         setSaveStoryModalDownloading(true)
+    //         // Alert.alert('PDF generated successfully!', `File saved at: ${pdf.filePath}`);
+    //     } catch (error) {
+    //         console.error('Error generating PDF: ', error);
+    //         Alert.alert('Error generating PDF. Please try again.');
+    //     }
+    // };
 
     return (
         <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
@@ -98,19 +128,6 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                                         Save
                                     </Text>
 
-                                    {/* {isLoading ? (
-          <ActivityIndicator color={'#FFF'} />
-        ) : (
-          <Text
-            style={{
-              fontSize: responsiveFontSize(1.9),
-              fontWeight: '600',
-              letterSpacing: 0.28,
-              color: color,
-            }}>
-            {text}
-          </Text>
-        )} */}
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -119,6 +136,11 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
 
                     </View>
                 </View>
+
+                {saveStoryModalDownloading &&
+                    <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
+Successfully Saved!" textButton="Back" />
+                }
 
 
             </ImageBackground>

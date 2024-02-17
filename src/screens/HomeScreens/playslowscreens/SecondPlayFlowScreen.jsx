@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     img_dog: {
         width: responsiveWidth(22),
         height: responsiveHeight(11),
-        resizeMode: "center"
+        resizeMode: "cover",
     },
     start: {
         paddingVertical: moderateVerticalScale(12),
@@ -110,5 +110,7 @@ const styles = StyleSheet.create({
         fontFamily: PassionOne_Regular.passionOne,
     }
 
-})
+});
+
+
 export default SecondPlayFlowScreen;
