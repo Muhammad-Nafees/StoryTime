@@ -52,6 +52,8 @@ const VideoFirstUser = () => {
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
     const GuestModalRef = useRef(null);
+    const GuestModalRefForAds = useRef(null);
+
 
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
@@ -293,7 +295,7 @@ const VideoFirstUser = () => {
       user?  navigation.navigate(SECOND_USER_STORY) :null
     };
 
-    const modalOpen = (heading, content, buttonText, text) => {
+    const modalOpen = (ref,heading, content, buttonText, text) => {
         if (GuestModalRef.current) {
           GuestModalRef.current.open(heading, content, buttonText, text);
         }
@@ -302,6 +304,7 @@ const VideoFirstUser = () => {
     const saveBtnHandler = () =>{
         if(!user){
             modalOpen(
+                GuestModalRef,
                 'Get Story Time Premium',
                 'Subscribe now to save your Story to your profile',
                 'Subscribe',
@@ -332,6 +335,15 @@ const VideoFirstUser = () => {
                             </View>
                        ) : !user ? (
                         <TouchableOpacity
+                        onPress={()=>{
+                            modalOpen(
+                                GuestModalRefForAds,
+                                'Support Story Time',
+                                'Watch the ad to \ncontinue playing',
+                                'Watch ads',
+                                'Subscribe for Ad FREE experience',
+                              )
+                          }}
                             style={{
                             borderRadius: 10,
                             borderWidth: 4,
@@ -437,6 +449,7 @@ const VideoFirstUser = () => {
                 <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
             }
             <GuestModals ref={GuestModalRef}/>
+            <GuestModals ref={GuestModalRefForAds}></GuestModals>
         </ScrollView>
 
         </ImageBackground>
