@@ -251,6 +251,8 @@ export const Img_Paths = {
     PLAYFLOW_FRAME: require("../../assets/border-frame.png"),
     PROFILE_BG_FRAME: require("../../assets/profilebg-frame.png"),
     BG: require("../../assets/background-frame.png"),
+    BG_CLOCK: require("../../assets/bg-frame-with-clock.png"),
+
 
     // BORDERS FRAME-------
     // PLAY FLOW SECTION IMAGES

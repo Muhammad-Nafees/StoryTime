@@ -4,12 +4,10 @@ import { TextInput, View, StyleSheet} from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 
-const SearchField = ({ placeholder, onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchField = ({ placeholder,searchTerm, setSearchTerm }) => {
 
   const handleSearch = text => {
     setSearchTerm(text);
-    onSearch(text);
   };
 
   return (

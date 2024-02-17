@@ -66,10 +66,21 @@ const Categories = () => {
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUsernameInputValue, setIsUsernameInputValue] = useState("");
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(''); //for guest search only
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const {user} = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
+
+  const DATA = useMemo(() => {
+    if(!!searchTerm){
+      const filtered = responseCategories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return filtered
+    }
+    return responseCategories
+  }, [responseCategories,searchTerm])
 
 
   const fetchCategoriesUntilFound = async searchTerm => {
@@ -226,16 +237,6 @@ const Categories = () => {
     return category?.name !== 'Animals' && !user
   };
 
-  const handleSearch = searchTerm => {
-    if(!!searchTerm){
-      const filtered = responseCategories.filter(category =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setResponseCategories(filtered);
-      return
-    }
-    fetchUsers();
-  };
   const generateRandomNumber = useMemo(() => {
     return (numDigits) => {
       const min = Math.pow(10, numDigits - 1);
@@ -327,7 +328,7 @@ const Categories = () => {
           ))}
         </View>
       </View></>:
-        <SearchField placeholder="Search" onSearch={handleSearch} />
+        <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         }
       <View
         style={{
@@ -341,7 +342,7 @@ const Categories = () => {
       >
 
         <FlatList
-          data={responseCategories}
+          data={DATA}
           scrollEnabled={true}
           numColumns={3}
           nestedScrollEnabled
