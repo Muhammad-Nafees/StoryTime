@@ -8,39 +8,39 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import React, {useCallback, useEffect, useState, useRef} from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {PrimaryColor, TextColorGreen} from '../../Styles/Style';
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import UserNames from '../../../components/UserNames';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   recordingData,
   resetRecordingData,
 } from '../../../../store/slices/RecordingData';
 import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
-import {PassionOne_Regular} from '../../../constants/GlobalFonts';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStory from '../../../components/playFlow/SaveStory';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import {
   checkTrueOrFalse,
   extendStoryCheck,
 } from '../../../../store/slices/addplayers/addPlayersSlice';
-import {SCREEN_HEIGHT, SPACING} from '../../../constants/Constant';
-import {Inter_Regular} from '../../../constants/GlobalFonts';
+import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 
-const FirstUser = ({route}) => {
+const FirstUser = ({ route }) => {
   let longPressTimeout;
-  const {SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME} = Img_Paths;
+  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
   const [started, setStarted] = useState(false);
@@ -51,53 +51,50 @@ const FirstUser = ({route}) => {
   const [IsRecording, setIsRecording] = useState(false);
   const [isLongPress, setIsLongPress] = useState(false);
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
   const checkUserTrueorFalse = useSelector(
     state => state.addPlayers.checkTrueOrFalse,
   );
-  const extendCounting = useSelector(
-    state => state?.addPlayers?.extendCounting,
-  );
-  const extendStoryTrueOrFalse = useSelector(
-    state => state?.addPlayers?.extendStoryCheck,
-  );
+  const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
+  const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck,);
   const dispatch = useDispatch();
-  const textrecordUsers = useSelector(
-    state => state?.recordingData?.recordingText,
-  );
+  const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
   const [recordingText, setRecordingText] = useState([]);
-  const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
-  const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
   const [isNext, setIsNext] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
   const [partialResults, setPartialResults] = useState([]);
-  const profileUsersStories = useSelector(
-    state => state?.recordingData?.saveDatatoProfile,
-  );
+  const profileUsersStories = useSelector(state => state?.recordingData?.saveDatatoProfile,);
   const checkTrue = route?.params?.checkValue;
+  const USER = user?.data?.user || user?.data;
+  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
+  const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
+  const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
+
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
+  const USER_LENGTH_CHECK = sequenceUser?.length == 1
 
-  console.log('profileusers', profileUsersStories);
-  console.log('ended====', ended);
+
+
+  // console.log("sequenceUser====", sequenceUser)
+  // console.log('profileusers', profileUsersStories);
+  // console.log('ended====', ended);
   // const isEmptyArray = route?.params?.isEmptyArray;
 
   // console.log("displayuser--", currentDisplayUser)
-  console.log('textrecordUsers=====', textrecordUsers);
+  // console.log('textrecordUsers=====', textrecordUsers);
   // const IdUsers = addedUsers.map((item) => item?.userid)
   // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
 
   // console.log("isEmptyArray=====", isEmptyArray);
 
-  console.log('extendStoryTrueOrFalse=====', extendStoryTrueOrFalse);
+  // console.log('extendStoryTrueOrFalse=====', extendStoryTrueOrFalse);
   const stringText = recordingText.toString();
-  // Remove commas from the string
   const cleanedText = stringText.replace(/,/g, '');
-  // Output the cleaned text
-  console.log('cleanedText=====', cleanedText);
+  // console.log('cleanedText=====', cleanedText);
 
   const handleStart = () => {
     if (timeLeft !== 0) {
@@ -129,6 +126,10 @@ const FirstUser = ({route}) => {
   // Timer 2 Minutes ---------
 
   useEffect(() => {
+    if (USER_LENGTH_CHECK) {
+      setIsNext(false)
+    }
+
     let countdown;
     if (extendStoryTrueOrFalse && timeLeft == null) {
       setTimeLeft(extendCounting);
@@ -214,14 +215,14 @@ const FirstUser = ({route}) => {
 
   const onSpeechPartialResults = e => {
     const text = e?.value[0];
-    console.log('text======Voice', e?.value[0]);
-    console.log('recordingTextState====', recordingText);
+    // console.log('text======Voice', e?.value[0]);
+    // console.log('recordingTextState====', recordingText);
     dispatch(recordingData(e?.value[0]));
 
     if (e?.value[0]) {
       setRecordingText(prevVal => [...prevVal, e?.value[0]]);
     }
-    console.log('onSpeechPartialResults: ', e);
+    // console.log('onSpeechPartialResults: ', e);
     setPartialResults(e.value);
 
     const combinedText = e.value.join(' ');
@@ -250,7 +251,7 @@ const FirstUser = ({route}) => {
   // ---------- Start Recording And Convert Text ----------
 
   const startRecognizing = async () => {
-    const options = {EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000};
+    const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000 };
     try {
       await Voice.start('en-US', options);
       handlePressIn();
@@ -259,23 +260,6 @@ const FirstUser = ({route}) => {
       console.log('err', error);
     }
   };
-
-  // const startRecognizing = async () => {
-  //     try {
-  //         await Voice.start('en-US', {
-  //             "RECOGNIZER_ENGINE": "GOOGLE",
-  //             "EXTRA_PARTIAL_RESULTS": true
-  //         });
-  //         handlePressIn();
-  //         console.log("Start Recognizing Value====")
-  //     } catch (error) {
-  //         console.log("err", error);
-  //     }
-  // };
-
-  // useEffect(() => {
-
-  // }, [])
 
   // -------- Stop Recording --------
 
@@ -305,14 +289,20 @@ const FirstUser = ({route}) => {
   useFocusEffect(
     useCallback(() => {
       if (checkUserTrueorFalse) {
-        const currentIndex = addedUsers.indexOf(currentDisplayUser);
-        const nextIndex = (currentIndex + 1) % addedUsers.length;
-        const nextPlayer = (currentIndex + 2) % addedUsers.length;
+        const currentIndex = sequenceUser.indexOf(currentDisplayUser);
+        const nextIndex = (currentIndex + 1) % sequenceUser.length;
+        const nextPlayer = (currentIndex + 2) % sequenceUser.length;
 
-        if (currentIndex !== addedUsers?.length - 1) {
-          setCurrentDisplayUser(addedUsers[nextIndex]);
-          setIsNextUser(addedUsers[nextPlayer]);
-          if (nextIndex == addedUsers?.length - 1 && nextPlayer == 0) {
+        console.log("NEXT INDEX-----", nextIndex)
+        console.log("NEXT PLAYER------", nextPlayer);
+        console.log("CURRENT INDEX------", currentIndex);
+        console.log("sequenceUser?.length------", sequenceUser?.length);
+
+
+        if (currentIndex !== sequenceUser?.length) {
+          setCurrentDisplayUser(sequenceUser[nextIndex]);
+          setIsNextUser(sequenceUser[nextPlayer]);
+          if (nextPlayer == 0) {
             return setIsNext(false);
           }
         } else {
@@ -322,16 +312,16 @@ const FirstUser = ({route}) => {
     }, [checkUserTrueorFalse]),
   );
 
-  const saveBtnHandler = () =>{
-    if(!user){
-        modalOpen(
-            GuestModalRef,
-            'Get Story Time Premium',
-            'Subscribe now to save your Story to your profile',
-            'Subscribe',
-            'Back',
-          )
-          return
+  const saveBtnHandler = () => {
+    if (!user) {
+      modalOpen(
+        GuestModalRef,
+        'Get Story Time Premium',
+        'Subscribe now to save your Story to your profile',
+        'Subscribe',
+        'Back',
+      )
+      return
     }
     saveStoryhandler()
   }
@@ -341,11 +331,12 @@ const FirstUser = ({route}) => {
     setVisible(true); // Set isVisible to true to open the modal
   };
 
-  const modalOpen = (ref,heading, content, buttonText, text) => {
+  const modalOpen = (ref, heading, content, buttonText, text) => {
     if (ref.current) {
       ref.current.open(heading, content, buttonText, text);
     }
   };
+
   return (
     <>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -368,7 +359,7 @@ const FirstUser = ({route}) => {
               }}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
-                style={{width: responsiveWidth(10)}}>
+                style={{ width: responsiveWidth(10) }}>
                 <Image
                   style={{
                     width: responsiveWidth(5),
@@ -402,15 +393,15 @@ const FirstUser = ({route}) => {
                   </View>
                 ) : !user ? (
                   <TouchableOpacity
-                  onPress={()=>{
-                    modalOpen(
+                    onPress={() => {
+                      modalOpen(
                         GuestModalRefForAds,
                         'Support Story Time',
                         'Watch the ad to \ncontinue playing',
                         'Watch ads',
                         'Subscribe for Ad FREE experience',
                       )
-                  }}
+                    }}
                     style={{
                       borderRadius: 10,
                       borderWidth: 4,
@@ -442,7 +433,7 @@ const FirstUser = ({route}) => {
             source={PLAYFLOW_FRAME}>
             <View
               activeOpacity={0.9}
-              style={[styles.bg_content, {backgroundColor: TextColorGreen}]}>
+              style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
               <View
                 style={{
                   borderRadius: 20,
@@ -460,7 +451,7 @@ const FirstUser = ({route}) => {
                 )}
 
                 <ScrollView>
-                  <View style={{paddingHorizontal: moderateVerticalScale(35)}}>
+                  <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
                     <Text
                       style={{
                         paddingTop: responsiveWidth(3),
@@ -498,7 +489,7 @@ const FirstUser = ({route}) => {
           </ImageBackground>
 
           <View
-            style={{height: responsiveHeight(35), marginBottom: SPACING * 4}}>
+            style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
             <View
               style={{
                 paddingVertical: moderateVerticalScale(25),
@@ -547,12 +538,12 @@ const FirstUser = ({route}) => {
               />
             )}
 
-            <View style={{paddingTop: responsiveWidth(6)}}>
+            <View style={{ paddingTop: responsiveWidth(6) }}>
               <SaveStoryBtn
                 onPress={saveBtnHandler}
-                text={!user?"Save to phone":"Save Story"}
+                text={!user ? "Save to phone" : "Save Story"}
                 color={TextColorGreen}
-                isNext={!user?false:isNext}
+                isNext={!user ? false : isNext}
               />
             </View>
 

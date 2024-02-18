@@ -29,7 +29,7 @@ import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
-import BlockUser from '../screens/HomeScreens/setting/BlockUser';
+import BlockUser from '../screens/HomeScreens/Setting/BlockUser';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 
