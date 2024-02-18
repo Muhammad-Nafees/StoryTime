@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState ,useRef} from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   Dimensions,
   Image,
@@ -44,7 +44,7 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import { addFriends } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
-import {BlurView} from '@react-native-community/blur';
+import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const Categories = () => {
@@ -68,41 +68,42 @@ const Categories = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(''); //for guest search only
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
 
   const DATA = useMemo(() => {
-    if(!!searchTerm){
+    if (!!searchTerm) {
       const filtered = responseCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       return filtered
     }
     return responseCategories
-  }, [responseCategories,searchTerm])
+  }, [responseCategories, searchTerm])
 
 
   const fetchCategoriesUntilFound = async searchTerm => {
     let page = 1;
     let found = false;
-    let array = []
+    let array = [];
 
     try {
       while (!found) {
-        const response = await get_Categories_Sub_Categories({page});
+        const response = await get_Categories_Sub_Categories({ page });
 
         if (response.data && response.data.categories) {
           const responseArray = response.data.categories;
-          array= [...array,...responseArray]
+          array = [...array, ...responseArray]
 
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
           console.log('filter', filteredCategories);
+
           if (filteredCategories.length > 0) {
-            array = array.filter(el=> !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
-            setResponseCategories([filteredCategories?.[0],...array]);
+            array = array.filter(el => !el?.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            setResponseCategories([filteredCategories?.[0], ...array]);
             setIsLoading(false);
             found = true;
           } else if (responseArray.length > 0) {
@@ -141,6 +142,7 @@ const Categories = () => {
       } else if (isUsernameInputValue?.length == 0) {
         navigation.navigate(ADD_PLAYERS)
       }
+
       else {
         Toast.show({
           type: "error",
@@ -153,26 +155,17 @@ const Categories = () => {
     }
   };
 
-  // const usernameId = responseData?.data?.users?.map((item) => item._id)
-  // useEffect(() => {
-  //   addFriends_api_handler()
-  // }, [])
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-        if (!user) {
-          fetchCategoriesUntilFound('animals');
-          return;
-        }    
-     const response = await get_Categories_Sub_Categories({ page: page });
-      // const categoriesData = response?.data?.categories
+      if (!user) {
+        fetchCategoriesUntilFound('animals');
+        return;
+      }
+      const response = await get_Categories_Sub_Categories({ page: page });
       setIsLoading(false);
       setHasMorePages(response?.data?.pagination?.hasNextPage)
       setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
-
-      // if (categoriesData) {
-      // }
-
       setIsRefreshing(false);
       return response;
     } catch (error) {
@@ -195,6 +188,7 @@ const Categories = () => {
         name: response?.data?.name,
       });
       console.log("response_id", response?.data?._id)
+      console.log("Random Clicked Category")
       setRandomId(response?.data?._id);
       setRandomName(response?.data?.name);
       return response;
@@ -204,21 +198,22 @@ const Categories = () => {
   const handleStoryUser = (id, name) => {
     console.log("id----", id);
     dispatch(setCategoriesId(id))
-    navigation.navigate('SubCategories', { id: id, name: name, guestNumber:guestNumber });
+    navigation.navigate('SubCategories', { id: id, name: name, guestNumber: guestNumber });
   };
 
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
     setPage(1);
-    // setResponseCategories([]) //BUGGY LINE //COMMENTED OUT
+    setResponseCategories([]) //BUGGY LINE //COMMENTED OUT
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);
   }, []);
 
 
+
   const handleLoadMore = async () => {
-    console.log("HasMorePages=====", HasMorePages)
+    // console.log("HasMorePages=====", HasMorePages)
     if (isLoading) {
       return;
     }
@@ -226,6 +221,7 @@ const Categories = () => {
       setPage((prevPage) => prevPage + 1);
       setIsLoadMore(true);
     } else {
+      setIsLoadMore(false);
       setIsLoadMore(false);
     }
   };
@@ -246,6 +242,7 @@ const Categories = () => {
   }, []);
 
   const guestNumberRef = useRef(null);
+
   useEffect(() => {
     if (!guestNumberRef.current) {
       const guestNumber = generateRandomNumber(4);
@@ -254,82 +251,89 @@ const Categories = () => {
   }, [generateRandomNumber]);
   const guestNumber = guestNumberRef.current;
 
+  const randomObject = {
+    namerandom: "Random",
+    backgroundColor: "EE5F8A",
+    imageludo: LUDO_ICON,
+
+  }
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       {/* <ScrollView> */}
       {/* Frame Content Close----------- */}
 
-      <View style={{flexDirection:'row',justifyContent:"space-between",marginHorizontal:responsiveWidth(5),marginBottom:moderateVerticalScale(10)}}>
+      <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
         <View style={styles.first_container}>
-       
+
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.categories_text_container}>
             <Text style={styles.categories_text}>Categories</Text>
-          </View>   
+          </View>
         </View>
 
-    {!user?
-          <View style={{marginTop:moderateVerticalScale(10)}}>
-        <View style={{marginBottom:'auto',marginTop:'auto',marginLeft:5}}>
-          <SvgIcons name={'Guest'} width={36} height={36} />
-        </View>
-          <Text style={styles.text}>Guest{guestNumber}</Text>
-        </View>:<></>}
-    </View>
+        {!user ?
+          <View style={{ marginTop: moderateVerticalScale(10) }}>
+            <View style={{ marginBottom: 'auto', marginTop: 'auto', marginLeft: 5 }}>
+              <SvgIcons name={'Guest'} width={36} height={36} />
+            </View>
+            <Text style={styles.text}>Guest{guestNumber}</Text>
+          </View> : <></>}
+      </View>
 
       {/* IMainnputField-----*/}
       {/* MainInputField----- */}
-    {user?
-       <>
-      <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
-      <View
-        style={{
-          paddingVertical: moderateVerticalScale(6),
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            width: responsiveWidth(90),
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}>
-          <View>
-            <Text
-              style={{
-                color: '#393939',
-                fontWeight: '600',
-                textAlign: 'center',
-                fontSize: responsiveHeight(1.9),
-                fontFamily: Inter_Regular.Inter_Regular
-              }}>
-              Players:
-            </Text>
-          </View>
 
-          {addUsersGame?.map((item, index) => (
+      {user ?
+        <>
+          <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
+          <View
+            style={{
+              paddingVertical: moderateVerticalScale(6),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <View
               style={{
-                margin: 4,
-                backgroundColor: '#395E66',
-                paddingHorizontal: moderateScale(14),
-                paddingVertical: moderateVerticalScale(4.5),
-                borderRadius: 40,
+                width: responsiveWidth(90),
+                flexDirection: 'row',
+                alignItems: 'center',
+                flexWrap: 'wrap',
               }}>
-              <Text
-                style={{
-                  color: '#FFF',
-                  fontSize: responsiveFontSize(1.9),
-                  fontFamily: Inter_Regular.Inter_Regular
-                }}>{`@${item.username}`}</Text>
+              <View>
+                <Text
+                  style={{
+                    color: '#393939',
+                    fontWeight: '600',
+                    textAlign: 'center',
+                    fontSize: responsiveHeight(1.9),
+                    fontFamily: Inter_Regular.Inter_Regular
+                  }}>
+                  Players:
+                </Text>
+              </View>
+
+              {addUsersGame?.map((item, index) => (
+                <View
+                  style={{
+                    margin: 4,
+                    backgroundColor: '#395E66',
+                    paddingHorizontal: moderateScale(14),
+                    paddingVertical: moderateVerticalScale(4.5),
+                    borderRadius: 40,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#FFF',
+                      fontSize: responsiveFontSize(1.9),
+                      fontFamily: Inter_Regular.Inter_Regular
+                    }}>{`@${item.username}`}</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-      </View></>:
+          </View></> :
         <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        }
+      }
       <View
         style={{
           // flexDirection: 'row',
@@ -340,9 +344,8 @@ const Categories = () => {
           // backgroundColor: "orange",
         }}
       >
-
         <FlatList
-          data={DATA}
+          data={[...DATA, randomObject]}
           scrollEnabled={true}
           numColumns={3}
           nestedScrollEnabled
@@ -355,87 +358,46 @@ const Categories = () => {
             <View
               key={item?.id}
               style={{
-                backgroundColor: TextColorGreen,
+                backgroundColor: item?.namerandom == "Random" ? "#E44173" : TextColorGreen,
                 width: responsiveWidth(30),
                 borderRadius: 10,
                 height: responsiveHeight(18.5),
                 alignItems: 'center',
                 margin: responsiveWidth(1.2),
                 borderWidth: 3,
-                borderColor: "#5797A5",
+                borderColor: item?.namerandom === "Random" ? "rgba(238, 95, 138, 1)" : "#5797A5",
               }}>
               <StoryUsers
                 onPress={() => handleStoryUser(item?.id, item?.name)}
                 images={item?.image}
                 text={item?.name}
+                item={item}
+                handleRandomClick={handleRandomClick}
                 mainbgColor={TextColorGreen}
                 backgroundColor="rgba(199, 152, 97, 1)"
               />
-               {!!isCategoryBlurred(item) && 
-               <View style={styles.blur_wrapper}>
-                <BlurView
-                  style={styles.blur_view}
-                  blurAmount={10}
-                  overlayColor='transparent'
+
+              {!!isCategoryBlurred(item) &&
+                <View style={styles.blur_wrapper}>
+                  <BlurView
+                    style={styles.blur_view}
+                    blurAmount={10}
+                    overlayColor='transparent'
                   >
                     <View style={styles.blur_content_container}>
-                    <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center',top:responsiveHeight(5)}}>
-                    <SvgIcons name={'Lock'} width={47} height={47} />
-                    </View>
+                      <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center', top: responsiveHeight(5) }}>
+                        <SvgIcons name={'Lock'} width={47} height={47} />
+                      </View>
                     </View>
                   </BlurView>
                 </View>
-                }
+              }
+
             </View>
           )}
+
           ListFooterComponent={() => (
             <>
-              {!isLoading && (
-                <View style={{
-                  //  backgroundColor: "red", 
-                  alignItems: 'center',
-                  paddingBottom: moderateVerticalScale(10)
-                }}>
-                  <TouchableOpacity
-                    onPress={() => handleRandomClick()}
-                    style={{
-                      backgroundColor: '#E44173',
-                      width: responsiveWidth(29),
-                      borderRadius: 10,
-                      height: responsiveHeight(18.5),
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        marginVertical: moderateVerticalScale(10),
-                        borderRadius: 10,
-                        width: responsiveWidth(25),
-                        height: responsiveHeight(11),
-                        backgroundColor: '#EE5F8A',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        style={{
-                          width: responsiveWidth(16),
-                          height: responsiveHeight(8),
-                          resizeMode: 'center',
-                        }}
-                        source={LUDO_ICON}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#FFF',
-                        fontWeight: '700',
-                        fontSize: responsiveFontSize(1.9),
-                      }}>
-                      Random
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-
               {isLoadMore && (
                 <View style={{ alignItems: 'center', height: height / 4 }}>
                   <ActivityIndicator size={40} color={'#000'} />
@@ -541,9 +503,57 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     color: 'black',
-    textAlign:'center',
+    textAlign: 'center',
     fontFamily: Inter_Regular.Inter_Regular
   },
 });
 
 export default Categories;
+
+// {!isLoading && (
+//   <View style={{
+//     //  backgroundColor: "red",
+//     alignItems: 'center',
+//     paddingBottom: moderateVerticalScale(10)
+//   }}>
+//     <TouchableOpacity
+//       onPress={() => handleRandomClick()}
+//       style={{
+//         backgroundColor: '#E44173',
+//         width: responsiveWidth(29),
+//         borderRadius: 10,
+//         height: responsiveHeight(18.5),
+//         alignItems: 'center',
+//       }}>
+//       <View
+//         style={{
+//           marginVertical: moderateVerticalScale(10),
+//           borderRadius: 10,
+//           width: responsiveWidth(25),
+//           height: responsiveHeight(11),
+//           backgroundColor: '#EE5F8A',
+//           justifyContent: 'center',
+//           alignItems: 'center',
+//         }}>
+//         <Image
+//           style={{
+//             width: responsiveWidth(16),
+//             height: responsiveHeight(8),
+//             resizeMode: 'center',
+//           }}
+//           source={LUDO_ICON}
+//         />
+//       </View>
+//       <Text
+//         style={{
+//           color: '#FFF',
+//           fontWeight: '700',
+//           fontSize: responsiveFontSize(1.9),
+//         }}>
+//         Random
+//       </Text>
+//     </TouchableOpacity>
+//   </View>
+// )}
+
+

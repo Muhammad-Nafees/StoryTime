@@ -31,17 +31,27 @@ const VideoFirstUser = () => {
     const [timeText, setTimeText] = useState('02:00');
     const [showCamera, setShowCamera] = useState(false)
     const [path, setPath] = useState("")
-    const [isVisible, setIsVisible] = useState(false)
-    const recordingVideo = useSelector((state) => state.recordingData.saveRecordingVideo)
+    const [isVisible, setIsVisible] = useState(false);
+    const recordingVideo = useSelector(
+        (state) => state.recordingData.saveRecordingVideo
+    )
     const [currentCamera, setCurrentCamera] = useState('back');
-    const addedUsers = useSelector(state => state.addPlayers.addFriends);
-    const checkVideoisTrue = useSelector(state => state.recordingData.checkVideoTrueorFalse);
-    const extendStoryCheckVideoTrue = useSelector(state => state.recordingData.extendStoryCheckVideo);
-    const extendVideoCheck = useSelector(state => state.recordingData.extendVideo);
-
-
-    const extendCountingVideo = useSelector(state => state.recordingData.extendCountingVideo);
-    const { user } = useSelector(state => state?.authSlice);
+    const addedUsers = useSelector(state => state.addPlayers.addFriends
+    );
+    const checkVideoisTrue = useSelector(
+        state => state.recordingData.checkVideoTrueorFalse);
+    const extendStoryCheckVideoTrue = useSelector(
+        state => state.recordingData.extendStoryCheckVideo
+    );
+    const extendVideoCheck = useSelector(
+        state => state.recordingData.extendVideo
+    );
+    const extendCountingVideo = useSelector(
+        state => state.recordingData.extendCountingVideo
+    );
+    const { user } = useSelector(
+        state => state?.authSlice
+    );
     const [isNext, setIsNext] = useState(true);
     const [isActive, setIsActive] = useState(false);
     const [isFirstCall, setIsFirstCall] = useState(false);
@@ -50,16 +60,15 @@ const VideoFirstUser = () => {
     const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
     const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
-
     const cameraRef = useRef(null);
     const dispatch = useDispatch()
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
     const GuestModalRef = useRef(null);
     const GuestModalRefForAds = useRef(null);
-    const USER_LENGTH_CHECK = sequenceUser?.length == 1
+    const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
-    console.log("sequcenuserVIdeo====", sequenceUser)
+    console.log("sequcenuserVIdeo====", sequenceUser);
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
     // })
@@ -91,9 +100,8 @@ const VideoFirstUser = () => {
     useEffect(() => {
         if (USER_LENGTH_CHECK) {
             setIsNext(false)
-        }
+        };
         let countdown;
-
         if (timeLeft !== null && timeLeft > 0) {
             countdown = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);

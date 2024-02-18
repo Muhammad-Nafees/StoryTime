@@ -60,7 +60,7 @@ const SecondPlayFlowScreen = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
-                <View>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
                         <Image source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
