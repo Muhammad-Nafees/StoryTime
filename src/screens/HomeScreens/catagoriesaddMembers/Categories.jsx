@@ -161,6 +161,7 @@ const Categories = () => {
     setIsLoading(true);
     try {
         if (!user) {
+          console.log("load",isLoading)
           fetchCategoriesUntilFound('animals');
           return;
         }    
@@ -390,7 +391,7 @@ const Categories = () => {
           )}
           ListFooterComponent={() => (
             <>
-              {!isLoading && (
+              {!isLoading  && responseCategories.length > 0 ? (
                 <View style={{
                   //  backgroundColor: "red", 
                   alignItems: 'center',
@@ -434,6 +435,10 @@ const Categories = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
+              ):(
+                <View style={{ alignItems: 'center', height: height / 4 }}>
+                  <ActivityIndicator size={40} color={'#000'} />
+                </View> 
               )}
 
               {isLoadMore && (
