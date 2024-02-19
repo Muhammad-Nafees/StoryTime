@@ -2,14 +2,13 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import { TextColorGreen } from '../screens/Styles/Style';
 import { useDispatch } from 'react-redux';
 import { setStoryUserImage } from '../../store/slices/addplayers/addPlayersSlice';
-import SvgIcons from './svgIcon/svgIcons';
+import { URL } from '../constants/Constant'
 
 const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disabled, item, handleRandomClick }) => {
   const dispatch = useDispatch();
-  const imageLink = "http://storytime.yameenyousuf.com/" + images;
+  const imageLink = URL + images;
 
   const handlePress = () => {
     if (!disabled) {
@@ -18,6 +17,7 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
     }
   };
 
+ 
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity

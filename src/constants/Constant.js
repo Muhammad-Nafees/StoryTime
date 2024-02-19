@@ -10,3 +10,4 @@ export const IS_ANDROID = Platform.OS === 'android';
 
 export const VERTICAL = moderateVerticalScale(10)
 export const SPACING = moderateScale(SCREEN_WIDTH*0.035)
+export const URL =  "http://storytime.yameenyousuf.com/" 

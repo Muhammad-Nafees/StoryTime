@@ -15,7 +15,7 @@ const StoryTimeSaved = ({ isVisible, setVisible, text, onPress, textButton }) =>
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-                <View style={{ width: responsiveWidth(80), height: responsiveHeight(24), backgroundColor: "#FFF", borderRadius: 30 }}>
+                <View style={{ width: responsiveWidth(80), height: responsiveHeight(24), backgroundColor: "#FFF", borderRadius: 30 ,paddingHorizontal:responsiveWidth(2)}}>
 
                     <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12) }}>
                         <Svg width="35" height="34" viewBox="0 0 35 34" fill="none" xmlns="http://www.w3.org/2000/svg">

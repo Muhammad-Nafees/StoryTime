@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../../screens/Styles/Style';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { SecondaryColor, ThirdColor,TextColorGreen } from '../../screens/Styles/Style';
 import {
     responsiveHeight,
     responsiveFontSize,
@@ -11,7 +11,8 @@ const SaveStoryBtn = ({
 
     text,
     onPress,
-    isNext
+    isNext,
+    isUserGuest
 
 }) => {
 
@@ -20,18 +21,14 @@ const SaveStoryBtn = ({
             <TouchableOpacity
                 onPress={onPress}
                 disabled={!isNext ? false : true}
-                style={{
-                    borderRadius: 10,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
+                style={isUserGuest?styles.guestWrapper:styles.wrapper}>
 
                 <Text
                     style={{
                         fontSize: responsiveFontSize(1.9),
                         fontWeight: '600',
                         letterSpacing: 0.28,
-                        color: !isNext ? "rgba(57, 94, 102, 1)" : "rgba(57, 94, 102, 0.3)",
+                        color: isUserGuest?"#FFF": !isNext ? "rgba(57, 94, 102, 1)" : "rgba(57, 94, 102, 0.3)",
                     }}>
                     {text}
                 </Text>
@@ -41,3 +38,20 @@ const SaveStoryBtn = ({
 };
 
 export default SaveStoryBtn;
+
+const styles = StyleSheet.create({
+    wrapper : {
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    guestWrapper : {
+        backgroundColor:TextColorGreen,
+        width:responsiveWidth(70),
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: responsiveHeight(6.6),
+
+    }
+});

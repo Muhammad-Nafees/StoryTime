@@ -300,9 +300,9 @@ const VideoFirstUser = () => {
         user ? navigation.navigate(SECOND_USER_STORY) : null
     };
 
-    const modalOpen = (ref, heading, content, buttonText, text) => {
-        if (GuestModalRef.current) {
-            GuestModalRef.current.open(heading, content, buttonText, text);
+    const modalOpen = (ref,heading, content, buttonText, text) => {
+        if (ref.current) {
+          ref.current.open(heading, content, buttonText, text);
         }
     }
 
@@ -449,13 +449,13 @@ const VideoFirstUser = () => {
                     <SaveStoryBtn onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
                 </View>
 
-                {
-                    isVisible &&
-                    <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
-                }
-                <GuestModals ref={GuestModalRef} />
-                <GuestModals ref={GuestModalRefForAds}></GuestModals>
-            </ScrollView>
+            {
+                isVisible &&
+                <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
+            }
+            <GuestModals ref={GuestModalRef}/>
+            <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo}/>
+        </ScrollView>
 
         </ImageBackground>
     )
