@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setStoryUserImage } from '../../store/slices/addplayers/addPlayersSlice';
 import SvgIcons from './svgIcon/svgIcons';
 
-const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disabled }) => {
+const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disabled, item, handleRandomClick }) => {
   const dispatch = useDispatch();
   const imageLink = "http://storytime.yameenyousuf.com/" + images;
 
@@ -21,7 +21,7 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity
-        onPress={handlePress}
+        onPress={item?.namerandom == "Random" ? handleRandomClick : handlePress}
         style={{
           marginVertical: moderateVerticalScale(10),
           borderRadius: 10,
@@ -29,16 +29,26 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
           height: responsiveHeight(11),
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: item?.namerandom == "Random" && "rgba(238, 95, 138, 1)"
         }}
         disabled={disabled}
       >
-        <Image
-          style={{ width: 90, height: 80, borderRadius: 10 }}
-          resizeMode="cover"
-          source={{ uri: imageLink }}
-        />
+        {
+          item?.namerandom == "Random" ?
+            <Image
+              style={{ width: 70, height: 57, borderRadius: 10 }}
+              resizeMode="center"
+              source={item?.imageludo}
+            />
+            :
+            <Image
+              style={{ width: 90, height: 80, borderRadius: 10 }}
+              resizeMode="cover"
+              source={{ uri: imageLink }}
+            />
+        }
       </TouchableOpacity>
-      <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{text}</Text>
+      <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>{item?.namerandom == "Random" ? item?.namerandom : text}</Text>
     </View>
   );
 };

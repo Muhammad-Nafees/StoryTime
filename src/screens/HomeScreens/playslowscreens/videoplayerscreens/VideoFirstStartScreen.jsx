@@ -56,8 +56,8 @@ const VideoFirstStartScreen = () => {
                     </View>
                 </View>
 
-                <View style={{ paddingVertical: moderateVerticalScale(45) }} />
-                <View>
+                <View style={{ paddingVertical: moderateVerticalScale(45), }} />
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate(VIDEO_FIRST_USER)
                         dispatch(resetVideoRecording())
