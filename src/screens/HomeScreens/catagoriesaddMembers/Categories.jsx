@@ -346,6 +346,7 @@ const Categories = () => {
           // backgroundColor: "orange",
         }}
       >
+      {DATA.length > 0 ?
         <FlatList
           data={[...DATA, randomObject]}
           scrollEnabled={true}
@@ -379,7 +380,7 @@ const Categories = () => {
                 backgroundColor="rgba(199, 152, 97, 1)"
               />
 
-              {!!isCategoryBlurred(item) &&
+              {!!isCategoryBlurred(item) && item?.namerandom !== "Random" &&
                 <View style={styles.blur_wrapper}>
                   <BlurView
                     style={styles.blur_view}
@@ -400,56 +401,6 @@ const Categories = () => {
 
           ListFooterComponent={() => (
             <>
-              {!isLoading  && responseCategories.length > 0 ? (
-                <View style={{
-                  //  backgroundColor: "red", 
-                  alignItems: 'center',
-                  paddingBottom: moderateVerticalScale(10)
-                }}>
-                  <TouchableOpacity
-                    onPress={() => handleRandomClick()}
-                    style={{
-                      backgroundColor: '#E44173',
-                      width: responsiveWidth(29),
-                      borderRadius: 10,
-                      height: responsiveHeight(18.5),
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        marginVertical: moderateVerticalScale(10),
-                        borderRadius: 10,
-                        width: responsiveWidth(25),
-                        height: responsiveHeight(11),
-                        backgroundColor: '#EE5F8A',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        style={{
-                          width: responsiveWidth(16),
-                          height: responsiveHeight(8),
-                          resizeMode: 'center',
-                        }}
-                        source={LUDO_ICON}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#FFF',
-                        fontWeight: '700',
-                        fontSize: responsiveFontSize(1.9),
-                      }}>
-                      Random
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ):(
-                <View style={{ alignItems: 'center', height: height / 4 }}>
-                  <ActivityIndicator size={40} color={'#000'} />
-                </View> 
-              )}
-
               {isLoadMore && (
                 <View style={{ alignItems: 'center', height: height / 4 }}>
                   <ActivityIndicator size={40} color={'#000'} />
@@ -459,8 +410,11 @@ const Categories = () => {
           )}
           onEndReached={() => handleLoadMore()}
           onEndReachedThreshold={0.3}
-        />
-
+        />: 
+        <View style={{ alignItems: 'center', height: height / 4 }}>
+        <ActivityIndicator size={40} color={'#000'} />
+        </View>
+      }   
       </View>
       <Toast />
       {/* <RandomCategories

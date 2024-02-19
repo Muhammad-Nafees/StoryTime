@@ -137,7 +137,7 @@ const SubCategories = ({ route }) => {
     try {
       const response = await get_Random(id);
       dispatch(randomNames(response?.data?.name));
-      navigation.navigate(PLAYER_SEQUENCE);
+      user?navigation.navigate(PLAYER_SEQUENCE):null;
       return response;
     } catch (error) {
       console.log('error---', error);
@@ -268,7 +268,7 @@ const SubCategories = ({ route }) => {
           // paddingBottom: 200
           // backgroundColor: "orange"
         }}>
-
+      {DATA.length > 0 ?  
         <FlatList
           data={[...DATA, randomObject]}
           // nestedScrollEnabled
@@ -300,7 +300,7 @@ const SubCategories = ({ route }) => {
                   backgroundColor="rgba(86, 182, 164, 1)"
                   handleRandomClick={handleRandomSub_category}
                 />
-                {!!isCategoryBlurred(item) &&
+                {!!isCategoryBlurred(item) && item?.namerandom !== "Random" &&
                   <View style={styles.blur_wrapper}>
                     <BlurView
                       style={styles.blur_view}
@@ -332,7 +332,10 @@ const SubCategories = ({ route }) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
         // onEndReachedThreshold={0.3}
-        />
+        />:<View style={{ alignItems: 'center', height: height / 4 }}>
+        <ActivityIndicator size={40} color={'#000'} />
+        </View>
+        }  
       </View>
       <Toast />
       {/* </ScrollView> */}
