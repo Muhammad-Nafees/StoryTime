@@ -50,7 +50,7 @@ const GuestModals = forwardRef((props, ref) => {
       animationOut="slideOutDown"
       backdropColor="white"
       onModalHide={close}
-      backdropOpacity={0.6}
+      backdropOpacity={0.8}
       onBackdropPress={close}>
       <ImageBackground
         style={styles.img_frame}
