@@ -90,7 +90,12 @@ const GuestModals = forwardRef((props, ref) => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.3}
-            onPress={onPress}
+            onPress={()=>{
+              if(typeof(onPress)=== 'function'){
+                onPress()
+              }
+              close();
+            }}
             style={{
               width: '100%',
               backgroundColor: TextColorGreen,
@@ -111,7 +116,9 @@ const GuestModals = forwardRef((props, ref) => {
               marginBottom: responsiveHeight(4),
             }}
             onPress={()=>{
-              textOnPress
+              if(typeof(textOnPress)=== 'function'){
+                textOnPress()
+              }
               close()
             }}>
             {text}

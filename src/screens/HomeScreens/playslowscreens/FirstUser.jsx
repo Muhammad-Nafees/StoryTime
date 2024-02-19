@@ -561,8 +561,8 @@ const FirstUser = ({route}) => {
             )}
           </View>
 
-          <GuestModals ref={GuestModalRef}></GuestModals>
-          <GuestModals ref={GuestModalRefForAds}></GuestModals>
+          <GuestModals ref={GuestModalRef}/>
+          <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler}/>
         </ScrollView>
       </ImageBackground>
     </>

@@ -296,8 +296,8 @@ const VideoFirstUser = () => {
     };
 
     const modalOpen = (ref,heading, content, buttonText, text) => {
-        if (GuestModalRef.current) {
-          GuestModalRef.current.open(heading, content, buttonText, text);
+        if (ref.current) {
+          ref.current.open(heading, content, buttonText, text);
         }
     }
     
@@ -449,7 +449,7 @@ const VideoFirstUser = () => {
                 <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
             }
             <GuestModals ref={GuestModalRef}/>
-            <GuestModals ref={GuestModalRefForAds}></GuestModals>
+            <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo}/>
         </ScrollView>
 
         </ImageBackground>
