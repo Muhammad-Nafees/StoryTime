@@ -24,4 +24,4 @@ export const notifications_endpoint = "user/notifications"
 export const logout_endpoint = "auth/logout"
 export const user_profile = "user/profile"
 export const update_profile = "user/update-profile"
-
+export const delete_account_endpoint = "user/delete-account"

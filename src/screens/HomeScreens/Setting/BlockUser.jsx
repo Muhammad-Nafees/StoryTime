@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import CustomModal from '../../../components/BlockModal';
+import BlockModal from '../../../components/BlockModal';
 import ScreenHeader from '../../../components/ScreenHeader';
 import {getBlockList} from '../../../../services/api/settings';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
@@ -127,7 +127,7 @@ const BlockUser = () => {
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
       />
-      <CustomModal ref={blockModalRef} removeUnblockUserFromList={removeUnblockUserFromList} />
+      <BlockModal ref={blockModalRef} removeUnblockUserFromList={removeUnblockUserFromList} />
     </BackgroundWrapper>
   );
 };

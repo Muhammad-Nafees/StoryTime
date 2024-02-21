@@ -30,7 +30,7 @@ const { width, height } = Dimensions.get('window');
 const Setting = () => {
   const navigation = useNavigation();
   const { LEFT_ARROW_IMG, DEFAULT_ICON } = Img_Paths;
-  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE } =
+  const { NOTIFICATION, SUBSCRIPTION_DETAILS, FAQ_ROUTE, BLOCK_USER, PROFILE, DELETE_ACCOUNT} =
     NavigationsString;
   const { user } = useSelector(state => state?.authSlice);
 
@@ -57,7 +57,7 @@ const Setting = () => {
       iconName: 'BlockUser',
       routeName: BLOCK_USER,
     },
-    { key: '7', text: 'Delete Account', iconName: 'DeleteAccount' },
+    { key: '7', text: 'Delete Account', iconName: 'DeleteAccount', routeName: DELETE_ACCOUNT },
   ];
   const legalData = [
     {

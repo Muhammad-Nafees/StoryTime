@@ -271,5 +271,5 @@ export const Img_Paths = {
     AVATAR: require("../../assets/avatar.png"),
     DROP_ICON: require("../../assets/bottom-icon.png"),
     DEFAULT_ICON: require("../../assets/defaultIcon.png"),
-    DEFAULT_COVER:require("../../assets/plain-grey-background.png")
+    // DEFAULT_COVER:require("../../assets/plain-grey-background.png")
 };

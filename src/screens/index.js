@@ -15,3 +15,5 @@ export { default as Notification } from "./HomeScreens/setting/Notification"
 export { default as SubscriptionDetails } from "./HomeScreens/setting/SubscriptionDetails"
 export { default as BlockUser } from "./HomeScreens/setting/BlockUser"
 export { default as SettingsProfile } from "./HomeScreens/setting/SettingsProfile"
+export { default as DeleteAccount } from "./HomeScreens/setting/DeleteAccount"
+

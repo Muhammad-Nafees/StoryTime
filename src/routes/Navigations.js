@@ -26,7 +26,7 @@ import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile } from '../screens';
+import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import BlockUser from '../screens/HomeScreens/setting/BlockUser';
@@ -37,7 +37,7 @@ const Navigations = () => {
 
   const Stack = createStackNavigator();
 
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER } = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT} = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -58,6 +58,7 @@ const Navigations = () => {
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
+      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
 
       <Stack.Screen
         name="GuestStack"

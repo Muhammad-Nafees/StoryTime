@@ -5,6 +5,7 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
+import { Inter_Regular } from '../constants/GlobalFonts';
 
 const Typography = props => {
   const {mt, ml, mr, mb, style,size, children,lh,clr,thin,heavy,bold, ...rest} = props || {};
@@ -15,6 +16,8 @@ const Typography = props => {
       fontSize: responsiveFontSize(1.9),
       fontWeight: '400',
       lineHeight: 24,
+      fontFamily:Inter_Regular.Inter_Regular,
+
       //   ...(h1 && {fontSize: 22}),
       //   ...(h2 && {fontSize: 20}),
       //   ...(h3 && {fontSize: 18}),
