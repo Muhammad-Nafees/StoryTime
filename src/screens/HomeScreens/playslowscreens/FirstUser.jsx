@@ -64,8 +64,6 @@ const FirstUser = ({ route }) => {
   const [partialResults, setPartialResults] = useState([]);
   const [speaking, setSpeaking] = useState(false);
 
-  const profileUsersStories = useSelector(state => state?.recordingData?.saveDatatoProfile,);
-  const checkTrue = route?.params?.checkValue;
   const USER = user?.data?.user || user?.data;
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
@@ -108,23 +106,33 @@ const FirstUser = ({ route }) => {
   // ---------- onSpeechResult----------
 
   const onSpeechResult = async (e) => {
+    console.log('onSpeechResults: ', e?.value);
+
+    if (!e.value) return;
     setSpeaking(false);
     // console.log('Voice Result: ' + e.value);
-    // dispatch(recordingData(e?.value[0]));
-    setRecordingText(prevData => prevData + " " + e?.value[0]);
-    await Voice.stop();
-  };
 
+    if (setRecordingText) {
+      dispatch(recordingData(e?.value[0]));
+      startRecognizing();
+      setRecordingText(prevData => prevData + " " + e?.value[0]);
+      // if (callBack) callBack(e?.value[0]);
+      return;
+    }
+
+    // await Voice.stop();
+  };
 
   const onSpeechRecognized = e => {
     setSpeaking(false);
     console.log('onSpeechRecognized', e);
   };
 
-  const onSpeechError = (e) => {
+  function onSpeechError(e) {
+    _destroyRecognizer();
+    setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  }
-
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -145,7 +153,7 @@ const FirstUser = ({ route }) => {
     console.log('Start Recognizing Value---------');
     try {
       if (!speaking) {
-        console.log("SPEAKING")
+        console.log("SPEAKING");
         await Voice.start('en-US');
         handlePressIn();
       } else {
@@ -157,13 +165,14 @@ const FirstUser = ({ route }) => {
       console.log('err', error);
     }
   };
-  console.log("SPEAKING=======", speaking)
+
+  console.log("SPEAKING=======", speaking);
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
     setIsRecording(false);
+    console.log('STOP RECORDING-----');
     try {
-      console.log("VOICE====", Voice)
       await Voice.stop();
     } catch (error) {
       console.error(error);
@@ -222,6 +231,14 @@ const FirstUser = ({ route }) => {
     saveStoryhandler()
   };
 
+  const _destroyRecognizer = async () => {
+    try {
+      await Voice.destroy();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const saveStoryhandler = () => {
     setSaveStoryModal(true);
     setVisible(true); // Set isVisible to true to open the modal
@@ -232,7 +249,6 @@ const FirstUser = ({ route }) => {
       ref.current.open(heading, content, buttonText, text);
     }
   };
-
 
   const handleStart = () => {
 
@@ -247,16 +263,16 @@ const FirstUser = ({ route }) => {
 
       if (!extendStoryTrueOrFalse && timeLeft === null) {
         startRecognizing();
-        setTimeLeft(20);
+        setTimeLeft(30);
       };
 
       if (isFirstCall) {
+        stopRecording();
         clearTimeout(longPressTimeout);
         setIsLongPress(false);
         setIsPressed(false);
-        stopRecording();
         console.log('STOP RECORDING-----');
-      }
+      };
 
       if (timeLeft !== null && timeLeft > 0) {
         setisCancelingStory(false);

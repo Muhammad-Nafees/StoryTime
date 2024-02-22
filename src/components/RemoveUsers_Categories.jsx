@@ -6,19 +6,22 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useDispatch, useSelector } from 'react-redux';
 import { addFriends, removeUser } from '../../store/slices/addplayers/addPlayersSlice';
 
-const RemoveUsers_Categories = ({ item, userid, username }) => {
+const RemoveUsers_Categories = ({ item, userid, username, }) => {
 
     const dispatch = useDispatch();
+    const removeFriends = useSelector((state) => state?.addPlayers?.addFriends);
+    console.log("removeFrieds===", removeFriends)
     const { FIRST_PROFILE } = Img_Paths;
 
     const removeUsers = () => {
         const removeuser = { userid, username }
         dispatch(removeUser(removeuser));
-    }
+    };
+
+    // removeAdduserList(friend);
 
     return (
         <>
-
             <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
                 <View style={{ flexDirection: "row", width: responsiveWidth(31), justifyContent: "space-between", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(11.5), height: responsiveHeight(5.5), resizeMode: "center" }} source={FIRST_PROFILE} />

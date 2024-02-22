@@ -13,6 +13,7 @@ import TouchableButton from '../../../components/TouchableButton';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { base, get_story_byId } from '../../../../services';
 import { getStory_Byid } from '../../../../services/api/profile';
+import CustomEmoji from '../../../components/likeDislikesandComments/CustomEmoji';
 
 
 
@@ -55,14 +56,27 @@ const VoiceToTextProfile = ({ route }) => {
     }, []);
 
 
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <SafeAreaView>
-                <ScrollView>
+                <ScrollView style={{}}>
                     <View style={{}}>
-                        <View style={{ paddingTop: responsiveWidth(6), marginLeft: "auto", width: responsiveWidth(95) }}>
-                            <BackButton onPress={() => navigation.goBack()} />
+
+                        <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(6) }}>
+                            <View style={{ flexDirection: 'row', width: responsiveWidth(90), alignItems: "center", justifyContent: "space-between" }}>
+                                <BackButton onPress={() => navigation.goBack()} />
+                                {
+                                    isMoreLength ?
+                                        <SettingButton onPress={() => {
+                                            setIsMoreLength(false);
+                                        }} image={require("../../../assets/profilenext-icon.png")} />
+                                        :
+                                        null
+                                }
+                            </View>
                         </View>
+
 
                         {/* Back Button */}
 
@@ -73,7 +87,7 @@ const VoiceToTextProfile = ({ route }) => {
                                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular }}>Posted by:</Text>
                                     </View>
                                     <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(18), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
-                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>{getresponseById?.creator?.username}</Text>
+                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>{getresponseById?.creator?.username || "loading.."}</Text>
                                     </View>
                                 </View>
 
@@ -104,8 +118,8 @@ const VoiceToTextProfile = ({ route }) => {
                                 > */}
 
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <View style={[styles.bg_content, { height: isMoreLength ? getresponseById?.content?.length * 0.65 : "auto" }]}>
-                                        <View style={[styles.child_bg, { height: isMoreLength ? getresponseById?.content?.length * 0.64 : "auto" }]}>
+                                    <View style={[styles.bg_content, { height: isMoreLength ? getresponseById?.content?.length * 0.65 : responsiveHeight(30) }]}>
+                                        <View style={[styles.child_bg, { height: isMoreLength ? getresponseById?.content?.length * 0.64 : responsiveHeight(27) }]}>
                                             {/* <View style={styles.second_childbg}> */}
                                             <View style={{ justifyContent: "center", alignItems: "center" }}>
                                                 <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(10), }}>
@@ -132,47 +146,40 @@ const VoiceToTextProfile = ({ route }) => {
                                 </View>
 
                                 {/* </ImageBackground> */}
+
                             </View>
                         </View>
 
-                        <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(10) }}>
-                            <SettingButton onPress={() => {
-                                setIsMoreLength(!isMoreLength)
-                            }} image={require("../../../assets/profilenext-icon.png")} />
-                        </View>
+                        {
+                            !isMoreLength ?
+                                <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(10) }}>
+                                    <SettingButton onPress={() => {
+                                        setIsMoreLength(true)
+                                    }} image={require("../../../assets/profilenext-icon.png")} />
+                                </View>
+                                :
+                                null
+                        }
 
-                        {/* <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(6) }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), alignItems: "center" }}>
-                                <TouchableOpacity style={styles.first_view}>
-                                    <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/456-img.png")} />
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>1.5k</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.second_view}>
-                                    <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/1.5k-img.png")} />
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300", }}>456</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.third_view}>
-                                    <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../../../assets/message-icon.png")} />
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>1.1k</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.third_view}>
-                                    <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: FourthColor, fontWeight: "300" }}>Share</Text>
-                                </TouchableOpacity>
+                        <View style={{ paddingTop: responsiveWidth(25), justifyContent: "center", alignItems: "center", }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), alignItems: "center", paddingVertical: moderateVerticalScale(10), }}>
+                                <CustomEmoji image={require("../../../assets/456-img.png")} text={getresponseById?.likesCount || 0} />
+                                <CustomEmoji image={require("../../../assets/1.5k-img.png")} text={getresponseById?.dislikesCount || 0} />
+                                <CustomEmoji image={require("../../../assets/message-icon.png")} text={getresponseById?.commentsCount || 0} />
+                                <CustomEmoji image={SHARE_BTN} text="Share" />
                             </View>
-                        </View> */}
-                        {/* <TouchableButton onPress={() => navigation.navigate("ProfileScreens", {
-                            screen: "TagFriends"
-                        })} backgroundColor={TextColorGreen} color="#FFF" text="Tag Friends" /> */}
-
+                            <TouchableButton onPress={() => navigation.navigate("ProfileScreens", {
+                                screen: "TagFriends"
+                            })} backgroundColor={TextColorGreen} color="#FFF" text="Tag Friends" />
+                        </View>
                         {/* {
                             Array.from({ length: 1 }, (item, index) => {
                                 return (
                                 )
                             })
                         } */}
-
                     </View>
+
                 </ScrollView>
             </SafeAreaView>
 
@@ -182,8 +189,6 @@ const VoiceToTextProfile = ({ route }) => {
 };
 
 
-
-export default VoiceToTextProfile;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
@@ -203,6 +208,7 @@ const styles = StyleSheet.create({
         // justifyContent: "center",
         alignItems: "center",
         width: responsiveWidth(78),
+        paddingBottom: 10
 
         // marginLeft: responsiveWidth(0.8),
         // marginTop: responsiveWidth(1.5),
@@ -283,12 +289,10 @@ const styles = StyleSheet.create({
         margin: responsiveWidth(2.8)
     },
     img_backgroung_content: {
-        // height: responsiveHeight(34),
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
-        // backgroundColor: "orange"
     },
 });
 
-
+export default VoiceToTextProfile;

@@ -18,7 +18,6 @@ const addPlayers = createSlice({
 
         addFriends: (state, action) => {
             const { userid } = action.payload;
-            // state.userId = userid;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
@@ -32,6 +31,8 @@ const addPlayers = createSlice({
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
+                // state.addFriends.push(action.payload);
+            } else {
             }
         },
 

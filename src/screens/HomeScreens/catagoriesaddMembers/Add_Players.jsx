@@ -30,6 +30,7 @@ const AddPlayers = () => {
         try {
             const responseData = await addFriends_api();
             setResponseapi(responseData.data.users);
+            console.log("Responseapi----", Responseapi);
             return responseData;
         } catch (error) {
             console.log("err", error)
@@ -96,6 +97,7 @@ const AddPlayers = () => {
 
                 <ScrollView>
                     <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
+
                         <ScrollView>
                             {
                                 addedUsers?.map((item, index) => (
@@ -108,7 +110,7 @@ const AddPlayers = () => {
                             <Text style={styles.categories_text}>Friends</Text>
                         </View>
 
-                        <ScrollView style={{}}>
+                        <ScrollView>
                             {
                                 !isNoFriends ?
                                     (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
@@ -123,6 +125,7 @@ const AddPlayers = () => {
                                     })
                             }
                         </ScrollView>
+
                     </View>
                 </ScrollView>
             </View>
@@ -135,6 +138,7 @@ const AddPlayers = () => {
 
     )
 };
+
 
 
 const styles = StyleSheet.create({

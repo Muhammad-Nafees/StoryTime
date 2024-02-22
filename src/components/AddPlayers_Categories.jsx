@@ -12,7 +12,7 @@ const AddFriends_Categories = ({ profileimage, username, userchoice, userid, ind
     const dispatch = useDispatch();
     // const [friendsArr, setFriendsArr] = useState([]);
 
-    console.log("userid----", userid)
+    // console.log("userid----", userid)
 
     const addFriendHandler = () => {
         const friend = { username, userid, };
@@ -23,7 +23,7 @@ const AddFriends_Categories = ({ profileimage, username, userchoice, userid, ind
         removeAdduserList(friend);
     };
 
-    console.log("usernames===", username)
+    // console.log("usernames===", username)
 
     return (
 
