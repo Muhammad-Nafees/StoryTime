@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../assets/Imagepaths';
@@ -17,8 +17,8 @@ const RemoveUsers_Categories = ({ item, userid, username }) => {
     }
 
     return (
-
         <>
+
             <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
                 <View style={{ flexDirection: "row", width: responsiveWidth(31), justifyContent: "space-between", alignItems: "center" }}>
                     <Image style={{ width: responsiveWidth(11.5), height: responsiveHeight(5.5), resizeMode: "center" }} source={FIRST_PROFILE} />
@@ -26,7 +26,7 @@ const RemoveUsers_Categories = ({ item, userid, username }) => {
                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.8) }}>{`@${item.username}`}</Text>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => removeUsers()}>
+                <TouchableOpacity onPress={removeUsers}>
                     <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>Remove</Text>
                 </TouchableOpacity>
             </View>

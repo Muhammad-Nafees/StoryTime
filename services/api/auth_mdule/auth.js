@@ -13,9 +13,6 @@ import {
 } from '../..';
 import { useSelector } from 'react-redux';
 
-// const refreshToken = useSelector((state) => state?.authSlice?.refreshToken);
-// console.log(refreshToken)
-
 const reset_email = async (values) => {
   console.log('values---', values);
 

@@ -32,7 +32,6 @@ const FrameContent = ({
     dislikesByMe,
     likesCountuser,
     dislikesCount,
-    likeslength,
 }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width;
@@ -44,18 +43,16 @@ const FrameContent = ({
     const [isDisLike, setIsDisliked] = useState(dislikesByMe);
     const [likesCounting, setLikesCounting] = useState(likesCountuser);
     const [dislikesCounting, setDisLikesCounting] = useState(dislikesCount);
-
-
     const dispatch = useDispatch();
+
+
     const storyLikedHandled = useCallback(async () => {
         try {
             const responseData = await storyLikedFeed(likedUserId);
             setIsLiked((prevIsLiked) => !prevIsLiked);
             if (isLiked && responseData?.data?._id === likedUserId) {
-                // If unliking, decrement by 1
                 setLikesCounting((prevCount) => prevCount - 1);
             } else {
-                // If liking, increment by 1
                 setLikesCounting((prevCount) => responseData?.data?.likes.length || prevCount + 1);
             }
             dispatch(likedstoryfeed(likesCountuser))
@@ -65,15 +62,15 @@ const FrameContent = ({
         }
     }, [likesCounting]);
 
+
+
     const storydisLikedHandled = useCallback(async () => {
         try {
             const responseData = await storydisLikedFeed(likedUserId)
             setIsDisliked((prevIsLiked) => !prevIsLiked);
             if (isDisLike && responseData?.data?._id === likedUserId) {
-                // If unliking, decrement by 1
                 setDisLikesCounting((prevCount) => prevCount - 1);
             } else {
-                // If liking, increment by 1
                 setDisLikesCounting((prevCount) => responseData?.data?.dislikes.length || prevCount + 1);
             }
             return responseData;
@@ -125,6 +122,9 @@ const FrameContent = ({
                         {
                             type == "video" &&
                             <>
+                                {
+                                    console.log("content", content)
+                                }
                                 <LinearGradient colors={["rgba(234, 137, 167, 1)", 'rgba(0,0,0,0.4)',]} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }} locations={[0.8, 1,]} style={styles.child_bg}>
                                     <View style={styles.second_childbg}>
                                         <View style={styles.third_childbg}>
@@ -138,10 +138,12 @@ const FrameContent = ({
                                             <Image style={{ width: 30, height: 30, resizeMode: "contain", }} source={{ uri: "http://storytime.yameenyousuf.com/" + subCategoryimage }} />
                                             <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2), fontFamily: PassionOne_Regular.passionOne }}>{subCategoryname}</Text>
                                         </View>
-                                        <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+
+                                        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
                                             <Image style={{ width: 30, height: 30, resizeMode: "center", }} source={require("../assets/profileurl_icon.png")} />
                                             <Text style={{ color: "#FFF", fontWeight: "300", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(6) }}>Url</Text>
-                                        </View>
+                                        </TouchableOpacity>
+
                                     </View>
 
                                 </LinearGradient>

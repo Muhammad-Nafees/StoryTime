@@ -8,7 +8,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
+import { PrimaryColor, SecondaryColor, TextColorGreen, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import {
     responsiveWidth,
@@ -23,9 +23,10 @@ import {
 } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 const FirstScreenGuest = () => {
-    const { SPLASH_SCREEN_IMAGE, GET_STARTED_IMAGE, STORY_TIME_IMG } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, STORY_TIME_IMG } = Img_Paths;
     const { CATEGORIES } = NavigationsString;
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation();
@@ -49,7 +50,7 @@ const FirstScreenGuest = () => {
             <View style={styles.container_img}>
                 <TouchableOpacity disabled={!toggleCheckBox}
                     onPress={() => navigation.navigate("CategoriesTab")}
-                    >
+                >
                     <Image
                         style={{
                             marginVertical: moderateVerticalScale(12),
@@ -61,7 +62,8 @@ const FirstScreenGuest = () => {
                         source={require('../../../assets/play-btn.png')}
                     />
                 </TouchableOpacity>
-                <Image style={styles.get_started} source={GET_STARTED_IMAGE} />
+                {/* <Image style={styles.get_started} source={GET_STARTED_IMAGE} /> */}
+                <Text style={{ color: "rgba(228, 65, 115, 1)", fontFamily: PassionOne_Regular.passionOne, fontSize: 32 }}>Get Started</Text>
             </View>
 
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>

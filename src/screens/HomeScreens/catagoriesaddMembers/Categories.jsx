@@ -69,9 +69,13 @@ const Categories = () => {
   const [searchTerm, setSearchTerm] = useState(''); //for guest search only
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
+  const responseLogin = useSelector((state) => state?.authSlice?.user);
+
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
+  console.log("responseLogin===", responseLogin.data);
 
+  // console.log("responseLogin===", )
   const DATA = useMemo(() => {
     if (!!searchTerm) {
       const filtered = responseCategories.filter(category =>
@@ -255,7 +259,6 @@ const Categories = () => {
     namerandom: "Random",
     backgroundColor: "EE5F8A",
     imageludo: LUDO_ICON,
-
   }
 
   return (

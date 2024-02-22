@@ -4,9 +4,12 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
 
 
-const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress }) => {
+const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, onPress, extendstory }) => {
     const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height
+    const SCREENHEIGHT = Dimensions.get("window").height;
+
+    console.log("extendStoryCheck", extendstory);
+
 
     return (
         <ImageBackground style={[styles.img_backgroung_content, { width: SCREENWIDTH * 0.9, height: SCREENWIDTH * 0.7 }]} resizeMode="center" source={BackgroundImage}>
@@ -15,7 +18,7 @@ const VoiceToText = ({ text, BackgroundImage, InnerImage, bgColor, innerColor, o
                     <Image style={{ width: responsiveWidth(69), height: responsiveHeight(18), resizeMode: "center" }} source={InnerImage} />
                 </View>
                 <View style={{ paddingVertical: moderateVerticalScale(4), }} />
-                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2.9), fontWeight: "700", }}>{text}</Text>
+                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2.9), fontWeight: "700", }}>{extendstory ? "Continue" : text}</Text>
             </TouchableOpacity>
         </ImageBackground>
     )

@@ -9,8 +9,6 @@ import {
   ScrollView,
 } from 'react-native';
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -18,25 +16,23 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Voice from '@react-native-voice/voice';
 import UserNames from '../../../components/UserNames';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  recordingData,
-  resetRecordingData,
-} from '../../../../store/slices/RecordingData';
+import { recordingData, } from '../../../../store/slices/RecordingData';
 import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
-import SaveStory from '../../../components/playFlow/SaveStory';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import {
   checkTrueOrFalse,
-  extendStoryCheck,
 } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
+import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+
 
 const FirstUser = ({ route }) => {
   let longPressTimeout;
@@ -59,53 +55,200 @@ const FirstUser = ({ route }) => {
   const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck,);
   const dispatch = useDispatch();
   const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
-  const [recordingText, setRecordingText] = useState([]);
+  const [recordingText, setRecordingText] = useState("");
   const [isNext, setIsNext] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
   const [partialResults, setPartialResults] = useState([]);
+  const [speaking, setSpeaking] = useState(false);
+
   const profileUsersStories = useSelector(state => state?.recordingData?.saveDatatoProfile,);
   const checkTrue = route?.params?.checkValue;
   const USER = user?.data?.user || user?.data;
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
-
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
-  const USER_LENGTH_CHECK = sequenceUser?.length == 1
+  const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
-
-
-  // console.log("sequenceUser====", sequenceUser)
-  // console.log('profileusers', profileUsersStories);
-  // console.log('ended====', ended);
-  // const isEmptyArray = route?.params?.isEmptyArray;
-
-  // console.log("displayuser--", currentDisplayUser)
-  // console.log('textrecordUsers=====', textrecordUsers);
-  // const IdUsers = addedUsers.map((item) => item?.userid)
-  // console.log("checkUserTrueorFalse=====", checkUserTrueorFalse);
-
-  // console.log("isEmptyArray=====", isEmptyArray);
-
-  // console.log('extendStoryTrueOrFalse=====', extendStoryTrueOrFalse);
   const stringText = recordingText.toString();
   const cleanedText = stringText.replace(/,/g, '');
-  // console.log('cleanedText=====', cleanedText);
+
+  // ----------XXXXXXXXXX----------
+
+  useEffect(() => {
+    Voice.onSpeechStart = onSpeechStart;
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechResults = onSpeechResult;
+
+    Voice.onSpeechRecognized = onSpeechRecognized;
+    Voice.onSpeechError = onSpeechError
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  // onSpeechStart----------
+
+  const onSpeechStart = e => {
+    console.log('START SPEECH CALLED---', e);
+    setStarted(true);
+  };
+
+  // onSpeechEnd ----------
+
+  const onSpeechEnd = e => {
+    setEnded(e.value);
+    console.log('SPEECH END CALLED----', e);
+  };
+
+  // ---------- onSpeechResult----------
+
+  const onSpeechResult = async (e) => {
+    setSpeaking(false);
+    // console.log('Voice Result: ' + e.value);
+    // dispatch(recordingData(e?.value[0]));
+    setRecordingText(prevData => prevData + " " + e?.value[0]);
+    await Voice.stop();
+  };
+
+
+  const onSpeechRecognized = e => {
+    setSpeaking(false);
+    console.log('onSpeechRecognized', e);
+  };
+
+  const onSpeechError = (e) => {
+    console.log('onSpeechError: ', JSON.stringify(e.error));
+  }
+
+
+  useFocusEffect(
+    useCallback(() => {
+      setTimeLeft(null);
+      setIsPressed(false);
+      dispatch(checkTrueOrFalse(false));
+      return () => {
+        setIsFirstCall(false);
+        setisCancelingStory(true);
+      };
+    }, []),
+  );
+
+  // ---------- Start Recording And Convert Text ----------
+
+  const startRecognizing = async () => {
+
+    console.log('Start Recognizing Value---------');
+    try {
+      if (!speaking) {
+        console.log("SPEAKING")
+        await Voice.start('en-US');
+        handlePressIn();
+      } else {
+        console.log('stop speaking');
+        await Voice.stop();
+      }
+      setSpeaking(prevState => !prevState);
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
+  console.log("SPEAKING=======", speaking)
+  // -------- Stop Recording --------
+
+  const stopRecording = async () => {
+    setIsRecording(false);
+    try {
+      console.log("VOICE====", Voice)
+      await Voice.stop();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onSpeechPartialResults = (e) => {
+    console.log("evalue====", e?.value)
+  };
+
+  //---------- Handle Press In ----------
+
+  const handlePressIn = () => {
+    longPressTimeout = setTimeout(() => {
+      setIsLongPress(true);
+    }, 1000);
+  };
+
+  // ---------- Handle Press out ----------
+
+  const onPressNext = () => {
+    user ? navigation.navigate('FirstUserStorytext') : null;
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (checkUserTrueorFalse) {
+        const currentIndex = sequenceUser.indexOf(currentDisplayUser);
+        const nextIndex = (currentIndex + 1) % sequenceUser.length;
+        const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+
+        if (currentIndex !== sequenceUser?.length) {
+          setCurrentDisplayUser(sequenceUser[nextIndex]);
+          setIsNextUser(sequenceUser[nextPlayer]);
+          if (nextPlayer == 0) {
+            return setIsNext(false);
+          }
+        } else {
+          console.log('add players in Game Completed');
+        }
+      }
+    }, [checkUserTrueorFalse]),
+  );
+
+  const saveBtnHandler = () => {
+    if (!user) {
+      modalOpen(
+        GuestModalRef,
+        'Get Story Time Premium',
+        'Subscribe now to save your Story to your profile',
+        'Subscribe',
+        'Back',
+      )
+      return;
+    }
+    saveStoryhandler()
+  };
+
+  const saveStoryhandler = () => {
+    setSaveStoryModal(true);
+    setVisible(true); // Set isVisible to true to open the modal
+  };
+
+  const modalOpen = (ref, heading, content, buttonText, text) => {
+    if (ref.current) {
+      ref.current.open(heading, content, buttonText, text);
+    }
+  };
+
 
   const handleStart = () => {
-    if (timeLeft !== 0) {
-      // setIsFirstCall(!isFirstCall)
-      setIsPressed(true);
-      if (timeLeft === null) {
-        startRecognizing();
-        setTimeLeft(30);
-      }
 
-      // console.log("isFirstCall-----", isFirstCall);
+    if (extendStoryTrueOrFalse && timeLeft == null) {
+      setTimeLeft(extendCounting);
+      startRecognizing();
+      setIsPressed(true);
+    };
+
+    if (timeLeft !== 0) {
+      setIsPressed(true);
+
+      if (!extendStoryTrueOrFalse && timeLeft === null) {
+        startRecognizing();
+        setTimeLeft(20);
+      };
 
       if (isFirstCall) {
         clearTimeout(longPressTimeout);
@@ -126,20 +269,15 @@ const FirstUser = ({ route }) => {
   // Timer 2 Minutes ---------
 
   useEffect(() => {
+
     if (USER_LENGTH_CHECK) {
       setIsNext(false)
-    }
+    };
 
     let countdown;
-    if (extendStoryTrueOrFalse && timeLeft == null) {
-      setTimeLeft(extendCounting);
-      // handleStart();
-      startRecognizing();
-      setIsPressed(true);
-    }
 
     if (extendStoryTrueOrFalse === false && timeLeft == null) {
-      setRecordingText([]);
+      setRecordingText("");
     }
 
     if (timeLeft !== null && timeLeft > 0) {
@@ -170,172 +308,6 @@ const FirstUser = ({ route }) => {
     }
   }, [timeLeft]);
 
-  // ----------XXXXXXXXXX----------
-
-  useEffect(() => {
-    Voice.onSpeechStart = onspeechStart;
-    Voice.onSpeechEnd = onspeechEnd;
-    Voice.onSpeechResults = onspeechResult;
-    Voice.onSpeechPartialResults = onSpeechPartialResults;
-    Voice.onSpeechRecognized = onSpeechRecognized;
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
-
-  // onSpeechStart----------
-
-  const onspeechStart = e => {
-    console.log('START SPEECH CALLED---', e);
-    setStarted(true);
-  };
-
-  // onSpeechEnd ----------
-
-  const onspeechEnd = e => {
-    setEnded(e.value);
-    console.log('SPEECH END CALLED----', e);
-  };
-
-  //---------- onSpeechResult----------
-
-  const onspeechResult = useCallback(
-    e => {
-      console.log('ON SPEECH RESULT-----------', e);
-      // const text = e?.value[0];
-
-      // dispatch(recordingData(text));
-      // if (text) {
-      //     setRecordingText((prevVal) => [...prevVal, ...text]);
-      // }
-    },
-    [dispatch],
-  );
-
-  const onSpeechPartialResults = e => {
-    const text = e?.value[0];
-    // console.log('text======Voice', e?.value[0]);
-    // console.log('recordingTextState====', recordingText);
-    dispatch(recordingData(e?.value[0]));
-
-    if (e?.value[0]) {
-      setRecordingText(prevVal => [...prevVal, e?.value[0]]);
-    }
-    // console.log('onSpeechPartialResults: ', e);
-    setPartialResults(e.value);
-
-    const combinedText = e.value.join(' ');
-    // Combined text ko split karna taki har word ko alag karein
-    const words = combinedText.split(' ');
-    // Duplicate entries ko hata kar ek naya array banana
-    const uniqueWords = [];
-  };
-
-  const onSpeechRecognized = e => {
-    console.log('onSpeechRecognized', e);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      setTimeLeft(null);
-      setIsPressed(false);
-      dispatch(checkTrueOrFalse(false));
-      return () => {
-        setIsFirstCall(false);
-        setisCancelingStory(true);
-      };
-    }, []),
-  );
-
-  // ---------- Start Recording And Convert Text ----------
-
-  const startRecognizing = async () => {
-    const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000 };
-    try {
-      await Voice.start('en-US', options);
-      handlePressIn();
-      console.log('Start Recognizing Value====');
-    } catch (error) {
-      console.log('err', error);
-    }
-  };
-
-  // -------- Stop Recording --------
-
-  const stopRecording = async () => {
-    setIsRecording(false);
-    try {
-      await Voice.stop();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  //---------- Handle Press In ----------
-
-  const handlePressIn = () => {
-    longPressTimeout = setTimeout(() => {
-      setIsLongPress(true);
-    }, 1000);
-  };
-
-  // ---------- Handle Press out ----------
-
-  const onPressNext = () => {
-    user ? navigation.navigate('FirstUserStorytext') : null;
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      if (checkUserTrueorFalse) {
-        const currentIndex = sequenceUser.indexOf(currentDisplayUser);
-        const nextIndex = (currentIndex + 1) % sequenceUser.length;
-        const nextPlayer = (currentIndex + 2) % sequenceUser.length;
-
-        console.log("NEXT INDEX-----", nextIndex)
-        console.log("NEXT PLAYER------", nextPlayer);
-        console.log("CURRENT INDEX------", currentIndex);
-        console.log("sequenceUser?.length------", sequenceUser?.length);
-
-
-        if (currentIndex !== sequenceUser?.length) {
-          setCurrentDisplayUser(sequenceUser[nextIndex]);
-          setIsNextUser(sequenceUser[nextPlayer]);
-          if (nextPlayer == 0) {
-            return setIsNext(false);
-          }
-        } else {
-          console.log('add players in Game Completed');
-        }
-      }
-    }, [checkUserTrueorFalse]),
-  );
-
-  const saveBtnHandler = () => {
-    if (!user) {
-      modalOpen(
-        GuestModalRef,
-        'Get Story Time Premium',
-        'Subscribe now to save your Story to your profile',
-        'Subscribe',
-        'Back',
-      )
-      return
-    }
-    saveStoryhandler()
-  }
-
-  const saveStoryhandler = () => {
-    setSaveStoryModal(true);
-    setVisible(true); // Set isVisible to true to open the modal
-  };
-
-  const modalOpen = (ref, heading, content, buttonText, text) => {
-    if (ref.current) {
-      ref.current.open(heading, content, buttonText, text);
-    }
-  };
 
   return (
     <>
@@ -357,8 +329,10 @@ const FirstUser = ({ route }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
+
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
+                // onPress={stopRecording}
                 style={{ width: responsiveWidth(10) }}>
                 <Image
                   style={{
@@ -369,6 +343,7 @@ const FirstUser = ({ route }) => {
                   source={require('../../../assets/back-playflowicon.png')}
                 />
               </TouchableOpacity>
+
               <View>
                 {isCancelingStory ? (
                   <View
@@ -449,7 +424,6 @@ const FirstUser = ({ route }) => {
                 ) : (
                   <></>
                 )}
-
                 <ScrollView>
                   <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
                     <Text
@@ -463,7 +437,7 @@ const FirstUser = ({ route }) => {
                         textAlign: 'center',
                         fontFamily: PassionOne_Regular.passionOne,
                       }}>
-                      {cleanedText}
+                      {recordingText}
                     </Text>
                   </View>
                 </ScrollView>
@@ -479,7 +453,6 @@ const FirstUser = ({ route }) => {
                         textAlign: 'center',
                         fontFamily: PassionOne_Regular.passionOne,
                       }}>
-                      {' '}
                       Hold microphone icon and share your story
                     </Text>
                   )}

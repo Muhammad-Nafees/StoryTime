@@ -26,7 +26,9 @@ const FirstUserStory = () => {
     const userId = useSelector(state => state?.addPlayers?.userId);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
     const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
-    // const [isUserCheckAvail, setIsUserCheckAvail] = useState(true);
+    const extendstory = useSelector(
+        state => state?.addPlayers?.extendStoryCheck
+    );
 
 
     const nextUserHandler = () => {
@@ -36,12 +38,10 @@ const FirstUserStory = () => {
         navigation.navigate(FIRST_USER);
     };
 
-
     const extendStoryHandler = () => {
         navigation.navigate(FIRST_USER, { extentCounting: 30 });
         dispatch(extendStoryCheck(true));
     };
-
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -50,7 +50,7 @@ const FirstUserStory = () => {
                 <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" onPress={extendStoryHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
+                        <VoiceToText text="Extend Your Story Time" extendstory={extendstory} onPress={extendStoryHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
                         <VoiceToText text="Next Player" onPress={nextUserHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
                     </View>
                 </View>
@@ -59,7 +59,6 @@ const FirstUserStory = () => {
 
     )
 };
-
 
 const styles = StyleSheet.create({
     container: {

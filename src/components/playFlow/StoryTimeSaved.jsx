@@ -26,7 +26,7 @@ const StoryTimeSaved = ({ isVisible, setVisible, text, onPress, textButton }) =>
                     </View>
 
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity onPress={() => setVisible(false)} style={{ width: responsiveWidth(60), backgroundColor: TextColorGreen, borderRadius: 10, justifyContent: "center", alignItems: "center", height: responsiveHeight(6.6) }}>
+                        <TouchableOpacity onPress={onPress} style={{ width: responsiveWidth(60), backgroundColor: TextColorGreen, borderRadius: 10, justifyContent: "center", alignItems: "center", height: responsiveHeight(6.6) }}>
                             <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: "#FFF", }}>{textButton}</Text>
                         </TouchableOpacity>
                     </View>
