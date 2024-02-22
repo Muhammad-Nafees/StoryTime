@@ -57,7 +57,7 @@ const Setting = () => {
       iconName: 'BlockUser',
       routeName: BLOCK_USER,
     },
-    { key: '7', text: 'Delete Account', iconName: 'DeleteAccount', routeName: DELETE_ACCOUNT },
+    { key: '7', text: 'Delete Account', iconName: 'DeleteAccount' },
   ];
   const legalData = [
     {

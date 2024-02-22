@@ -25,13 +25,18 @@ import {
   White,
 } from '../screens/Styles/Style';
 import Typography from './Typography';
-// import StoryTimeSaved from './playFlow/StoryTimeSaved';
+import StoryTimeSaved from './playFlow/StoryTimeSaved';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 
 const ConfirmationModal = forwardRef((props, ref) => {
+  const dispatch = useDispatch()
   const [isVisible, setIsVisible] = useState(false);
   const [randomWord, setRandomWord] = useState('');
   const [userInput, setUserInput] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [inputError, setInputError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     generateRandomWord();
@@ -45,18 +50,22 @@ const ConfirmationModal = forwardRef((props, ref) => {
     setRandomWord(newRandomWord);
   };
 
+
   const handleInputChange = (text) => {
     setUserInput(text);
+    if (text.trim() === '') {
+      setInputError('Please type the word');
+    } else {
+      setInputError('');
+    }
   };
 
   const handleCheckMatch = () => {
-    if (userInput.toLowerCase() === randomWord.toLowerCase()) {
+    if (userInput.trim().toLowerCase() === randomWord.toLowerCase()) {
       console.log('Congratulations! Matched!');
-      close()
-      setUserInput('');
-      // setIsSuccess(true)
+      DeleteUserAccount();
     } else {
-      console.log('Try again. Not matched.');
+      setInputError('Incorrect word. Please re-enter.');
     }
   };
 
@@ -66,6 +75,8 @@ const ConfirmationModal = forwardRef((props, ref) => {
 
   const close = () => {
     setIsVisible(false);
+    setUserInput('');
+    setInputError('');
   };
 
   useImperativeHandle(ref, () => {
@@ -75,28 +86,41 @@ const ConfirmationModal = forwardRef((props, ref) => {
   const DeleteUserAccount = async()=> {
     try {
       const responseData = await delete_user_account();
-      if(responseData.status === '200'){
+      // console.log(responseData)
+      if(responseData.statusCode === 200){
         close();
         setUserInput('');
-        // setIsSuccess(true)
+        setIsSuccess(true);
+        setInputError('');
       } 
     } catch (error) {
       console.log('error ==> ', error?.message);
     }
   };
+  const handleDeleteUser = async () => {
+  try {
+      setIsLoading(true);
+      await AsyncStorage.removeItem('isLoggedIn');
+      dispatch(logout())
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
+    <>
     <Modal
       style={{flex: 1}}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
       onModalHide={close}
-      backdropOpacity={0.7}
+      backdropOpacity={0.8}
       onBackdropPress={close}>
       <View
         style={{
-          height: responsiveHeight(32),
+          height: inputError?responsiveHeight(35):responsiveHeight(32),
           width: responsiveWidth(85),
           borderRadius: 32,
           backgroundColor: White,
@@ -125,13 +149,16 @@ const ConfirmationModal = forwardRef((props, ref) => {
           <Text style={{color: Black02}}>{randomWord}" </Text>
           to continue deleting your account.
         </Typography>
-        <TextInput
-          style={styles.input}
-          placeholder="Type the word"
-          onChangeText={handleInputChange}
-          value={userInput}
-        />
-
+            <TextInput
+            style={styles.input}
+            placeholder="Type the word"
+            onChangeText={handleInputChange}
+            value={userInput}
+            error={inputError}
+          />
+          {inputError ? (
+            <Text style={{ color: 'red', marginBottom:responsiveHeight(1),alignSelf:"flex-start",marginLeft:responsiveWidth(8) }}>{inputError}</Text>
+          ) : null}
         <View
           style={{
             flexDirection: 'row',
@@ -177,8 +204,12 @@ const ConfirmationModal = forwardRef((props, ref) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <StoryTimeSaved text={"Account Deleted"} textButton={'Return'} isVisible={isSuccess} setVisible={setIsSuccess}/> */}
     </Modal>
+    {
+      isSuccess &&
+      <StoryTimeSaved text={"Account Deleted"} textButton={'Return'} isVisible={isSuccess} setVisible={setIsSuccess} iconName={"Success"} onPress={handleDeleteUser} loading={isLoading}/>
+    }
+    </>
   );
 });
 const styles = StyleSheet.create({

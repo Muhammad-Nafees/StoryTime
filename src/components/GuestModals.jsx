@@ -48,7 +48,7 @@ const GuestModals = forwardRef((props, ref) => {
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      backdropColor="white"
+      // backdropColor="white"
       onModalHide={close}
       backdropOpacity={0.8}
       onBackdropPress={close}>
