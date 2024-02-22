@@ -215,21 +215,17 @@ const FirstUser = ({ route }) => {
 
   const onSpeechPartialResults = e => {
     const text = e?.value[0];
-    // console.log('text======Voice', e?.value[0]);
+    console.log('text======Voice', e?.value[0]);
     // console.log('recordingTextState====', recordingText);
     dispatch(recordingData(e?.value[0]));
 
     if (e?.value[0]) {
-      setRecordingText(prevVal => [...prevVal, e?.value[0]]);
+      // setRecordingText(prevVal => [...prevVal, e?.value[0]]);
+      setRecordingText([e?.value[0]]);
+
     }
     // console.log('onSpeechPartialResults: ', e);
     setPartialResults(e.value);
-
-    const combinedText = e.value.join(' ');
-    // Combined text ko split karna taki har word ko alag karein
-    const words = combinedText.split(' ');
-    // Duplicate entries ko hata kar ek naya array banana
-    const uniqueWords = [];
   };
 
   const onSpeechRecognized = e => {
@@ -251,9 +247,10 @@ const FirstUser = ({ route }) => {
   // ---------- Start Recording And Convert Text ----------
 
   const startRecognizing = async () => {
-    const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000 };
+    // const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 10000 };
     try {
-      await Voice.start('en-US', options);
+      // await Voice.start('en-US', options);
+      await Voice.start('en-US');
       handlePressIn();
       console.log('Start Recognizing Value====');
     } catch (error) {
@@ -616,3 +613,206 @@ const styles = StyleSheet.create({
 });
 
 export default FirstUser;
+
+
+
+
+////DEMO CODE EXAMPLE FOR REACT NATIVE VOICE
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   StyleSheet,
+//   Text,
+//   View,
+//   Image,
+//   TouchableHighlight,
+// } from 'react-native';
+
+// import Voice, {
+//   SpeechRecognizedEvent,
+//   SpeechResultsEvent,
+//   SpeechErrorEvent,
+// } from '@react-native-voice/voice';
+
+// const FirstUser = () => {
+//   const [recognized, setRecognized] = useState('');
+//   const [pitch, setPitch] = useState('');
+//   const [error, setError] = useState('');
+//   const [end, setEnd] = useState('');
+//   const [started, setStarted] = useState('');
+//   const [results, setResults] = useState([]);
+//   const [partialResults, setPartialResults] = useState([]);
+
+//   useEffect(() => {
+//     Voice.onSpeechStart = onSpeechStart;
+//     Voice.onSpeechRecognized = onSpeechRecognized;
+//     Voice.onSpeechEnd = onSpeechEnd;
+//     Voice.onSpeechError = onSpeechError;
+//     Voice.onSpeechResults = onSpeechResults;
+//     Voice.onSpeechPartialResults = onSpeechPartialResults;
+//     Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+
+//     return () => {
+//       Voice.destroy().then(Voice.removeAllListeners);
+//     };
+//   }, []);
+
+//   const onSpeechStart = (e) => {
+//     console.log('onSpeechStart: ', e);
+//     setStarted('√');
+//   };
+
+//   const onSpeechRecognized = (e) => {
+//     console.log('onSpeechRecognized: ', e);
+//     setRecognized('√');
+//   };
+
+//   const onSpeechEnd = (e) => {
+//     console.log('onSpeechEnd: ', e);
+//     setEnd('√');
+//   };
+
+//   const onSpeechError = (e) => {
+//     console.log('onSpeechError: ', e);
+//     setError(JSON.stringify(e.error));
+//   };
+
+//   const onSpeechResults = (e) => {
+//     console.log('onSpeechResults: ', e);
+//     setResults(e.value);
+//   };
+
+//   const onSpeechPartialResults = (e) => {
+//     console.log('onSpeechPartialResults: ', e);
+//     setPartialResults(e.value);
+//   };
+
+//   const onSpeechVolumeChanged = (e) => {
+//     console.log('onSpeechVolumeChanged: ', e);
+//     setPitch(e.value);
+//   };
+
+//   const startRecognizing = async () => {
+//     setRecognized('');
+//     setPitch('');
+//     setError('');
+//     setStarted('');
+//     setResults([]);
+//     setPartialResults([]);
+//     setEnd('');
+
+//     try {
+//     // below option is under investigation
+//     // const options = { EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: 3000 }; //https://github.com/react-native-voice/voice/issues/441
+//       await Voice.start('en-US');
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   };
+
+//   const stopRecognizing = async () => {
+//     try {
+//       await Voice.stop();
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   };
+
+//   const cancelRecognizing = async () => {
+//     try {
+//       await Voice.cancel();
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   };
+
+//   const destroyRecognizer = async () => {
+//     try {
+//       await Voice.destroy();
+//     } catch (e) {
+//       console.error(e);
+//     }
+//     setRecognized('');
+//     setPitch('');
+//     setError('');
+//     setStarted('');
+//     setResults([]);
+//     setPartialResults([]);
+//     setEnd('');
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.welcome}>Welcome to React Native Voice!</Text>
+//       <Text style={styles.instructions}>
+//         Press the button and start speaking.
+//       </Text>
+//       <Text style={styles.stat}>{`Started: ${started}`}</Text>
+//       <Text style={styles.stat}>{`Recognized: ${recognized}`}</Text>
+//       <Text style={styles.stat}>{`Pitch: ${pitch}`}</Text>
+//       <Text style={styles.stat}>{`Error: ${error}`}</Text>
+//       <Text style={styles.stat}>Results</Text>
+//       {results.map((result, index) => (
+//         <Text key={`result-${index}`} style={styles.stat}>
+//           {result}
+//         </Text>
+//       ))}
+//       <Text style={styles.stat}>Partial Results</Text>
+//       {partialResults.map((result, index) => (
+//         <Text key={`partial-result-${index}`} style={styles.stat}>
+//           {result}
+//         </Text>
+//       ))}
+//       <Text style={styles.stat}>{`End: ${end}`}</Text>
+//       <TouchableHighlight onPress={startRecognizing}>
+//        <Text style={{backgroundColor:"red",padding:50}}>BTN</Text>
+//       </TouchableHighlight>
+//       <TouchableHighlight onPress={stopRecognizing}>
+//         <Text style={styles.action}>Stop Recognizing</Text>
+//       </TouchableHighlight>
+//       <TouchableHighlight onPress={cancelRecognizing}>
+//         <Text style={styles.action}>Cancel</Text>
+//       </TouchableHighlight>
+//       <TouchableHighlight onPress={destroyRecognizer}>
+//         <Text style={styles.action}>Destroy</Text>
+//       </TouchableHighlight>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   button: {
+//     width: 50,
+//     height: 50,
+//   },
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#F5FCFF',
+//   },
+//   welcome: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   action: {
+//     textAlign: 'center',
+//     color: '#0000FF',
+//     marginVertical: 5,
+//     fontWeight: 'bold',
+//   },
+//   instructions: {
+//     textAlign: 'center',
+//     color: '#333333',
+//     marginBottom: 5,
+//   },
+//   stat: {
+//     textAlign: 'center',
+//     color: '#B0171F',
+//     marginBottom: 1,
+//   },
+// });
+
+// export default FirstUser;
+
