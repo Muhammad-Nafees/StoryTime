@@ -118,9 +118,7 @@ const FirstUser = ({ route }) => {
       setRecordingText(prevData => prevData + " " + e?.value[0]);
       // if (callBack) callBack(e?.value[0]);
       return;
-    }
-
-    // await Voice.stop();
+    };
   };
 
   const onSpeechRecognized = e => {
@@ -228,7 +226,7 @@ const FirstUser = ({ route }) => {
       )
       return;
     }
-    saveStoryhandler()
+    saveStoryhandler();
   };
 
   const _destroyRecognizer = async () => {
@@ -323,6 +321,7 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
+
 
 
   return (
@@ -549,10 +548,10 @@ const FirstUser = ({ route }) => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
-    // width: "100%",
-    // height: "100%",
     flex: 1,
     backgroundColor: '#FFF',
   },
@@ -592,15 +591,12 @@ const styles = StyleSheet.create({
     // backgroundColor: "orange"
   },
   bg_content: {
-    // backgroundColor: PrimaryColor,
     justifyContent: 'center',
     alignItems: 'center',
     width: responsiveWidth(74),
     height: responsiveHeight(42),
     marginLeft: responsiveWidth(0.9),
-    // marginRight: responsiveWidth(2),
     marginTop: responsiveWidth(1),
-    // marginBottom: responsiveWidth(2.5)
   },
 });
 
