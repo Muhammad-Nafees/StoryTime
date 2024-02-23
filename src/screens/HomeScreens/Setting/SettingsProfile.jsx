@@ -163,7 +163,7 @@ const SettingsProfile = () => {
   return (
     <BackgroundWrapper>
       <ImageBackground
-        source={coverImage?.uri ? { uri: coverImage?.uri } : DEFAULT_COVER}
+        source={coverImage?.uri ? { uri: coverImage?.uri } : BG_CONTAINER}
         style={styles.bg_img_container}>
         <ScreenHeader title={'Profile'} clr={'#fff'} />
       </ImageBackground>

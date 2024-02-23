@@ -105,21 +105,7 @@ const FirstUser = ({ route }) => {
 
   // ---------- onSpeechResult----------
 
-  const onSpeechResult = async (e) => {
-    console.log('onSpeechResults: ', e?.value);
 
-    if (!e.value) return;
-    setSpeaking(false);
-    // console.log('Voice Result: ' + e.value);
-
-    if (setRecordingText) {
-      dispatch(recordingData(e?.value[0]));
-      startRecognizing();
-      setRecordingText(prevData => prevData + " " + e?.value[0]);
-      // if (callBack) callBack(e?.value[0]);
-      return;
-    };
-  };
 
   const onSpeechRecognized = e => {
     setSpeaking(false);
@@ -321,7 +307,6 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
-
 
 
   return (
@@ -540,8 +525,8 @@ const FirstUser = ({ route }) => {
             )}
           </View>
 
-          <GuestModals ref={GuestModalRef}></GuestModals>
-          <GuestModals ref={GuestModalRefForAds}></GuestModals>
+          <GuestModals ref={GuestModalRef} />
+          <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} />
         </ScrollView>
       </ImageBackground>
     </>

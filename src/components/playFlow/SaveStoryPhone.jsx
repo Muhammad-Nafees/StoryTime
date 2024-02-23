@@ -1,4 +1,4 @@
-import React, { useState, } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Dimensions, Image, Platform, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, ProgressBarAndroid } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -36,6 +36,10 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
     const subCategoryId = useSelector((state) => state?.getcategories?.subcategoriesId);
     const playerContributorsId = useSelector((state) => state?.getcategories?.playerscontributorsIds);
+    const {user} = useSelector(state => state?.authSlice);
+
+    const isUserGuest = useMemo(() => !user, [user])
+    
     console.log("categoryId-----", categoryId);
     console.log("subCategoryId-----", subCategoryId)
     console.log("playerContributorsId-----", playerContributorsId);
@@ -86,11 +90,11 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                         <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Save your story to your phone</Text>
 
-                        <View style={{ paddingVertical: 8, }}>
+                       {!isUserGuest && <View style={{ paddingVertical: 8, }}>
                             <TouchableButton type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        </View>
+                        </View>}
 
-                        <SaveStoryBtn onPress={saveStoryhandler} text="Save as PDF" />
+                        <SaveStoryBtn onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest}/>
 
                     </View>
                 </View>

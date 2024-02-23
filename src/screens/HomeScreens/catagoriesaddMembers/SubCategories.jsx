@@ -40,12 +40,13 @@ import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
-import { addFriends, randomNames } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, randomNames, setStoryUserImage } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
 import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
+import { URL } from '../../../constants/Constant'
 
 const SubCategories = ({ route }) => {
   const { width, height } = Dimensions.get('window');
@@ -84,7 +85,6 @@ const SubCategories = ({ route }) => {
     return responsesubCategories
   }, [responsesubCategories, searchTerm])
 
-
   const addFriends_api_handler = async () => {
     try {
       const responseData = await addFriends_api();
@@ -120,7 +120,6 @@ const SubCategories = ({ route }) => {
       const response = await get_Categories_Sub_Categories({ page2: page, id: id });
       setIsLoading(false);
       setHasMorePages(response?.data?.pagination?.hasNextPage)
-      console.log("morepages", HasMorePages)
       setResponseSubCategories((prevValue) => [...prevValue, ...response?.data?.categories]);
       return response;
     } catch (error) {
@@ -133,11 +132,21 @@ const SubCategories = ({ route }) => {
   }, [page]);
 
 
-  const handleRandomSub_category = async () => {
+  const handleRandomSub_category = async (item) => {
     try {
-      const response = await get_Random(id);
-      dispatch(randomNames(response?.data?.name));
-      navigation.navigate(PLAYER_SEQUENCE);
+    let randomSubName = allowedCategories[Math.floor(Math.random() * allowedCategories.length)]
+         
+     const filteredSubcategory = responsesubCategories.find(category =>
+        category.name.includes(randomSubName)
+      );
+      const response = user? await get_Random(id):filteredSubcategory;
+
+      const imageLink = URL + response?.image; 
+      dispatch(randomNames(user?response?.data?.name:response?.name));
+      !user && dispatch(setStoryUserImage(imageLink));
+
+      user?navigation.navigate(PLAYER_SEQUENCE):navigation.navigate(FIRSTSCREENPLAYFLOW);
+
       return response;
     } catch (error) {
       console.log('error---', error);
@@ -148,7 +157,7 @@ const SubCategories = ({ route }) => {
     user ? navigation.navigate(PLAYER_SEQUENCE) : navigation.navigate(FIRSTSCREENPLAYFLOW);
     dispatch(randomNames(name));
     dispatch(setSubCategoriesId(id))
-    console.log("subCategiryId", id)
+    console.log("subCategiryId", name)
   };
 
   const onRefresh = useCallback(() => {
@@ -268,7 +277,7 @@ const SubCategories = ({ route }) => {
           // paddingBottom: 200
           // backgroundColor: "orange"
         }}>
-
+      {DATA.length > 0  ?
         <FlatList
           data={[...DATA, randomObject]}
           // nestedScrollEnabled
@@ -298,9 +307,10 @@ const SubCategories = ({ route }) => {
                   item={item}
                   mainbgColor={TextColorGreen}
                   backgroundColor="rgba(86, 182, 164, 1)"
-                  handleRandomClick={handleRandomSub_category}
+                  handleRandomClick={()=>handleRandomSub_category(item)}                  
                 />
-                {!!isCategoryBlurred(item) &&
+                {!!isCategoryBlurred(item) && 
+                item?.namerandom !== "Random" &&
                   <View style={styles.blur_wrapper}>
                     <BlurView
                       style={styles.blur_view}
@@ -332,7 +342,10 @@ const SubCategories = ({ route }) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
         // onEndReachedThreshold={0.3}
-        />
+        />:<View style={{ alignItems: 'center', height: height / 4 }}>
+        <ActivityIndicator size={40} color={'#000'} />
+        </View>
+        }  
       </View>
       <Toast />
       {/* </ScrollView> */}

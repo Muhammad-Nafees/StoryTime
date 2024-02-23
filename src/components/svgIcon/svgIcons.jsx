@@ -16,6 +16,8 @@ import Subscription from "../../assets/svgIcons/paymentSetting.svg"
 import ReportAProblem from "../../assets/svgIcons/reportProblem.svg"
 import Search from "../../assets/svgIcons/search.svg"
 import Guest from "../../assets/svgIcons/questionmark.svg"
+import Saved from "../../assets/svgIcons/saved.svg"
+import Success from "../../assets/svgIcons/success.svg"
 
 
 const SvgIcons = ({name, height, width,backgroundColor='transparent'}) => {
@@ -38,8 +40,8 @@ switch (name) {
     case 'Lock': return( <Lock width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'Search': return( <Search width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'Guest': return( <Guest width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
-
-
+    case 'Saved': return( <Saved width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
+    case 'Success': return( <Success width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
 
     default:
       return (

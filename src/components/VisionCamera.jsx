@@ -37,6 +37,7 @@ const VisionCamera = ({ showCamera, setShowCamera }) => {
                     device={device}
                     // isActive={showCamera}
                     // photo={true}
+                    video={true}
                     isActive={true}
                 />
             )}

@@ -56,6 +56,7 @@ const VideoFirstUser = () => {
     const [isActive, setIsActive] = useState(false);
     const [isFirstCall, setIsFirstCall] = useState(false);
     const [isCancelingStory, setisCancelingStory] = useState(true);
+    const [cameraPermission, setCameraPermission] = useState(false);
     const USER = user?.data?.user || user?.data;
     const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
     const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
@@ -67,12 +68,11 @@ const VideoFirstUser = () => {
     const GuestModalRef = useRef(null);
     const GuestModalRefForAds = useRef(null);
     const USER_LENGTH_CHECK = sequenceUser?.length == 1;
-
+  
     console.log("sequcenuserVIdeo====", sequenceUser);
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
     // })
-
 
     const getCameraDetails = () => {
         return devices.find(camera => camera.position === currentCamera);
@@ -85,12 +85,25 @@ const VideoFirstUser = () => {
 
     const activeCamera = getCameraDetails();
 
-    const checkpermission = async () => {
-        await Camera.requestCameraPermission()
-        await Camera.requestMicrophonePermission()
+
+  const checkPermission = async () => {
+    try {
+      const cameraGranted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      setCameraPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
+    } catch (err) {
+      console.warn(err);
     }
+  };
+
+    // const checkpermission = async () => {
+    //     await Camera.requestCameraPermission()
+    //     await Camera.requestMicrophonePermission()
+    // }
     useEffect(() => {
-        checkpermission()
+        // checkpermission()
+        checkPermission()
     }, []);
 
 
@@ -300,9 +313,9 @@ const VideoFirstUser = () => {
         user ? navigation.navigate(SECOND_USER_STORY) : null
     };
 
-    const modalOpen = (ref, heading, content, buttonText, text) => {
-        if (GuestModalRef.current) {
-            GuestModalRef.current.open(heading, content, buttonText, text);
+    const modalOpen = (ref,heading, content, buttonText, text) => {
+        if (ref.current) {
+          ref.current.open(heading, content, buttonText, text);
         }
     }
 
@@ -401,7 +414,8 @@ const VideoFirstUser = () => {
                                                     <></>
                                                 )}
                                             </View>
-
+                                            
+                                        {cameraPermission && (
                                             <Camera
                                                 ref={cameraRef}
                                                 style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
@@ -410,6 +424,7 @@ const VideoFirstUser = () => {
                                                 video={true}
                                                 resizeMode='cover'
                                             />
+                                            )}
 
                                         </View>
                                     </>
@@ -449,13 +464,13 @@ const VideoFirstUser = () => {
                     <SaveStoryBtn onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
                 </View>
 
-                {
-                    isVisible &&
-                    <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
-                }
-                <GuestModals ref={GuestModalRef} />
-                <GuestModals ref={GuestModalRefForAds}></GuestModals>
-            </ScrollView>
+            {
+                isVisible &&
+                <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
+            }
+            <GuestModals ref={GuestModalRef}/>
+            <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo}/>
+        </ScrollView>
 
         </ImageBackground>
     )

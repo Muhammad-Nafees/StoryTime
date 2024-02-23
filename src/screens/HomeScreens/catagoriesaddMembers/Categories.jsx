@@ -162,11 +162,13 @@ const Categories = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      if (!user) {
-        fetchCategoriesUntilFound('animals');
-        return;
-      }
-      const response = await get_Categories_Sub_Categories({ page: page });
+        if (!user) {
+          console.log("load",isLoading)
+          fetchCategoriesUntilFound('animals');
+          return;
+        }    
+     const response = await get_Categories_Sub_Categories({ page: page });
+      // const categoriesData = response?.data?.categories
       setIsLoading(false);
       setHasMorePages(response?.data?.pagination?.hasNextPage)
       setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
@@ -347,6 +349,7 @@ const Categories = () => {
           // backgroundColor: "orange",
         }}
       >
+      {DATA.length > 0 ?
         <FlatList
           data={[...DATA, randomObject]}
           scrollEnabled={true}
@@ -380,7 +383,7 @@ const Categories = () => {
                 backgroundColor="rgba(199, 152, 97, 1)"
               />
 
-              {!!isCategoryBlurred(item) &&
+              {!!isCategoryBlurred(item) && item?.namerandom !== "Random" &&
                 <View style={styles.blur_wrapper}>
                   <BlurView
                     style={styles.blur_view}
@@ -410,8 +413,11 @@ const Categories = () => {
           )}
           onEndReached={() => handleLoadMore()}
           onEndReachedThreshold={0.3}
-        />
-
+        />: 
+        <View style={{ alignItems: 'center', height: height / 4 }}>
+        <ActivityIndicator size={40} color={'#000'} />
+        </View>
+      }   
       </View>
       <Toast />
       {/* <RandomCategories
