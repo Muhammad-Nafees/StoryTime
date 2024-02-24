@@ -17,8 +17,10 @@ const LogoutBtn = () => {
       setIsLoggingOut(true);
       const responseData = await logout_user();
       const data = responseData?.data;
-    await AsyncStorage.removeItem('isLoggedIn');
       dispatch(logout())
+      await AsyncStorage.removeItem('isLoggedIn');
+      await AsyncStorage.removeItem('userData');
+
     } catch (error) {
     } finally {
       setIsLoggingOut(false);
