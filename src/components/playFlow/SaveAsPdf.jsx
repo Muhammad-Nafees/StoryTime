@@ -33,8 +33,32 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
     const dispatch = useDispatch();
 
     console.log("textrecordusers", textrecordUsers)
-    const createPDF = async () => {
-
+    
+    const checkPermission = async () => {
+            try {
+                // Check if the platform is Android
+                if (Platform.OS === 'android') {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    );
+    
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        console.log('Storage permission granted');
+                        createPDF();
+                    } else {
+                        console.log('Storage permission denied');
+                        Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
+                    }
+                } else {
+                    // Platform is iOS, no explicit permission request needed
+                    createPDF();
+                }
+            } catch (error) {
+                console.warn(error);
+            }
+        };
+    
+        const createPDF = async () => {
         try {
             const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
             await RNFS.mkdir(folderPath);
@@ -107,7 +131,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity
                                     // disabled={}
-                                    onPress={createPDF}
+                                    onPress={checkPermission}
                                     style={{
                                         width: responsiveWidth(70),
                                         backgroundColor: TextColorGreen,

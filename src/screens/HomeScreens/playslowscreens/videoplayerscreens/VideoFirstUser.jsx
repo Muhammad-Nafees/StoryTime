@@ -86,16 +86,21 @@ const VideoFirstUser = () => {
     const activeCamera = getCameraDetails();
 
 
-  const checkPermission = async () => {
-    try {
-      const cameraGranted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-      setCameraPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+    const checkPermission = async () => {
+        try {
+            if (Platform.OS === 'android') {
+                const cameraGranted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.CAMERA,
+                );
+                setCameraPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
+            } else if (Platform.OS === 'ios') {
+                await Camera.requestCameraPermission();
+                setCameraPermission(true);
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
 
     // const checkpermission = async () => {
     //     await Camera.requestCameraPermission()

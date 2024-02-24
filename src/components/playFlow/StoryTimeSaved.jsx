@@ -51,7 +51,7 @@ const StoryTimeSaved = ({
         <View
             style={{
             width: responsiveWidth(80),
-            height: responsiveHeight(24),
+            height: responsiveHeight(26),
             backgroundColor: '#FFF',
             borderRadius: 30,
             paddingHorizontal: responsiveWidth(2),
