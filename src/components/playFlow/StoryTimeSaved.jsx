@@ -19,6 +19,7 @@ import SvgIcons from '../svgIcon/svgIcons';
 import { Circle, Path, Svg } from 'react-native-svg';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
+
 const StoryTimeSaved = ({
   isVisible,
   setVisible,

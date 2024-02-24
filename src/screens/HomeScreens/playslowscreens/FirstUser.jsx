@@ -26,7 +26,7 @@ import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import {
-  checkTrueOrFalse,
+  checkTrueOrFalse, extendStoryCheck,
 } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
@@ -52,7 +52,7 @@ const FirstUser = ({ route }) => {
     state => state.addPlayers.checkTrueOrFalse,
   );
   const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
-  const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck,);
+  const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
   const dispatch = useDispatch();
   const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
   const [recordingText, setRecordingText] = useState("");
@@ -92,7 +92,7 @@ const FirstUser = ({ route }) => {
   // onSpeechStart----------
 
   const onSpeechStart = e => {
-    console.log('START SPEECH CALLED---', e);
+    // console.log('START SPEECH CALLED---', e);
     setStarted(true);
   };
 
@@ -100,16 +100,32 @@ const FirstUser = ({ route }) => {
 
   const onSpeechEnd = e => {
     setEnded(e.value);
-    console.log('SPEECH END CALLED----', e);
+    // console.log('SPEECH END CALLED----', e);
   };
 
   // ---------- onSpeechResult----------
 
 
+  const onSpeechResult = async (e) => {
+    // console.log('onSpeechResults: ', e?.value);
+
+    if (!e.value) return;
+    setSpeaking(false);
+    // console.log('Voice Result: ' + e.value);
+
+    if (setRecordingText) {
+      dispatch(recordingData(e?.value[0]));
+      startRecognizing();
+      setRecordingText(prevData => prevData + " " + e?.value[0]);
+      // if (callBack) callBack(e?.value[0]);
+      return;
+    };
+  };
+
 
   const onSpeechRecognized = e => {
     setSpeaking(false);
-    console.log('onSpeechRecognized', e);
+    // console.log('onSpeechRecognized', e);
   };
 
   function onSpeechError(e) {
@@ -118,30 +134,28 @@ const FirstUser = ({ route }) => {
     console.log('onSpeechError: ', JSON.stringify(e.error));
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setTimeLeft(null);
-      setIsPressed(false);
-      dispatch(checkTrueOrFalse(false));
-      return () => {
-        setIsFirstCall(false);
-        setisCancelingStory(true);
-      };
-    }, []),
-  );
+  // setisCancelingStory(false);
+
+  useEffect(() => {
+    setTimeLeft(null);
+    setIsPressed(false);
+    dispatch(checkTrueOrFalse(false));
+    return () => {
+      setIsFirstCall(false);
+      setisCancelingStory(true);
+    };
+  }, [extendStoryTrueOrFalse]);
 
   // ---------- Start Recording And Convert Text ----------
 
   const startRecognizing = async () => {
 
-    console.log('Start Recognizing Value---------');
+    // console.log('Start Recognizing Value---------');
     try {
       if (!speaking) {
-        console.log("SPEAKING");
         await Voice.start('en-US');
         handlePressIn();
       } else {
-        console.log('stop speaking');
         await Voice.stop();
       }
       setSpeaking(prevState => !prevState);
@@ -150,7 +164,7 @@ const FirstUser = ({ route }) => {
     }
   };
 
-  console.log("SPEAKING=======", speaking);
+  // console.log("SPEAKING=======", speaking);
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
@@ -161,10 +175,6 @@ const FirstUser = ({ route }) => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const onSpeechPartialResults = (e) => {
-    console.log("evalue====", e?.value)
   };
 
   //---------- Handle Press In ----------
@@ -181,9 +191,18 @@ const FirstUser = ({ route }) => {
     user ? navigation.navigate('FirstUserStorytext') : null;
   };
 
+  console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
+
   useFocusEffect(
     useCallback(() => {
+
+      if (extendStoryTrueOrFalse === false || extendStoryTrueOrFalse === true) {
+        setIsPressed(false);
+        setTimeLeft(null);
+      };
+
       if (checkUserTrueorFalse) {
+
         const currentIndex = sequenceUser.indexOf(currentDisplayUser);
         const nextIndex = (currentIndex + 1) % sequenceUser.length;
         const nextPlayer = (currentIndex + 2) % sequenceUser.length;
@@ -197,9 +216,16 @@ const FirstUser = ({ route }) => {
         } else {
           console.log('add players in Game Completed');
         }
-      }
-    }, [checkUserTrueorFalse]),
+      };
+
+      return () => {
+        setIsFirstCall(false);
+        setisCancelingStory(true);
+      };
+    }, [checkUserTrueorFalse, extendStoryTrueOrFalse]),
   );
+
+
 
   const saveBtnHandler = () => {
     if (!user) {
@@ -234,9 +260,11 @@ const FirstUser = ({ route }) => {
     }
   };
 
+  console.log("timeleft--", timeLeft)
   const handleStart = () => {
 
     if (extendStoryTrueOrFalse && timeLeft == null) {
+      setTimeText('00:30');
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
@@ -247,7 +275,7 @@ const FirstUser = ({ route }) => {
 
       if (!extendStoryTrueOrFalse && timeLeft === null) {
         startRecognizing();
-        setTimeLeft(30);
+        setTimeLeft(120);
       };
 
       if (isFirstCall) {
@@ -278,7 +306,7 @@ const FirstUser = ({ route }) => {
 
     if (extendStoryTrueOrFalse === false && timeLeft == null) {
       setRecordingText("");
-    }
+    };
 
     if (timeLeft !== null && timeLeft > 0) {
       countdown = setInterval(() => {
@@ -294,6 +322,8 @@ const FirstUser = ({ route }) => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
+
+
   useEffect(() => {
     if (timeLeft === null) {
       setTimeText('02:00');
@@ -307,6 +337,7 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
+
 
 
   return (
@@ -478,7 +509,7 @@ const FirstUser = ({ route }) => {
                 style={{
                   borderWidth: isPressed ? 6 : 0,
                   borderColor: isPressed ? '#D04141' : TextColorGreen,
-                  backgroundColor: isFirstCall
+                  backgroundColor: isFirstCall || timeLeft == 0
                     ? 'rgba(87, 150, 164, 0.3)'
                     : TextColorGreen,
                   width: SCREENWIDTH * 0.32,

@@ -83,8 +83,7 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
-      // validator={() => ({})}
-      // onSubmit={values => console.log(values)}
+
       onSubmit={async (values) => {
         try {
           dispatch(userinfoState(countryCode));
@@ -115,8 +114,12 @@ const Register = () => {
         setFieldValue,
         touched,
         setFieldError,
+        setFieldTouched
       }) => (
         <>
+          {
+            console.log("touchedOutside======", touched)
+          }
           <ScrollView
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ flexGrow: 1 }}>
@@ -139,6 +142,7 @@ const Register = () => {
                   setVisible={setVisible}
                   fieldName="username"
                   handleChange={text => setFieldValue('username', text)}
+                  setFieldTouched={() => setFieldTouched("username")}
                 />
 
                 <CustomInput
@@ -151,6 +155,8 @@ const Register = () => {
                   setFieldError={setFieldError}
                   fieldName="firstName"
                   handleChange={text => setFieldValue('firstName', text)}
+                  setFieldTouched={() => setFieldTouched("firstName")}
+
                 />
 
                 <CustomInput
@@ -160,6 +166,7 @@ const Register = () => {
                   error={errors.lastName}
                   touched={touched.lastName}
                   initialTouched={true}
+                  setFieldTouched={() => setFieldTouched("lastName")}
                   setFieldError={setFieldError}
                   fieldName="lastName"
                   handleChange={text => setFieldValue('lastName', text)}
@@ -191,6 +198,7 @@ const Register = () => {
                   initialTouched={true}
                   setFieldError={setEmailError}
                   setEmailstatusCode={setEmailstatusCode}
+                  setFieldTouched={() => setFieldTouched("email")}
                   fieldName="email"
                   handleChange={text => setFieldValue('email', text)}
                 />
@@ -198,7 +206,6 @@ const Register = () => {
                 <View style={{ paddingVertical: responsiveWidth(6) }}>
                   <TouchableOpacity
                     disabled={!validate(values) ? true : false}
-                    // onPress={()=>console.log("err",errors)}
                     onPress={handleSubmit}
                     style={{
                       width: responsiveWidth(80),

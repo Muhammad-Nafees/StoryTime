@@ -7,7 +7,7 @@ import { Img_Paths } from '../assets/Imagepaths'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
 import { useDispatch, useSelector } from 'react-redux'
-import { likedStoryFeed, likedhandler, likedstoryfeed } from '../../store/slices/storyfeedslices/likedStorySlice'
+import { likedstoryfeed, disLikedCountingRTK, likedCountingRTK, storyFeedContent, storyFeedUsername } from '../../store/slices/storyfeedslices/likedStorySlice'
 import {
     Menu,
     MenuOptions,
@@ -17,7 +17,7 @@ import {
 import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
-import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed'
+import { storyLikedFeed, storydisLikedFeed, } from '../../services/api/storyfeed'
 import LinearGradient from "react-native-linear-gradient"
 
 const FrameContent = ({
@@ -77,15 +77,17 @@ const FrameContent = ({
         } catch (error) {
             // Handle errors
         }
-
     }, [dislikesCounting])
 
+
     const commentsHandled = useCallback(() => {
-        dispatch(likedstoryfeed(likedUserId))
-        navigation.navigate(FEED_CHAT)
+        dispatch(likedstoryfeed(likedUserId));
+        dispatch(likedCountingRTK(likesCounting));
+        dispatch(disLikedCountingRTK(dislikesCounting));
+        dispatch(storyFeedContent(content));
+        dispatch(storyFeedUsername(username));
+        navigation.navigate(FEED_CHAT);
     }, [dispatch, navigation]);
-
-
 
     return (
         <View style={styles.container}>
@@ -122,9 +124,6 @@ const FrameContent = ({
                         {
                             type == "video" &&
                             <>
-                                {
-                                    console.log("content", content)
-                                }
                                 <LinearGradient colors={["rgba(234, 137, 167, 1)", 'rgba(0,0,0,0.4)',]} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }} locations={[0.8, 1,]} style={styles.child_bg}>
                                     <View style={styles.second_childbg}>
                                         <View style={styles.third_childbg}>

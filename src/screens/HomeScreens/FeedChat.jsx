@@ -7,6 +7,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
 import FeedChatFrame from '../../components/FeedChatFrame';
+import { useSelector } from 'react-redux';
 
 
 
@@ -33,12 +34,13 @@ const FlatListData = [
     },
 ]
 
-
 const FeedChat = () => {
 
-    const { width, height } = Dimensions.get('window');
+    const likeCountRTK = useSelector((state) => state?.likedstoryfeed?.likeCount);
+    const disLikedCountRTK = useSelector((state) => state?.likedstoryfeed?.disLikedCount);
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE } = Img_Paths
-    const { PLAY_STORY_TIME } = NavigationsString;
+    const { PLAY_STORY_TIME, ADD_FRIENDS } = NavigationsString;
+    const { width, height } = Dimensions.get('window');
     const navigation = useNavigation();
 
     return (
@@ -51,7 +53,7 @@ const FeedChat = () => {
                                 <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                             </View>
                             <View style={{ flexDirection: 'row', }}>
-                                <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }}>
+                                <TouchableOpacity onPress={() => navigation.navigate(ADD_FRIENDS)} style={{ paddingHorizontal: moderateVerticalScale(8) }}>
                                     <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
                                 </TouchableOpacity>
                                 <View>
@@ -85,16 +87,16 @@ const FeedChat = () => {
                             />
                         </View>
                     </View>
+
                     {/* Frame Content Start----------- */}
                     <View>
-                        <FeedChatFrame type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
+                        <FeedChatFrame likeCountRTK={likeCountRTK} disLikedCountRTK={disLikedCountRTK} type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
                     </View>
                     {/* Frame Content Close----------- */}
 
                 </ImageBackground>
             </ScrollView>
         </SafeAreaView>
-
 
     )
 };
