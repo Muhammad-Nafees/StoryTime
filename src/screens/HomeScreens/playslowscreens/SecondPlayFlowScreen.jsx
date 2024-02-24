@@ -9,6 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetRecordingData } from '../../../../store/slices/RecordingData';
+import { extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -26,7 +27,8 @@ const SecondPlayFlowScreen = () => {
     const dispatch = useDispatch()
     const onpressNextHandler = () => {
         navigation.navigate(FIRST_USER)
-        dispatch(resetRecordingData())
+        dispatch(resetRecordingData());
+        dispatch(extendStoryCheck(null));
     }
 
     return (

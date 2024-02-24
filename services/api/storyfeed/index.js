@@ -20,7 +20,6 @@ export const fetchallFeedStories = async (paginations) => {
 };
 
 export const storyLikedFeed = async (storyId) => {
-    console.log("storyId==", storyId)
     try {
         const url = `${Base_Url}story/like/${storyId}`;
         const responseData = await fetch(url, {
@@ -63,7 +62,6 @@ export const storydisLikedFeed = async (storyId) => {
 export const getAllUsers_api = async (paginations) => {
     try {
         const { limit, pagination } = paginations;
-        console.log("===paginationInApi======", paginations)
         const responseData = await fetch(Base_Url + getAllUsers_endpoint + `?page=${pagination}&limit=${limit}`, {
             method: "GET",
             headers: {
@@ -161,9 +159,6 @@ export const get_Comment_api = async (paginations) => {
 
 export const createStory_api = async ({ creator, category, subCategory, contributors, content }) => {
     console.log("creatorsss=====", creator, category, subCategory, contributors, content)
-    // const { storyId, page, limit, } = paginations;
-    // console.log("=====================", page, limit, storyId);
-    // console.log("url===", url);
 
     try {
         const url = Base_Url + "story";

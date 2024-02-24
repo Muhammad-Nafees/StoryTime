@@ -12,6 +12,7 @@ import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../services/api/storyfeed';
 import { addFriends_api } from '../../../services/api/add-members';
+import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
 
 
 const Home = () => {
@@ -30,25 +31,28 @@ const Home = () => {
     const [Responseapi, setResponseapi] = useState([]);
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const responseLogin = useSelector((state) => state?.authSlice?.user);
     const navigation = useNavigation();
+    const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
 
 
     useEffect(() => {
-
         const addFriends_api_handler = async () => {
             try {
                 const responseData = await addFriends_api();
-                setResponseapi(responseData.data.users);
+                setResponseapi(responseData?.data?.users);
+                if (responseData?.statusCode == 401) {
+                    const responseToken = await refresh_token_api(REFRESH_TOKEN);
+                    console.log("responseTokenfunc-----", responseToken)
+                    return responseToken;
+                }
                 return responseData;
             } catch (error) {
                 console.log("err", error)
             }
         };
         addFriends_api_handler()
-    }, [])
-
-
-    // console.log("arrBooleanCHeck===-=-==", !![]);
+    }, []);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -69,7 +73,6 @@ const Home = () => {
                     setIsRefreshing(false);
                 }
             }
-
         };
         fetchUsers();
     }, [page, isRefreshing,])

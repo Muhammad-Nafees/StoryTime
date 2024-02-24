@@ -43,7 +43,7 @@ const RegisterPassword = ({ route }) => {
             values.password &&
             values.confirmPassword
         )
-    }
+    };
 
     return (
         <Formik

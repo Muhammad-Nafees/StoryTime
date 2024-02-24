@@ -29,6 +29,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);
 
+
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress(prevProgress => {
@@ -47,11 +48,13 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
         };
     }, []);
 
+    const backScreenHandler = () => {
+        navigation.goBack();
+    };
+
 
     return (
-        <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow} >
-
-            {/* <View style={{ backgroundColor: "orange" }}> */}
+        <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>
 
             <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
 
@@ -79,12 +82,11 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
                 </View>
 
                 {saveStoryVideoModalAfterDownloading &&
-                    <StoryTimeSaved isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
+                    <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
 Successfully Saved to your phone!" textButton="Back" />
                 }
 
             </ImageBackground>
-            {/* </View> */}
         </Modal>
     )
 };

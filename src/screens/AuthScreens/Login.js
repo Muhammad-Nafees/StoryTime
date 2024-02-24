@@ -63,10 +63,10 @@ const Login = () => {
                             email, password, fcmToken
                         }),
                     });
-
                     const responseData = await response.json();
+                    console.log("RESPONSE_LOGIN----", responseData)
                     dispatch(login(responseData))
-                    await AsyncStorage.setItem("userData", JSON.stringify(responseData))
+                    await AsyncStorage.setItem("userData", JSON.stringify(responseData));
 
                     if (responseData?.data) {
                         setIsLoading(false)
@@ -84,7 +84,6 @@ const Login = () => {
                         await AsyncStorage.setItem("isLoggedIn", accessToken);
                         await AsyncStorage.setItem("isUsername", username);
                         await AsyncStorage.setItem("isUserId", userLoginId);
-                        console.log("Username===", username);
                         dispatch(setAccessToken(accessToken));
                         dispatch(setRefreshToken(refreshToken));
                         dispatch(userLoginid(userLoginId));
@@ -95,12 +94,6 @@ const Login = () => {
                             visibilityTime: 2500
                         })
                     }
-
-                    // } else if (statusCode === 401) {
-                    //     const responseRefresh = await refresh_token_api(refreshToken)
-                    //     console.log("responseReresh=====", responseRefresh)
-                    //     return responseRefresh
-                    // };
 
                     if (error) {
                         setIsLoading(false)

@@ -16,8 +16,9 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import SvgIcons from '../svgIcon/svgIcons';
-import {Circle, Path, Svg} from 'react-native-svg';
-import { moderateVerticalScale} from 'react-native-size-matters';
+import { Circle, Path, Svg } from 'react-native-svg';
+import { moderateVerticalScale } from 'react-native-size-matters';
+
 
 const StoryTimeSaved = ({
   isVisible,
@@ -29,17 +30,17 @@ const StoryTimeSaved = ({
   loading
 }) => {
   const close = () => {
-    if (onPress){
-    onPress ()  
-    setVisible(false);   
-    }else{
-    setVisible(false);
+    if (onPress) {
+      onPress()
+      setVisible(false);
+    } else {
+      setVisible(false);
     }
   };
 
   return (
     <Modal
-      style={{flex: 1}}
+      style={{ flex: 1 }}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
@@ -47,91 +48,91 @@ const StoryTimeSaved = ({
       onModalHide={close}
       backdropOpacity={0.8}
       onBackdropPress={close}>
-    
+
+      <View
+        style={{
+          width: responsiveWidth(80),
+          height: responsiveHeight(26),
+          backgroundColor: '#FFF',
+          borderRadius: 30,
+          paddingHorizontal: responsiveWidth(2),
+          alignSelf: 'center',
+        }}>
         <View
-            style={{
-            width: responsiveWidth(80),
-            height: responsiveHeight(26),
-            backgroundColor: '#FFF',
-            borderRadius: 30,
-            paddingHorizontal: responsiveWidth(2),
-            alignSelf: 'center',
-            }}>
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: moderateVerticalScale(12),
+          }}>
+          {iconName ? (
             <View
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingVertical: moderateVerticalScale(12),
-            }}>
-            {iconName ? (
-                <View
-                style={{
-                    marginTop: 'auto',
-                    marginBottom: 'auto',
-                    borderRadius: 100,
-                    backgroundColor: pastelGreen,
-                    padding: responsiveWidth(2),
-                }}>
-                <SvgIcons name={iconName} width={27} height={23} />
-                </View>
-            ) : (
-                <Svg
-                width="35"
-                height="34"
-                viewBox="0 0 35 34"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
-                <Path
-                    d="M24.5 13L14.875 22L10.5 17.9091"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
-                </Svg>
-            )}
-            <Text
-                style={{
-                fontSize: responsiveFontSize(1.9),
-                color: '#000',
-                textAlign: 'center',
-                lineHeight: 24,
-                marginTop: responsiveHeight(1),
-                }}>
-                {text}
-            </Text>
+              style={{
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                borderRadius: 100,
+                backgroundColor: pastelGreen,
+                padding: responsiveWidth(2),
+              }}>
+              <SvgIcons name={iconName} width={27} height={23} />
             </View>
-          {loading?
-           <ActivityIndicator/>:
-            <View
+          ) : (
+            <Svg
+              width="35"
+              height="34"
+              viewBox="0 0 35 34"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
+              <Path
+                d="M24.5 13L14.875 22L10.5 17.9091"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </Svg>
+          )}
+          <Text
             style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: responsiveHeight(2),
+              fontSize: responsiveFontSize(1.9),
+              color: '#000',
+              textAlign: 'center',
+              lineHeight: 24,
+              marginTop: responsiveHeight(1),
+            }}>
+            {text}
+          </Text>
+        </View>
+        {loading ?
+          <ActivityIndicator /> :
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: responsiveHeight(2),
             }}>
             <TouchableOpacity
-                onPress={close}
-                style={{
+              onPress={close}
+              style={{
                 width: responsiveWidth(60),
                 backgroundColor: TextColorGreen,
                 borderRadius: 10,
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: responsiveHeight(6.6),
-                }}>
-                <Text
+              }}>
+              <Text
                 style={{
-                    fontSize: responsiveFontSize(1.9),
-                    fontWeight: '600',
-                    letterSpacing: 0.28,
-                    color: '#FFF',
+                  fontSize: responsiveFontSize(1.9),
+                  fontWeight: '600',
+                  letterSpacing: 0.28,
+                  color: '#FFF',
                 }}>
                 {textButton}
-                </Text>
+              </Text>
             </TouchableOpacity>
-            </View>}
-        </View>      
+          </View>}
+      </View>
     </Modal>
   );
 };
