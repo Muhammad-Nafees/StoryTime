@@ -68,7 +68,7 @@ const VideoFirstUser = () => {
     const GuestModalRef = useRef(null);
     const GuestModalRefForAds = useRef(null);
     const USER_LENGTH_CHECK = sequenceUser?.length == 1;
-  
+
     console.log("sequcenuserVIdeo====", sequenceUser);
     // const devices = useCameraDevice("back", {
     //     physicalDevices: ["ultra-wide-angle-camera"],
@@ -318,9 +318,9 @@ const VideoFirstUser = () => {
         user ? navigation.navigate(SECOND_USER_STORY) : null
     };
 
-    const modalOpen = (ref,heading, content, buttonText, text) => {
+    const modalOpen = (ref, heading, content, buttonText, text) => {
         if (ref.current) {
-          ref.current.open(heading, content, buttonText, text);
+            ref.current.open(heading, content, buttonText, text);
         }
     }
 
@@ -419,16 +419,16 @@ const VideoFirstUser = () => {
                                                     <></>
                                                 )}
                                             </View>
-                                            
-                                        {cameraPermission && (
-                                            <Camera
-                                                ref={cameraRef}
-                                                style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
-                                                device={activeCamera}
-                                                isActive={isActive}
-                                                video={true}
-                                                resizeMode='cover'
-                                            />
+
+                                            {cameraPermission && (
+                                                <Camera
+                                                    ref={cameraRef}
+                                                    style={{ borderRadius: 50, width: responsiveWidth(72), height: responsiveHeight(40), }}
+                                                    device={activeCamera}
+                                                    isActive={isActive}
+                                                    video={true}
+                                                    resizeMode='cover'
+                                                />
                                             )}
 
                                         </View>
@@ -469,13 +469,13 @@ const VideoFirstUser = () => {
                     <SaveStoryBtn onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
                 </View>
 
-            {
-                isVisible &&
-                <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
-            }
-            <GuestModals ref={GuestModalRef}/>
-            <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo}/>
-        </ScrollView>
+                {
+                    isVisible &&
+                    <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
+                }
+                <GuestModals ref={GuestModalRef} />
+                <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo} />
+            </ScrollView>
 
         </ImageBackground>
     )
@@ -537,4 +537,3 @@ const styles = StyleSheet.create({
 
 })
 export default VideoFirstUser;
-

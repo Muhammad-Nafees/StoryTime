@@ -20,6 +20,7 @@ import {
   OtpForget,
   ForgetConfirmPassword,
 } from '../screens/index';
+import { useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import FrameContent from '../components/FrameContent';
@@ -35,9 +36,10 @@ import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videop
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
-
+import PlayStoryTime from '../screens/HomeScreens/PlayStoryTime';
 
 import {Img_Paths} from '../assets/Imagepaths';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthStack = () => {
   const {
@@ -54,15 +56,42 @@ const AuthStack = () => {
     FRAME_CONTENT,
   } = NavigationsString;
 
-  const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
+ const [checkRouteName, setCheckRouteName] = useState(null)
+
+ const fetchRouteName = async () => {
+  let initialRouteName = await AsyncStorage.getItem('isLoggedOut');
+    if(initialRouteName){
+      setCheckRouteName(initialRouteName);
+    } else{
+      setCheckRouteName('false');
+    }
+  await AsyncStorage.removeItem('isLoggedOut')
+};
+
+ useEffect(() => {
+  fetchRouteName();
+}, []);
+
+ let initialRouteName;
+  if (checkRouteName === null) {
+    return null;
+  } else if (checkRouteName === 'true') {
+    initialRouteName = LOGIN;
+  } else {
+    initialRouteName = POPUP_START;
+  }
+
+  console.log(initialRouteName);
+ 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
-        initialRouteName={POPUP_START}>
+        initialRouteName={initialRouteName}>
         <Stack.Screen
           name={POPUP_START}
           component={PopUpStart}
@@ -135,7 +164,7 @@ const AuthStack = () => {
 
 const GuestStack = () => {
   const Stack = createStackNavigator();
-  const {FIRSTSCREENPLAYFLOW,SECONDSCREENPLAYFLOW,VIDEO_FIRST_SCREEN,FIRST_USER,VIDEO_FIRST_USER} = NavigationsString;
+  const {FIRSTSCREENPLAYFLOW,SECONDSCREENPLAYFLOW,VIDEO_FIRST_SCREEN,FIRST_USER,VIDEO_FIRST_USER,PLAY_STORY_TIME} = NavigationsString;
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -153,9 +182,14 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+       <Stack.Screen
         name={"CategoriesTab"}
         component={CategoriesTab}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={PLAY_STORY_TIME}
+        component={PlayStoryTime}
         options={{headerShown: false}}
       />
       <Stack.Screen

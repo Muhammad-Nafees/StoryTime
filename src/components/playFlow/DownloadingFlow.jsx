@@ -21,7 +21,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
     const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
+    const { FIRST_USER } = NavigationsString;
     const [saveStoryModalAfterDownloading, setSaveStoryModalAfterDownloading] = useState(false);
     const [isVisibleAfterDownloading, setIsVisibleAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -47,6 +47,11 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
         };
     }, []);
 
+
+    const nextScreenmodalHandler = () => {
+        navigation.goBack();
+        console.log("FUNCTION CALLED");
+    };
 
     return (
         <Modal onRequestClose={() => setIsVisibleDownloading(false)} visible={isVisibleDownloading} >
@@ -92,8 +97,13 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
                 </View>
 
                 {saveStoryModalAfterDownloading &&
-                    <StoryTimeSaved isVisible={isVisibleAfterDownloading} setVisible={setIsVisibleAfterDownloading} text="Story Time 
-Successfully Saved to your phone!" textButton="Back" />
+                    <StoryTimeSaved
+                        onPress={nextScreenmodalHandler}
+                        isVisible={isVisibleAfterDownloading}
+                        setVisible={setIsVisibleAfterDownloading}
+                        text="Story Time 
+Successfully Saved to your phone!"
+                        textButton="Back" />
                 }
 
 

@@ -32,12 +32,14 @@ import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpoli
 import BlockUser from '../screens/HomeScreens/setting/BlockUser';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
+import {Login} from '../screens/index'
+
 
 const Navigations = () => {
 
   const Stack = createStackNavigator();
 
-  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT} = NavigationsString;
+  const { ADD_FRIENDS, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT,LOGIN } = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -59,7 +61,11 @@ const Navigations = () => {
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
       <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
-
+      <Stack.Screen
+          name={LOGIN}
+          component={Login}
+          options={{headerShown: false}}
+        />
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}

@@ -1,20 +1,6 @@
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 import { get_Random } from "../../services/api/categories";
 
-export const randomCategory = createAsyncThunk("data/randomCategory", async (id) => {
-
-    try {
-        const response = await get_Random(id);
-        console.log("responseRandomSlice---", response)
-        return response;
-
-    } catch (error) {
-        console.log("error---", error)
-    };
-});
-
-
-
 const randomCategorySlice = createSlice({
 
     name: "randomCategory",

@@ -102,6 +102,7 @@ const RegisterUserInformation = ({ }) => {
         handleSubmit,
         setFieldValue,
         handleChange,
+        setFieldTouched
       }) => (
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.container}>
@@ -183,6 +184,7 @@ const RegisterUserInformation = ({ }) => {
                   }}
                 />
               </View>
+
               {/* City------------ */}
               <View>
                 <View style={{ width: responsiveWidth(89), marginLeft: 'auto' }}>
@@ -205,7 +207,6 @@ const RegisterUserInformation = ({ }) => {
                         source={require('../../assets/bottom-icon.png')}
                       />
                     )}
-
                     buttonStyle={[
                       {
                         width: '80%',
@@ -258,10 +259,11 @@ const RegisterUserInformation = ({ }) => {
                   value={values.zipCode}
                   // onChangeText={(val) => handlezipcode(val)}
                   onChangeText={handleChange('zipCode')}
+                  setFieldTouched={() => setFieldTouched("zipcode")}
                 />
               </View>
 
-              {errors.zipCode && (
+              {touched.zipCode && errors.zipCode && (
                 <View
                   style={{
                     width: responsiveWidth(90),
