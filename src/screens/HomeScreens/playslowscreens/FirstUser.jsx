@@ -36,7 +36,7 @@ import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
 
 const FirstUser = ({ route }) => {
   let longPressTimeout;
-  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
+  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, BG_VOICE_TO_TEXT_IMG } = Img_Paths;
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
   const [started, setStarted] = useState(false);
@@ -436,60 +436,58 @@ const FirstUser = ({ route }) => {
           <ImageBackground
             style={[styles.img_backgroung_content]}
             resizeMode="center"
-            source={PLAYFLOW_FRAME}>
-            <View
-              activeOpacity={0.9}
-              style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
-              <View
-                style={{
-                  borderRadius: 20,
-                  width: responsiveWidth(69),
-                  height: responsiveHeight(39),
-                  backgroundColor: '#EA89A7',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingBottom: responsiveWidth(6),
-                }}>
-                {user ? (
-                  <UserNames currentDisplayUser={currentDisplayUser} />
-                ) : (
-                  <></>
-                )}
-                <ScrollView>
-                  <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                    <Text
-                      style={{
-                        paddingTop: responsiveWidth(3),
-                        color: isFirstCall
-                          ? 'rgba(255,255,255,0.3)'
-                          : 'rgba(255,255,255,1)',
-                        fontSize: responsiveFontSize(2.2),
-                        lineHeight: 20,
-                        textAlign: 'center',
-                        fontFamily: PassionOne_Regular.passionOne,
-                      }}>
-                      {recordingText}
-                    </Text>
-                  </View>
-                </ScrollView>
+            source={BG_VOICE_TO_TEXT_IMG}>
 
-                <View>
-                  {!started && (
-                    <Text
-                      style={{
-                        paddingHorizontal: moderateScale(32),
-                        lineHeight: moderateScale(22),
-                        color: '#FFF',
-                        fontSize: responsiveFontSize(2.1),
-                        textAlign: 'center',
-                        fontFamily: PassionOne_Regular.passionOne,
-                      }}>
-                      Hold microphone icon and share your story
-                    </Text>
-                  )}
+            {/* <View
+              style={[styles.bg_content,]}> */}
+            <View
+              style={{
+                width: responsiveWidth(69),
+                height: responsiveHeight(40),
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingBottom: responsiveWidth(10),
+              }}>
+              {user ? (
+                <UserNames currentDisplayUser={currentDisplayUser} />
+              ) : (
+                <></>
+              )}
+              <ScrollView>
+                <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
+                  <Text
+                    style={{
+                      paddingTop: responsiveWidth(3),
+                      color: isFirstCall
+                        ? 'rgba(255,255,255,0.3)'
+                        : 'rgba(255,255,255,1)',
+                      fontSize: responsiveFontSize(2.2),
+                      lineHeight: 20,
+                      textAlign: 'center',
+                      fontFamily: PassionOne_Regular.passionOne,
+                    }}>
+                    {recordingText}
+                  </Text>
                 </View>
+              </ScrollView>
+
+              <View>
+                {!started && (
+                  <Text
+                    style={{
+                      paddingHorizontal: moderateScale(32),
+                      lineHeight: moderateScale(22),
+                      color: '#FFF',
+                      fontSize: responsiveFontSize(2.1),
+                      textAlign: 'center',
+                      fontFamily: PassionOne_Regular.passionOne,
+                    }}>
+                    Hold microphone icon and share your story
+                  </Text>
+                )}
               </View>
             </View>
+            {/* </View> */}
           </ImageBackground>
 
           <View
@@ -609,10 +607,8 @@ const styles = StyleSheet.create({
   bg_content: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: responsiveWidth(74),
-    height: responsiveHeight(42),
-    marginLeft: responsiveWidth(0.9),
-    marginTop: responsiveWidth(1),
+    width: responsiveWidth(60),
+    height: responsiveHeight(30),
   },
 });
 

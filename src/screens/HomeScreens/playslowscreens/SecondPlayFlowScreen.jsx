@@ -20,13 +20,14 @@ const SecondPlayFlowScreen = () => {
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
-    console.log(storyUserImage)
+    console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
     const squareSize = windowWidth * 0.85;
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
     const onpressNextHandler = () => {
-        navigation.navigate(FIRST_USER)
+        navigation.navigate(FIRST_USER);
         dispatch(resetRecordingData());
         dispatch(extendStoryCheck(null));
     }

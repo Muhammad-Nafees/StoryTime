@@ -13,7 +13,7 @@ import VoiceToText from '../../../components/VoiceToText';
 const FirstScreenPlayFlow = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, VOICE_OF_TEXT_ICON, VIDEO_ICON } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, FIRST_VOICE_TO_TEXT_IMAGE, VIDEO_IMAGE } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
     const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
@@ -22,33 +22,26 @@ const FirstScreenPlayFlow = () => {
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
-                {/* Back Button */}
-                <BackButton onPress={() => navigation.goBack()} />
-                <View style={styles.container}>
-                    <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText onPress={() => navigation.navigate(SECONDSCREENPLAYFLOW)} text="Voice to Text" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/voiceoftext-icon.png")} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText onPress={() => navigation.navigate(VIDEO_FIRST_SCREEN)} text="Video" BackgroundImage={FULL_BORDER_FRAME} InnerImage={require("../../../assets/video-icon.png")} bgColor={PrimaryColor} innerColor="#4B7A84" />
-                    </View>
+                <View style={{ paddingTop: responsiveWidth(5) }}>
+                    <BackButton onPress={() => navigation.goBack()} />
                 </View>
+                {/* Back Button */}
+                <View style={{ paddingTop: responsiveWidth(15) }}>
+                    <VoiceToText onPress={() => navigation.navigate(SECONDSCREENPLAYFLOW)} text="Voice to Text" BackgroundImage={FIRST_VOICE_TO_TEXT_IMAGE} />
+                    <VoiceToText onPress={() => navigation.navigate(VIDEO_FIRST_SCREEN)} text="Video" BackgroundImage={VIDEO_IMAGE} />
+                </View>
+
             </View>
         </ImageBackground>
 
     )
 };
 
-
-
 export default FirstScreenPlayFlow;
-
 
 const styles = StyleSheet.create({
 
-    container: {
-        backgroundColor: SecondaryColor,
-        width: "100%",
-        height: "100%",
-        flex: 1,
-    },
+
     img: {
         resizeMode: "center"
     },
@@ -56,7 +49,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: moderateVerticalScale(10),
-        flex: 1
+        // flex: 1,
+        backgroundColor: "orange"
     },
     img_backgroung_content: {
         width: responsiveWidth(90),

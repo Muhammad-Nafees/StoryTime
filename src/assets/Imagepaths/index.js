@@ -34,7 +34,11 @@ export const Img_Paths = {
     // SCHOOL_ICON: require("../../assets/Categories-image/school-icon.png"),
     // FRANKIN_DRAWEN: require("../../assets/frankin-drawin.png"),
     SEARCH_ADD_ICON: require("../../assets/search-icon.png"),
-
+    BG_VOICE_TO_TEXT_IMG: require("../../assets/firstuserVoicetoText.png"),
+    FIRST_VOICE_TO_TEXT_IMAGE: require("../../assets/VoicetoTextimage.png"),
+    VIDEO_IMAGE: require("../../assets/videoimage.png"),
+    // VOICE_TO_TEXT_IMAGE2: require("../../assets/voiceTotextimage2.png"),
+    // BORDER_VOICE_TO_TEXT: require("../../assets/borderVoiceToText.png"),
     // Add Friends-----
 
     FIRST_PROFILE: require("../../assets/first-profile.png"),
@@ -267,7 +271,9 @@ export const Img_Paths = {
     //settings
     SETTING_USER: require("../../assets/oliver.png"),
     BLOCK_USER: require("../../assets/lilibeth.png"),
+
     //DUMMYS
+
     AVATAR: require("../../assets/avatar.png"),
     DROP_ICON: require("../../assets/bottom-icon.png"),
     DEFAULT_ICON: require("../../assets/defaultIcon.png"),
