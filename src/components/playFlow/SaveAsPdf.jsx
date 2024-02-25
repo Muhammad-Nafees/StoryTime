@@ -17,12 +17,12 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
-
+import { SPACING } from '../../constants/Constant';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG,BG_CLOCK } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const [isVisibleDownloading, setIsVisibleDownloading] = useState(false);
@@ -120,9 +120,12 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                 </View>
 
                 {/* Back Button */}
-
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.container2}>
+            <ImageBackground
+               style={styles.img_frame}
+               resizeMode="stretch"
+               source={BG_CLOCK}>
+               <View style={{  justifyContent: "center",alignSelf:'center',marginTop: -SPACING*10,backgroundColor: 'white',alignItems:'center'}}>
+                    {/* <View style={styles.container2}> */}
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                         <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
 
@@ -158,9 +161,9 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
 
                         <SaveStoryBtn onPress={() => setIsVisiblePdf(false)} text="No" />
 
-                    </View>
+                    {/* </View> */}
                 </View>
-
+                </ImageBackground>
                 {saveStoryModalDownloading &&
                     <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
 Successfully Saved!" textButton="Back" />
@@ -286,7 +289,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         margin: responsiveWidth(2.8)
-    }
+    },
+    img_frame: {
+        height: '70%',
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop:'auto',
+        marginBottom:'auto'
+      },
 });
 
 export default SaveAsPdf;
