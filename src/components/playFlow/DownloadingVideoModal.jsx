@@ -26,6 +26,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const [saveStoryVideoModalAfterDownloading, setSaveStoryVideoModalAfterDownloading] = useState(false);
     const [isVisibleVideoAfterDownloading, setIsVisibleVideoAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);
 
@@ -49,7 +50,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     }, []);
 
     const backScreenHandler = () => {
-        navigation.goBack();
+       !user? navigation.goBack():navigation.goBack(); //guest user doesn't have profile
     };
 
 

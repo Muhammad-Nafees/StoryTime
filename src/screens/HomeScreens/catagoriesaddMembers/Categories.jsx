@@ -73,16 +73,16 @@ const Categories = () => {
   const dispatch = useDispatch();
   const { ADD_PLAYERS } = NavigationsString;
 
-  // console.log("responseLogin===", )
   const DATA = useMemo(() => {
     if (!!searchTerm) {
       const filtered = responseCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      return filtered
+      return filtered;
     }
     return responseCategories
   }, [responseCategories, searchTerm])
+
 
 
   const fetchCategoriesUntilFound = async searchTerm => {
@@ -96,8 +96,8 @@ const Categories = () => {
 
         if (response.data && response.data.categories) {
           const responseArray = response.data.categories;
+          // console.log("responseArray-", responseArray)
           array = [...array, ...responseArray]
-
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
@@ -160,16 +160,21 @@ const Categories = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-        if (!user) {
-          console.log("load",isLoading)
-          fetchCategoriesUntilFound('animals');
-          return;
-        }    
-     const response = await get_Categories_Sub_Categories({ page: page });
-      // const categoriesData = response?.data?.categories
+      if (!user) {
+        fetchCategoriesUntilFound('animals');
+        return;
+      }
+      const response = await get_Categories_Sub_Categories({ page: page });
+      const valObj = ["#C453D7", "#82BED1", "#C07632", "#56C488", "#D18282", "#A4C857", "#974444", "#8482D1", "#C45E89", "#56B6A4", "#79905C", "#C79861"];
+      for (let i = 0; i < response?.data?.categories.length; i++) {
+        const colorIndex = i % valObj.length;
+        response.data.categories[i].background = valObj[colorIndex]; // Assigning a random color from valObj
+      };
+
+      setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
+
       setIsLoading(false);
       setHasMorePages(response?.data?.pagination?.hasNextPage)
-      setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
       setIsRefreshing(false);
       return response;
     } catch (error) {
@@ -178,7 +183,8 @@ const Categories = () => {
     finally {
       setIsLoading(false);
     }
-  }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, [page])
@@ -208,7 +214,7 @@ const Categories = () => {
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
     setPage(1);
-    setResponseCategories([]) //BUGGY LINE //COMMENTED OUT
+    setResponseCategories([]);
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);
@@ -230,8 +236,8 @@ const Categories = () => {
     }
   };
 
-  console.log("USERNAME--TEXT===", isUsernameInputValue)
-  console.log("pages-------------------", page)
+  // console.log("USERNAME--TEXT===", isUsernameInputValue)
+  // console.log("pages-------------------", page)
 
   const isCategoryBlurred = (category) => {
     return category?.name !== 'Animals' && !user
@@ -259,7 +265,8 @@ const Categories = () => {
     namerandom: "Random",
     backgroundColor: "EE5F8A",
     imageludo: LUDO_ICON,
-  }
+  };
+
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -411,11 +418,13 @@ const Categories = () => {
           )}
           onEndReached={() => handleLoadMore()}
           onEndReachedThreshold={0.3}
-        />: 
+        />
+        : 
         <View style={{ alignItems: 'center', height: height / 4 }}>
         <ActivityIndicator size={40} color={'#000'} />
         </View>
-      }   
+      }
+
       </View>
       <Toast />
       {/* <RandomCategories

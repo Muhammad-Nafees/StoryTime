@@ -40,7 +40,6 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
-
     return (
         <Formik
             initialValues={{
@@ -51,7 +50,8 @@ const Login = () => {
 
             validationSchema={validationUserLogin}
             onSubmit={async (values) => {
-                setIsLoading(true)
+                setIsLoading(true);
+
                 try {
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
@@ -207,13 +207,13 @@ const Login = () => {
 
                         <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>
                             <View style={styles.text_container}>
-                                <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our </Text>
+                                <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginTermsAndConditions"
                                 })}>
                                     <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
                                 </TouchableOpacity>
-                                <Text style={[styles.text, { color: FourthColor }]}> and </Text>
+                                <Text style={[styles.text, { color: FourthColor }]}>and</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginPrivacyAndPolicy"
                                 })}>

@@ -218,7 +218,9 @@ const OtpForget = ({ route }) => {
                         </View>
                     </View>
                 </View>
-
+                {
+                    console.log(timeLeft)
+                }
                 <View style={{ marginTop: responsiveWidth(88) }}>
                     <View
                         style={{
@@ -226,10 +228,10 @@ const OtpForget = ({ route }) => {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <TouchableOpacity onPress={handleButtonClick}>
+                        <TouchableOpacity disabled={timeLeft !== 0 ? true : false} onPress={handleButtonClick}>
                             <Text
                                 style={{
-                                    color: TextColorGreen,
+                                    color: timeLeft !== 0 ? "rgba(57, 94, 102, 0.5)" : TextColorGreen,
                                     fontWeight: '600',
                                     textAlign: 'center',
                                     paddingVertical: moderateVerticalScale(22),

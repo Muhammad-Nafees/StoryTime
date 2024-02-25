@@ -32,6 +32,7 @@ const Home = () => {
     const [Responseapi, setResponseapi] = useState([]);
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const responseLogin = useSelector((state) => state?.authSlice?.user);
     const navigation = useNavigation();
     // const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
@@ -45,6 +46,7 @@ const Home = () => {
           return null;
         }
       };
+      
       const addFriends_api_handler = async () => {
         try {
             const responseData = await addFriends_api();
@@ -68,7 +70,8 @@ const Home = () => {
         }
     };
     useEffect(() => {
-        addFriends_api_handler()
+      
+        addFriends_api_handler();
     }, []);
 
     useEffect(() => {
@@ -77,24 +80,25 @@ const Home = () => {
                 try {
                     const responseData = await fetchallFeedStories({ pagination: page, limit });
                     const data = responseData?.data?.stories;
+                    console.log("responseData-----------", responseData);
                     setIsData(data);
                     if (data && data.length > 0) {
                         setResponseUsers(prevData => [...prevData, ...responseData?.data?.stories]);
+                    } else {
+                        setCheckDataisOrNot("Follow someone to get Feeds")
                     }
                     setIsLoadingMain(false);
                     setHasMorePages(responseData?.data?.pagination?.hasNextPage);
                     return responseData;
                 } catch (error) {
                 } finally {
-                    setIsLoadingMain(false);
+                    // setIsLoadingMain(false);
                     setIsRefreshing(false);
                 }
             }
         };
         fetchUsers();
     }, [page, isRefreshing,])
-
-
 
     const handleLoadMore = useCallback(() => {
         console.log("HasMorePages-----", HasMorePages);
@@ -105,6 +109,7 @@ const Home = () => {
             setIsLoading(false);
         }
     }, [HasMorePages]);
+
 
 
     const onRefresh = () => {
@@ -167,50 +172,67 @@ const Home = () => {
             </View>
 
             {
-                !isLoadingMain ?
-                    <FlatList
-                        data={responseUsers}
-                        onRefresh={onRefresh}
-                        refreshing={isRefreshing}
-                        scrollEnabled={true}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item, index }) => (
-                            <FrameContent
-                                key={index}
-                                type={item?.type}
-                                profileImage={require("../../assets/avatar-inn.png")}
-                                content={item.content}
-                                likedUserId={item?._id}
-                                commentsCount={item?.commentsCount}
-                                likes={item?.likesCount}
-                                subCategoryname={item?.subCategory?.name}
-                                subCategoryimage={item?.subCategory?.image}
-                                username={item?.creator?.username}
-                                likedByMe={item?.likedByMe}
-                                likesCountuser={item?.likesCount}
-                                likeslength={item?.likes}
-                                dislikeslength={item?.dislikes}
-                                dislikesCount={item?.dislikesCount}
-                                dislikesByMe={item?.dislikesByMe}
-                            />
-                        )}
-                        ListFooterComponent={() => {
-                            if (isLoading) {
-                                return (
-                                    <View style={{ alignItems: 'center', height: height / 3, }}>
-                                        <ActivityIndicator size={40} color={'#000'} />
-                                    </View>
-                                );
-                            }
-                            return null;
-                        }}
-                        onEndReached={handleLoadMore}
-                        onEndReachedThreshold={0.3}
-                    />
-                    :
-                    <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
+                console.log(" checkDataisOrNot", checkDataisOrNot)
+            }
+
+            {/* !isLoadingMain ? */}
+
+            {
+                isLoadingMain ?
+                    <View style={{ alignItems: 'center', height: height / 2, }}>
                         <ActivityIndicator size={30} color={'#000'} />
-                    </View>
+                    </View> :
+                    responseUsers?.length !== 0 ?
+                        <FlatList
+                            data={responseUsers}
+                            onRefresh={onRefresh}
+                            refreshing={isRefreshing}
+                            scrollEnabled={true}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                console.log("resposneUSersLengt", responseUsers?.length),
+                                <FrameContent
+                                    key={index}
+                                    type={item?.type}
+                                    profileImage={require("../../assets/avatar-inn.png")}
+                                    content={item.content}
+                                    likedUserId={item?._id}
+                                    commentsCount={item?.commentsCount}
+                                    likes={item?.likesCount}
+                                    subCategoryname={item?.subCategory?.name}
+                                    subCategoryimage={item?.subCategory?.image}
+                                    username={item?.creator?.username}
+                                    likedByMe={item?.likedByMe}
+                                    likesCountuser={item?.likesCount}
+                                    likeslength={item?.likes}
+                                    dislikeslength={item?.dislikes}
+                                    dislikesCount={item?.dislikesCount}
+                                    dislikesByMe={item?.dislikesByMe}
+                                />
+                            )}
+                            ListFooterComponent={() => {
+                                if (isLoading) {
+                                    return (
+                                        <View style={{ alignItems: 'center', height: height / 3, }}>
+                                            <ActivityIndicator size={40} color={'#000'} />
+                                        </View>
+                                    );
+                                }
+                                return null;
+                            }}
+                            onEndReached={handleLoadMore}
+                            onEndReachedThreshold={0.3}
+                        />
+                        :
+                        <>
+                            {/* <View style={{ alignItems: 'center', height: height / 2, }}>
+                            <ActivityIndicator size={40} color={'#000'} />
+                        </View> */}
+                            <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
+                                {/* <ActivityIndicator size={30} color={'#000'} /> */}
+                                <Text style={{ color: "#000", fontSize: 22 }}>{checkDataisOrNot}</Text>
+                            </View>
+                        </>
             }
 
             {/* Frame Content Start----------- */}
