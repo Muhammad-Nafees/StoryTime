@@ -7,17 +7,23 @@ import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 import { logout_user } from '../../services/api/auth_mdule/auth';
 import { logout } from '../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import NavigationsString from '../constants/NavigationsString';
 
 const LogoutBtn = () => {
     const dispatch = useDispatch()
+    const navigation = useNavigation()
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const {LOGIN} = NavigationsString;
 
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
       const responseData = await logout_user();
       const data = responseData?.data;
-    await AsyncStorage.removeItem('isLoggedIn');
+      await AsyncStorage.removeItem('isLoggedIn');
+      await AsyncStorage.removeItem('userData');
+      await AsyncStorage.setItem('isLoggedOut','true')
       dispatch(logout())
     } catch (error) {
     } finally {

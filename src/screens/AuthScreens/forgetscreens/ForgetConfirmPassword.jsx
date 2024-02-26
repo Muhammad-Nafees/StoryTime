@@ -112,7 +112,7 @@ const ForgetConfirmPassword = () => {
                 }
             }}>
 
-            {({ values, errors, handleChange, handleSubmit }) => (
+            {({ values, errors, handleChange, handleSubmit, touched, setFieldTouched }) => (
 
                 <View style={styles.container}>
                     <ScrollView style={{}}>
@@ -142,9 +142,23 @@ const ForgetConfirmPassword = () => {
                                     onChangeText={handleChange('newPassword')}
                                     onPress={toggleShowPassword}
                                     showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                    value={values.newPassword}
                                     type="password"
                                     placeholderText="Enter here"
+                                    setFieldTouched={() => setFieldTouched("password")}
                                 />
+
+                                {/* <TextInputField
+                                value={values.password}
+                                onChangeText={handleChange('password')}
+                                onPress={toggleShowPassword}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                placeholderText="Type here"
+                                type="password"
+                                onBlur={() => setFieldTouched("password")}
+                            /> */}
 
                                 {errors.newPassword && (
                                     <View
@@ -197,6 +211,7 @@ const ForgetConfirmPassword = () => {
                                         showPassword={showPasswordConfirm}
                                         type="password"
                                         placeholderText="Enter here"
+                                        value={values.confirmPassword}
                                     />
                                 </View>
 

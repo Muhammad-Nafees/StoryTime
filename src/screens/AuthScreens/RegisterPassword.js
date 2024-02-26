@@ -43,7 +43,7 @@ const RegisterPassword = ({ route }) => {
             values.password &&
             values.confirmPassword
         )
-    }
+    };
 
     return (
         <Formik
@@ -196,7 +196,7 @@ const RegisterPassword = ({ route }) => {
                                                             letterSpacing: 0.28,
                                                             color: "#FFF",
                                                         }}>
-                                                        create
+                                                        Create
                                                     </Text>
                                                 ) :
                                                     <ActivityIndicator color={'#FFF'} />

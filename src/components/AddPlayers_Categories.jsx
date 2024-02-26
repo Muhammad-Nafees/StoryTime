@@ -10,19 +10,20 @@ import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
 const AddFriends_Categories = ({ profileimage, username, userchoice, userid, indexNo, removeAdduserList }) => {
 
     const dispatch = useDispatch();
-    const [friendsArr, setFriendsArr] = useState([]);
+    // const [friendsArr, setFriendsArr] = useState([]);
 
-    console.log("userid----", userid)
+    // console.log("userid----", userid)
 
     const addFriendHandler = () => {
         const friend = { username, userid, };
         dispatch(addFriends(friend));
-        dispatch(userId(userid));
+        // dispatch(addFriends(friend));
         dispatch(playerContributorsIds(userid));
+        dispatch(userId(userid));
         removeAdduserList(friend);
-        console.log("Add-button-Pressed")
     };
 
+    // console.log("usernames===", username)
 
     return (
 

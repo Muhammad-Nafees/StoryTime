@@ -32,9 +32,14 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     const [inputText, setInputText] = useState('');
     const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
     const { FEED_CHAT, HOME } = NavigationsString;
-    // const getCommentsData = useSelector((state) => state?.getComment?.data?.comments);
     const story = useSelector((state) => state?.likedstoryfeed?.storyId);
-    const likecountRTK = useSelector((state) => state?.likedstoryfeed?.likeCount);
+
+
+    const disLikedCountRTK = useSelector((state) => state?.likedstoryfeed?.disLikedCount);
+    const likeCountRTK = useSelector((state) => state?.likedstoryfeed?.likeCount);
+    const contentFeedRTK = useSelector((state) => state?.likedstoryfeed?.storyfeedContent);
+    const usernameFeedRTK = useSelector((state) => state?.likedstoryfeed?.storyfeedUsername);
+
     const [isComment, setIsComment] = useState(false);
     const [HasMorePages, setHasMorePages] = useState();
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -128,7 +133,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
             });
             bottomSCroll.current.scrollToEnd({ animated: true });
             setuserCommentsData(sortComments);
-            setCommentsCount(response?.data?.commentsCount)
+            setCommentsCount(response?.data?.commentsCount);
             setIsLoading(false);
             setIsReply(false)
             setMedia(null);
@@ -144,7 +149,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     }, [page, loadingPage, isLaodMore]);
 
 
-    // console.log("userDatacmts===", userCommentsData);
     const onRefresh = () => {
         setIsRefreshing(true)
         setPage(1)
@@ -170,11 +174,11 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                             <View style={styles.second_childbg}>
                                                 <View style={styles.third_childbg}>
                                                     <Image style={styles.child_bg_img} source={profileImage} />
-                                                    <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>Lilibeth</Text>
+                                                    <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>{usernameFeedRTK}</Text>
                                                 </View>
                                                 <View style={styles.text_container}>
                                                     <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16 }}>
-                                                        Suddenly his friend saw him start to move strangely. The shark attacked Wilson so hard his entire body flew out of the water, and multiple eyewitnesses observed the whole situation. His friend and some others grabbed him when the shark attempted to drag him under.
+                                                        {contentFeedRTK}
                                                     </Text>
                                                 </View>
                                             </View>
@@ -210,11 +214,11 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                         <TouchableOpacity style={styles.first_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>1.5k</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likeCountRTK}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.second_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>456</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{disLikedCountRTK}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => navigation.navigate(HOME)} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
@@ -266,7 +270,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                                     fontWeight: '500',
                                                     fontSize: 12,
                                                 }}>
-                                                {' '}
                                                 View {commentsCount - 2} more comments
                                             </Text>
                                         </TouchableOpacity>
@@ -368,8 +371,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
 
     )
 };
-
-
 
 const styles = StyleSheet.create({
 

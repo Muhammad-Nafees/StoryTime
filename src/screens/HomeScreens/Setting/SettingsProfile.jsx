@@ -56,7 +56,7 @@ import { login } from '../../../../store/slices/authSlice';
 const SettingsProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { BG_CONTAINER, AVATAR, DROP_ICON, DEFAULT_ICON } = Img_Paths;
+  const { BG_CONTAINER, DEFAULT_COVER, DROP_ICON, DEFAULT_ICON } = Img_Paths;
 
   const uploadProfileImageRef = useRef(null);
   const uploadCoverImageRef = useRef(null);

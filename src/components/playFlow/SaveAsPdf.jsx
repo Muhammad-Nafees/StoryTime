@@ -16,72 +16,97 @@ import SaveStoryBtn from './SaveStoryBtn';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import StoryTimeSaved from './StoryTimeSaved';
-
+import DownloadingFlow from './DownloadingFlow';
+import { SPACING } from '../../constants/Constant';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
+    const [isVisibleDownloading, setIsVisibleDownloading] = useState(false);
+    const [saveStoryModalDownloading, setSaveStoryModalDownloading] = useState(false)
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    console.log("textrecordusers", textrecordUsers)
+
+    const checkPermission = async () => {
+        try {
+            // Check if the platform is Android
+            if (Platform.OS === 'android') {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                );
+
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('Storage permission granted');
+                    createPDF();
+                } else {
+                    console.log('Storage permission denied');
+                    Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
+                }
+            } else {
+                createPDF();
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    };
 
     const createPDF = async () => {
-
         try {
             const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
             await RNFS.mkdir(folderPath);
 
-            const htmlContent = `<html><body><p>${textrecordUsers}</p></body></html>`;
+            const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
             const options = {
                 html: htmlContent,
-                fileName: 'textUsers', // PDF file ka naam
+                fileName: 'voicetotext', // PDF file ka naam
                 directory: folderPath,
             };
-
             const pdf = await RNHTMLtoPDF.convert(options);
-            console.log('PDF generated: ', pdf.filePath);
-            Alert.alert('PDF generated successfully!', `File saved at: ${pdf.filePath}`);
+            const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`; // Generate random number
+            console.log("download dest :", downloadDest)
+            await RNFS.moveFile(pdf.filePath, downloadDest);
+            setIsVisibleDownloading(true);
+            setSaveStoryModalDownloading(true);
         } catch (error) {
             console.error('Error generating PDF: ', error);
             Alert.alert('Error generating PDF. Please try again.');
         }
     };
 
-
-
     return (
         <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
 
-            {/* <View style={{ backgroundColor: "orange" }}> */}
+            <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
-            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
 
+                {/* Back Button */}
                 <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                     <BackButton onPress={() => setIsVisiblePdf(false)} />
                 </View>
 
-                {/* Back Button */}
+                <ImageBackground
+                    style={styles.img_frame}
+                    resizeMode="stretch"
+                    source={BG_CLOCK}>
+                    <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 10, backgroundColor: 'white', alignItems: 'center' }}>
 
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.container2}>
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                         <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
 
                         <View style={{ paddingVertical: 12, }}>
-                            {/* <TouchableButton onPress={createPDF} type="savestoryphone" backgroundColor={TextColorGreen} text="Save" color="#FFF" /> */}
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity
-                                    // disabled={}
-                                    onPress={createPDF}
+                                    onPress={checkPermission}
                                     style={{
                                         width: responsiveWidth(70),
                                         backgroundColor: TextColorGreen,
-                                        // backgroundColor:  "red" : "green",
                                         borderRadius: 10,
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -98,31 +123,22 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                                         Save
                                     </Text>
 
-                                    {/* {isLoading ? (
-          <ActivityIndicator color={'#FFF'} />
-        ) : (
-          <Text
-            style={{
-              fontSize: responsiveFontSize(1.9),
-              fontWeight: '600',
-              letterSpacing: 0.28,
-              color: color,
-            }}>
-            {text}
-          </Text>
-        )} */}
                                 </TouchableOpacity>
                             </View>
                         </View>
 
-                        <SaveStoryBtn onPress={() => setIsVisiblePdf(false)} text="No" />
+                        <SaveStoryBtn timeLeft={0} onPress={() => setIsVisiblePdf(false)} text="No" />
+
+                        {/* </View> */}
 
                     </View>
-                </View>
-
+                </ImageBackground>
+                {saveStoryModalDownloading &&
+                    <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
+Successfully Saved!" textButton="Back" />
+                }
 
             </ImageBackground>
-            {/* </View> */}
         </Modal>
     )
 };
@@ -139,108 +155,14 @@ const styles = StyleSheet.create({
     img: {
         resizeMode: "center"
     },
-    // container: {
-
-    // },
-
-    img_backgroung_content: {
-        width: responsiveWidth(90),
-        height: responsiveHeight(32),
-        justifyContent: "center",
-        alignItems: "center",
+    img_frame: {
+        height: '70%',
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: 'auto',
+        marginBottom: 'auto'
     },
-    bg_content: {
-        backgroundColor: PrimaryColor,
-        justifyContent: "center",
-        alignItems: "center",
-        width: responsiveWidth(78),
-        height: responsiveHeight(27),
-        marginLeft: responsiveWidth(1),
-        marginBottom: responsiveWidth(2)
-    },
-    container2: {
-        justifyContent: "center",
-        alignItems: "center",
-        // flex: 1,
-        backgroundColor: "#FFF",
-        height: responsiveHeight(30),
-        width: responsiveWidth(80),
-        borderWidth: 4,
-        borderColor: TextColorGreen
-    },
-    child_bg: {
-        backgroundColor: pinkColor,
-        width: responsiveWidth(70),
-        height: responsiveHeight(28),
-        marginTop: responsiveWidth(5),
-        borderRadius: 18,
-    },
-    second_childbg: {
-        marginLeft: "auto",
-        width: responsiveWidth(67)
-    },
-
-    third_childbg: {
-        flexDirection: "row",
-        width: responsiveWidth(21),
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: moderateVerticalScale(8)
-    },
-    child_bg_img: {
-        width: responsiveWidth(6.25),
-        height: responsiveHeight(3.5),
-        resizeMode: "center",
-    },
-    text_container: {
-        paddingTop: responsiveWidth(4),
-    },
-    second_container: {
-        position: 'relative',
-        bottom: responsiveWidth(5),
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    sec_container_firstchild: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingHorizontal: moderateVerticalScale(50),
-        width: responsiveWidth(92),
-        marginLeft: responsiveWidth(1),
-        backgroundColor: "#E44173",
-        height: responsiveHeight(7.5),
-    },
-    third_container: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    fourth_container: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: responsiveWidth(36),
-    },
-
-    first_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    second_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    third_view: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    sophia_container: {
-        flexDirection: "row",
-        width: responsiveWidth(21),
-        justifyContent: "space-between",
-        alignItems: "center",
-        margin: responsiveWidth(2.8)
-    }
 });
 
 export default SaveAsPdf;

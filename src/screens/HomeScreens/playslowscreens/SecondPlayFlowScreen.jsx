@@ -9,6 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetRecordingData } from '../../../../store/slices/RecordingData';
+import { extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -19,14 +20,16 @@ const SecondPlayFlowScreen = () => {
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
-    console.log(storyUserImage)
+    console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.95;
-    const dispatch = useDispatch()
+    const squareSize = windowWidth * 0.90;
+    const dispatch = useDispatch();
+
     const onpressNextHandler = () => {
-        navigation.navigate(FIRST_USER)
-        dispatch(resetRecordingData())
+        navigation.navigate(FIRST_USER);
+        dispatch(resetRecordingData());
+        dispatch(extendStoryCheck(null));
     }
 
     return (
@@ -53,14 +56,14 @@ const SecondPlayFlowScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>{randomName}</Text>
+                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(6.2), letterSpacing: 0 }}>{randomName}</Text>
                     </View>
 
                 </View>
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
-                <View>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
                         <Image source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
     img_dog: {
         width: responsiveWidth(22),
         height: responsiveHeight(11),
-        resizeMode: "center"
+        resizeMode: "cover",
     },
     start: {
         paddingVertical: moderateVerticalScale(12),
@@ -110,5 +113,7 @@ const styles = StyleSheet.create({
         fontFamily: PassionOne_Regular.passionOne,
     }
 
-})
+});
+
+
 export default SecondPlayFlowScreen;

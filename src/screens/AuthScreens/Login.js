@@ -40,7 +40,6 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
-
     return (
         <Formik
             initialValues={{
@@ -51,7 +50,8 @@ const Login = () => {
 
             validationSchema={validationUserLogin}
             onSubmit={async (values) => {
-                setIsLoading(true)
+                setIsLoading(true);
+
                 try {
                     const { email, password, fcmToken } = values;
                     const response = await fetch(Base_Url + login_andpoint, {
@@ -63,9 +63,10 @@ const Login = () => {
                             email, password, fcmToken
                         }),
                     });
-
                     const responseData = await response.json();
+                    console.log("RESPONSE_LOGIN----", responseData)
                     dispatch(login(responseData))
+                    await AsyncStorage.setItem("userData", JSON.stringify(responseData));
 
                     if (responseData?.data) {
                         setIsLoading(false)
@@ -83,7 +84,7 @@ const Login = () => {
                         await AsyncStorage.setItem("isLoggedIn", accessToken);
                         await AsyncStorage.setItem("isUsername", username);
                         await AsyncStorage.setItem("isUserId", userLoginId);
-                        console.log("Username===", username);
+                        await AsyncStorage.setItem("refreshToken",refreshToken)
                         dispatch(setAccessToken(accessToken));
                         dispatch(setRefreshToken(refreshToken));
                         dispatch(userLoginid(userLoginId));
@@ -94,12 +95,6 @@ const Login = () => {
                             visibilityTime: 2500
                         })
                     }
-
-                    // } else if (statusCode === 401) {
-                    //     const responseRefresh = await refresh_token_api(refreshToken)
-                    //     console.log("responseReresh=====", responseRefresh)
-                    //     return responseRefresh
-                    // };
 
                     if (error) {
                         setIsLoading(false)
@@ -212,13 +207,13 @@ const Login = () => {
 
                         <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>
                             <View style={styles.text_container}>
-                                <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our </Text>
+                                <Text style={[styles.text, { color: FourthColor }]}>By logging in, you agree to our</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginTermsAndConditions"
                                 })}>
                                     <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
                                 </TouchableOpacity>
-                                <Text style={[styles.text, { color: FourthColor }]}> and </Text>
+                                <Text style={[styles.text, { color: FourthColor }]}>and</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginPrivacyAndPolicy"
                                 })}>

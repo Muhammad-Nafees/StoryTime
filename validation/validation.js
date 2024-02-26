@@ -50,7 +50,6 @@ export const validationUserLogin = Yup.object().shape({
     .matches(/^[^\s]+$/, 'Email cannot contain spaces'),
   password: Yup.string()
     .required('Password is required')
-    .min(8, 'password length should be 8 character'),
 });
 
 export const validationforgetEmail = Yup.object().shape({

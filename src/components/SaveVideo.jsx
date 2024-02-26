@@ -13,61 +13,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PassionOne_Regular } from '../constants/GlobalFonts';
 import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
-
+import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
+import { SPACING } from '../constants/Constant';
 
 const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, BG_CLOCK, SAVE_STORY_BACKGROUND } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
-    const [saveStoryModalsecond, setSaveStoryModalsecond] = useState(false);
-    const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
+    const [saveStoryVideoModal, setSaveStoryVideoModal] = useState(false);
+    const [isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow] = useState(false);
     const navigation = useNavigation();
     const dispatch = useDispatch()
     const recordedVideo = useSelector((state) => state.recordingData.saveRecordingVideo);
     console.log("RECORDVID-----", recordedVideo);
 
 
-    // const saveVideo = () => {
-    //     dispatch(recordingToHome(RecordingText))
-    //     Alert.alert("Recording Text Saved to Home")
-    // }
-
-    // Recording ko download karne ka function
-
-    // const requestStoragePerission = async () => {
-    //     try {
-    //         const granted = await PermissionsAndroid.request(
-    //             PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-    //             {
-    //                 title: "Cool Photo App Camera Permission",
-    //                 message:
-    //                     "Your app needs permission.",
-    //                 buttonNeutral: "Ask Me Later",
-    //                 buttonNegative: "Cancel",
-    //                 buttonPositive: "OK"
-    //             }
-    //         );
-    //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //             downloadRecording()
-    //             return true;
-    //         } else {
-    //             console.log("Camera permission denied");
-    //             return false;
-    //         }
-    //     } catch (err) {
-    //         console.warn("ERR-PERMISSION", err);
-    //         return false;
-    //     }
-    // }
-
     const downloadRecording = async () => {
         try {
-            const destinationPath = `${RNFS.DownloadDirectoryPath}/downloaded_video.mp4`;
-
-
+            const destinationPath = `${RNFS.DownloadDirectoryPath}/downloaded_video${Math.floor(Math.random() * 100000)}.mp4`; // Generate random number
             const sourcePath = `file://${recordedVideo}`;
 
             if (!sourcePath) {
@@ -76,8 +42,8 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
             }
             await RNFS.copyFile(sourcePath, destinationPath);
             console.log('Video downloaded successfully:', destinationPath);
-            setSaveStoryModalsecond(true);
-            setVisibleSavePhone(true)
+            setSaveStoryVideoModal(true);
+            setIsVisibleFirstVideoFlow(true);
 
         } catch (error) {
             console.error('Error downloading recording:', error);
@@ -89,61 +55,68 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
     return (
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
-            {/* <View style={{ backgroundColor: "orange" }}> */}
+            <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
-            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+                {/* Back Button */}
 
                 <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                     <BackButton onPress={() => setIsVisible(false)} />
                 </View>
-                {/* Back Button */}
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.container2}>
+
+                <ImageBackground
+                    style={styles.img_frame}
+                    resizeMode="stretch"
+                    source={BG_CLOCK}>
+                    <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 10, backgroundColor: 'white', alignItems: 'center' }}>
+
                         <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                         <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time in your phone?</Text>
 
                         <View style={{ paddingVertical: 12, }}>
-                            <TouchableButton type="savevideo" onPress={downloadRecording} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity
+                                    onPress={downloadRecording}
+                                    style={{
+                                        width: responsiveWidth(70),
+                                        backgroundColor: TextColorGreen,
+                                        borderRadius: 10,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: responsiveHeight(6.6),
+                                    }}>
+
+                                    <Text
+                                        style={{
+                                            fontSize: responsiveFontSize(1.9),
+                                            fontWeight: '600',
+                                            letterSpacing: 0.28,
+                                            color: "#FFF",
+                                        }}>
+                                        Save
+                                    </Text>
+
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
-                        <SaveStoryBtn onPress={() => setIsVisible(false)} text="No" />
+                        <SaveStoryBtn timeLeft={0} onPress={() => setIsVisible(false)} text="No" />
+
+                        {/* </View> */}
 
                     </View>
-                </View>
+                </ImageBackground>
 
-                {saveStoryModalsecond &&
-                    <StoryTimeSaved isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time 
-Successfully Saved!" textButton="Back" />
+                {
+                    isVisibleFirstVideoFlow &&
+                    <DownloadingVideoModal
+                        isVisibleFirstVideoFlow={isVisibleFirstVideoFlow} setIsVisibleFirstVideoFlow={setIsVisibleFirstVideoFlow} text="Story Time 
+Successfully Saved!" textButton="Back"
+                    />
                 }
 
             </ImageBackground>
-            {/* </View> */}
         </Modal>
 
-        // <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
-        //     <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-
-        //         <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-        //             <BackButton onPress={() => setIsVisible(false)} />
-        //         </View>
-
-        //         {/* Back Button */}
-
-        //         <View style={{ flex: 1, justifyContent: "center" }}>
-        //             <View style={styles.container2}>
-        //                 <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-        //                 <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Save your story to your phone</Text>
-
-        //                 <View style={{ paddingVertical: 12, }}>
-        //                     <TouchableButton type="savevideo" onPress={downloadRecording} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-        //                 </View>
-
-        //             </View>
-        //         </View>
-
-        //     </ImageBackground>
-
-        // </Modal>
 
     )
 };
@@ -262,7 +235,17 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         margin: responsiveWidth(2.8)
-    }
+    },
+    img_frame: {
+        height: '70%',
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: 'auto',
+        marginBottom: 'auto'
+    },
 });
 
 export default SaveVideo;
+
+

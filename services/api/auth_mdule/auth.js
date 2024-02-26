@@ -9,12 +9,10 @@ import {
   reset_verify_code,
   stateandCity_endpoint,
   username_endpoint,
-  logout_endpoint
+  logout_endpoint,
+  delete_account_endpoint
 } from '../..';
 import { useSelector } from 'react-redux';
-
-// const refreshToken = useSelector((state) => state?.authSlice?.refreshToken);
-// console.log(refreshToken)
 
 const reset_email = async (values) => {
   console.log('values---', values);
@@ -209,6 +207,26 @@ export const logout_user = async () => {
 
     const responseData = await fetch(apiUrl, {
       method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const response = await responseData.json();
+    return response
+
+  } catch (error) {
+    Alert.alert("ERROR", "something went wrong")
+    return error
+  }
+}
+
+export const delete_user_account = async () => {
+  try {
+    let apiUrl = Base_Url + delete_account_endpoint;
+
+    const responseData = await fetch(apiUrl, {
+      method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
       },

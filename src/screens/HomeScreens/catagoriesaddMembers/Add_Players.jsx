@@ -12,25 +12,25 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 
 const AddPlayers = () => {
-    const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
-        SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
     const [Responseapi, setResponseapi] = useState([]);
     const navigation = useNavigation();
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
-    const { CATEGORIES } = NavigationsString
+    const { CATEGORIES } = NavigationsString;
+    const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
-    const userId = useSelector((state) => state.addPlayers.userId)
 
 
     const addFriends_api_handler = async () => {
         try {
             const responseData = await addFriends_api();
             setResponseapi(responseData.data.users);
+            console.log("Responseapi----", Responseapi);
             return responseData;
         } catch (error) {
             console.log("err", error)
@@ -40,13 +40,16 @@ const AddPlayers = () => {
     const removeAdduserList = (responseData) => {
         let AddList = Responseapi.filter(item => item._id !== responseData.userid)
         setResponseapi(AddList);
-        // console.log('blocklist', AddList)
     };
 
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
-            console.log("responseData=======", responseData)
+            if (responseData?.data == null) {
+                setIsNoFriends(false)
+            } else {
+                setIsNoFriends(true)
+            }
             setResponseapi(responseData.data?.users)
             return responseData
         } catch (error) {
@@ -55,9 +58,8 @@ const AddPlayers = () => {
     }, 700)
     ).current;
 
-
     useEffect(() => {
-        addFriends_api_handler()
+        addFriends_api_handler();
     }, []);
 
     const lodashTextHandler = (text) => {
@@ -69,67 +71,74 @@ const AddPlayers = () => {
         navigation.navigate(CATEGORIES);
     };
 
-    // console.log("userId0000", userId);
-
     return (
+
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             {/* Frame Content Close----------- */}
-            <ScrollView style={{ flex: 1 }}>
 
-                <View style={{ height: responsiveHeight(57) }}>
-                    <View style={styles.first_container}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
-                            <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-                        </TouchableOpacity>
-                        <View style={styles.categories_text_container}>
-                            <Text style={styles.categories_text}>Add Players</Text>
-                        </View>
+            <View style={{ height: responsiveHeight(85), }}>
+                <View style={styles.first_container}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
+                        <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
+                    </TouchableOpacity>
+                    <View style={styles.categories_text_container}>
+                        <Text style={styles.categories_text}>Add Players</Text>
                     </View>
+                </View>
 
-                    <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
-                            <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: moderateVerticalScale(14), }}>
-                                <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
-                            </View>
-                            <TextInput value={inputText} onChangeText={(text) => lodashTextHandler(text)} placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000", width: 260 }} />
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
+                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: moderateVerticalScale(14), }}>
+                            <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
                         </View>
+                        <TextInput value={inputText} onChangeText={(text) => lodashTextHandler(text)} placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000", width: 260 }} />
                     </View>
+                </View>
 
+                <ScrollView>
                     <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
 
-                        {
-                            addedUsers?.map((item, index) => (
-                                <RemoveUsers_Categories key={item?.userid} item={item} userid={item.userid} username={item.username} />
-                            ))
-                        }
+                        <ScrollView>
+                            {
+                                addedUsers?.map((item, index) => (
+                                    <RemoveUsers_Categories key={item?.userid} item={item} userid={item.userid} username={item.username} />
+                                ))
+                            }
+                        </ScrollView>
 
                         <View style={[styles.categories_text_container2, { paddingTop: responsiveWidth(6) }]}>
                             <Text style={styles.categories_text}>Friends</Text>
                         </View>
+
                         <ScrollView>
-
                             {
-                                Responseapi?.map((item, index) => {
-                                    console.log("index====", index);
-                                    return (
-                                        <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
-                                    )
-                                })
+                                !isNoFriends ?
+                                    (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
+                                        <Text style={{ fontSize: 22, color: "#000", textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>No Friends Found</Text>
+                                    </View>)
+                                    :
+                                    Responseapi?.map((item, index) => {
+                                        console.log("index====", index);
+                                        return (
+                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
+                                        )
+                                    })
                             }
-
                         </ScrollView>
+
                     </View>
-                </View>
+                </ScrollView>
+            </View>
 
-                <View style={{ paddingTop: responsiveWidth(60), }}>
-                    <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
-                </View>
+            <View style={{ paddingTop: responsiveWidth(5) }}>
+                <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
+            </View>
 
-            </ScrollView>
         </ImageBackground>
 
     )
 };
+
 
 
 const styles = StyleSheet.create({

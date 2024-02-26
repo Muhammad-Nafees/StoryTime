@@ -11,32 +11,24 @@ import UserNameExist from './UserNameExist';
 import { Inter_Regular } from '../constants/GlobalFonts';
 
 const CustomInput = (props,) => {
-  const [isFocused, setIsFocused] = useState(false);
-  // const [isVisible, setVisible] = useState(false)
+  // const [isFocused, setIsFocused] = useState(false);
 
-  const handleInputFocus = () => {
-    setIsFocused(true);
-  };
+  // const handleInputFocus = () => {
+  //   setIsFocused(true);
+  // };
 
-  const handleInputBlur = () => {
-    setIsFocused(false);
-  };
+  // const handleInputBlur = () => {
+  //   setIsFocused(false);
+  // };
 
   const debouncedApiCall = useRef(
     _.debounce(async (value, setFieldError, fieldName) => {
-      console.log("============", value, fieldName)
       const response = await username_api({ email: fieldName === 'email' ? value : '' });
       props.setEmailstatusCode(response.statusCode)
       if (response?.statusCode !== 200) {
         if (fieldName === 'email') {
           setFieldError('Email already exists');
         }
-        // if (fieldName === 'username') {
-        //   setFieldError('Username already exists');
-        // } else if (fieldName === 'email') {
-        //   setFieldError('Email already exists');
-        // }
-
       } else {
         setFieldError('');
         setFieldError('');
@@ -65,7 +57,8 @@ const CustomInput = (props,) => {
     fontWeight: '400',
     paddingLeft: 28,
     fontFamily: Inter_Regular.Inter_Regular,
-    fontSize: responsiveFontSize(1.8)
+    fontSize: responsiveFontSize(1.8),
+    backgroundColor: TextinputColor,
   };
 
   return (
@@ -87,7 +80,7 @@ const CustomInput = (props,) => {
       <View>
         <TextInput
           style={inputStyle}
-          placeholder={isFocused ? '' : props.placeholder}
+          placeholder={props.placeholder}
           value={props.value}
           onChangeText={(text) => handleChangeText(text, props.fieldName)}
           underlineColorAndroid="transparent"
@@ -95,9 +88,8 @@ const CustomInput = (props,) => {
           multiline={props.multiline ? props.multiline : false}
           keyboardType={props.keyboardType}
           autoCapitalize={props.autoCapitalize}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
           editable={props.editable}
+          onBlur={props.setFieldTouched}
         />
       </View>
 
@@ -116,8 +108,11 @@ const CustomInput = (props,) => {
           <Text style={[{ color: 'red' }]}>{props.customError}</Text>
         </View>
       )}
+      {
+        console.log("props.touched===", props.touched)
+      }
 
-      {props.error && (
+      {props.touched && props.error && (
         <View
           style={[
             {

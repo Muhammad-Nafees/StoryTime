@@ -16,32 +16,26 @@ import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/sl
 const FirstUserStory = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, CONTINUE_IMAGE, EXTEND_STORYTIME_IMAGE, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const addedUsers = useSelector(state => state?.addPlayers.addFriends);
-    const userId = useSelector(state => state?.addPlayers?.userId);
-    const [currentDisplayUser, setCurrentDisplayUser] = useState(addedUsers[0]);
-    const [isNextUser, setIsNextUser] = useState(addedUsers[1]);
-    // const [isUserCheckAvail, setIsUserCheckAvail] = useState(true);
-
+    const extendstory = useSelector(
+        state => state?.addPlayers?.extendStoryCheck
+    );
 
     const nextUserHandler = () => {
-        let checkTrueval = true;
-        dispatch(checkTrueOrFalse(checkTrueval));
+        dispatch(checkTrueOrFalse(true));
         dispatch(extendStoryCheck(false));
         navigation.navigate(FIRST_USER);
     };
 
-
-    const extendStoryHandler = () => {
-        navigation.navigate(FIRST_USER, { extentCounting: 30 });
+    const extendStoryHandler = async () => {
         dispatch(extendStoryCheck(true));
+        navigation.navigate(FIRST_USER, { extentCounting: 30 });
     };
-
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -50,24 +44,27 @@ const FirstUserStory = () => {
                 <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText text="Extend Your Story Time" onPress={extendStoryHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText text="Next Player" onPress={nextUserHandler} BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText
+                            onPress={extendStoryHandler}
+                            BackgroundImage={!extendstory ? EXTEND_STORYTIME_IMAGE : CONTINUE_IMAGE}
+
+                        />
+
+                        <VoiceToText text="Next Player"
+                            onPress={nextUserHandler}
+                            BackgroundImage={NEXT_PLAYER_IMAGE}
+                        />
                     </View>
                 </View>
             </View>
         </ImageBackground>
-
     )
 };
 
 
+
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: SecondaryColor,
-        width: "100%",
-        height: "100%",
-        flex: 1,
-    },
+
     img: {
         resizeMode: "center"
     },

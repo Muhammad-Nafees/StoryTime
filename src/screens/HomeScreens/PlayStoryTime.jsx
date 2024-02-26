@@ -5,6 +5,7 @@ import { responsiveWidth, responsiveHeight } from "react-native-responsive-dimen
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
+import { useSelector } from 'react-redux';
 
 
 
@@ -17,6 +18,7 @@ const PlayStoryTime = () => {
     const { width, height } = Dimensions.get('window');
     const { CATEGORIES } = NavigationsString
     const navigation = useNavigation()
+    const { user } = useSelector(state => state?.authSlice);
 
     return (
 
@@ -29,7 +31,7 @@ const PlayStoryTime = () => {
             </View>
 
             <View style={styles.container_img}>
-                <TouchableOpacity onPress={() => navigation.navigate(CATEGORIES)}>
+                <TouchableOpacity onPress={() => navigation.navigate(user?CATEGORIES:'CategoriesTab')}>
                     <Image style={{ marginVertical: moderateVerticalScale(12), width: width * 0.3, height: height * 0.12, resizeMode: "center" }} source={require("../../assets/play-btn.png")} />
                 </TouchableOpacity>
                 <Image style={styles.get_started} source={PLAY_STORY_IMG} />

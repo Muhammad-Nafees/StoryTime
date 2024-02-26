@@ -10,14 +10,12 @@ import NavigationsString from '../../constants/NavigationsString';
 import TouchableButton from '../TouchableButton';
 import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordingToHome } from '../../../store/slices/RecordingData';
-import RNFetchBlob from 'rn-fetch-blob';
-import Pdf from 'react-native-pdf';
+
 
 const SaveStory = ({ isVisible, setVisible }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { BG_PLAYFLOW, } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
@@ -30,24 +28,6 @@ const SaveStory = ({ isVisible, setVisible }) => {
         setSaveStoryModal(true);
         setVisibleSavePhone(true); // Set isVisible to true to open the modal
     };
-
-    // const downloadFile = () => {
-    //     const date = new Date();
-    //     const fileDir = RNFS.DownloadDirectoryPath;
-
-    //     const filePath = `${fileDir}/download_${Math.floor(date.getDate() + date.getSeconds() / 2)}.pdf`;
-    //     const recordingText = RecordingText;
-    //     RNFS.writeFile(filePath, recordingText, 'utf8')
-    //         .then((success) => {
-    //             console.log('File saved at: ', filePath);
-    //             Alert.alert('File downloaded successfully');
-    //         })
-    //         .catch((err) => {
-    //             console.error(err);
-    //             Alert.alert('Error in downloading file');
-    //         });
-    // }
-
 
 
     return (

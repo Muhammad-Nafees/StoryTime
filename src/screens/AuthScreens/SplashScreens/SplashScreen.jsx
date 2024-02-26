@@ -1,11 +1,12 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
-import { SecondaryColor, } from '../../Styles/Style';
+import { SecondaryColor, TextColorGreen, White, } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import AuthImage from '../../../components/AuthImage';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 const SplashScreen = () => {
     const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths
@@ -24,7 +25,9 @@ const SplashScreen = () => {
                 <AuthImage onPress={() => navigation.navigate("GuestStack")} ImageSource={BG_FRAME} />
                 <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
-
+            {/* <View style={{width:responsiveWidth(80),height:responsiveHeight(6),backgroundColor:TextColorGreen,alignSelf:'center',borderRadius:10,justifyContent:'center',marginTop:responsiveHeight(2)}}>
+                <Text style={{color:'white',fontWeight:'800',textAlign:'center',fontSize:responsiveFontSize(2)}}>Subscribe for AD FEEE experience </Text>
+            </View> */}
         </ImageBackground>
     )
 }

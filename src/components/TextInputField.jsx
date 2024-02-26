@@ -20,8 +20,6 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths;
 
   console.log("onChangeText", value);
-  // console.log("checkState====", checkState)
-
 
   return (
     <View
@@ -50,7 +48,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
           placeholderTextColor="#AAAAAA"
           secureTextEntry={type == 'password' ? !showPassword : null}
           style={{
-            color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 8 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
+            color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 10 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
           }}
         />
 

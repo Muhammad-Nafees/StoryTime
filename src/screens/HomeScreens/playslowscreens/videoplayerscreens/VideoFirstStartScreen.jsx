@@ -18,11 +18,12 @@ const VideoFirstStartScreen = () => {
     const navigation = useNavigation();
     const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.95;
+    const squareSize = windowWidth * 0.90;
+
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
     const dispatch = useDispatch();
-    console.log("randomName---", randomName);
+
 
     return (
 
@@ -51,13 +52,15 @@ const VideoFirstStartScreen = () => {
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: "400", color: "#FFF" }}>Your Word is </Text>
                     </View>
+
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(9), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(6.2), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
                     </View>
+
                 </View>
 
-                <View style={{ paddingVertical: moderateVerticalScale(45) }} />
-                <View>
+                <View style={{ paddingVertical: moderateVerticalScale(45), }} />
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate(VIDEO_FIRST_USER)
                         dispatch(resetVideoRecording())
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
     img_dog: {
         // width: responsiveWidth(21),
         // height: responsiveHeight(10),
-        resizeMode: "center"
+        resizeMode: "cover"
     },
     start: {
         paddingVertical: moderateVerticalScale(8),

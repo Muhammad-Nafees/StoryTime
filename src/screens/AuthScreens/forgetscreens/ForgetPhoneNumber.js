@@ -96,11 +96,24 @@ const ForgetPhoneNumber = () => {
                                     setPhoneError={setPhoneError}
                                     isLoading={isLoading}
                                     handleSubmit={handleSubmit}
-                                    isValid={isValid}
-                                    dirty={dirty}
+
                                 />
                             </View>
-
+                            {/* <CustomPhoneInput
+                  value={values.phoneNo}
+                  error={errors.phoneNo}
+                  touched={touched.phoneNo}
+                  handleChange={handleChange('phoneNo')}
+                  setFieldValue={setFieldValue}
+                  phoneInput={phoneInput}
+                  setIsError={setIsError}
+                  setFieldError={setFieldError}
+                  setFormatText={setFormatText}
+                  isError={isError}
+                  setPhoneCode={setPhoneCode}
+                  setPhoneError={setPhoneError}
+                  setphoneNumberStatusCode={setphoneNumberStatusCode}
+                /> */}
                             {/* Confirm Password------------ */}
 
                             {/* Next and Back------------ */}

@@ -7,7 +7,7 @@ import { Img_Paths } from '../assets/Imagepaths'
 import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../constants/NavigationsString'
 import { useDispatch, useSelector } from 'react-redux'
-import { likedStoryFeed, likedhandler, likedstoryfeed } from '../../store/slices/storyfeedslices/likedStorySlice'
+import { likedstoryfeed, disLikedCountingRTK, likedCountingRTK, storyFeedContent, storyFeedUsername } from '../../store/slices/storyfeedslices/likedStorySlice'
 import {
     Menu,
     MenuOptions,
@@ -17,7 +17,7 @@ import {
 import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
-import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed'
+import { storyLikedFeed, storydisLikedFeed, } from '../../services/api/storyfeed'
 import LinearGradient from "react-native-linear-gradient"
 
 const FrameContent = ({
@@ -32,7 +32,6 @@ const FrameContent = ({
     dislikesByMe,
     likesCountuser,
     dislikesCount,
-    likeslength,
 }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width;
@@ -44,18 +43,16 @@ const FrameContent = ({
     const [isDisLike, setIsDisliked] = useState(dislikesByMe);
     const [likesCounting, setLikesCounting] = useState(likesCountuser);
     const [dislikesCounting, setDisLikesCounting] = useState(dislikesCount);
-
-
     const dispatch = useDispatch();
+
+
     const storyLikedHandled = useCallback(async () => {
         try {
             const responseData = await storyLikedFeed(likedUserId);
             setIsLiked((prevIsLiked) => !prevIsLiked);
             if (isLiked && responseData?.data?._id === likedUserId) {
-                // If unliking, decrement by 1
                 setLikesCounting((prevCount) => prevCount - 1);
             } else {
-                // If liking, increment by 1
                 setLikesCounting((prevCount) => responseData?.data?.likes.length || prevCount + 1);
             }
             dispatch(likedstoryfeed(likesCountuser))
@@ -65,30 +62,32 @@ const FrameContent = ({
         }
     }, [likesCounting]);
 
+
+
     const storydisLikedHandled = useCallback(async () => {
         try {
             const responseData = await storydisLikedFeed(likedUserId)
             setIsDisliked((prevIsLiked) => !prevIsLiked);
             if (isDisLike && responseData?.data?._id === likedUserId) {
-                // If unliking, decrement by 1
                 setDisLikesCounting((prevCount) => prevCount - 1);
             } else {
-                // If liking, increment by 1
                 setDisLikesCounting((prevCount) => responseData?.data?.dislikes.length || prevCount + 1);
             }
             return responseData;
         } catch (error) {
             // Handle errors
         }
-
     }, [dislikesCounting])
 
+
     const commentsHandled = useCallback(() => {
-        dispatch(likedstoryfeed(likedUserId))
-        navigation.navigate(FEED_CHAT)
+        dispatch(likedstoryfeed(likedUserId));
+        dispatch(likedCountingRTK(likesCounting));
+        dispatch(disLikedCountingRTK(dislikesCounting));
+        dispatch(storyFeedContent(content));
+        dispatch(storyFeedUsername(username));
+        navigation.navigate(FEED_CHAT);
     }, [dispatch, navigation]);
-
-
 
     return (
         <View style={styles.container}>
@@ -110,12 +109,13 @@ const FrameContent = ({
                                             <Image style={styles.child_bg_img} source={profileImage} />
                                             <Text style={{ paddingLeft: moderateScale(12), color: SecondaryColor, fontSize: responsiveFontSize(1.7), fontWeight: "600" }}>{username}</Text>
                                         </View>
-
-                                        <View style={styles.text_container}>
-                                            <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
-                                                {content}
-                                            </Text>
-                                        </View>
+                                        <ScrollView>
+                                            <View style={styles.text_container}>
+                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, }}>
+                                                    {content}
+                                                </Text>
+                                            </View>
+                                        </ScrollView>
                                     </View>
                                 </LinearGradient>
                             </>
@@ -137,10 +137,12 @@ const FrameContent = ({
                                             <Image style={{ width: 30, height: 30, resizeMode: "contain", }} source={{ uri: "http://storytime.yameenyousuf.com/" + subCategoryimage }} />
                                             <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2), fontFamily: PassionOne_Regular.passionOne }}>{subCategoryname}</Text>
                                         </View>
-                                        <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+
+                                        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
                                             <Image style={{ width: 30, height: 30, resizeMode: "center", }} source={require("../assets/profileurl_icon.png")} />
                                             <Text style={{ color: "#FFF", fontWeight: "300", fontSize: responsiveFontSize(1.8), paddingVertical: moderateVerticalScale(6) }}>Url</Text>
-                                        </View>
+                                        </TouchableOpacity>
+
                                     </View>
 
                                 </LinearGradient>
@@ -262,6 +264,7 @@ const styles = StyleSheet.create({
     },
     text_container: {
         paddingTop: responsiveWidth(3),
+        // height: responsiveHeight(25)
     },
     second_container: {
         position: 'relative',
