@@ -61,9 +61,9 @@ const GuestModals = forwardRef((props, ref) => {
             height: '50%',
             width: '80%',
             marginTop: -SPACING*2,
-            backgroundColor: 'white',
             alignSelf: 'center',
             justifyContent: 'center',
+            paddingHorizontal:responsiveWidth(2)
           }}>
           <Text
             style={{

@@ -21,7 +21,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
     const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { FIRST_USER } = NavigationsString;
+    const { FIRST_USER,PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryModalAfterDownloading, setSaveStoryModalAfterDownloading] = useState(false);
     const [isVisibleAfterDownloading, setIsVisibleAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -50,7 +50,8 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
-      !user?navigation.goBack():navigation.goBack(); //guest user doesn't have profile
+      setIsVisibleDownloading(false)
+      !user?navigation.navigate(PLAY_STORY_TIME):navigation.goBack(); //guest user doesn't have profile
         console.log("FUNCTION CALLED");
     };
 

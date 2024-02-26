@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert, PermissionsAndroid } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert, PermissionsAndroid,Platform } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -36,6 +36,29 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
     //     Alert.alert("Recording Text Saved to Home")
     // }
 
+    const checkPermission = async () => {
+        try {
+            // Check if the platform is Android
+            if (Platform.OS === 'android') {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                );
+
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('Storage permission granted');
+                    downloadRecording();
+                } else {
+                    console.log('Storage permission denied');
+                    Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
+                }
+            } else {
+                // Platform is iOS, no explicit permission request needed
+                downloadRecording();
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    };
 
     const downloadRecording = async () => {
         try {
@@ -81,7 +104,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
                                 {/* Touchable Save Button------------- */}
 
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={downloadRecording}
+                                    <TouchableOpacity onPress={checkPermission}
                                         style={{
                                             width: responsiveWidth(70),
                                             backgroundColor: TextColorGreen,

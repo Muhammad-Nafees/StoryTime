@@ -315,7 +315,7 @@ const VideoFirstUser = () => {
 
 
     const onpressNextHandler = () => {
-        user ? navigation.navigate(SECOND_USER_STORY) : null
+        user ? navigation.navigate(SECOND_USER_STORY) : saveBtnHandler()
     };
 
     const modalOpen = (ref, heading, content, buttonText, text) => {
@@ -462,10 +462,14 @@ const VideoFirstUser = () => {
                     isNext &&
                     <CustomVideoPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />
                 }
+                 {
+                    !user?
+                    <CustomVideoPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />:<></>
+                }
 
                 {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
-                <View style={{ paddingTop: responsiveWidth(6) }}>
+                <View style={{ paddingTop: responsiveWidth(6),marginBottom:responsiveHeight(2)}}>
                     <SaveStoryBtn onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
                 </View>
 

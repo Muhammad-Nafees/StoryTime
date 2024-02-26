@@ -143,9 +143,9 @@ const SubCategories = ({ route }) => {
 
       const response = user ? await get_Random(id) : filteredSubcategory;
       console.log("response----", response)
-      const imageLink = URL + response?.data?.image;
+      const imageLink = user?(URL + response?.data?.image):(URL + response?.image);
       dispatch(randomNames(user ? response?.data?.name : response?.name));
-      user && dispatch(setStoryUserImage(imageLink));
+      dispatch(setStoryUserImage(imageLink));
       console.log("storyUserImage0-----", imageLink);
       // console.log(" response?.image-----", response?.image);
       user ? navigation.navigate(PLAYER_SEQUENCE) : navigation.navigate(FIRSTSCREENPLAYFLOW);

@@ -188,7 +188,13 @@ const FirstUser = ({ route }) => {
   // ---------- Handle Press out ----------
 
   const onPressNext = () => {
-    user ? navigation.navigate('FirstUserStorytext') : null;
+    user ? navigation.navigate('FirstUserStorytext') : modalOpen(
+      GuestModalRef,
+      'Get Story Time Premium',
+      'Subscribe now to save your Story to your profile',
+      'Subscribe',
+      'Back',
+    ) ;
   };
 
   console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
@@ -539,6 +545,16 @@ const FirstUser = ({ route }) => {
                 isCancelingStory={isCancelingStory}
               />
             )}
+           { !user?
+              <CustomPlayFlowButton
+                onPress={onPressNext}
+                isLongPress={isLongPress}
+                backgroundColor={TextColorGreen}
+                color="#FFF"
+                timeLeft={timeLeft}
+                isNextUser={isNextUser}
+                isCancelingStory={isCancelingStory}
+              />:<></>}
 
             <View style={{ paddingTop: responsiveWidth(6) }}>
               <SaveStoryBtn
