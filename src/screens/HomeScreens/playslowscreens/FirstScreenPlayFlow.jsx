@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingVertical: moderateVerticalScale(10),
         // flex: 1,
-        backgroundColor: "orange"
     },
     img_backgroung_content: {
         width: responsiveWidth(90),

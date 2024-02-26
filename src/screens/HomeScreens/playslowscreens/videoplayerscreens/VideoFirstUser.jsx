@@ -128,10 +128,6 @@ const VideoFirstUser = () => {
             clearInterval(countdown);
             setIsPressed(false);
             pauseRecordings();
-            // dispatch(saveRecordingVideoUser(path))
-            // stopRecordings();
-            // pauseRecordings()
-            // pauseRecordings()
         }
 
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
@@ -139,10 +135,13 @@ const VideoFirstUser = () => {
 
 
     useEffect(() => {
-        if (timeLeft === null) {
+        if (extendVideoCheck == true && timeLeft === null) {
             // Display default time when countdown is not started
+            setTimeText('00:30');
+        } else if (timeLeft == null) {
             setTimeText('02:00');
-        } else {
+        }
+        else {
             // Format time for display
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
@@ -197,8 +196,8 @@ const VideoFirstUser = () => {
             console.log("Stop-Recording-Function_Called")
         } catch (error) {
             console.log("RECORDINGESTOPErr------", error)
-        }
-        // setTimeLeft(null);
+        };
+
     };
 
     const resumeRecording = async () => {
@@ -220,12 +219,10 @@ const VideoFirstUser = () => {
         }
     };
 
-
     const saverecordingvideo = () => {
         setIsVisible(true);
         stopRecordings();
     };
-
 
 
     useFocusEffect(
@@ -261,8 +258,6 @@ const VideoFirstUser = () => {
         }, [])
     );
 
-    console.log("Is Active :", isActive);
-
     useFocusEffect(
         useCallback(() => {
             setTimeLeft(null);
@@ -272,11 +267,10 @@ const VideoFirstUser = () => {
                 dispatch(extendStoryCheckVideo(false));
                 setIsFirstCall(false);
                 setisCancelingStory(true);
-            }
-            // dispatch(extendStoryCheckVideo(false));
+            };
+
         }, [])
     );
-
 
     const handleStart = () => {
 
@@ -289,7 +283,7 @@ const VideoFirstUser = () => {
             console.log("CALLED CANCELING=============");
         };
 
-        if (timeLeft == null) {
+        if (timeLeft === null) {
 
             if (extendStoryCheckVideoTrue == true) {
                 resumeRecording();
@@ -305,7 +299,7 @@ const VideoFirstUser = () => {
 
             if (timeLeft == null && extendStoryCheckVideoTrue == null) {
                 setIsPressed(true);
-                setTimeLeft(30);
+                setTimeLeft(120);
                 recordVideos();
                 console.log("START VIDEO-----")
             }
@@ -336,7 +330,9 @@ const VideoFirstUser = () => {
             return
         }
         saverecordingvideo()
-    }
+    };
+
+    console.log("extendVideoCheck==", extendVideoCheck)
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -466,13 +462,14 @@ const VideoFirstUser = () => {
                 {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
                 <View style={{ paddingTop: responsiveWidth(6) }}>
-                    <SaveStoryBtn onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
+                    <SaveStoryBtn timeLeft={timeLeft} onPress={saveBtnHandler} text={!user ? "Save to phone" : "Save Story"} color={TextColorGreen} isNext={!user ? false : isNext} />
                 </View>
 
                 {
                     isVisible &&
                     <SaveVideo type="savevideo" isVisible={isVisible} setIsVisible={setIsVisible} path={path} />
                 }
+
                 <GuestModals ref={GuestModalRef} />
                 <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo} />
             </ScrollView>

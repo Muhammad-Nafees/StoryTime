@@ -9,7 +9,6 @@ const VoiceToText = ({ text, BackgroundImage, bgColor, innerColor, onPress, exte
     const SCREENHEIGHT = Dimensions.get("window").height;
 
     return (
-
         <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={{ width: responsiveWidth(90), justifyContent: "center", alignItems: "center" }}>
             <Image style={{ width: SCREENWIDTH / 1.3, height: SCREENHEIGHT / 3, resizeMode: "contain" }} source={BackgroundImage} />
         </TouchableOpacity>
@@ -17,24 +16,15 @@ const VoiceToText = ({ text, BackgroundImage, bgColor, innerColor, onPress, exte
 };
 
 
-
-
 const styles = StyleSheet.create({
     img_backgroung_content: {
-        // width: responsiveWidth(90),
-        // height: responsiveHeight(32),
         justifyContent: "center",
         alignItems: "center",
         marginVertical: moderateVerticalScale(6)
     },
     bg_content: {
-        // backgroundColor: PrimaryColor,
         justifyContent: "center",
         alignItems: "center",
-        // width: responsiveWidth(78),
-        // height: responsiveHeight(27),
-        // marginLeft: responsiveWidth(1),
-        // marginBottom: responsiveWidth(2.4)
     },
 })
 

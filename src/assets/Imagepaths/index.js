@@ -37,6 +37,11 @@ export const Img_Paths = {
     BG_VOICE_TO_TEXT_IMG: require("../../assets/firstuserVoicetoText.png"),
     FIRST_VOICE_TO_TEXT_IMAGE: require("../../assets/VoicetoTextimage.png"),
     VIDEO_IMAGE: require("../../assets/videoimage.png"),
+    NEXT_PLAYER_IMAGE: require("../../assets/nextplayerimage.png"),
+    EXTEND_STORYTIME_IMAGE: require("../../assets/extendstoryTimeimage.png"),
+    CONTINUE_IMAGE: require("../../assets/continueimage.png"),
+    SAVE_STORY_BACKGROUND: require("../../assets/savestorybackgroundImage.png"),
+    // c:\Users\dell\Downloads\extendstoryTimeimage.png c:\Users\dell\Downloads\continueimage.png
     // VOICE_TO_TEXT_IMAGE2: require("../../assets/voiceTotextimage2.png"),
     // BORDER_VOICE_TO_TEXT: require("../../assets/borderVoiceToText.png"),
     // Add Friends-----

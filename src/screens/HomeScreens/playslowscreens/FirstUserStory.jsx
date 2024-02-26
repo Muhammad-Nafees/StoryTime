@@ -16,7 +16,7 @@ import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/sl
 const FirstUserStory = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, CONTINUE_IMAGE, EXTEND_STORYTIME_IMAGE, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { FIRST_USER } = NavigationsString;
@@ -32,7 +32,6 @@ const FirstUserStory = () => {
         navigation.navigate(FIRST_USER);
     };
 
-
     const extendStoryHandler = async () => {
         dispatch(extendStoryCheck(true));
         navigation.navigate(FIRST_USER, { extentCounting: 30 });
@@ -46,18 +45,15 @@ const FirstUserStory = () => {
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText
-                            text="Extend Your Story Time"
                             onPress={extendStoryHandler}
-                            extendStoryCheck={extendstory}
-                            BackgroundImage={FULL_BORDER_FRAME}
-                            InnerImage={EXTEND_STORY_IMG}
-                            bgColor={TextColorGreen} innerColor="#EA89A7"
+                            BackgroundImage={!extendstory ? EXTEND_STORYTIME_IMAGE : CONTINUE_IMAGE}
+
                         />
+
                         <VoiceToText text="Next Player"
                             onPress={nextUserHandler}
-                            BackgroundImage={FULL_BORDER_FRAME}
-                            InnerImage={NEXT_PLAYER_IMG}
-                            bgColor={PrimaryColor} innerColor="#4B7A84" />
+                            BackgroundImage={NEXT_PLAYER_IMAGE}
+                        />
                     </View>
                 </View>
             </View>
@@ -68,12 +64,7 @@ const FirstUserStory = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: SecondaryColor,
-        width: "100%",
-        height: "100%",
-        flex: 1,
-    },
+
     img: {
         resizeMode: "center"
     },

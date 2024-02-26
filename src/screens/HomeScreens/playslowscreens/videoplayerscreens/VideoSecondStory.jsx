@@ -15,7 +15,7 @@ import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../
 const VideoSecondStory = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, FULL_BORDER_FRAME, EXTEND_STORYTIME_IMAGE, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_FIRST_USER } = NavigationsString;
@@ -46,8 +46,8 @@ const VideoSecondStory = () => {
                 <BackButton />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
-                        <VoiceToText onPress={extendVideoHandler} text="Extend Your Story Time" BackgroundImage={FULL_BORDER_FRAME} InnerImage={EXTEND_STORY_IMG} bgColor={TextColorGreen} innerColor="#EA89A7" />
-                        <VoiceToText onPress={nextPlayerHandler} text="Next Player" BackgroundImage={FULL_BORDER_FRAME} InnerImage={NEXT_PLAYER_IMG} bgColor={PrimaryColor} innerColor="#4B7A84" />
+                        <VoiceToText onPress={extendVideoHandler} BackgroundImage={EXTEND_STORYTIME_IMAGE} />
+                        <VoiceToText onPress={nextPlayerHandler} BackgroundImage={NEXT_PLAYER_IMAGE} />
                     </View>
                 </View>
             </View>

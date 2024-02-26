@@ -143,6 +143,8 @@ const FirstUser = ({ route }) => {
     return () => {
       setIsFirstCall(false);
       setisCancelingStory(true);
+      setStarted(false);
+
     };
   }, [extendStoryTrueOrFalse]);
 
@@ -322,13 +324,15 @@ const FirstUser = ({ route }) => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
-
+  console.log("isNext------", isNext);
 
   useEffect(() => {
-    if (timeLeft === null) {
+    if (extendStoryTrueOrFalse === true && timeLeft == null) {
+      setTimeText('00:30');
+    } else if (timeLeft == null) {
       setTimeText('02:00');
-    } else {
-      // Format time for display
+    }
+    else {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
@@ -337,7 +341,6 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
-
 
 
   return (
@@ -403,7 +406,7 @@ const FirstUser = ({ route }) => {
                       modalOpen(
                         GuestModalRefForAds,
                         'Support Story Time',
-                        'Watch the ad to \ncontinue playing',
+                        'Watch the add to continue playing',
                         'Watch ads',
                         'Subscribe for Ad FREE experience',
                       )
@@ -546,6 +549,7 @@ const FirstUser = ({ route }) => {
                 text={!user ? "Save to phone" : "Save Story"}
                 color={TextColorGreen}
                 isNext={!user ? false : isNext}
+                timeLeft={timeLeft}
               />
             </View>
 

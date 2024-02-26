@@ -217,6 +217,7 @@ const Sequence = () => {
                         borderWidth: 4,
                         borderRadius: 10,
                         borderColor: bgColor,
+                        flexDirection: "row"
                       }}>
                       <Text
                         style={{
@@ -225,9 +226,11 @@ const Sequence = () => {
                           fontSize: responsiveFontSize(4),
                         }}>{selectedIndices.includes(index) ? selectedIndices.indexOf(index) + 1 : ''}
                       </Text>
-                      {/* <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2), paddingHorizontal: 2 }}>
-                        <View style={{ width: responsiveWidth(1.8), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
-                      </View> */}
+
+                      <View style={{ justifyContent: "flex-end", alignItems: "center", height: responsiveHeight(2.5), paddingHorizontal: 2 }}>
+                        <View style={{ width: responsiveWidth(1.9), height: responsiveHeight(0.7), backgroundColor: "#FFF", borderRadius: 50 }} />
+                      </View>
+
                     </View>
                   </TouchableOpacity>
 

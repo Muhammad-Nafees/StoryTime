@@ -50,7 +50,9 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
-      !user?navigation.goBack():navigation.goBack(); //guest user doesn't have profile
+        !user ? navigation.goBack() : navigation.navigate("profileStack", {
+            screen: "Profile"
+        }); //guest user doesn't have profile
         console.log("FUNCTION CALLED");
     };
 
