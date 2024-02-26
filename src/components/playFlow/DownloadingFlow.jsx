@@ -50,11 +50,13 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
+      setIsVisibleDownloading(false)
       !user?navigation.navigate(PLAY_STORY_TIME):navigation.goBack(); //guest user doesn't have profile
         console.log("FUNCTION CALLED");
     };
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisibleDownloading(false)} visible={isVisibleDownloading} >
 
             {/* <View style={{ backgroundColor: "orange" }}> */}
@@ -97,20 +99,21 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
                     </View>
                 </View>
 
-                {saveStoryModalAfterDownloading &&
-                    <StoryTimeSaved
-                        onPress={nextScreenmodalHandler}
-                        isVisible={isVisibleAfterDownloading}
-                        setVisible={setIsVisibleAfterDownloading}
-                        text="Story Time 
-Successfully Saved to your phone!"
-                        textButton="Back" />
-                }
-
+              
 
             </ImageBackground>
             {/* </View> */}
         </Modal>
+          {saveStoryModalAfterDownloading &&
+            <StoryTimeSaved
+                onPress={nextScreenmodalHandler}
+                isVisible={isVisibleAfterDownloading}
+                setVisible={setIsVisibleAfterDownloading}
+                text="Story Time 
+                Successfully Saved to your phone!"
+                textButton="Back" />
+        }
+</>
     )
 };
 

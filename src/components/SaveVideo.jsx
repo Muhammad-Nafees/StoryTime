@@ -46,6 +46,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                     console.log('Storage permission granted');
+                    // setIsVisible(false)
                     downloadRecording();
                 } else {
                     console.log('Storage permission denied');
@@ -71,8 +72,8 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
             }
             await RNFS.copyFile(sourcePath, destinationPath);
             console.log('Video downloaded successfully:', destinationPath);
-            setSaveStoryVideoModal(true);
-            setIsVisibleFirstVideoFlow(true);
+            setIsVisibleFirstVideoFlow(true); 
+            setSaveStoryVideoModal(true);      
 
         } catch (error) {
             console.error('Error downloading recording:', error);
@@ -82,6 +83,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
             {/* <View style={{ backgroundColor: "orange" }}> */}
@@ -136,23 +138,24 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
                     </View>
                 </View>
 
-                {
-                    isVisibleFirstVideoFlow &&
-                    <DownloadingVideoModal
-                        isVisibleFirstVideoFlow={isVisibleFirstVideoFlow} setIsVisibleFirstVideoFlow={setIsVisibleFirstVideoFlow} text="Story Time 
-Successfully Saved!" textButton="Back"
-                    />
-                }
+               
 
                 {/* {saveStoryModalsecond &&
                     <StoryTimeSaved isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time 
-Successfully Saved!" textButton="Back" />
+        Successfully Saved!" textButton="Back" />
                 } */}
 
             </ImageBackground>
             {/* </View> */}
         </Modal>
-
+ {
+    isVisibleFirstVideoFlow &&
+    <DownloadingVideoModal
+        isVisibleFirstVideoFlow={isVisibleFirstVideoFlow} setIsVisibleFirstVideoFlow={setIsVisibleFirstVideoFlow} text="Story Time 
+Successfully Saved!" textButton="Back"
+    />
+}
+</>
         // <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
         //     <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
 

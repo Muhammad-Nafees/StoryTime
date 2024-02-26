@@ -58,6 +58,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
    const saveStoryhandler = () => {
+         setIsVisible(false)
        setSaveStoryModal(true);
        setVisiblePdf(true);
    };
@@ -87,6 +88,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
    return (
+    <>
        <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
 
@@ -122,20 +124,22 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                </ImageBackground>
 
 
-               {
-                   saveStoryModal && (
-                       <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
-                   )
-               }
-
-
-               {saveStoryModalsecond &&
-                   <StoryTimeSaved isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
-                   Successfully Saved!" textButton="Back" />
-               }
           
            </ImageBackground>
        </Modal>
+
+        {
+            saveStoryModal && (
+                <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
+            )
+        }
+
+
+        {saveStoryModalsecond &&
+            <StoryTimeSaved isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
+            Successfully Saved!" textButton="Back" />
+        }
+</>
    )
 };
 

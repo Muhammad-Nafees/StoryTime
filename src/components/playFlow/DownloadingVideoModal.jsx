@@ -50,11 +50,13 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     }, []);
 
     const backScreenHandler = () => {
+        setIsVisibleFirstVideoFlow(false)
        !user? navigation.navigate(PLAY_STORY_TIME):navigation.goBack(); //guest user doesn't have profile
     };
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>
 
             <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
@@ -82,13 +84,14 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
                     </View>
                 </View>
 
-                {saveStoryVideoModalAfterDownloading &&
-                    <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
-Successfully Saved to your phone!" textButton="Back" />
-                }
-
+             
             </ImageBackground>
         </Modal>
+           {saveStoryVideoModalAfterDownloading &&
+            <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
+Successfully Saved to your phone!" textButton="Back" />
+        }
+</>
     )
 };
 

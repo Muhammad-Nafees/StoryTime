@@ -76,6 +76,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
             // "/download_" +  + 
             console.log("download dest :", downloadDest)
             await RNFS.moveFile(pdf.filePath, downloadDest);
+            setIsVisiblePdf(false)
             setIsVisibleDownloading(true);
             setSaveStoryModalDownloading(true);
         } catch (error) {
@@ -109,6 +110,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
     // };
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
 
             {/* <View style={{ backgroundColor: "orange" }}> */}
@@ -164,15 +166,17 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
                     {/* </View> */}
                 </View>
                 </ImageBackground>
-                {saveStoryModalDownloading &&
-                    <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
-Successfully Saved!" textButton="Back" />
-                }
+              
 
 
             </ImageBackground>
             {/* </View> */}
         </Modal>
+          {saveStoryModalDownloading &&
+            <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
+Successfully Saved!" textButton="Back" />
+        }
+        </>
     )
 };
 
