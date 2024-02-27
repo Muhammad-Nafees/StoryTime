@@ -48,20 +48,32 @@ const FirstUser = ({ route }) => {
   const [isLongPress, setIsLongPress] = useState(false);
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
+
   const checkUserTrueorFalse = useSelector(
     state => state.addPlayers.checkTrueOrFalse,
   );
+
   const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
   const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
-  const dispatch = useDispatch();
   const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
+  const nextRandomNumvalue = useSelector(
+    state => state?.addPlayers?.nextRandomNumber
+  );
+
+  const nextRandomNumvalueExtend = useSelector(
+    state => state?.addPlayers?.nextRandomNumberExtend
+  );
+
+
+  const dispatch = useDispatch();
+
   const [recordingText, setRecordingText] = useState("");
   const [isNext, setIsNext] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
-  const [partialResults, setPartialResults] = useState([]);
+  const [focusvalueCheck, setFocusValueCheck] = useState(false);
   const [speaking, setSpeaking] = useState(false);
 
   const USER = user?.data?.user || user?.data;
@@ -135,18 +147,18 @@ const FirstUser = ({ route }) => {
   };
 
   // setisCancelingStory(false);
-
+  console.log("isFirstCall", isFirstCall)
   useEffect(() => {
     setTimeLeft(null);
+
     setIsPressed(false);
     dispatch(checkTrueOrFalse(false));
     return () => {
-      setIsFirstCall(false);
+      // setIsFirstCall(false);
       setisCancelingStory(true);
       setStarted(false);
-
     };
-  }, [extendStoryTrueOrFalse]);
+  }, []);
 
   // ---------- Start Recording And Convert Text ----------
 
@@ -166,7 +178,6 @@ const FirstUser = ({ route }) => {
     }
   };
 
-  // console.log("SPEAKING=======", speaking);
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
@@ -191,41 +202,54 @@ const FirstUser = ({ route }) => {
 
   const onPressNext = () => {
     user ? navigation.navigate('FirstUserStorytext') : null;
+    // dispatch(extendStoryCheck(null));
   };
+
 
   console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
 
-  useFocusEffect(
-    useCallback(() => {
 
-      if (extendStoryTrueOrFalse === false || extendStoryTrueOrFalse === true) {
-        setIsPressed(false);
-        setTimeLeft(null);
-      };
+  // useFocusEffect(
+  //   useCallback(() => {
 
-      if (checkUserTrueorFalse) {
+  // useFocusEffect(useCallback(() => {
 
-        const currentIndex = sequenceUser.indexOf(currentDisplayUser);
-        const nextIndex = (currentIndex + 1) % sequenceUser.length;
-        const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+  // }, []))
 
-        if (currentIndex !== sequenceUser?.length) {
-          setCurrentDisplayUser(sequenceUser[nextIndex]);
-          setIsNextUser(sequenceUser[nextPlayer]);
-          if (nextPlayer == 0) {
-            return setIsNext(false);
-          }
-        } else {
-          console.log('add players in Game Completed');
-        }
-      };
 
-      return () => {
-        setIsFirstCall(false);
-        setisCancelingStory(true);
-      };
-    }, [checkUserTrueorFalse, extendStoryTrueOrFalse]),
-  );
+  useEffect(() => {
+
+    if (extendStoryTrueOrFalse === false || extendStoryTrueOrFalse === true) {
+      setTimeLeft(null);
+      setIsPressed(false);
+      setIsFirstCall(false);
+    };
+
+    if (checkUserTrueorFalse) {
+
+      const currentIndex = sequenceUser.indexOf(currentDisplayUser);
+      const nextIndex = (currentIndex + 1) % sequenceUser.length;
+      const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+
+      if (currentIndex !== sequenceUser?.length) {
+        setCurrentDisplayUser(sequenceUser[nextIndex]);
+        setIsNextUser(sequenceUser[nextPlayer]);
+        if (nextPlayer == 0) {
+          return setIsNext(false);
+        };
+      } else {
+        console.log('add players in Game Completed');
+      }
+    };
+    return () => {
+      // setIsFirstCall(false);
+      setisCancelingStory(true);
+    };
+  }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend])
+
+
+  //   }, [checkUserTrueorFalse, extendStoryTrueOrFalse]),
+  // );
 
 
 
@@ -262,8 +286,9 @@ const FirstUser = ({ route }) => {
     }
   };
 
-  console.log("timeleft--", timeLeft)
-  const handleStart = () => {
+  console.log("timeleft--", timeLeft);
+
+  const pressHandlerIn = () => {
 
     if (extendStoryTrueOrFalse && timeLeft == null) {
       setTimeText('00:30');
@@ -279,24 +304,29 @@ const FirstUser = ({ route }) => {
         startRecognizing();
         setTimeLeft(120);
       };
-
-      if (isFirstCall) {
-        stopRecording();
-        clearTimeout(longPressTimeout);
-        setIsLongPress(false);
-        setIsPressed(false);
-        console.log('STOP RECORDING-----');
-      };
-
-      if (timeLeft !== null && timeLeft > 0) {
-        setisCancelingStory(false);
-        setIsFirstCall(true);
-        setTimeLeft(0);
-      }
     }
   };
 
+  const pressHandlerOut = () => {
+    console.log('On PressOut-----');
+
+    if (timeLeft !== null && timeLeft > 0) {
+      setIsFirstCall(true);
+      setisCancelingStory(false);
+      setTimeLeft(0);
+    }
+
+    if (isFirstCall) {
+      stopRecording();
+      clearTimeout(longPressTimeout);
+      setIsLongPress(false);
+      setIsPressed(false);
+      console.log('STOP RECORDING-----');
+    };
+  };
+
   // Timer 2 Minutes ---------
+
 
   useEffect(() => {
 
@@ -324,7 +354,7 @@ const FirstUser = ({ route }) => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
-  console.log("isNext------", isNext);
+
 
   useEffect(() => {
     if (extendStoryTrueOrFalse === true && timeLeft == null) {
@@ -343,195 +373,198 @@ const FirstUser = ({ route }) => {
   }, [timeLeft]);
 
 
+
   return (
     <>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
         {/* BACK BUTTON AND TIMER */}
-        <ScrollView>
+        {/* <ScrollView> */}
+        <View
+          style={{
+            paddingVertical: moderateVerticalScale(18),
+            paddingHorizontal: moderateScale(22),
+          }}>
           <View
             style={{
-              paddingVertical: moderateVerticalScale(18),
-              paddingHorizontal: moderateScale(22),
+              paddingTop: responsiveWidth(5),
+              flexDirection: 'row',
+              width: isCancelingStory
+                ? responsiveWidth(60)
+                : responsiveWidth(90),
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            <View
-              style={{
-                paddingTop: responsiveWidth(5),
-                flexDirection: 'row',
-                width: isCancelingStory
-                  ? responsiveWidth(60)
-                  : responsiveWidth(90),
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
 
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                // onPress={stopRecording}
-                style={{ width: responsiveWidth(10) }}>
-                <Image
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{ width: responsiveWidth(10) }}>
+              <Image
+                style={{
+                  width: responsiveWidth(5),
+                  height: responsiveHeight(2.5),
+                  resizeMode: 'center',
+                }}
+                source={require('../../../assets/back-playflowicon.png')}
+              />
+            </TouchableOpacity>
+
+            <View>
+              {isCancelingStory ? (
+                <View
                   style={{
-                    width: responsiveWidth(5),
-                    height: responsiveHeight(2.5),
-                    resizeMode: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    borderWidth: 4,
+                    borderColor: 'rgba(255, 153, 166, 1)',
+                    backgroundColor: 'rgba(255, 164, 164, 0.5)',
+                    paddingVertical: moderateVerticalScale(10),
+                    paddingHorizontal: moderateScale(12),
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: '600',
+                      color: TextColorGreen,
+                      fontSize: responsiveFontSize(1.9),
+                    }}>
+                    Time :{timeText}
+                  </Text>
+                </View>
+              ) : !user ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    modalOpen(
+                      GuestModalRefForAds,
+                      'Support Story Time',
+                      'Watch the add to continue playing',
+                      'Watch ads',
+                      'Subscribe for Ad FREE experience',
+                    )
                   }}
-                  source={require('../../../assets/back-playflowicon.png')}
-                />
-              </TouchableOpacity>
-
-              <View>
-                {isCancelingStory ? (
-                  <View
+                  style={{
+                    borderRadius: 10,
+                    borderWidth: 4,
+                    borderColor: TextColorGreen,
+                    backgroundColor: TextColorGreen,
+                    paddingVertical: moderateVerticalScale(6),
+                    paddingHorizontal: moderateScale(25),
+                  }}>
+                  <Text
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: 10,
-                      borderWidth: 4,
-                      borderColor: 'rgba(255, 153, 166, 1)',
-                      backgroundColor: 'rgba(255, 164, 164, 0.5)',
-                      paddingVertical: moderateVerticalScale(10),
-                      paddingHorizontal: moderateScale(12),
+                      color: 'white',
+                      fontWeight: '400',
+                      fontSize: responsiveFontSize(1.9),
+                      fontFamily: Inter_Regular.Inter_Regular,
                     }}>
-                    <Text
-                      style={{
-                        fontWeight: '600',
-                        color: TextColorGreen,
-                        fontSize: responsiveFontSize(1.9),
-                      }}>
-                      Time :{timeText}
-                    </Text>
-                  </View>
-                ) : !user ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      modalOpen(
-                        GuestModalRefForAds,
-                        'Support Story Time',
-                        'Watch the add to continue playing',
-                        'Watch ads',
-                        'Subscribe for Ad FREE experience',
-                      )
-                    }}
-                    style={{
-                      borderRadius: 10,
-                      borderWidth: 4,
-                      borderColor: TextColorGreen,
-                      backgroundColor: TextColorGreen,
-                      paddingVertical: moderateVerticalScale(6),
-                      paddingHorizontal: moderateScale(25),
-                    }}>
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontWeight: '400',
-                        fontSize: responsiveFontSize(1.9),
-                        fontFamily: Inter_Regular.Inter_Regular,
-                      }}>
-                      Done
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <></>
-                )}
-              </View>
-            </View>
-          </View>
-
-          <ImageBackground
-            style={[styles.img_backgroung_content]}
-            resizeMode="center"
-            source={BG_VOICE_TO_TEXT_IMG}>
-
-            {/* <View
-              style={[styles.bg_content,]}> */}
-            <View
-              style={{
-                width: responsiveWidth(69),
-                height: responsiveHeight(40),
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingBottom: responsiveWidth(10),
-              }}>
-              {user ? (
-                <UserNames currentDisplayUser={currentDisplayUser} />
+                    Done
+                  </Text>
+                </TouchableOpacity>
               ) : (
                 <></>
               )}
-              <ScrollView>
-                <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
-                  <Text
-                    style={{
-                      paddingTop: responsiveWidth(3),
-                      color: isFirstCall
-                        ? 'rgba(255,255,255,0.3)'
-                        : 'rgba(255,255,255,1)',
-                      fontSize: responsiveFontSize(2.2),
-                      lineHeight: 20,
-                      textAlign: 'center',
-                      fontFamily: PassionOne_Regular.passionOne,
-                    }}>
-                    {recordingText}
-                  </Text>
-                </View>
-              </ScrollView>
-
-              <View>
-                {!started && (
-                  <Text
-                    style={{
-                      paddingHorizontal: moderateScale(32),
-                      lineHeight: moderateScale(22),
-                      color: '#FFF',
-                      fontSize: responsiveFontSize(2.1),
-                      textAlign: 'center',
-                      fontFamily: PassionOne_Regular.passionOne,
-                    }}>
-                    Hold microphone icon and share your story
-                  </Text>
-                )}
-              </View>
             </View>
-            {/* </View> */}
-          </ImageBackground>
+          </View>
+        </View>
+
+        <ImageBackground
+          style={[styles.img_backgroung_content]}
+          resizeMode="center"
+          source={BG_VOICE_TO_TEXT_IMG}>
 
           <View
-            style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
-            <View
+            style={{
+              width: responsiveWidth(69),
+              height: responsiveHeight(40),
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: responsiveWidth(10),
+            }}>
+            {user ? (
+              <UserNames currentDisplayUser={currentDisplayUser} />
+            ) : (
+              <></>
+            )}
+
+            <ScrollView>
+              <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
+                <Text
+                  style={{
+                    paddingTop: responsiveWidth(3),
+                    color: isFirstCall
+                      ? 'rgba(255,255,255,0.3)'
+                      : 'rgba(255,255,255,1)',
+                    fontSize: responsiveFontSize(2.2),
+                    lineHeight: 20,
+                    textAlign: 'center',
+                    fontFamily: PassionOne_Regular.passionOne,
+                  }}>
+                  {recordingText}
+                </Text>
+              </View>
+            </ScrollView>
+
+            <View>
+              {!started && (
+                <Text
+                  style={{
+                    paddingHorizontal: moderateScale(32),
+                    lineHeight: moderateScale(22),
+                    color: '#FFF',
+                    fontSize: responsiveFontSize(2.1),
+                    textAlign: 'center',
+                    fontFamily: PassionOne_Regular.passionOne,
+                  }}>
+                  Hold microphone icon and share your story
+                </Text>
+              )}
+            </View>
+          </View>
+        </ImageBackground>
+
+        <View
+          style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
+          <View
+            style={{
+              paddingVertical: moderateVerticalScale(25),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              disabled={isFirstCall ? true : false}
+              onLongPress={() => {
+                pressHandlerIn();
+              }}
+              onPressOut={() => {
+                pressHandlerOut();
+              }}
+              activeOpacity={0.7}
               style={{
-                paddingVertical: moderateVerticalScale(25),
+                borderWidth: isPressed ? 6 : 0,
+                borderColor: isPressed ? '#D04141' : TextColorGreen,
+                backgroundColor: isFirstCall || timeLeft == 0
+                  ? 'rgba(87, 150, 164, 0.3)'
+                  : TextColorGreen,
+                width: SCREENWIDTH * 0.32,
+                height: SCREENWIDTH * 0.32,
+                borderRadius: SCREENWIDTH / 2,
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                disabled={isFirstCall ? true : false}
-                onPress={() => {
-                  handleStart();
-                }}
-                activeOpacity={0.7}
+              }}
+            >
+              <Image
                 style={{
-                  borderWidth: isPressed ? 6 : 0,
-                  borderColor: isPressed ? '#D04141' : TextColorGreen,
-                  backgroundColor: isFirstCall || timeLeft == 0
-                    ? 'rgba(87, 150, 164, 0.3)'
-                    : TextColorGreen,
-                  width: SCREENWIDTH * 0.32,
-                  height: SCREENWIDTH * 0.32,
-                  borderRadius: SCREENWIDTH / 2,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{
-                    width: responsiveWidth(16),
-                    height: responsiveHeight(8),
-                    tintColor: isPressed ? '#D04141' : null,
-                    resizeMode: 'center',
-                  }}
-                  source={require('../../../assets/mic.png')}
-                />
-              </TouchableOpacity>
-            </View>
+                  width: responsiveWidth(16),
+                  height: responsiveHeight(8),
+                  tintColor: isPressed ? '#D04141' : null,
+                  resizeMode: 'center',
+                }}
+                source={require('../../../assets/mic.png')}
+              />
+            </TouchableOpacity>
+          </View>
 
-            {isNext && (
+          {
+            isNext && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -541,26 +574,27 @@ const FirstUser = ({ route }) => {
                 isNextUser={isNextUser}
                 isCancelingStory={isCancelingStory}
               />
-            )}
+            )
+          }
 
-            <View style={{ paddingTop: responsiveWidth(6) }}>
-              <SaveStoryBtn
-                onPress={saveBtnHandler}
-                text={!user ? "Save to phone" : "Save Story"}
-                color={TextColorGreen}
-                isNext={!user ? false : isNext}
-                timeLeft={timeLeft}
-              />
-            </View>
-
-            {saveStoryModal && (
-              <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
-            )}
+          <View style={{ paddingTop: responsiveWidth(6) }}>
+            <SaveStoryBtn
+              onPress={saveBtnHandler}
+              text={!user ? "Save to phone" : "Save Story"}
+              color={TextColorGreen}
+              isNext={!user ? false : isNext}
+              timeLeft={timeLeft}
+            />
           </View>
 
-          <GuestModals ref={GuestModalRef} />
-          <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} />
-        </ScrollView>
+          {saveStoryModal && (
+            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
+          )}
+        </View>
+
+        <GuestModals ref={GuestModalRef} />
+        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} />
+        {/* </ScrollView> */}
       </ImageBackground>
     </>
   );

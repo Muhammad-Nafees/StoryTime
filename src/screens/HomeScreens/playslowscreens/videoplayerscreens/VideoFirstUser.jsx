@@ -52,6 +52,17 @@ const VideoFirstUser = () => {
     const { user } = useSelector(
         state => state?.authSlice
     );
+
+    const nextRandomValueVideo = useSelector(
+        state => state?.addPlayers?.nextRandomNumberVideo
+    );
+
+    const nextRandomValueVideoExtend = useSelector(
+        state => state?.addPlayers?.nextRandomNumberVideoExtend
+    );
+
+
+
     const [isNext, setIsNext] = useState(true);
     const [isActive, setIsActive] = useState(false);
     const [isFirstCall, setIsFirstCall] = useState(false);
@@ -62,7 +73,7 @@ const VideoFirstUser = () => {
     const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
     const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
     const cameraRef = useRef(null);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const devices = Camera.getAvailableCameraDevices();
     const { SECOND_USER_STORY } = NavigationsString;
     const GuestModalRef = useRef(null);
@@ -70,9 +81,6 @@ const VideoFirstUser = () => {
     const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
     console.log("sequcenuserVIdeo====", sequenceUser);
-    // const devices = useCameraDevice("back", {
-    //     physicalDevices: ["ultra-wide-angle-camera"],
-    // })
 
     const getCameraDetails = () => {
         return devices.find(camera => camera.position === currentCamera);
@@ -81,7 +89,9 @@ const VideoFirstUser = () => {
     console.log("path---", path)
     console.log("recordingVideo---", recordingVideo);
     console.log("currentDisplayUser---", currentDisplayUser);
-    // console.log("extend-video-check-true", extendStoryCheckVideoTrue)
+    console.log("extend-video-check-", extendStoryCheckVideoTrue);
+    console.log("extendVideoCheck===", extendVideoCheck);
+
 
     const activeCamera = getCameraDetails();
 
@@ -132,6 +142,7 @@ const VideoFirstUser = () => {
 
         return () => clearInterval(countdown); // Cleanup interval on unmount or change
     }, [timeLeft]);
+
 
 
     useEffect(() => {
@@ -224,73 +235,128 @@ const VideoFirstUser = () => {
         stopRecordings();
     };
 
+    // useFocusEffect(
+    //     useCallback(() => {
 
-    useFocusEffect(
-        useCallback(() => {
-            if (checkVideoisTrue) {
-                const currentIndex = sequenceUser.indexOf(currentDisplayUser);
-                const nextIndex = (currentIndex + 1) % sequenceUser.length;
-                const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+    useEffect(() => {
+        setTimeLeft(null);
 
-                if (currentIndex !== addedUsers?.length) {
-                    setCurrentDisplayUser(sequenceUser[nextIndex]);
-                    setIsNextUser(sequenceUser[nextPlayer])
-                    if (nextPlayer == 0 && timeLeft == 0) {
-                        // stopRecordings();
-                        // dispatch(saveRecordingVideoUser(path));
-                        console.log("CALLED-STOP-RECORDING And----")
-                        return setIsNext(false);
-                    };
+        if (extendStoryCheckVideoTrue === false || extendStoryCheckVideoTrue === true) {
+            setTimeLeft(null);
+            setIsPressed(false);
+            setIsFirstCall(false)
+        };
 
-                } else {
-                    console.log("add players in Game Completed");
-                }
-            }
-        }, [checkVideoisTrue])
-    );
+        if (checkVideoisTrue) {
+            const currentIndex = sequenceUser.indexOf(currentDisplayUser);
+            const nextIndex = (currentIndex + 1) % sequenceUser.length;
+            const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+
+            if (currentIndex !== addedUsers?.length) {
+                setCurrentDisplayUser(sequenceUser[nextIndex]);
+                setIsNextUser(sequenceUser[nextPlayer])
+                if (nextPlayer == 0 && timeLeft == 0) {
+                    // stopRecordings();
+                    // dispatch(saveRecordingVideoUser(path));
+                    console.log("CALLED-STOP-RECORDING And----")
+                    return setIsNext(false);
+                };
+
+            } else {
+                console.log("add players in Game Completed");
+            };
+        }
+        return () => {
+            // dispatch(extendStoryCheckVideo(false));
+            // setIsFirstCall(false);
+            setisCancelingStory(true);
+        }
+    }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend])
+
+
+    //     }, [checkVideoisTrue])
+    // );
 
     useFocusEffect(
         useCallback(() => {
             setIsActive(true)
             return () => {
-                setIsActive(false)
+                setIsActive(false);
             }
         }, [])
     );
 
-    useFocusEffect(
-        useCallback(() => {
-            setTimeLeft(null);
-            setIsPressed(false);
-            dispatch(checkVideoTrue(false));
-            return () => {
-                dispatch(extendStoryCheckVideo(false));
-                setIsFirstCall(false);
-                setisCancelingStory(true);
-            };
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         // setTimeLeft(null);
+    //         setIsPressed(false);
+    //         // dispatch(checkVideoTrue(false));
+    //         return () => {
+    //             dispatch(extendStoryCheckVideo(false));
+    //             setIsFirstCall(false);
+    //             setisCancelingStory(true);
+    //         };
 
-        }, [])
-    );
+    //     }, [])
+    // );
 
-    const handleStart = () => {
+    // const handleStart = () => {
 
-        if (timeLeft > 0) {
-            dispatch(extendStoryCheckVideo(false));
-            setisCancelingStory(false);
-            setIsFirstCall(true);
-            setIsPressed(false);
-            setTimeLeft(0);
-            console.log("CALLED CANCELING=============");
-        };
+    //     if (timeLeft > 0) {
+    //         dispatch(extendStoryCheckVideo(false));
+    //         setisCancelingStory(false);
+    //         setIsFirstCall(true);
+    //         setIsPressed(false);
+    //         setTimeLeft(0);
+    //         console.log("CALLED CANCELING=============");
+    //     };
+
+    //     if (timeLeft === null) {
+
+    //         if (extendStoryCheckVideoTrue == true) {
+    //             resumeRecording();
+    //             setIsPressed(true);
+    //             setTimeLeft(30);
+    //             console.log("EXTEND VIDEO----");
+    //         } else if (extendVideoCheck == true) {
+    //             resumeRecording();
+    //             setIsPressed(true);
+    //             setTimeLeft(30);
+    //             console.log("RESUME VIDEO-----")
+    //         };
+
+    //         if (timeLeft == null && extendStoryCheckVideoTrue == null) {
+    //             setIsPressed(true);
+    //             setTimeLeft(120);
+    //             recordVideos();
+    //             console.log("START VIDEO-----")
+    //         }
+    //     }
+    // };
+
+    // setTimeLeft(null);
+
+    const pressHandlerIn = () => {
+
+        // if (timeLeft > 0) {
+        //     dispatch(extendStoryCheckVideo(false));
+        //     setisCancelingStory(false);
+        //     setIsFirstCall(true);
+        //     setIsPressed(false);
+        //     setTimeLeft(0);
+        //     console.log("CALLED CANCELING=============");
+        // };
 
         if (timeLeft === null) {
 
             if (extendStoryCheckVideoTrue == true) {
                 resumeRecording();
                 setIsPressed(true);
-                setTimeLeft(30);
+                setTimeLeft(120);
                 console.log("EXTEND VIDEO----");
-            } else if (extendVideoCheck == true) {
+            }
+
+            else if (extendVideoCheck == true) {
                 resumeRecording();
                 setIsPressed(true);
                 setTimeLeft(30);
@@ -306,6 +372,33 @@ const VideoFirstUser = () => {
         }
     };
 
+    const pressHandlerOut = () => {
+
+        if (timeLeft > 0) {
+            dispatch(extendStoryCheckVideo(false));
+            setisCancelingStory(false);
+            setIsFirstCall(true);
+            setIsPressed(false);
+            setTimeLeft(0);
+            console.log("CALLED CANCELING=============");
+        };
+
+        if (timeLeft === null) {
+
+            if (extendStoryCheckVideoTrue === true) {
+                resumeRecording();
+                setIsPressed(true);
+                setTimeLeft(30);
+                console.log("EXTEND VIDEO----");
+            } else if (extendVideoCheck === true) {
+                resumeRecording();
+                setIsPressed(true);
+                setTimeLeft(30);
+                console.log("RESUME VIDEO-----");
+            };
+
+        }
+    };
 
 
     const onpressNextHandler = () => {
@@ -316,7 +409,7 @@ const VideoFirstUser = () => {
         if (ref.current) {
             ref.current.open(heading, content, buttonText, text);
         }
-    }
+    };
 
     const saveBtnHandler = () => {
         if (!user) {
@@ -442,13 +535,15 @@ const VideoFirstUser = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(25), justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity
-                        disabled={isFirstCall ? true : false}
-                        onPress={() => {
-                            handleStart();
+                        disabled={isFirstCall || timeLeft == 0 ? true : false}
+                        onLongPress={() => {
+                            pressHandlerIn()
                         }}
-                        activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: isFirstCall ? "rgba(87, 150, 164, 0.3)" : TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
+                        onPressOut={() => {
+                            pressHandlerOut();
+                        }}
+                        activeOpacity={0.7} style={{ borderWidth: isPressed ? 6 : 0, borderColor: isPressed ? "#D04141" : TextColorGreen, backgroundColor: isFirstCall || timeLeft == 0 ? "rgba(87, 150, 164, 0.3)" : TextColorGreen, width: SCREENWIDTH * 0.32, height: SCREENWIDTH * 0.32, borderRadius: SCREENWIDTH / 2, justifyContent: 'center', alignItems: "center" }}>
                         <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../../assets/video-recording.png")} />
-                        {/* <Image style={{ width: responsiveWidth(16), height: responsiveHeight(8), tintColor: isPressed ? "#D04141" : null, resizeMode: "center" }} source={require("../../../assets/mic.png")} /> */}
                     </TouchableOpacity>
                 </View>
 
@@ -456,7 +551,12 @@ const VideoFirstUser = () => {
 
                 {
                     isNext &&
-                    <CustomVideoPlayFlowButton onPress={onpressNextHandler} backgroundColor={TextColorGreen} color="#FFF" timeLeft={timeLeft} isNextUser={isNextUser} />
+                    <CustomVideoPlayFlowButton
+                        onPress={onpressNextHandler}
+                        backgroundColor={TextColorGreen}
+                        color="#FFF"
+                        timeLeft={timeLeft}
+                        isNextUser={isNextUser} />
                 }
 
                 {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}

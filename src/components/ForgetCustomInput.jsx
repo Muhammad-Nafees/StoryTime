@@ -38,7 +38,7 @@ const ForgetCustomInput = ({
     const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
     const navigation = useNavigation();
 
-    const debouncedApiCall = useRef(_.debounce(async (phoneNumber, setFieldError) => {
+    const debouncedApiCall = useRef(_.debounce(async (phoneNumber) => {
 
         try {
 
@@ -57,17 +57,19 @@ const ForgetCustomInput = ({
     ).current;
 
 
+
     const handleCountryChange = () => {
         phoneInput.current?.setState({ number: '' });
         setFieldValue('phone', '');
         setIsError('Phone number is required!');
     };
-
+    console.log("setFieldError--", setFieldError)
     useEffect(() => {
         if (touched && value === '') {
             setIsError('Phone number is required!');
         }
     }, [touched, value]);
+
 
     return (
         <View style={{ paddingVertical: 10 }}>
@@ -88,13 +90,18 @@ const ForgetCustomInput = ({
                         defaultCode={'AU'}
                         codeTextStyle={{ color: "rgba(170, 170, 170, 1)", fontFamily: Inter_Regular.Inter_Regular, fontWeight: "400", fontSize: responsiveFontSize(1.8) }}
                         onChangeFormattedText={phone => {
-                            handleChange(phone)
+                            handleChange(phone);
                             setFieldError('phone', '');
                             setIsError('');
-                            debouncedApiCall(phone, setFieldError);
+
+                            if (phone.length > 3) {
+                                debouncedApiCall(textphone);
+                            };
+
                             console.log("--==", phone)
                             const checkValid = phoneInput.current?.isValidNumber(phone);
-                            if (!checkValid) {
+
+                            if (!checkValid && phone.length > 3) {
                                 setFieldError('phone', 'Invalid phone number');
                                 setIsError('Invalid phone number');
                             }

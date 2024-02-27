@@ -10,7 +10,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
-import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse, extendStoryCheck, nextRandomNum, nextRandomNumExtend, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const FirstUserStory = () => {
@@ -26,16 +26,25 @@ const FirstUserStory = () => {
         state => state?.addPlayers?.extendStoryCheck
     );
 
-    const nextUserHandler = () => {
-        dispatch(checkTrueOrFalse(true));
-        dispatch(extendStoryCheck(false));
+
+    const extendStoryHandler = async () => {
+        const randomvalue = Math.floor(Math.random() * 100);
+        dispatch(checkTrueOrFalse(false));
+        dispatch(nextRandomNumExtend(randomvalue));
+        dispatch(extendStoryCheck(true));
         navigation.navigate(FIRST_USER);
     };
 
-    const extendStoryHandler = async () => {
-        dispatch(extendStoryCheck(true));
-        navigation.navigate(FIRST_USER, { extentCounting: 30 });
+
+    const nextUserHandler = () => {
+        const randomvalue = Math.floor(Math.random() * 100);
+        console.log("randomvalue", randomvalue)
+        dispatch(checkTrueOrFalse(true));
+        dispatch(extendStoryCheck(false));
+        dispatch(nextRandomNum(randomvalue))
+        navigation.navigate(FIRST_USER);
     };
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -47,7 +56,6 @@ const FirstUserStory = () => {
                         <VoiceToText
                             onPress={extendStoryHandler}
                             BackgroundImage={!extendstory ? EXTEND_STORYTIME_IMAGE : CONTINUE_IMAGE}
-
                         />
 
                         <VoiceToText text="Next Player"

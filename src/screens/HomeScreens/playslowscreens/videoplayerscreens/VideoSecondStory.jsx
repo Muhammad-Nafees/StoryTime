@@ -10,12 +10,13 @@ import NavigationsString from '../../../../constants/NavigationsString';
 import VoiceToText from '../../../../components/VoiceToText';
 import { useDispatch } from 'react-redux';
 import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../../store/slices/RecordingData';
+import { nextRandomNumVideo, nextRandomNumVideoExtend } from '../../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const VideoSecondStory = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, FULL_BORDER_FRAME, EXTEND_STORYTIME_IMAGE, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, EXTEND_STORYTIME_IMAGE } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_FIRST_USER } = NavigationsString;
@@ -23,17 +24,23 @@ const VideoSecondStory = () => {
     const dispatch = useDispatch();
 
 
+    // nextRandomNumVideoExtend
+
     const nextPlayerHandler = () => {
-        dispatch(checkVideoTrue(true))
+        const randomValuevideo = Math.floor(Math.random() * 100);
+        dispatch(nextRandomNumVideo(randomValuevideo));
+        dispatch(checkVideoTrue(true));
         navigation.navigate(VIDEO_FIRST_USER);
         dispatch(extendStoryCheckVideo(true));
         dispatch(extendVideo(false));
     };
 
     const extendVideoHandler = async () => {
-        // await camera.current.resumeRecording()
-        navigation.navigate(VIDEO_FIRST_USER)
+        const randomValuevideoExt = Math.floor(Math.random() * 100);
+        dispatch(nextRandomNumVideoExtend(randomValuevideoExt));
+        navigation.navigate(VIDEO_FIRST_USER);
         dispatch(extendStoryCheckVideo(false));
+        dispatch(checkVideoTrue(false));
         dispatch(extendVideo(true));
     };
 
@@ -43,7 +50,7 @@ const VideoSecondStory = () => {
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
             <View>
                 {/* Back Button */}
-                <BackButton />
+                <BackButton onPress={() => navigation.goBack()} />
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText onPress={extendVideoHandler} BackgroundImage={EXTEND_STORYTIME_IMAGE} />
