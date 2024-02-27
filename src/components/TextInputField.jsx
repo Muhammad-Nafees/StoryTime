@@ -58,6 +58,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
           </TouchableOpacity>
         )}
       </View>
+
     </View>
   );
 };

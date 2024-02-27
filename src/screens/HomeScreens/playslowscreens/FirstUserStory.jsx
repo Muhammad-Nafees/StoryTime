@@ -10,13 +10,13 @@ import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
-import { checkTrueOrFalse, extendStoryCheck, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse, extendStoryCheck, nextRandomNum, nextRandomNumExtend, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const FirstUserStory = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, CONTINUE_IMAGE, EXTEND_STORYTIME_IMAGE, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { FIRST_USER } = NavigationsString;
@@ -26,17 +26,25 @@ const FirstUserStory = () => {
         state => state?.addPlayers?.extendStoryCheck
     );
 
-    const nextUserHandler = () => {
-        dispatch(checkTrueOrFalse(true));
-        dispatch(extendStoryCheck(false));
+
+    const extendStoryHandler = async () => {
+        const randomvalue = Math.floor(Math.random() * 100);
+        dispatch(checkTrueOrFalse(false));
+        dispatch(nextRandomNumExtend(randomvalue));
+        dispatch(extendStoryCheck(true));
         navigation.navigate(FIRST_USER);
     };
 
 
-    const extendStoryHandler = async () => {
-        dispatch(extendStoryCheck(true));
-        navigation.navigate(FIRST_USER, { extentCounting: 30 });
+    const nextUserHandler = () => {
+        const randomvalue = Math.floor(Math.random() * 100);
+        console.log("randomvalue", randomvalue)
+        dispatch(checkTrueOrFalse(true));
+        dispatch(extendStoryCheck(false));
+        dispatch(nextRandomNum(randomvalue))
+        navigation.navigate(FIRST_USER);
     };
+
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -46,18 +54,14 @@ const FirstUserStory = () => {
                 <View style={styles.container}>
                     <View style={{ width: responsiveWidth(90), }}>
                         <VoiceToText
-                            text="Extend Your Story Time"
                             onPress={extendStoryHandler}
-                            extendStoryCheck={extendstory}
-                            BackgroundImage={FULL_BORDER_FRAME}
-                            InnerImage={EXTEND_STORY_IMG}
-                            bgColor={TextColorGreen} innerColor="#EA89A7"
+                            BackgroundImage={!extendstory ? EXTEND_STORYTIME_IMAGE : CONTINUE_IMAGE}
                         />
+
                         <VoiceToText text="Next Player"
                             onPress={nextUserHandler}
-                            BackgroundImage={FULL_BORDER_FRAME}
-                            InnerImage={NEXT_PLAYER_IMG}
-                            bgColor={PrimaryColor} innerColor="#4B7A84" />
+                            BackgroundImage={NEXT_PLAYER_IMAGE}
+                        />
                     </View>
                 </View>
             </View>
@@ -68,12 +72,7 @@ const FirstUserStory = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: SecondaryColor,
-        width: "100%",
-        height: "100%",
-        flex: 1,
-    },
+
     img: {
         resizeMode: "center"
     },

@@ -84,7 +84,7 @@ const Login = () => {
                         await AsyncStorage.setItem("isLoggedIn", accessToken);
                         await AsyncStorage.setItem("isUsername", username);
                         await AsyncStorage.setItem("isUserId", userLoginId);
-                        await AsyncStorage.setItem("refreshToken",refreshToken)
+                        await AsyncStorage.setItem("refreshToken", refreshToken)
                         dispatch(setAccessToken(accessToken));
                         dispatch(setRefreshToken(refreshToken));
                         dispatch(userLoginid(userLoginId));
@@ -94,7 +94,7 @@ const Login = () => {
                             position: "top",
                             visibilityTime: 2500
                         })
-                    }
+                    };
 
                     if (error) {
                         setIsLoading(false)
@@ -119,7 +119,6 @@ const Login = () => {
 
                 <View style={styles.container}>
                     <ScrollView>
-
                         <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
                             <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
                         </View>
@@ -167,12 +166,12 @@ const Login = () => {
                             <TextInputField
                                 value={values.password}
                                 onChangeText={handleChange('password')}
+                                onBlur={() => setFieldTouched("password")}
                                 onPress={toggleShowPassword}
                                 showPassword={showPassword}
                                 setShowPassword={setShowPassword}
                                 placeholderText="Type here"
                                 type="password"
-                                onBlur={() => setFieldTouched("password")}
                             />
 
                             <View style={{ height: responsiveHeight(3), }}>

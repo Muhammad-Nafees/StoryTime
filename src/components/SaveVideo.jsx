@@ -14,11 +14,12 @@ import { PassionOne_Regular } from '../constants/GlobalFonts';
 import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
 import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
+import { SPACING } from '../constants/Constant';
 
 const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] = useState(false);
   const { width, height } = Dimensions.get('window');
-  const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG } = Img_Paths;
+  const { STORY_TIME_IMG, BG_PLAYFLOW, HOME_FRAME, FULL_BORDER_FRAME, EXTEND_STORY_IMG, NEXT_PLAYER_IMG, SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
   const SCREENWIDTH = Dimensions.get("window").width
   const SCREENHEIGHT = Dimensions.get("window").height;
   const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
@@ -36,8 +37,10 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
   const checkPermission = async () => {
     try {
+        const OsVer = Platform.constants['Release'];
+        console.log("osVER",typeof(OsVer))
         // Check if the platform is Android
-        if (Platform.OS === 'android') {
+        if (Platform.OS === 'android' && Number(OsVer) < 12) {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
             );
@@ -76,60 +79,71 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
     }
   };
 
-  return (
-    <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
-      <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+
+    return (
+        <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
+<ImageBackground style={styles.container} source={BG_PLAYFLOW}>
         
-      <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-                    <BackButton onPress={() => setIsVisible(false)} />
-                </View>
-                {/* Back Button */}
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.container2}>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-                        <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time in your phone?</Text>
+        <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
+                      <BackButton onPress={() => setIsVisible(false)} />
+                  </View>
+  
+                  <ImageBackground
+                      style={styles.img_frame}
+                      resizeMode="stretch"
+                      source={BG_CLOCK}>
+                      <View style={{flex:1, justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 5, alignItems: 'center' }}>
+  
+                          <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
+                          <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time in your phone?</Text>
+  
+                          <View style={{ paddingVertical: 12, }}>
+                              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                  <TouchableOpacity
+                                      onPress={checkPermission}
+                                      style={{
+                                          width: responsiveWidth(70),
+                                          backgroundColor: TextColorGreen,
+                                          borderRadius: 10,
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          height: responsiveHeight(6.6),
+                                      }}>
+  
+                                      <Text
+                                          style={{
+                                              fontSize: responsiveFontSize(1.9),
+                                              fontWeight: '600',
+                                              letterSpacing: 0.28,
+                                              color: "#FFF",
+                                          }}>
+                                          Save
+                                      </Text>
+  
+                                  </TouchableOpacity>
+                              </View>
+                          </View>
+  
+                          <SaveStoryBtn timeLeft={0} onPress={() => setIsVisible(false)} text="No" />
+  
+  
+                      </View>
+                  </ImageBackground>
+  
+                  {isDownloadingModalVisible &&
+                  <DownloadingVideoModal
+                  isVisibleFirstVideoFlow={isDownloadingModalVisible}
+                  setIsVisibleFirstVideoFlow={closeDownloadingModal}
+                  text="Story Time Successfully Saved!"
+                  textButton="Back"
+                  />
+               }
+  
+              </ImageBackground>
+        </Modal>
 
-        <View style={{ paddingVertical: 12 }}>
-          <View style={{ paddingVertical: 4 }}>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <TouchableOpacity onPress={checkPermission}
-                style={{
-                  width: responsiveWidth(70),
-                  backgroundColor: TextColorGreen,
-                  borderRadius: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: responsiveHeight(6.6),
-                }}>
-                <Text
-                  style={{
-                    fontSize: responsiveFontSize(1.9),
-                    fontWeight: '600',
-                    letterSpacing: 0.28,
-                    color: "#FFF",
-                  }}>
-                  Save
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <SaveStoryBtn onPress={() => setIsVisible(false)} text="No" />
 
-        </View>
-        </View>
-      </ImageBackground>
-
-      {isDownloadingModalVisible &&
-        <DownloadingVideoModal
-          isVisibleFirstVideoFlow={isDownloadingModalVisible}
-          setIsVisibleFirstVideoFlow={closeDownloadingModal}
-          text="Story Time Successfully Saved!"
-          textButton="Back"
-        />
-      }
-    </Modal>
-  );
+    )
 };
 
 const styles = StyleSheet.create({
@@ -139,6 +153,14 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: "center"
+},
+img_frame: {
+    height: '70%',
+    width: '100%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    marginBottom: 'auto'
 },
 img_backgroung_content: {
     width: responsiveWidth(90),
@@ -242,3 +264,5 @@ sophia_container: {
 });
 
 export default SaveVideo;
+
+

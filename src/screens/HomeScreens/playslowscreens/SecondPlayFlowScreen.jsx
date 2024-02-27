@@ -23,7 +23,7 @@ const SecondPlayFlowScreen = () => {
     console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.85;
+    const squareSize = windowWidth * 0.90;
     const dispatch = useDispatch();
 
     const onpressNextHandler = () => {
@@ -56,7 +56,7 @@ const SecondPlayFlowScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(9), letterSpacing: 0 }}>{randomName}</Text>
+                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(6.2), letterSpacing: 0 }}>{randomName}</Text>
                     </View>
 
                 </View>

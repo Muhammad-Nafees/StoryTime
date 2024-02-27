@@ -22,7 +22,7 @@ const TouchableButton = ({
   sequenceUser,
   selectedIndices,
   validate,
-  values
+  values,
 
 }) => {
   return (

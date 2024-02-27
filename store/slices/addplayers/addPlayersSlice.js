@@ -7,7 +7,11 @@ const initialState = {
     storyUserImage: "",
     checkTrueOrFalse: false,
     extendStoryCheck: null,
-    extendCounting: 30
+    extendCounting: 30,
+    nextRandomNumber: null,
+    nextRandomNumberExtend: null,
+    nextRandomNumberVideo: null,
+    nextRandomNumberVideoExtend: null,
 };
 
 const addPlayers = createSlice({
@@ -44,19 +48,33 @@ const addPlayers = createSlice({
 
         randomNames: (state, payload) => {
             state.randomnames = payload
-            console.log("state-random---", state.randomnames)
+            console.log("state-random---", state.randomnames);
         },
 
         setStoryUserImage: (state, payload) => {
             state.storyUserImage = payload
             console.log("state-storyUser---", state.storyUserImage)
         },
+
         checkTrueOrFalse: (state, { payload }) => {
             state.checkTrueOrFalse = payload
         },
         extendStoryCheck: (state, { payload }) => {
             state.extendStoryCheck = payload
-        }
+        },
+        nextRandomNum: (state, action) => {
+            state.nextRandomNumber = action.payload
+        },
+        nextRandomNumExtend: (state, action) => {
+            state.nextRandomNumberExtend = action.payload
+        },
+        nextRandomNumVideo: (state, action) => {
+            state.nextRandomNumberVideo = action.payload
+        },
+        nextRandomNumVideoExtend: (state, action) => {
+            state.nextRandomNumberVideoExtend = action.payload
+        },
+        // nextRand4
 
     },
 });
@@ -68,7 +86,11 @@ export const {
     randomNames,
     checkTrueOrFalse,
     setStoryUserImage,
-    extendStoryCheck
+    extendStoryCheck,
+    nextRandomNum,
+    nextRandomNumExtend,
+    nextRandomNumVideo,
+    nextRandomNumVideoExtend
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

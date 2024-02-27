@@ -18,6 +18,7 @@ import {
 import SvgIcons from '../svgIcon/svgIcons';
 import { Circle, Path, Svg } from 'react-native-svg';
 import { moderateVerticalScale } from 'react-native-size-matters';
+import { useNavigation } from '@react-navigation/native';
 
 
 const StoryTimeSaved = ({
@@ -29,14 +30,21 @@ const StoryTimeSaved = ({
   iconName,
   loading
 }) => {
+
+  const navigation = useNavigation();
+
   const close = () => {
     if (onPress) {
       onPress()
       setVisible(false);
     } else {
-      setVisible(false);
+      // setVisible(false);
+      navigation.navigate("profileStack", {
+        screen: "Profile"
+      });
     }
   };
+
 
   return (
     <Modal
@@ -131,7 +139,8 @@ const StoryTimeSaved = ({
                 {textButton}
               </Text>
             </TouchableOpacity>
-          </View>}
+          </View>
+        }
       </View>
     </Modal>
   );

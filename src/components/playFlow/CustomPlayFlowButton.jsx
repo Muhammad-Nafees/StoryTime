@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../../screens/Styles/Style';
+
 import {
     responsiveHeight,
     responsiveFontSize,
     responsiveWidth,
 } from 'react-native-responsive-dimensions';
+
+
 
 const CustomPlayFlowButton = ({
     text,
@@ -14,7 +16,7 @@ const CustomPlayFlowButton = ({
     timeLeft,
     color,
     isNextUser,
-    isCancelingStory
+    isCancelingStory,
 }) => {
 
     return (
@@ -35,6 +37,7 @@ const CustomPlayFlowButton = ({
                 <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
                     {`Next Player${isNextUser?.username ? ": @" + isNextUser?.username : ''}`}
                 </Text>
+
             </TouchableOpacity>
         </View>
     );

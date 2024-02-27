@@ -13,8 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../services/api/storyfeed';
 import { addFriends_api } from '../../../services/api/add-members';
 import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setAccessToken , setRefreshToken} from '../../../store/slices/authSlice';
+
 
 const Home = () => {
 
@@ -32,47 +31,30 @@ const Home = () => {
     const [Responseapi, setResponseapi] = useState([]);
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const responseLogin = useSelector((state) => state?.authSlice?.user);
     const navigation = useNavigation();
-    // const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
-    console.log('responseLogin',responseLogin)
-    const getToken = async (tokenKey) => {
-        try {
-          const token = await AsyncStorage.getItem(tokenKey);
-          return token
-        } catch (error) {
-          console.error(`Error getting ${tokenKey} token from AsyncStorage:`, error);
-          return null;
-        }
-      };
-      
-      const addFriends_api_handler = async () => {
-        try {
-            const responseData = await addFriends_api();
-            setResponseapi(responseData?.data?.users);
-            if (responseData?.statusCode == 401) {
-                const REFRESH_TOKEN = await getToken('refreshToken')
-                const responseToken = await refresh_token_api(REFRESH_TOKEN);
-                console.log("responseTokenfunc-----", responseToken)
-                const newRefreshToken = responseToken?.data?.refreshToken;
-                const newAccessToken = responseToken?.data?.accessToken;
-                await AsyncStorage.setItem("refreshToken",newRefreshToken)
-                await AsyncStorage.setItem("isLoggedIn", newAccessToken);
-                dispatch(setAccessToken(newAccessToken));
-                dispatch(setRefreshToken(newRefreshToken))
+    const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
+    const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
 
-                return responseToken;
-            }
-            return responseData;
-        } catch (error) {
-            console.log("err", error)
-        }
-    };
+
     useEffect(() => {
-      
+        const addFriends_api_handler = async () => {
+            try {
+                const responseData = await addFriends_api();
+                setResponseapi(responseData?.data?.users);
+                if (responseData?.statusCode == 401) {
+                    const responseToken = await refresh_token_api(REFRESH_TOKEN);
+                    console.log("responseTokenfunc-----", responseToken)
+                    return responseToken;
+                }
+                return responseData;
+            } catch (error) {
+                console.log("err", error)
+            }
+        };
         addFriends_api_handler();
     }, []);
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -109,8 +91,6 @@ const Home = () => {
             setIsLoading(false);
         }
     }, [HasMorePages]);
-
-
 
     const onRefresh = () => {
         setIsRefreshing(true);
@@ -171,9 +151,7 @@ const Home = () => {
                 </View>
             </View>
 
-            {
-                console.log(" checkDataisOrNot", checkDataisOrNot)
-            }
+
 
             {/* !isLoadingMain ? */}
 
@@ -225,11 +203,7 @@ const Home = () => {
                         />
                         :
                         <>
-                            {/* <View style={{ alignItems: 'center', height: height / 2, }}>
-                            <ActivityIndicator size={40} color={'#000'} />
-                        </View> */}
                             <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
-                                {/* <ActivityIndicator size={30} color={'#000'} /> */}
                                 <Text style={{ color: "#000", fontSize: 22 }}>{checkDataisOrNot}</Text>
                             </View>
                         </>
