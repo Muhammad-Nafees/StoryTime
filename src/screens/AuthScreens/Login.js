@@ -210,13 +210,13 @@ const Login = () => {
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginTermsAndConditions"
                                 })}>
-                                    <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions</Text>
                                 </TouchableOpacity>
-                                <Text style={[styles.text, { color: FourthColor }]}>and</Text>
+                                <Text style={[styles.text, { color: FourthColor }]}> and</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginPrivacyAndPolicy"
                                 })}>
-                                    <Text style={[styles.text, { color: TextColorGreen }]}>Privacy Policy</Text>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}> Privacy Policy</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

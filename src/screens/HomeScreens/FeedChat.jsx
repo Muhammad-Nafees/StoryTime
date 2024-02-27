@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
@@ -8,31 +8,36 @@ import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
 import FeedChatFrame from '../../components/FeedChatFrame';
 import { useSelector } from 'react-redux';
+import { addFriends_api } from '../../../services/api/add-members';
 
 
 
-const FlatListData = [
-    {
-        img: require("../../assets/first-img.png"),
-        text: "Alfred",
-    },
-    {
-        img: require("../../assets/second-img.png"),
-        text: "Sophia",
-    },
-    {
-        img: require("../../assets/third-img.png"),
-        text: "Ellen",
-    },
-    {
-        img: require("../../assets/fourth-img.png"),
-        text: "Chris",
-    },
-    {
-        img: require("../../assets/fifth-img.png"),
-        text: "Alma",
-    },
-]
+// const FlatListData = [
+//     {
+//         img: require("../../assets/first-img.png"),
+//         text: "Alfred",
+//     },
+//     {
+//         img: require("../../assets/second-img.png"),
+//         text: "Sophia",
+//     },
+//     {
+//         img: require("../../assets/third-img.png"),
+//         text: "Ellen",
+//     },
+//     {
+//         img: require("../../assets/fourth-img.png"),
+//         text: "Chris",
+//     },
+//     {
+//         img: require("../../assets/fifth-img.png"),
+//         text: "Alma",
+//     },
+// ]
+
+
+
+
 
 const FeedChat = () => {
 
@@ -41,7 +46,21 @@ const FeedChat = () => {
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE } = Img_Paths
     const { PLAY_STORY_TIME, ADD_FRIENDS } = NavigationsString;
     const { width, height } = Dimensions.get('window');
+    const [ResponseapiChat, setResponseapiChat] = useState([]);
     const navigation = useNavigation();
+
+    useEffect(() => {
+        const addFriends_api_handler = async () => {
+            try {
+                const responseData = await addFriends_api();
+                setResponseapiChat(responseData?.data?.users);
+                return responseData;
+            } catch (error) {
+                console.log("err", error)
+            }
+        };
+        addFriends_api_handler();
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -49,9 +68,11 @@ const FeedChat = () => {
                 <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
                     <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
                         <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
+
                             <View>
                                 <Image style={[styles.img, { width: width * 0.23, height: height * 0.075, }]} source={STORY_TIME_IMG} />
                             </View>
+
                             <View style={{ flexDirection: 'row', }}>
                                 <TouchableOpacity onPress={() => navigation.navigate(ADD_FRIENDS)} style={{ paddingHorizontal: moderateVerticalScale(8) }}>
                                     <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
@@ -70,17 +91,19 @@ const FeedChat = () => {
 
                     <View style={styles.flatlist_container}>
                         <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
-
                             <FlatList
-                                data={FlatListData}
+                                data={ResponseapiChat}
+                                scrollEnabled={true}
                                 horizontal
+                                // onRefresh={onRefresh}
+                                // refreshing={isRefreshing}
                                 renderItem={({ item, index }) => {
                                     return (
                                         <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                            <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(4), paddingHorizontal: moderateScale(10), }}>
-                                                <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={item.img} />
+                                            <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
+                                                <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../assets/first-img.png")} />
                                             </TouchableOpacity>
-                                            <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize" }}>{item.text}</Text>
+                                            <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
                                         </View>
                                     )
                                 }}

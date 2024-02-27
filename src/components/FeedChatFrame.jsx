@@ -174,7 +174,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                             <View style={styles.second_childbg}>
                                                 <View style={styles.third_childbg}>
                                                     <Image style={styles.child_bg_img} source={profileImage} />
-                                                    <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9) }}>{usernameFeedRTK}</Text>
+                                                    <Text style={{ color: SecondaryColor, fontSize: responsiveFontSize(1.9), }}>{usernameFeedRTK}</Text>
                                                 </View>
                                                 <View style={styles.text_container}>
                                                     <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16 }}>
@@ -214,15 +214,15 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: responsiveWidth(50), }}>
                                         <TouchableOpacity style={styles.first_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/456-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likeCountRTK}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{likeCountRTK || 0}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.second_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/1.5k-img.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{disLikedCountRTK}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{disLikedCountRTK || 0}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => navigation.navigate(HOME)} style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={require("../assets/message-icon.png")} />
-                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{commentsCount}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{commentsCount || 0}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.third_view}>
                                             <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center" }} source={SHARE_BTN} />
@@ -409,10 +409,10 @@ const styles = StyleSheet.create({
     },
     third_childbg: {
         flexDirection: "row",
-        width: responsiveWidth(21),
+        width: responsiveWidth(32),
         justifyContent: "space-between",
         alignItems: "center",
-        paddingVertical: moderateVerticalScale(8)
+        paddingVertical: moderateVerticalScale(8),
     },
     child_bg_img: {
         width: responsiveWidth(6.25),

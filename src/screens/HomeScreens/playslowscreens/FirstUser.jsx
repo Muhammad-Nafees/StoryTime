@@ -14,6 +14,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import UserNames from '../../../components/UserNames';
@@ -26,7 +27,7 @@ import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import {
-  checkTrueOrFalse, extendStoryCheck,
+  checkTrueOrFalse,
 } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
@@ -104,50 +105,46 @@ const FirstUser = ({ route }) => {
   // onSpeechStart----------
 
   const onSpeechStart = e => {
-    // console.log('START SPEECH CALLED---', e);
     setStarted(true);
   };
+
+
 
   // onSpeechEnd ----------
 
   const onSpeechEnd = e => {
     setEnded(e.value);
-    // console.log('SPEECH END CALLED----', e);
   };
 
   // ---------- onSpeechResult----------
 
+  console.log("timeleft--", timeLeft);
 
   const onSpeechResult = async (e) => {
-    // console.log('onSpeechResults: ', e?.value);
 
     if (!e.value) return;
     setSpeaking(false);
-    // console.log('Voice Result: ' + e.value);
 
     if (setRecordingText) {
       dispatch(recordingData(e?.value[0]));
       startRecognizing();
       setRecordingText(prevData => prevData + " " + e?.value[0]);
-      // if (callBack) callBack(e?.value[0]);
       return;
     };
   };
 
-
   const onSpeechRecognized = e => {
     setSpeaking(false);
-    // console.log('onSpeechRecognized', e);
   };
 
   function onSpeechError(e) {
-    _destroyRecognizer();
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
+    // if (e?.error) {
+    //   startRecognizing();
+    // }
   };
 
-  // setisCancelingStory(false);
-  console.log("isFirstCall", isFirstCall)
   useEffect(() => {
     setTimeLeft(null);
 
@@ -160,11 +157,9 @@ const FirstUser = ({ route }) => {
     };
   }, []);
 
-  // ---------- Start Recording And Convert Text ----------
 
   const startRecognizing = async () => {
 
-    // console.log('Start Recognizing Value---------');
     try {
       if (!speaking) {
         await Voice.start('en-US');
@@ -207,20 +202,11 @@ const FirstUser = ({ route }) => {
       'Subscribe now to save your Story to your profile',
       'Subscribe',
       'Back',
-    ) ;
+    );
   };
 
 
   console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
-
-
-  // useFocusEffect(
-  //   useCallback(() => {
-
-  // useFocusEffect(useCallback(() => {
-
-  // }, []))
-
 
   useEffect(() => {
 
@@ -247,15 +233,9 @@ const FirstUser = ({ route }) => {
       }
     };
     return () => {
-      // setIsFirstCall(false);
       setisCancelingStory(true);
     };
   }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend])
-
-
-  //   }, [checkUserTrueorFalse, extendStoryTrueOrFalse]),
-  // );
-
 
 
   const saveBtnHandler = () => {
@@ -291,7 +271,6 @@ const FirstUser = ({ route }) => {
     }
   };
 
-  console.log("timeleft--", timeLeft);
 
   const pressHandlerIn = () => {
 
@@ -315,19 +294,19 @@ const FirstUser = ({ route }) => {
   const pressHandlerOut = () => {
     console.log('On PressOut-----');
 
-    if (timeLeft !== null && timeLeft > 0) {
-      setIsFirstCall(true);
-      setisCancelingStory(false);
-      setTimeLeft(0);
-    }
+    // if (timeLeft !== null && timeLeft > 0) {
+    // }
+    setIsFirstCall(true);
+    setisCancelingStory(false);
+    stopRecording();
+    clearTimeout(longPressTimeout);
+    setIsLongPress(false);
+    setIsPressed(false);
+    setTimeLeft(0);
+    console.log('STOP RECORDING-----');
 
-    if (isFirstCall) {
-      stopRecording();
-      clearTimeout(longPressTimeout);
-      setIsLongPress(false);
-      setIsPressed(false);
-      console.log('STOP RECORDING-----');
-    };
+    // if (isFirstCall) {
+    // };
   };
 
   // Timer 2 Minutes ---------
@@ -580,7 +559,9 @@ const FirstUser = ({ route }) => {
                 isCancelingStory={isCancelingStory}
               />
             )}
-           { !user?
+
+          {
+            !user ?
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -589,7 +570,9 @@ const FirstUser = ({ route }) => {
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
                 isCancelingStory={isCancelingStory}
-              />:<></>}
+              /> :
+              <></>
+          }
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn

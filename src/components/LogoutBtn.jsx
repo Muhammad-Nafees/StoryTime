@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Typography from './Typography';
-import {Red02} from '../screens/Styles/Style';
+import { Red02 } from '../screens/Styles/Style';
 import { useDispatch, useSelector } from 'react-redux';
-import {SCREEN_WIDTH, SPACING} from '../constants/Constant';
-import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+import { SCREEN_WIDTH, SPACING } from '../constants/Constant';
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { logout_user } from '../../services/api/auth_mdule/auth';
 import { logout } from '../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,10 +11,10 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../constants/NavigationsString';
 
 const LogoutBtn = () => {
-    const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const {LOGIN} = NavigationsString;
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { LOGIN } = NavigationsString;
 
   const handleLogout = async () => {
     try {
@@ -23,7 +23,7 @@ const LogoutBtn = () => {
       const data = responseData?.data;
       await AsyncStorage.removeItem('isLoggedIn');
       await AsyncStorage.removeItem('userData');
-      await AsyncStorage.setItem('isLoggedOut','true')
+      await AsyncStorage.setItem('isLoggedOut', 'true')
       dispatch(logout())
     } catch (error) {
     } finally {
