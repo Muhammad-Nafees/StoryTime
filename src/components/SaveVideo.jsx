@@ -92,7 +92,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
                       style={styles.img_frame}
                       resizeMode="stretch"
                       source={BG_CLOCK}>
-                      <View style={{flex:1, justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 5, alignItems: 'center' }}>
+                      <View style={{flex:1, justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 7, alignItems: 'center' }}>
   
                           <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                           <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time in your phone?</Text>

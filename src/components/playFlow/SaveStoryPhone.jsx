@@ -83,6 +83,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
 
@@ -115,26 +116,23 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                     </View>
                 </ImageBackground>
 
-                {
-                    saveStoryModal && (
-                        <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
-                    )
-                }
-
-                {saveStoryModalsecond &&
-                    <StoryTimeSaved isLoading={isLoading} isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
-                   Successfully Saved!" textButton="Back" />
-                }
+            
 
             </ImageBackground>
         </Modal>
+            {
+                saveStoryModal && (
+                    <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
+                )
+            }
+
+            {saveStoryModalsecond &&
+                <StoryTimeSaved isLoading={isLoading} isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
+               Successfully Saved!" textButton="Back" />
+            }
+            </>
     )
 };
-
-
-
-
-
 
 const styles = StyleSheet.create({
     container: {
