@@ -36,12 +36,7 @@ const AddPlayers = () => {
             console.log("err", error)
         }
     };
-
-    const removeAdduserList = (responseData) => {
-        let AddList = Responseapi.filter(item => item._id !== responseData.userid)
-        setResponseapi(AddList);
-    };
-
+    
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
@@ -120,7 +115,7 @@ const AddPlayers = () => {
                                     Responseapi?.map((item, index) => {
                                         console.log("index====", index);
                                         return (
-                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} removeAdduserList={removeAdduserList} />
+                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
                                         )
                                     })
                             }
