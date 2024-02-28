@@ -1,5 +1,5 @@
-export const base = "http://storytime.yameenyousuf.com/"
-// export const base = 'http://3.128.201.197/storytime/'
+// export const base = "http://storytime.yameenyousuf.com/"
+export const base = 'http://3.128.201.197/storytime/'
 export const Base_Url = base + 'api/';
 export const register_endpoint = 'auth/register';
 export const login_andpoint = 'auth/login';

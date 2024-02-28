@@ -22,7 +22,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
 
 
+
+
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
+
+
 
 
     const { width, height } = Dimensions.get('window');
@@ -35,6 +39,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
     const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
     const subCategoryId = useSelector((state) => state?.getcategories?.subcategoriesId);
@@ -42,7 +47,10 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { user } = useSelector(state => state?.authSlice);
 
 
+
+
     const isUserGuest = useMemo(() => !user, [user])
+
 
     // console.log("categoryId-----", categoryId);
     // console.log("subCategoryId-----", subCategoryId)
@@ -50,10 +58,15 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     // console.log("textrecordUsers-----", textrecordUsers);
 
 
+
+
     const convertStr = textrecordUsers.join()
     console.log("convertstr----", convertStr)
 
+
     const dispatch = useDispatch();
+
+
 
 
     const saveStoryhandler = () => {
@@ -61,6 +74,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         setSaveStoryModal(true);
         setVisiblePdf(true);
     };
+
 
     const handleSaveStories = async () => {
         setIsLoading(true);
@@ -82,57 +96,80 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
 
+
     return (
         <>
-        <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
+            <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
 
-            <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
 
-                <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-                    <BackButton onPress={() => setIsVisible(false)} />
-                </View>
+                <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
-                {/* Back Button */}
-                <ImageBackground
-                    style={styles.img_frame}
-                    resizeMode="stretch"
-                    source={BG_CLOCK}>
-                    <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 8, alignItems: 'center' }}>
-                        {/* <View style={styles.container2}> */}
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-                        <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400", marginBottom: responsiveHeight(2) }}>Save your story to your phone</Text>
 
-                        {!isUserGuest && <View style={{}}>
-                            <TouchableButton isLoading={isLoading} type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        </View>}
 
-                        <View style={{ paddingTop: responsiveWidth(8) }}>
-                            <SaveStoryBtn timeLeft={0} onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest} />
-                        </View>
 
-                        {/* </View> */}
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
+                        <BackButton onPress={() => setIsVisible(false)} />
                     </View>
+
+                    {/* Back Button */}
+
+                    <ImageBackground
+                        style={styles.img_frame}
+                        resizeMode="stretch"
+                        source={BG_CLOCK}>
+                        <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 8, alignItems: 'center' }}>
+                            {/* <View style={styles.container2}> */}
+                            <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
+                            <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400", marginBottom: responsiveHeight(2) }}>Save your story to your phone</Text>
+
+
+                            {!isUserGuest && <View style={{}}>
+                                <TouchableButton isLoading={isLoading} type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                            </View>}
+
+
+                            <View style={{ paddingTop: responsiveWidth(8) }}>
+                                <SaveStoryBtn timeLeft={0} onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest} />
+                            </View>
+
+
+                            {/* </View> */}
+                        </View>
+                    </ImageBackground>
+
+
+
+
+
                 </ImageBackground>
-
-            
-
-            </ImageBackground>
-        </Modal>
+            </Modal>
             {
                 saveStoryModal && (
                     <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
                 )
             }
 
+
             {saveStoryModalsecond &&
                 <StoryTimeSaved isLoading={isLoading} isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
-               Successfully Saved!" textButton="Back" />
+              Successfully Saved!" textButton="Back" />
             }
-            </>
+        </>
     )
 };
+
+
+
+
+
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -179,7 +216,6 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         width: responsiveWidth(67)
     },
-
 
     third_childbg: {
         flexDirection: "row",
@@ -253,10 +289,13 @@ const styles = StyleSheet.create({
     },
 
 
+
+
 });
 
 
-export default SaveStoryPhone;
 
+
+export default SaveStoryPhone;
 
 

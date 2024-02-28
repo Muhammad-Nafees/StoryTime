@@ -8,6 +8,7 @@ import { Img_Paths } from "../../../assets/Imagepaths/index";
 import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
+import { SCREEN_HEIGHT } from '../../../constants/Constant';
 
 
 const FirstScreenPlayFlow = () => {
@@ -21,8 +22,10 @@ const FirstScreenPlayFlow = () => {
 
     return (
         <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-            <View>
-                <View style={{ paddingTop: responsiveWidth(5) }}>
+            <View style={{
+                height: SCREEN_HEIGHT / 1,
+            }}>
+                <View style={{ paddingTop: responsiveWidth(10) }}>
                     <BackButton onPress={() => navigation.goBack()} />
                 </View>
                 {/* Back Button */}
@@ -33,7 +36,6 @@ const FirstScreenPlayFlow = () => {
 
             </View>
         </ImageBackground>
-
     )
 };
 
@@ -41,15 +43,11 @@ export default FirstScreenPlayFlow;
 
 const styles = StyleSheet.create({
 
-
     img: {
         resizeMode: "center"
     },
     container: {
-        justifyContent: "center",
         alignItems: "center",
-        paddingVertical: moderateVerticalScale(10),
-        // flex: 1,
     },
     img_backgroung_content: {
         width: responsiveWidth(90),

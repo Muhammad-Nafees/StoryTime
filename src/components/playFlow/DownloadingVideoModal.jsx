@@ -94,8 +94,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
             </ImageBackground>
         </Modal>
            {saveStoryVideoModalAfterDownloading &&
-            <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
-Successfully Saved to your phone!" textButton="Back" />
+            <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text={`Story Time\nSuccessfully Saved to your phone!`} textButton="Back" />
         }
 </>
     )

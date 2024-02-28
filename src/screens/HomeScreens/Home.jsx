@@ -3,6 +3,7 @@ import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, Style
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import NetInfo from "@react-native-community/netinfo";
 import FrameContent from '../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
@@ -35,7 +36,6 @@ const Home = () => {
     const navigation = useNavigation();
     const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
-
 
     useEffect(() => {
         const addFriends_api_handler = async () => {
@@ -160,7 +160,7 @@ const Home = () => {
                     <View style={{ alignItems: 'center', height: height / 2, }}>
                         <ActivityIndicator size={30} color={'#000'} />
                     </View> :
-                    responseUsers?.length !== 0 ?
+                    <>
                         <FlatList
                             data={responseUsers}
                             onRefresh={onRefresh}
@@ -201,12 +201,14 @@ const Home = () => {
                             onEndReached={handleLoadMore}
                             onEndReachedThreshold={0.3}
                         />
-                        :
-                        <>
-                            <View style={{ alignItems: 'center', justifyContent: "center", height: height / 2 }}>
-                                <Text style={{ color: "#000", fontSize: 22 }}>{checkDataisOrNot}</Text>
-                            </View>
-                        </>
+                        {
+                            responseUsers?.length === 0 && (
+                                <View style={{ position: "absolute", top: 300, left: 40, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
+                                    <Text style={{ color: "#000", fontSize: responsiveFontSize(3) }}>{checkDataisOrNot}</Text>
+                                </View>
+                            )
+                        }
+                    </>
             }
 
             {/* Frame Content Start----------- */}

@@ -1,18 +1,18 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../assets/Imagepaths';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useDispatch, useSelector} from 'react-redux';
+import { Img_Paths } from '../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addFriends,
   userId,
 } from '../../store/slices/addplayers/addPlayersSlice';
-import {playerContributorsIds} from '../../store/slices/getCategoriesSlice';
+import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
 
 const AddFriends_Categories = ({
   profileimage,
@@ -30,14 +30,13 @@ const AddFriends_Categories = ({
   console.log('userid----', userid);
 
   const addFriendHandler = () => {
-    const friend = {username, userid};
+    const friend = { username, userid };
     dispatch(addFriends(friend));
     // dispatch(addFriends(friend));
     dispatch(playerContributorsIds(userid));
     dispatch(userId(userid));
   };
 
-  console.log('usernames===', username);
 
   return (
     <>
@@ -80,7 +79,7 @@ const AddFriends_Categories = ({
           </View>
 
           <TouchableOpacity onPress={() => addFriendHandler()}>
-            <Text style={{color: '#209BCC', fontSize: responsiveFontSize(1.9)}}>
+            <Text style={{ color: '#209BCC', fontSize: responsiveFontSize(1.9) }}>
               {userchoice}
             </Text>
           </TouchableOpacity>
