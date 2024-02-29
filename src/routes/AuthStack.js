@@ -241,6 +241,7 @@ const CategoriesTab = () => {
         name={CATEGORIES}
         component={Categories}
         options={{
+          tabBarHideOnKeyboard: true,
           tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
@@ -271,6 +272,7 @@ const CategoriesTab = () => {
         name={'SubCategories'}
         component={SubCategories}
         options={{
+          tabBarHideOnKeyboard: true,
           tabBarButton: () => null,
           tabBarVisible: false,
         }}
