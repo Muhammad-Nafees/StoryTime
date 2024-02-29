@@ -271,7 +271,7 @@ export const Img_Paths = {
     BG_CONTAINER: require("../../assets/bgcontainer.png"),
     SETTINGS_ICON: require("../../assets/settingsicon.png"),
     BG_URL_PAGE: require("../../assets/bgurlpageProfile.png"),
-    // BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
+    BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
 
     //settings
     SETTING_USER: require("../../assets/oliver.png"),

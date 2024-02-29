@@ -54,13 +54,13 @@ const Navigations = () => {
       <Stack.Screen name={ADD_PLAYERS} component={AddPlayers} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
-      {/* <Stack.Screen name={SETTING} component={Setting} /> */}
-      {/* <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={SETTING} component={Setting} />
+      <Stack.Screen name={NOTIFICATION} component={Notification} />
       <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
-      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />   */}
+      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
       <Stack.Screen
         name={LOGIN}
         component={Login}
@@ -89,7 +89,7 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
+      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
   );
 };
@@ -181,8 +181,8 @@ const ProfileStacksBottom = () => {
       headerShown: false
     }}>
       <Stack.Screen name="Profile" component={Profile} />
-      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
+      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };

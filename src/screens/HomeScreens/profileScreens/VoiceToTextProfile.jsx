@@ -28,18 +28,9 @@ const VoiceToTextProfile = ({ route }) => {
     const [isMoreLength, setIsMoreLength] = useState(false);
     const [getresponseById, setGetresponseById] = useState([]);
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
-    const animation = useRef(new Animated.Value(0)).current;
-
-    // console.log(route?.params?.storyuserId)
     const storyId = route?.params?.storyuserId;
 
 
-    const startToggling = () => {
-        Animated.spring(animation, {
-            toValue: 1,
-            useNativeDriver: true,
-        })
-    };
 
     const getStory_Byid_api = async () => {
         try {
@@ -54,6 +45,8 @@ const VoiceToTextProfile = ({ route }) => {
     useEffect(() => {
         getStory_Byid_api();
     }, []);
+
+    const contentLength = getresponseById?.content?.length || 0;
 
 
 
@@ -77,8 +70,8 @@ const VoiceToTextProfile = ({ route }) => {
                             </View>
                         </View>
 
-
                         {/* Back Button */}
+
 
                         <View>
                             <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
@@ -118,29 +111,31 @@ const VoiceToTextProfile = ({ route }) => {
                                 > */}
 
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <View style={[styles.bg_content, { height: isMoreLength ? getresponseById?.content?.length * 0.65 : responsiveHeight(30) }]}>
-                                        <View style={[styles.child_bg, { height: isMoreLength ? getresponseById?.content?.length * 0.64 : responsiveHeight(27) }]}>
+                                    <View style={[styles.bg_content, { height: SCREENHEIGHT / 3 }]}>
+                                        {/* <View > */}
+                                        <ScrollView style={[styles.child_bg,]} >
                                             {/* <View style={styles.second_childbg}> */}
                                             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                                <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(10), }}>
+                                                <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(6), }}>
                                                     <Image style={{ width: 40, height: 40, resizeMode: "center" }} source={{ uri: base + getresponseById?.subCategory?.image }} />
                                                     <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{getresponseById?.subCategory?.name}</Text>
                                                 </View>
                                             </View>
 
-                                            <View style={styles.text_container}>
-                                                <ScrollView>
-                                                    <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
-                                                        {
-                                                            !isMoreLength ?
-                                                                getresponseById?.content?.slice(0, 220) :
-                                                                getresponseById?.content
-                                                        }
-                                                    </Text>
-                                                </ScrollView>
+                                            <View style={{ paddingTop: responsiveWidth(4), justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
+                                                    {/* {
+                                                        !isMoreLength ?
+                                                            getresponseById?.content?.slice(0, 220) :
+                                                            getresponseById?.content
+                                                    } */}
+                                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo
+                                                    {/* "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo */}
+                                                </Text>
                                             </View>
+                                        </ScrollView>
 
-                                        </View>
+                                        {/* </View> */}
                                         {/* </View> */}
                                     </View>
                                 </View>
@@ -189,6 +184,7 @@ const VoiceToTextProfile = ({ route }) => {
 };
 
 
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
@@ -219,6 +215,7 @@ const styles = StyleSheet.create({
         width: responsiveWidth(70),
         marginTop: responsiveWidth(2),
         borderRadius: 18,
+
     },
 
     second_childbg: {
