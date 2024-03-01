@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Typography from './Typography';
-import { Red02 } from '../screens/Styles/Style';
+import { Red02, White } from '../screens/Styles/Style';
 import { useDispatch, useSelector } from 'react-redux';
 import { SCREEN_WIDTH, SPACING } from '../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
@@ -34,7 +34,7 @@ const LogoutBtn = () => {
   return (
     <TouchableOpacity onPress={handleLogout} activeOpacity={0.3} style={styles.btn}>
       {isLoggingOut ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={White}  />
       ) : (
         <Typography style={styles.txt}>Log out</Typography>
       )}
