@@ -295,7 +295,7 @@ const SubCategories = ({route}) => {
     if (isLoadMore) {
       return (
         <View style={{alignItems: 'center',paddingVertical:SPACING}}>
-          {/* <ActivityIndicator size={40} color={PrimaryColor} /> */}
+          <ActivityIndicator size={40} color={PrimaryColor} /> 
         </View>
       );
     }
