@@ -10,7 +10,7 @@ import { PassionOne_Regular } from '../constants/GlobalFonts';
 const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disabled, item, handleRandomClick }) => {
   const dispatch = useDispatch();
   const imageLink = URL + images;
-
+console.log(imageLink)
   const handlePress = () => {
     if (!disabled) {
       onPress();
@@ -31,7 +31,7 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
           height: responsiveHeight(11),
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: item?.namerandom == "Random" ? "rgba(238, 95, 138, 1)" : item.background ? item.background : "#56B6A4"
+          backgroundColor: item?.namerandom === "Random" ? "rgba(238, 95, 138, 1)" : (item.background ? item.background :(backgroundColor?backgroundColor: "#56B6A4"))
         }}
         disabled={disabled}
       >
@@ -44,8 +44,8 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
             />
             :
             <Image
-              style={{ width: 50, height: 50, borderRadius: 10 }}
-              resizeMode="cover"
+              style={{ width: 60, height: 60, borderRadius: 10 }}
+              resizeMode="center"
               source={{ uri: imageLink }}
             />
         }

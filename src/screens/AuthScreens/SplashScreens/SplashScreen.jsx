@@ -7,6 +7,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SplashScreen = () => {
     const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths
@@ -26,7 +27,7 @@ const SplashScreen = () => {
                 <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
             <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate(REGISTER)} style={{width:responsiveWidth(80),height:responsiveHeight(6),backgroundColor:TextColorGreen,alignSelf:'center',borderRadius:10,justifyContent:'center',marginTop:responsiveHeight(2)}}>
-                <Text style={{color:'white',fontWeight:'800',textAlign:'center',fontSize:responsiveFontSize(2)}}>Subscribe for AD FEEE experience </Text>
+                <Text style={{color:'white',fontWeight:'800',textAlign:'center',fontSize:responsiveFontSize(2),fontFamily:Inter_Regular.Inter_Regular}}>Subscribe for AD FEEE experience </Text>
             </TouchableOpacity>
         </ImageBackground>
     )

@@ -8,7 +8,7 @@ import {
 import { Inter_Regular } from '../constants/GlobalFonts';
 
 const Typography = props => {
-  const {mt, ml, mr, mb, style,size, children,lh,clr,thin,heavy,bold, ...rest} = props || {};
+  const {mt, ml, mr, mb, style,size, children,lh,clr,thin,heavy,bold,ff,...rest} = props || {};
 
   const styleComponent = [
     {
@@ -33,6 +33,7 @@ const Typography = props => {
       ...(mr && {marginRight: mr}),
       ...(mb && {marginBottom: mb}),
       ...(clr && {color: clr}),
+      ...(ff && {fontFamily: ff})
 
       //   ...(center && {textAlign: 'center'}),
     },
