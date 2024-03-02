@@ -19,7 +19,7 @@ import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
 
-const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
+const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
 
     const { width, height } = Dimensions.get('window');
     const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
@@ -33,6 +33,8 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
     const dispatch = useDispatch();
 
     console.log("textrecordusers", textrecordUsers)
+
+
 
     const checkPermission = async () => {
         try {
@@ -82,68 +84,69 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
         }
     };
 
+
+
     return (
         <>
-        <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
+            <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
 
-            <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
+                <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
 
-                {/* Back Button */}
-                <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-                    <BackButton onPress={() => setIsVisiblePdf(false)} />
-                </View>
-
-                <ImageBackground
-                    style={styles.img_frame}
-                    resizeMode="stretch"
-                    source={BG_CLOCK}>
-                    <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 7, alignItems: 'center' }}>
-
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-                        <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
-
-                        <View style={{ paddingVertical: 12, }}>
-                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity
-                                    onPress={checkPermission}
-                                    style={{
-                                        width: responsiveWidth(70),
-                                        backgroundColor: TextColorGreen,
-                                        borderRadius: 10,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        height: responsiveHeight(6.6),
-                                    }}>
-
-                                    <Text
-                                        style={{
-                                            fontSize: responsiveFontSize(1.9),
-                                            fontWeight: '600',
-                                            letterSpacing: 0.28,
-                                            color: "#FFF",
-                                        }}>
-                                        Save
-                                    </Text>
-
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <SaveStoryBtn timeLeft={0} onPress={() => setIsVisiblePdf(false)} text="No" />
-
-                        {/* </View> */}
-
+                    {/* Back Button */}
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
+                        <BackButton onPress={() => setIsVisiblePdf(false)} />
                     </View>
-                </ImageBackground>
-              
 
-            </ImageBackground>
-        </Modal>
-          {saveStoryModalDownloading &&
-            <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
-Successfully Saved!" textButton="Back" />
-        }
+                    <ImageBackground
+                        style={styles.img_frame}
+                        resizeMode="stretch"
+                        source={BG_CLOCK}>
+                        <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 7, alignItems: 'center' }}>
+
+                            <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
+                            <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
+
+                            <View style={{ paddingVertical: 12, }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        onPress={checkPermission}
+                                        style={{
+                                            width: responsiveWidth(70),
+                                            backgroundColor: TextColorGreen,
+                                            borderRadius: 10,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: responsiveHeight(6.6),
+                                        }}>
+
+                                        <Text
+                                            style={{
+                                                fontSize: responsiveFontSize(1.9),
+                                                fontWeight: '600',
+                                                letterSpacing: 0.28,
+                                                color: "#FFF",
+                                            }}>
+                                            Save
+                                        </Text>
+
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                            <SaveStoryBtn timeLeft={0} onPress={() => setIsVisiblePdf(false)} text="No" />
+
+                            {/* </View> */}
+
+                        </View>
+                    </ImageBackground>
+
+
+                </ImageBackground>
+            </Modal>
+            {saveStoryModalDownloading &&
+                <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text={`Story Time\nSuccessfully Saved to your phone!`} textButton="Back" />
+            }
         </>
     )
 };

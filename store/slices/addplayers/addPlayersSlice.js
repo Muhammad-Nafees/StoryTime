@@ -12,6 +12,7 @@ const initialState = {
     nextRandomNumberExtend: null,
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
+    publicAndPrivateMode: null,
 };
 
 const addPlayers = createSlice({
@@ -74,7 +75,9 @@ const addPlayers = createSlice({
         nextRandomNumVideoExtend: (state, action) => {
             state.nextRandomNumberVideoExtend = action.payload
         },
-        // nextRand4
+        setIsPublicOrPrivateMode: (state, { payload }) => {
+            state.publicAndPrivateMode = payload
+        },
 
     },
 });
@@ -90,7 +93,8 @@ export const {
     nextRandomNum,
     nextRandomNumExtend,
     nextRandomNumVideo,
-    nextRandomNumVideoExtend
+    nextRandomNumVideoExtend,
+    setIsPublicOrPrivateMode
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

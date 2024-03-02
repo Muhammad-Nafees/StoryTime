@@ -9,6 +9,7 @@ import {
     Button,
     Alert,
     ActivityIndicator,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {
     FourthColor,
@@ -37,7 +38,7 @@ import { validationforgetEmail } from '../../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import _ from 'lodash';
 import CustomInputForgetEmail from '../../../components/CustomInputForgetEmail';
-
+import useKeyboard from '../../../hooks/AvoidingKeyboard';
 
 const ForgetEmail = () => {
     const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
@@ -46,61 +47,65 @@ const ForgetEmail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
 
+    // const keyboardHeight = useKeyboard();
+
     return (
-        <Formik
-            initialValues={{
-                email: '',
-            }}
-            validationSchema={validationforgetEmail}
-            onSubmit={async values => {
 
-            }}>
-            {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue, dirty, isValid }) => (
+        <KeyboardAvoidingView
+        >
+            <Formik
+                initialValues={{
+                    email: '',
+                }}
+                validationSchema={validationforgetEmail}
+                onSubmit={async values => {
 
-                <>
-                    <View style={styles.container}>
-                        <View style={styles.img_container}>
-                            <Image style={styles.img_child} source={FORGET_BG_IMG} />
-                        </View>
+                }}>
+                {({ values, errors, handleChange, handleSubmit, setFieldError, touched, setFieldValue, dirty, isValid }) => (
 
-                        {/* Password------------ */}
-
-                        <View>
-                            <View>
-                                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                    <CustomInputForgetEmail
-                                        label="Email Adress"
-                                        placeholder="Type here"
-                                        value={values.email}
-                                        error={errors.email}
-                                        touched={touched.email}
-                                        initialTouched={true}
-                                        setFieldError={setFieldError}
-                                        erroremail={errors?.email}
-                                        handleSubmit={handleSubmit}
-                                        fieldName="email"
-                                        dirty={dirty}
-                                        isValid={isValid}
-                                        handleChange={text => setFieldValue('email', text)}
-                                    />
-                                </View>
+                    <>
+                        <View style={[styles.container, { height: responsiveHeight(100) }]}>
+                            <View style={styles.img_container}>
+                                <Image style={styles.img_child} source={FORGET_BG_IMG} />
                             </View>
+
+                            {/* Password------------ */}
+
+                            <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                <CustomInputForgetEmail
+                                    label="Email Adress"
+                                    placeholder="Type here"
+                                    value={values.email}
+                                    error={errors.email}
+                                    touched={touched.email}
+                                    initialTouched={true}
+                                    setFieldError={setFieldError}
+                                    erroremail={errors?.email}
+                                    handleSubmit={handleSubmit}
+                                    fieldName="email"
+                                    dirty={dirty}
+                                    isValid={isValid}
+                                    handleChange={text => setFieldValue('email', text)}
+                                />
+                            </View>
+
                             {/* Next------------ */}
 
                         </View>
                         <Toast />
-                    </View>
-                </>
-            )}
-        </Formik>
+
+                    </>
+                )}
+            </Formik>
+        </KeyboardAvoidingView>
+
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: SecondaryColor,
+
+        backgroundColor: "orange",
     },
     text: {
         fontSize: responsiveFontSize(1.8),

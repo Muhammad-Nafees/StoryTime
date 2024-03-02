@@ -58,6 +58,7 @@ import {Inter_Regular, PassionOne_Regular} from '../../../constants/GlobalFonts'
 import {SPACING, URL} from '../../../constants/Constant';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
+import LinearGradient from 'react-native-linear-gradient';
 
 const SubCategories = ({route}) => {
   //destructures
@@ -106,6 +107,8 @@ const SubCategories = ({route}) => {
       ? [...responsesubCategories, randomObject]
       : [];
   }, [responsesubCategories, searchTerm]);
+
+
 
   const addFriends_api_handler = async () => {
     try {
@@ -170,7 +173,6 @@ const SubCategories = ({route}) => {
       const filteredSubcategory = responsesubCategories.find(category =>
         category.name.includes(randomSubName),
       );
-
       const response = user ? await get_Random(id) : filteredSubcategory;
       console.log('response----', response);
       const imageLink = user
@@ -190,6 +192,8 @@ const SubCategories = ({route}) => {
     }
   };
 
+
+
   const handleStoryUser = (id, name, image) => {
     const imageLink = URL + image;
     user
@@ -198,7 +202,6 @@ const SubCategories = ({route}) => {
     dispatch(randomNames(name));
     dispatch(setStoryUserImage(imageLink));
     dispatch(setSubCategoriesId(id));
-    console.log('subCategiryId', name);
   };
 
   const onRefresh = () =>{
@@ -315,23 +318,29 @@ const SubCategories = ({route}) => {
     );
   };
 
+
   return (
-    <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-      <SafeAreaView  style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: responsiveWidth(5),
-          marginBottom: moderateVerticalScale(10),
-        }}>
-        <View style={styles.first_container}>
-          <BackButton onPress={() => navigation.goBack()} />
-          <View style={styles.categories_text_container}>
-            <Text style={styles.categories_text}>{name}</Text>
+    <LinearGradient
+      colors={["#75BDCD", "#FFB5CB",]}
+      start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+      style={[ styles.container, {backgroundColor: pinkColor}] }>
+      <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+      <SafeAreaView style={styles.container}>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginHorizontal: responsiveWidth(5),
+            marginBottom: moderateVerticalScale(10),
+          }}>
+          <View style={styles.first_container}>
+            <BackButton onPress={() => navigation.goBack()} />
+            <View style={styles.categories_text_container}>
+              <Text style={styles.categories_text}>{name}</Text>
+            </View>
           </View>
-        </View>
-        {isUserGuest && (
+          {isUserGuest && (
           <View style={{marginTop: moderateVerticalScale(10)}}>
             <View
               style={{marginBottom: 'auto', marginTop: 'auto', marginLeft: 5}}>
@@ -342,7 +351,7 @@ const SubCategories = ({route}) => {
         )}
       </View>
 
-      {/* MainnputField----------*/}
+        {/* MainnputField----------*/}
 
       {user ? (
         <>
@@ -360,10 +369,9 @@ const SubCategories = ({route}) => {
             }}>
             <View
               style={{
-                width: responsiveWidth(90),
-                flexDirection: 'row',
+                paddingVertical: moderateVerticalScale(6),
+                justifyContent: 'center',
                 alignItems: 'center',
-                flexWrap: 'wrap',
               }}>
               <View style={{marginHorizontal: moderateScale(10)}}>
                 <Text
@@ -425,13 +433,15 @@ const SubCategories = ({route}) => {
       />
       <Toast />
       </SafeAreaView>
-    </ImageBackground>
+    </ImageBackground>    
+    </LinearGradient>
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: pinkColor,
     width: '100%',
     height: '100%',
     flex: 1,

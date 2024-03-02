@@ -22,7 +22,7 @@ const RecordingOliverData = ({ video_profile_response }) => {
             <FlatList
                 data={video_profile_response}
                 renderItem={({ item, index }) => (
-                    console.log("item----------", item),
+                    console.log("itemVideo----------", item),
                     <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-around", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
                         <View style={{ flexDirection: "row", width: responsiveWidth(71), justifyContent: "space-between", alignItems: "center", }}>
                             <TouchableOpacity style={{ backgroundColor: "#56B6A4", flexDirection: "row", width: 110, height: 47, justifyContent: "space-around", alignItems: "center", borderRadius: 10 }}>
@@ -45,9 +45,7 @@ const RecordingOliverData = ({ video_profile_response }) => {
                             </View>
                         </View>
 
-                        <TouchableOpacity onPress={() => navigation.navigate("ProfileScreens", {
-                            screen: "AddUrl"
-                        })}>
+                        <TouchableOpacity>
                             <Image style={{ width: 27, height: 27, alignItems: "center", paddingVertical: moderateVerticalScale(16), resizeMode: "center" }} source={require("../assets/profileurl_icon.png")} />
                             <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>URL</Text>
                         </TouchableOpacity>

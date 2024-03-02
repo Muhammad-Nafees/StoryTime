@@ -52,9 +52,9 @@ const StoryTimeSaved = ({
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // backdropColor="white"
+      backdropColor="#777377"
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.9}
       onBackdropPress={close}>
 
       <View

@@ -31,7 +31,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
       <View
         style={{
           flexDirection: type == 'password' ? 'row' : null,
-          width: responsiveWidth(80),
+          width: type == "URL" ? responsiveWidth(73) : responsiveWidth(80),
           backgroundColor: TextinputColor,
           borderRadius: 12,
           height: responsiveHeight(6.5),
@@ -48,7 +48,7 @@ const TextInputField = ({ placeholderText, type, onPress, showPassword, onChange
           placeholderTextColor="#AAAAAA"
           secureTextEntry={type == 'password' ? !showPassword : null}
           style={{
-            color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 10 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
+            paddingLeft: type == "URL" ? 40 : null, color: '#000', width: type == 'password' ? 235 : 260, letterSpacing: type === 'password' && !showPassword && value !== "" ? 10 : 0, fontWeight: type === 'password' && !showPassword && value !== "" ? "600" : "400"
           }}
         />
 
