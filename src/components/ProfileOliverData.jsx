@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, FlatList, ActivityIndicator, } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { profile_oliverPierce } from '../../dummyData/DummyData'
 import { SecondaryColor, TextColorGreen } from '../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
@@ -16,13 +16,11 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
     const [isLoadMore, setIsLoadMore] = useState(false);
 
     const handleLoadMore = async () => {
-
         // if (isLoading) {
         //     return;
         // }
-
         console.log("HAS_MORE_PAGES");
-
+        console.log("hasmorepages===", hasMorePagesRecording)
         if (hasMorePagesRecording) {
             setIsLoadMore(true)
             setRecordingPage((prevPage) => prevPage + 1);
@@ -32,13 +30,15 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
         }
     };
 
+
+
     const onRefresh = () => {
         // setIsRefreshing(true);
         setRecordingPage(1);
         setTimeout(() => {
             // setIsRefreshing(false);
         }, 1000);
-    }
+    };
 
     return (
         <>
@@ -46,7 +46,7 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
                 data={profile_response}
                 scrollEnabled={true}
                 renderItem={({ item, index }) => (
-                    console.log("itemProfileOliveier", item._id),
+                    console.log("itemProfileOliveier", item?._id),
                     <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
                         <TouchableOpacity onPress={() => navigation?.navigate("profileStack", { screen: "VoiceToTextProfile", params: { storyuserId: item?._id }, })} style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
                             <Image style={{ width: SCREENWIDTH * 0.1, height: SCREENHEIGHT * 0.1, resizeMode: "center" }} source={{ uri: base + item?.subCategory?.image }} />
@@ -66,8 +66,9 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
                                 <Text style={{ fontSize: responsiveFontSize(1.7), color: SecondaryColor, fontWeight: "300" }}>{item?.commentsCount}</Text>
                             </TouchableOpacity>
                         </View>
-                    </View >
+                    </View>
                 )}
+
                 ListFooterComponent={() => {
                     if (isLoadMore) {
                         return (
@@ -78,6 +79,7 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
                     }
                     return null;
                 }}
+
                 onEndReached={() => {
                     handleLoadMore();
                 }}

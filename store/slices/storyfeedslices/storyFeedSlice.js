@@ -1,24 +1,28 @@
-import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
-import { fetchallFeedStories } from "../../../services/api/storyfeed";
-
+import { createSlice, } from "@reduxjs/toolkit";
 
 const story_Feed_slice = createSlice({
 
     name: "StoryFeed",
 
     initialState: {
-        data: [],
-        error: null,
-        loading: false,
+
+        storyUserId: ""
     },
 
     reducers: {
-        storyfeed: (state, { payload }) => {
-            state.data = payload;
-        },
+
+        storyUserId: (state, { payload }) => {
+            state.storyUserId = payload;
+        }
+
     },
 
 });
 
+
+
 export default story_Feed_slice.reducer;
-export const { storyfeed } = story_Feed_slice.actions;
+export const {
+    storyfeed,
+    storyUserId
+} = story_Feed_slice.actions;

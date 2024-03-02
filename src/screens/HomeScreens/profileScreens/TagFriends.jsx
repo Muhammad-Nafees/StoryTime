@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,11 @@ import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import AddFriendUsers from '../../../components/AddFriendUsers';
 import TouchableButton from ' ../../../components/TouchableButton';
+import { addFriends_api } from '../../../../services/api/add-members';
+import AddFriends_Categories from '../../../components/AddPlayers_Categories';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
+import _ from 'lodash';
+
 
 const TagFriends = () => {
     const { width, height } = Dimensions.get('window');
@@ -17,49 +22,125 @@ const TagFriends = () => {
         SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+    const [isNoFriends, setIsNoFriends] = useState(true);
+    const [inputText, setInputText] = useState("");
+    const [ResponseapiFriends, setResponseapiFriends] = useState([]);
+
+
+    const addFriends_api_handler = async () => {
+
+        try {
+            const responseData = await addFriends_api();
+            setResponseapiFriends(responseData.data.users);
+            console.log("Responseapi----", Responseapi);
+            return responseData;
+        } catch (error) {
+            console.log("err", error)
+        }
+    };
+
+    useEffect(() => {
+        addFriends_api_handler();
+    }, []);
+
+    const debonceApiCall = useRef(_.debounce(async (text) => {
+        try {
+            const responseData = await addFriends_api({ search: text });
+            if (responseData?.data == null) {
+                setIsNoFriends(false)
+            } else {
+                setIsNoFriends(true)
+            }
+            setResponseapiFriends(responseData.data?.users)
+            return responseData
+        } catch (error) {
+            console.log("error=====", error)
+        }
+    }, 700)
+    ).current;
+
+    const handlenavigation = () => {
+        navigation.navigate("ProfileScreens", { screen: "AddUrl" })
+    }
+
+    const lodashTextHandler = (text) => {
+        setInputText(text)
+        debonceApiCall(text)
+    };
+
+
+
+
 
 
     return (
-        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            <ScrollView>
-                {/* Frame Content Close----------- */}
 
+        <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+            {/* Frame Content Close----------- */}
+
+            <View style={{ height: responsiveHeight(85), }}>
                 <View style={styles.first_container}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_button}>
                         <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
                     </TouchableOpacity>
                     <View style={styles.categories_text_container}>
-                        <Text style={styles.categories_text}>Tag Friends</Text>
+                        <Text style={styles.categories_text}>Add Players</Text>
                     </View>
                 </View>
 
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <View style={{ backgroundColor: "#FFF", borderRadius: 50, width: responsiveWidth(90), flexDirection: "row", alignItems: "center" }}>
-                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: 14, }}>
+                        <View style={{ paddingLeft: responsiveWidth(6), paddingHorizontal: moderateVerticalScale(10), paddingVertical: moderateVerticalScale(14), }}>
                             <Image style={{ width: responsiveWidth(6), height: responsiveHeight(3), }} source={SEARCH_ADD_ICON} />
                         </View>
-                        <TextInput placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000" }} />
+                        <TextInput value={inputText} onChangeText={(text) => lodashTextHandler(text)} placeholder="Search" placeholderTextColor={"#393939"} style={{ color: "#000", width: 260 }} />
                     </View>
                 </View>
 
-                <View style={{ paddingVertical: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
-                    <AddFriendUsers profileimage={FIRST_PROFILE} text="@chrislee" userchoice="Tag" />
-                    <AddFriendUsers profileimage={SECOND_PROFILE} text="@Cedrick101" userchoice="Tag" />
-                    <AddFriendUsers profileimage={THIRD_PROFILE} text="@itsmeMike" userchoice="Tag" />
-                    <AddFriendUsers profileimage={FOURTH_PROFILE} text="@christine02" userchoice="Tag" />
-                    <AddFriendUsers profileimage={FIFTH_PROFILE} text="@deniseperkins" userchoice="Tag" />
-                    <AddFriendUsers profileimage={SIXTH_PROFILE} text="@nolanjames_1" userchoice="Tag" />
-                </View>
+                <ScrollView>
+                    <View style={{ paddingTop: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
 
-                <View style={{ paddingTop: responsiveWidth(55) }}>
-                    <TouchableButton backgroundColor={TextColorGreen} color="#FFF" text="Tag" />
-                </View>
+                        {/* <ScrollView>
+                            {
+                                addedUsers?.map((item, index) => (
+                                    <RemoveUsers_Categories key={item?.userid} item={item} userid={item.userid} username={item.username} />
+                                ))
+                            }
+                        </ScrollView> */}
 
-            </ScrollView>
+                        <View style={[styles.categories_text_container2, { paddingTop: responsiveWidth(6) }]}>
+                            <Text style={styles.categories_text}>Friends</Text>
+                        </View>
+
+                        <View style={{ paddingVertical: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
+                            {
+                                !isNoFriends ?
+                                    (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
+                                        <Text style={{ fontSize: 22, color: "#000", textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>No Friends Found</Text>
+                                    </View>)
+                                    :
+                                    ResponseapiFriends?.map((item, index) => {
+                                        console.log("index====", index);
+                                        return (
+                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Tag" profileimage={FIRST_PROFILE} item={item} userid={item?._id} type="tagFriends" />
+                                        )
+                                    })
+                            }
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+
+            <View style={{ paddingTop: responsiveWidth(5) }}>
+                <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Tag" color="#FFF" />
+            </View>
+
         </ImageBackground>
+
 
     )
 }
+
 
 
 
@@ -104,6 +185,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: moderateVerticalScale(2)
+    },
+    categories_text_container: {
+        paddingHorizontal: moderateScale(20)
+    },
+    categories_text_container2: {
+        width: responsiveWidth(90)
+    },
+    categories_text: {
+        color: "#E44173",
+        fontSize: responsiveFontSize(2.4),
+        fontWeight: "600",
+        letterSpacing: 0.36
     },
     text_input_child: {
         flexDirection: 'row',

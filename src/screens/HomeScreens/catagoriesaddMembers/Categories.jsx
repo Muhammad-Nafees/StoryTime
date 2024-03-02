@@ -55,6 +55,7 @@ import SvgIcons from '../../../components/svgIcon/svgIcons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
 import { SPACING } from '../../../constants/Constant';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Categories = () => {
   //destructures
@@ -215,8 +216,8 @@ const Categories = () => {
       ];
       for (let i = 0; i < response?.data?.categories.length; i++) {
         const colorIndex = i % valObj.length;
-        response.data.categories[i].background = valObj[colorIndex]; // Assigning a random color from valObj
-      }
+        response.data.categories[i].background = valObj[colorIndex];
+      };
 
       setResponseCategories(prevData => [
         ...prevData,
@@ -375,16 +376,16 @@ const Categories = () => {
   };
 
   return (
-    <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
+
+    <LinearGradient
+      colors={["#75BDCD", "#FFB5CB",]}
+      start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+      style={[ styles.container, {backgroundColor: pinkColor}] }>
+      <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: responsiveWidth(5),
-            marginBottom: moderateVerticalScale(10),
-          }}>
+        <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
           <View style={styles.first_container}>
+
             <BackButton onPress={() => navigation.goBack()} />
             <View style={styles.categories_text_container}>
               <Text style={styles.categories_text}>Categories</Text>
@@ -405,15 +406,11 @@ const Categories = () => {
             </View>
           )}
         </View>
+        {/* MainInputField----- */}
 
-        {user ? (
-          <>
-            <MainInputField
-              onPress={addFriends_api_handler}
-              inputValue={isUsernameInputValue}
-              OnchangeText={setIsUsernameInputValue}
-              placeholder="Username"
-            />
+        {user ?
+         ( <>
+            <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
             <View
               style={{
                 paddingVertical: moderateVerticalScale(6),
@@ -486,16 +483,18 @@ const Categories = () => {
           }}
           ListEmptyComponent={renderListEmptyComponent}
           ListFooterComponent={renderListFooterComponent}
-        />
+        />    
         <Toast />
-      </SafeAreaView>
-    </ImageBackground>
+        </SafeAreaView>
+      </ImageBackground>
+    </LinearGradient>
+
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: pinkColor,
     width: '100%',
     height: '100%',
     flex: 1,

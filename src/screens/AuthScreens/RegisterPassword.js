@@ -14,6 +14,7 @@ import { registerapi } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { validationUserPassword } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
+import { Img_Paths } from '../../assets/Imagepaths';
 
 
 const RegisterPassword = ({ route }) => {
@@ -27,6 +28,7 @@ const RegisterPassword = ({ route }) => {
     const [firstPasswordError, setFirstPasswordError] = useState("")
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
+    const { BGIMAGE_ACCOUNT_CREATED } = Img_Paths;
     const firstuserData = useSelector((state) => state.authSlice.firstpageData);
     const seconduserData = useSelector((state) => state.authSlice.secondpageData);
 
@@ -212,7 +214,14 @@ const RegisterPassword = ({ route }) => {
 
                             </View>
 
-                            {isVisible && <UserErrors setVisible={setVisible} isVisible={isVisible} text="Login" onPress={() => navigation.navigate(LOGIN)} />}
+                            {isVisible && <UserErrors
+                                setVisible={setVisible}
+                                text1={"Account Created"}
+                                bgImage={BGIMAGE_ACCOUNT_CREATED}
+                                isVisible={isVisible}
+                                text="Login"
+                                onPress={() => navigation.navigate(LOGIN)} />
+                            }
                         </ScrollView>
 
                     </View>

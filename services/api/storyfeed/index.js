@@ -185,3 +185,44 @@ export const createStory_api = async ({ creator, category, subCategory, contribu
 };
 
 
+export const blockUser_Story = async ({ blockId }) => {
+    try {
+        const url = Base_Url + "user/block";
+        const responseData = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                blockId: blockId
+            })
+        });
+        const response = await responseData.json()
+        console.log("response=====", response)
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+export const reportUser_Story = async ({ text, storyId }) => {
+
+    try {
+        const url = Base_Url + "user/report-user";
+        const responseData = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                story: storyId,
+                text: text
+            })
+        });
+        const response = await responseData.json()
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+};
+

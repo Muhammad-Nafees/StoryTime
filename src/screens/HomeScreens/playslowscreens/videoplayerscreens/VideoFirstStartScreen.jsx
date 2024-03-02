@@ -18,7 +18,8 @@ const VideoFirstStartScreen = () => {
     const navigation = useNavigation();
     const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.90;
+    const squareSize = windowWidth * 0.92;
+
 
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
@@ -54,7 +55,7 @@ const VideoFirstStartScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(6.2), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(5.5), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
                     </View>
 
                 </View>

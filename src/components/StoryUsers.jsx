@@ -38,7 +38,7 @@ console.log(imageLink)
         {
           item?.namerandom == "Random" ?
             <Image
-              style={{ width: 70, height: 57, borderRadius: 10 }}
+              style={{ width: 65, height: 65, borderRadius: 10 }}
               resizeMode="center"
               source={item?.imageludo}
             />
@@ -50,7 +50,7 @@ console.log(imageLink)
             />
         }
       </TouchableOpacity>
-      <Text style={{ color: "#FFF", fontWeight: "400", fontSize: responsiveFontSize(2.1), letterSpacing: 0.4, fontFamily: PassionOne_Regular.passionOne }}>{item?.namerandom == "Random" ? item?.namerandom : text}</Text>
+      <Text style={{ color: "#FFF", fontWeight: "400", fontSize: responsiveFontSize(1.9), letterSpacing: 0.4, fontFamily: PassionOne_Regular.passionOne, textAlign: "center", }}>{item?.namerandom == "Random" ? item?.namerandom : text}</Text>
     </View>
   );
 };

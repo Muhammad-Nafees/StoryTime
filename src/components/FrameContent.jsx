@@ -14,11 +14,14 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
-import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
+import { storyFeed, storyUserId } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
 import { storyLikedFeed, storydisLikedFeed, } from '../../services/api/storyfeed'
 import LinearGradient from "react-native-linear-gradient"
+import BlockUserStory from './blockuser/BlockUserModal'
+
+
 
 const FrameContent = ({
     type,
@@ -32,18 +35,23 @@ const FrameContent = ({
     dislikesByMe,
     likesCountuser,
     dislikesCount,
+    userId
 }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width;
     const SCREENHEIGHT = Dimensions.get("window").height;
     const navigation = useNavigation();
     const { HOME_FRAME, SHARE_BTN, } = Img_Paths;
-    const { FEED_CHAT } = NavigationsString;
+    const { FEED_CHAT, REPORT_USER } = NavigationsString;
     const [isLiked, setIsLiked] = useState(likedByMe);
     const [isDisLike, setIsDisliked] = useState(dislikesByMe);
     const [likesCounting, setLikesCounting] = useState(likesCountuser);
     const [dislikesCounting, setDisLikesCounting] = useState(dislikesCount);
+    const [isVisible, setIsVisible] = useState(false)
     const dispatch = useDispatch();
+
+    // console.log("userId---", userId);
+
 
 
     const storyLikedHandled = useCallback(async () => {
@@ -78,6 +86,7 @@ const FrameContent = ({
             // Handle errors
         }
     }, [dislikesCounting])
+
 
 
     const commentsHandled = useCallback(() => {
@@ -191,10 +200,17 @@ const FrameContent = ({
                                                 </MenuTrigger>
 
                                                 <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: responsiveWidth(8), width: responsiveWidth(42), } }}>
-                                                    <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
+                                                    <MenuOption onSelect={() => {
+                                                        setIsVisible(true);
+                                                        dispatch(storyUserId(userId));
+                                                    }} style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
                                                     </MenuOption>
-                                                    <MenuOption style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
+                                                    <MenuOption onSelect={() => {
+                                                        dispatch(storyUserId(userId));
+                                                        navigation.navigate(REPORT_USER)
+                                                    }
+                                                    } style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Report</Text>
                                                     </MenuOption>
                                                 </MenuOptions>
@@ -209,6 +225,14 @@ const FrameContent = ({
 
                         </View>
                     </View>
+                    {
+                        isVisible && (
+                            <BlockUserStory
+                                setIsVisible={setIsVisible}
+                                isVisible={isVisible}
+                            />
+                        )
+                    }
                 </View>
             </View>
         </View>

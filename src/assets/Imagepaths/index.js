@@ -15,7 +15,9 @@ export const Img_Paths = {
     EYE_ICON: require("../../assets/eye-icon.png"),
     NOT_EYE_ICON: require("../../assets/not-eye-icon.png"),
     BGIMAGE_DOWNLOADING: require("../../assets/downloadingBgImage.png"),
-
+    BGIMAGE_BLOCKUSER: require("../../assets/bgimageblockuser.png"),
+    BGIMAGE_ACCOUNT_CREATED: require("../../assets/bgaccount_created.png"),
+    USERNAME_IMAGE_REPORT: require("../../assets/usernameimageReport.png"),
     // Categories File-----
 
     // ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
@@ -271,7 +273,7 @@ export const Img_Paths = {
     BG_CONTAINER: require("../../assets/bgcontainer.png"),
     SETTINGS_ICON: require("../../assets/settingsicon.png"),
     BG_URL_PAGE: require("../../assets/bgurlpageProfile.png"),
-    // BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
+    BG_BLACK_INCOGNITO: require("../../assets/bgblackincognito.png"),
 
     //settings
     SETTING_USER: require("../../assets/oliver.png"),

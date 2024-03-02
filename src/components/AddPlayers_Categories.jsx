@@ -13,6 +13,7 @@ import {
   userId,
 } from '../../store/slices/addplayers/addPlayersSlice';
 import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
+import { tag_Friends } from '../../services/api/profile';
 
 const AddFriends_Categories = ({
   profileimage,
@@ -20,6 +21,7 @@ const AddFriends_Categories = ({
   userchoice,
   userid,
   indexNo,
+  type
 }) => {
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const isUserAdded = addedUsers.some(user => user.userid === userid);
@@ -30,13 +32,22 @@ const AddFriends_Categories = ({
   console.log('userid----', userid);
 
   const addFriendHandler = () => {
-    const friend = { username, userid };
-    dispatch(addFriends(friend));
-    // dispatch(addFriends(friend));
-    dispatch(playerContributorsIds(userid));
-    dispatch(userId(userid));
+    if (type !== "tagFriends") {
+      const friend = { username, userid };
+      dispatch(addFriends(friend));
+      dispatch(playerContributorsIds(userid));
+      dispatch(userId(userid));
+    } else {
+      console.log("Im in Tag Friends Component");
+      tag_FriendsApi_Handler()
+    }
   };
 
+  const tag_FriendsApi_Handler = async () => {
+    const responseData = await tag_Friends();
+    console.log("responseDataTag----", responseData)
+    return responseData;
+  }
 
   return (
     <>
