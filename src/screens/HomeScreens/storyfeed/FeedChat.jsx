@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import FeedChatFrame from '../../components/FeedChatFrame';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import NavigationsString from '../../../constants/NavigationsString';
+import FeedChatFrame from '../../../components/FeedChatFrame';
 import { useSelector } from 'react-redux';
-import { addFriends_api } from '../../../services/api/add-members';
+import { addFriends_api } from '../../../../services/api/add-members';
 
 
 
@@ -75,10 +75,10 @@ const FeedChat = () => {
 
                             <View style={{ flexDirection: 'row', }}>
                                 <TouchableOpacity onPress={() => navigation.navigate(ADD_FRIENDS)} style={{ paddingHorizontal: moderateVerticalScale(8) }}>
-                                    <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
+                                    <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../../assets/plus-icon.png")} />
                                 </TouchableOpacity>
                                 <View>
-                                    <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
+                                    <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../../assets/avatar.png")} />
                                 </View>
 
                             </View>
@@ -101,7 +101,7 @@ const FeedChat = () => {
                                     return (
                                         <View style={{ justifyContent: "center", alignItems: "center", }}>
                                             <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
-                                                <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../assets/first-img.png")} />
+                                                <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../../assets/first-img.png")} />
                                             </TouchableOpacity>
                                             <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
                                         </View>
@@ -113,7 +113,7 @@ const FeedChat = () => {
 
                     {/* Frame Content Start----------- */}
                     <View>
-                        <FeedChatFrame likeCountRTK={likeCountRTK} disLikedCountRTK={disLikedCountRTK} type="lilibeth" profileImage={require("../../assets/avatar-inn.png")} />
+                        <FeedChatFrame likeCountRTK={likeCountRTK} disLikedCountRTK={disLikedCountRTK} type="lilibeth" profileImage={require("../../../assets/avatar-inn.png")} />
                     </View>
                     {/* Frame Content Close----------- */}
 

@@ -41,7 +41,7 @@ export const validationUserPassword = Yup.object().shape({
 
 export const validationUserLogin = Yup.object().shape({
   email: Yup.string()
-    .email('Invalid email')
+    .email('Email is required')
     .required('Email is required')
     .matches(
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
@@ -49,7 +49,7 @@ export const validationUserLogin = Yup.object().shape({
     )
     .matches(/^[^\s]+$/, 'Email cannot contain spaces'),
   password: Yup.string()
-    .required('Invalid password')
+    .required('Password is required')
 });
 
 export const validationforgetEmail = Yup.object().shape({

@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, ActivityIndicator } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../Styles/Style';
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import NetInfo from "@react-native-community/netinfo";
-import FrameContent from '../../components/FrameContent';
+import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../../assets/Imagepaths';
-import NavigationsString from '../../constants/NavigationsString';
-import { FlatListData } from '../../../dummyData/DummyData';
-import { PassionOne_Regular } from '../../constants/GlobalFonts';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import NavigationsString from '../../../constants/NavigationsString';
+import { FlatListData } from '../../../../dummyData/DummyData';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchallFeedStories } from '../../../services/api/storyfeed';
-import { addFriends_api } from '../../../services/api/add-members';
-import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
+import { fetchallFeedStories } from '../../../../services/api/storyfeed';
+import { addFriends_api } from '../../../../services/api/add-members';
+import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
 
 
 const Home = () => {
@@ -102,10 +102,9 @@ const Home = () => {
     };
 
 
-
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-            {/* <ScrollView> */}
+
             <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(5) }}>
                 <View style={{ flexDirection: 'row', width: responsiveWidth(90), justifyContent: "space-between", alignItems: "center" }}>
                     <View>
@@ -114,11 +113,11 @@ const Home = () => {
 
                     <View style={{ flexDirection: 'row', }}>
                         <TouchableOpacity style={{ paddingHorizontal: moderateVerticalScale(8) }} onPress={() => navigation.navigate(ADD_FRIENDS)}>
-                            <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../assets/plus-icon.png")} />
+                            <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../../assets/plus-icon.png")} />
                         </TouchableOpacity>
 
                         <TouchableOpacity>
-                            <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../assets/avatar.png")} />
+                            <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../../assets/avatar.png")} />
                         </TouchableOpacity>
 
                     </View>
@@ -141,7 +140,7 @@ const Home = () => {
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
                                     <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
-                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../assets/first-img.png")} />
+                                        <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../../assets/first-img.png")} />
                                     </TouchableOpacity>
                                     <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
                                 </View>
@@ -153,12 +152,10 @@ const Home = () => {
 
 
 
-            {/* !isLoadingMain ? */}
-
             {
                 isLoadingMain ?
-                    <View style={{ alignItems: 'center', height: height / 2, }}>
-                        <ActivityIndicator size={30} color={'#000'} />
+                    <View style={{ justifyContent: "center", alignItems: 'center', height: height / 1.5, }}>
+                        <ActivityIndicator size={24} color={PrimaryColor} />
                     </View> :
                     <>
                         <FlatList
@@ -172,7 +169,8 @@ const Home = () => {
                                 <FrameContent
                                     key={index}
                                     type={item?.type}
-                                    profileImage={require("../../assets/avatar-inn.png")}
+                                    userId={item?._id}
+                                    profileImage={require("../../../assets/avatar-inn.png")}
                                     content={item.content}
                                     likedUserId={item?._id}
                                     commentsCount={item?.commentsCount}
@@ -192,7 +190,7 @@ const Home = () => {
                                 if (isLoading) {
                                     return (
                                         <View style={{ alignItems: 'center', height: height / 3, }}>
-                                            <ActivityIndicator size={40} color={'#000'} />
+                                            <ActivityIndicator size={24} color={PrimaryColor} />
                                         </View>
                                     );
                                 }
@@ -201,29 +199,18 @@ const Home = () => {
                             onEndReached={handleLoadMore}
                             onEndReachedThreshold={0.3}
                         />
+
                         {
                             responseUsers?.length === 0 && (
-                                <View style={{ position: "absolute", top: 300, left: 40, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
-                                    <Text style={{ color: "#000", fontSize: responsiveFontSize(3) }}>{checkDataisOrNot}</Text>
+                                <View style={{ position: "absolute", top: 300, left: 45, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
+                                    <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{checkDataisOrNot}</Text>
                                 </View>
                             )
                         }
+
                     </>
             }
 
-            {/* Frame Content Start----------- */}
-
-            {/* 
-            {
-                {/* !loading ? */}
-            {/* <View style={{ justifyContent: "center", alignItems: "center", height: height / 2 }}>
-                        <ActivityIndicator size={40} color={"#000"} />
-                    </View>
-             */}
-
-            {/* Frame Content Close----------- */}
-
-            {/* </ScrollView> */}
         </ImageBackground>
     )
 };

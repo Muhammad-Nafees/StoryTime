@@ -46,6 +46,7 @@ import Toast from 'react-native-toast-message';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Categories = () => {
   const { width, height } = Dimensions.get('window');
@@ -132,7 +133,6 @@ const Categories = () => {
     try {
       const responseData = await addFriends_api();
       const usernameObj = responseData?.data?.users?.find((item) => item.username === isUsernameInputValue);
-      console.log("usernameObj=====", usernameObj);
       if (usernameObj) {
         const userid = usernameObj._id;
         const username = usernameObj?.username;
@@ -144,7 +144,6 @@ const Categories = () => {
       } else if (isUsernameInputValue?.length == 0) {
         navigation.navigate(ADD_PLAYERS)
       }
-
       else {
         Toast.show({
           type: "error",
@@ -168,7 +167,7 @@ const Categories = () => {
       const valObj = ["#C453D7", "#82BED1", "#C07632", "#56C488", "#D18282", "#A4C857", "#974444", "#8482D1", "#C45E89", "#56B6A4", "#79905C", "#C79861"];
       for (let i = 0; i < response?.data?.categories.length; i++) {
         const colorIndex = i % valObj.length;
-        response.data.categories[i].background = valObj[colorIndex]; // Assigning a random color from valObj
+        response.data.categories[i].background = valObj[colorIndex];
       };
 
       setResponseCategories(prevData => [...prevData, ...response?.data?.categories]);
@@ -269,179 +268,173 @@ const Categories = () => {
 
 
   return (
-    <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-      {/* <ScrollView> */}
-      {/* Frame Content Close----------- */}
 
-      <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
-        <View style={styles.first_container}>
+    <LinearGradient
+      colors={["#75BDCD", "#FFB5CB",]}
+      start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+      style={{ backgroundColor: pinkColor, height: responsiveHeight(90) }}>
+      <ImageBackground style={{ height: responsiveHeight(100) }} source={SPLASH_SCREEN_IMAGE}>
 
-          <BackButton onPress={() => navigation.goBack()} />
-          <View style={styles.categories_text_container}>
-            <Text style={styles.categories_text}>Categories</Text>
-          </View>
-        </View>
+        <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
+          <View style={styles.first_container}>
 
-        {!user ?
-          <View style={{ marginTop: moderateVerticalScale(10) }}>
-            <View style={{ marginBottom: 'auto', marginTop: 'auto', marginLeft: 5 }}>
-              <SvgIcons name={'Guest'} width={36} height={36} />
+            <BackButton onPress={() => navigation.goBack()} />
+            <View style={styles.categories_text_container}>
+              <Text style={styles.categories_text}>Categories</Text>
             </View>
-            <Text style={styles.text}>Guest{guestNumber}</Text>
-          </View> : <></>}
-      </View>
+          </View>
 
-      {/* IMainnputField-----*/}
-      {/* MainInputField----- */}
+          {!user ?
+            <View style={{ marginTop: moderateVerticalScale(10) }}>
+              <View style={{ marginBottom: 'auto', marginTop: 'auto', marginLeft: 5 }}>
+                <SvgIcons name={'Guest'} width={36} height={36} />
+              </View>
+              <Text style={styles.text}>Guest{guestNumber}</Text>
+            </View> : <></>}
+        </View>
+        {/* MainInputField----- */}
 
-      {user ?
-        <>
-          <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
-          <View
-            style={{
-              paddingVertical: moderateVerticalScale(6),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+        {user ?
+          <>
+            <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
             <View
               style={{
-                width: responsiveWidth(90),
-                flexDirection: 'row',
+                paddingVertical: moderateVerticalScale(6),
+                justifyContent: 'center',
                 alignItems: 'center',
-                flexWrap: 'wrap',
               }}>
-              <View>
-                <Text
-                  style={{
-                    color: '#393939',
-                    fontWeight: '600',
-                    textAlign: 'center',
-                    fontSize: responsiveHeight(1.9),
-                    fontFamily: Inter_Regular.Inter_Regular
-                  }}>
-                  Players:
-                </Text>
-              </View>
-
-              {addUsersGame?.map((item, index) => (
-                <View
-                  style={{
-                    margin: 4,
-                    backgroundColor: '#395E66',
-                    paddingHorizontal: moderateScale(14),
-                    paddingVertical: moderateVerticalScale(4.5),
-                    borderRadius: 40,
-                  }}>
+              <View
+                style={{
+                  width: responsiveWidth(90),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}>
+                <View>
                   <Text
                     style={{
-                      color: '#FFF',
-                      fontSize: responsiveFontSize(1.9),
+                      color: '#393939',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      fontSize: responsiveHeight(1.9),
                       fontFamily: Inter_Regular.Inter_Regular
-                    }}>{`@${item.username}`}</Text>
+                    }}>
+                    Players:
+                  </Text>
                 </View>
-              ))}
-            </View>
-          </View></> :
-        <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      }
-      <View
-        style={{
-          // flexDirection: 'row',
-          // flexWrap: 'wrap',
-          justifyContent: 'flex-start',
-          // alignItems: 'flex-start', 
-          paddingHorizontal: moderateScale(4),
-          // backgroundColor: "orange",
-        }}
-      >
-      {DATA.length > 0 ?
-        <FlatList
-          data={[...DATA, randomObject]}
-          scrollEnabled={true}
-          numColumns={3}
-          nestedScrollEnabled
-          scrollsToTop
-          contentContainerStyle={{ paddingBottom: 200 }}
-          keyExtractor={(item, index) => index.toString()}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          renderItem={({ item, index }) => (
-            <View
-              key={item?.id}
-              style={{
-                backgroundColor: item?.namerandom == "Random" ? "#E44173" : TextColorGreen,
-                width: responsiveWidth(30),
-                borderRadius: 10,
-                height: responsiveHeight(18.5),
-                alignItems: 'center',
-                margin: responsiveWidth(1.2),
-                borderWidth: 3,
-                borderColor: item?.namerandom === "Random" ? "rgba(238, 95, 138, 1)" : "#5797A5",
-              }}>
-              <StoryUsers
-                onPress={() => handleStoryUser(item?.id, item?.name)}
-                images={item?.image}
-                text={item?.name}
-                item={item}
-                handleRandomClick={handleRandomClick}
-                mainbgColor={TextColorGreen}
-                backgroundColor="rgba(199, 152, 97, 1)"
-              />
 
-              {!!isCategoryBlurred(item) && item?.namerandom !== "Random" &&
-                <View style={styles.blur_wrapper}>
-                  <BlurView
-                    style={styles.blur_view}
-                    blurAmount={10}
-                    overlayColor='transparent'
-                  >
-                    <View style={styles.blur_content_container}>
-                      <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center', top: responsiveHeight(5) }}>
-                        <SvgIcons name={'Lock'} width={47} height={47} />
-                      </View>
+                {addUsersGame?.map((item, index) => (
+                  <View
+                    style={{
+                      margin: 4,
+                      backgroundColor: '#395E66',
+                      paddingHorizontal: moderateScale(14),
+                      paddingVertical: moderateVerticalScale(4.5),
+                      borderRadius: 40,
+                    }}>
+                    <Text
+                      style={{
+                        color: '#FFF',
+                        fontSize: responsiveFontSize(1.9),
+                        fontFamily: Inter_Regular.Inter_Regular
+                      }}>{`@${item.username}`}</Text>
+                  </View>
+                ))}
+              </View>
+            </View></> :
+          <SearchField placeholder="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        }
+        <View
+          style={{
+            // flexDirection: 'row',
+            // flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+            // alignItems: 'flex-start', 
+            paddingHorizontal: moderateScale(4),
+            // backgroundColor: "orange",
+          }}
+        >
+          {DATA.length > 0 ?
+            <FlatList
+              data={[...DATA, randomObject]}
+              scrollEnabled={true}
+              numColumns={3}
+              nestedScrollEnabled
+              scrollsToTop
+              contentContainerStyle={{ paddingBottom: responsiveHeight(35) }}
+              keyExtractor={(item, index) => index.toString()}
+              onRefresh={onRefresh}
+              refreshing={isRefreshing}
+              renderItem={({ item, index }) => (
+                <View
+                  key={item?.id}
+                  style={{
+                    backgroundColor: item?.namerandom == "Random" ? "#E44173" : TextColorGreen,
+                    width: responsiveWidth(30),
+                    borderRadius: 10,
+                    height: responsiveHeight(18.5),
+                    alignItems: 'center',
+                    margin: responsiveWidth(1.2),
+                    borderWidth: 3,
+                    borderColor: item?.namerandom === "Random" ? "rgba(238, 95, 138, 1)" : "#5797A5",
+                  }}>
+                  <StoryUsers
+                    onPress={() => handleStoryUser(item?.id, item?.name)}
+                    images={item?.image}
+                    text={item?.name}
+                    item={item}
+                    handleRandomClick={handleRandomClick}
+                    mainbgColor={TextColorGreen}
+                    backgroundColor="rgba(199, 152, 97, 1)"
+                  />
+
+                  {!!isCategoryBlurred(item) && item?.namerandom !== "Random" &&
+                    <View style={styles.blur_wrapper}>
+                      <BlurView
+                        style={styles.blur_view}
+                        blurAmount={10}
+                        overlayColor='transparent'
+                      >
+                        <View style={styles.blur_content_container}>
+                          <View style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', alignItems: 'center', top: responsiveHeight(5) }}>
+                            <SvgIcons name={'Lock'} width={47} height={47} />
+                          </View>
+                        </View>
+                      </BlurView>
                     </View>
-                  </BlurView>
-                </View>
-              }
+                  }
 
-            </View>
-          )}
-
-          ListFooterComponent={() => (
-            <>
-              {isLoadMore && (
-                <View style={{ alignItems: 'center', height: height / 4 }}>
-                  <ActivityIndicator size={40} color={'#000'} />
                 </View>
               )}
-            </>
-          )}
-          onEndReached={() => handleLoadMore()}
-          onEndReachedThreshold={0.3}
-        />
-        : 
-        <View style={{ alignItems: 'center', height: height / 4 }}>
-        <ActivityIndicator size={40} color={'#000'} />
-        </View>
-      }
 
-      </View>
-      <Toast />
-      {/* <RandomCategories
-                    responseRandom={responseRandom}
-                /> */}
-      {/* </ScrollView> */}
-    </ImageBackground>
+              ListFooterComponent={() => (
+                <>
+                  {isLoadMore && (
+                    <View style={{ alignItems: 'center', height: height / 4 }}>
+                      <ActivityIndicator size={24} color={PrimaryColor} />
+                    </View>
+                  )}
+                </>
+              )}
+              onEndReached={() => handleLoadMore()}
+              onEndReachedThreshold={0.3}
+            />
+            :
+            <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
+              <ActivityIndicator size={24} color={PrimaryColor} />
+            </View>
+          }
+
+        </View>
+        <Toast />
+      </ImageBackground>
+    </LinearGradient>
+
+
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: pinkColor,
-    width: '100%',
-    height: '100%',
-    flex: 1,
-  },
   first_container: {
     paddingTop: responsiveWidth(6),
     paddingVertical: moderateVerticalScale(8),
