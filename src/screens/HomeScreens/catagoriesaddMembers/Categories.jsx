@@ -369,7 +369,7 @@ const Categories = () => {
         ) : isLoading ? (
           <ActivityIndicator size={40} color={PrimaryColor} />
         ) : (
-          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.5)} clr={White}>No Data Found!</Typography>
+          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.6)} clr={PrimaryColor}>No Data Found!</Typography>
         )}
       </View>
     );

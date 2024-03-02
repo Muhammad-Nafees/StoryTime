@@ -44,8 +44,8 @@ console.log(imageLink)
             />
             :
             <Image
-              style={{ width: 60, height: 60, borderRadius: 10 }}
-              resizeMode="center"
+              style={{ width: 65, height: 65, borderRadius: 10 }}
+              resizeMode="stretch"
               source={{ uri: imageLink }}
             />
         }
