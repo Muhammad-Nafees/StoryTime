@@ -81,8 +81,9 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
-<ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+       <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
         
         <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                       <BackButton onPress={() => setIsVisible(false)} />
@@ -129,19 +130,17 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   
                       </View>
                   </ImageBackground>
-  
-                  {isDownloadingModalVisible &&
-                  <DownloadingVideoModal
-                  isVisibleFirstVideoFlow={isDownloadingModalVisible}
-                  setIsVisibleFirstVideoFlow={closeDownloadingModal}
-                  text="Story Time Successfully Saved!"
-                  textButton="Back"
-                  />
-               }
-  
               </ImageBackground>
         </Modal>
-
+  {isDownloadingModalVisible &&
+    <DownloadingVideoModal
+    isVisibleFirstVideoFlow={isDownloadingModalVisible}
+    setIsVisibleFirstVideoFlow={closeDownloadingModal}
+    text={`Story Time\nSuccessfully Saved!`}
+    textButton="Back"
+    />
+ }
+</>
 
     )
 };

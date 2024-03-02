@@ -13,7 +13,7 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
-import {SecondaryColor, TextColorGreen} from '../screens/Styles/Style';
+import {TextColorGreen} from '../screens/Styles/Style';
 import {PassionOne_Regular} from '../constants/GlobalFonts';
 import {SPACING} from '../constants/Constant';
 
@@ -48,9 +48,9 @@ const GuestModals = forwardRef((props, ref) => {
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // backdropColor="white"
+      backdropColor="#777377"
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.9}
       onBackdropPress={close}>
       <ImageBackground
         style={styles.img_frame}

@@ -312,7 +312,7 @@ const SubCategories = ({route}) => {
         ) : isLoading ? (
           <ActivityIndicator size={40} color={PrimaryColor} />
         ) : (
-          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.5)} clr={White}>No Data Found!</Typography>
+          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.6)} clr={PrimaryColor}>No Data Found!</Typography>
         )}
       </View>
     );
@@ -367,22 +367,25 @@ const SubCategories = ({route}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View
-              style={{
-                paddingVertical: moderateVerticalScale(6),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View style={{marginHorizontal: moderateScale(10)}}>
-                <Text
-                  style={{
-                    color: '#393939',
-                    fontWeight: '500',
-                    textAlign: 'center',
-                  }}>
-                  Players:
-                </Text>
-              </View>
+             <View
+                style={{
+                  width: responsiveWidth(90),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      color: '#393939',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      fontSize: responsiveHeight(1.9),
+                      fontFamily: Inter_Regular.Inter_Regular,
+                    }}>
+                    Players:
+                  </Text>
+                </View>
 
               {addUsersGame?.map((item, index) => (
                 <View

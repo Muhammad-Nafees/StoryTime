@@ -113,7 +113,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
                 onPress={nextScreenmodalHandler}
                 isVisible={isVisibleAfterDownloading}
                 setVisible={setIsVisibleAfterDownloading}
-                text={`Story Time\nSuccessfully Saved to your phone!`}
+                text={`Story Time\nSuccessfully Saved to your\nphone!`}
                 textButton="Back" />
         }
 </>

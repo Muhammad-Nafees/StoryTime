@@ -145,7 +145,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
                 </ImageBackground>
             </Modal>
             {saveStoryModalDownloading &&
-                <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text={`Story Time\nSuccessfully Saved to your phone!`} textButton="Back" />
+                <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text={`Story Time\nSuccessfully Saved`} textButton="Back" />
             }
         </>
     )
