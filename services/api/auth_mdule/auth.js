@@ -224,7 +224,7 @@ export const logout_user = async () => {
 export const delete_user_account = async () => {
   try {
     let apiUrl = Base_Url + delete_account_endpoint;
-
+    console.log(apiUrl)
     const responseData = await fetch(apiUrl, {
       method: "DELETE",
       headers: {
