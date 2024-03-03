@@ -46,8 +46,9 @@ const BlockModal = forwardRef((props, ref) => {
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
+      backdropColor='#979797'
       onModalHide={close}
-      backdropOpacity={0.7}
+      backdropOpacity={0.98}
       onBackdropPress={close}>
       <View
         style={{

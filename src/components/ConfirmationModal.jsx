@@ -2,41 +2,37 @@ import Modal from 'react-native-modal';
 import {
   Text,
   View,
-  TouchableOpacity,
-  StyleSheet,
   TextInput,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {
-  responsiveFontSize,
-  responsiveHeight,
   responsiveWidth,
+  responsiveHeight,
+  responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {delete_user_account} from '../../services/api/auth_mdule/auth';
+import { delete_user_account } from '../../services/api/auth_mdule/auth';
 import React, {
   useState,
+  useEffect,
   forwardRef,
   useImperativeHandle,
-  useEffect,
 } from 'react';
 import {
+  White,
   Black02,
   PrimaryColor,
   TextColorGreen,
-  White,
 } from '../screens/Styles/Style';
 import Typography from './Typography';
-import StoryTimeSaved from './playFlow/StoryTimeSaved';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
 
 const ConfirmationModal = forwardRef((props, ref) => {
-  const dispatch = useDispatch()
+  const {handleSuccessCallback} = props || {}
+
   const [isVisible, setIsVisible] = useState(false);
   const [randomWord, setRandomWord] = useState('');
   const [userInput, setUserInput] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
   const [inputError, setInputError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     generateRandomWord();
@@ -74,9 +70,9 @@ const ConfirmationModal = forwardRef((props, ref) => {
   };
 
   const close = () => {
-    setIsVisible(false);
     setUserInput('');
     setInputError('');
+    setIsVisible(false);
   };
 
   useImperativeHandle(ref, () => {
@@ -86,27 +82,15 @@ const ConfirmationModal = forwardRef((props, ref) => {
   const DeleteUserAccount = async()=> {
     try {
       const responseData = await delete_user_account();
-      // console.log(responseData)
+      console.log(responseData)
       if(responseData.statusCode === 200){
+        handleSuccessCallback();
         close();
-        setUserInput('');
-        setIsSuccess(true);
-        setInputError('');
-      } 
+      }
     } catch (error) {
       console.log('error ==> ', error?.message);
     }
   };
-  const handleDeleteUser = async () => {
-  try {
-      setIsLoading(true);
-      await AsyncStorage.removeItem('isLoggedIn');
-      dispatch(logout())
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   return (
     <>
@@ -115,8 +99,9 @@ const ConfirmationModal = forwardRef((props, ref) => {
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
+      backdropColor='#979797'
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.98}
       onBackdropPress={close}>
       <View
         style={{
@@ -205,10 +190,6 @@ const ConfirmationModal = forwardRef((props, ref) => {
         </View>
       </View>
     </Modal>
-    {
-      isSuccess &&
-      <StoryTimeSaved text={"Account Deleted"} textButton={'Return'} isVisible={isSuccess} setVisible={setIsSuccess} iconName={"Success"} onPress={handleDeleteUser} loading={isLoading}/>
-    }
     </>
   );
 });
