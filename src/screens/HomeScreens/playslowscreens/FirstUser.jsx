@@ -552,8 +552,19 @@ const FirstUser = ({ route }) => {
             </TouchableOpacity>
           </View>
 
-          {
-            isNext && (
+          {isNext && user ? (
+          <CustomPlayFlowButton
+            onPress={onPressNext}
+            isLongPress={isLongPress}
+            backgroundColor={TextColorGreen}
+            color="#FFF"
+            text={`Next Player${isNextUser?.username ? ": @" + isNextUser?.username : ''}`}
+            timeLeft={timeLeft}
+            isNextUser={isNextUser}
+            isCancelingStory={isCancelingStory}
+          />
+          ) : (
+            !user && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -561,23 +572,12 @@ const FirstUser = ({ route }) => {
                 color="#FFF"
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
+                text={'NextPlayer'}
                 isCancelingStory={isCancelingStory}
               />
-            )}
+            )
+          )}
 
-          {
-            !user ?
-              <CustomPlayFlowButton
-                onPress={onPressNext}
-                isLongPress={isLongPress}
-                backgroundColor={TextColorGreen}
-                color="#FFF"
-                timeLeft={timeLeft}
-                isNextUser={isNextUser}
-                isCancelingStory={isCancelingStory}
-              /> :
-              <></>
-          }
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn

@@ -1,3 +1,4 @@
+import SuccessModal from '../../../components/SuccessModal';
 import React, {useEffect, useRef,useState} from 'react';
 import Typography from '../../../components/Typography';
 import { useNavigation } from '@react-navigation/native';
@@ -7,12 +8,26 @@ import ConfirmationModal from '../../../components/ConfirmationModal';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { View, StyleSheet,TouchableOpacity, Keyboard } from 'react-native'
 import {responsiveFontSize, responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
+import { useLogout } from '../../../hooks/useLogout';
 
 
 const DeleteAccount = () => {
     const navigation = useNavigation();
+    const {handleLogout} = useLogout()
     const ConfirmationModalRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const [successModalVisible, setSuccessModalVisible] = useState(false);
+
+    const handleDeleteUser = async () => {
+      try {
+          setIsLoading(true);
+          await handleLogout()
+        } catch (error) {
+        } finally {
+          setIsLoading(false);
+        }
+      }
 
     const modalOpen = () => {
         if (ConfirmationModalRef.current) {
@@ -59,7 +74,8 @@ const DeleteAccount = () => {
     <Typography style={styles.txt}>Cancel</Typography>
     </TouchableOpacity>
     </View>
-    <ConfirmationModal ref={ConfirmationModalRef}/>
+    <ConfirmationModal ref={ConfirmationModalRef} handleSuccessCallback={()=>setSuccessModalVisible(true)}/>
+    <SuccessModal text={"Account Deleted"} textButton={'Return'} isVisible={successModalVisible} setVisible={setSuccessModalVisible} iconName={"Success"} onPress={handleDeleteUser} loading={isLoading}/>
     </BackgroundWrapper>
   )
 }

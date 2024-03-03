@@ -9,6 +9,7 @@ import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
 import { useDispatch, useSelector } from 'react-redux'
 import { extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
+import { SCREEN_HEIGHT } from '../../../../constants/Constant'
 
 
 
@@ -16,9 +17,8 @@ const VideoFirstStartScreen = () => {
 
     const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
-    const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.92;
+    const squareSize = SCREEN_HEIGHT / 2.2;
 
 
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     circle_container: {
         paddingVertical: moderateVerticalScale(10),
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     sub_circle: {
         backgroundColor: TextColorGreen,

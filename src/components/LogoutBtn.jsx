@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Typography from './Typography';
-import { Red02 } from '../screens/Styles/Style';
+import { Red02, White } from '../screens/Styles/Style';
 import { useDispatch, useSelector } from 'react-redux';
 import { SCREEN_WIDTH, SPACING } from '../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
@@ -9,22 +9,16 @@ import { logout } from '../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../constants/NavigationsString';
+import { useLogout } from '../hooks/useLogout';
 
 const LogoutBtn = () => {
-  const dispatch = useDispatch()
-  const navigation = useNavigation()
+  const {handleLogout} = useLogout()
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const { LOGIN } = NavigationsString;
 
-  const handleLogout = async () => {
+  const handleLogoutPress = async () => {
     try {
       setIsLoggingOut(true);
-      const responseData = await logout_user();
-      const data = responseData?.data;
-      await AsyncStorage.removeItem('isLoggedIn');
-      await AsyncStorage.removeItem('userData');
-      await AsyncStorage.setItem('isLoggedOut', 'true')
-      dispatch(logout())
+      await handleLogout()
     } catch (error) {
     } finally {
       setIsLoggingOut(false);
@@ -32,9 +26,9 @@ const LogoutBtn = () => {
   };
 
   return (
-    <TouchableOpacity onPress={handleLogout} activeOpacity={0.3} style={styles.btn}>
+    <TouchableOpacity onPress={handleLogoutPress} activeOpacity={0.3} style={styles.btn}>
       {isLoggingOut ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={White}  />
       ) : (
         <Typography style={styles.txt}>Log out</Typography>
       )}

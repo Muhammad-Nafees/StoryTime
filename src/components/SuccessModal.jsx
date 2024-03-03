@@ -9,19 +9,17 @@ import Modal from 'react-native-modal';
 import {
   TextColorGreen,
   pastelGreen,
-} from '../../screens/Styles/Style';
+} from '../screens/Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import SvgIcons from '../svgIcon/svgIcons';
-import { Circle, Path, Svg } from 'react-native-svg';
+import SvgIcons from './svgIcon/svgIcons';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import { useNavigation } from '@react-navigation/native';
 
 
-const StoryTimeSaved = ({
+const SuccessModal = ({
   isVisible,
   setVisible,
   text,
@@ -31,17 +29,12 @@ const StoryTimeSaved = ({
   loading
 }) => {
 
-  const navigation = useNavigation();
-
   const close = () => {
     if (onPress) {
       onPress()
       setVisible(false);
-    } else {
-      // setVisible(false);
-      navigation.navigate("profileStack", {
-        screen: "Profile"
-      });
+    }else{
+     setVisible(false);
     }
   };
 
@@ -52,9 +45,9 @@ const StoryTimeSaved = ({
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      backdropColor='#979697'      
+      backdropColor='#979797'
       onModalHide={close}
-      backdropOpacity={0.95}
+      backdropOpacity={0.98}
       onBackdropPress={close}>
         
       <View
@@ -73,7 +66,7 @@ const StoryTimeSaved = ({
             alignItems: 'center',
             paddingVertical: moderateVerticalScale(12),
           }}>
-          {iconName ? (
+          
             <View
               style={{
                 marginTop: 'auto',
@@ -84,23 +77,6 @@ const StoryTimeSaved = ({
               }}>
               <SvgIcons name={iconName} width={27} height={23} />
             </View>
-          ) : (
-            <Svg
-              width="35"
-              height="34"
-              viewBox="0 0 35 34"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
-              <Path
-                d="M24.5 13L14.875 22L10.5 17.9091"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </Svg>
-          )}
           <Text
             style={{
               fontSize: responsiveFontSize(1.9),
@@ -147,4 +123,4 @@ const StoryTimeSaved = ({
   );
 };
 
-export default StoryTimeSaved;
+export default SuccessModal;

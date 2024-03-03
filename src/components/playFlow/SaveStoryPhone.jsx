@@ -209,8 +209,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
             {saveStoryModalsecond &&
-                <StoryTimeSaved isLoading={isLoading} isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text="Story Time
-              Successfully Saved!" textButton="Back" />
+                <StoryTimeSaved isLoading={isLoading} isVisible={isVisibleSavePhone} setVisible={setVisibleSavePhone} text={`Story Time\nSuccessfully Saved`} textButton="Back" />
             }
         </>
     )

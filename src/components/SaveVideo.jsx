@@ -81,8 +81,9 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
-<ImageBackground style={styles.container} source={BG_PLAYFLOW}>
+       <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
         
         <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                       <BackButton onPress={() => setIsVisible(false)} />
@@ -92,7 +93,7 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
                       style={styles.img_frame}
                       resizeMode="stretch"
                       source={BG_CLOCK}>
-                      <View style={{flex:1, justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 5, alignItems: 'center' }}>
+                      <View style={{flex:1, justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 7, alignItems: 'center' }}>
   
                           <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                           <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time in your phone?</Text>
@@ -129,19 +130,17 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   
                       </View>
                   </ImageBackground>
-  
-                  {isDownloadingModalVisible &&
-                  <DownloadingVideoModal
-                  isVisibleFirstVideoFlow={isDownloadingModalVisible}
-                  setIsVisibleFirstVideoFlow={closeDownloadingModal}
-                  text="Story Time Successfully Saved!"
-                  textButton="Back"
-                  />
-               }
-  
               </ImageBackground>
         </Modal>
-
+  {isDownloadingModalVisible &&
+    <DownloadingVideoModal
+    isVisibleFirstVideoFlow={isDownloadingModalVisible}
+    setIsVisibleFirstVideoFlow={closeDownloadingModal}
+    text={`Story Time\nSuccessfully Saved!`}
+    textButton="Back"
+    />
+ }
+</>
 
     )
 };
