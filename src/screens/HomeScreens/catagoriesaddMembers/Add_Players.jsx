@@ -96,7 +96,7 @@ const AddPlayers = () => {
                         <ScrollView>
                             {
                                 addedUsers?.map((item, index) => (
-                                    <RemoveUsers_Categories key={item?.userid} item={item} userid={item.userid} username={item.username} />
+                                    <RemoveUsers_Categories key={`added_users_${item?.userid}`} item={item} userid={item.userid} username={item.username} />
                                 ))
                             }
                         </ScrollView>
@@ -115,7 +115,7 @@ const AddPlayers = () => {
                                     Responseapi?.map((item, index) => {
                                         console.log("index====", index);
                                         return (
-                                            <AddFriends_Categories key={item?._id} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
+                                            <AddFriends_Categories key={`friends_${item?._id}`} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
                                         )
                                     })
                             }
