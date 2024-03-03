@@ -9,7 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetRecordingData } from '../../../../store/slices/RecordingData';
-import { extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -20,6 +20,8 @@ const SecondPlayFlowScreen = () => {
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
+
     console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
@@ -27,10 +29,14 @@ const SecondPlayFlowScreen = () => {
     const dispatch = useDispatch();
 
     const onpressNextHandler = () => {
+
         navigation.navigate(FIRST_USER);
         dispatch(resetRecordingData());
         dispatch(extendStoryCheck(null));
-    }
+        dispatch(checkTrueOrFalse(null))
+    };
+
+    console.log("addedUsers", addedUsers);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

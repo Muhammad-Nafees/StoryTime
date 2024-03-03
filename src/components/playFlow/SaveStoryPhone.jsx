@@ -21,7 +21,7 @@ import { createStory_api } from '../../../services/api/storyfeed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
 import * as ScopedStorage from "react-native-scoped-storage"
-
+import DocumentPicker from "react-native-document-picker"
 
 
 
@@ -40,7 +40,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [directoryPath, setDirectoryPath] = useState(null);
+    const [directoryPath, setDirectoryPath] = useState("");
 
 
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -69,16 +69,28 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     async function getAndroidDir(directoryId) {
 
         try {
-            let dir = await AsyncStorage.getItem(directoryId); // Check if dir exists already
+            let dir = await AsyncStorage.getItem(directoryId);
             if (!dir) {
                 dir = await requestPermission(directoryId)
             }
             else {
                 dir = JSON.parse(dir);
             };
+            let absolutePath;
 
-            const persistedUris = await ScopedStorage.getPersistedUriPermissions(); // list all persisted uris
-            setDirectoryPath(persistedUris);
+            const persistedUris = await ScopedStorage.getPersistedUriPermissions();
+
+            if (
+                dir?.uri?.startsWith(
+                    'content://com.android.externalstorage.documents/tree/primary'
+                )
+            ) {
+                absolutePath = convertInternalStoragePathToAbsolutePath(dir?.uri);
+            } else {
+                // It's SD card or other external storage
+                absolutePath = convertExternalStorageUriToAbsolutePath(dir?.uri);
+            }
+
 
             if (persistedUris.length > 0) {
                 setIsVisible(false);
@@ -86,6 +98,9 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 setVisiblePdf(true);
                 console.log("I'M OUT FROM DESTINATIOnN----====");
             };
+            setDirectoryPath(absolutePath);
+
+            console.log("diruri--", dir?.uri)
 
             console.log("persistedUris", persistedUris);
 
@@ -98,16 +113,24 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         }
     };
 
+    const convertExternalStorageUriToAbsolutePath = (uri) => {
+        let dirToRead = uri.split('tree')[1];
+        dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
+        return decodeURIComponent(dirToRead);
+    };
+
+    const convertInternalStoragePathToAbsolutePath = (uri) => {
+        let dirToRead = uri?.split('primary')[1];
+        const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
+        dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
+        return decodeURIComponent(dirToRead);
+    };
+
     const saveFile = async () => {
         let dir = await getAndroidDir("dataDir");
         await ScopedStorage.writeFile(dir?.uri, 'text/plain',)
     };
 
-    const saveStoryhandler = () => {
-        // setIsVisible(false);
-        // setSaveStoryModal(true);
-        // setVisiblePdf(true);
-    };
 
 
 
@@ -157,7 +180,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                             <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400", marginBottom: responsiveHeight(2) }}>Save your story to your phone</Text>
 
-
                             {!isUserGuest && <View style={{}}>
                                 <TouchableButton isLoading={isLoading} type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
                             </View>}
@@ -171,8 +193,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             {/* </View> */}
                         </View>
                     </ImageBackground>
-
-
 
 
 

@@ -32,7 +32,7 @@ import {
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
-import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+import Voice from '@react-native-voice/voice';
 
 
 const FirstUser = ({ route }) => {
@@ -41,11 +41,9 @@ const FirstUser = ({ route }) => {
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
   const [started, setStarted] = useState(false);
-  const [ended, setEnded] = useState('');
   const [isPressed, setIsPressed] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [timeText, setTimeText] = useState('02:00');
-  const [IsRecording, setIsRecording] = useState(false);
   const [isLongPress, setIsLongPress] = useState(false);
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
@@ -53,7 +51,7 @@ const FirstUser = ({ route }) => {
   const checkUserTrueorFalse = useSelector(
     state => state.addPlayers.checkTrueOrFalse,
   );
-
+  console.log("checkUserTrueorFalse----", checkUserTrueorFalse)
   const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
   const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
   const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
@@ -64,8 +62,6 @@ const FirstUser = ({ route }) => {
   const nextRandomNumvalueExtend = useSelector(
     state => state?.addPlayers?.nextRandomNumberExtend
   );
-
-
   const dispatch = useDispatch();
 
   const [recordingText, setRecordingText] = useState("");
@@ -74,20 +70,27 @@ const FirstUser = ({ route }) => {
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
-  const [focusvalueCheck, setFocusValueCheck] = useState(false);
   const [speaking, setSpeaking] = useState(false);
 
+
   const USER = user?.data?.user || user?.data;
-  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
+  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
+  ], [USER, addedUsers]);
+
+
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
+  console.log("seuecneusers--", sequenceUser[0]);
+  console.log("currentdisplayuser-------------------------", currentDisplayUser);
+
+  // console.log("isNextUser", isNextUser);
+
+
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
   const stringText = recordingText.toString();
-  const cleanedText = stringText.replace(/,/g, '');
-
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -102,6 +105,7 @@ const FirstUser = ({ route }) => {
     };
   }, []);
 
+
   // onSpeechStart----------
 
   const onSpeechStart = e => {
@@ -113,12 +117,12 @@ const FirstUser = ({ route }) => {
   // onSpeechEnd ----------
 
   const onSpeechEnd = e => {
-    setEnded(e.value);
+
   };
 
   // ---------- onSpeechResult----------
 
-  console.log("timeleft--", timeLeft);
+  // console.log("timeleft--", timeLeft);
 
   const onSpeechResult = async (e) => {
 
@@ -140,18 +144,15 @@ const FirstUser = ({ route }) => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-    // if (e?.error) {
-    //   startRecognizing();
-    // }
   };
+
+
 
   useEffect(() => {
     setTimeLeft(null);
-
     setIsPressed(false);
     dispatch(checkTrueOrFalse(false));
     return () => {
-      // setIsFirstCall(false);
       setisCancelingStory(true);
       setStarted(false);
     };
@@ -176,7 +177,7 @@ const FirstUser = ({ route }) => {
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
-    setIsRecording(false);
+
     console.log('STOP RECORDING-----');
     try {
       await Voice.stop();
@@ -205,8 +206,7 @@ const FirstUser = ({ route }) => {
     );
   };
 
-
-  console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
+  // console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
 
   useEffect(() => {
 
@@ -221,6 +221,11 @@ const FirstUser = ({ route }) => {
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
       const nextIndex = (currentIndex + 1) % sequenceUser.length;
       const nextPlayer = (currentIndex + 2) % sequenceUser.length;
+
+      console.log("nextIndex==", nextIndex)
+      console.log("currentIndex==", currentIndex);
+      console.log("nextPlayer==", nextPlayer);
+      console.log("sequecneuserLength", sequenceUser?.length);
 
       if (currentIndex !== sequenceUser?.length) {
         setCurrentDisplayUser(sequenceUser[nextIndex]);

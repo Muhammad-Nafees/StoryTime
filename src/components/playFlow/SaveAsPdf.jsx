@@ -19,7 +19,7 @@ import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
 
-const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
+const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
 
     const { width, height } = Dimensions.get('window');
     const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
@@ -32,7 +32,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    console.log("textrecordusers", textrecordUsers)
+    console.log("textrecordusers", textrecordUsers);
 
 
 
@@ -59,31 +59,39 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
             console.warn(error);
         }
     };
-
+    // android:requestLegacyExternalStorage="true"
     const createPDF = async () => {
+
         try {
-            const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
+
+            const folderPath = `${directoryPath}`;
+            console.log("direcotypath===================", directoryPath)
             await RNFS.mkdir(folderPath);
 
             const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
+
             const options = {
                 html: htmlContent,
-                fileName: 'voicetotext', // PDF file ka naam
+                fileName: 'voicetotext',
                 directory: folderPath,
             };
+            console.log("options=======================", options);
             const pdf = await RNHTMLtoPDF.convert(options);
-            const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`; // Generate random number
-            console.log("download dest :", downloadDest)
+            const downloadDest = `${folderPath}voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
+            console.log("downloadDest---------------------", downloadDest);
             await RNFS.moveFile(pdf.filePath, downloadDest);
-            setIsVisiblePdf(false)
-            setIsVisibleDownloading(true);
-            setSaveStoryModalDownloading(true);
-        } catch (error) {
+        }
+
+        catch (error) {
             console.error('Error generating PDF: ', error);
             Alert.alert('Error generating PDF. Please try again.');
-        }
+        };
     };
 
+
+    // setIsVisiblePdf(false);
+    // setIsVisibleDownloading(true);
+    // setSaveStoryModalDownloading(true);
 
 
     return (
