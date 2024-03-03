@@ -49,13 +49,13 @@ const Profile = () => {
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
 
   // const isPublicOrPrivate = useSelector((state) => state?.addPlayers?.publicAndPrivateMode)
+  let isPublicBoolean = false;
 
   const toggel_mode = async () => {
     try {
       const responseData = await toggle_publicandPrivateMode();
-      const isPublic = responseData?.data?.isPublic;
-      setIsPublicOrPrivate(isPublic);
-
+      // const isPublic = responseData?.data?.isPublic;
+      // setIsPublicOrPrivate(isPublic);
       console.log("toggleModeResponse=====", responseData?.data);
       console.log("isPublicOrPrivate=====", isPublicOrPrivate);
       return responseData;
@@ -63,7 +63,6 @@ const Profile = () => {
 
     }
   };
-
 
 
   const profile_story_api = async () => {

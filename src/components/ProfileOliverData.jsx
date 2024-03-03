@@ -16,10 +16,7 @@ const ProfileOliverData = ({ profile_response, hasMorePagesRecording, setVideoPa
     const [isLoadMore, setIsLoadMore] = useState(false);
 
     const handleLoadMore = async () => {
-        // if (isLoading) {
-        //     return;
-        // }
-        console.log("HAS_MORE_PAGES");
+
         console.log("hasmorepages===", hasMorePagesRecording)
         if (hasMorePagesRecording) {
             setIsLoadMore(true)
