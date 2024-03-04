@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     addFriends: [],
+    gameFriends: [],
     userId: "",
     randomnames: "",
     storyUserImage: "",
@@ -13,6 +14,7 @@ const initialState = {
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
     publicAndPrivateMode: null,
+
 };
 
 const addPlayers = createSlice({
@@ -32,21 +34,15 @@ const addPlayers = createSlice({
         },
 
         rearrangedFriends: (state, { payload }) => {
-            const { selectedIndices } = payload;
-            const rearrangedArray = [];
-
-            // Iterate over selectedIndices array
+            const { selectedIndices, sequenceUser } = payload;
             for (const index of selectedIndices) {
-                // Check if the index is within the bounds of state.addFriends array
-                if (index >= 0 && index < state.addFriends.length) {
-                    // Push the corresponding object from state.addFriends to rearrangedArray
-                    rearrangedArray.push(state.addFriends[index]);
+                console.log("index==== :", index)
+                if (index >= 0 && index < sequenceUser.length) {
+                    state.gameFriends.push(sequenceUser[index]);
                 }
-            }
-            console.log("rearrangedArray------", rearrangedArray)
-            // Update state.addFriends with rearrangedArray
-            state.addFriends = rearrangedArray;
+            };
         },
+
 
         removeUser: (state, action) => {
             const { userid } = action.payload;

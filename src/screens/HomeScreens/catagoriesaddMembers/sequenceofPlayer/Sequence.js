@@ -41,9 +41,10 @@ const Sequence = () => {
 
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
 
-  console.log("selectedIndices  :", selectedIndices);
+  console.log("selectedIndices  : ", selectedIndices);
 
   const handlePress = index => {
+
     const updatedIndices = [...selectedIndices];
     const selectedIndex = updatedIndices.indexOf(index);
 
@@ -59,14 +60,14 @@ const Sequence = () => {
 
 
   const handlesequence = () => {
-    dispatch(rearrangedFriends({ selectedIndices: selectedIndices }));
+    dispatch(rearrangedFriends({ selectedIndices: selectedIndices, sequenceUser: sequenceUser }));
 
     const allValuesSelected = selectedIndices.length === sequenceUser.length;
-    // if (allValuesSelected) {
-    navigation.navigate('PLayFlowScreens', {
-      screen: FIRSTSCREENPLAYFLOW,
-    });
-    // }
+    if (allValuesSelected) {
+      navigation.navigate('PLayFlowScreens', {
+        screen: FIRSTSCREENPLAYFLOW,
+      });
+    }
   };
 
   const handleShuffle = () => {

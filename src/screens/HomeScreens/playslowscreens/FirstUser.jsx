@@ -51,7 +51,7 @@ const FirstUser = ({ route }) => {
   const checkUserTrueorFalse = useSelector(
     state => state.addPlayers.checkTrueOrFalse,
   );
-  console.log("checkUserTrueorFalse----", checkUserTrueorFalse)
+
   const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
   const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
   const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
@@ -72,16 +72,14 @@ const FirstUser = ({ route }) => {
   const [isVisible, setVisible] = useState(false);
   const [speaking, setSpeaking] = useState(false);
 
-
   const USER = user?.data?.user || user?.data;
-  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
-  ], [USER, addedUsers]);
+  // const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
+  // ], [USER, addedUsers]);
 
-
+  const sequenceUser = useSelector((state) => state.addPlayers?.gameFriends);
+  console.log("sequenceUsers FirstUser--", sequenceUser[1]);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
-  console.log("seuecneusers--", sequenceUser[0]);
-  console.log("currentdisplayuser-------------------------", currentDisplayUser);
 
   // console.log("isNextUser", isNextUser);
 
@@ -222,11 +220,6 @@ const FirstUser = ({ route }) => {
       const nextIndex = (currentIndex + 1) % sequenceUser.length;
       const nextPlayer = (currentIndex + 2) % sequenceUser.length;
 
-      console.log("nextIndex==", nextIndex)
-      console.log("currentIndex==", currentIndex);
-      console.log("nextPlayer==", nextPlayer);
-      console.log("sequecneuserLength", sequenceUser?.length);
-
       if (currentIndex !== sequenceUser?.length) {
         setCurrentDisplayUser(sequenceUser[nextIndex]);
         setIsNextUser(sequenceUser[nextPlayer]);
@@ -241,6 +234,7 @@ const FirstUser = ({ route }) => {
       setisCancelingStory(true);
     };
   }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend])
+
 
 
   const saveBtnHandler = () => {
@@ -552,19 +546,8 @@ const FirstUser = ({ route }) => {
             </TouchableOpacity>
           </View>
 
-          {isNext && user ? (
-          <CustomPlayFlowButton
-            onPress={onPressNext}
-            isLongPress={isLongPress}
-            backgroundColor={TextColorGreen}
-            color="#FFF"
-            text={`Next Player${isNextUser?.username ? ": @" + isNextUser?.username : ''}`}
-            timeLeft={timeLeft}
-            isNextUser={isNextUser}
-            isCancelingStory={isCancelingStory}
-          />
-          ) : (
-            !user && (
+          {
+            isNext && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -572,12 +555,23 @@ const FirstUser = ({ route }) => {
                 color="#FFF"
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
-                text={'NextPlayer'}
                 isCancelingStory={isCancelingStory}
               />
-            )
-          )}
+            )}
 
+          {
+            !user ?
+              <CustomPlayFlowButton
+                onPress={onPressNext}
+                isLongPress={isLongPress}
+                backgroundColor={TextColorGreen}
+                color="#FFF"
+                timeLeft={timeLeft}
+                isNextUser={isNextUser}
+                isCancelingStory={isCancelingStory}
+              /> :
+              <></>
+          }
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
