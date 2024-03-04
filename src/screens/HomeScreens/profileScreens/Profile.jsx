@@ -29,6 +29,7 @@ import IncognitoMode from '../../../components/IncognitoMode';
 import { fetch_users_stories, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsPublicOrPrivateMode } from '../../../../store/slices/addplayers/addPlayersSlice';
+import LogoutBtn from '../../../components/LogoutBtn';
 
 const Profile = () => {
 
@@ -93,6 +94,12 @@ const Profile = () => {
     profile_story_api();
   }, [type, recordingPage]);
 
+
+  // <>
+  //   <View style={{ height: responsiveHeight(90), justifyContent: "flex-end" }}>
+  //     <LogoutBtn />
+  //   </View>
+  // </>
 
   return (
     <>

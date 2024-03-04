@@ -7,7 +7,8 @@ export const fetch_users_stories = async ({ type, recordingPage, isincognitoPage
         url = `${Base_Url}${story_profile}?page=${isincognitoPage}&limit=${10}&type=${type}`;
     } else {
         url = `${Base_Url}${story_profile}?page=${recordingPage}&limit=${10}&type=${type}`;
-    }
+    };
+
 
     try {
         const responseData = await fetch(url, {
@@ -15,7 +16,7 @@ export const fetch_users_stories = async ({ type, recordingPage, isincognitoPage
             headers: {
                 "Content-Type": "application/json"
             },
-        })
+        });
         const response = responseData.json();
         return response;
     } catch (error) {

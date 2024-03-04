@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useTransition} from 'react';
+import React, { useEffect, useState, useRef, useTransition } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {moderateVerticalScale, verticalScale} from 'react-native-size-matters';
+import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -18,17 +18,17 @@ import {
   TextinputColor,
 } from '../screens/Styles/Style';
 import _ from 'lodash';
-import reset_email, {username_api} from '../../services/api/auth_mdule/auth';
+import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import {useNavigation} from '@react-navigation/native';
-import {Img_Paths} from '../assets/Imagepaths';
+import { useNavigation } from '@react-navigation/native';
+import { Img_Paths } from '../assets/Imagepaths';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
 
 const CustomInputForgetEmail = props => {
-  const {FORGET_BG_IMG} = Img_Paths;
+  const { FORGET_BG_IMG } = Img_Paths;
   const [isFocused, setIsFocused] = useState(false);
-  const {FORGET_PHONE_NO, OTP_FORGET} = NavigationsString;
+  const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState();
   const [navigatee, setNavigate] = useState(false);
@@ -47,7 +47,7 @@ const CustomInputForgetEmail = props => {
   const debouncedApiCall = useRef(
     _.debounce(async text => {
       try {
-        const response = await reset_email({email: text});
+        const response = await reset_email({ email: text });
         seText(text);
         setResponse(response?.data?.code);
         console.log('response---', response?.data?.code);
@@ -88,7 +88,7 @@ const CustomInputForgetEmail = props => {
 
   return (
     // <>
-    <View style={{paddingVertical: 10, flex: 1}}>
+    <View style={{ paddingVertical: 10, flex: 1 }}>
       <Text
         style={[
           {
@@ -146,11 +146,11 @@ const CustomInputForgetEmail = props => {
             },
           ]}>
           <Icon name="alert-circle" size={22} color="red" />
-          <Text style={[{color: 'red'}]}>{emailError}</Text>
+          <Text style={[{ color: 'red' }]}>{emailError}</Text>
         </View>
       )}
 
-      <View style={{marginTop: 'auto'}}>
+      <View style={{ marginTop: 'auto', paddingBottom: responsiveWidth(12) }}>
         <TouchableOpacity onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
           <Text
             style={{

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -23,16 +23,16 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import TouchableButton from '../../../components/TouchableButton';
 import PhoneNumber from '../../../components/PhoneNumber';
 import NavigationsString from '../../../constants/NavigationsString';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import {Path, Svg} from 'react-native-svg';
-import {Formik} from 'formik';
+import { Path, Svg } from 'react-native-svg';
+import { Formik } from 'formik';
 import CustomPhoneInput from '../../../components/CustomPhoneInput';
 import ForgetCustomInput from '../../../components/ForgetCustomInput';
 
@@ -40,19 +40,19 @@ const ForgetPhoneNumber = () => {
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {OTP_FORGET, FORGET_EMAIL} = NavigationsString;
+  const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const [formatText, setFormatText] = useState('');
   const [phoneCode, setPhoneCode] = useState('');
   const [isError, setIsError] = useState('');
   const [phoneError, setPhoneError] = useState('');
-  const {ANOTHER_FORGET_BG_IMG} = Img_Paths;
+  const { ANOTHER_FORGET_BG_IMG } = Img_Paths;
   const phoneInput = useRef();
   const toggleCountryPicker = () => {
     setCountryPickerVisible(!countryPickerVisible);
   };
 
   return (
-    <Formik initialValues={{phone: ''}} onSubmit={async values => {}}>
+    <Formik initialValues={{ phone: '' }} onSubmit={async values => { }}>
       {({
         values,
         errors,
@@ -65,7 +65,7 @@ const ForgetPhoneNumber = () => {
         setFieldError,
       }) => (
         <View style={styles.container}>
-          <ScrollView contentContainerStyle={{flex: 1}}>
+          <ScrollView contentContainerStyle={{ flex: 1 }}>
             <View style={styles.img_container}>
               <Image style={styles.img_child} source={ANOTHER_FORGET_BG_IMG} />
             </View>
@@ -140,6 +140,9 @@ const styles = StyleSheet.create({
     // width: responsiveWidth(50),
     // height: responsiveHeight(20),
     // resizeMode: 'center',
+    width: responsiveWidth(50),
+    height: responsiveHeight(20),
+    resizeMode: "center",
   },
 });
 

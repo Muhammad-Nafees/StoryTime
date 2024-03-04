@@ -22,7 +22,7 @@ const addPlayers = createSlice({
     reducers: {
 
         addFriends: (state, action) => {
-            const { userid } = action.payload;
+            const { userid, } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
@@ -31,14 +31,30 @@ const addPlayers = createSlice({
             }
         },
 
+        rearrangedFriends: (state, { payload }) => {
+            const { selectedIndices } = payload;
+            const rearrangedArray = [];
+
+            // Iterate over selectedIndices array
+            for (const index of selectedIndices) {
+                // Check if the index is within the bounds of state.addFriends array
+                if (index >= 0 && index < state.addFriends.length) {
+                    // Push the corresponding object from state.addFriends to rearrangedArray
+                    rearrangedArray.push(state.addFriends[index]);
+                }
+            }
+            console.log("rearrangedArray------", rearrangedArray)
+            // Update state.addFriends with rearrangedArray
+            state.addFriends = rearrangedArray;
+        },
+
         removeUser: (state, action) => {
             const { userid } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
-                // state.addFriends.push(action.payload);
-            } else {
             }
+
         },
 
         userId: (state, action) => {
@@ -94,7 +110,8 @@ export const {
     nextRandomNumExtend,
     nextRandomNumVideo,
     nextRandomNumVideoExtend,
-    setIsPublicOrPrivateMode
+    setIsPublicOrPrivateMode,
+    rearrangedFriends
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

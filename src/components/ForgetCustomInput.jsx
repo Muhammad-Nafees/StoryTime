@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Field} from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
@@ -18,13 +18,13 @@ import {
   TextColorGreen,
   TextinputColor,
 } from '../screens/Styles/Style';
-import reset_email, {username_api} from '../../services/api/auth_mdule/auth';
+import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
 import _ from 'lodash';
 import TouchableButton from './TouchableButton';
 import NavigationsString from '../constants/NavigationsString';
-import {useNavigation} from '@react-navigation/native';
-import {Path, Svg} from 'react-native-svg';
-import {Inter_Regular} from '../constants/GlobalFonts';
+import { useNavigation } from '@react-navigation/native';
+import { Path, Svg } from 'react-native-svg';
+import { Inter_Regular } from '../constants/GlobalFonts';
 
 const ForgetCustomInput = ({
   handleChange,
@@ -46,13 +46,13 @@ const ForgetCustomInput = ({
 }) => {
   const [responses, setResponse] = useState('');
   const [textphone, setPhone] = useState('');
-  const {OTP_FORGET, FORGET_EMAIL} = NavigationsString;
+  const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const navigation = useNavigation();
 
   const debouncedApiCall = useRef(
     _.debounce(async phoneNumber => {
       try {
-        const response = await reset_email({phone: phoneNumber});
+        const response = await reset_email({ phone: phoneNumber });
         setPhone(phoneNumber);
         setResponse(response?.data?.code);
 
@@ -67,7 +67,7 @@ const ForgetCustomInput = ({
   ).current;
 
   const handleCountryChange = () => {
-    phoneInput.current?.setState({number: ''});
+    phoneInput.current?.setState({ number: '' });
     setFieldValue('phone', '');
     setIsError('Phone number is required!');
   };
@@ -79,7 +79,7 @@ const ForgetCustomInput = ({
   }, [touched, value]);
 
   return (
-    <View style={{paddingVertical: 10, flex: 1}}>
+    <View style={{ paddingVertical: 10, flex: 1 }}>
       <Text
         style={{
           color: FourthColor,
@@ -138,9 +138,9 @@ const ForgetCustomInput = ({
             }
             textContainerStyle={styles.phoneTextContainer}
             textInputStyle={styles.phoneTextInput}
-            flagButtonStyle={{width: 87}}
+            flagButtonStyle={{ width: 87 }}
             value={value}
-            onChangeText={phoneNumber => {}}
+            onChangeText={phoneNumber => { }}
             onChangeCountry={country => {
               setPhoneCode(country.callingCode);
               console.log(country.callingCode, 'phoneCode');
@@ -160,13 +160,13 @@ const ForgetCustomInput = ({
               marginTop: 2,
             }}>
             <Icon name="alert-circle" size={22} color="red" />
-            <Text style={{color: 'red'}}>{error ? error : isError}</Text>
+            <Text style={{ color: 'red' }}>{error ? error : isError}</Text>
           </View>
-          <View style={{height: 0}} />
+          <View style={{ height: 0 }} />
         </>
       )}
 
-      <View style={{marginTop: 'auto'}}>
+      <View style={{ marginTop: 'auto', paddingBottom: responsiveWidth(12) }}>
         <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)}>
           <Text
             style={{
