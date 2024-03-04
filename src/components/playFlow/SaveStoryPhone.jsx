@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Dimensions, Image, Platform, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, ProgressBarAndroid } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -20,7 +20,6 @@ import StoryTimeSaved from './StoryTimeSaved';
 import { createStory_api } from '../../../services/api/storyfeed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
-import * as ScopedStorage from "react-native-scoped-storage"
 
 
 
@@ -40,8 +39,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [directoryPath, setDirectoryPath] = useState(null);
-
 
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
     const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
@@ -49,85 +46,48 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const playerContributorsId = useSelector((state) => state?.getcategories?.playerscontributorsIds);
     const { user } = useSelector(state => state?.authSlice);
 
-    const isUserGuest = useMemo(() =>
-        !user, [user])
 
-    const convertStr = textrecordUsers.join();
+
+
+    const isUserGuest = useMemo(() => !user, [user])
+
+
+    // console.log("categoryId-----", categoryId);
+    // console.log("subCategoryId-----", subCategoryId)
+    // console.log("playerContributorsId-----", playerContributorsId);
+    // console.log("textrecordUsers-----", textrecordUsers);
+
+
+
+
+    const convertStr = textrecordUsers.join()
+    console.log("convertstr----", convertStr)
+
+
     const dispatch = useDispatch();
 
 
 
-    async function requestPermission(directoryId) {
-        dir = await ScopedStorage.openDocumentTree(true);
-        if (!dir) return null; // User cancelled
-        await AsyncStorage.setItem(directoryId, JSON.stringify(dir));
-        return dir;
-    };
-
-    console.log("directoryPath===", directoryPath);
-
-    async function getAndroidDir(directoryId) {
-
-        try {
-            let dir = await AsyncStorage.getItem(directoryId); // Check if dir exists already
-            if (!dir) {
-                dir = await requestPermission(directoryId)
-            }
-            else {
-                dir = JSON.parse(dir);
-            };
-
-            const persistedUris = await ScopedStorage.getPersistedUriPermissions(); // list all persisted uris
-            setDirectoryPath(persistedUris);
-
-            if (persistedUris.length > 0) {
-                setIsVisible(false);
-                setSaveStoryModal(true);
-                setVisiblePdf(true);
-                console.log("I'M OUT FROM DESTINATIOnN----====");
-            };
-
-            console.log("persistedUris", persistedUris);
-
-            if (persistedUris.indexOf(dir?.uri) !== -1)
-                return { dir, persistedUris }; // Return both dir and persistedUris
-            return { dir: await requestPermission(directoryId), persistedUris };
-        } catch (e) {
-            console.log("err==", e);
-            return null;
-        }
-    };
-
-    const saveFile = async () => {
-        let dir = await getAndroidDir("dataDir");
-        await ScopedStorage.writeFile(dir?.uri, 'text/plain',)
-    };
 
     const saveStoryhandler = () => {
-        // setIsVisible(false);
-        // setSaveStoryModal(true);
-        // setVisiblePdf(true);
+        setIsVisible(false)
+        setSaveStoryModal(true);
+        setVisiblePdf(true);
     };
-
 
 
     const handleSaveStories = async () => {
         setIsLoading(true);
         try {
             const userLoginId = await AsyncStorage.getItem("isUserId");
-            const responseData = await createStory_api({
-                creator: userLoginId,
-                category: categoryId,
-                subCategory: subCategoryId,
-                contributors: playerContributorsId,
-                content: convertStr
-            });
+            const responseData = await createStory_api({ creator: userLoginId, category: categoryId, subCategory: subCategoryId, contributors: playerContributorsId, content: convertStr });
             setIsLoading(false);
             console.log("storyresData====", responseData)
             dispatch(SaveDataToProfile(textrecordUsers));
             setSaveStoryModalsecond(true);
             setVisibleSavePhone(true);
             console.log("Users Stories save to profile");
+            console.log("isLoginUserId-----", userLoginId)
             return responseData;
         } catch (error) {
             console.log("error", error)
@@ -136,11 +96,18 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
 
+
     return (
         <>
             <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
 
+
+
+
                 <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
+
+
+
 
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                         <BackButton onPress={() => setIsVisible(false)} />
@@ -164,7 +131,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
                             <View style={{ paddingTop: responsiveWidth(8) }}>
-                                <SaveStoryBtn timeLeft={0} onPress={saveFile} text="Save as PDF" isUserGuest={isUserGuest} />
+                                <SaveStoryBtn timeLeft={0} onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest} />
                             </View>
 
 
@@ -180,10 +147,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
             </Modal>
             {
                 saveStoryModal && (
-                    <SaveAsPdf
-                        directoryPath={directoryPath}
-                        isVisiblePdf={isVisiblePdf}
-                        setIsVisiblePdf={setVisiblePdf} />
+                    <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
                 )
             }
 
@@ -194,6 +158,8 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         </>
     )
 };
+
+
 
 
 
@@ -330,5 +296,3 @@ const styles = StyleSheet.create({
 
 
 export default SaveStoryPhone;
-
-

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert, PermissionsAndroid, Platform } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -18,6 +18,8 @@ import RNFS from 'react-native-fs';
 import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
+import DocumentPicker from 'react-native-document-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
 
@@ -36,56 +38,186 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
 
 
 
-    const checkPermission = async () => {
+    // const checkPermission = async () => {
+    //     try {
+    //         const OsVer = Platform.constants['Release'];
+    //         // Check if the platform is Android
+    //         if (Platform.OS === 'android' && Number(OsVer) < 12) {
+    //             const granted = await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //             );
+
+    //             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //                 console.log('Storage permission granted');
+    //                 createPDF();
+    //             } else {
+    //                 console.log('Storage permission denied');
+    //                 Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
+    //             }
+    //         } else {
+    //             createPDF();
+    //         }
+    //     } catch (error) {
+    //         console.warn(error);
+    //     }
+    // };
+
+    // const createPDF = async () => {
+    //     try {
+    //         const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
+    //         await RNFS.mkdir(folderPath);
+
+    //         const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
+    //         const options = {
+    //             html: htmlContent,
+    //             fileName: 'voicetotext', // PDF file ka naam
+    //             directory: folderPath,
+    //         };
+    //         const pdf = await RNHTMLtoPDF.convert(options);
+    //         const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`; // Generate random number
+    //         console.log("download dest :", downloadDest)
+    //         await RNFS.moveFile(pdf.filePath, downloadDest);
+    //         setIsVisiblePdf(false)
+    //         setIsVisibleDownloading(true);
+    //         setSaveStoryModalDownloading(true);
+    //     } catch (error) {
+    //         console.error('Error generating PDF: ', error);
+    //         Alert.alert('Error generating PDF. Please try again.');
+    //     }
+    // };
+
+      const loadSavedPath = async () => {
         try {
-            const OsVer = Platform.constants['Release'];
-            // Check if the platform is Android
-            if (Platform.OS === 'android' && Number(OsVer) < 12) {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                );
-
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log('Storage permission granted');
-                    createPDF();
-                } else {
-                    console.log('Storage permission denied');
-                    Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
-                }
-            } else {
-                createPDF();
-            }
+          const savedPath = await AsyncStorage.getItem('selectedFolderPath');
+          if (savedPath) {
+            // If path is saved, use it for subsequent PDF creations
+            console.log(savedPath,".....")
+            createPDF(savedPath)
+          } else {
+            // If no path is saved, prompt the user to select
+            pickDirectory();
+          }
         } catch (error) {
-            console.warn(error);
+          console.error('Error loading saved path: ', error);
         }
-    };
-
-    const createPDF = async () => {
+      };
+ 
+      const saveSelectedPath = async (path) => {
         try {
-            const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
-            await RNFS.mkdir(folderPath);
-
-            const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
-            const options = {
-                html: htmlContent,
-                fileName: 'voicetotext', // PDF file ka naam
-                directory: folderPath,
-            };
-            const pdf = await RNHTMLtoPDF.convert(options);
-            const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`; // Generate random number
-            console.log("download dest :", downloadDest)
-            await RNFS.moveFile(pdf.filePath, downloadDest);
-            setIsVisiblePdf(false)
-            setIsVisibleDownloading(true);
-            setSaveStoryModalDownloading(true);
+          // Save the selected path to AsyncStorage for future usage
+          await AsyncStorage.setItem('selectedFolderPath', path);
         } catch (error) {
-            console.error('Error generating PDF: ', error);
-            Alert.alert('Error generating PDF. Please try again.');
+          console.error('Error saving selected path: ', error);
         }
-    };
+      };
+ 
 
+      const convertExternalStorageUriToAbsolutePath = (uri) => {
+        let dirToRead = uri.split('tree')[1];
+        dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
+        console.log(dirToRead)
+        return decodeURIComponent(dirToRead);
+      };      
+   
+      const convertInternalStoragePathToAbsolutePath = (uri) => {
+        let dirToRead = uri?.split('primary')[1];
+        const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
+        console.log(InternalStoragePath)
+        dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
+        console.log(dirToRead)
+        return decodeURIComponent(dirToRead);
+      };
+      
 
+     const pickDirectory = async () => {
+        try {
+          const result = await DocumentPicker.pickDirectory({
+            type: [DocumentPicker.types.allFiles],
+          });
+          console.log('result', result);
+   
+          let absolutePath;
+   
+          // Check if it's internal storage
+          if (
+            result.uri.startsWith(
+              'content://com.android.externalstorage.documents/tree/primary'
+            )
+          ) {
+            absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
 
+          } else {
+            // It's SD card or other external storage
+            absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+          }
+          console.log(absolutePath)
+          // Save the selected path
+          saveSelectedPath(absolutePath);
+          // Use the absolute file path directly
+          requestStoragePermission(absolutePath);
+        } catch (err) {
+          // Handle errors
+          console.error('Error picking directory:', err);
+        }
+      };
+   
+      const createPDF = async (selectedPath) => {
+        try {
+          // const folderPath = `${selectedPath}/PDF`;
+          // console.log(folderPath)
+
+          if (!(await RNFS.exists(selectedPath))) {
+            await RNFS.mkdir(selectedPath);
+          }
+   
+          const htmlContent = '<html><body><h3>Your PDF Content</h3></body></html>';
+          const options = {
+            html: htmlContent,
+            fileName: 'voicetotext.pdf',
+            directory: selectedPath,
+          };
+   
+          const pdf = await RNHTMLtoPDF.convert(options);
+   
+          const downloadDest = `${selectedPath}/voicetotext_${Math.floor(
+            Math.random() * 100000
+          )}.pdf`;
+          // const downloadDest = `${RNFS.ExternalDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
+
+            console.log(downloadDest)
+          await RNFS.moveFile(pdf.filePath, downloadDest);
+          setIsVisiblePdf(false)
+          setIsVisibleDownloading(true);
+          setSaveStoryModalDownloading(true);
+        } catch (error) {
+          console.error('Error generating PDF: ', error);
+          Alert.alert('Error generating PDF. Please try again.');
+        }
+      };
+      const requestStoragePermission = async (selectedPath) => {
+        try {
+          const granted = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          ]);
+      
+          if (
+            granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
+            granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
+          ) {
+            console.log('External storage permissions granted');
+            // Perform operations on external storage here (e.g., calling createPDF function)
+            createPDF(selectedPath);
+          } else {
+            console.warn('External storage permissions denied');
+            // Handle the case where permissions are denied
+          }
+        } catch (error) {
+          console.error('Error requesting external storage permissions: ', error);
+          // Handle the error
+        }
+      };
+      
     return (
         <>
             <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
@@ -110,7 +242,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, }) => {
                             <View style={{ paddingVertical: 12, }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity
-                                        onPress={checkPermission}
+                                        onPress={loadSavedPath}
                                         style={{
                                             width: responsiveWidth(70),
                                             backgroundColor: TextColorGreen,
