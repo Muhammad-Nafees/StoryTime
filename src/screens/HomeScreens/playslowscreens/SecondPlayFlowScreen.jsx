@@ -48,7 +48,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} source={{ uri: storyUserImage }} />
+                        <Image style={styles.img_dog} resizeMode='stretch' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>
@@ -63,9 +63,9 @@ const SecondPlayFlowScreen = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <View style={{justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
-                        <Image source={require("../../../assets/pause-img.png")} />
+                        <Image resizeMode='stretch' source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>
                 </View>
@@ -103,13 +103,14 @@ const styles = StyleSheet.create({
     img_dog: {
         width: responsiveWidth(22),
         height: responsiveHeight(11),
-        resizeMode: "cover",
     },
     start: {
         paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
-        // fontWeight: "800",
-        fontSize: responsiveFontSize(4.8),
+        // fontWeight: "bold",
+        textAlign:'center',
+        marginRight:'auto',
+        fontSize: responsiveFontSize(4.5),
         fontFamily: PassionOne_Regular.passionOne,
     }
 

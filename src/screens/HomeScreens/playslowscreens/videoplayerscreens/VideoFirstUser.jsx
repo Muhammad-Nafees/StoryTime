@@ -722,7 +722,7 @@ const VideoFirstUser = () => {
         <View style={{paddingVertical: responsiveWidth(4)}}>
           <SaveStoryBtn
             timeLeft={timeLeft}
-            onPress={saveBtnHandler}
+            onPress={isUserGuest ?saverecordingvideo:saveBtnHandler}
             text={isUserGuest ? 'Save to phone' : 'Save Story'}
             color={TextColorGreen}
             isNext={isUserGuest ? false : isNext}

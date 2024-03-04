@@ -576,7 +576,7 @@ const FirstUser = ({ route }) => {
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
-              onPress={saveBtnHandler}
+              onPress={!user?saveStoryhandler:saveBtnHandler}
               text={!user ? "Save to phone" : "Save Story"}
               color={TextColorGreen}
               isNext={!user ? false : isNext}

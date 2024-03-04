@@ -58,9 +58,9 @@ const GuestModals = forwardRef((props, ref) => {
         source={BG_CLOCK}>
         <View
           style={{
-            height: '50%',
+            height: '40%',
             width: '80%',
-            marginTop: -SPACING*2,
+            marginTop: -SPACING,
             alignSelf: 'center',
             justifyContent: 'center',
             paddingHorizontal:responsiveWidth(2)
@@ -72,7 +72,7 @@ const GuestModals = forwardRef((props, ref) => {
               fontSize: 24,
               paddingVertical: 10,
               textAlign: 'center',
-              marginTop: responsiveHeight(4),
+              marginTop: responsiveHeight(10),
             }}>
             {heading}
           </Text>
@@ -131,8 +131,8 @@ const GuestModals = forwardRef((props, ref) => {
 
 const styles = StyleSheet.create({
   img_frame: {
-    height: '80%',
-    width: '100%',
+    height: responsiveHeight(50),
+    width: responsiveWidth(100),
     alignSelf: 'center',
     justifyContent: 'center',
   },

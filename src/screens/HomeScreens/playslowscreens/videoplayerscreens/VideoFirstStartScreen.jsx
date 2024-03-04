@@ -47,7 +47,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} source={{ uri: storyUserImage }} />
+                        }]} resizeMode='stretch' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
@@ -102,15 +102,17 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        // width: responsiveWidth(21),
-        // height: responsiveHeight(10),
-        resizeMode: "cover"
+        width: responsiveWidth(22),
+        height: responsiveHeight(11),
     },
     start: {
-        paddingVertical: moderateVerticalScale(8),
+        paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
-        fontSize: responsiveFontSize(4.8),
-        fontFamily: PassionOne_Regular.passionOne
+        // fontWeight: "bold",
+        textAlign:'center',
+        marginRight:'auto',
+        fontSize: responsiveFontSize(4.5),
+        fontFamily: PassionOne_Regular.passionOne,
     }
 
 
