@@ -21,7 +21,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
     const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { FIRST_USER } = NavigationsString;
+    const { FIRST_USER,PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryModalAfterDownloading, setSaveStoryModalAfterDownloading] = useState(false);
     const [isVisibleAfterDownloading, setIsVisibleAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -50,13 +50,17 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
-        !user ? navigation.goBack() : navigation.navigate("profileStack", {
+        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("profileStack", {
             screen: "Profile"
         }); //guest user doesn't have profile
+        // setTimeout(() => {
+            setIsVisibleDownloading(false);
+        // }, 1000);
         console.log("FUNCTION CALLED");
     };
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisibleDownloading(false)} visible={isVisibleDownloading} >
 
             {/* <View style={{ backgroundColor: "orange" }}> */}
@@ -99,20 +103,20 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
                     </View>
                 </View>
 
-                {saveStoryModalAfterDownloading &&
-                    <StoryTimeSaved
-                        onPress={nextScreenmodalHandler}
-                        isVisible={isVisibleAfterDownloading}
-                        setVisible={setIsVisibleAfterDownloading}
-                        text="Story Time 
-Successfully Saved to your phone!"
-                        textButton="Back" />
-                }
-
+              
 
             </ImageBackground>
             {/* </View> */}
         </Modal>
+          {saveStoryModalAfterDownloading &&
+            <StoryTimeSaved
+                onPress={nextScreenmodalHandler}
+                isVisible={isVisibleAfterDownloading}
+                setVisible={setIsVisibleAfterDownloading}
+                text={`Story Time\nSuccessfully Saved to your\nphone!`}
+                textButton="Back" />
+        }
+</>
     )
 };
 

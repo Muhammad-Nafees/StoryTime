@@ -22,7 +22,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
+    const { VIDEO_SECOND_USER, FIRST_USER,PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryVideoModalAfterDownloading, setSaveStoryVideoModalAfterDownloading] = useState(false);
     const [isVisibleVideoAfterDownloading, setIsVisibleVideoAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -51,14 +51,18 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
 
 
     const backScreenHandler = () => {
-        !user ? navigation.goBack() : navigation.navigate("profileStack", {
+        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("profileStack", {
             screen: "Profile"
         });
+        setTimeout(() => { //TEMP HACK
+            setIsVisibleFirstVideoFlow(false);
+        }, 1000);
     };
 
 
 
     return (
+        <>
         <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>
 
             <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
@@ -86,13 +90,13 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
                     </View>
                 </View>
 
-                {saveStoryVideoModalAfterDownloading &&
-                    <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text="Story Time 
-Successfully Saved to your phone!" textButton="Back" />
-                }
-
+             
             </ImageBackground>
         </Modal>
+           {saveStoryVideoModalAfterDownloading &&
+            <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text={`Story Time\nSuccessfully Saved to your\nphone!`} textButton="Back" />
+        }
+</>
     )
 };
 

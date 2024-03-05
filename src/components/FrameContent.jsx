@@ -14,11 +14,15 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
-import { storyFeed } from '../../store/slices/storyfeedslices/storyFeedSlice'
+import { storyFeed, storyUserId } from '../../store/slices/storyfeedslices/storyFeedSlice'
 import { Base_Url } from '../../services'
 import { PassionOne_Regular } from '../constants/GlobalFonts'
 import { storyLikedFeed, storydisLikedFeed, } from '../../services/api/storyfeed'
 import LinearGradient from "react-native-linear-gradient"
+import BlockUserStory from './blockuser/BlockUserModal'
+import { debounce } from 'lodash'; // Import debounce function from lodash
+
+
 
 const FrameContent = ({
     type,
@@ -32,52 +36,76 @@ const FrameContent = ({
     dislikesByMe,
     likesCountuser,
     dislikesCount,
+    userId
 }) => {
 
     const SCREENWIDTH = Dimensions.get("window").width;
     const SCREENHEIGHT = Dimensions.get("window").height;
     const navigation = useNavigation();
     const { HOME_FRAME, SHARE_BTN, } = Img_Paths;
-    const { FEED_CHAT } = NavigationsString;
+    const { FEED_CHAT, REPORT_USER } = NavigationsString;
     const [isLiked, setIsLiked] = useState(likedByMe);
     const [isDisLike, setIsDisliked] = useState(dislikesByMe);
     const [likesCounting, setLikesCounting] = useState(likesCountuser);
     const [dislikesCounting, setDisLikesCounting] = useState(dislikesCount);
+    const [isVisible, setIsVisible] = useState(false)
+    const [likeCountUpdated, setLikeCountUpdated] = useState(false);
+    const [disLikeCountUpdated, setDisLikeCountUpdated] = useState(false);
+
+
     const dispatch = useDispatch();
+
+    // console.log("userId---", userId);
+
 
 
     const storyLikedHandled = useCallback(async () => {
         try {
-            const responseData = await storyLikedFeed(likedUserId);
-            setIsLiked((prevIsLiked) => !prevIsLiked);
-            if (isLiked && responseData?.data?._id === likedUserId) {
-                setLikesCounting((prevCount) => prevCount - 1);
-            } else {
-                setLikesCounting((prevCount) => responseData?.data?.likes.length || prevCount + 1);
+            // Check if like count has already been updated
+            if (!likeCountUpdated) {
+                // Set flag to indicate that like count is being updated
+                setLikeCountUpdated(true);
+
+                const responseData = await storyLikedFeed(likedUserId);
+                setIsLiked((prevIsLiked) => !prevIsLiked);
+                if (isLiked && responseData?.data?._id === likedUserId) {
+                    setLikesCounting((prevCount) => prevCount - 1);
+                } else {
+                    setLikesCounting((prevCount) => responseData?.data?.likes.length || prevCount + 1);
+                }
+                dispatch(likedstoryfeed(likesCountuser));
+
+                // Reset flag after updating like count
+                setLikeCountUpdated(false);
+                return responseData;
             }
-            dispatch(likedstoryfeed(likesCountuser))
-            return responseData;
         } catch (error) {
             // Handle errors
         }
-    }, [likesCounting]);
+    }, [likesCounting, likeCountUpdated]);
 
 
 
     const storydisLikedHandled = useCallback(async () => {
         try {
-            const responseData = await storydisLikedFeed(likedUserId)
-            setIsDisliked((prevIsLiked) => !prevIsLiked);
-            if (isDisLike && responseData?.data?._id === likedUserId) {
-                setDisLikesCounting((prevCount) => prevCount - 1);
-            } else {
-                setDisLikesCounting((prevCount) => responseData?.data?.dislikes.length || prevCount + 1);
+            if (!disLikeCountUpdated) {
+                setDisLikeCountUpdated(true);
+
+                const responseData = await storydisLikedFeed(likedUserId)
+                setIsDisliked((prevIsLiked) => !prevIsLiked);
+                if (isDisLike && responseData?.data?._id === likedUserId) {
+                    setDisLikesCounting((prevCount) => prevCount - 1);
+                } else {
+                    setDisLikesCounting((prevCount) => responseData?.data?.dislikes.length || prevCount + 1);
+                }
+                setDisLikeCountUpdated(false);
+                return responseData;
             }
-            return responseData;
         } catch (error) {
             // Handle errors
         }
-    }, [dislikesCounting])
+    }, [dislikesCounting, disLikeCountUpdated]);
+
 
 
     const commentsHandled = useCallback(() => {
@@ -191,10 +219,17 @@ const FrameContent = ({
                                                 </MenuTrigger>
 
                                                 <MenuOptions customStyles={{ optionsContainer: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: responsiveWidth(8), width: responsiveWidth(42), } }}>
-                                                    <MenuOption style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
+                                                    <MenuOption onSelect={() => {
+                                                        // setIsVisible(true);
+                                                        // dispatch(storyUserId(userId));
+                                                    }} style={{ paddingVertical: moderateVerticalScale(12), paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Block</Text>
                                                     </MenuOption>
-                                                    <MenuOption style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
+                                                    <MenuOption onSelect={() => {
+                                                        // dispatch(storyUserId(userId));
+                                                        // navigation.navigate(REPORT_USER)
+                                                    }
+                                                    } style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
                                                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Report</Text>
                                                     </MenuOption>
                                                 </MenuOptions>
@@ -209,6 +244,14 @@ const FrameContent = ({
 
                         </View>
                     </View>
+                    {
+                        isVisible && (
+                            <BlockUserStory
+                                setIsVisible={setIsVisible}
+                                isVisible={isVisible}
+                            />
+                        )
+                    }
                 </View>
             </View>
         </View>
@@ -244,13 +287,10 @@ const styles = StyleSheet.create({
         borderRadius: 18,
 
     },
-
     second_childbg: {
         marginLeft: "auto",
         width: responsiveWidth(69),
-
     },
-
     third_childbg: {
         flexDirection: "row",
         width: responsiveWidth(40),
@@ -282,10 +322,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#E44173",
         height: responsiveHeight(7.5),
     },
-    third_container: {
-        // justifyContent: "center",
-        // alignItems: "center",
-    },
+
     fourth_container: {
         flexDirection: "row",
         alignItems: "center",

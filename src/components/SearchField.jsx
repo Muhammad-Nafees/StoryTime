@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingVertical: moderateVerticalScale(2),
         marginBottom:moderateVerticalScale(10)
-
     },
     text_input_child: {
         flexDirection: 'row',
@@ -46,7 +45,8 @@ const styles = StyleSheet.create({
     },
     input_field: {
         paddingLeft: 10,  
-        color: "#000"
+        color: "#000",
+        width:'100%'
     },
     svgIcon:{
         marginBottom:'auto',

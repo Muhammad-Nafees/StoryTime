@@ -34,7 +34,7 @@ const CustomVideoPlayFlowButton = ({
                 }}>
 
                 <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
-                    {`Next Player${isNextUser?.username ? ": @" + isNextUser?.username : ''}`}
+                {text}
                 </Text>
             </TouchableOpacity>
         </View>

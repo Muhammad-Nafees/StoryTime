@@ -52,15 +52,16 @@ const StoryTimeSaved = ({
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // backdropColor="white"
+      backdropColor='#979697'      
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.95}
       onBackdropPress={close}>
-
+        
       <View
         style={{
           width: responsiveWidth(80),
-          height: responsiveHeight(26),
+          // height: responsiveHeight(29),
+          padding:responsiveHeight(1.6),
           backgroundColor: '#FFF',
           borderRadius: 30,
           paddingHorizontal: responsiveWidth(2),
@@ -105,7 +106,7 @@ const StoryTimeSaved = ({
               fontSize: responsiveFontSize(1.9),
               color: '#000',
               textAlign: 'center',
-              lineHeight: 24,
+              lineHeight: 20,
               marginTop: responsiveHeight(1),
             }}>
             {text}

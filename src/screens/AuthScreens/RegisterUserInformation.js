@@ -309,6 +309,7 @@ const RegisterUserInformation = ({ }) => {
                     ? '#395E66'
                     : 'rgba(57, 94, 102, 0.5)'
                 }
+                type="registeruserInfo"
                 color="#FFF"
                 text="Next"
               />
@@ -316,6 +317,7 @@ const RegisterUserInformation = ({ }) => {
                 <TouchableButton
                   onPress={() => navigation.goBack()}
                   backgroundColor="#FFF"
+                  type={"backuser"}
                   borderWidth="1"
                   color="#395E66"
                   text="Back"

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     addFriends: [],
+    gameFriends: [],
     userId: "",
     randomnames: "",
     storyUserImage: "",
@@ -12,6 +13,8 @@ const initialState = {
     nextRandomNumberExtend: null,
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
+    publicAndPrivateMode: null,
+
 };
 
 const addPlayers = createSlice({
@@ -21,7 +24,7 @@ const addPlayers = createSlice({
     reducers: {
 
         addFriends: (state, action) => {
-            const { userid } = action.payload;
+            const { userid, } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
@@ -30,14 +33,29 @@ const addPlayers = createSlice({
             }
         },
 
+        rearrangedFriends: (state, { payload }) => {
+            const { selectedIndices, sequenceUser, userIds } = payload;
+            // const uniqueVal = new Set([sequenceUser]);
+
+            state.gameFriends = [];
+            for (const index of selectedIndices) {
+                if (index >= 0 && index < sequenceUser.length) {
+                    state.gameFriends.push(sequenceUser[index]);
+                } else {
+                    console.log("Players Already Exist");
+                };
+            };
+            console.log("state.gameFriends--------", state.gameFriends)
+        },
+
+
         removeUser: (state, action) => {
             const { userid } = action.payload;
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
-                // state.addFriends.push(action.payload);
-            } else {
             }
+
         },
 
         userId: (state, action) => {
@@ -74,7 +92,9 @@ const addPlayers = createSlice({
         nextRandomNumVideoExtend: (state, action) => {
             state.nextRandomNumberVideoExtend = action.payload
         },
-        // nextRand4
+        setIsPublicOrPrivateMode: (state, { payload }) => {
+            state.publicAndPrivateMode = payload
+        },
 
     },
 });
@@ -90,7 +110,9 @@ export const {
     nextRandomNum,
     nextRandomNumExtend,
     nextRandomNumVideo,
-    nextRandomNumVideoExtend
+    nextRandomNumVideoExtend,
+    setIsPublicOrPrivateMode,
+    rearrangedFriends
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

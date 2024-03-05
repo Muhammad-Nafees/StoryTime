@@ -7,10 +7,11 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SplashScreen = () => {
     const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths
-    const { LOGIN } = NavigationsString
+    const { LOGIN, REGISTER } = NavigationsString
 
     const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
@@ -25,9 +26,9 @@ const SplashScreen = () => {
                 <AuthImage onPress={() => navigation.navigate("GuestStack")} ImageSource={BG_FRAME} />
                 <AuthImage onPress={() => navigation.navigate(LOGIN)} ImageSource={LOGIN_IMG} />
             </View>
-            {/* <View style={{width:responsiveWidth(80),height:responsiveHeight(6),backgroundColor:TextColorGreen,alignSelf:'center',borderRadius:10,justifyContent:'center',marginTop:responsiveHeight(2)}}>
-                <Text style={{color:'white',fontWeight:'800',textAlign:'center',fontSize:responsiveFontSize(2)}}>Subscribe for AD FEEE experience </Text>
-            </View> */}
+            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate(REGISTER)} style={styles.btn}>
+                <Text style={styles.btn_Txt}>Subscribe for AD FREE experience </Text>
+            </TouchableOpacity>
         </ImageBackground>
     )
 }
@@ -49,5 +50,21 @@ const styles = StyleSheet.create({
     story_time_container: {
         justifyContent: "center",
         alignItems: "center"
+    },
+    btn:{
+        width:responsiveWidth(80),
+        height:responsiveHeight(6),
+        backgroundColor:TextColorGreen,
+        alignSelf:'center',
+        borderRadius:10,
+        justifyContent:'center',
+        marginTop:responsiveHeight(2)
+    },
+    btn_Txt:{
+        color:White,
+        fontWeight:'800',
+        textAlign:'center',
+        fontSize:responsiveFontSize(2),
+        fontFamily:Inter_Regular.Inter_Regular
     }
 })

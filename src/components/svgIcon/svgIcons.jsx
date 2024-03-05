@@ -18,7 +18,7 @@ import Search from "../../assets/svgIcons/search.svg"
 import Guest from "../../assets/svgIcons/questionmark.svg"
 import Saved from "../../assets/svgIcons/saved.svg"
 import Success from "../../assets/svgIcons/success.svg"
-
+import Check from "../../assets/svgIcons/check.svg"
 
 const SvgIcons = ({name, height, width,backgroundColor='transparent'}) => {
 
@@ -42,6 +42,7 @@ switch (name) {
     case 'Guest': return( <Guest width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'Saved': return( <Saved width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
     case 'Success': return( <Success width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
+    case 'Check': return( <Check width={width} height={height} style={{backgroundColor:backgroundColor}}/>);
 
     default:
       return (

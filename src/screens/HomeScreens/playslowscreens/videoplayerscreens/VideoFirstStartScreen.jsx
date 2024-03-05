@@ -9,6 +9,7 @@ import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
 import { useDispatch, useSelector } from 'react-redux'
 import { extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
+import { SCREEN_HEIGHT } from '../../../../constants/Constant'
 
 
 
@@ -16,9 +17,12 @@ const VideoFirstStartScreen = () => {
 
     const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
-    const windowWidth = Dimensions.get('window').width;
     const { VIDEO_FIRST_USER } = NavigationsString;
+    const windowWidth = Dimensions.get('window').width;
+
     const squareSize = windowWidth * 0.90;
+
+
 
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
@@ -46,7 +50,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} source={{ uri: storyUserImage }} />
+                        }]} resizeMode='stretch' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
@@ -54,7 +58,7 @@ const VideoFirstStartScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(6.2), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
+                        <Text style={{ color: "#F3F3F3", fontSize: responsiveFontSize(5.5), fontWeight: "500", fontFamily: PassionOne_Regular.passionOne }}>{randomName}</Text>
                     </View>
 
                 </View>
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     circle_container: {
         paddingVertical: moderateVerticalScale(10),
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     sub_circle: {
         backgroundColor: TextColorGreen,
@@ -101,15 +105,17 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        // width: responsiveWidth(21),
-        // height: responsiveHeight(10),
-        resizeMode: "cover"
+        width: responsiveWidth(22),
+        height: responsiveHeight(11),
     },
     start: {
-        paddingVertical: moderateVerticalScale(8),
+        paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
-        fontSize: responsiveFontSize(4.8),
-        fontFamily: PassionOne_Regular.passionOne
+        // fontWeight: "bold",
+        textAlign: 'center',
+        marginRight: 'auto',
+        fontSize: responsiveFontSize(4.5),
+        fontFamily: PassionOne_Regular.passionOne,
     }
 
 
