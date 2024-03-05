@@ -54,7 +54,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} resizeMode='stretch' source={{ uri: storyUserImage }} />
+                        <Image style={styles.img_dog} resizeMode='contain' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        width: responsiveWidth(22),
+        width: responsiveWidth(25),
         height: responsiveHeight(11),
     },
     start: {
