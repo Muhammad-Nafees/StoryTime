@@ -25,7 +25,7 @@ const SecondPlayFlowScreen = () => {
     console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.92;
+    const squareSize = windowWidth * 0.90;
     const dispatch = useDispatch();
 
     const onpressNextHandler = () => {
@@ -69,7 +69,7 @@ const SecondPlayFlowScreen = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
-                <View style={{justifyContent: "center", alignItems: "center" }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
                         <Image resizeMode='stretch' source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
         paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
         // fontWeight: "bold",
-        textAlign:'center',
-        marginRight:'auto',
+        textAlign: 'center',
+        marginRight: 'auto',
         fontSize: responsiveFontSize(4.5),
         fontFamily: PassionOne_Regular.passionOne,
     }

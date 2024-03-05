@@ -24,8 +24,7 @@ const TouchableButton = ({
   validate,
   values,
   StatusCodeSuccess
-  // disabled={type === 'register' ? !isValid || !dirty : null}
-  // StatusCodeSuccess
+
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -35,9 +34,11 @@ const TouchableButton = ({
             type === "login" ? false :
               type === "forgetemail" && StatusCodeSuccess ? false :
                 type === "optForget" ? false :
-                  type == "registeruserInfo" ? false :
-                    type == "backuser" ? false :
-                      true
+                  type === "registeruserInfo" ? false :
+                    type === "backuser" ? false :
+                      type === "addPlayers" ? false :
+                        type === "sequence" ? false :
+                          true
         }
         onPress={onPress}
         style={{

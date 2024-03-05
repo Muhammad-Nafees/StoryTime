@@ -33,6 +33,7 @@ import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 import Voice from '@react-native-voice/voice';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 const FirstUser = ({ route }) => {
@@ -77,6 +78,7 @@ const FirstUser = ({ route }) => {
   // ], [USER, addedUsers]);
 
   const sequenceUser = useSelector((state) => state.addPlayers?.gameFriends);
+  console.log("sequence-users-------", sequenceUser)
   console.log("sequenceUsers FirstUser--", sequenceUser[1]);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
@@ -310,7 +312,6 @@ const FirstUser = ({ route }) => {
 
   // Timer 2 Minutes ---------
 
-
   useEffect(() => {
 
     if (USER_LENGTH_CHECK) {
@@ -360,7 +361,6 @@ const FirstUser = ({ route }) => {
   return (
     <>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-        {/* BACK BUTTON AND TIMER */}
         {/* <ScrollView> */}
         <View
           style={{
@@ -391,60 +391,68 @@ const FirstUser = ({ route }) => {
               />
             </TouchableOpacity>
 
-            <View>
+            <View style={{
+            }}>
               {isCancelingStory ? (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    backgroundColor: 'rgba(255, 164, 164, 0.5)',
-                    paddingVertical: moderateVerticalScale(10),
-                    paddingHorizontal: moderateScale(12),
-                  }}>
-                  <Text
+                <View style={{
+                  borderWidth: 4,
+                  borderColor: 'rgba(255, 153, 166, 1)',
+                  borderRadius: 8,
+                }}>
+                  <LinearGradient
+                    colors={["rgba(255, 164, 164, 0.8)", "#FFFFFF",]}
+                    start={{ x: 1, y: 0.5 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+
                     style={{
-                      fontWeight: '600',
-                      color: TextColorGreen,
-                      fontSize: responsiveFontSize(1.9),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: moderateVerticalScale(10),
+                      paddingHorizontal: moderateScale(12),
                     }}>
-                    Time :{timeText}
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: TextColorGreen,
+                        fontSize: responsiveFontSize(2),
+                      }}>
+                      Time: {timeText}
+                    </Text>
+                  </LinearGradient>
                 </View>
-              ) : !user ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    modalOpen(
-                      GuestModalRefForAds,
-                      'Support Story Time',
-                      'Watch the add to continue playing',
-                      'Watch ads',
-                      'Subscribe for Ad FREE experience',
-                    )
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: TextColorGreen,
-                    backgroundColor: TextColorGreen,
-                    paddingVertical: moderateVerticalScale(6),
-                    paddingHorizontal: moderateScale(25),
-                  }}>
-                  <Text
+              )
+
+                : !user ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      modalOpen(
+                        GuestModalRefForAds,
+                        'Support Story Time',
+                        'Watch the add to continue playing',
+                        'Watch ads',
+                        'Subscribe for Ad FREE experience',
+                      )
+                    }}
                     style={{
-                      color: 'white',
-                      fontWeight: '400',
-                      fontSize: responsiveFontSize(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
+                      borderRadius: 10,
+                      borderWidth: 4,
+                      borderColor: TextColorGreen,
+                      backgroundColor: TextColorGreen,
+                      paddingVertical: moderateVerticalScale(6),
+                      paddingHorizontal: moderateScale(25),
                     }}>
-                    Done
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <></>
-              )}
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontWeight: '400',
+                        fontSize: responsiveFontSize(1.9),
+                        fontFamily: Inter_Regular.Inter_Regular,
+                      }}>
+                      Done
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <></>
+                )}
             </View>
           </View>
         </View>
@@ -547,7 +555,7 @@ const FirstUser = ({ route }) => {
           </View>
 
           {
-            isNext && (
+            user && isNext && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -555,6 +563,7 @@ const FirstUser = ({ route }) => {
                 color="#FFF"
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
+                user={user}
                 isCancelingStory={isCancelingStory}
               />
             )}
@@ -575,7 +584,7 @@ const FirstUser = ({ route }) => {
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
-              onPress={!user?saveStoryhandler:saveBtnHandler}
+              onPress={!user ? saveStoryhandler : saveBtnHandler}
               text={!user ? "Save to phone" : "Save Story"}
               color={TextColorGreen}
               isNext={!user ? false : isNext}

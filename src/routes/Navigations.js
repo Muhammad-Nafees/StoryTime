@@ -91,7 +91,7 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
+      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
     </Stack.Navigator>
   );
 };
@@ -186,8 +186,8 @@ const ProfileStacksBottom = () => {
       headerShown: false
     }}>
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
+      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
     </Stack.Navigator>
   );
 };

@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
 import { Path, Svg } from 'react-native-svg';
-import { addFriends, rearrangedFriends } from '../../../../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, rearrangedFriends, userId } from '../../../../../store/slices/addplayers/addPlayersSlice';
 
 const Sequence = () => {
   const { FIRSTSCREENPLAYFLOW } = NavigationsString;
@@ -41,7 +41,8 @@ const Sequence = () => {
 
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
 
-  console.log("selectedIndices  : ", selectedIndices);
+  // console.log("selectedIndices  : ", selectedIndices);
+  // console.log("sequenceUser  : ", sequenceUser);
 
   const handlePress = index => {
 
@@ -54,13 +55,12 @@ const Sequence = () => {
       updatedIndices.push(index);
     };
     setSelectedIndices(updatedIndices);
-
   };
 
-
-
   const handlesequence = () => {
-    dispatch(rearrangedFriends({ selectedIndices: selectedIndices, sequenceUser: sequenceUser }));
+    // const userIds = sequenceUser.map((user) => user?.userid);
+    // console.log("userids--Redux ", userIds)
+    dispatch(rearrangedFriends({ selectedIndices: selectedIndices, sequenceUser: sequenceUser, }));
 
     const allValuesSelected = selectedIndices.length === sequenceUser.length;
     if (allValuesSelected) {
@@ -225,6 +225,7 @@ const Sequence = () => {
             onPress={() => handlesequence()}
             backgroundColor={TextColorGreen}
             text="Next"
+            type={"sequence"}
             color="#FFF"
             sequenceUser={sequenceUser}
             selectedIndices={selectedIndices}

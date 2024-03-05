@@ -133,7 +133,11 @@ const AddPlayers = () => {
             </View>
 
             <View style={{ paddingTop: responsiveWidth(5) }}>
-                <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
+                <TouchableButton
+                    onPress={handlenavigation}
+                    backgroundColor={TextColorGreen}
+                    type={"addPlayers"}
+                    text="Add" color="#FFF" />
             </View>
 
         </ImageBackground>

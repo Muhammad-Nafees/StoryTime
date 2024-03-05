@@ -34,13 +34,18 @@ const addPlayers = createSlice({
         },
 
         rearrangedFriends: (state, { payload }) => {
-            const { selectedIndices, sequenceUser } = payload;
+            const { selectedIndices, sequenceUser, userIds } = payload;
+            // const uniqueVal = new Set([sequenceUser]);
+
+            state.gameFriends = [];
             for (const index of selectedIndices) {
-                console.log("index==== :", index)
                 if (index >= 0 && index < sequenceUser.length) {
                     state.gameFriends.push(sequenceUser[index]);
-                }
+                } else {
+                    console.log("Players Already Exist");
+                };
             };
+            console.log("state.gameFriends--------", state.gameFriends)
         },
 
 
