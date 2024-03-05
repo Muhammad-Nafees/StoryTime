@@ -15,20 +15,22 @@ import Toast from 'react-native-toast-message';
 import { validationUserPassword } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import { Img_Paths } from '../../assets/Imagepaths';
+import ErrorMessageForm from '../../components/ErrorMessagesForm';
 
 
 const RegisterPassword = ({ route }) => {
 
     const navigation = useNavigation();
-    const [showPassword, setShowPassword] = useState(false);
-    const [confirmShowPassword, setConfirmShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(true);
+    const [confirmShowPassword, setConfirmShowPassword] = useState(true);
     const [response, setResponse] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setVisible] = useState(false);
     const [firstPasswordError, setFirstPasswordError] = useState("")
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
-    const { BGIMAGE_ACCOUNT_CREATED } = Img_Paths;
+    const { BGIMAGE_ACCOUNT_CREATED, CREATE_PASSWORD_IMG } = Img_Paths;
     const firstuserData = useSelector((state) => state.authSlice.firstpageData);
     const seconduserData = useSelector((state) => state.authSlice.secondpageData);
 
@@ -55,6 +57,7 @@ const RegisterPassword = ({ route }) => {
             }}
             validationSchema={validationUserPassword}
             onSubmit={async (values) => {
+
                 setIsLoading(true)
                 const responseData = await registerapi(firstuserData, seconduserData, values)
                 const statusCode = responseData?.statusCode;
@@ -72,13 +75,8 @@ const RegisterPassword = ({ route }) => {
                     })
                 }
                 if (error) {
-                    setFirstPasswordError(message)
-                    Toast.show({
-                        type: "error",
-                        text1: message,
-                        position: "top",
-                        visibilityTime: 2500,
-                    })
+                    setFirstPasswordError(message);
+                    console.log("message====", message);
                     setIsLoading(false)
                 }
                 setResponse(responseData)
@@ -91,7 +89,7 @@ const RegisterPassword = ({ route }) => {
 
                         <ScrollView>
                             <View style={styles.img_container}>
-                                <Image style={styles.img_child} source={require("../../assets/create-account-img.png")} />
+                                <Image style={styles.img_child} source={CREATE_PASSWORD_IMG} />
                             </View>
 
                             {/* Password------------ */}
@@ -108,26 +106,34 @@ const RegisterPassword = ({ route }) => {
                                         onChangeText={handleChange("password")}
                                         type="password"
                                         onBlur={() => setFieldTouched("password")}
-                                        placeholderText="Type here" />
+                                        placeholderText="Type here"
+                                    />
                                 </View>
 
                                 <View style={{ height: responsiveHeight(3.2) }}>
-                                    {touched.password && errors.password &&
-                                        <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
-                                            <View style={{ flexDirection: "row", }}>
-                                                <View>
-                                                    <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                        <Path
-                                                            d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                        />
-                                                    </Svg>
-                                                </View>
-                                                <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                    <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
-                                                </View>
-                                            </View>
+                                    {
+                                        firstPasswordError.length > 0 ?
+                                            <View style={{ height: responsiveHeight(3), }}>
+                                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                                    <View style={{ flexDirection: "row", }}>
 
-                                        </View>
+                                                        <View>
+                                                            <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                                <Path
+                                                                    d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                                />
+                                                            </Svg>
+                                                        </View>
+                                                        <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                            <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{firstPasswordError}</Text>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </View> :
+                                            <ErrorMessageForm
+                                                errorsField={errors.password}
+                                                isSubmitted={isSubmitted}
+                                            />
                                     }
                                 </View>
 
@@ -143,51 +149,55 @@ const RegisterPassword = ({ route }) => {
                                         value={values.confirmPassword}
                                         onChangeText={handleChange("confirmPassword")}
                                         onBlur={() => setFieldTouched("confirmPassword")}
-                                        type="password" placeholderText="Type here" />
+                                        type="password"
+                                        placeholderText="Type here" />
                                 </View>
 
-
-
-                                {touched.confirmPassword && errors.confirmPassword &&
-                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(2) }}>
-                                        <View style={{ flexDirection: "row", }}>
-                                            <View>
-                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                    <Path
-                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                    />
-                                                </Svg>
+                                {
+                                    firstPasswordError.length > 0 ?
+                                        <View style={{ height: responsiveHeight(3), }}>
+                                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                                <View style={{ flexDirection: "row", }}>
+                                                    <View>
+                                                        <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                            <Path
+                                                                d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                            />
+                                                        </Svg>
+                                                    </View>
+                                                    <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                        <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{firstPasswordError}</Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.confirmPassword}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
+                                        </View> :
+                                        <ErrorMessageForm
+                                            errorsField={errors.confirmPassword}
+                                            isSubmitted={isSubmitted}
+                                        />
                                 }
 
                                 {/* Next and Back------------ */}
 
-                                <View style={{ paddingTop: responsiveWidth(60) }}>
-                                    {/* <TouchableButton isLoading={isLoading} onPress={handleSubmit} backgroundColor="#395E66" color="#FFF" text="Create" validate={validate} values={values} /> */}
-                                    {/*  */}
+                                <View style={{ paddingTop: responsiveWidth(42.5) }}>
 
                                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                         <TouchableOpacity
                                             disabled={validate(values) ? false : true}
-                                            onPress={handleSubmit}
+                                            onPress={() => {
+                                                setIsSubmitted(true)
+                                                handleSubmit()
+                                            }
+                                            }
                                             style={{
                                                 width: responsiveWidth(80),
                                                 backgroundColor: validate(values) ? TextColorGreen : "rgba(57, 94, 102, 0.3)",
                                                 borderRadius: 10,
-                                                //   borderWidth: borderWidth == '1' ? 1 : 0,
-                                                //   borderColor: borderWidth == '1' ? '#395E66' : null,
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
                                                 height: responsiveHeight(6.6),
-                                            }}>
-                                            {/* {isLoading ? (
-          <ActivityIndicator color={'#FFF'} />
-        ) : ( */}
+                                            }}
+                                        >
 
                                             {
                                                 !isLoading ? (
@@ -208,7 +218,12 @@ const RegisterPassword = ({ route }) => {
 
                                     {/*  */}
                                     <View style={{ marginVertical: 7 }}>
-                                        <TouchableButton onPress={() => navigation.goBack()} backgroundColor="#FFF" borderWidth="1" color="#395E66" text="Back" />
+                                        <TouchableButton onPress={() => navigation.goBack()}
+                                            type={"backRegisterpassword"}
+                                            backgroundColor="#FFF"
+                                            borderWidth="1"
+                                            color="#395E66"
+                                            text="Back" />
                                     </View>
                                 </View>
 

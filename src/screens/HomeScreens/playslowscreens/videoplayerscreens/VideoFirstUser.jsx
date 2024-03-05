@@ -12,17 +12,17 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Img_Paths} from '../../../../assets/Imagepaths';
-import {PrimaryColor, TextColorGreen} from '../../../Styles/Style';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Img_Paths } from '../../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveScreenHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
 import NavigationsString from '../../../../constants/NavigationsString';
@@ -40,23 +40,24 @@ import {
   recordingVideo,
   saveRecordingVideoUser,
 } from '../../../../../store/slices/RecordingData';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
-import {Inter_Regular} from '../../../../constants/GlobalFonts';
+import { Inter_Regular } from '../../../../constants/GlobalFonts';
 import GuestModals from '../../../../components/GuestModals';
-import { WINDOW_WIDTH } from '../../../../constants/Constant';
+import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../../../constants/Constant';
+import LinearGradient from 'react-native-linear-gradient';
 
 const VideoFirstUser = () => {
   //destructures
-  const {SECOND_USER_STORY} = NavigationsString;
-  const {SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME} = Img_Paths;
+  const { SECOND_USER_STORY, PLAY_STORY_TIME } = NavigationsString;
+  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
 
   //hooks
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  
+
   //redux states
   const recordingVideo = useSelector(
     state => state.recordingData.saveRecordingVideo,
@@ -75,7 +76,7 @@ const VideoFirstUser = () => {
   const extendCountingVideo = useSelector(
     state => state.recordingData.extendCountingVideo,
   );
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
 
   const nextRandomValueVideo = useSelector(
     state => state?.addPlayers?.nextRandomNumberVideo,
@@ -85,25 +86,15 @@ const VideoFirstUser = () => {
     state => state?.addPlayers?.nextRandomNumberVideoExtend,
   );
 
-  //init helper function
-  const getCameraDetails = () => {
-    return devices.find(camera => camera.position === currentCamera);
-  };
-
-  //consts
-  const devices = Camera.getAvailableCameraDevices();
-  const USER = user?.data?.user || user?.data;
-  const isUserGuest = useMemo(() => !user, [user]);
+  //dependant consts
   const sequenceUser = useMemo(
     () => [
       ...addedUsers,
       USER?._id &&
-        USER?.username && {userid: USER?._id, username: USER?.username},
+      USER?.username && { userid: USER?._id, username: USER?.username },
     ],
     [USER, addedUsers],
   );
-  const USER_LENGTH_CHECK = sequenceUser?.length == 1;
-  const activeCamera = getCameraDetails();
 
   //states
   const [started, setStarted] = useState(false);
@@ -113,7 +104,7 @@ const VideoFirstUser = () => {
   const [showCamera, setShowCamera] = useState(false);
   const [path, setPath] = useState('');
   const [isVisible, setIsVisible] = useState(false);
- 
+
   const [isNext, setIsNext] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isFirstCall, setIsFirstCall] = useState(false);
@@ -126,6 +117,20 @@ const VideoFirstUser = () => {
   const cameraRef = useRef(null);
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
+
+  //init helper function
+  const getCameraDetails = () => {
+    return devices.find(camera => camera.position === currentCamera);
+  };
+
+  //consts
+  const devices = Camera.getAvailableCameraDevices();
+  const USER = user?.data?.user || user?.data;
+  const isUserGuest = useMemo(() => !user, [user]);
+  const USER_LENGTH_CHECK = sequenceUser?.length == 1;
+  const activeCamera = getCameraDetails();
+  const SHOW_DONE_BTN = ((timeText === '00:00' && isUserGuest) || !isCancelingStory)
+
 
   console.log('sequcenuserVIdeo====', sequenceUser);
 
@@ -185,7 +190,7 @@ const VideoFirstUser = () => {
     setShowCamera(true);
   }, []);
 
-    // useFocusEffect(
+  // useFocusEffect(
   //     useCallback(() => {
 
   useEffect(() => {
@@ -219,8 +224,7 @@ const VideoFirstUser = () => {
       }
     }
     return () => {
-      // dispatch(extendStoryCheckVideo(false));
-      // setIsFirstCall(false);
+
       setisCancelingStory(true);
     };
   }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend]);
@@ -237,65 +241,7 @@ const VideoFirstUser = () => {
     }, []),
   );
 
-  // useFocusEffect(
-  //     useCallback(() => {
-  //         // setTimeLeft(null);
-  //         setIsPressed(false);
-  //         // dispatch(checkVideoTrue(false));
-  //         return () => {
-  //             dispatch(extendStoryCheckVideo(false));
-  //             setIsFirstCall(false);
-  //             setisCancelingStory(true);
-  //         };
-
-  //     }, [])
-  // );
-
-  // const handleStart = () => {
-
-  //     if (timeLeft > 0) {
-  //         dispatch(extendStoryCheckVideo(false));
-  //         setisCancelingStory(false);
-  //         setIsFirstCall(true);
-  //         setIsPressed(false);
-  //         setTimeLeft(0);
-  //         console.log("CALLED CANCELING=============");
-  //     };
-
-  //     if (timeLeft === null) {
-
-  //         if (extendStoryCheckVideoTrue == true) {
-  //             resumeRecording();
-  //             setIsPressed(true);
-  //             setTimeLeft(30);
-  //             console.log("EXTEND VIDEO----");
-  //         } else if (extendVideoCheck == true) {
-  //             resumeRecording();
-  //             setIsPressed(true);
-  //             setTimeLeft(30);
-  //             console.log("RESUME VIDEO-----")
-  //         };
-
-  //         if (timeLeft == null && extendStoryCheckVideoTrue == null) {
-  //             setIsPressed(true);
-  //             setTimeLeft(120);
-  //             recordVideos();
-  //             console.log("START VIDEO-----")
-  //         }
-  //     }
-  // };
-
-  // setTimeLeft(null);
-
-
-  //functions
-
   console.log('path---', path);
-  console.log('recordingVideo---', recordingVideo);
-  console.log('currentDisplayUser---', currentDisplayUser);
-  console.log('extend-video-check-', extendStoryCheckVideoTrue);
-  console.log('extendVideoCheck===', extendVideoCheck);
-
 
   const checkPermission = async () => {
     try {
@@ -314,11 +260,6 @@ const VideoFirstUser = () => {
       console.warn(err);
     }
   };
-
-  // const checkpermission = async () => {
-  //     await Camera.requestCameraPermission()
-  //     await Camera.requestMicrophonePermission()
-  // }
 
 
   const toggleCamera = () => {
@@ -377,14 +318,7 @@ const VideoFirstUser = () => {
   };
 
   const pressHandlerIn = () => {
-    // if (timeLeft > 0) {
-    //     dispatch(extendStoryCheckVideo(false));
-    //     setisCancelingStory(false);
-    //     setIsFirstCall(true);
-    //     setIsPressed(false);
-    //     setTimeLeft(0);
-    //     console.log("CALLED CANCELING=============");
-    // };
+
 
     if (timeLeft === null) {
       if (extendStoryCheckVideoTrue == true) {
@@ -473,15 +407,15 @@ const VideoFirstUser = () => {
             style={{
               paddingTop: responsiveWidth(5),
               flexDirection: 'row',
-              width: isCancelingStory
-                ? responsiveWidth(60)
-                : responsiveWidth(90),
+              // width: isCancelingStory
+              //   ? responsiveWidth(60)
+              //   : responsiveWidth(90),
+              width: SCREEN_WIDTH - moderateScale(22) * 2,
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={{width: responsiveWidth(10)}}>
+              onPress={() => navigation.goBack()}>
               <Image
                 style={{
                   width: responsiveWidth(5),
@@ -492,60 +426,72 @@ const VideoFirstUser = () => {
               />
             </TouchableOpacity>
             <View>
-              {isCancelingStory ? (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    backgroundColor: 'rgba(255, 164, 164, 0.5)',
-                    paddingVertical: moderateVerticalScale(10),
-                    paddingHorizontal: moderateScale(12),
-                  }}>
-                  <Text
+              {
+                SHOW_DONE_BTN ?
+                  (
+                    <TouchableOpacity
+                      onPress={() => {
+                        modalOpen(
+                          GuestModalRefForAds,
+                          'Support Story Time',
+                          'Watch the ad to \ncontinue playing',
+                          'Watch ads',
+                          'Subscribe for Ad FREE experience',
+                        );
+                      }}
+                      style={{
+                        borderRadius: 10,
+                        borderWidth: 4,
+                        borderColor: TextColorGreen,
+                        backgroundColor: TextColorGreen,
+                        paddingVertical: moderateVerticalScale(6),
+                        paddingHorizontal: moderateScale(25),
+                      }}>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontWeight: '400',
+                          fontSize: responsiveFontSize(1.9),
+                          fontFamily: Inter_Regular.Inter_Regular,
+                        }}>
+                        Done
+                      </Text>
+                    </TouchableOpacity>
+                  ) :
+                  (isCancelingStory) ? (
+                    <View style={{
+                  borderWidth: 4,
+                  borderColor: 'rgba(255, 153, 166, 1)',
+                  borderRadius: 8,
+                }}>
+                  <LinearGradient
+                    colors={["rgba(255, 164, 164, 0.8)", "#FFFFFF",]}
+                    start={{ x: 1, y: 0.5 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
                     style={{
-                      fontWeight: '600',
-                      color: TextColorGreen,
-                      fontSize: responsiveFontSize(1.9),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: moderateVerticalScale(10),
+                      paddingHorizontal: moderateScale(12),
                     }}>
-                    Time :{timeText}
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: TextColorGreen,
+                        fontSize: responsiveFontSize(2),
+                      }}>
+                      Time: {timeText}
+                    </Text>
+                  </LinearGradient>
                 </View>
-              ) : isUserGuest ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    modalOpen(
-                      GuestModalRefForAds,
-                      'Support Story Time',
-                      'Watch the ad to \ncontinue playing',
-                      'Watch ads',
-                      'Subscribe for Ad FREE experience',
-                    );
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: TextColorGreen,
-                    backgroundColor: TextColorGreen,
-                    paddingVertical: moderateVerticalScale(6),
-                    paddingHorizontal: moderateScale(25),
-                  }}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: '400',
-                      fontSize: responsiveFontSize(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
-                    }}>
-                    Done
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <></>
-              )}
+                  ) : (
+                    <></>
+                  )
+              }
             </View>
+            {
+              //Layout adjuster text
+              !SHOW_DONE_BTN && <Text></Text>
+            }
           </View>
         </View>
 
@@ -556,7 +502,7 @@ const VideoFirstUser = () => {
             source={PLAYFLOW_FRAME}>
             <View
               activeOpacity={0.9}
-              style={[styles.bg_content, {backgroundColor: TextColorGreen}]}>
+              style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
               {!showCamera ? (
                 <ImageBackground
                   style={{
@@ -705,24 +651,24 @@ const VideoFirstUser = () => {
             text={`Next Player${isNextUser?.username ? ": @" + isNextUser?.username : ''}`}
             isNextUser={isNextUser}
           />
-          ) : (
-        isUserGuest && (
-          <CustomVideoPlayFlowButton
-            onPress={onpressNextHandler}
-            backgroundColor={TextColorGreen}
-            color="#FFF"
-            timeLeft={timeLeft}
-            text={'NextPlayer'}
-            isNextUser={isNextUser}
-          />
+        ) : (
+          isUserGuest && (
+            <CustomVideoPlayFlowButton
+              onPress={onpressNextHandler}
+              backgroundColor={TextColorGreen}
+              color="#FFF"
+              timeLeft={timeLeft}
+              text={'Next Player'}
+              isNextUser={isNextUser}
+            />
           )
         )}
         {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
-        <View style={{paddingVertical: responsiveWidth(4)}}>
+        <View style={{ paddingVertical: responsiveWidth(4) }}>
           <SaveStoryBtn
             timeLeft={timeLeft}
-            onPress={isUserGuest ?saverecordingvideo:saveBtnHandler}
+            onPress={isUserGuest ? saverecordingvideo : saveBtnHandler}
             text={isUserGuest ? 'Save to phone' : 'Save Story'}
             color={TextColorGreen}
             isNext={isUserGuest ? false : isNext}
@@ -738,8 +684,8 @@ const VideoFirstUser = () => {
           />
         )}
 
-        <GuestModals ref={GuestModalRef} />
-        <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo} />
+        <GuestModals ref={GuestModalRef} onPress={()=>navigation.navigate(PLAY_STORY_TIME)}/>
+        <GuestModals ref={GuestModalRefForAds} onPress={saverecordingvideo} textOnPress={ ()=>navigation.navigate(PLAY_STORY_TIME)} />
       </ScrollView>
     </ImageBackground>
   );

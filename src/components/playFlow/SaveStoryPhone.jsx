@@ -20,13 +20,11 @@ import StoryTimeSaved from './StoryTimeSaved';
 import { createStory_api } from '../../../services/api/storyfeed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
-
-
+import * as ScopedStorage from "react-native-scoped-storage"
+import DocumentPicker from "react-native-document-picker"
 
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
-
-
 
 
     const { width, height } = Dimensions.get('window');
@@ -39,6 +37,8 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [directoryPath, setDirectoryPath] = useState("");
+
 
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
     const categoryId = useSelector((state) => state?.getcategories?.categoriesId);
@@ -65,8 +65,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
     const dispatch = useDispatch();
-
-
 
 
     const saveStoryhandler = () => {
@@ -106,9 +104,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
                 <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
-
-
-
                     <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
                         <BackButton onPress={() => setIsVisible(false)} />
                     </View>
@@ -124,22 +119,17 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
                             <Text style={{ paddingVertical: 2, width: responsiveWidth(40), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400", marginBottom: responsiveHeight(2) }}>Save your story to your phone</Text>
 
-
                             {!isUserGuest && <View style={{}}>
                                 <TouchableButton isLoading={isLoading} type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
                             </View>}
-
 
                             <View style={{ paddingTop: responsiveWidth(8) }}>
                                 <SaveStoryBtn timeLeft={0} onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest} />
                             </View>
 
-
                             {/* </View> */}
                         </View>
                     </ImageBackground>
-
-
 
 
 

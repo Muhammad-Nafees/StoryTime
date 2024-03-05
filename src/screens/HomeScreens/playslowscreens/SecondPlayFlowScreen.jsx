@@ -9,7 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetRecordingData } from '../../../../store/slices/RecordingData';
-import { extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -20,17 +20,23 @@ const SecondPlayFlowScreen = () => {
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
+
     console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
-    const squareSize = windowWidth * 0.92;
+    const squareSize = windowWidth * 0.90;
     const dispatch = useDispatch();
 
     const onpressNextHandler = () => {
+
         navigation.navigate(FIRST_USER);
         dispatch(resetRecordingData());
         dispatch(extendStoryCheck(null));
-    }
+        dispatch(checkTrueOrFalse(null))
+    };
+
+    console.log("addedUsers", addedUsers);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -63,7 +69,7 @@ const SecondPlayFlowScreen = () => {
 
                 <View style={{ paddingVertical: moderateVerticalScale(35), }} />
 
-                <View style={{justifyContent: "center", alignItems: "center" }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
                         <Image resizeMode='stretch' source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
@@ -108,8 +114,8 @@ const styles = StyleSheet.create({
         paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
         // fontWeight: "bold",
-        textAlign:'center',
-        marginRight:'auto',
+        textAlign: 'center',
+        marginRight: 'auto',
         fontSize: responsiveFontSize(4.5),
         fontFamily: PassionOne_Regular.passionOne,
     }

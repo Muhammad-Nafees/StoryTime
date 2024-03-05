@@ -17,6 +17,7 @@ const CustomPlayFlowButton = ({
     color,
     isNextUser,
     isCancelingStory,
+    user
 }) => {
 
     return (
@@ -33,11 +34,16 @@ const CustomPlayFlowButton = ({
                     alignItems: 'center',
                     height: responsiveHeight(6.6),
                 }}>
-                
-              { 
-               <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
-                    {text}
-                </Text>}
+
+                {
+                    user ?
+                        <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
+                            {`Next Player: @${isNextUser?.username}`}
+                        </Text> :
+                        <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: '600', letterSpacing: 0.28, color: color, }}>
+                            {`Next Player`}
+                        </Text>
+                }
 
             </TouchableOpacity>
         </View>

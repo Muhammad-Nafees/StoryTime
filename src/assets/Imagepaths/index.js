@@ -6,7 +6,7 @@ export const Img_Paths = {
   LOGIN_IMG: require('../../assets/login-img.png'),
   CREATE_ACCOUNT_ICON: require('../../assets/create-account-img.png'),
   FORGET_BG_IMG: require('../../assets/forget-bg-img.png'),
-  ANOTHER_FORGET_BG_IMG: require('../../assets/anotherforgetbgimage.png'),
+  ANOTHER_FORGET_BG_IMG: require('../../assets/another_forgetImage.png'),
   GOOGLE_ICON: require('../../assets/google-icon.png'),
   FACEBOOK_ICON: require('../../assets/facebook-icon.png'),
   APPLE_ICON: require('../../assets/apple-icon.png'),
@@ -19,6 +19,11 @@ export const Img_Paths = {
   BGIMAGE_BLOCKUSER: require('../../assets/bgimageblockuser.png'),
   BGIMAGE_ACCOUNT_CREATED: require('../../assets/bgaccount_created.png'),
   USERNAME_IMAGE_REPORT: require('../../assets/usernameimageReport.png'),
+  GREEN_COLOUR_FORGETIMAGE: require('../../assets/greeencolour_anotherimage.png'),
+  CREATE_PASSWORD_IMG: require('../../assets/createpassword.png'),
+  CREATE_NEW_PASSWORD_IMG: require('../../assets/createNewpassword.png'),
+  // c:\Users\dell\Downloads\.png
+
   // Categories File-----
 
   // ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),

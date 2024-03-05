@@ -101,7 +101,7 @@ const SubCategories = ({route}) => {
       const filtered = responsesubCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
-      return filtered?.length > 0 ? [...filtered, randomObject] : [];
+      return filtered;
     }
     return responsesubCategories?.length > 0
       ? [...responsesubCategories, randomObject]
@@ -340,16 +340,22 @@ const SubCategories = ({route}) => {
               <Text style={styles.categories_text}>{name}</Text>
             </View>
           </View>
-          {isUserGuest && (
-          <View style={{marginTop: moderateVerticalScale(10)}}>
-            <View
-              style={{marginBottom: 'auto', marginTop: 'auto', marginLeft: 5}}>
-              <SvgIcons name={'Guest'} width={36} height={36} />
-            </View>
-            <Text style={styles.text}>Guest{guestNumber}</Text>
+            {isUserGuest && (
+              <View style={{ marginTop: moderateVerticalScale(10) }}>
+                <View
+                  style={{
+                    marginBottom: 'auto',
+                    marginTop: 'auto',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                  <SvgIcons name={'Guest'} width={36} height={36} />
+                </View>
+                <Text style={styles.text}>Guest{guestNumber}</Text>
+              </View>
+            )}
           </View>
-        )}
-      </View>
 
         {/* MainnputField----------*/}
 

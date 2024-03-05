@@ -38,19 +38,20 @@ const AddFiends = () => {
         }
         if (HasMorePages) {
             setPage((prevPage) => prevPage + 1);
-            setHandleLoadMoreFriends(true)
+            setHandleLoadMoreFriends(true);
         } else {
-            setHandleLoadMoreFriends(false)
+            setHandleLoadMoreFriends(false);
         }
     };
 
-
+    // console.log("handleLoadMore", handleLoadMoreFriends)
 
     useEffect(() => {
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
                 const responseData = await getAllUsers_api({ pagination: page, limit });
+                // console.log("responseData=====", responseData?.data)
                 const data = responseData?.data?.users;
                 setIsData(data)
                 if (data && data.length > 0) {
@@ -76,9 +77,19 @@ const AddFiends = () => {
         const filteredData = responseUsers?.filter((item) => {
             return item?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase())
         })
-        setFilteredData(filteredData)
+        if (filteredData?.length > 0) {
+            setFilteredData(filteredData);
+        } else {
+            // setIsLoading(false);
+            setTimeout(() => {
+                setHandleLoadMoreFriends(false);
+            }, 500);
+            setFilteredData([]);
+            console.log("USers not found");
+        };
 
     }, [searchQuery, responseUsers]);
+    console.log("filteredData", filteredData);
 
     useEffect(() => {
         filterUserData();
@@ -122,6 +133,11 @@ const AddFiends = () => {
 
                 <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
 
+                    {/* isLoading ?
+                            <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
+                                <ActivityIndicator size={24} color={PrimaryColor} />
+                            </View> : */}
+
                     {
                         <FlatList
                             scrollEnabled={true}
@@ -136,9 +152,9 @@ const AddFiends = () => {
                                 />
                             )}
                             ListFooterComponent={() => {
-                                if (handleLoadMoreFriends || isLoading) {
+                                if (handleLoadMoreFriends) {
                                     return (
-                                        <View style={{ justifyContent: "center", alignItems: 'center', height: handleLoadMoreFriends ? height / 8 : height / 1.5 }}>
+                                        <View style={{ justifyContent: "center", alignItems: 'center', height: height / 8 }}>
                                             <ActivityIndicator size={24} color={PrimaryColor} />
                                         </View>
                                     );

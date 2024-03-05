@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -12,31 +12,34 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
-import { Inter_Regular } from '../../../constants/GlobalFonts';
+import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 const AddPlayers = () => {
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
+    const { height, width } = Dimensions.get("window")
     const [Responseapi, setResponseapi] = useState([]);
     const navigation = useNavigation();
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
     const { CATEGORIES } = NavigationsString;
     const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
 
     const addFriends_api_handler = async () => {
+        setIsLoading(true);
         try {
             const responseData = await addFriends_api();
             setResponseapi(responseData.data.users);
+            setIsLoading(false);
             console.log("Responseapi----", Responseapi);
             return responseData;
         } catch (error) {
             console.log("err", error)
         }
     };
-    
+
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
@@ -109,15 +112,19 @@ const AddPlayers = () => {
                             {
                                 !isNoFriends ?
                                     (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
-                                        <Text style={{ fontSize: 22, color: "#000", textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>No Friends Found</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(3.5), color: "#E44173", textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
                                     </View>)
-                                    :
-                                    Responseapi?.map((item, index) => {
-                                        console.log("index====", index);
-                                        return (
-                                            <AddFriends_Categories key={`friends_${item?._id}`} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
-                                        )
-                                    })
+                                    : isLoading ?
+                                        <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
+                                            <ActivityIndicator size={24} color={PrimaryColor} />
+                                        </View>
+                                        :
+                                        Responseapi?.map((item, index) => {
+                                            console.log("index====", index);
+                                            return (
+                                                <AddFriends_Categories key={`friends_${item?._id}`} indexNo={index} username={item?.username} userchoice="Add" profileimage={FIRST_PROFILE} item={item} userid={item?._id} />
+                                            )
+                                        })
                             }
                         </ScrollView>
 
@@ -126,7 +133,11 @@ const AddPlayers = () => {
             </View>
 
             <View style={{ paddingTop: responsiveWidth(5) }}>
-                <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Add" color="#FFF" />
+                <TouchableButton
+                    onPress={handlenavigation}
+                    backgroundColor={TextColorGreen}
+                    type={"addPlayers"}
+                    text="Add" color="#FFF" />
             </View>
 
         </ImageBackground>

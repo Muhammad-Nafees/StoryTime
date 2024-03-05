@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Text,
   View,
@@ -20,22 +20,22 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TouchableButton from '../../../components/TouchableButton';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email, {
   otp_forget,
 } from '../../../../services/api/auth_mdule/auth';
-import {useDispatch} from 'react-redux';
-import {forgetResetToken} from '../../../../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { forgetResetToken } from '../../../../store/slices/authSlice';
 import VerifyingCodeModal from '../../../components/forget-screens-modal/VerifyingCodeModal';
 import Toast from 'react-native-toast-message';
 
-const OtpForget = ({route}) => {
+const OtpForget = ({ route }) => {
   const navigation = useNavigation();
-  const {FORGET_CONFIRM_PASSWORD} = NavigationsString;
-  const {ANOTHER_FORGET_BG_IMG} = Img_Paths;
+  const { FORGET_CONFIRM_PASSWORD } = NavigationsString;
+  const { ANOTHER_FORGET_BG_IMG } = Img_Paths;
   const [otptext, setOtptext] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -65,7 +65,7 @@ const OtpForget = ({route}) => {
   );
 
   const handleBackspace = (event, index) => {
-    const {nativeEvent} = event;
+    const { nativeEvent } = event;
     if (nativeEvent.key === 'Backspace') {
       handlechange('', index);
     }
@@ -141,7 +141,7 @@ const OtpForget = ({route}) => {
   }, [timeLeft]);
 
   return (
-    <View style={{flex: 1, backgroundColor: SecondaryColor}}>
+    <View style={{ flex: 1, backgroundColor: SecondaryColor }}>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.img_container}>
@@ -225,15 +225,15 @@ const OtpForget = ({route}) => {
           <VerifyingCodeModal
             setVisible={setVisible}
             isVisible={isVisible}
-            onPress={() => {}}
+            onPress={() => { }}
             statusCodeForget={statusCodeForget}
           />
         )}
 
         <Toast />
       </ScrollView>
-      {console.log(timeLeft)}
-      <View style={{marginBottom: 16}}>
+
+      <View style={{ marginBottom: responsiveWidth(15) }}>
         <View
           style={{
             flexDirection: 'row',
@@ -256,7 +256,7 @@ const OtpForget = ({route}) => {
             </Text>
           </TouchableOpacity>
           <View>
-            <Text style={{color: TextColorGreen, fontWeight: '300'}}>
+            <Text style={{ color: TextColorGreen, fontWeight: '300' }}>
               {' '}
               {`in ${timeText}s`}
             </Text>
@@ -265,6 +265,7 @@ const OtpForget = ({route}) => {
 
         <TouchableButton
           onPress={otptext.length === 6 ? otp_forget_api : null}
+          type="optForget"
           backgroundColor={
             otptext.length === 6 ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
           }
@@ -288,9 +289,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   img_child: {
-    // width: responsiveWidth(50),
-    // height: responsiveHeight(20),
-    // resizeMode: 'center',
+    width: responsiveWidth(50),
+    height: responsiveHeight(20),
+    resizeMode: 'center',
   },
 });
 

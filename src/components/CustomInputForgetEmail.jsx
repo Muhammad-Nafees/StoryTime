@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useTransition} from 'react';
+import React, { useEffect, useState, useRef, useTransition } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {moderateVerticalScale, verticalScale} from 'react-native-size-matters';
+import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -18,21 +18,23 @@ import {
   TextinputColor,
 } from '../screens/Styles/Style';
 import _ from 'lodash';
-import reset_email, {username_api} from '../../services/api/auth_mdule/auth';
+import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import {useNavigation} from '@react-navigation/native';
-import {Img_Paths} from '../assets/Imagepaths';
+import { useNavigation } from '@react-navigation/native';
+import { Img_Paths } from '../assets/Imagepaths';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
 
 const CustomInputForgetEmail = props => {
-  const {FORGET_BG_IMG} = Img_Paths;
+  const { FORGET_BG_IMG } = Img_Paths;
   const [isFocused, setIsFocused] = useState(false);
-  const {FORGET_PHONE_NO, OTP_FORGET} = NavigationsString;
+  const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState();
   const [navigatee, setNavigate] = useState(false);
   const [responses, setResponse] = useState('');
+  const [isStatusCodeSuccess, setIsStatusCodeSuccess] = useState(false);
+  const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
   const [textval, seText] = useState('');
   const navigation = useNavigation();
 
@@ -47,21 +49,23 @@ const CustomInputForgetEmail = props => {
   const debouncedApiCall = useRef(
     _.debounce(async text => {
       try {
-        const response = await reset_email({email: text});
+        const response = await reset_email({ email: text });
         seText(text);
         setResponse(response?.data?.code);
         console.log('response---', response?.data?.code);
-        if (
-          response?.message === 'Verification Code is Generated Successfully'
-        ) {
-          // setResponse(response)
-          setEmailError('');
-          return;
-        } else if (response?.stack) {
-          console.log('resmessage', response?.message);
-          setEmailError(response?.message);
-          setIsLoading(false);
+        if (response?.message === "Invalid Information, Record Not Found!") {
+          setInvalidPhoneNumber("Invalid Information, Record Not Found!");
+        } else {
+          setInvalidPhoneNumber("Invalid number")
         }
+
+        if (response?.statusCode === 200) {
+          setIsStatusCodeSuccess(true);
+          setInvalidPhoneNumber("");
+        } else {
+          setIsStatusCodeSuccess(false);
+        };
+
       } catch (err) {
         console.log(err);
       }
@@ -88,7 +92,7 @@ const CustomInputForgetEmail = props => {
 
   return (
     // <>
-    <View style={{paddingVertical: 10, flex: 1}}>
+    <View style={{ paddingVertical: 10, flex: 1 }}>
       <Text
         style={[
           {
@@ -135,22 +139,24 @@ const CustomInputForgetEmail = props => {
             )} */}
       {console.log('res-=', responses)}
 
-      {emailError && (
-        <View
-          style={[
-            {
+      {
+        invalidPhoneNumber &&
+        <>
+          <View
+            style={{
               flexDirection: 'row',
               alignItems: 'center',
               gap: 2,
-              marginTop: verticalScale(7),
-            },
-          ]}>
-          <Icon name="alert-circle" size={22} color="red" />
-          <Text style={[{color: 'red'}]}>{emailError}</Text>
-        </View>
-      )}
+              marginTop: 2,
+            }}>
+            <Icon name="alert-circle" size={22} color="red" />
+            <Text style={{ color: 'red' }}>{invalidPhoneNumber}</Text>
+          </View>
+          <View style={{ height: 0 }} />
+        </>
+      }
 
-      <View style={{marginTop: 'auto'}}>
+      <View style={{ marginTop: 'auto', paddingBottom: responsiveWidth(12) }}>
         <TouchableOpacity onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
           <Text
             style={{
@@ -163,15 +169,17 @@ const CustomInputForgetEmail = props => {
             Use phone number instead
           </Text>
         </TouchableOpacity>
+
         <TouchableButton
           isLoading={isLoading}
           setIsLoading={setIsLoading}
-          type="register"
+          type="forgetemail"
+          StatusCodeSuccess={isStatusCodeSuccess}
           isValid={props?.isValid}
           dirty={props?.dirty}
           onPress={() => {
             props?.value === !'' ? props?.handleSubmit : null;
-            if (!props?.error && !emailError) {
+            if (isStatusCodeSuccess) {
               navigation.navigate(OTP_FORGET, {
                 code: responses,
                 email: textval,
@@ -179,9 +187,8 @@ const CustomInputForgetEmail = props => {
               });
             }
           }}
-          backgroundColor={
-            props?.value !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
-          }
+          backgroundColor={isStatusCodeSuccess ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
+
           color="#FFF"
           text="Next"
         />

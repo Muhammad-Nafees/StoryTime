@@ -33,19 +33,21 @@ import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+import NavigationsString from '../../../constants/NavigationsString';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 const FirstUser = ({ route }) => {
   let longPressTimeout;
   const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, BG_VOICE_TO_TEXT_IMG } = Img_Paths;
+  const { PLAY_STORY_TIME } = NavigationsString;
+
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
   const [started, setStarted] = useState(false);
-  const [ended, setEnded] = useState('');
   const [isPressed, setIsPressed] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [timeText, setTimeText] = useState('02:00');
-  const [IsRecording, setIsRecording] = useState(false);
   const [isLongPress, setIsLongPress] = useState(false);
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
@@ -64,8 +66,6 @@ const FirstUser = ({ route }) => {
   const nextRandomNumvalueExtend = useSelector(
     state => state?.addPlayers?.nextRandomNumberExtend
   );
-
-
   const dispatch = useDispatch();
 
   const [recordingText, setRecordingText] = useState("");
@@ -74,20 +74,26 @@ const FirstUser = ({ route }) => {
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
-  const [focusvalueCheck, setFocusValueCheck] = useState(false);
   const [speaking, setSpeaking] = useState(false);
 
   const USER = user?.data?.user || user?.data;
-  const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
+  // const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
+  // ], [USER, addedUsers]);
+
+  const sequenceUser = useSelector((state) => state.addPlayers?.gameFriends);
+  console.log("sequence-users-------", sequenceUser)
+  console.log("sequenceUsers FirstUser--", sequenceUser[1]);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
+
+  // console.log("isNextUser", isNextUser);
+
+
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
   const stringText = recordingText.toString();
-  const cleanedText = stringText.replace(/,/g, '');
-
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -102,6 +108,7 @@ const FirstUser = ({ route }) => {
     };
   }, []);
 
+
   // onSpeechStart----------
 
   const onSpeechStart = e => {
@@ -113,12 +120,12 @@ const FirstUser = ({ route }) => {
   // onSpeechEnd ----------
 
   const onSpeechEnd = e => {
-    setEnded(e.value);
+
   };
 
   // ---------- onSpeechResult----------
 
-  console.log("timeleft--", timeLeft);
+  // console.log("timeleft--", timeLeft);
 
   const onSpeechResult = async (e) => {
 
@@ -140,18 +147,15 @@ const FirstUser = ({ route }) => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-    // if (e?.error) {
-    //   startRecognizing();
-    // }
   };
+
+
 
   useEffect(() => {
     setTimeLeft(null);
-
     setIsPressed(false);
     dispatch(checkTrueOrFalse(false));
     return () => {
-      // setIsFirstCall(false);
       setisCancelingStory(true);
       setStarted(false);
     };
@@ -176,7 +180,7 @@ const FirstUser = ({ route }) => {
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
-    setIsRecording(false);
+
     console.log('STOP RECORDING-----');
     try {
       await Voice.stop();
@@ -205,8 +209,7 @@ const FirstUser = ({ route }) => {
     );
   };
 
-
-  console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
+  // console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
 
   useEffect(() => {
 
@@ -236,6 +239,7 @@ const FirstUser = ({ route }) => {
       setisCancelingStory(true);
     };
   }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend])
+
 
 
   const saveBtnHandler = () => {
@@ -311,7 +315,6 @@ const FirstUser = ({ route }) => {
 
   // Timer 2 Minutes ---------
 
-
   useEffect(() => {
 
     if (USER_LENGTH_CHECK) {
@@ -361,7 +364,6 @@ const FirstUser = ({ route }) => {
   return (
     <>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-        {/* BACK BUTTON AND TIMER */}
         {/* <ScrollView> */}
         <View
           style={{
@@ -392,60 +394,68 @@ const FirstUser = ({ route }) => {
               />
             </TouchableOpacity>
 
-            <View>
+            <View style={{
+            }}>
               {isCancelingStory ? (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    backgroundColor: 'rgba(255, 164, 164, 0.5)',
-                    paddingVertical: moderateVerticalScale(10),
-                    paddingHorizontal: moderateScale(12),
-                  }}>
-                  <Text
+                <View style={{
+                  borderWidth: 4,
+                  borderColor: 'rgba(255, 153, 166, 1)',
+                  borderRadius: 8,
+                }}>
+                  <LinearGradient
+                    colors={["rgba(255, 164, 164, 0.8)", "#FFFFFF",]}
+                    start={{ x: 1, y: 0.5 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+
                     style={{
-                      fontWeight: '600',
-                      color: TextColorGreen,
-                      fontSize: responsiveFontSize(1.9),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: moderateVerticalScale(10),
+                      paddingHorizontal: moderateScale(12),
                     }}>
-                    Time :{timeText}
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: TextColorGreen,
+                        fontSize: responsiveFontSize(2),
+                      }}>
+                      Time: {timeText}
+                    </Text>
+                  </LinearGradient>
                 </View>
-              ) : !user ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    modalOpen(
-                      GuestModalRefForAds,
-                      'Support Story Time',
-                      'Watch the add to continue playing',
-                      'Watch ads',
-                      'Subscribe for Ad FREE experience',
-                    )
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: TextColorGreen,
-                    backgroundColor: TextColorGreen,
-                    paddingVertical: moderateVerticalScale(6),
-                    paddingHorizontal: moderateScale(25),
-                  }}>
-                  <Text
+              )
+
+                : !user ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      modalOpen(
+                        GuestModalRefForAds,
+                        'Support Story Time',
+                        'Watch the add to continue playing',
+                        'Watch ads',
+                        'Subscribe for Ad FREE experience',
+                      )
+                    }}
                     style={{
-                      color: 'white',
-                      fontWeight: '400',
-                      fontSize: responsiveFontSize(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
+                      borderRadius: 10,
+                      borderWidth: 4,
+                      borderColor: TextColorGreen,
+                      backgroundColor: TextColorGreen,
+                      paddingVertical: moderateVerticalScale(6),
+                      paddingHorizontal: moderateScale(25),
                     }}>
-                    Done
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <></>
-              )}
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontWeight: '400',
+                        fontSize: responsiveFontSize(1.9),
+                        fontFamily: Inter_Regular.Inter_Regular,
+                      }}>
+                      Done
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <></>
+                )}
             </View>
           </View>
         </View>
@@ -567,16 +577,15 @@ const FirstUser = ({ route }) => {
                 color="#FFF"
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
-                text={'NextPlayer'}
+                text={'Next Player'}
                 isCancelingStory={isCancelingStory}
               />
             )
           )}
 
-
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
-              onPress={!user?saveStoryhandler:saveBtnHandler}
+              onPress={!user ? saveStoryhandler : saveBtnHandler}
               text={!user ? "Save to phone" : "Save Story"}
               color={TextColorGreen}
               isNext={!user ? false : isNext}
@@ -589,8 +598,8 @@ const FirstUser = ({ route }) => {
           )}
         </View>
 
-        <GuestModals ref={GuestModalRef} />
-        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} />
+        <GuestModals ref={GuestModalRef} onPress={()=>navigation.navigate(PLAY_STORY_TIME)}/>
+        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} textOnPress={ ()=>navigation.navigate(PLAY_STORY_TIME)}/>
         {/* </ScrollView> */}
       </ImageBackground>
     </>

@@ -18,7 +18,10 @@ const VideoFirstStartScreen = () => {
     const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
     const navigation = useNavigation();
     const { VIDEO_FIRST_USER } = NavigationsString;
-    const squareSize = SCREEN_HEIGHT / 2.2;
+    const windowWidth = Dimensions.get('window').width;
+
+    const squareSize = windowWidth * 0.90;
+
 
 
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
@@ -109,8 +112,8 @@ const styles = StyleSheet.create({
         paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
         // fontWeight: "bold",
-        textAlign:'center',
-        marginRight:'auto',
+        textAlign: 'center',
+        marginRight: 'auto',
         fontSize: responsiveFontSize(4.5),
         fontFamily: PassionOne_Regular.passionOne,
     }

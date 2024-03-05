@@ -69,7 +69,6 @@ export const getAllUsers_api = async (paginations) => {
             }
         });
         const response = await responseData.json();
-        console.log("response=====", response)
         return response;
     }
     catch (error) {

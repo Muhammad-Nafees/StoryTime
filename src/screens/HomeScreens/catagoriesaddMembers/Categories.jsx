@@ -102,7 +102,7 @@ const Categories = () => {
       const filtered = responseCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
-      return filtered?.length > 0 ? [...filtered, randomObject] : [];
+      return filtered;
     }
     return responseCategories?.length > 0
       ? [...responseCategories, randomObject]
@@ -406,7 +406,9 @@ const Categories = () => {
                 style={{
                   marginBottom: 'auto',
                   marginTop: 'auto',
-                  marginLeft: 5,
+                  justifyContent:'center',
+                  alignContent:'center',
+                  alignItems:'center'
                 }}>
                 <SvgIcons name={'Guest'} width={36} height={36} />
               </View>
