@@ -89,6 +89,7 @@ const Categories = () => {
 
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
+  const allowedCategories = ['Animals'];
   const guestNumber = guestNumberRef.current;
   const randomObject = {
     namerandom: 'Random',
@@ -235,16 +236,23 @@ const Categories = () => {
 
   const handleRandomClick = async () => {
     try {
-      const response = await get_Random();
+      let randomCatName =
+      allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
+      const filteredCategory = responseCategories.find(category =>
+        category.name.includes(randomCatName),
+      );
+      console.log("randomCat",filteredCategory)
+      const response = isUserGuest? filteredCategory : await get_Random();
       console.log('res', response.data);
+    
       navigation.navigate('SubCategories', {
-        id: response?.data?._id,
-        name: response?.data?.name,
+        id: isUserGuest?response?._id: response?.data?._id,
+        name: isUserGuest? response?.name: response?.data?.name,
       });
       console.log('response_id', response?.data?._id);
       console.log('Random Clicked Category');
-      setRandomId(response?.data?._id);
-      setRandomName(response?.data?.name);
+      setRandomId(isUserGuest?response?._id:response?.data?._id);
+      setRandomName(isUserGuest? response?.name:response?.data?.name);
       return response;
     } catch (error) {}
   };
@@ -326,7 +334,7 @@ const Categories = () => {
           <View style={styles.blur_wrapper}>
             <BlurView
               style={styles.blur_view}
-              blurAmount={10}
+              blurAmount={20}
               overlayColor="transparent">
               <View style={styles.blur_content_container}>
                 <View
@@ -524,8 +532,10 @@ const styles = StyleSheet.create({
   categories_text: {
     color: '#E44173',
     fontSize: responsiveFontSize(2.4),
-    fontWeight: '500',
+    fontWeight: '800',
     letterSpacing: 0.36,
+    fontFamily:Inter_Regular.Inter_Regular
+
   },
   text_Input_container: {
     justifyContent: 'center',

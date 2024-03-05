@@ -268,7 +268,7 @@ const SubCategories = ({route}) => {
             <View style={styles.blur_wrapper}>
               <BlurView
                 style={styles.blur_view}
-                blurAmount={10}
+                blurAmount={20}
                 overlayColor="transparent">
                 <View style={styles.blur_content_container}>
                   <View
@@ -474,8 +474,9 @@ const styles = StyleSheet.create({
   categories_text: {
     color: '#E44173',
     fontSize: responsiveFontSize(2.4),
-    fontWeight: '500',
+    fontWeight: '800',
     letterSpacing: 0.36,
+    fontFamily:Inter_Regular.Inter_Regular
   },
   text_Input_container: {
     justifyContent: 'center',
