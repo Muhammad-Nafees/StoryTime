@@ -22,7 +22,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER,PLAY_STORY_TIME } = NavigationsString;
+    const { VIDEO_SECOND_USER, FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryVideoModalAfterDownloading, setSaveStoryVideoModalAfterDownloading] = useState(false);
     const [isVisibleVideoAfterDownloading, setIsVisibleVideoAfterDownloading] = useState(false)
     const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
@@ -63,40 +63,40 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
 
     return (
         <>
-        <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>
+            <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>
 
-            <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
+                <ImageBackground style={styles.container} source={BGIMAGE_DOWNLOADING}>
 
-                <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
-                    <BackButton onPress={() => setIsVisibleFirstVideoFlow(false)} />
-                </View>
+                    <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
+                        <BackButton onPress={() => setIsVisibleFirstVideoFlow(false)} />
+                    </View>
 
-                {/* Back Button */}
+                    {/* Back Button */}
 
-                <View style={{ flex: 1, justifyContent: "center", }}>
-                    <View style={{ flexDirection: 'row', backgroundColor: "#FFF", width: responsiveWidth(80), height: responsiveHeight(10), justifyContent: "space-between", alignItems: "center", borderRadius: 4 }}>
-                        <View style={{ width: responsiveWidth(80), justifyContent: "space-evenly", }}>
-                            <View style={{ flexDirection: 'row', justifyContent: "space-around", }}>
-                                <Text style={{ color: "#000", fontFamily: Inter_Regular.Inter_Regular, fontSize: responsiveFontSize(1.8) }}>Downloading Story Time</Text>
-                                <Text style={{ color: "#000", fontWeight: "600" }}>{progress}%</Text>
-                            </View>
+                    <View style={{ flex: 1, justifyContent: "center", }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: "#FFF", width: responsiveWidth(80), height: responsiveHeight(10), justifyContent: "space-between", alignItems: "center", borderRadius: 4 }}>
+                            <View style={{ width: responsiveWidth(80), justifyContent: "space-evenly", }}>
+                                <View style={{ flexDirection: 'row', justifyContent: "space-around", }}>
+                                    <Text style={{ color: "#000", fontFamily: Inter_Regular.Inter_Regular, fontSize: responsiveFontSize(1.8) }}>Downloading Story Time</Text>
+                                    <Text style={{ color: "#000", fontWeight: "600" }}>{progress}%</Text>
+                                </View>
 
-                            <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(3) }}>
-                                <ProgressBar styleAttr="Horizontal" indeterminate={false} style={{ color: "rgba(4, 120, 87, 1)", width: responsiveWidth(65) }} progress={progress / 100} />
+                                <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(3) }}>
+                                    <ProgressBar styleAttr="Horizontal" indeterminate={false} style={{ color: "rgba(4, 120, 87, 1)", width: responsiveWidth(65) }} progress={progress / 100} />
+                                </View>
+
                             </View>
 
                         </View>
-
                     </View>
-                </View>
 
-             
-            </ImageBackground>
-        </Modal>
-           {saveStoryVideoModalAfterDownloading &&
-            <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text={`Story Time\nSuccessfully Saved to your\nphone!`} textButton="Back" />
-        }
-</>
+
+                </ImageBackground>
+            </Modal>
+            {saveStoryVideoModalAfterDownloading &&
+                <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text={`Story Time\nSuccessfully Saved to your\nphone!`} textButton="Back" />
+            }
+        </>
     )
 };
 

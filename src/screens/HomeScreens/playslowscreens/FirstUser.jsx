@@ -566,7 +566,8 @@ const FirstUser = ({ route }) => {
                 user={user}
                 isCancelingStory={isCancelingStory}
               />
-            )}
+            )
+          }
 
           {
             !user ?
