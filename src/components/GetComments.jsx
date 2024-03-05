@@ -79,9 +79,9 @@ const GetComments = ({ text, firstName, lastName, createdAt, handleLoadMore, isL
 
                 <View style={{ justifyContent: "center", alignItems: "flex-end", }}>
                     <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(67), }}>
-                        <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>{calculateTimeDifference(createdAt)}</Text>
-                        <TouchableOpacity onPress={handleReplying}>
-                            <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
+                        <Text style={{ color: "#b3b3b3", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(3) }}>{calculateTimeDifference(createdAt)}</Text>
+                        <TouchableOpacity onPress={handleReplying} style={{paddingLeft:10}}>
+                            <Text style={{ color: "#b3b3b3", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                         </TouchableOpacity>
                     </View>
 

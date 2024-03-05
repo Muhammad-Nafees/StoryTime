@@ -20,7 +20,7 @@ import { TextColorGreen } from '../../../Styles/Style';
 import TouchableButton from '../../../../components/TouchableButton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
+import { Inter_Medium, PassionOne_Regular } from '../../../../constants/GlobalFonts';
 import { Path, Svg } from 'react-native-svg';
 import { addFriends, rearrangedFriends, userId } from '../../../../../store/slices/addplayers/addPlayersSlice';
 
@@ -210,6 +210,7 @@ const Sequence = () => {
                         color: '#FFFFFF',
                         fontWeight: '500',
                         fontSize: responsiveFontSize(1.9),
+                        fontFamily: Inter_Medium.Inter_Medium
                       }}>
                       {`@${item?.username}`}
                     </Text>
