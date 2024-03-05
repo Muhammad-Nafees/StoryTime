@@ -23,7 +23,7 @@ import _ from 'lodash';
 import TouchableButton from './TouchableButton';
 import NavigationsString from '../constants/NavigationsString';
 import { useNavigation } from '@react-navigation/native';
-import { Path, Svg } from 'react-native-svg';
+import { Path, Svg, err } from 'react-native-svg';
 import { Inter_Regular } from '../constants/GlobalFonts';
 
 const ForgetCustomInput = ({
@@ -46,20 +46,36 @@ const ForgetCustomInput = ({
 }) => {
   const [responses, setResponse] = useState('');
   const [textphone, setPhone] = useState('');
+  const [isStatusCodeSuccess, setIsStatusCodeSuccess] = useState(false);
+  const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
+  const [recordNotFound, setRecordNotFound] = useState("");
   const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const navigation = useNavigation();
+
 
   const debouncedApiCall = useRef(
     _.debounce(async phoneNumber => {
       try {
         const response = await reset_email({ phone: phoneNumber });
+        console.log("phonenUmberValue--=---------- :", phoneNumber)
+        console.log("response file--=---------- :", response)
         setPhone(phoneNumber);
         setResponse(response?.data?.code);
 
-        if (response?.statusCode !== 200) {
-          setPhoneError('Invalid Information, Record Not Found!');
-          setFieldError('phone', `Invalid Information, Record Not Found!`);
+        console.log("response?.message", response?.message)
+        if (response?.message === "Invalid Information, Record Not Found!") {
+          setInvalidPhoneNumber("Invalid Information, Record Not Found!");
+        } else {
+          setInvalidPhoneNumber("Invalid number")
         }
+
+        if (response?.statusCode === 200) {
+          setIsStatusCodeSuccess(true);
+          setInvalidPhoneNumber("");
+        } else {
+          setIsStatusCodeSuccess(false);
+        };
+
       } catch (error) {
         console.log(error);
       }
@@ -105,19 +121,19 @@ const ForgetCustomInput = ({
               handleChange(phone);
               setFieldError('phone', '');
               setIsError('');
-
-              if (phone.length > 3) {
-                debouncedApiCall(textphone);
+              if (phone?.length > 3) {
+                console.log("phone?.length", phone?.length)
+                debouncedApiCall(phone)
               }
-
               console.log('--==', phone);
               const checkValid = phoneInput.current?.isValidNumber(phone);
 
-              if (!checkValid && phone.length > 3) {
+              if (!checkValid) {
                 setFieldError('phone', 'Invalid phone number');
                 setIsError('Invalid phone number');
               }
             }}
+
             containerStyle={styles.phoneContainer}
             renderDropdownImage={
               <Svg
@@ -150,7 +166,12 @@ const ForgetCustomInput = ({
         )}
       </Field>
 
-      {!isError && !error ? null : (
+
+      {
+        console.log("error", isError)
+      }
+      {
+        invalidPhoneNumber &&
         <>
           <View
             style={{
@@ -160,11 +181,12 @@ const ForgetCustomInput = ({
               marginTop: 2,
             }}>
             <Icon name="alert-circle" size={22} color="red" />
-            <Text style={{ color: 'red' }}>{error ? error : isError}</Text>
+            <Text style={{ color: 'red' }}>{invalidPhoneNumber}</Text>
           </View>
           <View style={{ height: 0 }} />
         </>
-      )}
+      }
+
 
       <View style={{ marginTop: 'auto', paddingBottom: responsiveWidth(12) }}>
         <TouchableOpacity onPress={() => navigation.navigate(FORGET_EMAIL)}>
@@ -179,10 +201,13 @@ const ForgetCustomInput = ({
           </Text>
         </TouchableOpacity>
         <TouchableButton
+
           isLoading={isLoading}
           isValid={isValid}
           dirty={dirty}
           type="register"
+          phoneValue={value}
+          StatusCodeSuccess={isStatusCodeSuccess}
           onPress={() => {
             value !== '' ? handleSubmit : null;
             const checkValid = phoneInput.current?.isValidNumber(textphone);
@@ -193,7 +218,8 @@ const ForgetCustomInput = ({
               });
             }
           }}
-          backgroundColor={value !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
+          backgroundColor={isStatusCodeSuccess ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
+          // backgroundColor={value == '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
           color="#FFF"
           text="Next"
         />
@@ -229,172 +255,3 @@ const styles = StyleSheet.create({
 });
 
 export default ForgetCustomInput;
-
-// import React, { useEffect, useRef, useState } from 'react';
-// import { StyleSheet, Text, View } from 'react-native';
-// import { Field } from 'formik';
-// import PhoneInput from 'react-native-phone-number-input';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import { moderateScale, verticalScale } from 'react-native-size-matters';
-// import { responsiveFontSize, responsiveScreenFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
-// import { FourthColor, TextinputColor } from '../screens/Styles/Style';
-// import { username_api } from '../../services/api/auth_mdule/auth';
-// import _ from 'lodash';
-
-// const ForgetCustomInput = ({
-//     handleChange,
-//     error,
-//     value,
-//     touched,
-//     setFieldValue,
-//     phoneInput,
-//     isError,
-//     setIsError,
-//     setPhoneCode,
-//     setFieldError,
-//     countryCode,
-//     placeholder,
-//     setPhoneError,
-//     disabled = false,
-//     extraStyles,
-//     setFormatText,
-//     phoneError
-// }) => {
-
-//     const handleCountryChange = () => {
-//         phoneInput.current?.setState({ number: '' });
-//         setFieldValue('phoneNo', '');
-//         setIsError('Phone number is required!');
-//     };
-
-//     const debouncedApiCall = useRef(_.debounce(async (phone) => {
-
-//         try {
-//             const response = await reset_email({ phone: text });
-//             console.log('responsephonenu', response?.data?.code);
-//             if (response?.statusCode === 200) {
-//                 Toast.show({
-//                     type: 'success',
-//                     text1: response?.message,
-//                 });
-
-//                 // setPhoneError()
-//                 setIsLoading(false);
-//             } else if (response?.stack) {
-//                 setPhoneError(response?.message)
-//                 Toast.show({
-//                     type: 'error',
-//                     text1: response?.message,
-//                 });
-//                 setIsLoading(false);
-//             }
-//         } catch (err) {
-//             console.log(err);
-//         }
-//     }, 1000)
-//     ).current;
-
-//     // useEffect(() => {
-//     //     if (touched && value === '') {
-//     //         setPhoneError('Phone number is required!');
-//     //     }
-//     // }, [touched, value]);
-
-//     return (
-//         <View style={{ paddingVertical: 10 }}>
-//             <Text
-//                 style={{
-//                     color: FourthColor,
-//                     fontWeight: '600',
-//                     marginBottom: verticalScale(7),
-//                 }}>
-//                 Phone Number
-//             </Text>
-//             <Field name="phoneNo">
-//                 {() => (
-//                     <PhoneInput
-//                         ref={phoneInput}
-//                         disabled={disabled}
-//                         placeholder=" "
-//                         defaultCode={'AU'}
-//                         onChangeFormattedText={(formatNo) => {
-//                             setFormatText(formatNo)
-//                             handleChange(formatNo);
-//                             setFieldError('phoneNo', '');
-//                             setIsError('');
-//                             const checkValid = phoneInput.current?.isValidNumber(formatNo);
-//                             if (!checkValid) {
-//                                 setFieldError('phoneNo', 'Invalid phone number');
-//                                 setIsError('Invalid phone number');
-//                             }
-//                         }
-//                         }
-
-//                         containerStyle={styles.phoneContainer}
-//                         textContainerStyle={styles.phoneTextContainer}
-//                         textInputStyle={styles.phoneTextInput}
-//                         flagButtonStyle={{ width: 87 }}
-//                         value={value}
-//                         onChangeText={phoneNumber => {
-//                         }}
-//                         onChangeCountry={country => {
-//                             console.log(country.callingCode, 'phoneCode');
-//                             handleCountryChange();
-//                         }}
-//                     />
-//                 )}
-//             </Field>
-
-//             <>
-//                 {/* <View
-//                     style={{
-//                         flexDirection: 'row',
-//                         alignItems: 'center',
-//                         gap: 2,
-//                         marginTop: 2,
-//                     }}>
-//                     <Icon name="alert-circle" size={22} color="red" />
-//                     <Text style={{ color: 'red' }}>{phoneError}</Text>
-//                 </View>
-//                 <View style={{ height: 0 }} /> */}
-//             </>
-
-//         </View>
-//     );
-// };
-
-// const styles = StyleSheet.create({
-//     phoneInput: {
-//         width: responsiveWidth(80),
-//         borderRadius: 12,
-//         backgroundColor: TextinputColor,
-//         color: FourthColor,
-//         height: 40,
-//     },
-//     phoneTextInput: {
-//         padding: 0,
-//         fontSize: responsiveFontSize(2),
-//         color: '#000',
-//         marginTop: verticalScale(1.5),
-//     },
-//     phoneTextContainer: {
-//         backgroundColor: '#F3F3F3',
-//         borderTopRightRadius: 12,
-//         borderBottomRightRadius: 12,
-//     },
-//     phoneContainer: {
-//         width: responsiveWidth(80),
-//         backgroundColor: 'rgba(232, 232, 232, 1)',
-//         borderRadius: 12,
-//     },
-// });
-
-// export default ForgetCustomInput;
-
-// setTimeout(() => {
-//     navigation.navigate(OTP_FORGET, {
-//         code: response?.data?.code,
-//         phone: phone,
-//         type: 'phone',
-//     });
-// }, 1000);

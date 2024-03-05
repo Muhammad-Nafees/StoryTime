@@ -19,6 +19,7 @@
 
 
     <application
+      android:installLocation="preferExternal"
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"

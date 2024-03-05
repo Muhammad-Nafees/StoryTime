@@ -47,9 +47,12 @@ const ForgetPhoneNumber = () => {
   const [phoneError, setPhoneError] = useState('');
   const { ANOTHER_FORGET_BG_IMG } = Img_Paths;
   const phoneInput = useRef();
+
   const toggleCountryPicker = () => {
     setCountryPickerVisible(!countryPickerVisible);
   };
+
+
 
   return (
     <Formik initialValues={{ phone: '' }} onSubmit={async values => { }}>
@@ -64,6 +67,7 @@ const ForgetPhoneNumber = () => {
         dirty,
         setFieldError,
       }) => (
+
         <View style={styles.container}>
           <ScrollView contentContainerStyle={{ flex: 1 }}>
             <View style={styles.img_container}>
@@ -95,21 +99,7 @@ const ForgetPhoneNumber = () => {
                 handleSubmit={handleSubmit}
               />
             </View>
-            {/* <CustomPhoneInput
-                  value={values.phoneNo}
-                  error={errors.phoneNo}
-                  touched={touched.phoneNo}
-                  handleChange={handleChange('phoneNo')}
-                  setFieldValue={setFieldValue}
-                  phoneInput={phoneInput}
-                  setIsError={setIsError}
-                  setFieldError={setFieldError}
-                  setFormatText={setFormatText}
-                  isError={isError}
-                  setPhoneCode={setPhoneCode}
-                  setPhoneError={setPhoneError}
-                  setphoneNumberStatusCode={setphoneNumberStatusCode}
-                /> */}
+
             {/* Confirm Password------------ */}
 
             {/* Next and Back------------ */}

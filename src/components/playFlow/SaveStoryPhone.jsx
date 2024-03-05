@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Dimensions, Image, Platform, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, ProgressBarAndroid } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -24,10 +24,7 @@ import * as ScopedStorage from "react-native-scoped-storage"
 import DocumentPicker from "react-native-document-picker"
 
 
-
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
-
-
 
 
     const { width, height } = Dimensions.get('window');
@@ -49,108 +46,46 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const playerContributorsId = useSelector((state) => state?.getcategories?.playerscontributorsIds);
     const { user } = useSelector(state => state?.authSlice);
 
-    const isUserGuest = useMemo(() =>
-        !user, [user])
 
-    const convertStr = textrecordUsers.join();
+
+
+    const isUserGuest = useMemo(() => !user, [user])
+
+
+    // console.log("categoryId-----", categoryId);
+    // console.log("subCategoryId-----", subCategoryId)
+    // console.log("playerContributorsId-----", playerContributorsId);
+    // console.log("textrecordUsers-----", textrecordUsers);
+
+
+
+
+    const convertStr = textrecordUsers.join()
+    console.log("convertstr----", convertStr)
+
+
     const dispatch = useDispatch();
 
 
-
-    async function requestPermission(directoryId) {
-        dir = await ScopedStorage.openDocumentTree(true);
-        if (!dir) return null; // User cancelled
-        await AsyncStorage.setItem(directoryId, JSON.stringify(dir));
-        return dir;
+    const saveStoryhandler = () => {
+        setIsVisible(false)
+        setSaveStoryModal(true);
+        setVisiblePdf(true);
     };
-
-    console.log("directoryPath===", directoryPath);
-
-    async function getAndroidDir(directoryId) {
-
-        try {
-            let dir = await AsyncStorage.getItem(directoryId);
-            if (!dir) {
-                dir = await requestPermission(directoryId)
-            }
-            else {
-                dir = JSON.parse(dir);
-            };
-            let absolutePath;
-
-            const persistedUris = await ScopedStorage.getPersistedUriPermissions();
-
-            if (
-                dir?.uri?.startsWith(
-                    'content://com.android.externalstorage.documents/tree/primary'
-                )
-            ) {
-                absolutePath = convertInternalStoragePathToAbsolutePath(dir?.uri);
-            } else {
-                // It's SD card or other external storage
-                absolutePath = convertExternalStorageUriToAbsolutePath(dir?.uri);
-            }
-
-
-            if (persistedUris.length > 0) {
-                setIsVisible(false);
-                setSaveStoryModal(true);
-                setVisiblePdf(true);
-                console.log("I'M OUT FROM DESTINATIOnN----====");
-            };
-            setDirectoryPath(absolutePath);
-
-            console.log("diruri--", dir?.uri)
-
-            console.log("persistedUris", persistedUris);
-
-            if (persistedUris.indexOf(dir?.uri) !== -1)
-                return { dir, persistedUris }; // Return both dir and persistedUris
-            return { dir: await requestPermission(directoryId), persistedUris };
-        } catch (e) {
-            console.log("err==", e);
-            return null;
-        }
-    };
-
-    const convertExternalStorageUriToAbsolutePath = (uri) => {
-        let dirToRead = uri.split('tree')[1];
-        dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
-        return decodeURIComponent(dirToRead);
-    };
-
-    const convertInternalStoragePathToAbsolutePath = (uri) => {
-        let dirToRead = uri?.split('primary')[1];
-        const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
-        dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
-        return decodeURIComponent(dirToRead);
-    };
-
-    const saveFile = async () => {
-        let dir = await getAndroidDir("dataDir");
-        await ScopedStorage.writeFile(dir?.uri, 'text/plain',)
-    };
-
-
 
 
     const handleSaveStories = async () => {
         setIsLoading(true);
         try {
             const userLoginId = await AsyncStorage.getItem("isUserId");
-            const responseData = await createStory_api({
-                creator: userLoginId,
-                category: categoryId,
-                subCategory: subCategoryId,
-                contributors: playerContributorsId,
-                content: convertStr
-            });
+            const responseData = await createStory_api({ creator: userLoginId, category: categoryId, subCategory: subCategoryId, contributors: playerContributorsId, content: convertStr });
             setIsLoading(false);
             console.log("storyresData====", responseData)
             dispatch(SaveDataToProfile(textrecordUsers));
             setSaveStoryModalsecond(true);
             setVisibleSavePhone(true);
             console.log("Users Stories save to profile");
+            console.log("isLoginUserId-----", userLoginId)
             return responseData;
         } catch (error) {
             console.log("error", error)
@@ -159,9 +94,13 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
 
 
+
     return (
         <>
             <Modal onRequestClose={() => setIsVisible(false)} visible={isVisible} >
+
+
+
 
                 <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
 
@@ -184,11 +123,9 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                                 <TouchableButton isLoading={isLoading} type="savestoryphone" onPress={handleSaveStories} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
                             </View>}
 
-
                             <View style={{ paddingTop: responsiveWidth(8) }}>
-                                <SaveStoryBtn timeLeft={0} onPress={saveFile} text="Save as PDF" isUserGuest={isUserGuest} />
+                                <SaveStoryBtn timeLeft={0} onPress={saveStoryhandler} text="Save as PDF" isUserGuest={isUserGuest} />
                             </View>
-
 
                             {/* </View> */}
                         </View>
@@ -200,10 +137,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
             </Modal>
             {
                 saveStoryModal && (
-                    <SaveAsPdf
-                        directoryPath={directoryPath}
-                        isVisiblePdf={isVisiblePdf}
-                        setIsVisiblePdf={setVisiblePdf} />
+                    <SaveAsPdf isVisiblePdf={isVisiblePdf} setIsVisiblePdf={setVisiblePdf} />
                 )
             }
 
@@ -214,6 +148,8 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         </>
     )
 };
+
+
 
 
 
@@ -350,5 +286,3 @@ const styles = StyleSheet.create({
 
 
 export default SaveStoryPhone;
-
-

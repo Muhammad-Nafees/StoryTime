@@ -37,24 +37,24 @@ const Home = () => {
     const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
 
-    useEffect(() => {
-        const addFriends_api_handler = async () => {
-            try {
-                const responseData = await addFriends_api();
-                setResponseapi(responseData?.data?.users);
-                if (responseData?.statusCode == 401) {
-                    const responseToken = await refresh_token_api(REFRESH_TOKEN);
-                    console.log("responseTokenfunc-----", responseToken)
-                    return responseToken;
-                }
-                return responseData;
-            } catch (error) {
-                console.log("err", error)
+    const addFriends_api_handler = async () => {
+        try {
+            const responseData = await addFriends_api();
+            setResponseapi(responseData?.data?.users);
+            if (responseData?.statusCode == 401) {
+                const responseToken = await refresh_token_api(REFRESH_TOKEN);
+                console.log("responseTokenfunc-----", responseToken)
+                return responseToken;
             }
-        };
+            return responseData;
+        } catch (error) {
+            console.log("err", error)
+        }
+    };
+
+    useEffect(() => {
         addFriends_api_handler();
     }, []);
-
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -74,7 +74,6 @@ const Home = () => {
                     return responseData;
                 } catch (error) {
                 } finally {
-                    // setIsLoadingMain(false);
                     setIsRefreshing(false);
                 }
             }
@@ -94,6 +93,7 @@ const Home = () => {
 
     const onRefresh = () => {
         setIsRefreshing(true);
+        addFriends_api_handler()
         setPage(1);
         setResponseUsers([]);
         setTimeout(() => {
@@ -200,13 +200,13 @@ const Home = () => {
                             onEndReachedThreshold={0.3}
                         />
 
-                        {
+                        {/* {
                             responseUsers?.length === 0 && (
                                 <View style={{ position: "absolute", top: 300, left: 45, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
                                     <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{checkDataisOrNot}</Text>
                                 </View>
                             )
-                        }
+                        } */}
 
                     </>
             }

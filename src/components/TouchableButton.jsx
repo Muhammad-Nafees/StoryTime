@@ -23,12 +23,22 @@ const TouchableButton = ({
   selectedIndices,
   validate,
   values,
-
+  StatusCodeSuccess
+  // disabled={type === 'register' ? !isValid || !dirty : null}
+  // StatusCodeSuccess
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
-        disabled={type === 'register' ? !isValid || !dirty : null}
+        disabled={
+          type === 'register' && StatusCodeSuccess ? false :
+            type === "login" ? false :
+              type === "forgetemail" && StatusCodeSuccess ? false :
+                type === "optForget" ? false :
+                  type == "registeruserInfo" ? false :
+                    type == "backuser" ? false :
+                      true
+        }
         onPress={onPress}
         style={{
           width: type == "savestoryphone" ? responsiveWidth(70) : responsiveWidth(80),

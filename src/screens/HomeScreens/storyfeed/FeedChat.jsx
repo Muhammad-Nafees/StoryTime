@@ -9,6 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import FeedChatFrame from '../../../components/FeedChatFrame';
 import { useSelector } from 'react-redux';
 import { addFriends_api } from '../../../../services/api/add-members';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 
@@ -85,9 +86,10 @@ const FeedChat = () => {
                         </View>
                     </View>
 
-                    <View style={{ width: responsiveWidth(95), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), paddingTop: responsiveWidth(2) }}>
-                        <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(2.7), fontWeight: "700", }}>My Friend’s Story Time</Text>
+                    <View style={{ width: responsiveWidth(94), marginLeft: 'auto', marginVertical: responsiveWidth(1.5), marginTop: responsiveWidth(6) }}>
+                        <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3), fontFamily: PassionOne_Regular.passionOne }}>My Friend’s Story Time</Text>
                     </View>
+
 
                     <View style={styles.flatlist_container}>
                         <View style={{ width: responsiveWidth(95), marginLeft: "auto" }}>
