@@ -71,44 +71,40 @@ const Home = () => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      addFriends_api_handler();
-    }, []),
-  );
+  useEffect(() => {
+    addFriends_api_handler();
+  }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchUsers = async () => {
-        if (!isRefreshing) {
-          try {
-            const responseData = await fetchallFeedStories({
-              pagination: page,
-              limit,
-            });
-            const data = responseData?.data?.stories;
-            console.log('responseData-----------', responseData);
-            setIsData(data);
-            if (data && data.length > 0) {
-              setResponseUsers(prevData => [
-                ...prevData,
-                ...responseData?.data?.stories,
-              ]);
-            } else {
-              setCheckDataisOrNot('Follow someone to get Feeds');
-            }
-            setIsLoadingMain(false);
-            setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-            return responseData;
-          } catch (error) {
-          } finally {
-            setIsRefreshing(false);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (!isRefreshing) {
+        try {
+          const responseData = await fetchallFeedStories({
+            pagination: page,
+            limit,
+          });
+          const data = responseData?.data?.stories;
+          console.log('responseData-----------', responseData);
+          setIsData(data);
+          if (data && data.length > 0) {
+            setResponseUsers(prevData => [
+              ...prevData,
+              ...responseData?.data?.stories,
+            ]);
+          } else {
+            setCheckDataisOrNot('Follow someone to get Feeds');
           }
+          setIsLoadingMain(false);
+          setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+          return responseData;
+        } catch (error) {
+        } finally {
+          setIsRefreshing(false);
         }
-      };
-      fetchUsers();
-    }, [page, isRefreshing]),
-  );
+      }
+    };
+    fetchUsers();
+  }, [page, isRefreshing]);
 
   const handleLoadMore = useCallback(() => {
     console.log('HasMorePages-----', HasMorePages);
