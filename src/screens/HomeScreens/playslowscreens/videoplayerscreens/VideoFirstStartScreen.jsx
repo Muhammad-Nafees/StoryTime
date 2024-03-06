@@ -50,7 +50,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} resizeMode='stretch' source={{ uri: storyUserImage }} />
+                        }]} resizeMode='contain' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        width: responsiveWidth(22),
+        width: responsiveWidth(25),
         height: responsiveHeight(11),
     },
     start: {

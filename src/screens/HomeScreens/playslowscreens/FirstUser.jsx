@@ -94,6 +94,7 @@ const FirstUser = ({ route }) => {
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
   const stringText = recordingText.toString();
+
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -563,7 +564,6 @@ const FirstUser = ({ route }) => {
             )
           }
 
-
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
               onPress={!user ? saveStoryhandler : saveBtnHandler}
@@ -592,7 +592,7 @@ const FirstUser = ({ route }) => {
       </ImageBackground>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

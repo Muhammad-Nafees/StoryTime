@@ -105,18 +105,19 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 contributors: playerContributorsId,
                 content: convertStr,
             });
+            console.log()
             if (responseData?.statusCode !== 200) {
                 Toast.show({
                     type: "error",
                     text1: "content is not allowed to be empty",
                 })
+                setIsLoading(false);
+            } else {
+                console.log('storyresData====', responseData);
+                dispatch(SaveDataToProfile(textrecordUsers));
+                setSaveStoryModalsecond(true);
+                setVisibleSavePhone(true);
             }
-            setIsLoading(false);
-            console.log('storyresData====', responseData);
-            dispatch(SaveDataToProfile(textrecordUsers));
-            setSaveStoryModalsecond(true);
-            setVisibleSavePhone(true);
-            console.log('isLoginUserId-----', userLoginId);
             return responseData;
         } catch (error) {
             console.log('error', error);

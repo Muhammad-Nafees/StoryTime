@@ -48,6 +48,7 @@ import GuestModals from '../../../../components/GuestModals';
 import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 
+
 const VideoFirstUser = () => {
   //destructures
   const { SECOND_USER_STORY, PLAY_STORY_TIME } = NavigationsString;
@@ -230,6 +231,7 @@ const VideoFirstUser = () => {
     };
   }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend]);
 
+
   //     }, [checkVideoisTrue])
   // );
 
@@ -318,11 +320,6 @@ const VideoFirstUser = () => {
     stopRecordings();
   };
 
-  console.log("extendStoryCheckVideoTrue -----:", extendStoryCheckVideoTrue)
-  console.log("extendVideoCheck -----:", extendVideoCheck);
-  console.log("checkVideoisTrue -----:", checkVideoisTrue);
-
-
 
   const pressHandlerIn = () => {
     if (timeLeft === null) {
@@ -394,7 +391,6 @@ const VideoFirstUser = () => {
     }
     saverecordingvideo();
   };
-
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

@@ -242,7 +242,6 @@ const Register = () => {
                       backgroundColor="#FFF"
                       borderWidth="1"
                       type={"backuser"}
-
                       color="#395E66"
                       text="Back"
                     />
