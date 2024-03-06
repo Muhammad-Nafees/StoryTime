@@ -27,7 +27,7 @@ import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {PrimaryColor, TextColorGreen} from '../../Styles/Style';
 import {checkTrueOrFalse} from '../../../../store/slices/addplayers/addPlayersSlice';
-import {SCREEN_HEIGHT, SPACING} from '../../../constants/Constant';
+import {SCREEN_HEIGHT,SCREEN_WIDTH, SPACING} from '../../../constants/Constant';
 import {Inter_Regular} from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 import Voice, {SpeechResultsEvent} from '@react-native-voice/voice';
@@ -96,6 +96,11 @@ const FirstUser = ({route}) => {
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
   const stringText = recordingText.toString();
+
+  //consts
+  const isUserGuest = useMemo(() => !user, [user]);
+  const SHOW_DONE_BTN =
+    (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -355,9 +360,7 @@ const FirstUser = ({route}) => {
             style={{
               paddingTop: responsiveWidth(5),
               flexDirection: 'row',
-              width: isCancelingStory
-                ? responsiveWidth(60)
-                : responsiveWidth(90),
+              width: SCREEN_WIDTH - moderateScale(22) * 2,
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
@@ -374,36 +377,8 @@ const FirstUser = ({route}) => {
               />
             </TouchableOpacity>
 
-            <View style={{}}>
-              {isCancelingStory ? (
-                <View
-                  style={{
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    borderRadius: 8,
-                  }}>
-                  <LinearGradient
-                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
-                    start={{x: 1, y: 0.5}}
-                    end={{x: 1, y: 0}}
-                    locations={[0, 1]}
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingVertical: moderateVerticalScale(10),
-                      paddingHorizontal: moderateScale(12),
-                    }}>
-                    <Text
-                      style={{
-                        fontWeight: '600',
-                        color: TextColorGreen,
-                        fontSize: responsiveFontSize(2),
-                      }}>
-                      Time: {timeText}
-                    </Text>
-                  </LinearGradient>
-                </View>
-              ) : !user ? (
+            <View>
+              {SHOW_DONE_BTN ? (
                 <TouchableOpacity
                   onPress={() => {
                     modalOpen(
@@ -432,10 +407,42 @@ const FirstUser = ({route}) => {
                     Done
                   </Text>
                 </TouchableOpacity>
+              ) : isCancelingStory ? (
+                <View
+                  style={{
+                    borderWidth: 4,
+                    borderColor: 'rgba(255, 153, 166, 1)',
+                    borderRadius: 8,
+                  }}>
+                  <LinearGradient
+                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
+                    start={{x: 1, y: 0.5}}
+                    end={{x: 1, y: 0}}
+                    locations={[0, 1]}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: moderateVerticalScale(10),
+                      paddingHorizontal: moderateScale(12),
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: TextColorGreen,
+                        fontSize: responsiveFontSize(2),
+                      }}>
+                      Time: {timeText}
+                    </Text>
+                  </LinearGradient>
+                </View>
               ) : (
                 <></>
               )}
             </View>
+              {
+                //Layout adjuster text
+                !SHOW_DONE_BTN && <Text></Text>
+              }
           </View>
         </View>
 

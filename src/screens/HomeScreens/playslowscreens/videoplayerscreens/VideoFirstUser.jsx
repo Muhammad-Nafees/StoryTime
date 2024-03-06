@@ -130,7 +130,7 @@ const VideoFirstUser = () => {
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
   const activeCamera = getCameraDetails();
   const SHOW_DONE_BTN =
-    (timeText === '00:00' && isUserGuest) || !isCancelingStory;
+  (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
 
 
   //effects

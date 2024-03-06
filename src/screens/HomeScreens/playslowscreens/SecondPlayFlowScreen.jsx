@@ -84,7 +84,7 @@ const SecondPlayFlowScreen = () => {
           <View style={{paddingBottom: moderateVerticalScale(30)}}>
             <Image
               style={styles.img_dog}
-              resizeMode="stretch"
+              resizeMode="contain"
               source={{uri: storyUserImage}}
             />
           </View>
@@ -120,7 +120,7 @@ const SecondPlayFlowScreen = () => {
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity onPress={onpressNextHandler}>
             <Image
-              resizeMode="stretch"
+              resizeMode="contain"
               source={require('../../../assets/pause-img.png')}
             />
           </TouchableOpacity>
@@ -132,41 +132,42 @@ const SecondPlayFlowScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#FFF',
-  },
-  backplay_flow: {
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
-  },
-  circle_container: {
-    paddingVertical: moderateVerticalScale(10),
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'orange'
-  },
-  sub_circle: {
-    backgroundColor: TextColorGreen,
-    borderRadius: responsiveWidth(60),
-    height: 340,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  img_dog: {
-    width: responsiveWidth(22),
-    height: responsiveHeight(11),
-  },
-  start: {
-    paddingVertical: moderateVerticalScale(12),
-    color: PrimaryColor,
-    // fontWeight: "bold",
-    textAlign: 'center',
-    marginRight: 'auto',
-    fontSize: responsiveFontSize(4.5),
-    fontFamily: PassionOne_Regular.passionOne,
-  },
+    container: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#FFF"
+    },
+    backplay_flow: {
+        marginLeft: "auto",
+        width: responsiveWidth(95)
+    },
+    circle_container: {
+        paddingVertical: moderateVerticalScale(10),
+        justifyContent: "center",
+        alignItems: "center",
+        // backgroundColor: 'orange'
+    },
+    sub_circle: {
+        backgroundColor: TextColorGreen,
+        borderRadius: responsiveWidth(60),
+        height: 340,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    img_dog: {
+        width: responsiveWidth(25),
+        height: responsiveHeight(11),
+    },
+    start: {
+        paddingVertical: moderateVerticalScale(12),
+        color: PrimaryColor,
+        // fontWeight: "bold",
+        textAlign: 'center',
+        marginRight: 'auto',
+        fontSize: responsiveFontSize(4.5),
+        fontFamily: PassionOne_Regular.passionOne,
+    }
+
 });
 
 export default SecondPlayFlowScreen;
