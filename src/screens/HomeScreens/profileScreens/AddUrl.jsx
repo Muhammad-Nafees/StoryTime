@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor, pinkColor } from "../../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import TouchableButton from '../../../components/TouchableButton';
 import CustomSelectDropDown from '../../../components/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
 
 
 
@@ -21,12 +22,56 @@ const AddUrl = () => {
 
     const [changeColor, setChangeColor] = useState("#AAA");
     const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
-    const [textInputValue, setTextInputValue] = useState("")
+    const [textInputValue, setTextInputValue] = useState("");
+    const [HasMorePages, setHasMorePages] = useState(false);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [responseCategories, setResponseCategories] = useState([]);
+    const [checkSubCategory, setCheckSubCategory] = useState(false);
+    const [subCategoriesNames, setSubCategoriesNames] = useState([]);
+    const [page, setPage] = useState(1);
+
+
+
+
 
     const arrayurl = ["Animals"]
     const SubCategory = ["Dog"]
     const urlArr = ["http://example.com"]
-    console.log("textInputValue----", textInputValue)
+    console.log("textInputValue----", textInputValue);
+
+
+
+    const categories_Api = async () => {
+        try {
+            const responseData = await get_Categories_Sub_Categories({ page: page });
+            console.log("response Addurl-------------- :", responseData?.data?.categories);
+            if (responseData?.message === "Sub-Categories retrieved successfully") {
+                return setCheckSubCategory(true);
+            };
+
+            setResponseCategories(prevData => [
+                ...prevData,
+                ...responseData?.data?.categories,
+            ]);
+
+            console.log("responseData----- :", responseData)
+            setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+            return responseData;
+        } catch (error) {
+
+        }
+    };
+
+    useEffect(() => {
+        categories_Api()
+    }, [])
+
+    const categoriesNames = responseCategories?.map((categories) => categories?.name)
+    if (checkSubCategory) {
+        const SubcategoriesNames = responseCategories?.map((categories) => categories?.name)
+        setSubCategoriesNames(SubcategoriesNames)
+    }
+
     return (
 
         <ImageBackground style={styles.container} source={BG_URL_PAGE}>
@@ -44,10 +89,8 @@ const AddUrl = () => {
                         <Text style={{ color: "#000", fontWeight: "500" }}>Category</Text>
                     </View>
 
-
-
                     <CustomSelectDropDown
-                        arrayurl={arrayurl}
+                        categoriesNames={categoriesNames}
                         defaultText="Select a Category"
                         changeColor={changeColor}
                         setChangeColor={setChangeColor}
@@ -89,6 +132,7 @@ const AddUrl = () => {
                         }}
                     /> */}
                     <CustomSelectDropDown
+                        categoriesNames={subCategoriesNames}
                         arrayurl={SubCategory}
                         defaultText="Select a Sub-Category"
                         changeColor={secondChangeColor}

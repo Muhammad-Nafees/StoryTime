@@ -6,16 +6,14 @@ import { responsiveFontSize } from "react-native-responsive-dimensions";
 
 
 
-const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeColor, secondChangeColor, setSecondChangeColor }) => {
-
+const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeColor, secondChangeColor, categoriesNames }) => {
 
 
 
     return (
 
         <SelectDropdown
-
-            data={arrayurl}
+            data={categoriesNames}
             defaultButtonText={defaultText}
             buttonStyle={[
                 {
@@ -26,7 +24,6 @@ const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeCol
                     paddingHorizontal: 25,
                 },
             ]}
-
             renderDropdownIcon={() => (
                 <Image
                     style={{ width: 16, height: 16, resizeMode: 'center' }}

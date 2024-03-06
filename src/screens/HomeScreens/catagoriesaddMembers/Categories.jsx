@@ -150,7 +150,6 @@ const Categories = () => {
           } else if (responseArray.length > 0) {
             page++;
           } else {
-            // No more data available
             break;
           }
         } else {
@@ -158,7 +157,7 @@ const Categories = () => {
           console.error('Unexpected API response format:', response);
           break;
         }
-      }
+      };
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -197,7 +196,6 @@ const Categories = () => {
         fetchCategoriesUntilFound('animals');
         return;
       };
-
       const response = await get_Categories_Sub_Categories({ page: page });
       const valObj = [
         '#56B6A4',
@@ -213,7 +211,6 @@ const Categories = () => {
         '#8482D1',
         '#C45E89',
       ];
-
       for (let i = 0; i < response?.data?.categories?.length; i++) {
         const colorIndex = i % valObj.length;
         response.data.categories[i].background = valObj[colorIndex];
@@ -589,49 +586,3 @@ const styles = StyleSheet.create({
 });
 
 export default Categories;
-
-// {!isLoading && (
-//   <View style={{
-//     //  backgroundColor: "red",
-//     alignItems: 'center',
-//     paddingBottom: moderateVerticalScale(10)
-//   }}>
-//     <TouchableOpacity
-//       onPress={() => handleRandomClick()}
-//       style={{
-//         backgroundColor: '#E44173',
-//         width: responsiveWidth(29),
-//         borderRadius: 10,
-//         height: responsiveHeight(18.5),
-//         alignItems: 'center',
-//       }}>
-//       <View
-//         style={{
-//           marginVertical: moderateVerticalScale(10),
-//           borderRadius: 10,
-//           width: responsiveWidth(25),
-//           height: responsiveHeight(11),
-//           backgroundColor: '#EE5F8A',
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//         }}>
-//         <Image
-//           style={{
-//             width: responsiveWidth(16),
-//             height: responsiveHeight(8),
-//             resizeMode: 'center',
-//           }}
-//           source={LUDO_ICON}
-//         />
-//       </View>
-//       <Text
-//         style={{
-//           color: '#FFF',
-//           fontWeight: '700',
-//           fontSize: responsiveFontSize(1.9),
-//         }}>
-//         Random
-//       </Text>
-//     </TouchableOpacity>
-//   </View>
-// )}

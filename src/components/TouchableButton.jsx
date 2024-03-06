@@ -39,7 +39,9 @@ const TouchableButton = ({
                       type === "addPlayers" ? false :
                         type === "sequence" ? false :
                           type === "tagFriends" ? false :
-                            true
+                            type === "tag" ? false :
+                              type == "savestoryphone" ? false :
+                                true
         }
         onPress={onPress}
         style={{

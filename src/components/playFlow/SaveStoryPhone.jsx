@@ -48,6 +48,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import DocumentPicker from 'react-native-document-picker';
+import Toast from 'react-native-toast-message';
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { width, height } = Dimensions.get('window');
@@ -104,12 +105,17 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 contributors: playerContributorsId,
                 content: convertStr,
             });
+            if (responseData?.statusCode !== 200) {
+                Toast.show({
+                    type: "error",
+                    text1: "content is not allowed to be empty",
+                })
+            }
             setIsLoading(false);
             console.log('storyresData====', responseData);
             dispatch(SaveDataToProfile(textrecordUsers));
             setSaveStoryModalsecond(true);
             setVisibleSavePhone(true);
-            console.log('Users Stories save to profile');
             console.log('isLoginUserId-----', userLoginId);
             return responseData;
         } catch (error) {
@@ -193,9 +199,18 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             {/* </View> */}
                         </View>
                     </ImageBackground>
-
+                    <Toast />
                 </ImageBackground>
             </Modal>
+
+            {saveStoryModalsecond &&
+                <StoryTimeSaved isLoading={isLoading}
+                    isVisible={isVisibleSavePhone}
+                    setVisible={setVisibleSavePhone}
+                    text={`Story Time\nSuccessfully Saved`}
+                    textButton="Back" />
+            }
+
             {saveStoryModal && (
                 <SaveAsPdf
                     isVisiblePdf={isVisiblePdf}

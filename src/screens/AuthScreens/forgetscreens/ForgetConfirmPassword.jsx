@@ -154,12 +154,10 @@ const ForgetConfirmPassword = () => {
                             </View>
 
                             <View style={{ height: responsiveHeight(3.2) }}>
-
                                 <ErrorMessageForm
                                     errorsField={errors.newPassword}
                                     isSubmitted={isSubmitted}
                                 />
-
                             </View>
 
                             {/* <View */}
