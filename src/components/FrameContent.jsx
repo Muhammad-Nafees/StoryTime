@@ -230,7 +230,13 @@ const FrameContent = ({
                                                         // navigation.navigate(REPORT_USER)
                                                     }
                                                     } style={{ paddingBottom: 10, paddingLeft: responsiveWidth(5) }}>
-                                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}>Report</Text>
+                                                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9) }}
+                                                        //  onPress={() =>
+                                                        //     navigation.navigate('Report', {
+                                                        //       id: item._id,
+                                                        //     })
+                                                        //   }
+                                                        >Report</Text>
                                                     </MenuOption>
                                                 </MenuOptions>
 

@@ -290,4 +290,24 @@ export const Img_Paths = {
   DROP_ICON: require('../../assets/bottom-icon.png'),
   DEFAULT_ICON: require('../../assets/defaultIcon.png'),
   // DEFAULT_COVER: require("../../assets/plain-grey-background.png")
+
+  //Report a Problem
+  MESSAGE_ICON: require('../../assets/support_story_time.png'),
+  STORY_ICON: require('../../assets/storytime_icon.png'),
+  CAMERA_ICON: require('../../assets/camera_icon.png'),
+
+  //Chat Icons
+  GALLERY_ICON: require('../../assets/galleryicon.png'),
+  CAMERA__ICON: require('../../assets/cameraicon.png'),
+  MESSAGE_SEND: require('../../assets/sendicon.png'),
+
+  //Report Icons
+  REPORT_ICON: require('../../assets/Report_Icon.png'),
+
+  //Payment
+  VISA: require('../../assets/visa.png'),
+  ADD_CARD: require('../../assets/addcard.png'),
+  EDIT: require('../../assets/edit.png'),
+  TRASH: require('../../assets/trash.png'),
+  CHECK: require('../../assets/check.png'),
 };
