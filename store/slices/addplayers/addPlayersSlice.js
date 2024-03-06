@@ -1,3 +1,4 @@
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -14,13 +15,12 @@ const initialState = {
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
     publicAndPrivateMode: null,
-
+    addTagPlayers: [],
 };
 
 const addPlayers = createSlice({
     name: 'addFriends',
     initialState,
-
     reducers: {
 
         addFriends: (state, action) => {
@@ -28,26 +28,19 @@ const addPlayers = createSlice({
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
-            } else {
-                console.log("User with the same userid already exists in the array");
             }
         },
 
         rearrangedFriends: (state, { payload }) => {
-            const { selectedIndices, sequenceUser, userIds } = payload;
-            // const uniqueVal = new Set([sequenceUser]);
+            const { selectedIndices, sequenceUser, } = payload;
 
             state.gameFriends = [];
             for (const index of selectedIndices) {
                 if (index >= 0 && index < sequenceUser.length) {
                     state.gameFriends.push(sequenceUser[index]);
-                } else {
-                    console.log("Players Already Exist");
-                };
+                }
             };
-            console.log("state.gameFriends--------", state.gameFriends)
         },
-
 
         removeUser: (state, action) => {
             const { userid } = action.payload;
@@ -55,23 +48,19 @@ const addPlayers = createSlice({
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
             }
-
         },
 
         userId: (state, action) => {
             state.userId = action.payload;
-            const isUserExist = state.addFriends.some((friend) => friend.userid === action.payload);
-            console.log("state.--", isUserExist)
+            state.addFriends.some((friend) => friend.userid === action.payload);
         },
 
         randomNames: (state, payload) => {
             state.randomnames = payload
-            console.log("state-random---", state.randomnames);
         },
 
         setStoryUserImage: (state, payload) => {
             state.storyUserImage = payload
-            console.log("state-storyUser---", state.storyUserImage)
         },
 
         checkTrueOrFalse: (state, { payload }) => {
@@ -95,7 +84,20 @@ const addPlayers = createSlice({
         setIsPublicOrPrivateMode: (state, { payload }) => {
             state.publicAndPrivateMode = payload
         },
-
+        addTagPlayers: ({ addTagPlayers }, { payload }) => {
+            const { userid } = payload;
+            const isAlreadyExist = addTagPlayers.some((friend) => friend?.userid === userid)
+            if (!isAlreadyExist) {
+                addTagPlayers.push(payload)
+            }
+        },
+        tagRemoveUsers: ({ addTagPlayers }, { payload }) => {
+            const { userid } = payload;
+            const isAlreadyExist = addTagPlayers.some((friend) => friend?.userid === userid)
+            if (isAlreadyExist) {
+                addTagPlayers.pop(payload)
+            };
+        }
     },
 });
 
@@ -112,7 +114,9 @@ export const {
     nextRandomNumVideo,
     nextRandomNumVideoExtend,
     setIsPublicOrPrivateMode,
-    rearrangedFriends
+    rearrangedFriends,
+    addTagPlayers,
+    tagRemoveUsers
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

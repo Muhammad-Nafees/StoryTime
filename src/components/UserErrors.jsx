@@ -8,7 +8,7 @@ import BackButton from '../components/BackButton';
 import TouchableButton from './TouchableButton';
 import { Img_Paths } from '../assets/Imagepaths';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/Constant';
-import { Inter_Regular } from '../constants/GlobalFonts';
+import { Inter_Medium, Inter_Regular } from '../constants/GlobalFonts';
 
 
 const UserErrors = ({ isVisible, setVisible, text, onPress, text1, bgImage }) => {

@@ -32,13 +32,16 @@ import {
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
-import Voice from '@react-native-voice/voice';
+import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+import NavigationsString from '../../../constants/NavigationsString';
 import LinearGradient from 'react-native-linear-gradient';
 
 
 const FirstUser = ({ route }) => {
   let longPressTimeout;
   const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, BG_VOICE_TO_TEXT_IMG } = Img_Paths;
+  const { PLAY_STORY_TIME } = NavigationsString;
+
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
   const [started, setStarted] = useState(false);
@@ -564,6 +567,7 @@ const FirstUser = ({ route }) => {
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
                 user={user}
+                text={'Next Player'}
                 isCancelingStory={isCancelingStory}
               />
             )
@@ -598,8 +602,8 @@ const FirstUser = ({ route }) => {
           )}
         </View>
 
-        <GuestModals ref={GuestModalRef} />
-        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} />
+        <GuestModals ref={GuestModalRef} onPress={() => navigation.navigate(PLAY_STORY_TIME)} />
+        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} textOnPress={() => navigation.navigate(PLAY_STORY_TIME)} />
         {/* </ScrollView> */}
       </ImageBackground>
     </>

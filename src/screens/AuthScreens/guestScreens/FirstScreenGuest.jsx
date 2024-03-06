@@ -111,7 +111,7 @@ const FirstScreenGuest = () => {
                                 color: '#000',
                                 fontSize: responsiveFontSize(1.6),
                             }}>
-                            By Checking this box, you agree to our{' '}
+                            By checking this box, you agree to our{' '}
                         </Text>
                         <TouchableOpacity
                             onPress={() =>

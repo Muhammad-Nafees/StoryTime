@@ -1,10 +1,36 @@
-import React, { useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert, PermissionsAndroid, Platform } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
+import React, { useState, useEffect } from 'react';
+import {
+    Dimensions,
+    Image,
+    ImageBackground,
+    Text,
+    TouchableOpacity,
+    View,
+    StyleSheet,
+    FlatList,
+    ScrollView,
+    Modal,
+    TouchableOpacityBase,
+    ActivityIndicator,
+    Alert,
+    PermissionsAndroid,
+    Platform,
+} from 'react-native';
+import {
+    PrimaryColor,
+    SecondaryColor,
+    TextColorGreen,
+    ThirdColor,
+    pinkColor,
+} from '../../screens/Styles/Style';
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import {
+    responsiveFontSize,
+    responsiveHeight,
+    responsiveWidth,
+} from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from "../../assets/Imagepaths/index";
+import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import TouchableButton from '../TouchableButton';
@@ -18,92 +44,176 @@ import RNFS from 'react-native-fs';
 import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
+import DocumentPicker from 'react-native-document-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
-
     const { width, height } = Dimensions.get('window');
     const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height;
+    const SCREENWIDTH = Dimensions.get('window').width;
+    const SCREENHEIGHT = Dimensions.get('window').height;
     const [isVisibleDownloading, setIsVisibleDownloading] = useState(false);
-    const [saveStoryModalDownloading, setSaveStoryModalDownloading] = useState(false)
+    const [saveStoryModalDownloading, setSaveStoryModalDownloading] =
+        useState(false);
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
-    const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const textrecordUsers = useSelector(
+        state => state?.recordingData?.recordingText,
+    );
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    console.log("textrecordusers", textrecordUsers);
+    console.log('textrecordusers', textrecordUsers);
 
+    const loadSavedPath = async () => {
+        console.log('Saving pdf file!');
+        pickDirectory();
 
+        // try {
+        //   const savedPath = await AsyncStorage.getItem('selectedFolderPath');
+        //   if (savedPath) {
+        //     // If path is saved, use it for subsequent PDF creations
+        //     console.log(savedPath, '.....');
+        //     createPDF(savedPath);
+        //   } else {
+        //     // If no path is saved, prompt the user to select
+        //     pickDirectory();
+        //   }
+        // } catch (error) {
+        //   console.error('Error loading saved path: ', error);
+        // }
+    };
 
-    const checkPermission = async () => {
+    const saveSelectedPath = async path => {
         try {
-            const OsVer = Platform.constants['Release'];
-            // Check if the platform is Android
-            if (Platform.OS === 'android' && Number(OsVer) < 12) {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                );
-
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log('Storage permission granted');
-                    createPDF();
-                } else {
-                    console.log('Storage permission denied');
-                    Alert.alert('Permission Denied', 'Please grant storage permission to save the PDF.');
-                }
-            } else {
-                createPDF();
-            }
+            // Save the selected path to AsyncStorage for future usage
+            await AsyncStorage.setItem('selectedFolderPath', path);
         } catch (error) {
-            console.warn(error);
+            console.error('Error saving selected path: ', error);
         }
     };
 
-    const createPDF = async () => {
+    const convertExternalStorageUriToAbsolutePath = uri => {
+        let dirToRead = uri.split('tree')[1];
+        dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
+        console.log(dirToRead);
+        return decodeURIComponent(dirToRead);
+    };
+
+    const convertInternalStoragePathToAbsolutePath = uri => {
+        let dirToRead = uri?.split('primary')[1];
+        const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
+        console.log(InternalStoragePath);
+        dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
+        console.log(dirToRead);
+        return decodeURIComponent(dirToRead);
+    };
+
+    const pickDirectory = async () => {
         try {
-            const folderPath = `${RNFS.DocumentDirectoryPath}/PDF`;
-            await RNFS.mkdir(folderPath);
-            console.log("folderPath---------------------", folderPath)
+            const result = await DocumentPicker.pickDirectory({
+                type: [DocumentPicker.types.allFiles],
+            });
+            console.log('result', result);
 
-            const htmlContent = `<html><body><h3>${textrecordUsers}</h3></body></html>`;
+            let absolutePath;
 
+            // Check if it's internal storage
+            if (
+                result?.uri?.startsWith(
+                    'content://com.android.externalstorage.documents/tree/primary',
+                )
+            ) {
+                absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+            } else {
+                // It's SD card or other external storage
+                absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+            }
+            console.log(absolutePath);
+            // Save the selected path
+            saveSelectedPath(absolutePath);
+            // Use the absolute file path directly
+            //   requestStoragePermission(absolutePath);
+            createPDF(absolutePath);
+        } catch (err) {
+            // Handle errors
+            console.error('Error picking directory:', err);
+        }
+    };
+
+    const createPDF = async selectedPath => {
+        try {
+            // const folderPath = `${selectedPath}/PDF`;
+            // console.log(folderPath)
+
+            if (!(await RNFS.exists(selectedPath))) {
+                await RNFS.mkdir(selectedPath);
+            }
+
+            const htmlContent = `<html><body><h3>Your PDF Content</h3> <p>${textrecordUsers}</p></body></html>`;
             const options = {
                 html: htmlContent,
-                fileName: 'voicetotext',
-                directory: folderPath,
+                fileName: 'voicetotext.pdf',
+                directory: selectedPath,
             };
 
             const pdf = await RNHTMLtoPDF.convert(options);
-            const downloadDest = `${RNFS.DownloadDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
-            console.log("downloadDest---------------------", downloadDest);
+
+            const downloadDest = `${selectedPath}/voicetotext_${Math.floor(
+                Math.random() * 100000,
+            )}.pdf`;
+            // const downloadDest = `${RNFS.ExternalDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
+
+            console.log(downloadDest);
             await RNFS.moveFile(pdf.filePath, downloadDest);
             setIsVisiblePdf(false);
             setIsVisibleDownloading(true);
             setSaveStoryModalDownloading(true);
-
-        }
-        catch (error) {
+        } catch (error) {
             console.error('Error generating PDF: ', error);
             Alert.alert('Error generating PDF. Please try again.');
-        };
+        }
     };
 
+    //   const requestStoragePermission = async selectedPath => {
+    //     try {
+    //       const granted = await PermissionsAndroid.requestMultiple([
+    //         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+    //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //       ]);
 
-    // setIsVisiblePdf(false);
-    // setIsVisibleDownloading(true);
-    // setSaveStoryModalDownloading(true);
-
+    //       if (
+    //         granted['android.permission.READ_EXTERNAL_STORAGE'] ===
+    //           PermissionsAndroid.RESULTS.GRANTED &&
+    //         granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+    //           PermissionsAndroid.RESULTS.GRANTED
+    //       ) {
+    //         console.log('External storage permissions granted');
+    //         createPDF(selectedPath);
+    //       } else {
+    //         console.warn('External storage permissions denied');
+    //         // Handle the case where permissions are denied
+    //       }
+    //     } catch (error) {
+    //       console.error('Error requesting external storage permissions: ', error);
+    //       // Handle the error
+    //     }
+    //   };
 
     return (
         <>
-            <Modal onRequestClose={() => setIsVisiblePdf(false)} visible={isVisiblePdf} >
-
-                <ImageBackground style={styles.container} source={SAVE_STORY_BACKGROUND}>
-
-
+            <Modal
+                onRequestClose={() => setIsVisiblePdf(false)}
+                visible={isVisiblePdf}>
+                <ImageBackground
+                    style={styles.container}
+                    source={SAVE_STORY_BACKGROUND}>
                     {/* Back Button */}
-                    <View style={{ width: responsiveWidth(90), marginLeft: "auto", paddingTop: responsiveWidth(10) }}>
+                    <View
+                        style={{
+                            width: responsiveWidth(90),
+                            marginLeft: 'auto',
+                            paddingTop: responsiveWidth(10),
+                        }}>
                         <BackButton onPress={() => setIsVisiblePdf(false)} />
                     </View>
 
@@ -111,15 +221,38 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                         style={styles.img_frame}
                         resizeMode="stretch"
                         source={BG_CLOCK}>
-                        <View style={{ justifyContent: "center", alignSelf: 'center', marginTop: -SPACING * 7, alignItems: 'center' }}>
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                marginTop: -SPACING * 7,
+                                alignItems: 'center',
+                            }}>
+                            <Text
+                                style={{
+                                    fontFamily: PassionOne_Regular.passionOne,
+                                    color: TextColorGreen,
+                                    fontSize: 24,
+                                    paddingVertical: 10,
+                                }}>
+                                Save Story
+                            </Text>
+                            <Text
+                                style={{
+                                    paddingVertical: 2,
+                                    width: responsiveWidth(45),
+                                    textAlign: 'center',
+                                    color: TextColorGreen,
+                                    lineHeight: 22,
+                                    fontWeight: '400',
+                                }}>
+                                Do you want to save your Story Time as PDF?
+                            </Text>
 
-                            <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: TextColorGreen, fontSize: 24, paddingVertical: 10 }}>Save Story</Text>
-                            <Text style={{ paddingVertical: 2, width: responsiveWidth(45), textAlign: "center", color: TextColorGreen, lineHeight: 22, fontWeight: "400" }}>Do you want to save your Story Time as PDF?</Text>
-
-                            <View style={{ paddingVertical: 12, }}>
+                            <View style={{ paddingVertical: 12 }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity
-                                        onPress={checkPermission}
+                                        onPress={loadSavedPath}
                                         style={{
                                             width: responsiveWidth(70),
                                             backgroundColor: TextColorGreen,
@@ -128,50 +261,52 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                                             alignItems: 'center',
                                             height: responsiveHeight(6.6),
                                         }}>
-
                                         <Text
                                             style={{
                                                 fontSize: responsiveFontSize(1.9),
                                                 fontWeight: '600',
                                                 letterSpacing: 0.28,
-                                                color: "#FFF",
+                                                color: '#FFF',
                                             }}>
                                             Save
                                         </Text>
-
                                     </TouchableOpacity>
                                 </View>
                             </View>
 
-                            <SaveStoryBtn timeLeft={0} onPress={() => setIsVisiblePdf(false)} text="No" />
+                            <SaveStoryBtn
+                                timeLeft={0}
+                                onPress={() => setIsVisiblePdf(false)}
+                                text="No"
+                            />
 
                             {/* </View> */}
-
                         </View>
                     </ImageBackground>
-
-
                 </ImageBackground>
             </Modal>
-            {saveStoryModalDownloading &&
-                <DownloadingFlow isVisibleDownloading={isVisibleDownloading} setIsVisibleDownloading={setIsVisibleDownloading} text="Story Time 
-Successfully Saved!" textButton="Back" />
-            }
+
+            {saveStoryModalDownloading && (
+                <DownloadingFlow
+                    isVisibleDownloading={isVisibleDownloading}
+                    setIsVisibleDownloading={setIsVisibleDownloading}
+                    text={`Story Time\nSuccessfully Saved`}
+                    textButton="Back"
+                />
+            )}
         </>
-    )
+    );
 };
-
-
 
 const styles = StyleSheet.create({
     container: {
         // justifyContent: "center",
-        alignItems: "center",
+        alignItems: 'center',
         // paddingVertical: moderateVerticalScale(10),
         flex: 1,
     },
     img: {
-        resizeMode: "center"
+        resizeMode: 'center',
     },
     img_frame: {
         height: '70%',
@@ -179,7 +314,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         marginTop: 'auto',
-        marginBottom: 'auto'
+        marginBottom: 'auto',
     },
 });
 

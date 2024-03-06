@@ -150,8 +150,6 @@ const Home = () => {
                 </View>
             </View>
 
-
-
             {
                 isLoadingMain ?
                     <View style={{ justifyContent: "center", alignItems: 'center', height: height / 1.5, }}>

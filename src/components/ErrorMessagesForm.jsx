@@ -30,4 +30,4 @@ const ErrorMessageForm = ({ errorsField, isSubmitted }) => {
     )
 }
 
-export default ErrorMessageForm
+export default ErrorMessageForm;

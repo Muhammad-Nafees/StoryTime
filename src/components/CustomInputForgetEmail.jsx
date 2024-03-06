@@ -24,6 +24,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Img_Paths } from '../assets/Imagepaths';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
+import { Inter_Medium, Inter_SemiBold } from '../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
   const { FORGET_BG_IMG } = Img_Paths;
@@ -165,6 +166,7 @@ const CustomInputForgetEmail = props => {
               textAlign: 'center',
               paddingVertical: moderateVerticalScale(20),
               fontSize: responsiveFontSize(1.7),
+              fontFamily: Inter_SemiBold.Inter_SemiBold
             }}>
             Use phone number instead
           </Text>

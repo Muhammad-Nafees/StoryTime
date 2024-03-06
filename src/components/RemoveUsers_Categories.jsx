@@ -4,9 +4,9 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFriends, removeUser } from '../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, removeUser, tagRemoveUsers } from '../../store/slices/addplayers/addPlayersSlice';
 
-const RemoveUsers_Categories = ({ item, userid, username, }) => {
+const RemoveUsers_Categories = ({ item, userid, username, type }) => {
 
     const dispatch = useDispatch();
     const removeFriends = useSelector((state) => state?.addPlayers?.addFriends);
@@ -14,11 +14,16 @@ const RemoveUsers_Categories = ({ item, userid, username, }) => {
     const { FIRST_PROFILE } = Img_Paths;
 
     const removeUsers = () => {
-        const removeuser = { userid, username }
-        dispatch(removeUser(removeuser));
+        if (type !== "tagFriends") {
+            const removeuser = { userid, username }
+            dispatch(removeUser(removeuser));
+        } else {
+            const removeuser = { userid, username }
+            dispatch(tagRemoveUsers(removeuser));
+        }
     };
 
-    // removeAdduserList(friend);
+    console.log("remvoeFriends------------- :", removeFriends)
 
     return (
         <>

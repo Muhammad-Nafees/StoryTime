@@ -10,6 +10,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addFriends,
+  addTagPlayers,
   userId,
 } from '../../store/slices/addplayers/addPlayersSlice';
 import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
@@ -20,16 +21,19 @@ const AddFriends_Categories = ({
   username,
   userchoice,
   userid,
-  indexNo,
-  type
+  type,
+  storyId,
+
 }) => {
+
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const isUserAdded = addedUsers.some(user => user.userid === userid);
+  const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers)
+  const isAddedtagPlayers = tagPlayersRTK.some(user => user.userid === userid);
+
+  console.log("isAddedtagPlayers----- :", isAddedtagPlayers);
 
   const dispatch = useDispatch();
-  // const [friendsArr, setFriendsArr] = useState([]);
-
-  console.log('userid----', userid);
 
   const addFriendHandler = () => {
     if (type !== "tagFriends") {
@@ -38,13 +42,15 @@ const AddFriends_Categories = ({
       dispatch(playerContributorsIds(userid));
       dispatch(userId(userid));
     } else {
-      console.log("Im in Tag Friends Component");
       tag_FriendsApi_Handler()
     }
   };
 
   const tag_FriendsApi_Handler = async () => {
-    const responseData = await tag_Friends();
+    const responseData = await tag_Friends({ userid, storyId });
+    if (responseData) {
+      dispatch(addTagPlayers({ username, userid }))
+    }
     console.log("responseDataTag----", responseData)
     return responseData;
   }

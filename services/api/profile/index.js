@@ -60,8 +60,7 @@ export const toggle_publicandPrivateMode = async () => {
 };
 
 
-
-export const tag_Friends = async () => {
+export const tag_Friends = async ({ userid, storyId }) => {
 
     try {
         let url = `${Base_Url}story/tag-friend`;
@@ -70,6 +69,10 @@ export const tag_Friends = async () => {
             headers: {
                 "Content-Type": "application/json"
             },
+            body: JSON.stringify({
+                taggedUserId: userid,
+                storyId: storyId
+            })
         });
         const response = responseData.json();
         return response;
@@ -79,11 +82,10 @@ export const tag_Friends = async () => {
     }
 };
 
-
-export const hide_Story = async () => {
+export const hide_Story = async (storyId) => {
 
     try {
-        let url = `${Base_Url}story/hide/`;
+        let url = `${Base_Url}story/hide/${storyId}`;
         const responseData = await fetch(url, {
             method: "PUT",
             headers: {

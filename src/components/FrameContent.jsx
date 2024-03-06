@@ -106,8 +106,6 @@ const FrameContent = ({
         }
     }, [dislikesCounting, disLikeCountUpdated]);
 
-
-
     const commentsHandled = useCallback(() => {
         dispatch(likedstoryfeed(likedUserId));
         dispatch(likedCountingRTK(likesCounting));
