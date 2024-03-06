@@ -33,23 +33,24 @@ export const validationUserAdressInfo = Yup.object().shape({
 export const validationUserPassword = Yup.object().shape({
   password: Yup.string()
     .required('password is required')
-    .min(8, 'password length should be 8 character'),
+    .min(8, 'password length should be 8 characters characters'),
+
   confirmPassword: Yup.string()
-    .required('Confirm password is required')
-    .min(8, 'password length should be 8 character'),
+    .min(8, 'Confirm password must be at least 8 characters ')
+    .required('Confirm Password is required')
+    .oneOf([Yup.ref('password')], 'Password must be same'),
 });
 
 export const validationUserLogin = Yup.object().shape({
   email: Yup.string()
-    .email('Invalid email')
+    .email('Email is required')
     .required('Email is required')
     .matches(
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
       'Must be a valid email',
     )
     .matches(/^[^\s]+$/, 'Email cannot contain spaces'),
-  password: Yup.string()
-    .required('Invalid password')
+  password: Yup.string().required('Password is required'),
 });
 
 export const validationforgetEmail = Yup.object().shape({

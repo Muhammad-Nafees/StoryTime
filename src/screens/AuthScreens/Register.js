@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   FourthColor,
@@ -85,10 +86,12 @@ const Register = () => {
       validationSchema={validationSignUp}
 
       onSubmit={async (values) => {
+        setIsLoading(true);
         try {
           dispatch(userinfoState(countryCode));
           dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
           const responseData = await username_api({ username: values?.username })
+          setIsLoading(false);
           setStatusCodeusername(responseData.statusCode)
 
           if (responseData?.statusCode !== 200) {
@@ -218,17 +221,19 @@ const Register = () => {
                       alignItems: 'center',
                       height: responsiveHeight(6.6),
                     }}
-                  // disabled={!validate(values)}
                   >
-                    <Text
-                      style={{
-                        fontSize: responsiveFontSize(1.9),
-                        fontWeight: '600',
-                        letterSpacing: 0.28,
-                        color: 'white',
-                      }}>
-                      Next
-                    </Text>
+                    {!isLoading ?
+                      <Text
+                        style={{
+                          fontSize: responsiveFontSize(1.9),
+                          fontWeight: '600',
+                          letterSpacing: 0.28,
+                          color: 'white',
+                        }}>
+                        Next
+                      </Text> :
+                      <ActivityIndicator size={22} />
+                    }
                   </TouchableOpacity>
 
                   <View style={{ marginVertical: moderateVerticalScale(7) }}>
@@ -236,6 +241,8 @@ const Register = () => {
                       onPress={() => navigation.goBack()}
                       backgroundColor="#FFF"
                       borderWidth="1"
+                      type={"backuser"}
+
                       color="#395E66"
                       text="Back"
                     />

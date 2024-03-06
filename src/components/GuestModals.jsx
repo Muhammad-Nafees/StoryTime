@@ -13,7 +13,7 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
-import {SecondaryColor, TextColorGreen} from '../screens/Styles/Style';
+import {TextColorGreen} from '../screens/Styles/Style';
 import {PassionOne_Regular} from '../constants/GlobalFonts';
 import {SPACING} from '../constants/Constant';
 
@@ -48,9 +48,9 @@ const GuestModals = forwardRef((props, ref) => {
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // backdropColor="white"
+      backdropColor="#fdfdfd"
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.95}
       onBackdropPress={close}>
       <ImageBackground
         style={styles.img_frame}
@@ -58,12 +58,12 @@ const GuestModals = forwardRef((props, ref) => {
         source={BG_CLOCK}>
         <View
           style={{
-            height: '50%',
+            height: '40%',
             width: '80%',
-            marginTop: -SPACING*2,
-            backgroundColor: 'white',
+            marginTop: -SPACING,
             alignSelf: 'center',
             justifyContent: 'center',
+            paddingHorizontal:responsiveWidth(2)
           }}>
           <Text
             style={{
@@ -72,7 +72,7 @@ const GuestModals = forwardRef((props, ref) => {
               fontSize: 24,
               paddingVertical: 10,
               textAlign: 'center',
-              marginTop: responsiveHeight(4),
+              marginTop: responsiveHeight(10),
             }}>
             {heading}
           </Text>
@@ -131,8 +131,8 @@ const GuestModals = forwardRef((props, ref) => {
 
 const styles = StyleSheet.create({
   img_frame: {
-    height: '80%',
-    width: '100%',
+    height: responsiveHeight(50),
+    width: responsiveWidth(100),
     alignSelf: 'center',
     justifyContent: 'center',
   },

@@ -23,16 +23,34 @@ const TouchableButton = ({
   selectedIndices,
   validate,
   values,
+  StatusCodeSuccess
 
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
-        disabled={type === 'register' ? !isValid || !dirty : null}
+        disabled={
+          type === 'register' && StatusCodeSuccess ? false :
+            type === "login" ? false :
+              type === "forgetemail" && StatusCodeSuccess ? false :
+                type === "optForget" ? false :
+                  type === "registeruserInfo" ? false :
+                    type === "backuser" ? false :
+                      type === "addPlayers" ? false :
+                        type === "sequence" ? false :
+                          type === "tagFriends" ? false :
+                            true
+        }
         onPress={onPress}
         style={{
-          width: type == "savestoryphone" ? responsiveWidth(70) : responsiveWidth(80),
-          backgroundColor: selectedIndices?.length === sequenceUser?.length ? backgroundColor : "rgba(57, 94, 102, 0.3)",
+          width:
+            type == 'savestoryphone'
+              ? responsiveWidth(70)
+              : responsiveWidth(80),
+          backgroundColor:
+            selectedIndices?.length === sequenceUser?.length
+              ? backgroundColor
+              : 'rgba(57, 94, 102, 0.3)',
           // backgroundColor:  "red" : "green",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,

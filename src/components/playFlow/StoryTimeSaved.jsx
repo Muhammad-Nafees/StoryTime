@@ -1,25 +1,16 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator
-} from 'react-native';
+import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Modal from 'react-native-modal';
-import {
-  TextColorGreen,
-  pastelGreen,
-} from '../../screens/Styles/Style';
+import {TextColorGreen, pastelGreen} from '../../screens/Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import SvgIcons from '../svgIcon/svgIcons';
-import { Circle, Path, Svg } from 'react-native-svg';
-import { moderateVerticalScale } from 'react-native-size-matters';
-import { useNavigation } from '@react-navigation/native';
-
+import {Circle, Path, Svg} from 'react-native-svg';
+import {moderateVerticalScale} from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
 
 const StoryTimeSaved = ({
   isVisible,
@@ -28,39 +19,35 @@ const StoryTimeSaved = ({
   onPress,
   textButton,
   iconName,
-  loading
+  loading,
 }) => {
-
   const navigation = useNavigation();
 
   const close = () => {
     if (onPress) {
-      onPress()
+      onPress();
       setVisible(false);
     } else {
       // setVisible(false);
-      navigation.navigate("profileStack", {
-        screen: "Profile"
-      });
+      navigation.navigate('Home');
     }
   };
 
-
   return (
     <Modal
-      style={{ flex: 1 }}
+      style={{flex: 1}}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // backdropColor="white"
+      backdropColor="#979697"
       onModalHide={close}
-      backdropOpacity={0.8}
+      backdropOpacity={0.95}
       onBackdropPress={close}>
-
       <View
         style={{
           width: responsiveWidth(80),
-          height: responsiveHeight(26),
+          // height: responsiveHeight(29),
+          padding: responsiveHeight(1.6),
           backgroundColor: '#FFF',
           borderRadius: 30,
           paddingHorizontal: responsiveWidth(2),
@@ -105,14 +92,15 @@ const StoryTimeSaved = ({
               fontSize: responsiveFontSize(1.9),
               color: '#000',
               textAlign: 'center',
-              lineHeight: 24,
+              lineHeight: 20,
               marginTop: responsiveHeight(1),
             }}>
             {text}
           </Text>
         </View>
-        {loading ?
-          <ActivityIndicator /> :
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
           <View
             style={{
               justifyContent: 'center',
@@ -140,7 +128,7 @@ const StoryTimeSaved = ({
               </Text>
             </TouchableOpacity>
           </View>
-        }
+        )}
       </View>
     </Modal>
   );

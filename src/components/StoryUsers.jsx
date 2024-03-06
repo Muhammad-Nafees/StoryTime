@@ -10,15 +10,13 @@ import { PassionOne_Regular } from '../constants/GlobalFonts';
 const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disabled, item, handleRandomClick }) => {
   const dispatch = useDispatch();
   const imageLink = URL + images;
-
+  console.log(imageLink)
   const handlePress = () => {
     if (!disabled) {
       onPress();
       dispatch(setStoryUserImage(imageLink));
     }
   };
-
-  console.log("item---bg", item)
 
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -31,26 +29,26 @@ const StoryUsers = ({ images, text, backgroundColor, mainbgColor, onPress, disab
           height: responsiveHeight(11),
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: item?.namerandom == "Random" ? "rgba(238, 95, 138, 1)" : item.background ? item.background : "#56B6A4"
+          backgroundColor: item?.namerandom === "Random" ? "rgba(238, 95, 138, 1)" : (item.background ? item.background : (backgroundColor ? backgroundColor : "#56B6A4"))
         }}
         disabled={disabled}
       >
         {
           item?.namerandom == "Random" ?
             <Image
-              style={{ width: 70, height: 57, borderRadius: 10 }}
+              style={{ width: 65, height: 65, borderRadius: 10 }}
               resizeMode="center"
               source={item?.imageludo}
             />
             :
             <Image
-              style={{ width: 50, height: 50, borderRadius: 10 }}
-              resizeMode="cover"
+              style={{ width: 65, height: 65, borderRadius: 10 }}
+              resizeMode="center"
               source={{ uri: imageLink }}
             />
         }
       </TouchableOpacity>
-      <Text style={{ color: "#FFF", fontWeight: "400", fontSize: responsiveFontSize(2.1), letterSpacing: 0.4, fontFamily: PassionOne_Regular.passionOne }}>{item?.namerandom == "Random" ? item?.namerandom : text}</Text>
+      <Text style={{ color: "#FFF", fontWeight: "400", fontSize: responsiveFontSize(1.9), letterSpacing: 0.4, fontFamily: PassionOne_Regular.passionOne, textAlign: "center", }}>{item?.namerandom == "Random" ? item?.namerandom : text}</Text>
     </View>
   );
 };

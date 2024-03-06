@@ -1,6 +1,6 @@
-import React, {useRef, useState, useMemo, useEffect} from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {moderateScale} from 'react-native-size-matters';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { moderateScale } from 'react-native-size-matters';
 import {
   View,
   Text,
@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import BlockModal from '../../../components/BlockModal';
 import ScreenHeader from '../../../components/ScreenHeader';
-import {getBlockList} from '../../../../services/api/settings';
-import {responsiveWidth} from 'react-native-responsive-dimensions';
+import { getBlockList } from '../../../../services/api/settings';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
 
 const BlockUser = () => {
-  const {DEFAULT_ICON} = Img_Paths;
+  const { DEFAULT_ICON } = Img_Paths;
   const blockModalRef = useRef(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [users, setUsers] = useState({
@@ -40,6 +40,7 @@ const BlockUser = () => {
         loading: true,
       }));
       const responseData = await getBlockList();
+      console.log("responseData==", responseData)
       const data = responseData?.data?.blockUsers || [];
       setUsers({
         loading: false,
@@ -63,16 +64,16 @@ const BlockUser = () => {
       blockModalRef.current.open(item);
     }
   };
-  const removeUnblockUserFromList =(blockId)=>{
+  const removeUnblockUserFromList = (blockId) => {
     let blockList = DATA.filter(item => item._id !== blockId)
     setUsers(prevState => ({
       ...(prevState || {}),
       data: blockList,
     }));
-    console.log('blocklist',blockList ,blockId)
+    console.log('blocklist', blockList, blockId)
   }
-  const renderItem = ({item}) => {
-    console.log("item",item)
+  const renderItem = ({ item }) => {
+    console.log("item", item)
     return (
       <View
         style={{
@@ -81,10 +82,10 @@ const BlockUser = () => {
           marginVertical: responsiveWidth(1),
           alignContent: 'center',
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Image
-            style={{width: 33, height: 33}}
-            source={item?.profileImage?profileImage:DEFAULT_ICON}
+            style={{ width: 33, height: 33 }}
+            source={item?.profileImage ? profileImage : DEFAULT_ICON}
             resizeMode={'contain'}
           />
 
@@ -99,11 +100,11 @@ const BlockUser = () => {
 
   const renderEmpty = () => {
     return LOADING && DATA?.length < 1 && !isRefreshing ? (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size={'large'}/>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={'large'} />
       </View>
     ) : DATA?.length < 1 && !LOADING && !isRefreshing ? (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Typography center size={15}>
           Nothing to show
         </Typography>
@@ -117,7 +118,7 @@ const BlockUser = () => {
       <FlatList
         data={DATA}
         contentContainerStyle={{
-          flex:1,
+          flex: 1,
           paddingHorizontal: moderateScale(20),
         }}
         renderItem={renderItem}

@@ -21,6 +21,7 @@ import { validationUserLogin } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
 import { Inter_Regular } from '../../constants/GlobalFonts';
+import ErrorMessageForm from '../../components/ErrorMessagesForm';
 
 
 
@@ -29,12 +30,13 @@ const Login = () => {
     const { REGISTER, FORGET_EMAIL } = NavigationsString;
     const [isLoading, setIsLoading] = useState(false);
     const [isEmail, setIsEmail] = useState("")
-    const [showPassword, setShowPassword] = useState(false);
+    const [isPasswordErr, setPasswordErr] = useState("");
+    const [showPassword, setShowPassword] = useState(true);
+    const [] = useState();
     const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
-
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const toggleShowPassword = () => {
         // console.log("setShowPassword---=====", setShowPassword);
         setShowPassword(!showPassword);
@@ -49,7 +51,11 @@ const Login = () => {
             }}
 
             validationSchema={validationUserLogin}
-            onSubmit={async (values) => {
+            onSubmit={async (values, actions) => {
+                console.log(values);
+                // Reset form submission state
+                setIsSubmitted(false);
+
                 setIsLoading(true);
 
                 try {
@@ -63,6 +69,7 @@ const Login = () => {
                             email, password, fcmToken
                         }),
                     });
+
                     const responseData = await response.json();
                     console.log("RESPONSE_LOGIN----", responseData)
                     dispatch(login(responseData))
@@ -88,25 +95,19 @@ const Login = () => {
                         dispatch(setAccessToken(accessToken));
                         dispatch(setRefreshToken(refreshToken));
                         dispatch(userLoginid(userLoginId));
-                        Toast.show({
-                            type: "success",
-                            text1: message,
-                            position: "top",
-                            visibilityTime: 2500
-                        })
                     };
 
                     if (error) {
-                        setIsLoading(false)
-                        setIsEmail(message);
-                        Toast.show({
-                            type: "error",
-                            text1: message,
-                            position: "top",
-                            visibilityTime: 2500,
-                        })
-                    };
 
+                        if (message === "Email not found") {
+                            setIsEmail("Invalid email");
+                        } else if (message === "password length must be at least 8 characters long" || message === "Invalid password") {
+                            setPasswordErr("Invalid password");
+                            setIsEmail("");
+                        };
+                        setIsLoading(false)
+                        console.log("message-----", message)
+                    };
                     return responseData;
                 }
                 catch (err) {
@@ -122,7 +123,6 @@ const Login = () => {
                         <View style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
                             <Image style={styles.img_child} source={require('../../assets/story-time-without.png')} />
                         </View>
-
                         <View style={{ paddingBottom: moderateVerticalScale(6) }}>
                             <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                                 <Text style={{ color: FourthColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Email</Text>
@@ -139,23 +139,29 @@ const Login = () => {
                             />
 
                             <View style={{ height: responsiveHeight(3), }}>
-                                {touched.email && errors.email && (
-                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
-                                        <View style={{ flexDirection: "row", }}>
+                                {
+                                    isEmail.length > 0 ?
+                                        <View style={{ height: responsiveHeight(3), }}>
+                                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                                <View style={{ flexDirection: "row", }}>
 
-                                            <View>
-                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                    <Path
-                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                    />
-                                                </Svg>
+                                                    <View>
+                                                        <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                            <Path
+                                                                d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                            />
+                                                        </Svg>
+                                                    </View>
+                                                    <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                        <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{isEmail}</Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.email}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )
+                                        </View> :
+                                        <ErrorMessageForm
+                                            errorsField={errors.email}
+                                            isSubmitted={isSubmitted}
+                                        />
                                 }
                             </View>
 
@@ -166,7 +172,7 @@ const Login = () => {
                             <TextInputField
                                 value={values.password}
                                 onChangeText={handleChange('password')}
-                                onBlur={() => setFieldTouched("password")}
+                                // onBlur={() => setFieldTouched("password")}
                                 onPress={toggleShowPassword}
                                 showPassword={showPassword}
                                 setShowPassword={setShowPassword}
@@ -175,22 +181,30 @@ const Login = () => {
                             />
 
                             <View style={{ height: responsiveHeight(3), }}>
-                                {touched.password && errors.password && (
-                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
-                                        <View style={{ flexDirection: "row", }}>
-                                            <View>
-                                                <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
-                                                    <Path
-                                                        d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                                                    />
-                                                </Svg>
+
+                                {
+                                    isPasswordErr.length > 0 ?
+                                        <View style={{ height: responsiveHeight(3), }}>
+                                            <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
+                                                <View style={{ flexDirection: "row", }}>
+
+                                                    <View>
+                                                        <Svg width={20} height={20} viewBox="0 0 24 24" fill="red">
+                                                            <Path
+                                                                d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                                                            />
+                                                        </Svg>
+                                                    </View>
+                                                    <View style={{ paddingHorizontal: moderateScale(5) }}>
+                                                        <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{isPasswordErr}</Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text style={{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }}>{errors.password}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )
+                                        </View> :
+                                        <ErrorMessageForm
+                                            errorsField={errors.password}
+                                            isSubmitted={isSubmitted}
+                                        />
                                 }
                             </View>
 
@@ -201,7 +215,18 @@ const Login = () => {
                         </TouchableOpacity>
 
                         <View style={{ paddingVertical: moderateVerticalScale(14) }}>
-                            <TouchableButton type="login" isLoading={isLoading} onPress={handleSubmit} color="#FFF" backgroundColor="#395E66" text="Login" />
+                            <TouchableButton
+                                type="login"
+                                isLoading={isLoading}
+                                color="#FFF"
+                                backgroundColor="#395E66"
+                                text="Login"
+                                onPress={() => {
+                                    setIsSubmitted(true);
+                                    handleSubmit()
+                                }
+                                }
+                            />
                         </View>
 
                         <View style={{ paddingVertical: moderateVerticalScale(6), justifyContent: 'center', alignItems: 'center' }}>
@@ -210,13 +235,13 @@ const Login = () => {
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginTermsAndConditions"
                                 })}>
-                                    <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions </Text>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}> Terms & Conditions</Text>
                                 </TouchableOpacity>
-                                <Text style={[styles.text, { color: FourthColor }]}>and</Text>
+                                <Text style={[styles.text, { color: FourthColor }]}> and</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsStack", {
                                     screen: "LoginPrivacyAndPolicy"
                                 })}>
-                                    <Text style={[styles.text, { color: TextColorGreen }]}>Privacy Policy</Text>
+                                    <Text style={[styles.text, { color: TextColorGreen }]}> Privacy Policy</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

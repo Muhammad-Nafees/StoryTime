@@ -10,6 +10,7 @@ import {
     Button,
     Alert,
     ScrollView,
+    ActivityIndicator,
 } from 'react-native';
 import {
     FourthColor,
@@ -37,6 +38,7 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import * as Yup from 'yup';
 import ResetPasswordModal from '../../../components/forget-screens-modal/ResetpasswordModal';
+import ErrorMessageForm from '../../../components/ErrorMessagesForm';
 
 export const validationForgetConfirmPassword = Yup.object().shape({
     newPassword: Yup.string()
@@ -48,15 +50,19 @@ export const validationForgetConfirmPassword = Yup.object().shape({
         .min(8, 'Password length should be at least 8 characters'),
 });
 
+
+
 const ForgetConfirmPassword = () => {
 
-    const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-    const { FORGET_BG_IMG } = Img_Paths;
+    const [showPassword, setShowPassword] = useState(true);
+    const [showPasswordConfirm, setShowPasswordConfirm] = useState(true);
+    const { CREATE_NEW_PASSWORD_IMG } = Img_Paths;
     const { LOGIN } = NavigationsString;
     const [isVisible, setVisible] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState("")
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
     const forgetuserToken = useSelector(
         state => state?.authSlice?.forgetAccesstoken,
     );
@@ -68,6 +74,14 @@ const ForgetConfirmPassword = () => {
 
     const toggleShowPasswordConfir = () => {
         setShowPasswordConfirm(!showPasswordConfirm);
+    };
+
+
+    const validate = (values) => {
+        return (
+            values.newPassword &&
+            values.confirmPassword
+        )
     };
 
     return (
@@ -99,10 +113,9 @@ const ForgetConfirmPassword = () => {
                         }, 1000);
 
                     } else if (response?.stack) {
-                        Toast.show({
-                            type: 'error',
-                            text1: response?.message,
-                        });
+                        if (response?.message === "newPassword length must be at least 8 characters long") {
+                            setErrorMessage("newPassword length must be at least 8 characters long")
+                        }
                         setIsLoading(false);
                     }
                 } catch (err) {
@@ -118,26 +131,16 @@ const ForgetConfirmPassword = () => {
                     <ScrollView style={{}}>
 
                         <View style={styles.img_container}>
-                            <Image style={styles.img_child} source={FORGET_BG_IMG} />
+                            <Image style={styles.img_child} source={CREATE_NEW_PASSWORD_IMG} />
                         </View>
 
                         {/* Code------------ */}
 
                         <View>
                             <View>
-                                {/*New Password----------- */}
-
-                                <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                    <Text
-                                        style={{
-                                            color: FourthColor,
-                                            fontWeight: '600',
-                                            fontSize: responsiveFontSize(1.7),
-                                        }}>
-                                        New Password
-                                    </Text>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
                                 </View>
-
                                 <TextInputField
                                     onChangeText={handleChange('newPassword')}
                                     onPress={toggleShowPassword}
@@ -148,134 +151,97 @@ const ForgetConfirmPassword = () => {
                                     placeholderText="Enter here"
                                     setFieldTouched={() => setFieldTouched("password")}
                                 />
-
-                                {/* <TextInputField
-                                value={values.password}
-                                onChangeText={handleChange('password')}
-                                onPress={toggleShowPassword}
-                                showPassword={showPassword}
-                                setShowPassword={setShowPassword}
-                                placeholderText="Type here"
-                                type="password"
-                                onBlur={() => setFieldTouched("password")}
-                            /> */}
-
-                                {errors.newPassword && (
-                                    <View
-                                        style={{
-                                            width: responsiveWidth(90),
-                                            marginLeft: 'auto',
-                                            paddingBottom: responsiveWidth(2),
-                                        }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <View>
-                                                <Svg
-                                                    width={20}
-                                                    height={20}
-                                                    viewBox="0 0 24 24"
-                                                    fill="red">
-                                                    <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                                </Svg>
-                                            </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text
-                                                    style={{
-                                                        color: 'red',
-                                                        fontSize: responsiveFontSize(1.7),
-                                                        fontWeight: '600',
-                                                    }}>
-                                                    {errors.newPassword}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )}
-
-                                {/* Confirm Password------------ */}
-
-                                <View style={{}}>
-                                    <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                        <Text
-                                            style={{
-                                                marginVertical: responsiveWidth(1),
-                                                color: FourthColor,
-                                                fontWeight: '600',
-                                                fontSize: responsiveFontSize(1.7),
-                                            }}>
-                                            Confirm Password
-                                        </Text>
-                                    </View>
-                                    <TextInputField
-                                        onChangeText={handleChange('confirmPassword')}
-                                        onPress={toggleShowPasswordConfir}
-                                        showPassword={showPasswordConfirm}
-                                        type="password"
-                                        placeholderText="Enter here"
-                                        value={values.confirmPassword}
-                                    />
-                                </View>
-
-                                {errors.confirmPassword && (
-                                    <View
-                                        style={{
-                                            width: responsiveWidth(90),
-                                            marginLeft: 'auto',
-                                            paddingBottom: responsiveWidth(2),
-                                        }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <View>
-                                                <Svg
-                                                    width={20}
-                                                    height={20}
-                                                    viewBox="0 0 24 24"
-                                                    fill="red">
-                                                    <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                                </Svg>
-                                            </View>
-                                            <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                <Text
-                                                    style={{
-                                                        color: 'red',
-                                                        fontSize: responsiveFontSize(1.7),
-                                                        fontWeight: '600',
-                                                    }}>
-                                                    {errors.confirmPassword}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )}
                             </View>
 
-                            {/* Next------------ */}
+                            <View style={{ height: responsiveHeight(3.2) }}>
 
-                            <View style={{ paddingTop: responsiveWidth(70) }}>
-                                <TouchableButton
-                                    isLoading={isLoading}
-                                    onPress={
-                                        values.newPassword !== '' && values.confirmPassword
-                                            ? handleSubmit
-                                            : null
-                                    }
-                                    backgroundColor={
-                                        values.newPassword !== '' && values.confirmPassword
-                                            ? '#395E66'
-                                            : 'rgba(57, 94, 102, 0.5)'
-                                    }
-                                    color="#FFF"
-                                    text="Save"
+                                <ErrorMessageForm
+                                    errorsField={errors.newPassword}
+                                    isSubmitted={isSubmitted}
+                                />
+
+                            </View>
+
+                            {/* <View */}
+                            {/* Confirm Password------------ */}
+
+                            <View>
+                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
+                                    <Text style={{ color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
+                                </View>
+                                <TextInputField
+                                    onChangeText={handleChange('confirmPassword')}
+                                    onPress={toggleShowPasswordConfir}
+                                    showPassword={showPasswordConfirm}
+                                    type="password"
+                                    placeholderText="Enter here"
+                                    value={values.confirmPassword}
                                 />
                             </View>
+
+                            <ErrorMessageForm
+                                errorsField={errors.confirmPassword}
+                                isSubmitted={isSubmitted}
+                            />
+                            {/* Next and Back------------ */}
+
+                            <View style={{ paddingTop: responsiveWidth(60) }}>
+
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        disabled={validate(values) ? false : true}
+                                        onPress={() => {
+                                            setIsSubmitted(true)
+                                            handleSubmit()
+                                        }
+                                        }
+                                        style={{
+                                            width: responsiveWidth(80),
+                                            backgroundColor: validate(values) ? TextColorGreen : "rgba(57, 94, 102, 0.3)",
+                                            borderRadius: 10,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: responsiveHeight(6.6),
+                                        }}
+                                    >
+                                        {
+                                            !isLoading ? (
+                                                <Text
+                                                    style={{
+                                                        fontSize: responsiveFontSize(1.9),
+                                                        fontWeight: '600',
+                                                        letterSpacing: 0.28,
+                                                        color: "#FFF",
+                                                    }}>
+                                                    Create
+                                                </Text>
+                                            ) :
+                                                <ActivityIndicator color={'#FFF'} />
+                                        }
+                                    </TouchableOpacity>
+                                </View>
+
+                                {/*  */}
+
+                            </View>
+
                         </View>
 
-                        {isVisible && (
-                            <ResetPasswordModal
-                                setVisible={setVisible}
-                                isVisible={isVisible}
-                                text="Reset Password Complete!"
-                                onPress={() => { }}
-                            />
-                        )}
+                        {/* -------------------------------------------------------------------------- */}
+                        {/* <View>
+                            <View>
+                                {/*New Password----------- */}
+
+                        {
+                            isVisible && (
+                                <ResetPasswordModal
+                                    setVisible={setVisible}
+                                    isVisible={isVisible}
+                                    text="Reset Password Complete!"
+                                    onPress={() => { }}
+                                />
+                            )
+                        }
                         <Toast />
                     </ScrollView>
                 </View>
@@ -296,7 +262,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     img_container: {
-        paddingVertical: moderateVerticalScale(22),
+        paddingTop: responsiveWidth(10),
         justifyContent: 'center',
         alignItems: 'center',
     },

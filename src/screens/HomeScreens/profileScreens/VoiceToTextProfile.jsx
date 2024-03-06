@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, Animated, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -12,10 +12,9 @@ import SettingButton from '../../../components/SettingButton';
 import TouchableButton from '../../../components/TouchableButton';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { base, get_story_byId } from '../../../../services';
-import { getStory_Byid } from '../../../../services/api/profile';
+import { getStory_Byid, hide_Story } from '../../../../services/api/profile';
 import CustomEmoji from '../../../components/likeDislikesandComments/CustomEmoji';
-
-
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 const VoiceToTextProfile = ({ route }) => {
 
@@ -27,19 +26,10 @@ const VoiceToTextProfile = ({ route }) => {
     const navigation = useNavigation();
     const [isMoreLength, setIsMoreLength] = useState(false);
     const [getresponseById, setGetresponseById] = useState([]);
+    const [isClicked, setIsClicked] = useState(true);
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
-    const animation = useRef(new Animated.Value(0)).current;
-
-    // console.log(route?.params?.storyuserId)
     const storyId = route?.params?.storyuserId;
 
-
-    const startToggling = () => {
-        Animated.spring(animation, {
-            toValue: 1,
-            useNativeDriver: true,
-        })
-    };
 
     const getStory_Byid_api = async () => {
         try {
@@ -55,6 +45,21 @@ const VoiceToTextProfile = ({ route }) => {
         getStory_Byid_api();
     }, []);
 
+    const hide_Storyapi = async () => {
+        try {
+            const responseData = await hide_Story(storyId);
+            console.log("hide-story-response :", responseData?.data?.isHidden);
+            return responseData;
+        } catch (error) {
+        }
+    };
+
+    const contentLength = getresponseById?.content?.length || 0;
+
+    const animation = useSharedValue(0);
+    const animationStyle = useAnimatedStyle(() => {
+        return { transform: [{ translateX: animation.value }] }
+    })
 
 
     return (
@@ -77,7 +82,6 @@ const VoiceToTextProfile = ({ route }) => {
                             </View>
                         </View>
 
-
                         {/* Back Button */}
 
                         <View>
@@ -96,8 +100,16 @@ const VoiceToTextProfile = ({ route }) => {
                                         <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
                                     </View>
 
-                                    <TouchableOpacity activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
-                                        <View style={{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }} />
+                                    <TouchableOpacity onPress={() => {
+                                        if (isClicked) {
+                                            animation.value = withSpring(responsiveWidth(7.25));
+                                            hide_Storyapi()
+                                        } else {
+                                            animation.value = withSpring(responsiveWidth(-0.4));
+                                        }
+                                        setIsClicked(!isClicked);
+                                    }} activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
+                                        <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} />
                                     </TouchableOpacity>
 
                                 </View>
@@ -118,29 +130,31 @@ const VoiceToTextProfile = ({ route }) => {
                                 > */}
 
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <View style={[styles.bg_content, { height: isMoreLength ? getresponseById?.content?.length * 0.65 : responsiveHeight(30) }]}>
-                                        <View style={[styles.child_bg, { height: isMoreLength ? getresponseById?.content?.length * 0.64 : responsiveHeight(27) }]}>
+                                    <View style={[styles.bg_content, { height: SCREENHEIGHT / 3 }]}>
+                                        {/* <View > */}
+                                        <ScrollView style={[styles.child_bg,]} >
                                             {/* <View style={styles.second_childbg}> */}
                                             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                                <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(10), }}>
+                                                <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(6), }}>
                                                     <Image style={{ width: 40, height: 40, resizeMode: "center" }} source={{ uri: base + getresponseById?.subCategory?.image }} />
                                                     <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{getresponseById?.subCategory?.name}</Text>
                                                 </View>
                                             </View>
 
-                                            <View style={styles.text_container}>
-                                                <ScrollView>
-                                                    <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
-                                                        {
-                                                            !isMoreLength ?
-                                                                getresponseById?.content?.slice(0, 220) :
-                                                                getresponseById?.content
-                                                        }
-                                                    </Text>
-                                                </ScrollView>
+                                            <View style={{ paddingTop: responsiveWidth(4), justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
+                                                    {/* {
+                                                        !isMoreLength ?
+                                                            getresponseById?.content?.slice(0, 220) :
+                                                            getresponseById?.content
+                                                    } */}
+                                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo
+                                                    {/* "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo */}
+                                                </Text>
                                             </View>
+                                        </ScrollView>
 
-                                        </View>
+                                        {/* </View> */}
                                         {/* </View> */}
                                     </View>
                                 </View>
@@ -168,10 +182,19 @@ const VoiceToTextProfile = ({ route }) => {
                                 <CustomEmoji image={require("../../../assets/message-icon.png")} text={getresponseById?.commentsCount || 0} />
                                 <CustomEmoji image={SHARE_BTN} text="Share" />
                             </View>
-                            <TouchableButton onPress={() => navigation.navigate("ProfileScreens", {
-                                screen: "TagFriends"
-                            })} backgroundColor={TextColorGreen} color="#FFF" text="Tag Friends" />
+                            <TouchableButton
+                                onPress={() => navigation.navigate("ProfileScreens", {
+                                    screen: "TagFriends",
+                                    params: {
+                                        storyId: storyId
+                                    }
+                                })}
+                                backgroundColor={TextColorGreen}
+                                color="#FFF"
+                                type={"tagFriends"}
+                                text="Tag Friends" />
                         </View>
+
                         {/* {
                             Array.from({ length: 1 }, (item, index) => {
                                 return (
@@ -187,6 +210,7 @@ const VoiceToTextProfile = ({ route }) => {
 
     )
 };
+
 
 
 const styles = StyleSheet.create({
@@ -219,6 +243,7 @@ const styles = StyleSheet.create({
         width: responsiveWidth(70),
         marginTop: responsiveWidth(2),
         borderRadius: 18,
+
     },
 
     second_childbg: {

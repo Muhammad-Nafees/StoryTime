@@ -9,7 +9,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetRecordingData } from '../../../../store/slices/RecordingData';
-import { extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse, extendStoryCheck } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -20,6 +20,8 @@ const SecondPlayFlowScreen = () => {
     // const SCREENWIDTH = Dimensions.get("window").width;
     const randomName = useSelector((state) => state.addPlayers.randomnames?.payload);
     const storyUserImage = useSelector((state) => state.addPlayers.storyUserImage?.payload);
+    const addedUsers = useSelector(state => state.addPlayers.addFriends);
+
     console.log("storyUserImage", storyUserImage);
     const windowWidth = Dimensions.get('window').width;
     const { FIRST_USER } = NavigationsString;
@@ -27,10 +29,14 @@ const SecondPlayFlowScreen = () => {
     const dispatch = useDispatch();
 
     const onpressNextHandler = () => {
+
         navigation.navigate(FIRST_USER);
         dispatch(resetRecordingData());
         dispatch(extendStoryCheck(null));
-    }
+        dispatch(checkTrueOrFalse(null))
+    };
+
+    console.log("addedUsers", addedUsers);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -48,7 +54,7 @@ const SecondPlayFlowScreen = () => {
                 }]}>
 
                     <View style={{ paddingBottom: moderateVerticalScale(30) }}>
-                        <Image style={styles.img_dog} source={{ uri: storyUserImage }} />
+                        <Image style={styles.img_dog} resizeMode='stretch' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(10), }}>
@@ -56,7 +62,7 @@ const SecondPlayFlowScreen = () => {
                     </View>
 
                     <View>
-                        <Text style={{ fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(6.2), letterSpacing: 0 }}>{randomName}</Text>
+                        <Text style={{ width: responsiveWidth(80), fontFamily: PassionOne_Regular.passionOne, color: "#F3F3F3", fontSize: responsiveFontSize(5.5), letterSpacing: 0, textAlign: "center" }}>{randomName}</Text>
                     </View>
 
                 </View>
@@ -65,7 +71,7 @@ const SecondPlayFlowScreen = () => {
 
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <TouchableOpacity onPress={onpressNextHandler}>
-                        <Image source={require("../../../assets/pause-img.png")} />
+                        <Image resizeMode='stretch' source={require("../../../assets/pause-img.png")} />
                     </TouchableOpacity>
                     <Text style={styles.start}>Start</Text>
                 </View>
@@ -103,13 +109,14 @@ const styles = StyleSheet.create({
     img_dog: {
         width: responsiveWidth(22),
         height: responsiveHeight(11),
-        resizeMode: "cover",
     },
     start: {
         paddingVertical: moderateVerticalScale(12),
         color: PrimaryColor,
-        // fontWeight: "800",
-        fontSize: responsiveFontSize(4.8),
+        // fontWeight: "bold",
+        textAlign: 'center',
+        marginRight: 'auto',
+        fontSize: responsiveFontSize(4.5),
         fontFamily: PassionOne_Regular.passionOne,
     }
 

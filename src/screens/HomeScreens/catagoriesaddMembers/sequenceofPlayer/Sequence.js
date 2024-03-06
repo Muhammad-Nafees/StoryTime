@@ -20,8 +20,9 @@ import { TextColorGreen } from '../../../Styles/Style';
 import TouchableButton from '../../../../components/TouchableButton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
+import { Inter_Medium, PassionOne_Regular } from '../../../../constants/GlobalFonts';
 import { Path, Svg } from 'react-native-svg';
+import { addFriends, rearrangedFriends, userId } from '../../../../../store/slices/addplayers/addPlayersSlice';
 
 const Sequence = () => {
   const { FIRSTSCREENPLAYFLOW } = NavigationsString;
@@ -39,65 +40,28 @@ const Sequence = () => {
   const [userCounts, setUserCounts] = useState({});
 
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);
-  console.log("🚀 ~ Sequence ~ selectedIndices:", selectedIndices);
+
+  // console.log("selectedIndices  : ", selectedIndices);
+  // console.log("sequenceUser  : ", sequenceUser);
 
   const handlePress = index => {
-    const updatedIndices = [...selectedIndices];
 
+    const updatedIndices = [...selectedIndices];
     const selectedIndex = updatedIndices.indexOf(index);
+
     if (selectedIndex !== -1) {
       updatedIndices.splice(selectedIndex, 1);
     } else {
       updatedIndices.push(index);
     };
-
-    // Update the state with individual counts for each selected index
-    const numberedIndices = updatedIndices.reduce((acc, val, idx) => {
-      acc[val] = idx + 1;
-      return acc;
-    }, {});
-
-    // Update the state
     setSelectedIndices(updatedIndices);
   };
 
-
-  // const handlePress = (index) => {
-  //   const newUserCounts = [...selectedIndices];
-
-  //   if (newUserCounts[index] !== undefined) {
-  //     delete newUserCounts[index];
-  //   } else {
-  //     const availableNumbers = Array.from({ length: addedUsers.length }, (_, i) => i + 1)
-  //       .filter(number => !Object.values(newUserCounts).includes(number));
-
-  //     if (availableNumbers.length > 0) {
-  //       newUserCounts[index] = availableNumbers[0];
-  //     }
-
-  //   };
-
-  //   setSelectedIndices(newUserCounts);
-  // };
-
-  // const handlePress = (index) => {
-  //   const newUserCounts = { ...userCounts };
-
-  //   if (newUserCounts[index] !== undefined) {
-  //     delete newUserCounts[index];
-  //   } else {
-  //     const availableNumbers = Array.from({ length: addedUsers.length }, (_, i) => i + 1)
-  //       .filter(number => !Object.values(newUserCounts).includes(number));
-
-  //     if (availableNumbers.length > 0) {
-  //       newUserCounts[index] = availableNumbers[0];
-  //     }
-  //   };
-
-  //   setUserCounts(newUserCounts);
-  // };
-
   const handlesequence = () => {
+    // const userIds = sequenceUser.map((user) => user?.userid);
+    // console.log("userids--Redux ", userIds)
+    dispatch(rearrangedFriends({ selectedIndices: selectedIndices, sequenceUser: sequenceUser, }));
+
     const allValuesSelected = selectedIndices.length === sequenceUser.length;
     if (allValuesSelected) {
       navigation.navigate('PLayFlowScreens', {
@@ -108,7 +72,6 @@ const Sequence = () => {
 
   const handleShuffle = () => {
     const length = sequenceUser?.length
-    console.log("length-----", length);
 
     const numbers = Array.from({ length }, (_, index) => index); // Create an array [0, 1, 2, ..., length - 1]
     const randomArray = [];
@@ -247,6 +210,7 @@ const Sequence = () => {
                         color: '#FFFFFF',
                         fontWeight: '500',
                         fontSize: responsiveFontSize(1.9),
+                        fontFamily: Inter_Medium.Inter_Medium
                       }}>
                       {`@${item?.username}`}
                     </Text>
@@ -262,6 +226,7 @@ const Sequence = () => {
             onPress={() => handlesequence()}
             backgroundColor={TextColorGreen}
             text="Next"
+            type={"sequence"}
             color="#FFF"
             sequenceUser={sequenceUser}
             selectedIndices={selectedIndices}

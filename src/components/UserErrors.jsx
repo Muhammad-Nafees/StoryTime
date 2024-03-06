@@ -7,37 +7,37 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import BackButton from '../components/BackButton';
 import TouchableButton from './TouchableButton';
 import { Img_Paths } from '../assets/Imagepaths';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/Constant';
+import { Inter_Medium, Inter_Regular } from '../constants/GlobalFonts';
 
 
-const UserErrors = ({ isVisible, setVisible, text, onPress }) => {
+const UserErrors = ({ isVisible, setVisible, text, onPress, text1, bgImage }) => {
 
-    const { BG_PLAYFLOW } = Img_Paths;
+    const { BGIMAGE_ACCOUNT_CREATED } = Img_Paths;
 
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
-            <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
-                <View style={{ width: responsiveWidth(80), height: responsiveHeight(21), backgroundColor: "#FFF", borderRadius: 30 }}>
+            <ImageBackground style={styles.container} source={bgImage}>
+                <View style={{ width: responsiveWidth(80), height: responsiveHeight(25), backgroundColor: "#FFF", borderRadius: 30, justifyContent: "space-evenly" }}>
 
-                    <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(16) }}>
-                        <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 42, width: 42, justifyContent: "center", alignItems: "center", }}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center", }} source={require("../assets/456-img.png")} />
+                    <View style={{ justifyContent: "center", alignItems: "center", }}>
+                        <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 40, width: 40, justifyContent: "center", alignItems: "center", }}>
+                            <Image style={{ width: SCREEN_WIDTH * 0.08, height: SCREEN_WIDTH * 0.08, resizeMode: "center", }} source={require("../assets/456-img.png")} />
                         </View>
-                        <Text style={{ fontSize: responsiveFontSize(1.9), color: "#000" }}>Account Created</Text>
+                        <Text style={{ paddingTop: responsiveWidth(3), fontSize: responsiveFontSize(1.9), fontWeight: "600", color: "#000", fontFamily: Inter_Regular.Inter_Regular }}>{text1}</Text>
                     </View>
 
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
                         <TouchableOpacity onPress={onPress} style={{ width: responsiveWidth(60), backgroundColor: TextColorGreen, borderRadius: 10, justifyContent: "center", alignItems: "center", height: responsiveHeight(6.6) }}>
-                            <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: "#FFF", }}>{text}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), fontWeight: "600", letterSpacing: 0.28, color: "#FFF", textAlign: "center" }}>{text}</Text>
                         </TouchableOpacity>
                     </View>
-
 
                 </View>
             </ImageBackground>
         </Modal>
     )
 };
-
 
 
 const styles = StyleSheet.create({

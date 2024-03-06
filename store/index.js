@@ -11,6 +11,7 @@ import followandunfollow from "./slices/storyfeedslices/followUnfollowSlice";
 import getComment from "./slices/storyfeedslices/getCommentsSlice";
 import addPlayers from "./slices/addplayers/addPlayersSlice"
 import startGame from "./slices/playflow/startGameSlice"
+import storyFeed from "./slices/storyfeedslices/storyFeedSlice"
 
 const store = configureStore({
     reducer: {
@@ -25,7 +26,8 @@ const store = configureStore({
         followandunfollow: followandunfollow,
         getComment: getComment,
         addPlayers: addPlayers,
-        startGame: startGame
+        startGame: startGame,
+        storyFeed: storyFeed
     }
 });
 

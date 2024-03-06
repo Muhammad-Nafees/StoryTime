@@ -24,6 +24,7 @@ import {
 import { Img_Paths } from '../../../assets/Imagepaths';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
 
 const FirstScreenGuest = () => {
     const { SPLASH_SCREEN_IMAGE, STORY_TIME_IMG } = Img_Paths;
@@ -81,6 +82,7 @@ const FirstScreenGuest = () => {
                         iconStyle={{
                             borderColor: 'red',
                             borderRadius: 0,
+                            size:5
                         }}
                         innerIconStyle={{
                             borderWidth: 2,
@@ -89,6 +91,13 @@ const FirstScreenGuest = () => {
                         onPress={isChecked => {
                             setToggleCheckBox(isChecked);
                         }}
+                        iconComponent={
+                        toggleCheckBox &&
+                          <View style={{ marginBottom:'auto',marginTop:'auto' }}>
+                                <SvgIcons name={'Check'} width={20} height={20} />
+                          </View>
+                        }
+                          
                     />
                     <View
                         style={{
@@ -102,7 +111,7 @@ const FirstScreenGuest = () => {
                                 color: '#000',
                                 fontSize: responsiveFontSize(1.6),
                             }}>
-                            By Checking this box, you agree to our{' '}
+                            By checking this box, you agree to our{' '}
                         </Text>
                         <TouchableOpacity
                             onPress={() =>

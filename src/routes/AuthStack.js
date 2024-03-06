@@ -2,7 +2,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   responsiveHeight,
@@ -36,9 +36,9 @@ import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videop
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
-import PlayStoryTime from '../screens/HomeScreens/PlayStoryTime';
+import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
-import {Img_Paths} from '../assets/Imagepaths';
+import { Img_Paths } from '../assets/Imagepaths';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthStack = () => {
@@ -56,25 +56,25 @@ const AuthStack = () => {
     FRAME_CONTENT,
   } = NavigationsString;
 
-const Stack = createStackNavigator();
+  const Stack = createStackNavigator();
 
- const [checkRouteName, setCheckRouteName] = useState(null)
+  const [checkRouteName, setCheckRouteName] = useState(null)
 
- const fetchRouteName = async () => {
-  let initialRouteName = await AsyncStorage.getItem('isLoggedOut');
-    if(initialRouteName){
+  const fetchRouteName = async () => {
+    let initialRouteName = await AsyncStorage.getItem('isLoggedOut');
+    if (initialRouteName) {
       setCheckRouteName(initialRouteName);
-    } else{
+    } else {
       setCheckRouteName('false');
     }
-  await AsyncStorage.removeItem('isLoggedOut')
-};
+    await AsyncStorage.removeItem('isLoggedOut')
+  };
 
- useEffect(() => {
-  fetchRouteName();
-}, []);
+  useEffect(() => {
+    fetchRouteName();
+  }, []);
 
- let initialRouteName;
+  let initialRouteName;
   if (checkRouteName === null) {
     return null;
   } else if (checkRouteName === 'true') {
@@ -84,7 +84,7 @@ const Stack = createStackNavigator();
   }
 
   console.log(initialRouteName);
- 
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -95,67 +95,67 @@ const Stack = createStackNavigator();
         <Stack.Screen
           name={POPUP_START}
           component={PopUpStart}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={SPLASH_SCREEN}
           component={SplashScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="GuestStack"
           component={GuestStack}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={LOGIN}
           component={Login}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TermsAndConditionsStack"
           component={TermsAndConditionsStack}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER}
           component={Register}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER_USER_INFO}
           component={RegisterUserInformation}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={REGISTER_PASSWORD}
           component={RegisterPassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_EMAIL}
           component={ForgetEmail}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_PHONE_NO}
           component={ForgetPhoneNumber}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={OTP_FORGET}
           component={OtpForget}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FORGET_CONFIRM_PASSWORD}
           component={ForgetConfirmPassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={FRAME_CONTENT}
           component={FrameContent}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -164,59 +164,59 @@ const Stack = createStackNavigator();
 
 const GuestStack = () => {
   const Stack = createStackNavigator();
-  const {FIRSTSCREENPLAYFLOW,SECONDSCREENPLAYFLOW,VIDEO_FIRST_SCREEN,FIRST_USER,VIDEO_FIRST_USER,PLAY_STORY_TIME} = NavigationsString;
+  const { FIRSTSCREENPLAYFLOW, SECONDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN, FIRST_USER, VIDEO_FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="FirstScreenGuest"
         component={FirstScreenGuest}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PrivacyAndPolicy"
         component={PrivacyAndPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name={"CategoriesTab"}
         component={CategoriesTab}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={PLAY_STORY_TIME}
         component={PlayStoryTime}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={FIRSTSCREENPLAYFLOW}
         component={FirstScreenPlayFlow}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name={SECONDSCREENPLAYFLOW}
         component={SecondPlayFlowScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={VIDEO_FIRST_SCREEN}
         component={VideoFirstStartScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen 
-      name={FIRST_USER} 
-      component={FirstUser}
-      options={{headerShown: false}}
+      <Stack.Screen
+        name={FIRST_USER}
+        component={FirstUser}
+        options={{ headerShown: false }}
       />
 
-      <Stack.Screen 
-      name={VIDEO_FIRST_USER} 
-      component={VideoFirstUser} 
-      options={{headerShown: false}}
+      <Stack.Screen
+        name={VIDEO_FIRST_USER}
+        component={VideoFirstUser}
+        options={{ headerShown: false }}
       />
 
     </Stack.Navigator>
@@ -224,8 +224,8 @@ const GuestStack = () => {
 };
 
 const CategoriesTab = () => {
-  const {CATEGORIES} = NavigationsString;
-  const {HOME_FOCUSED} = Img_Paths;
+  const { CATEGORIES } = NavigationsString;
+  const { HOME_FOCUSED } = Img_Paths;
 
   const Tab = createBottomTabNavigator();
 
@@ -235,12 +235,13 @@ const CategoriesTab = () => {
         headerShown: false,
         tabBarLabel: () => null,
         tabBarIcon: () => null,
-        tabBarStyle: {height: responsiveHeight(10)},
+        tabBarStyle: { height: responsiveHeight(10) },
       }}>
       <Tab.Screen
         name={CATEGORIES}
         component={Categories}
         options={{
+          tabBarHideOnKeyboard: true,
           tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
@@ -271,6 +272,7 @@ const CategoriesTab = () => {
         name={'SubCategories'}
         component={SubCategories}
         options={{
+          tabBarHideOnKeyboard: true,
           tabBarButton: () => null,
           tabBarVisible: false,
         }}
@@ -287,12 +289,12 @@ const TermsAndConditionsStack = () => {
       <Stack.Screen
         name="LoginTermsAndConditions"
         component={LoginTermsAnd_Conditions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="LoginPrivacyAndPolicy"
         component={LoginPrivacyAndPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
