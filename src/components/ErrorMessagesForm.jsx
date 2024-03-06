@@ -24,13 +24,11 @@ const ErrorMessageForm = ({errorsField, isSubmitted}) => {
                 <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
               </Svg>
             </View>
-            <View style={{paddingHorizontal: moderateScale(5)}}>
+            <View style={{paddingHorizontal: moderateScale(1),paddingTop:2}}>
               <Text
-                numberOfLines={2}
-                ellipsizeMode="tail"
                 style={{
                   color: 'red',
-                  fontSize: responsiveFontSize(1.9),
+                  fontSize: responsiveFontSize(1.6),
                   fontWeight: '600',
                 }}>
                 {errorsField}
