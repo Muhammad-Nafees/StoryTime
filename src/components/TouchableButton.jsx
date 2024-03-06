@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {SecondaryColor, ThirdColor} from '../screens/Styles/Style';
 import {
   responsiveHeight,
   responsiveFontSize,
@@ -23,27 +23,40 @@ const TouchableButton = ({
   selectedIndices,
   validate,
   values,
-  StatusCodeSuccess
-
+  StatusCodeSuccess,
 }) => {
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <TouchableOpacity
         disabled={
-          type === 'register' && StatusCodeSuccess ? false :
-            type === "login" ? false :
-              type === "forgetemail" && StatusCodeSuccess ? false :
-                type === "optForget" ? false :
-                  type === "registeruserInfo" ? false :
-                    type === "backuser" ? false :
-                      type === "addPlayers" ? false :
-                        type === "sequence" ? false :
-                          true
+          type === 'register' && StatusCodeSuccess
+            ? false
+            : type === 'login'
+            ? false
+            : type === 'forgetemail' && StatusCodeSuccess
+            ? false
+            : type === 'optForget'
+            ? false
+            : type === 'registeruserInfo'
+            ? false
+            : type === 'backuser'
+            ? false
+            : type === 'addPlayers'
+            ? false
+            : type === 'sequence'
+            ? false
+            : false
         }
         onPress={onPress}
         style={{
-          width: type == "savestoryphone" ? responsiveWidth(70) : responsiveWidth(80),
-          backgroundColor: selectedIndices?.length === sequenceUser?.length ? backgroundColor : "rgba(57, 94, 102, 0.3)",
+          width:
+            type == 'savestoryphone'
+              ? responsiveWidth(70)
+              : responsiveWidth(80),
+          backgroundColor:
+            selectedIndices?.length === sequenceUser?.length
+              ? backgroundColor
+              : 'rgba(57, 94, 102, 0.3)',
           // backgroundColor:  "red" : "green",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,
