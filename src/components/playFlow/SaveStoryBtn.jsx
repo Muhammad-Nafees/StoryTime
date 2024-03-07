@@ -13,7 +13,8 @@ const SaveStoryBtn = ({
     onPress,
     isNext,
     isUserGuest,
-    timeLeft
+    timeLeft,
+    isDisabled
 
 }) => {
 
@@ -21,7 +22,7 @@ const SaveStoryBtn = ({
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity
                 onPress={onPress}
-                disabled={!isNext && timeLeft == 0 ? false : true}
+                disabled={!isNext && timeLeft == 0 ? false : true || isDisabled}
                 style={isUserGuest ? styles.guestWrapper : styles.wrapper}>
 
                 <Text

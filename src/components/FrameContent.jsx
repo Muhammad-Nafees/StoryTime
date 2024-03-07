@@ -432,10 +432,10 @@ const FrameContent = ({
                             </Text>
                           </MenuOption>
                           <MenuOption
-                            onSelect={() => {
-                              dispatch(storyUserId(userId));
-                              navigation.navigate(REPORT_USER);
-                            }}
+                            // onSelect={() => {
+                            //   dispatch(storyUserId(userId));
+                            //   navigation.navigate(REPORT_USER);
+                            // }}
                             style={{
                               paddingBottom: 10,
                               paddingLeft: responsiveWidth(5),

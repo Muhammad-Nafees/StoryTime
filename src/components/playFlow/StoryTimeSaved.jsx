@@ -22,13 +22,14 @@ const StoryTimeSaved = ({
   loading,
 }) => {
   const navigation = useNavigation();
-
   const close = () => {
     if (onPress) {
       onPress();
       setVisible(false);
+      navigation.navigate('Home');
     } else {
-      // setVisible(false);
+      setVisible(false);
+      // navigation.navigate('Home');
       navigation.navigate('Home');
     }
   };
