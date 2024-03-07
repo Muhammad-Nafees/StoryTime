@@ -46,6 +46,7 @@ import DownloadingFlow from './DownloadingFlow';
 import {SPACING} from '../../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {resetFriends} from '../../../store/slices/addplayers/addPlayersSlice';
 
 const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
   const {width, height} = Dimensions.get('window');
@@ -107,33 +108,43 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
     console.log(dirToRead);
     return decodeURIComponent(dirToRead);
   };
+  const [isLoadingDirectory, setIsLoadingDirectory] = useState(false);
 
   const pickDirectory = async () => {
     try {
       const result = await DocumentPicker.pickDirectory({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('result', result);
 
-      let absolutePath;
+      if (result) {
+        console.log('result', result);
 
-      // Check if it's internal storage
-      if (
-        result?.uri?.startsWith(
-          'content://com.android.externalstorage.documents/tree/primary',
-        )
-      ) {
-        absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+        let absolutePath;
+
+        // Check if it's internal storage
+        if (
+          result?.uri?.startsWith(
+            'content://com.android.externalstorage.documents/tree/primary',
+          )
+        ) {
+          absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+        } else {
+          // It's SD card or other external storage
+          absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+        }
+
+        console.log(absolutePath);
+
+        // Save the selected path
+        saveSelectedPath(absolutePath);
+        // Use the absolute file path directly
+        //   requestStoragePermission(absolutePath);
+        createPDF(absolutePath);
       } else {
-        // It's SD card or other external storage
-        absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+        console.log('User canceled directory selection.');
+        // Handle the case where the user canceled the directory selection (pressed back)
+        // You may choose to show a message or take appropriate action.
       }
-      console.log(absolutePath);
-      // Save the selected path
-      saveSelectedPath(absolutePath);
-      // Use the absolute file path directly
-      //   requestStoragePermission(absolutePath);
-      createPDF(absolutePath);
     } catch (err) {
       // Handle errors
       console.error('Error picking directory:', err);
@@ -141,6 +152,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
   };
 
   const createPDF = async selectedPath => {
+    setIsLoadingDirectory(true);
     try {
       // const folderPath = `${selectedPath}/PDF`;
       // console.log(folderPath)
@@ -168,6 +180,8 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
       setIsVisiblePdf(false);
       setIsVisibleDownloading(true);
       setSaveStoryModalDownloading(true);
+      dispatch(resetFriends());
+      setIsLoadingDirectory(false);
     } catch (error) {
       console.error('Error generating PDF: ', error);
       Alert.alert('Error generating PDF. Please try again.');
@@ -227,6 +241,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
               <View style={{paddingVertical: 12}}>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <TouchableOpacity
+                    disabled={isLoadingDirectory}
                     onPress={loadSavedPath}
                     style={{
                       width: responsiveWidth(70),
@@ -250,6 +265,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
               </View>
 
               <SaveStoryBtn
+                isDisabled={isLoadingDirectory}
                 timeLeft={0}
                 onPress={() => setIsVisiblePdf(false)}
                 text="No"

@@ -48,6 +48,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SPACING} from '../../constants/Constant';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import DocumentPicker from 'react-native-document-picker';
+import {resetFriends} from '../../../store/slices/addplayers/addPlayersSlice';
+import Toast from 'react-native-toast-message';
 
 const SaveStoryPhone = ({isVisible, setIsVisible}) => {
   const {width, height} = Dimensions.get('window');
@@ -92,7 +94,6 @@ const SaveStoryPhone = ({isVisible, setIsVisible}) => {
     setSaveStoryModal(true);
     setVisiblePdf(true);
   };
-
   const handleSaveStories = async () => {
     setIsLoading(true);
     try {
@@ -104,13 +105,19 @@ const SaveStoryPhone = ({isVisible, setIsVisible}) => {
         contributors: playerContributorsId,
         content: convertStr,
       });
-      setIsLoading(false);
-      console.log('storyresData====', responseData);
-      dispatch(SaveDataToProfile(textrecordUsers));
-      setSaveStoryModalsecond(true);
-      setVisibleSavePhone(true);
-      console.log('Users Stories save to profile');
-      console.log('isLoginUserId-----', userLoginId);
+      if (responseData?.message === 'content is not allowed to be empty') {
+        Toast.show({
+          type: 'error',
+          text1: 'content is not allowed to be empty',
+        });
+        setIsLoading(false);
+      } else {
+        console.log('storyresData====', responseData);
+        dispatch(resetFriends());
+        dispatch(SaveDataToProfile(textrecordUsers));
+        setSaveStoryModalsecond(true);
+        setVisibleSavePhone(true);
+      }
       return responseData;
     } catch (error) {
       console.log('error', error);
@@ -133,6 +140,7 @@ const SaveStoryPhone = ({isVisible, setIsVisible}) => {
           </View>
 
           {/* Back Button */}
+              <Toast />
 
           <ImageBackground
             style={styles.img_frame}

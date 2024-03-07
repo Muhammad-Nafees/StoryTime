@@ -1,16 +1,24 @@
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import {
+  CommonActions,
+  NavigationContainer,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import { Image, View } from 'react-native';
+import {Image, View} from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../assets/Imagepaths';
+import {Img_Paths} from '../assets/Imagepaths';
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
 import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
@@ -26,26 +34,46 @@ import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount, BlockUser } from '../screens';
+import {
+  FAQ,
+  Notification,
+  Setting,
+  SubscriptionDetails,
+  SettingsProfile,
+  DeleteAccount,
+  BlockUser,
+} from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
-import { Login } from '../screens/index'
+import {Login} from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
-
+import React, {useEffect} from 'react';
 
 const Navigations = () => {
-
   const Stack = createStackNavigator();
 
-  const { ADD_FRIENDS, REPORT_USER, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT, LOGIN } = NavigationsString;
+  const {
+    ADD_FRIENDS,
+    REPORT_USER,
+    ADD_PLAYERS,
+    PLAYER_SEQUENCE,
+    FAQ_ROUTE,
+    SETTING,
+    NOTIFICATION,
+    SUBSCRIPTION_DETAILS,
+    PROFILE,
+    BLOCK_USER,
+    DELETE_ACCOUNT,
+    LOGIN,
+  } = NavigationsString;
 
   return (
     <Stack.Navigator
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerShown: false
+        headerShown: false,
       }}
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
@@ -57,7 +85,10 @@ const Navigations = () => {
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
       <Stack.Screen name={SETTING} component={Setting} />
       <Stack.Screen name={NOTIFICATION} component={Notification} />
-      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
+      <Stack.Screen
+        name={SUBSCRIPTION_DETAILS}
+        component={SubscriptionDetails}
+      />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
@@ -65,12 +96,12 @@ const Navigations = () => {
       <Stack.Screen
         name={LOGIN}
         component={Login}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -83,20 +114,17 @@ const GuestStack = () => {
       <Stack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="PrivacyAndPolicy"
         component={PrivacyAndPolicy}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
     </Stack.Navigator>
   );
 };
-
-
-
 
 const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
@@ -112,10 +140,11 @@ const PLayFlowScreens = () => {
   } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen
         name={FIRSTSCREENPLAYFLOW}
         component={FirstScreenPlayFlow}
@@ -141,16 +170,15 @@ const PLayFlowScreens = () => {
   );
 };
 
-
-
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT, REPORT_USER } = NavigationsString;
+  const {HOME, FEED_CHAT, REPORT_USER} = NavigationsString;
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name={HOME} component={Home} />
       <Stack.Screen name={FEED_CHAT} component={FeedChat} />
     </Stack.Navigator>
@@ -161,15 +189,23 @@ const HomeStackBottom = () => {
 
 const CategoriesStackBottom = () => {
   const Stack = createStackNavigator();
-  const { CATEGORIES } = NavigationsString;
+  const {CATEGORIES} = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
-      <Stack.Screen name={CATEGORIES} component={Categories} />
-      <Stack.Screen name="SubCategories" component={SubCategories} />
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}
+      initialRouteName={CATEGORIES}>
+      <Stack.Screen
+        name={CATEGORIES}
+        component={Categories}
+      />
+      <Stack.Screen
+        name="SubCategories"
+        component={SubCategories}
+      />
     </Stack.Navigator>
   );
 };
@@ -178,12 +214,14 @@ const CategoriesStackBottom = () => {
 
 const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME } = NavigationsString;
+  const {HOME} = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name="Profile" component={Profile} />
       {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
@@ -191,26 +229,25 @@ const ProfileStacksBottom = () => {
   );
 };
 
-
-
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT } = NavigationsString;
+  const {HOME, FEED_CHAT} = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name="TagFriends" component={TagFriends} />
       <Stack.Screen name="AddUrl" component={AddUrl} />
     </Stack.Navigator>
   );
 };
 
-
 const BottomTavNavigator = () => {
-  const { HOME, CATEGORIES, PROFILE } = NavigationsString;
-  const { HOME_FOCUSED } = Img_Paths;
+  const {HOME, CATEGORIES, PROFILE} = NavigationsString;
+  const {HOME_FOCUSED} = Img_Paths;
   const Tab = createBottomTabNavigator();
 
   return (
@@ -219,13 +256,13 @@ const BottomTavNavigator = () => {
         headerShown: false,
         tabBarLabel: () => null,
         tabBarIcon: () => null,
-        tabBarStyle: { height: responsiveHeight(10) },
+        tabBarStyle: {height: responsiveHeight(10)},
       }}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackBottom}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image
@@ -255,7 +292,7 @@ const BottomTavNavigator = () => {
         name="categoriesStack"
         component={CategoriesStackBottom}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image
@@ -279,13 +316,19 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+        listeners={({navigation, route}) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('categoriesStack', {screen: CATEGORIES});
+          },
+        })}
       />
 
       <Tab.Screen
         name="profileStack"
         component={ProfileStacksBottom}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image
