@@ -433,7 +433,7 @@ const SettingsProfile = () => {
                             )}
                             onSelect={(selectedItem, index) => {
                               setFieldValue('state', selectedItem);
-                              selectedItems(selectedItem);
+                              // selectedItems(selectedItem);
                               const cities = userdata?.data?.find(
                                 data => data?.name === selectedItem,
                               );
@@ -548,6 +548,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: SPACING,
   },
   bg_img_container: {
     height: SCREEN_HEIGHT / 4.5,

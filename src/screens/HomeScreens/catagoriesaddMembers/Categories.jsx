@@ -49,12 +49,15 @@ import {setCategoriesId} from '../../../../store/slices/getCategoriesSlice';
 import {addFriends_api} from '../../../../services/api/add-members';
 import {addFriends} from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
-import {Inter_Regular, PassionOne_Regular} from '../../../constants/GlobalFonts';
+import {
+  Inter_Regular,
+  PassionOne_Regular,
+} from '../../../constants/GlobalFonts';
 import {BlurView} from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
-import { SPACING } from '../../../constants/Constant';
+import {SPACING} from '../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 
 const Categories = () => {
@@ -202,6 +205,9 @@ const Categories = () => {
       }
       const response = await get_Categories_Sub_Categories({page: page});
       const valObj = [
+        '#56B6A4',
+        '#79905C',
+        '#C79861',
         '#C453D7',
         '#82BED1',
         '#C07632',
@@ -211,14 +217,12 @@ const Categories = () => {
         '#974444',
         '#8482D1',
         '#C45E89',
-        '#56B6A4',
-        '#79905C',
-        '#C79861',
       ];
+
       for (let i = 0; i < response?.data?.categories.length; i++) {
         const colorIndex = i % valObj.length;
         response.data.categories[i].background = valObj[colorIndex];
-      };
+      }
 
       setResponseCategories(prevData => [
         ...prevData,
@@ -237,22 +241,22 @@ const Categories = () => {
   const handleRandomClick = async () => {
     try {
       let randomCatName =
-      allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
+        allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
       const filteredCategory = responseCategories.find(category =>
         category.name.includes(randomCatName),
       );
-      console.log("randomCat",filteredCategory)
-      const response = isUserGuest? filteredCategory : await get_Random();
+      console.log('randomCat', filteredCategory);
+      const response = isUserGuest ? filteredCategory : await get_Random();
       console.log('res', response.data);
-    
+
       navigation.navigate('SubCategories', {
-        id: isUserGuest?response?._id: response?.data?._id,
-        name: isUserGuest? response?.name: response?.data?.name,
+        id: isUserGuest ? response?._id : response?.data?._id,
+        name: isUserGuest ? response?.name : response?.data?.name,
       });
       console.log('response_id', response?.data?._id);
       console.log('Random Clicked Category');
-      setRandomId(isUserGuest?response?._id:response?.data?._id);
-      setRandomName(isUserGuest? response?.name:response?.data?.name);
+      setRandomId(isUserGuest ? response?._id : response?.data?._id);
+      setRandomName(isUserGuest ? response?.name : response?.data?.name);
       return response;
     } catch (error) {}
   };
@@ -357,12 +361,12 @@ const Categories = () => {
   };
 
   const renderListFooterComponent = () => {
-    if(isLoading || DATA.length === 0){
-      return <></>
+    if (isLoading || DATA.length === 0) {
+      return <></>;
     }
     if (isLoadMore) {
       return (
-        <View style={{alignItems: 'center',paddingVertical:SPACING}}>
+        <View style={{alignItems: 'center', paddingVertical: SPACING}}>
           <ActivityIndicator size={40} color={PrimaryColor} />
         </View>
       );
@@ -377,129 +381,143 @@ const Categories = () => {
         ) : isLoading ? (
           <ActivityIndicator size={40} color={PrimaryColor} />
         ) : (
-          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.6)} clr={PrimaryColor}>No Data Found!</Typography>
+          <Typography
+            ff={PassionOne_Regular.passionOne}
+            size={responsiveFontSize(2.6)}
+            clr={PrimaryColor}>
+            No Data Found!
+          </Typography>
         )}
       </View>
     );
   };
 
   return (
-
     <LinearGradient
-      colors={["#75BDCD", "#FFB5CB",]}
-      start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
-      style={[ styles.container, {backgroundColor: pinkColor}] }>
+      colors={['#75BDCD', '#FFB5CB']}
+      start={{x: 1.5, y: 1}}
+      end={{x: 1, y: 0}}
+      locations={[0, 1]}
+      style={[styles.container, {backgroundColor: pinkColor}]}>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-      <SafeAreaView style={styles.container}>
-        <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
-          <View style={styles.first_container}>
-
-            <BackButton onPress={() => navigation.goBack()} />
-            <View style={styles.categories_text_container}>
-              <Text style={styles.categories_text}>Categories</Text>
-            </View>
-          </View>
-
-          {isUserGuest && (
-            <View style={{marginTop: moderateVerticalScale(10)}}>
-              <View
-                style={{
-                  marginBottom: 'auto',
-                  marginTop: 'auto',
-                  justifyContent:'center',
-                  alignContent:'center',
-                  alignItems:'center'
-                }}>
-                <SvgIcons name={'Guest'} width={36} height={36} />
+        <SafeAreaView style={styles.container}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginHorizontal: responsiveWidth(5),
+              marginBottom: moderateVerticalScale(10),
+            }}>
+            <View style={styles.first_container}>
+              <BackButton onPress={() => navigation.goBack()} />
+              <View style={styles.categories_text_container}>
+                <Text style={styles.categories_text}>Categories</Text>
               </View>
-              <Text style={styles.text}>Guest{guestNumber}</Text>
             </View>
-          )}
-        </View>
-        {/* MainInputField----- */}
 
-        {user ?
-         ( <>
-            <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
-            <View
-              style={{
-                paddingVertical: moderateVerticalScale(6),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            {isUserGuest && (
+              <View style={{marginTop: moderateVerticalScale(10)}}>
+                <View
+                  style={{
+                    marginBottom: 'auto',
+                    marginTop: 'auto',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <SvgIcons name={'Guest'} width={36} height={36} />
+                </View>
+                <Text style={styles.text}>Guest{guestNumber}</Text>
+              </View>
+            )}
+          </View>
+          {/* MainInputField----- */}
+
+          {user ? (
+            <>
+              <MainInputField
+                onPress={addFriends_api_handler}
+                inputValue={isUsernameInputValue}
+                OnchangeText={setIsUsernameInputValue}
+                placeholder="Username"
+              />
               <View
                 style={{
-                  width: responsiveWidth(90),
-                  flexDirection: 'row',
+                  paddingVertical: moderateVerticalScale(6),
+                  justifyContent: 'center',
                   alignItems: 'center',
-                  flexWrap: 'wrap',
                 }}>
-                <View>
-                  <Text
-                    style={{
-                      color: '#393939',
-                      fontWeight: '600',
-                      textAlign: 'center',
-                      fontSize: responsiveHeight(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
-                    }}>
-                    Players:
-                  </Text>
-                </View>
-
-                {addUsersGame?.map((item) => (
-                  <View
-                    style={{
-                      margin: 4,
-                      backgroundColor: '#395E66',
-                      paddingHorizontal: moderateScale(14),
-                      paddingVertical: moderateVerticalScale(4.5),
-                      borderRadius: 40,
-                    }}>
+                <View
+                  style={{
+                    width: responsiveWidth(90),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                  }}>
+                  <View>
                     <Text
                       style={{
-                        color: '#FFF',
-                        fontSize: responsiveFontSize(1.9),
+                        color: '#393939',
+                        fontWeight: '600',
+                        textAlign: 'center',
+                        fontSize: responsiveHeight(1.9),
                         fontFamily: Inter_Regular.Inter_Regular,
-                      }}>{`@${item.username}`}</Text>
+                      }}>
+                      Players:
+                    </Text>
                   </View>
-                ))}
+
+                  {addUsersGame?.map(item => (
+                    <View
+                      style={{
+                        margin: 4,
+                        backgroundColor: '#395E66',
+                        paddingHorizontal: moderateScale(14),
+                        paddingVertical: moderateVerticalScale(4.5),
+                        borderRadius: 40,
+                      }}>
+                      <Text
+                        style={{
+                          color: '#FFF',
+                          fontSize: responsiveFontSize(1.9),
+                          fontFamily: Inter_Regular.Inter_Regular,
+                        }}>{`@${item.username}`}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
-            </View>
-          </>
-        ) : (
-          <SearchField
-            placeholder="Search"
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
+            </>
+          ) : (
+            <SearchField
+              placeholder="Search"
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          )}
+          <FlatList
+            data={DATA}
+            scrollsToTop
+            scrollEnabled
+            numColumns={3}
+            nestedScrollEnabled
+            onRefresh={onRefresh}
+            renderItem={renderItem}
+            refreshing={isRefreshing}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={handleLoadMore}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingBottom: bottom + 30,
+              paddingHorizontal: moderateScale(4),
+            }}
+            ListEmptyComponent={renderListEmptyComponent}
+            ListFooterComponent={renderListFooterComponent}
           />
-        )}
-        <FlatList
-          data={DATA}
-          scrollsToTop
-          scrollEnabled
-          numColumns={3}
-          nestedScrollEnabled
-          onRefresh={onRefresh}
-          renderItem={renderItem}
-          refreshing={isRefreshing}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={handleLoadMore}
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingBottom: bottom + 30,
-            paddingHorizontal: moderateScale(4),
-          }}
-          ListEmptyComponent={renderListEmptyComponent}
-          ListFooterComponent={renderListFooterComponent}
-        />    
-        <Toast />
+          <Toast />
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
-
-
   );
 };
 
@@ -536,8 +554,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '800',
     letterSpacing: 0.36,
-    fontFamily:Inter_Regular.Inter_Regular
-
+    fontFamily: Inter_Regular.Inter_Regular,
   },
   text_Input_container: {
     justifyContent: 'center',

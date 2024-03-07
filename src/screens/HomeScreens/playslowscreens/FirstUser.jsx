@@ -27,11 +27,7 @@ import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {PrimaryColor, TextColorGreen} from '../../Styles/Style';
 import {checkTrueOrFalse} from '../../../../store/slices/addplayers/addPlayersSlice';
-import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  SPACING,
-} from '../../../constants/Constant';
+import {SCREEN_HEIGHT,SCREEN_WIDTH, SPACING} from '../../../constants/Constant';
 import {Inter_Regular} from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 import Voice, {SpeechResultsEvent} from '@react-native-voice/voice';
@@ -104,7 +100,7 @@ const FirstUser = ({route}) => {
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
   const SHOW_DONE_BTN =
-    (timeText === '00:00' && isUserGuest) || !isCancelingStory;
+    (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -368,7 +364,9 @@ const FirstUser = ({route}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{width: responsiveWidth(10)}}>
               <Image
                 style={{
                   width: responsiveWidth(5),
@@ -509,38 +507,40 @@ const FirstUser = ({route}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <TouchableOpacity
-              disabled={isFirstCall ? true : false}
-              onLongPress={() => {
-                pressHandlerIn();
-              }}
-              onPressOut={() => {
-                pressHandlerOut();
-              }}
-              activeOpacity={0.7}
-              style={{
-                borderWidth: isPressed ? 6 : 0,
-                borderColor: isPressed ? '#D04141' : TextColorGreen,
-                backgroundColor:
-                  isFirstCall || timeLeft == 0
-                    ? 'rgba(87, 150, 164, 0.3)'
-                    : TextColorGreen,
-                width: SCREENWIDTH * 0.32,
-                height: SCREENWIDTH * 0.32,
-                borderRadius: SCREENWIDTH / 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                style={{
-                  width: responsiveWidth(16),
-                  height: responsiveHeight(8),
-                  tintColor: isPressed ? '#D04141' : null,
-                  resizeMode: 'center',
+            <ImageBackground source={require('../../../assets/microphone-bg.png')}>
+              <TouchableOpacity
+                disabled={isFirstCall ? true : false}
+                onLongPress={() => {
+                  pressHandlerIn();
                 }}
-                source={require('../../../assets/mic.png')}
-              />
-            </TouchableOpacity>
+                onPressOut={() => {
+                  pressHandlerOut();
+                }}
+                activeOpacity={0.7}
+                style={{
+                  borderWidth: isPressed ? 6 : 0,
+                  borderColor: isPressed ? '#D04141' : TextColorGreen,
+                  backgroundColor:
+                    isFirstCall || timeLeft == 0
+                      ? 'rgba(87, 150, 164, 0.3)'
+                      : undefined,
+                  width: SCREENWIDTH * 0.32,
+                  height: SCREENWIDTH * 0.32,
+                  borderRadius: SCREENWIDTH / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{
+                    width: responsiveWidth(16),
+                    height: responsiveHeight(8),
+                    tintColor: isPressed ? '#D04141' : null,
+                    resizeMode: 'center',
+                  }}
+                  source={require('../../../assets/mic.png')}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
           </View>
 
           {isNext && user ? (

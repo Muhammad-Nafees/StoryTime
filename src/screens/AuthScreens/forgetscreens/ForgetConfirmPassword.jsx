@@ -42,11 +42,11 @@ import ErrorMessageForm from '../../../components/ErrorMessagesForm';
 export const validationForgetConfirmPassword = Yup.object().shape({
   newPassword: Yup.string()
     .required('New Password is required')
-    .min(8, 'Password length should be at least 8 characters'),
+    .min(8, 'Password length must be at least 8 characters'),
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-    .min(8, 'Password length should be at least 8 characters'),
+    .min(8, 'Password length must be at least 8 characters'),
 });
 
 const ForgetConfirmPassword = () => {
@@ -163,7 +163,9 @@ const ForgetConfirmPassword = () => {
                 />
               </View>
 
-              <View style={{height: responsiveHeight(3.2)}}>
+              <View style={{height: responsiveHeight(4.2)}
+              }
+              >
                 <ErrorMessageForm
                   errorsField={errors.newPassword}
                   isSubmitted={isSubmitted}

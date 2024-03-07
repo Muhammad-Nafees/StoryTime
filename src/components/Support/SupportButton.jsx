@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Typography from '../Typography';
+import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const SupportButton = ({title, onpress, input, loading}) => {
   return (
@@ -51,7 +52,8 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     letterSpacing: 0.02,
     color: '#FFF',
-    fontWeight: 600,
+    fontWeight: '600',
+    fontFamily:Inter_SemiBold.Inter_SemiBold
   },
   disabled_button: {
     // opacity: 0.5,

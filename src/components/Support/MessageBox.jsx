@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 19.46,
     fontSize: 14,
     lineHeight: 24,
-    color: '#AAAAAA',
+    color: 'black',
   },
   camera_container: {
     justifyContent: 'center',

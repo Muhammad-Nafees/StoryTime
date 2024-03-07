@@ -41,6 +41,7 @@ import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
 import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
 import {SPACING} from '../constants/Constant';
+import DocumentPicker from 'react-native-document-picker';
 
 const SaveVideo = ({isVisible, setIsVisible, path}) => {
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] =
@@ -73,52 +74,148 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
     setIsVisible(false); // Close the main modal
   };
 
-  const checkPermission = async () => {
-    try {
-      const OsVer = Platform.constants['Release'];
-      console.log('osVER', typeof OsVer);
-      // Check if the platform is Android
-      if (Platform.OS === 'android' && Number(OsVer) < 12) {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        );
+  // const checkPermission = async () => {
+  //   try {
+  //     const OsVer = Platform.constants['Release'];
+  //     console.log('osVER', typeof OsVer);
+  //     // Check if the platform is Android
+  //     if (Platform.OS === 'android' && Number(OsVer) < 12) {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //       );
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('Storage permission granted');
-          // setIsVisible(false)
-          downloadRecording();
-        } else {
-          console.log('Storage permission denied');
-          Alert.alert(
-            'Permission Denied',
-            'Please grant storage permission to save the PDF.',
-          );
-        }
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         console.log('Storage permission granted');
+  //         // setIsVisible(false)
+  //         downloadRecording();
+  //       } else {
+  //         console.log('Storage permission denied');
+  //         Alert.alert(
+  //           'Permission Denied',
+  //           'Please grant storage permission to save the PDF.',
+  //         );
+  //       }
+  //     } else {
+  //       // Platform is iOS, no explicit permission request needed
+  //       downloadRecording();
+  //     }
+  //   } catch (error) {
+  //     console.warn(error);
+  //   }
+  // };
+
+  const convertExternalStorageUriToAbsolutePath = uri => {
+    let dirToRead = uri.split('tree')[1];
+    dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
+    console.log(dirToRead);
+    return decodeURIComponent(dirToRead);
+  };
+
+  const convertInternalStoragePathToAbsolutePath = uri => {
+    let dirToRead = uri?.split('primary')[1];
+    const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
+    console.log(InternalStoragePath);
+    dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
+    console.log(dirToRead);
+    return decodeURIComponent(dirToRead);
+  };
+
+  const pickDirectory = async () => {
+    try {
+      const result = await DocumentPicker.pickDirectory({
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log('result', result);
+
+      let absolutePath;
+      if (
+        result?.uri?.startsWith(
+          'content://com.android.externalstorage.documents/tree/primary',
+        )
+      ) {
+        absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
       } else {
-        // Platform is iOS, no explicit permission request needed
-        downloadRecording();
+        absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
       }
-    } catch (error) {
-      console.warn(error);
+      downloadRecording(absolutePath);
+    } catch (err) {
+      // Handle errors
+      console.error('Error picking directory:', err);
     }
   };
-  const downloadRecording = async () => {
-    try {
-      const destinationPath = `${
-        RNFS.DownloadDirectoryPath
-      }/downloaded_video${Math.floor(Math.random() * 100000)}.mp4`; // Generate random number
-      const sourcePath = `file://${recordedVideo}`;
+  // const downloadRecording = async absolutePath => {
+  //   // try {
+  //   //   const destinationPath = `${
+  //   //     RNFS.DownloadDirectoryPath
+  //   //   }/downloaded_video${Math.floor(Math.random() * 100000)}.mp4`; // Generate random number
+  //   //   const sourcePath = `file://${recordedVideo}`;
 
+  //   //   if (!sourcePath) {
+  //   //     console.error('Recording path not found.');
+  //   //     return;
+  //   //   }
+  //   //   await RNFS.copyFile(sourcePath, destinationPath);
+  //   //   console.log('Video downloaded successfully:', destinationPath);
+  //   //   setSaveStoryVideoModal(true);
+  //   //   setIsDownloadingModalVisible(true);
+  //   // } catch (error) {
+  //   //   console.error('Error downloading recording:', error);
+  //   // }
+  //   try {
+  //     // Download the video
+  //     const destinationPath = `${
+  //       RNFS.DownloadDirectoryPath
+  //     }/downloaded_video${Math.floor(Math.random() * 100000)}.mp4`; // Generate random number
+  //     const sourcePath = `file://${recordedVideo}`;
+
+  //     if (!sourcePath) {
+  //       console.error('Recording path not found.');
+  //       return;
+  //     }
+  //     await RNFS.copyFile(sourcePath, destinationPath);
+  //     console.log('Video downloaded successfully:', destinationPath);
+
+  //     // Create PDF from the downloaded video
+  //     await createPDF(selectedPath);
+
+  //     // Additional logic or UI updates after both tasks are completed
+  //     setSaveStoryVideoModal(true);
+  //     setIsDownloadingModalVisible(true);
+  //   } catch (error) {
+  //     console.error('Error downloading recording or generating PDF:', error);
+  //   }
+  // };
+  const downloadRecording = async selectedPath => {
+    console.log('downloading video!');
+    try {
+      // Ensure the selected path exists
+      if (!(await RNFS.exists(selectedPath))) {
+        await RNFS.mkdir(selectedPath);
+      }
+
+      // Generate a random filename for the downloaded video
+      const destinationPath = `${selectedPath}/downloaded_video${Math.floor(
+        Math.random() * 100000,
+      )}.mov`;
+      console.log(recordedVideo, 'RECORDED VIDOE!');
+
+      // Copy the recorded video to the selected path
+      const sourcePath = `file://${recordedVideo}`;
+      console.log(recordedVideo, 'RECORDED VIDEO');
       if (!sourcePath) {
         console.error('Recording path not found.');
         return;
       }
+
       await RNFS.copyFile(sourcePath, destinationPath);
-      console.log('Video downloaded successfully:', destinationPath);
+
+      console.log('Video saved successfully:', destinationPath);
+
+      // Additional logic or UI updates after the video is saved
       setSaveStoryVideoModal(true);
       setIsDownloadingModalVisible(true);
     } catch (error) {
-      console.error('Error downloading recording:', error);
+      console.error('Error saving video:', error);
     }
   };
 
@@ -171,7 +268,7 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
               <View style={{paddingVertical: 12}}>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <TouchableOpacity
-                    onPress={checkPermission}
+                    onPress={pickDirectory}
                     style={{
                       width: responsiveWidth(70),
                       backgroundColor: TextColorGreen,

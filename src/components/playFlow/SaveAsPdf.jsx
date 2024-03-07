@@ -149,7 +149,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
         await RNFS.mkdir(selectedPath);
       }
 
-      const htmlContent = `<html><body><h3>Your PDF Content</h3> <p>${textrecordUsers}</p></body></html>`;
+      const htmlContent = `<html><body> <p>${textrecordUsers}</p></body></html>`;
       const options = {
         html: htmlContent,
         fileName: 'voicetotext.pdf',
@@ -173,31 +173,6 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
       Alert.alert('Error generating PDF. Please try again.');
     }
   };
-
-  //   const requestStoragePermission = async selectedPath => {
-  //     try {
-  //       const granted = await PermissionsAndroid.requestMultiple([
-  //         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //       ]);
-
-  //       if (
-  //         granted['android.permission.READ_EXTERNAL_STORAGE'] ===
-  //           PermissionsAndroid.RESULTS.GRANTED &&
-  //         granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-  //           PermissionsAndroid.RESULTS.GRANTED
-  //       ) {
-  //         console.log('External storage permissions granted');
-  //         createPDF(selectedPath);
-  //       } else {
-  //         console.warn('External storage permissions denied');
-  //         // Handle the case where permissions are denied
-  //       }
-  //     } catch (error) {
-  //       console.error('Error requesting external storage permissions: ', error);
-  //       // Handle the error
-  //     }
-  //   };
 
   return (
     <>

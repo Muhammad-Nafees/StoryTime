@@ -24,6 +24,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import NavigationsString from '../../../constants/NavigationsString';
 import {SecondaryColor, FourthColor} from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const {width, height} = Dimensions.get('window');
 
@@ -231,6 +232,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
+    fontFamily:Inter_SemiBold.Inter_SemiBold
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),

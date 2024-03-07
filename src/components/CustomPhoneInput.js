@@ -96,7 +96,7 @@ const CustomPhoneInput = ({
       <Field name="phoneNo">
         {() => (
           <PhoneInput
-          withDarkTheme={false}
+          
             ref={phoneInput}
             disabled={disabled}
             placeholder=" "
