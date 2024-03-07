@@ -16,6 +16,10 @@ const initialState = {
     nextRandomNumberVideoExtend: null,
     publicAndPrivateMode: null,
     addTagPlayers: [],
+    isHidden: false,
+    addUrlid: "",
+    urlCategoryname: "",
+    urlSubcategoryname: "",
 };
 
 const addPlayers = createSlice({
@@ -29,6 +33,9 @@ const addPlayers = createSlice({
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
             }
+        },
+        resetFriends: (state) => {
+            state.addFriends = [];
         },
 
         rearrangedFriends: (state, { payload }) => {
@@ -97,6 +104,24 @@ const addPlayers = createSlice({
             if (isAlreadyExist) {
                 addTagPlayers.pop(payload)
             };
+        },
+        isHidden: (state, { payload }) => {
+            console.log("payload value---- :", payload)
+            console.log("state.isHidden---- :", state.isHidden)
+            state.isHidden = payload
+        },
+        setAddUrlId: (state, { payload }) => {
+            state.addUrlid = payload;
+        },
+
+        categorynameUrl: (state, { payload }) => {
+            state.urlCategoryname = payload;
+        },
+        subCategorynameUrl: (state, { payload }) => {
+            state.urlSubcategoryname = payload;
+        },
+        setUserIdandUsername: (state, { payload }) => {
+
         }
     },
 });
@@ -116,7 +141,12 @@ export const {
     setIsPublicOrPrivateMode,
     rearrangedFriends,
     addTagPlayers,
-    tagRemoveUsers
+    tagRemoveUsers,
+    resetFriends,
+    isHidden,
+    setAddUrlId,
+    categorynameUrl,
+    subCategorynameUrl
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

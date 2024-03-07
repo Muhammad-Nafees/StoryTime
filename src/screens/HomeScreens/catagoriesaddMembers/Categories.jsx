@@ -251,6 +251,8 @@ const Categories = () => {
     } catch (error) { }
   };
 
+
+
   const handleStoryUser = (id, name) => {
     console.log('id----', id);
     dispatch(setCategoriesId(id));
@@ -296,8 +298,6 @@ const Categories = () => {
   };
 
   const keyExtractor = (_, index) => `categories.${index}`;
-
-  //render functions
 
   const renderItem = ({ item }) => {
     return (
@@ -408,6 +408,7 @@ const Categories = () => {
               </View>
             )}
           </View>
+
           {/* MainInputField----- */}
 
           {user ?

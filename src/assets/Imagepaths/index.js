@@ -48,7 +48,7 @@ export const Img_Paths = {
   NEXT_PLAYER_IMAGE: require('../../assets/nextplayerimage.png'),
   EXTEND_STORYTIME_IMAGE: require('../../assets/extendstoryTimeimage.png'),
   CONTINUE_IMAGE: require('../../assets/continueimage.png'),
-  // SAVE_STORY_BACKGROUND: require('../../assets/savestorybackgroundImage.png'),
+  SAVE_STORY_BACKGROUND: require('../../assets/savestoryimageBg.png'),
   // c:\Users\dell\Downloads\extendstoryTimeimage.png c:\Users\dell\Downloads\continueimage.png
   // VOICE_TO_TEXT_IMAGE2: require("../../assets/voiceTotextimage2.png"),
   // BORDER_VOICE_TO_TEXT: require("../../assets/borderVoiceToText.png"),

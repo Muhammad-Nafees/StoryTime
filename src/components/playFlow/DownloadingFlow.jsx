@@ -51,9 +51,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
-        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("profileStack", {
-            screen: "Profile"
-        }); //guest user doesn't have profile
+        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("Home") //guest user doesn't have profile
         // setTimeout(() => {
         setIsVisibleDownloading(false);
         // }, 1000);
@@ -105,8 +103,6 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
                         </View>
                     </View>
-
-
 
                 </ImageBackground>
                 {/* </View> */}

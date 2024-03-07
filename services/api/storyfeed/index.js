@@ -156,8 +156,28 @@ export const get_Comment_api = async (paginations) => {
 };
 
 
-export const createStory_api = async ({ creator, category, subCategory, contributors, content }) => {
+export const createStory_api = async ({ type, creator, category, subCategory, contributors, content }) => {
     console.log("creatorsss=====", creator, category, subCategory, contributors, content)
+    let textstory = {}
+    if (contributors) {
+        textstory = {
+            type,
+            creator,
+            category,
+            subCategory,
+            contributors,
+            content
+        }
+    } else {
+        textstory = {
+            type,
+            creator,
+            category,
+            subCategory,
+            content
+        }
+    }
+    console.log("textstory== :", textstory);
 
     try {
         const url = Base_Url + "story";
@@ -166,14 +186,7 @@ export const createStory_api = async ({ creator, category, subCategory, contribu
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                type: "text",
-                creator,
-                category,
-                subCategory,
-                contributors,
-                content
-            })
+            body: JSON.stringify(textstory)
         });
         const response = await responseData.json()
         console.log("response=====", response)

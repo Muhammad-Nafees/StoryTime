@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -23,30 +23,30 @@ import {
   ThirdColor,
   pinkColor,
 } from '../screens/Styles/Style';
-import {useNavigation, useNavigationBuilder} from '@react-navigation/native';
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../assets/Imagepaths/index';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths/index';
 import BackButton from '../components/BackButton';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
 import RNFS from 'react-native-fs';
-import {useDispatch, useSelector} from 'react-redux';
-import {PassionOne_Regular} from '../constants/GlobalFonts';
+import { useDispatch, useSelector } from 'react-redux';
+import { PassionOne_Regular } from '../constants/GlobalFonts';
 import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
 import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
-import {SPACING} from '../constants/Constant';
+import { SPACING } from '../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 
-const SaveVideo = ({isVisible, setIsVisible, path}) => {
+const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] =
     useState(false);
-  const {width, height} = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
   const {
     STORY_TIME_IMG,
     BG_PLAYFLOW,
@@ -59,7 +59,7 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   } = Img_Paths;
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
-  const {VIDEO_SECOND_USER, FIRST_USER} = NavigationsString;
+  const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
   const [saveStoryVideoModal, setSaveStoryVideoModal] = useState(false);
   const [isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow] = useState(false);
   const navigation = useNavigation();
@@ -120,6 +120,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
     return decodeURIComponent(dirToRead);
   };
 
+
+
   const pickDirectory = async () => {
     try {
       const result = await DocumentPicker.pickDirectory({
@@ -143,6 +145,9 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
       console.error('Error picking directory:', err);
     }
   };
+
+
+
   // const downloadRecording = async absolutePath => {
   //   // try {
   //   //   const destinationPath = `${
@@ -185,13 +190,14 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   //     console.error('Error downloading recording or generating PDF:', error);
   //   }
   // };
+
   const downloadRecording = async selectedPath => {
     console.log('downloading video!');
     try {
       // Ensure the selected path exists
       if (!(await RNFS.exists(selectedPath))) {
         await RNFS.mkdir(selectedPath);
-      }
+      };
 
       // Generate a random filename for the downloaded video
       const destinationPath = `${selectedPath}/downloaded_video${Math.floor(
@@ -205,7 +211,7 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
       if (!sourcePath) {
         console.error('Recording path not found.');
         return;
-      }
+      };
 
       await RNFS.copyFile(sourcePath, destinationPath);
 
@@ -218,6 +224,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
       console.error('Error saving video:', error);
     }
   };
+
+
 
   return (
     <>
@@ -265,8 +273,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
                 Do you want to save your Story Time in your phone?
               </Text>
 
-              <View style={{paddingVertical: 12}}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{ paddingVertical: 12 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity
                     onPress={pickDirectory}
                     style={{
@@ -310,6 +318,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
     </>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

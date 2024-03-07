@@ -49,6 +49,7 @@ import { SPACING } from '../../constants/Constant';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import DocumentPicker from 'react-native-document-picker';
 import Toast from 'react-native-toast-message';
+import { resetFriends, } from '../../../store/slices/addplayers/addPlayersSlice';
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { width, height } = Dimensions.get('window');
@@ -78,15 +79,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { user } = useSelector(state => state?.authSlice);
 
     const isUserGuest = useMemo(() => !user, [user]);
-
-    // console.log("categoryId-----", categoryId);
-    // console.log("subCategoryId-----", subCategoryId)
-    // console.log("playerContributorsId-----", playerContributorsId);
-    // console.log("textrecordUsers-----", textrecordUsers);
-
     const convertStr = textrecordUsers.join();
-
-
 
     const saveStoryhandler = () => {
         setIsVisible(false);
@@ -99,14 +92,14 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         try {
             const userLoginId = await AsyncStorage.getItem('isUserId');
             const responseData = await createStory_api({
+                type: "text",
                 creator: userLoginId,
                 category: categoryId,
                 subCategory: subCategoryId,
                 contributors: playerContributorsId,
                 content: convertStr,
             });
-            console.log()
-            if (responseData?.statusCode !== 200) {
+            if (responseData?.message === "content is not allowed to be empty") {
                 Toast.show({
                     type: "error",
                     text1: "content is not allowed to be empty",
@@ -114,6 +107,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 setIsLoading(false);
             } else {
                 console.log('storyresData====', responseData);
+                dispatch(resetFriends());
                 dispatch(SaveDataToProfile(textrecordUsers));
                 setSaveStoryModalsecond(true);
                 setVisibleSavePhone(true);
@@ -162,6 +156,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                                 }}>
                                 Save Story
                             </Text>
+
                             <Text
                                 style={{
                                     paddingVertical: 2,
@@ -220,8 +215,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
             )}
         </>
     )
-}
-
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -231,7 +225,6 @@ const styles = StyleSheet.create({
     img: {
         resizeMode: 'center',
     },
-
     img_backgroung_content: {
         width: responsiveWidth(90),
         height: responsiveHeight(32),

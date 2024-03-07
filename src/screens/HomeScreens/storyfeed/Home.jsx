@@ -186,6 +186,7 @@ const Home = () => {
                                     dislikesByMe={item?.dislikesByMe}
                                 />
                             )}
+
                             ListFooterComponent={() => {
                                 if (isLoading) {
                                     return (
@@ -200,13 +201,13 @@ const Home = () => {
                             onEndReachedThreshold={0.3}
                         />
 
-                        {/* {
+                        {
                             responseUsers?.length === 0 && (
                                 <View style={{ position: "absolute", top: 300, left: 45, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
                                     <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{checkDataisOrNot}</Text>
                                 </View>
                             )
-                        } */}
+                        }
 
                     </>
             }

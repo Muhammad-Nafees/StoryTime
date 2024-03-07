@@ -3,6 +3,7 @@ import { Base_Url, Subcategory, category_Random, category_endpoint } from "../..
 
 export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
     let apiUrl;
+    console.log("apiUrl---- :", apiUrl)
 
     if (id) {
         apiUrl = Base_Url + `category?parent=${id}&page=${page2}&limit=${15}`;

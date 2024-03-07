@@ -8,6 +8,7 @@ import AddFriendUsers from '../../../components/AddFriendUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers_api } from '../../../../services/api/storyfeed';
 import { PrimaryColor, pinkColor } from '../../Styles/Style';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 const AddFiends = () => {
@@ -28,6 +29,7 @@ const AddFiends = () => {
     const [limit, setLimit] = useState(20);
     const [filteredData, setFilteredData] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [showTextUser, setshowTextUser] = useState(false)
     const [searchQuery, setSearchQuery] = useState('');
     const [handleLoadMoreFriends, setHandleLoadMoreFriends] = useState(false)
 
@@ -35,8 +37,9 @@ const AddFiends = () => {
     const handleLoadMore = async () => {
         if (isLoading) {
             return;
-        }
+        };
         if (HasMorePages) {
+            setshowTextUser(false);
             setPage((prevPage) => prevPage + 1);
             setHandleLoadMoreFriends(true);
         } else {
@@ -44,22 +47,23 @@ const AddFiends = () => {
         }
     };
 
-    // console.log("handleLoadMore", handleLoadMoreFriends)
 
     useEffect(() => {
         const fetchUsers = async () => {
             setIsLoading(true);
+            // setshowTextUser(false);
             try {
                 const responseData = await getAllUsers_api({ pagination: page, limit });
-                // console.log("responseData=====", responseData?.data)
                 const data = responseData?.data?.users;
-                setIsData(data)
+                setIsData(data);
                 if (data && data.length > 0) {
+                    console.log("Users")
                     setResponseUsers(prevData => [...prevData, ...data]);
                     setHasMorePages(responseData?.data?.pagination?.hasNextPage);
                     setStopLimit(responseData?.data?.pagination?.currentPage);
+                    // setshowTextUser(false);
                 } else {
-                    console.log("No users found");
+                    // setshowTextUser(true);
                     return;
                 }
             } catch (error) {
@@ -69,7 +73,7 @@ const AddFiends = () => {
             }
         };
         fetchUsers();
-    }, [page, isRefreshing]);
+    }, [page, isRefreshing,]);
 
 
 
@@ -77,19 +81,24 @@ const AddFiends = () => {
         const filteredData = responseUsers?.filter((item) => {
             return item?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase())
         })
+
+        console.log("filterlength--------- :", filteredData?.length)
+        if (filteredData?.length === 0) {
+            setshowTextUser(true);
+        } else {
+            setshowTextUser(false);
+        }
         if (filteredData?.length > 0) {
             setFilteredData(filteredData);
+            setHandleLoadMoreFriends(false);
+            setIsLoading(false);
         } else {
-            // setIsLoading(false);
-            setTimeout(() => {
-                setHandleLoadMoreFriends(false);
-            }, 500);
+            setIsLoading(false);
+            setHandleLoadMoreFriends(false);
             setFilteredData([]);
             console.log("USers not found");
         };
-
     }, [searchQuery, responseUsers]);
-    console.log("filteredData", filteredData);
 
     useEffect(() => {
         filterUserData();
@@ -133,10 +142,14 @@ const AddFiends = () => {
 
                 <View style={{ paddingTop: responsiveWidth(5), justifyContent: "center", alignItems: "center" }}>
 
-                    {/* isLoading ?
+
+
+                    {
+                        showTextUser ?
                             <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
-                                <ActivityIndicator size={24} color={PrimaryColor} />
-                            </View> : */}
+                                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>No Data Found</Text>
+                            </View> : null
+                    }
 
                     {
                         <FlatList

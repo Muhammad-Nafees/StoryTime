@@ -260,7 +260,6 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                     </ImageBackground>
                 </ImageBackground>
             </Modal>
-
             {saveStoryModalDownloading && (
                 <DownloadingFlow
                     isVisibleDownloading={isVisibleDownloading}

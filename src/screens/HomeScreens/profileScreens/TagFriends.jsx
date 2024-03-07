@@ -29,10 +29,8 @@ const TagFriends = ({ route }) => {
     const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
-    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers)
-    console.log("tagPlayersRTK---------- :", tagPlayersRTK);
+    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers);
     const storyId = route?.params?.storyId;
-
 
     const addFriends_api_handler = async () => {
 
@@ -44,6 +42,7 @@ const TagFriends = ({ route }) => {
             console.log("err", error)
         }
     };
+
     useEffect(() => {
         addFriends_api_handler();
     }, []);
@@ -64,10 +63,10 @@ const TagFriends = ({ route }) => {
     }, 700)
     ).current;
 
-    const handlenavigation = () => {
-        navigation.navigate("ProfileScreens", { screen: "AddUrl" })
-    };
 
+    const handlenavigation = () => {
+        navigation.navigate("VoiceToTextProfile",)
+    };
     const lodashTextHandler = (text) => {
         setInputText(text)
         debonceApiCall(text)
@@ -112,6 +111,7 @@ const TagFriends = ({ route }) => {
                                         />
                                     ))
                                 }
+
                             </ScrollView>
 
                             <View style={[styles.categories_text_container2, { paddingTop: responsiveWidth(6) }]}>

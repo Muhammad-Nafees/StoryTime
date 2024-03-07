@@ -142,7 +142,7 @@ const FirstUser = ({ route }) => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  }
+  };
 
   useEffect(() => {
     setTimeLeft(null);
@@ -208,7 +208,7 @@ const FirstUser = ({ route }) => {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    }
+    };
 
     if (checkUserTrueorFalse) {
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
@@ -229,6 +229,7 @@ const FirstUser = ({ route }) => {
       setisCancelingStory(true);
     };
   }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend]);
+
 
 
   const saveBtnHandler = () => {
@@ -270,7 +271,7 @@ const FirstUser = ({ route }) => {
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
-    }
+    };
 
     if (timeLeft !== 0) {
       setIsPressed(true);
@@ -285,8 +286,6 @@ const FirstUser = ({ route }) => {
   const pressHandlerOut = () => {
     console.log('On PressOut-----');
 
-    // if (timeLeft !== null && timeLeft > 0) {
-    // }
     setIsFirstCall(true);
     setisCancelingStory(false);
     stopRecording();
@@ -295,9 +294,6 @@ const FirstUser = ({ route }) => {
     setIsPressed(false);
     setTimeLeft(0);
     console.log('STOP RECORDING-----');
-
-    // if (isFirstCall) {
-    // };
   };
 
   // Timer 2 Minutes ---------
@@ -305,7 +301,7 @@ const FirstUser = ({ route }) => {
   useEffect(() => {
     if (USER_LENGTH_CHECK) {
       setIsNext(false);
-    }
+    };
 
     let countdown;
 
@@ -341,6 +337,8 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
+
+
 
   return (
     <>
@@ -575,7 +573,9 @@ const FirstUser = ({ route }) => {
           </View>
 
           {saveStoryModal && (
-            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
+            <SaveStoryPhone
+              isVisible={isVisible}
+              setIsVisible={setVisible} />
           )}
         </View>
 

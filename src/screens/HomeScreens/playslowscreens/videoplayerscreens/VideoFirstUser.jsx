@@ -666,8 +666,6 @@ const VideoFirstUser = () => {
           )
         )}
 
-        {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
-
         <View style={{ paddingVertical: responsiveWidth(4) }}>
           <SaveStoryBtn
             timeLeft={timeLeft}

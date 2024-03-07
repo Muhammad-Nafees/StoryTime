@@ -27,7 +27,9 @@ const VoiceToTextProfile = ({ route }) => {
     const [isMoreLength, setIsMoreLength] = useState(false);
     const [getresponseById, setGetresponseById] = useState([]);
     const [isClicked, setIsClicked] = useState(true);
+    const [isHidden, setIsHidden] = useState(false)
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
+    // const isHidden = useSelector((state) => state?.addPlayers?.isHidden);
     const storyId = route?.params?.storyuserId;
 
 
@@ -35,7 +37,8 @@ const VoiceToTextProfile = ({ route }) => {
         try {
             const responseData = await getStory_Byid(storyId);
             setGetresponseById(responseData?.data)
-            console.log("responseData------", responseData);
+            setIsHidden(responseData?.data?.isHidden)
+            console.log("responseData hiden------", responseData?.data?.isHidden);
             return responseData;
         } catch (error) {
         }
@@ -48,19 +51,32 @@ const VoiceToTextProfile = ({ route }) => {
     const hide_Storyapi = async () => {
         try {
             const responseData = await hide_Story(storyId);
-            console.log("hide-story-response :", responseData?.data?.isHidden);
+            // setIsHidden(responseData?.data?.isHidden);
+            console.log("response :", responseData);
             return responseData;
         } catch (error) {
         }
     };
 
+    const handleHideStory = () => {
+        if (isClicked) {
+            hide_Storyapi();
+            animation.value = withSpring(responsiveWidth(7.25))
+        } else {
+            hide_Storyapi();
+            animation.value = withSpring(responsiveWidth(-0.4))
+        };
+        setIsClicked(!isClicked);
+    };
+    console.log("iahiden------ :", isClicked)
     const contentLength = getresponseById?.content?.length || 0;
 
     const animation = useSharedValue(0);
     const animationStyle = useAnimatedStyle(() => {
         return { transform: [{ translateX: animation.value }] }
-    })
+    });
 
+    // console.log("ishide---- :", isHidden);
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -86,12 +102,12 @@ const VoiceToTextProfile = ({ route }) => {
 
                         <View>
                             <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
-                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-between', width: responsiveWidth(42) }}>
-                                    <View style={{}}>
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-between', }}>
+                                    <View>
                                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular }}>Posted by:</Text>
                                     </View>
-                                    <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(18), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
-                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>{getresponseById?.creator?.username || "loading.."}</Text>
+                                    <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(10), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>{`@${getresponseById?.creator?.username}` || "loading.."}</Text>
                                     </View>
                                 </View>
 
@@ -101,13 +117,7 @@ const VoiceToTextProfile = ({ route }) => {
                                     </View>
 
                                     <TouchableOpacity onPress={() => {
-                                        if (isClicked) {
-                                            animation.value = withSpring(responsiveWidth(7.25));
-                                            hide_Storyapi()
-                                        } else {
-                                            animation.value = withSpring(responsiveWidth(-0.4));
-                                        }
-                                        setIsClicked(!isClicked);
+                                        handleHideStory()
                                     }} activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
                                         <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} />
                                     </TouchableOpacity>

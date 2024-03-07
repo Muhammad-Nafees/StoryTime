@@ -4,6 +4,7 @@ import Routes from './src/routes';
 import { requestPermissions } from './src/utils/permission';
 
 const App = () => {
+
   useEffect(() => {
     requestPermissions();
   }, []);

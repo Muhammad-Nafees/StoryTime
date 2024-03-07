@@ -13,6 +13,7 @@ import { Defs, G, Path, Rect, Svg } from 'react-native-svg';
 import { useEffect, useState } from 'react';
 import StoryTimeSaved from './StoryTimeSaved';
 import { Inter_Regular } from '../../constants/GlobalFonts';
+import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
 
 
 
@@ -29,6 +30,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);
+
 
 
     useEffect(() => {
@@ -50,10 +52,10 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     }, []);
 
 
+
     const backScreenHandler = () => {
-        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("profileStack", {
-            screen: "Profile"
-        });
+        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("Home");
+        dispatch(resetFriends());
         setTimeout(() => { //TEMP HACK
             setIsVisibleFirstVideoFlow(false);
         }, 1000);
@@ -90,11 +92,16 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
                         </View>
                     </View>
 
-
                 </ImageBackground>
             </Modal>
+
             {saveStoryVideoModalAfterDownloading &&
-                <StoryTimeSaved onPress={backScreenHandler} isVisible={isVisibleVideoAfterDownloading} setVisible={setIsVisibleVideoAfterDownloading} text={`Story Time\nSuccessfully Saved to your\nphone!`} textButton="Back" />
+                <StoryTimeSaved
+                    onPress={backScreenHandler}
+                    isVisible={isVisibleVideoAfterDownloading}
+                    setVisible={setIsVisibleVideoAfterDownloading}
+                    text={`Story Time\nSuccessfully Saved to your\nphone!`}
+                    textButton="Back" />
             }
         </>
     )
@@ -107,8 +114,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1,
     },
-
-
 });
 
 export default DownloadingVideoModal;
