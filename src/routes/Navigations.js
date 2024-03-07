@@ -26,7 +26,7 @@ import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount, BlockUser } from '../screens';
+import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount, BlockUser } from '../screens/index';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
@@ -90,7 +90,7 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
+      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
     </Stack.Navigator>
   );
 };
@@ -185,8 +185,8 @@ const ProfileStacksBottom = () => {
       headerShown: false
     }}>
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
+      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
     </Stack.Navigator>
   );
 };

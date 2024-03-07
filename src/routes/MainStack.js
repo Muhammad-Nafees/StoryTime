@@ -1,12 +1,9 @@
-import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Navigations from "./Navigations";
 
 
 
 const MainStack = () => {
-
-    const Stack = createStackNavigator()
 
     return (
         <NavigationContainer independent={true}>

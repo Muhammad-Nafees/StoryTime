@@ -85,6 +85,7 @@ const ForgetEmail = () => {
                   alignItems: 'center',
                   flex: 1,
                 }}>
+
                 <CustomInputForgetEmail
                   label="Email Adress"
                   placeholder="Type here"

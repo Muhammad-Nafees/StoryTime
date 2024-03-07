@@ -148,7 +148,12 @@ const TagFriends = ({ route }) => {
                 </View>
 
                 <View style={{ paddingTop: responsiveWidth(5) }}>
-                    <TouchableButton onPress={handlenavigation} backgroundColor={TextColorGreen} text="Tag" color="#FFF" />
+                    <TouchableButton
+                        onPress={handlenavigation}
+                        backgroundColor={TextColorGreen}
+                        text="Tag"
+                        type="tag"
+                        color="#FFF" />
                 </View>
 
             </ImageBackground>

@@ -90,6 +90,7 @@ const AuthStack = () => {
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          animationEnabled: false,
         }}
         initialRouteName={initialRouteName}>
         <Stack.Screen
@@ -166,7 +167,12 @@ const GuestStack = () => {
   const Stack = createStackNavigator();
   const { FIRSTSCREENPLAYFLOW, SECONDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN, FIRST_USER, VIDEO_FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    screenOptions={{
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      animationEnabled: false,
+    }}
+    >
       <Stack.Screen
         name="FirstScreenGuest"
         component={FirstScreenGuest}
@@ -224,7 +230,7 @@ const GuestStack = () => {
 };
 
 const CategoriesTab = () => {
-  const { CATEGORIES } = NavigationsString;
+  const { CATEGORIES,FIRSTSCREENPLAYFLOW } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;
 
   const Tab = createBottomTabNavigator();

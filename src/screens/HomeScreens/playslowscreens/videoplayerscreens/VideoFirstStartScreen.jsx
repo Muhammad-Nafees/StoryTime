@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import NavigationsString from '../../../../constants/NavigationsString'
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts'
 import { useDispatch, useSelector } from 'react-redux'
-import { extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
+import { checkVideoTrue, extendStoryCheckVideo, extendVideo, resetVideoRecording } from '../../../../../store/slices/RecordingData'
 import { SCREEN_HEIGHT } from '../../../../constants/Constant'
 
 
@@ -50,7 +50,7 @@ const VideoFirstStartScreen = () => {
                         <Image style={[styles.img_dog, {
                             width: squareSize / 4,
                             height: squareSize / 4,
-                        }]} resizeMode='stretch' source={{ uri: storyUserImage }} />
+                        }]} resizeMode='contain' source={{ uri: storyUserImage }} />
                     </View>
 
                     <View style={{ paddingVertical: moderateVerticalScale(20), }}>
@@ -68,8 +68,11 @@ const VideoFirstStartScreen = () => {
                     <TouchableOpacity onPress={() => {
                         navigation.navigate(VIDEO_FIRST_USER)
                         dispatch(resetVideoRecording())
-                        dispatch(extendStoryCheckVideo(null));
+                        dispatch(extendStoryCheckVideo(true));
                         dispatch(extendVideo(null));
+                        dispatch(checkVideoTrue(false));
+                        console.log("check--- :")
+                        // dispatch(extendStoryCheckVideo(null));
                     }
                     }>
                         <Image source={require("../../../../assets/pause-img.png")} />
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img_dog: {
-        width: responsiveWidth(22),
+        width: responsiveWidth(25),
         height: responsiveHeight(11),
     },
     start: {

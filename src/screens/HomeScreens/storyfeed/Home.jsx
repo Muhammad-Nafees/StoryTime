@@ -8,7 +8,6 @@ import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import { FlatListData } from '../../../../dummyData/DummyData';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
@@ -18,7 +17,6 @@ import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
 
 const Home = () => {
 
-    const dispatch = useDispatch()
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, } = Img_Paths;
     const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +31,12 @@ const Home = () => {
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const responseLogin = useSelector((state) => state?.authSlice?.user);
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
+
+
 
     const addFriends_api_handler = async () => {
         try {
@@ -81,6 +82,8 @@ const Home = () => {
         fetchUsers();
     }, [page, isRefreshing,])
 
+
+
     const handleLoadMore = useCallback(() => {
         console.log("HasMorePages-----", HasMorePages);
         if (HasMorePages) {
@@ -100,7 +103,6 @@ const Home = () => {
             setIsRefreshing(false);
         }, 1000);
     };
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

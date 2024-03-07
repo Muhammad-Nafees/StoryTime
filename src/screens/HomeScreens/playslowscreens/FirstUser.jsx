@@ -19,23 +19,20 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import UserNames from '../../../components/UserNames';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordingData, } from '../../../../store/slices/RecordingData';
+import { recordingData } from '../../../../store/slices/RecordingData';
 import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
-import {
-  checkTrueOrFalse,
-} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { checkTrueOrFalse } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
 import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
 import NavigationsString from '../../../constants/NavigationsString';
 import LinearGradient from 'react-native-linear-gradient';
-
 
 const FirstUser = ({ route }) => {
   let longPressTimeout;
@@ -56,19 +53,25 @@ const FirstUser = ({ route }) => {
     state => state.addPlayers.checkTrueOrFalse,
   );
 
-  const extendCounting = useSelector(state => state?.addPlayers?.extendCounting,);
-  const extendStoryTrueOrFalse = useSelector(state => state?.addPlayers?.extendStoryCheck);
-  const textrecordUsers = useSelector(state => state?.recordingData?.recordingText,);
+  const extendCounting = useSelector(
+    state => state?.addPlayers?.extendCounting,
+  );
+  const extendStoryTrueOrFalse = useSelector(
+    state => state?.addPlayers?.extendStoryCheck,
+  );
+  const textrecordUsers = useSelector(
+    state => state?.recordingData?.recordingText,
+  );
   const nextRandomNumvalue = useSelector(
-    state => state?.addPlayers?.nextRandomNumber
+    state => state?.addPlayers?.nextRandomNumber,
   );
 
   const nextRandomNumvalueExtend = useSelector(
-    state => state?.addPlayers?.nextRandomNumberExtend
+    state => state?.addPlayers?.nextRandomNumberExtend,
   );
   const dispatch = useDispatch();
 
-  const [recordingText, setRecordingText] = useState("");
+  const [recordingText, setRecordingText] = useState('');
   const [isNext, setIsNext] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
   const [isCancelingStory, setisCancelingStory] = useState(true);
@@ -80,20 +83,18 @@ const FirstUser = ({ route }) => {
   // const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
   // ], [USER, addedUsers]);
 
-  const sequenceUser = useSelector((state) => state.addPlayers?.gameFriends);
-  console.log("sequence-users-------", sequenceUser)
-  console.log("sequenceUsers FirstUser--", sequenceUser[1]);
+  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
 
   // console.log("isNextUser", isNextUser);
-
 
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
 
   const stringText = recordingText.toString();
+
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -102,12 +103,11 @@ const FirstUser = ({ route }) => {
     Voice.onSpeechResults = onSpeechResult;
 
     Voice.onSpeechRecognized = onSpeechRecognized;
-    Voice.onSpeechError = onSpeechError
+    Voice.onSpeechError = onSpeechError;
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
-
 
   // onSpeechStart----------
 
@@ -115,29 +115,24 @@ const FirstUser = ({ route }) => {
     setStarted(true);
   };
 
-
-
   // onSpeechEnd ----------
 
-  const onSpeechEnd = e => {
-
-  };
+  const onSpeechEnd = e => { };
 
   // ---------- onSpeechResult----------
 
   // console.log("timeleft--", timeLeft);
 
-  const onSpeechResult = async (e) => {
-
+  const onSpeechResult = async e => {
     if (!e.value) return;
     setSpeaking(false);
 
     if (setRecordingText) {
       dispatch(recordingData(e?.value[0]));
       startRecognizing();
-      setRecordingText(prevData => prevData + " " + e?.value[0]);
+      setRecordingText(prevData => prevData + ' ' + e?.value[0]);
       return;
-    };
+    }
   };
 
   const onSpeechRecognized = e => {
@@ -147,9 +142,7 @@ const FirstUser = ({ route }) => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  };
-
-
+  }
 
   useEffect(() => {
     setTimeLeft(null);
@@ -161,9 +154,7 @@ const FirstUser = ({ route }) => {
     };
   }, []);
 
-
   const startRecognizing = async () => {
-
     try {
       if (!speaking) {
         await Voice.start('en-US');
@@ -180,7 +171,6 @@ const FirstUser = ({ route }) => {
   // -------- Stop Recording --------
 
   const stopRecording = async () => {
-
     console.log('STOP RECORDING-----');
     try {
       await Voice.stop();
@@ -200,27 +190,27 @@ const FirstUser = ({ route }) => {
   // ---------- Handle Press out ----------
 
   const onPressNext = () => {
-    user ? navigation.navigate('FirstUserStorytext') : modalOpen(
-      GuestModalRef,
-      'Get Story Time Premium',
-      'Subscribe now to save your Story to your profile',
-      'Subscribe',
-      'Back',
-    );
+    user
+      ? navigation.navigate('FirstUserStorytext')
+      : modalOpen(
+        GuestModalRef,
+        'Get Story Time Premium',
+        'Subscribe now to save your Story to your profile',
+        'Subscribe',
+        'Back',
+      );
   };
 
   // console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
 
   useEffect(() => {
-
     if (extendStoryTrueOrFalse === false || extendStoryTrueOrFalse === true) {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    };
+    }
 
     if (checkUserTrueorFalse) {
-
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
       const nextIndex = (currentIndex + 1) % sequenceUser.length;
       const nextPlayer = (currentIndex + 2) % sequenceUser.length;
@@ -230,16 +220,15 @@ const FirstUser = ({ route }) => {
         setIsNextUser(sequenceUser[nextPlayer]);
         if (nextPlayer == 0) {
           return setIsNext(false);
-        };
+        }
       } else {
         console.log('add players in Game Completed');
       }
-    };
+    }
     return () => {
       setisCancelingStory(true);
     };
-  }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend])
-
+  }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend]);
 
 
   const saveBtnHandler = () => {
@@ -250,7 +239,7 @@ const FirstUser = ({ route }) => {
         'Subscribe now to save your Story to your profile',
         'Subscribe',
         'Back',
-      )
+      );
       return;
     }
     saveStoryhandler();
@@ -275,15 +264,13 @@ const FirstUser = ({ route }) => {
     }
   };
 
-
   const pressHandlerIn = () => {
-
     if (extendStoryTrueOrFalse && timeLeft == null) {
       setTimeText('00:30');
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
-    };
+    }
 
     if (timeLeft !== 0) {
       setIsPressed(true);
@@ -291,7 +278,7 @@ const FirstUser = ({ route }) => {
       if (!extendStoryTrueOrFalse && timeLeft === null) {
         startRecognizing();
         setTimeLeft(120);
-      };
+      }
     }
   };
 
@@ -316,16 +303,15 @@ const FirstUser = ({ route }) => {
   // Timer 2 Minutes ---------
 
   useEffect(() => {
-
     if (USER_LENGTH_CHECK) {
-      setIsNext(false)
-    };
+      setIsNext(false);
+    }
 
     let countdown;
 
     if (extendStoryTrueOrFalse === false && timeLeft == null) {
-      setRecordingText("");
-    };
+      setRecordingText('');
+    }
 
     if (timeLeft !== null && timeLeft > 0) {
       countdown = setInterval(() => {
@@ -341,15 +327,12 @@ const FirstUser = ({ route }) => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
-
-
   useEffect(() => {
     if (extendStoryTrueOrFalse === true && timeLeft == null) {
       setTimeText('00:30');
     } else if (timeLeft == null) {
       setTimeText('02:00');
-    }
-    else {
+    } else {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
@@ -358,8 +341,6 @@ const FirstUser = ({ route }) => {
       setTimeText(formattedTime);
     }
   }, [timeLeft]);
-
-
 
   return (
     <>
@@ -380,7 +361,6 @@ const FirstUser = ({ route }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{ width: responsiveWidth(10) }}>
@@ -394,18 +374,19 @@ const FirstUser = ({ route }) => {
               />
             </TouchableOpacity>
 
-            <View style={{
-            }}>
+            <View style={{}}>
               {isCancelingStory ? (
-                <View style={{
-                  borderWidth: 4,
-                  borderColor: 'rgba(255, 153, 166, 1)',
-                  borderRadius: 8,
-                }}>
+                <View
+                  style={{
+                    borderWidth: 4,
+                    borderColor: 'rgba(255, 153, 166, 1)',
+                    borderRadius: 8,
+                  }}>
                   <LinearGradient
-                    colors={["rgba(255, 164, 164, 0.8)", "#FFFFFF",]}
-                    start={{ x: 1, y: 0.5 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
-
+                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
+                    start={{ x: 1, y: 0.5 }}
+                    end={{ x: 1, y: 0 }}
+                    locations={[0, 1]}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -422,40 +403,38 @@ const FirstUser = ({ route }) => {
                     </Text>
                   </LinearGradient>
                 </View>
-              )
-
-                : !user ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      modalOpen(
-                        GuestModalRefForAds,
-                        'Support Story Time',
-                        'Watch the add to continue playing',
-                        'Watch ads',
-                        'Subscribe for Ad FREE experience',
-                      )
-                    }}
+              ) : !user ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    modalOpen(
+                      GuestModalRefForAds,
+                      'Support Story Time',
+                      'Watch the add to continue playing',
+                      'Watch ads',
+                      'Subscribe for Ad FREE experience',
+                    );
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    borderWidth: 4,
+                    borderColor: TextColorGreen,
+                    backgroundColor: TextColorGreen,
+                    paddingVertical: moderateVerticalScale(6),
+                    paddingHorizontal: moderateScale(25),
+                  }}>
+                  <Text
                     style={{
-                      borderRadius: 10,
-                      borderWidth: 4,
-                      borderColor: TextColorGreen,
-                      backgroundColor: TextColorGreen,
-                      paddingVertical: moderateVerticalScale(6),
-                      paddingHorizontal: moderateScale(25),
+                      color: 'white',
+                      fontWeight: '400',
+                      fontSize: responsiveFontSize(1.9),
+                      fontFamily: Inter_Regular.Inter_Regular,
                     }}>
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontWeight: '400',
-                        fontSize: responsiveFontSize(1.9),
-                        fontFamily: Inter_Regular.Inter_Regular,
-                      }}>
-                      Done
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <></>
-                )}
+                    Done
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )}
             </View>
           </View>
         </View>
@@ -464,7 +443,6 @@ const FirstUser = ({ route }) => {
           style={[styles.img_backgroung_content]}
           resizeMode="center"
           source={BG_VOICE_TO_TEXT_IMG}>
-
           <View
             style={{
               width: responsiveWidth(69),
@@ -515,50 +493,63 @@ const FirstUser = ({ route }) => {
           </View>
         </ImageBackground>
 
-        <View
-          style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
+        <View style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
           <View
             style={{
               paddingVertical: moderateVerticalScale(25),
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <TouchableOpacity
-              disabled={isFirstCall ? true : false}
-              onLongPress={() => {
-                pressHandlerIn();
-              }}
-              onPressOut={() => {
-                pressHandlerOut();
-              }}
-              activeOpacity={0.7}
-              style={{
-                borderWidth: isPressed ? 6 : 0,
-                borderColor: isPressed ? '#D04141' : TextColorGreen,
-                backgroundColor: isFirstCall || timeLeft == 0
-                  ? 'rgba(87, 150, 164, 0.3)'
-                  : TextColorGreen,
-                width: SCREENWIDTH * 0.32,
-                height: SCREENWIDTH * 0.32,
-                borderRadius: SCREENWIDTH / 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Image
-                style={{
-                  width: responsiveWidth(16),
-                  height: responsiveHeight(8),
-                  tintColor: isPressed ? '#D04141' : null,
-                  resizeMode: 'center',
+            <ImageBackground source={require('../../../assets/microphone-bg.png')}>
+              <TouchableOpacity
+                disabled={isFirstCall ? true : false}
+                onLongPress={() => {
+                  pressHandlerIn();
                 }}
-                source={require('../../../assets/mic.png')}
-              />
-            </TouchableOpacity>
+                onPressOut={() => {
+                  pressHandlerOut();
+                }}
+                activeOpacity={0.7}
+                style={{
+                  borderWidth: isPressed ? 6 : 0,
+                  borderColor: isPressed ? '#D04141' : TextColorGreen,
+                  backgroundColor:
+                    isFirstCall || timeLeft == 0
+                      ? 'rgba(87, 150, 164, 0.3)'
+                      : undefined,
+                  width: SCREENWIDTH * 0.32,
+                  height: SCREENWIDTH * 0.32,
+                  borderRadius: SCREENWIDTH / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{
+                    width: responsiveWidth(16),
+                    height: responsiveHeight(8),
+                    tintColor: isPressed ? '#D04141' : null,
+                    resizeMode: 'center',
+                  }}
+                  source={require('../../../assets/mic.png')}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
           </View>
 
-          {
-            user && isNext && (
+          {isNext && user ? (
+            <CustomPlayFlowButton
+              onPress={onPressNext}
+              isLongPress={isLongPress}
+              backgroundColor={TextColorGreen}
+              color="#FFF"
+              text={`Next Player${isNextUser?.username ? ': @' + isNextUser?.username : ''
+                }`}
+              timeLeft={timeLeft}
+              isNextUser={isNextUser}
+              isCancelingStory={isCancelingStory}
+            />
+          ) :
+            !user && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
                 isLongPress={isLongPress}
@@ -573,24 +564,10 @@ const FirstUser = ({ route }) => {
             )
           }
 
-          {
-            !user ?
-              <CustomPlayFlowButton
-                onPress={onPressNext}
-                isLongPress={isLongPress}
-                backgroundColor={TextColorGreen}
-                color="#FFF"
-                timeLeft={timeLeft}
-                isNextUser={isNextUser}
-                isCancelingStory={isCancelingStory}
-              /> :
-              <></>
-          }
-
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
               onPress={!user ? saveStoryhandler : saveBtnHandler}
-              text={!user ? "Save to phone" : "Save Story"}
+              text={!user ? 'Save to phone' : 'Save Story'}
               color={TextColorGreen}
               isNext={!user ? false : isNext}
               timeLeft={timeLeft}
@@ -602,15 +579,20 @@ const FirstUser = ({ route }) => {
           )}
         </View>
 
-        <GuestModals ref={GuestModalRef} onPress={() => navigation.navigate(PLAY_STORY_TIME)} />
-        <GuestModals ref={GuestModalRefForAds} onPress={saveStoryhandler} textOnPress={() => navigation.navigate(PLAY_STORY_TIME)} />
+        <GuestModals
+          ref={GuestModalRef}
+          onPress={() => navigation.navigate(PLAY_STORY_TIME)}
+        />
+        <GuestModals
+          ref={GuestModalRefForAds}
+          onPress={saveStoryhandler}
+          textOnPress={() => navigation.navigate(PLAY_STORY_TIME)}
+        />
         {/* </ScrollView> */}
       </ImageBackground>
     </>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -650,7 +632,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: moderateVerticalScale(6),
-    // backgroundColor: "orange"
   },
   bg_content: {
     justifyContent: 'center',

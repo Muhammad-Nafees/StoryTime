@@ -69,7 +69,7 @@ const ReplyingContent = ({ replies, lastName, firstName, text, createdAt, replym
                     <View style={{ flexDirection: "row", paddingTop: moderateScale(4), width: responsiveWidth(52), }}>
                         <Text style={{ color: "grey", fontSize: responsiveFontSize(1.5), paddingHorizontal: moderateScale(12) }}>{calculateTimeDifference(createdAt)}</Text>
                         <TouchableOpacity onPress={handleReplying}>
-                            <Text style={{ color: "#000", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
+                            <Text style={{ color: "grey", fontWeight: "500", fontSize: responsiveFontSize(1.7) }}>Reply</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

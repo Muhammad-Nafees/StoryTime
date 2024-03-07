@@ -57,7 +57,7 @@ const CustomInputForgetEmail = props => {
         if (response?.message === "Invalid Information, Record Not Found!") {
           setInvalidPhoneNumber("Invalid Information, Record Not Found!");
         } else {
-          setInvalidPhoneNumber("Invalid number")
+          setInvalidPhoneNumber("Invalid email")
         }
 
         if (response?.statusCode === 200) {
