@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';
 import {
@@ -11,15 +11,13 @@ import {
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import Typography from '../../../components/Typography';
+import PaymentInput from '../../../components/paymentSetting/PaymentInput';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
 
-const AddPaymentCard = ({navigation}) => {
+const AddPaymentCardDetail = ({navigation}) => {
   const {LEFT_ARROW_IMG, CHECK} = Img_Paths;
-  const handleScreen = () => {
-    navigation.navigate('AddPaymentCardDetail');
-  };
   return (
-    <BackgroundWrapper disableScrollView coverScreen>
+    <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
       <View style={styles.first_container}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -30,36 +28,34 @@ const AddPaymentCard = ({navigation}) => {
           <Text style={styles.categories_text}>Add Card</Text>
         </View>
       </View>
-      <View style={styles.body}>
-        <Typography style={styles.cardText}>Card Info</Typography>
-        <View style={styles.applepay}>
-          <View style={styles.add_cards_wrapper}>
-            <View style={styles.add_cards_wrapper_container}>
-              <Typography style={styles.add_cards_wrapper_text}>
-                Credit/Debit Card
-              </Typography>
-              <Typography style={styles.add_card_wrapper_text1}>
-                Visa, MasterCard, American Express
-              </Typography>
-            </View>
-            <Image source={CHECK} />
-          </View>
-          <View style={styles.applepaywrapper}>
-            <Typography style={styles.add_card_wrapper_text}>PayPal</Typography>
-          </View>
-          <View style={styles.applepaywrapper}>
-            <Typography style={styles.add_card_wrapper_text}>
-              Apple Pay
-            </Typography>
+      <ScrollView>
+        <View style={styles.body}>
+          <Typography style={styles.cardText}>Card Info</Typography>
+          <View style={styles.input_container}>
+            <PaymentInput label="Full Name" placeholderText="Type here" />
+            <PaymentInput label="Country" placeholderText="Type here" />
+            <PaymentInput
+              label="Card Number"
+              placeholderText="Type here"
+              numeric={true}
+            />
+            <PaymentInput
+              label="Expiry Date"
+              placeholderText="MM/YY"
+              numeric={true}
+            />
+            <PaymentInput label="CVV" placeholderText="435" numeric={true} />
           </View>
         </View>
+      </ScrollView>
+      <View style={{marginTop: 70}}>
+        <PaymentButton label="Save Card" />
       </View>
-      <PaymentButton label="Next" onpress={handleScreen} />
     </BackgroundWrapper>
   );
 };
 
-export default AddPaymentCard;
+export default AddPaymentCardDetail;
 
 const styles = StyleSheet.create({
   container: {
@@ -101,56 +97,14 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   cardText: {
-    fontWeight: 500,
+    fontWeight: 700,
     fontSize: 16,
     lineHeight: 20,
     letterSpacing: -0.5,
     color: '#395E66',
   },
-  add_cards: {
+  input_container: {
     paddingTop: 10.75,
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    // paddingHorizontal: 16,
-  },
-  add_cards_wrapper: {
-    height: 65.47,
-    borderRadius: 4.89,
-    backgroundColor: '#F3F3F3',
-    paddingHorizontal: 13.64,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  add_cards_wrapper_text: {
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 24,
-    color: '#000000',
-  },
-  applepay: {
-    paddingTop: 10.75,
-    gap: 4.89,
-    // paddingHorizontal: 16,
-  },
-  applepaywrapper: {
-    height: 45.93,
-    borderRadius: 4.89,
-    backgroundColor: '#F3F3F3',
-    paddingHorizontal: 12.63,
-    justifyContent: 'center',
-  },
-  add_card_wrapper_text: {
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 24,
-    color: '#AAAAAA',
-  },
-  add_card_wrapper_text1: {
-    fontWeight: 400,
-    fontSize: 12,
-    lineHeight: 24,
-    color: '#AAAAAA',
+    gap: 15,
   },
 });

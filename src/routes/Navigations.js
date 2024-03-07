@@ -36,13 +36,13 @@ import {
   SubscriptionDetails,
   SettingsProfile,
   DeleteAccount,
-  BlockUser
+  BlockUser,
 } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
-import { Login } from '../screens/index'
+import {Login} from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 
 import Support from '../screens/HomeScreens/setting/Support';
@@ -51,6 +51,7 @@ import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageLis
 import Report from '../screens/HomeScreens/setting/Report';
 import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
 import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
+import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -74,6 +75,7 @@ const Navigations = () => {
     REPORT,
     PAYEMENT,
     ADD_PAYMENT_CARD,
+    ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -103,7 +105,7 @@ const Navigations = () => {
       <Stack.Screen
         name={LOGIN}
         component={Login}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen name={SUPPORT} component={Support} />
       <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
@@ -114,6 +116,10 @@ const Navigations = () => {
       />
       <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
       <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} />
+      <Stack.Screen
+        name={ADD_PAYMENT_CARD_DETAIL}
+        component={AddPaymentCardDetail}
+      />
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
@@ -186,11 +192,9 @@ const PLayFlowScreens = () => {
   );
 };
 
-
-
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT, REPORT_USER } = NavigationsString;
+  const {HOME, FEED_CHAT, REPORT_USER} = NavigationsString;
   return (
     <Stack.Navigator
       screenOptions={{
