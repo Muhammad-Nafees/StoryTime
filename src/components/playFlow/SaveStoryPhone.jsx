@@ -205,7 +205,7 @@ const SaveStoryPhone = ({isVisible, setIsVisible}) => {
       </Modal>
       {saveStoryModal && (
         <SaveAsPdf
-          isVisiblePdf={isVisiblePdf}
+          isVisiblePdf={true}
           setIsVisiblePdf={setVisiblePdf}
         />
       )}

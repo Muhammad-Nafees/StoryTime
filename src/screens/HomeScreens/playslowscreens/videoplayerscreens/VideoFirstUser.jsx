@@ -618,7 +618,7 @@ const VideoFirstUser = () => {
                 backgroundColor:
                   isFirstCall || timeLeft == 0
                     ? 'rgba(87, 150, 164, 0.3)'
-                    : undefined,
+                    : TextColorGreen,
                 width: WINDOW_WIDTH * 0.32,
                 height: WINDOW_WIDTH * 0.32,
                 borderRadius: WINDOW_WIDTH / 2,
