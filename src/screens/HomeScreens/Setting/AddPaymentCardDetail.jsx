@@ -13,9 +13,17 @@ import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import Typography from '../../../components/Typography';
 import PaymentInput from '../../../components/paymentSetting/PaymentInput';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
+import AddPaymentCardModal from '../../../components/paymentSetting/AddPaymentCardModal';
 
 const AddPaymentCardDetail = ({navigation}) => {
-  const {LEFT_ARROW_IMG, CHECK} = Img_Paths;
+  const [isVisible, setVisible] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState();
+  const {LEFT_ARROW_IMG, ADD_SUCCEFULLY_PAYMENT_CARD} = Img_Paths;
+
+  const handleInput = (e, key) => {
+    setInputValue({...inputValue, [key]: e});
+  };
+
   return (
     <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
       <View style={styles.first_container}>
@@ -28,29 +36,63 @@ const AddPaymentCardDetail = ({navigation}) => {
           <Text style={styles.categories_text}>Add Card</Text>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.body}>
           <Typography style={styles.cardText}>Card Info</Typography>
           <View style={styles.input_container}>
-            <PaymentInput label="Full Name" placeholderText="Type here" />
-            <PaymentInput label="Country" placeholderText="Type here" />
+            <PaymentInput
+              label="Full Name"
+              placeholderText="Type here"
+              onchange={handleInput}
+              keyValue="fullName"
+            />
+            <PaymentInput
+              label="Country"
+              placeholderText="Type here"
+              onchange={handleInput}
+              keyValue="country"
+            />
             <PaymentInput
               label="Card Number"
               placeholderText="Type here"
+              onchange={handleInput}
+              keyValue="cardNumber"
               numeric={true}
             />
             <PaymentInput
               label="Expiry Date"
               placeholderText="MM/YY"
+              onchange={handleInput}
+              keyValue="expiryDate"
               numeric={true}
             />
-            <PaymentInput label="CVV" placeholderText="435" numeric={true} />
+            <PaymentInput
+              label="CVV"
+              placeholderText="435"
+              onchange={handleInput}
+              keyValue="cvv"
+              numeric={true}
+            />
           </View>
         </View>
       </ScrollView>
       <View style={{marginTop: 70}}>
-        <PaymentButton label="Save Card" />
+        <PaymentButton label="Save Card" onpress={() => setVisible(true)} />
       </View>
+      {isVisible && (
+        <AddPaymentCardModal
+          setVisible={setVisible}
+          text1={'Successfully Added!'}
+          bgImage={ADD_SUCCEFULLY_PAYMENT_CARD}
+          isVisible={isVisible}
+          text="Back"
+          onPress={() => {
+            navigation.navigate('PayementSetting');
+          }}
+        />
+      )}
     </BackgroundWrapper>
   );
 };

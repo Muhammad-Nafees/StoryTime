@@ -310,4 +310,5 @@ export const Img_Paths = {
   EDIT: require('../../assets/edit.png'),
   TRASH: require('../../assets/trash.png'),
   CHECK: require('../../assets/check.png'),
+  ADD_SUCCEFULLY_PAYMENT_CARD: require('../../assets/Add_Succsessfully_Card_Bg.png'),
 };
