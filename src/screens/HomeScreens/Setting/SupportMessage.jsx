@@ -13,6 +13,7 @@ import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import SupportButton from '../../../components/Support/SupportButton';
 import MessageBox from '../../../components/Support/MessageBox';
 import {sendMessage} from '../../../../services/api/support';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const SupportMessage = ({navigation}) => {
   const [profileImage, setProfileImage] = React.useState(null);
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
+    fontFamily:Inter_SemiBold.Inter_SemiBold
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),

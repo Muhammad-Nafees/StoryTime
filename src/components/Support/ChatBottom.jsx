@@ -45,7 +45,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
     <View k style={styles.container}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={() => modalOpen(uploadProfileImageRef)}>
-          <Image source={GALLERY_ICON} />
+          <Image style={{marginHorizontal:5}} source={GALLERY_ICON} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => modalOpen(uploadProfileImageRef)}>
           <Image source={CAMERA__ICON} />
@@ -63,7 +63,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
           </TouchableOpacity>
         ) : (
           <View style={styles.loading}>
-            <ActivityIndicator color="#395E66" />
+            <ActivityIndicator size="small" color="#395E66" />
           </View>
         )}
       </View>
@@ -99,6 +99,6 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     color: '#AAAAAA',
     paddingHorizontal: 17,
-    paddingVertical: 7,
+    paddingVertical: 7,marginHorizontal:5
   },
 });

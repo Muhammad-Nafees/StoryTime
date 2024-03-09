@@ -130,9 +130,8 @@ const VideoFirstUser = () => {
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
   const activeCamera = getCameraDetails();
   const SHOW_DONE_BTN =
-    (timeText === '00:00' && isUserGuest) || !isCancelingStory;
+  (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
 
-  console.log('sequcenuserVIdeo====', sequenceUser);
 
   //effects
   useEffect(() => {
@@ -240,7 +239,6 @@ const VideoFirstUser = () => {
     }, []),
   );
 
-  console.log('path---', path);
 
   const checkPermission = async () => {
     try {
@@ -262,7 +260,6 @@ const VideoFirstUser = () => {
 
   const toggleCamera = () => {
     const newCamera = currentCamera === 'back' ? 'front' : 'back';
-    console.log('NEWCAMERA====', newCamera);
     setCurrentCamera(newCamera);
   };
 
@@ -270,12 +267,14 @@ const VideoFirstUser = () => {
     if (!cameraRef.current) {
       return;
     }
+    console.log('RECORDING STARTED');
 
     cameraRef.current.startRecording({
       videoCodec: 'h264',
       // videoBitRate: 'extra-low',
       onRecordingFinished: video => {
         const pathVideo = video.path;
+        console.log(video, 'VIDEO');
         setPath(pathVideo);
         dispatch(saveRecordingVideoUser(pathVideo));
       },
@@ -321,7 +320,6 @@ const VideoFirstUser = () => {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(120);
-        console.log('EXTEND VIDEO----');
       } else if (extendVideoCheck == true) {
         resumeRecording();
         setIsPressed(true);
@@ -387,7 +385,6 @@ const VideoFirstUser = () => {
     saverecordingvideo();
   };
 
-  console.log('extendVideoCheck==', extendVideoCheck);
 
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -597,38 +594,41 @@ const VideoFirstUser = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <TouchableOpacity
-            disabled={isFirstCall || timeLeft == 0 ? true : false}
-            onLongPress={() => {
-              pressHandlerIn();
-            }}
-            onPressOut={() => {
-              pressHandlerOut();
-            }}
-            activeOpacity={0.7}
-            style={{
-              borderWidth: isPressed ? 6 : 0,
-              borderColor: isPressed ? '#D04141' : TextColorGreen,
-              backgroundColor:
-                isFirstCall || timeLeft == 0
-                  ? 'rgba(87, 150, 164, 0.3)'
-                  : TextColorGreen,
-              width: WINDOW_WIDTH * 0.32,
-              height: WINDOW_WIDTH * 0.32,
-              borderRadius: WINDOW_WIDTH / 2,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={{
-                width: responsiveWidth(16),
-                height: responsiveHeight(8),
-                tintColor: isPressed ? '#D04141' : null,
-                resizeMode: 'center',
+          <ImageBackground
+            source={require('../../../../assets/microphone-bg.png')}>
+            <TouchableOpacity
+              disabled={isFirstCall || timeLeft == 0 ? true : false}
+              onLongPress={() => {
+                pressHandlerIn();
               }}
-              source={require('../../../../assets/video-recording.png')}
-            />
-          </TouchableOpacity>
+              onPressOut={() => {
+                pressHandlerOut();
+              }}
+              activeOpacity={0.7}
+              style={{
+                borderWidth: isPressed ? 6 : 0,
+                borderColor: isPressed ? '#D04141' : TextColorGreen,
+                backgroundColor:
+                  isFirstCall || timeLeft == 0
+                    ? 'rgba(87, 150, 164, 0.3)'
+                    : undefined,
+                width: WINDOW_WIDTH * 0.32,
+                height: WINDOW_WIDTH * 0.32,
+                borderRadius: WINDOW_WIDTH / 2,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{
+                  width: responsiveWidth(16),
+                  height: responsiveHeight(8),
+                  tintColor: isPressed ? '#D04141' : null,
+                  resizeMode: 'center',
+                }}
+                source={require('../../../../assets/video-recording.png')}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </View>
 
         {/* <View> */}
