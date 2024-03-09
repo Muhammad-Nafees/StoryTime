@@ -1,4 +1,3 @@
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

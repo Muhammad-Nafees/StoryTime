@@ -48,8 +48,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import DocumentPicker from 'react-native-document-picker';
+import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
-import { resetFriends, } from '../../../store/slices/addplayers/addPlayersSlice';
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { width, height } = Dimensions.get('window');
@@ -64,7 +64,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [directoryPath, setDirectoryPath] = useState('');
-    const dispatch = useDispatch();
 
     const textrecordUsers = useSelector(
         state => state?.recordingData?.recordingText,
@@ -79,7 +78,16 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { user } = useSelector(state => state?.authSlice);
 
     const isUserGuest = useMemo(() => !user, [user]);
+
+    // console.log("categoryId-----", categoryId);
+    // console.log("subCategoryId-----", subCategoryId)
+    // console.log("playerContributorsId-----", playerContributorsId);
+    // console.log("textrecordUsers-----", textrecordUsers);
+
     const convertStr = textrecordUsers.join();
+    console.log('convertstr----', convertStr);
+
+    const dispatch = useDispatch();
 
     const saveStoryhandler = () => {
         setIsVisible(false);
@@ -99,11 +107,11 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 contributors: playerContributorsId,
                 content: convertStr,
             });
-            if (responseData?.message === "content is not allowed to be empty") {
+            if (responseData?.message === 'content is not allowed to be empty') {
                 Toast.show({
-                    type: "error",
-                    text1: "content is not allowed to be empty",
-                })
+                    type: 'error',
+                    text1: 'content is not allowed to be empty',
+                });
                 setIsLoading(false);
             } else {
                 console.log('storyresData====', responseData);
@@ -134,6 +142,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                     </View>
 
                     {/* Back Button */}
+                    <Toast />
 
                     <ImageBackground
                         style={styles.img_frame}
@@ -156,7 +165,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                                 }}>
                                 Save Story
                             </Text>
-
                             <Text
                                 style={{
                                     paddingVertical: 2,
@@ -195,26 +203,26 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             {/* </View> */}
                         </View>
                     </ImageBackground>
-                    <Toast />
                 </ImageBackground>
             </Modal>
-
-            {saveStoryModalsecond &&
-                <StoryTimeSaved isLoading={isLoading}
-                    isVisible={isVisibleSavePhone}
-                    setVisible={setVisibleSavePhone}
-                    text={`Story Time\nSuccessfully Saved`}
-                    textButton="Back" />
-            }
-
             {saveStoryModal && (
                 <SaveAsPdf
-                    isVisiblePdf={isVisiblePdf}
+                    isVisiblePdf={true}
                     setIsVisiblePdf={setVisiblePdf}
                 />
             )}
+
+            {saveStoryModalsecond && (
+                <StoryTimeSaved
+                    isLoading={isLoading}
+                    isVisible={isVisibleSavePhone}
+                    setVisible={setVisibleSavePhone}
+                    text={`Story Time\nSuccessfully Saved`}
+                    textButton="Back"
+                />
+            )}
         </>
-    )
+    );
 };
 
 const styles = StyleSheet.create({
@@ -225,6 +233,7 @@ const styles = StyleSheet.create({
     img: {
         resizeMode: 'center',
     },
+
     img_backgroung_content: {
         width: responsiveWidth(90),
         height: responsiveHeight(32),

@@ -1,5 +1,13 @@
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import {
+  CommonActions,
+  NavigationContainer,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
@@ -25,27 +33,46 @@ import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount, BlockUser } from '../screens/index';
+import {
+  FAQ,
+  Notification,
+  Setting,
+  SubscriptionDetails,
+  SettingsProfile,
+  DeleteAccount,
+  BlockUser,
+} from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
-import { Login } from '../screens/index'
+import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
-
-
+import React, { useEffect } from 'react';
 
 const Navigations = () => {
-
   const Stack = createStackNavigator();
 
-  const { ADD_FRIENDS, REPORT_USER, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT, LOGIN } = NavigationsString;
+  const {
+    ADD_FRIENDS,
+    REPORT_USER,
+    ADD_PLAYERS,
+    PLAYER_SEQUENCE,
+    FAQ_ROUTE,
+    SETTING,
+    NOTIFICATION,
+    SUBSCRIPTION_DETAILS,
+    PROFILE,
+    BLOCK_USER,
+    DELETE_ACCOUNT,
+    LOGIN,
+  } = NavigationsString;
 
   return (
     <Stack.Navigator
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerShown: false
+        headerShown: false,
       }}
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
@@ -57,7 +84,10 @@ const Navigations = () => {
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
       <Stack.Screen name={SETTING} component={Setting} />
       <Stack.Screen name={NOTIFICATION} component={Notification} />
-      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
+      <Stack.Screen
+        name={SUBSCRIPTION_DETAILS}
+        component={SubscriptionDetails}
+      />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
@@ -95,9 +125,6 @@ const GuestStack = () => {
   );
 };
 
-
-
-
 const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
 
@@ -112,10 +139,11 @@ const PLayFlowScreens = () => {
   } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen
         name={FIRSTSCREENPLAYFLOW}
         component={FirstScreenPlayFlow}
@@ -141,16 +169,15 @@ const PLayFlowScreens = () => {
   );
 };
 
-
-
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT, REPORT_USER } = NavigationsString;
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name={HOME} component={Home} />
       <Stack.Screen name={FEED_CHAT} component={FeedChat} />
     </Stack.Navigator>
@@ -164,12 +191,20 @@ const CategoriesStackBottom = () => {
   const { CATEGORIES } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
-      <Stack.Screen name={CATEGORIES} component={Categories} />
-      <Stack.Screen name="SubCategories" component={SubCategories} />
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}
+      initialRouteName={CATEGORIES}>
+      <Stack.Screen
+        name={CATEGORIES}
+        component={Categories}
+      />
+      <Stack.Screen
+        name="SubCategories"
+        component={SubCategories}
+      />
     </Stack.Navigator>
   );
 };
@@ -180,18 +215,18 @@ const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
   const { HOME } = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
       <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };
-
-
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
@@ -206,7 +241,6 @@ const ProfileScreens = () => {
     </Stack.Navigator>
   );
 };
-
 
 const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
@@ -279,6 +313,12 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+        listeners={({ navigation, route }) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('categoriesStack', { screen: CATEGORIES });
+          },
+        })}
       />
 
       <Tab.Screen

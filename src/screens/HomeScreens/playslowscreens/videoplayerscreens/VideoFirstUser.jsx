@@ -48,6 +48,7 @@ import GuestModals from '../../../../components/GuestModals';
 import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 
+let videoPath;
 
 const VideoFirstUser = () => {
   //destructures
@@ -85,19 +86,18 @@ const VideoFirstUser = () => {
   const nextRandomValueVideoExtend = useSelector(
     state => state?.addPlayers?.nextRandomNumberVideoExtend,
   );
-  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
-
   //dependant consts
   // const sequenceUser = useMemo(
   //   () => [
   //     ...addedUsers,
   //     USER?._id &&
-  //     USER?.username && { userid: USER?._id, username: USER?.username },
+  //       USER?.username && {userid: USER?._id, username: USER?.username},
   //   ],
   //   [USER, addedUsers],
   // );
 
-
+  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
+  console.log(sequenceUser, "SEQUESNCE")
 
   //states
   const [started, setStarted] = useState(false);
@@ -135,8 +135,6 @@ const VideoFirstUser = () => {
   const activeCamera = getCameraDetails();
   const SHOW_DONE_BTN =
     (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
-
-  //effects---
 
   useEffect(() => {
     checkPermission();
@@ -212,7 +210,6 @@ const VideoFirstUser = () => {
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
       const nextIndex = (currentIndex + 1) % sequenceUser.length;
       const nextPlayer = (currentIndex + 2) % sequenceUser.length;
-
       if (currentIndex !== addedUsers?.length) {
         setCurrentDisplayUser(sequenceUser[nextIndex]);
         setIsNextUser(sequenceUser[nextPlayer]);
@@ -244,8 +241,6 @@ const VideoFirstUser = () => {
     }, []),
   );
 
-
-
   const checkPermission = async () => {
     try {
       if (Platform.OS === 'android') {
@@ -269,7 +264,7 @@ const VideoFirstUser = () => {
     setCurrentCamera(newCamera);
   };
 
-  const recordVideos = useCallback(() => {
+  const recordVideos = () => {
     if (!cameraRef.current) {
       return;
     }
@@ -282,11 +277,12 @@ const VideoFirstUser = () => {
         const pathVideo = video.path;
         console.log(video, 'VIDEO');
         setPath(pathVideo);
+        videoPath = pathVideo;
         dispatch(saveRecordingVideoUser(pathVideo));
       },
       onRecordingError: error => console.error('ON-RECORD-ERR-----', error),
     });
-  }, [cameraRef, path]);
+  };
 
   const stopRecordings = async () => {
     try {
@@ -296,6 +292,7 @@ const VideoFirstUser = () => {
       console.log('RECORDINGESTOPErr------', error);
     }
   };
+  console.log(videoPath, 'VIDEOPATHH');
 
   const resumeRecording = async () => {
     try {
@@ -327,6 +324,7 @@ const VideoFirstUser = () => {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(120);
+        console.log('IF IS RUNNIGN!');
       } else if (extendVideoCheck == true) {
         resumeRecording();
         setIsPressed(true);
@@ -621,7 +619,7 @@ const VideoFirstUser = () => {
                 backgroundColor:
                   isFirstCall || timeLeft == 0
                     ? 'rgba(87, 150, 164, 0.3)'
-                    : undefined,
+                    : TextColorGreen,
                 width: WINDOW_WIDTH * 0.32,
                 height: WINDOW_WIDTH * 0.32,
                 borderRadius: WINDOW_WIDTH / 2,
@@ -681,7 +679,7 @@ const VideoFirstUser = () => {
             type="savevideo"
             isVisible={isVisible}
             setIsVisible={setIsVisible}
-            path={path}
+            path={videoPath}
           />
         )}
 

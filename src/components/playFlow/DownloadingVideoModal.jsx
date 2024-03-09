@@ -30,7 +30,7 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
     const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);
-
+    const dispatch = useDispatch()
 
 
     useEffect(() => {

@@ -514,7 +514,7 @@ const FirstUser = ({ route }) => {
                   backgroundColor:
                     isFirstCall || timeLeft == 0
                       ? 'rgba(87, 150, 164, 0.3)'
-                      : undefined,
+                      : TextColorGreen,
                   width: SCREENWIDTH * 0.32,
                   height: SCREENWIDTH * 0.32,
                   borderRadius: SCREENWIDTH / 2,

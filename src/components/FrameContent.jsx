@@ -41,6 +41,7 @@ import { PassionOne_Regular } from '../constants/GlobalFonts';
 import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed';
 import LinearGradient from 'react-native-linear-gradient';
 import BlockUserStory from './blockuser/BlockUserModal';
+import { debounce } from 'lodash'; // Import debounce function from lodash
 
 const FrameContent = ({
   type,
@@ -429,6 +430,10 @@ const FrameContent = ({
                               // dispatch(storyUserId(userId));
                               // navigation.navigate(REPORT_USER);
                             }}
+                            // onSelect={() => {
+                            //   dispatch(storyUserId(userId));
+                            //   navigation.navigate(REPORT_USER);
+                            // }}
                             style={{
                               paddingBottom: 10,
                               paddingLeft: responsiveWidth(5),

@@ -46,8 +46,11 @@ import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import SaveStoryPhone from './SaveStoryPhone';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
+    console.log("SAVEASPDF FIEL!", isVisiblePdf)
     const { width, height } = Dimensions.get('window');
     const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
     const SCREENWIDTH = Dimensions.get('window').width;
@@ -61,6 +64,10 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
     );
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const [dontSaveToPdf, setDontSaveToPdf] = useState(false);
+    // const {user} = useSelector(state => state?.authSlice);
+
+    // const isUserGuest = useMemo(() => !user, [user]);
 
     console.log('textrecordusers', textrecordUsers);
 
@@ -107,70 +114,115 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
         console.log(dirToRead);
         return decodeURIComponent(dirToRead);
     };
+    const [isLoadingDirectory, setIsLoadingDirectory] = useState(false);
 
     const pickDirectory = async () => {
         try {
             const result = await DocumentPicker.pickDirectory({
                 type: [DocumentPicker.types.allFiles],
             });
-            console.log('result', result);
 
-            let absolutePath;
+            if (result) {
+                console.log('result', result);
 
-            // Check if it's internal storage
-            if (
-                result?.uri?.startsWith(
-                    'content://com.android.externalstorage.documents/tree/primary',
-                )
-            ) {
-                absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+                let absolutePath;
+
+                // Check if it's internal storage
+                if (
+                    result?.uri?.startsWith(
+                        'content://com.android.externalstorage.documents/tree/primary',
+                    )
+                ) {
+                    absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+                } else {
+                    // It's SD card or other external storage
+                    absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+                }
+
+                console.log(absolutePath);
+
+                // Save the selected path
+                saveSelectedPath(absolutePath);
+                // Use the absolute file path directly
+                requestStoragePermission(absolutePath);
+                // createPDF(absolutePath);
             } else {
-                // It's SD card or other external storage
-                absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+                console.log('User canceled directory selection.');
+                // Handle the case where the user canceled the directory selection (pressed back)
+                // You may choose to show a message or take appropriate action.
             }
-            console.log(absolutePath);
-            // Save the selected path
-            saveSelectedPath(absolutePath);
-            // Use the absolute file path directly
-            //   requestStoragePermission(absolutePath);
-            createPDF(absolutePath);
         } catch (err) {
             // Handle errors
             console.error('Error picking directory:', err);
         }
     };
 
-    const createPDF = async selectedPath => {
+    const requestStoragePermission = async selectedPath => {
         try {
-            // const folderPath = `${selectedPath}/PDF`;
-            // console.log(folderPath)
+            const granted = await PermissionsAndroid.requestMultiple([
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            ]);
 
-            if (!(await RNFS.exists(selectedPath))) {
-                await RNFS.mkdir(selectedPath);
+            if (
+                granted['android.permission.READ_EXTERNAL_STORAGE'] ===
+                PermissionsAndroid.RESULTS.GRANTED &&
+                granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+                PermissionsAndroid.RESULTS.GRANTED
+            ) {
+                console.log('External storage permissions granted');
+                createPDF(selectedPath);
+            } else {
+                console.warn('External storage permissions denied');
+                // Handle the case where permissions are denied
             }
+        } catch (error) {
+            console.error('Error requesting external storage permissions: ', error);
+            // Handle the error
+        }
+    };
+
+    const createPDF = async selectedPath => {
+        console.log(selectedPath, 'SELECTEDPATH');
+        setIsLoadingDirectory(true);
+        try {
+            // Use ExternalDirectoryPath for Android and DocumentDirectoryPath for iOS
+            const basePath =
+                Platform.OS === 'android'
+                    ? RNFS.ExternalDirectoryPath
+                    : RNFS.DocumentDirectoryPath;
+            const directoryPath = `${basePath}/${selectedPath}`;
+
+            // Recursively create directories if they don't exist
+            await RNFS.mkdir(directoryPath, {
+                NSURLIsExcludedFromBackupKey: true,
+                NSFileProtectionKey: 'complete',
+            });
 
             const htmlContent = `<html><body> <p>${textrecordUsers}</p></body></html>`;
             const options = {
                 html: htmlContent,
                 fileName: 'voicetotext.pdf',
-                directory: selectedPath,
+                directory: directoryPath,
             };
 
             const pdf = await RNHTMLtoPDF.convert(options);
 
-            const downloadDest = `${selectedPath}/voicetotext_${Math.floor(
+            const downloadDest = `${directoryPath}/voicetotext_${Math.floor(
                 Math.random() * 100000,
             )}.pdf`;
-            // const downloadDest = `${RNFS.ExternalDirectoryPath}/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
 
             console.log(downloadDest);
             await RNFS.moveFile(pdf.filePath, downloadDest);
             setIsVisiblePdf(false);
             setIsVisibleDownloading(true);
             setSaveStoryModalDownloading(true);
+            dispatch(resetFriends());
+            setIsLoadingDirectory(false);
         } catch (error) {
-            console.error('Error generating PDF: ', error);
+            console.error('Error generating PDF: ', error.message, error.code);
             Alert.alert('Error generating PDF. Please try again.');
+            setIsLoadingDirectory(false);
         }
     };
 
@@ -227,6 +279,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                             <View style={{ paddingVertical: 12 }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity
+                                        disabled={isLoadingDirectory}
                                         onPress={loadSavedPath}
                                         style={{
                                             width: responsiveWidth(70),
@@ -250,8 +303,12 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                             </View>
 
                             <SaveStoryBtn
+                                isDisabled={isLoadingDirectory}
                                 timeLeft={0}
-                                onPress={() => setIsVisiblePdf(false)}
+                                onPress={() => {
+                                    setIsVisiblePdf(false);
+                                    setDontSaveToPdf(true);
+                                }}
                                 text="No"
                             />
 
@@ -260,6 +317,12 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                     </ImageBackground>
                 </ImageBackground>
             </Modal>
+            {dontSaveToPdf && (
+                <SaveStoryPhone
+                    isVisible={dontSaveToPdf}
+                    setIsVisible={setDontSaveToPdf}
+                />
+            )}
             {saveStoryModalDownloading && (
                 <DownloadingFlow
                     isVisibleDownloading={isVisibleDownloading}

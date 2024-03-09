@@ -136,7 +136,7 @@ const GetComments = ({
             <Text
               style={{
                 color: '#b3b3b3',
-                fontSize: responsiveFontSize(1.5),
+                fontSize: responsiveFontSize(1.6),
                 paddingHorizontal: moderateScale(3),
               }}>
               {calculateTimeDifference(createdAt)}
@@ -148,7 +148,7 @@ const GetComments = ({
                 style={{
                   color: '#b3b3b3',
                   fontWeight: '500',
-                  fontSize: responsiveFontSize(1.7),
+                  fontSize: responsiveFontSize(1.6),
                 }}>
                 Reply
               </Text>
