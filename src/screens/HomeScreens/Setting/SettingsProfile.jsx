@@ -94,6 +94,7 @@ const SettingsProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [userCity, setUserCity] = useState(null);
+  const [initialLoading, setInitialLoading] = React.useState(true);
 
   const handleFormSubmit = async values => {
     const payload = {
@@ -135,6 +136,7 @@ const SettingsProfile = () => {
     }
     handleCountryCodeChange(data?.countryCode);
     setinitialData(payload);
+    setInitialLoading(false);
   };
 
   const handleCountryCodeChange = countryCode => {
@@ -143,6 +145,7 @@ const SettingsProfile = () => {
   };
 
   useEffect(() => {
+    console.log('🚀 ~ initialData ~ initialData:', initialData);
     getData();
   }, []);
 
@@ -173,290 +176,137 @@ const SettingsProfile = () => {
   }, [userdata, userCity]);
 
   return (
-    <BackgroundWrapper>
-      <>
-        {!userdata ? (
+    <>
+      {initialLoading ? (
+        <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
           <View style={styles.container}>
             <ActivityIndicator size="large" />
           </View>
-        ) : (
-          <>
-            <ImageBackground
-              source={coverImage?.uri ? {uri: coverImage?.uri} : BG_CONTAINER}
-              style={styles.bg_img_container}>
-              <ScreenHeader title={'Profile'} clr={'#fff'} />
-            </ImageBackground>
-            <View style={{width: SCREEN_WIDTH}}>
-              <View style={styles.avatar_wrapper}>
-                <Image
-                  source={
-                    profileImage?.uri ? {uri: profileImage?.uri} : DEFAULT_ICON
-                  }
-                  style={styles.avatar}
-                  resizeMode="contain"
-                />
-                <TouchableOpacity
-                  onPress={() => modalOpen(uploadProfileImageRef)}
-                  style={styles.icon_container}>
-                  <SvgIcons name={'PencilEdit'} width={40} height={40} />
-                </TouchableOpacity>
-              </View>
+        </BackgroundWrapper>
+      ) : (
+        <BackgroundWrapper>
+          <ImageBackground
+            source={coverImage?.uri ? {uri: coverImage?.uri} : BG_CONTAINER}
+            style={styles.bg_img_container}>
+            <ScreenHeader title={'Profile'} clr={'#fff'} />
+          </ImageBackground>
+          <View style={{width: SCREEN_WIDTH}}>
+            <View style={styles.avatar_wrapper}>
+              <Image
+                source={
+                  profileImage?.uri ? {uri: profileImage?.uri} : DEFAULT_ICON
+                }
+                style={styles.avatar}
+                resizeMode="contain"
+              />
               <TouchableOpacity
-                onPress={() => modalOpen(uploadCoverImageRef)}
-                style={styles.icon_container2}>
+                onPress={() => modalOpen(uploadProfileImageRef)}
+                style={styles.icon_container}>
                 <SvgIcons name={'PencilEdit'} width={40} height={40} />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              onPress={() => modalOpen(uploadCoverImageRef)}
+              style={styles.icon_container2}>
+              <SvgIcons name={'PencilEdit'} width={40} height={40} />
+            </TouchableOpacity>
+          </View>
 
-            <Formik
-              enableReinitialize
-              initialValues={initialData}
-              validationSchema={validationSettingsProfile}
-              onSubmit={handleFormSubmit}>
-              {({
-                values,
-                errors,
-                handleChange,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                isValid,
-                dirty,
-                setFieldError,
-              }) => (
-                <>
-                  {console.log('values', values.state)}
-                  <View
-                    style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <CustomInput
-                      label="Username"
-                      placeholder="Type here"
-                      value={values.username}
-                      error={errors.username}
-                      // customError={usernameError}
-                      touched={touched.username}
-                      initialTouched={true}
+          <Formik
+            enableReinitialize
+            initialValues={initialData}
+            validationSchema={validationSettingsProfile}
+            onSubmit={handleFormSubmit}>
+            {({
+              values,
+              errors,
+              handleChange,
+              handleSubmit,
+              setFieldValue,
+              touched,
+              isValid,
+              dirty,
+              setFieldError,
+            }) => (
+              <>
+                {console.log('values', values.state)}
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <CustomInput
+                    label="Username"
+                    placeholder="Type here"
+                    value={values.username}
+                    error={errors.username}
+                    // customError={usernameError}
+                    touched={touched.username}
+                    initialTouched={true}
+                    setFieldError={setFieldError}
+                    // isVisible={isVisible}
+                    // setVisible={setVisible}
+                    fieldName="username"
+                    handleChange={text => setFieldValue('username', text)}
+                  />
+
+                  <CustomInput
+                    label="First Name"
+                    placeholder="Type here"
+                    value={values.firstName}
+                    error={errors.firstName}
+                    touched={touched.firstName}
+                    initialTouched={true}
+                    setFieldError={setFieldError}
+                    fieldName="firstName"
+                    handleChange={text => setFieldValue('firstName', text)}
+                  />
+
+                  <CustomInput
+                    label="Last Name"
+                    placeholder="Type here"
+                    value={values.lastName}
+                    error={errors.lastName}
+                    touched={touched.lastName}
+                    initialTouched={true}
+                    setFieldError={setFieldError}
+                    fieldName="lastName"
+                    handleChange={text => setFieldValue('lastName', text)}
+                  />
+
+                  {countryCodeState && (
+                    <CustomPhoneInput
+                      value={values.phoneNo}
+                      error={errors.phoneNo}
+                      touched={touched.phoneNo}
+                      handleChange={handleChange('phoneNo')}
+                      setFieldValue={setFieldValue}
+                      phoneInput={phoneInput}
+                      setIsError={setIsError}
                       setFieldError={setFieldError}
-                      // isVisible={isVisible}
-                      // setVisible={setVisible}
-                      fieldName="username"
-                      handleChange={text => setFieldValue('username', text)}
+                      setFormatText={setFormatText}
+                      isError={isError}
+                      defaultCode={countryCodeState}
+                      setPhoneCode={handleCountryCodeChange}
+                      setPhoneError={setPhoneError}
+                      setphoneNumberStatusCode={setphoneNumberStatusCode}
                     />
+                  )}
 
-                    <CustomInput
-                      label="First Name"
-                      placeholder="Type here"
-                      value={values.firstName}
-                      error={errors.firstName}
-                      touched={touched.firstName}
-                      initialTouched={true}
-                      setFieldError={setFieldError}
-                      fieldName="firstName"
-                      handleChange={text => setFieldValue('firstName', text)}
-                    />
+                  <CustomInput
+                    label="Email Address"
+                    placeholder="Type here"
+                    value={values.email}
+                    error={errors.email}
+                    // customError={emailError}
+                    touched={touched.email}
+                    initialTouched={true}
+                    // setFieldError={setEmailError}
+                    // setEmailstatusCode={setEmailstatusCode}
+                    fieldName="email"
+                    handleChange={text => setFieldValue('email', text)}
+                  />
+                </View>
+                <View>
+                  {/* City----------- */}
 
-                    <CustomInput
-                      label="Last Name"
-                      placeholder="Type here"
-                      value={values.lastName}
-                      error={errors.lastName}
-                      touched={touched.lastName}
-                      initialTouched={true}
-                      setFieldError={setFieldError}
-                      fieldName="lastName"
-                      handleChange={text => setFieldValue('lastName', text)}
-                    />
-
-                    {countryCodeState && (
-                      <CustomPhoneInput
-                        value={values.phoneNo}
-                        error={errors.phoneNo}
-                        touched={touched.phoneNo}
-                        handleChange={handleChange('phoneNo')}
-                        setFieldValue={setFieldValue}
-                        phoneInput={phoneInput}
-                        setIsError={setIsError}
-                        setFieldError={setFieldError}
-                        setFormatText={setFormatText}
-                        isError={isError}
-                        defaultCode={countryCodeState}
-                        setPhoneCode={handleCountryCodeChange}
-                        setPhoneError={setPhoneError}
-                        setphoneNumberStatusCode={setphoneNumberStatusCode}
-                      />
-                    )}
-
-                    <CustomInput
-                      label="Email Address"
-                      placeholder="Type here"
-                      value={values.email}
-                      error={errors.email}
-                      // customError={emailError}
-                      touched={touched.email}
-                      initialTouched={true}
-                      // setFieldError={setEmailError}
-                      // setEmailstatusCode={setEmailstatusCode}
-                      fieldName="email"
-                      handleChange={text => setFieldValue('email', text)}
-                    />
-                  </View>
-                  <View>
-                    {/* City----------- */}
-
-                    {namesCities?.length > 0 && (
-                      <View>
-                        <View
-                          style={{
-                            width: responsiveWidth(89),
-                            marginLeft: 'auto',
-                          }}>
-                          <Text style={[styles.text, {color: FourthColor}]}>
-                            City
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            paddingVertical: 12,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <SelectDropdown
-                            data={namesCities}
-                            defaultButtonText="Select here"
-                            defaultValue={values.city}
-                            // plac
-                            // searchPlaceHolderColor={"red"}
-                            renderDropdownIcon={() => (
-                              <Image
-                                style={{
-                                  width: 16,
-                                  height: 16,
-                                  resizeMode: 'center',
-                                }}
-                                source={DROP_ICON}
-                              />
-                            )}
-                            buttonStyle={[
-                              {
-                                width: '80%',
-                                backgroundColor: TextinputColor,
-                                borderRadius: 10,
-                                justifyContent: 'flex-start',
-                                paddingHorizontal: 25,
-                              },
-                              errors.state && {
-                                borderColor: 'red',
-                                borderWidth: 2,
-                              },
-                            ]}
-                            rowTextStyle={{
-                              textAlign: 'left',
-                              fontSize: responsiveFontSize(1.9),
-                            }}
-                            rowStyle={{paddingHorizontal: 8}}
-                            dropdownStyle={{borderRadius: 10}}
-                            buttonTextStyle={{
-                              textAlign: 'left',
-                              fontSize: responsiveFontSize(1.9),
-                            }}
-                            onSelect={(selectedItem, index) => {
-                              setFieldValue('city', selectedItem);
-                              console.log('selectitem', selectedItem);
-                              handleInitCity(selectedItem);
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                              return selectedItem;
-                            }}
-                            rowTextForSelection={(item, index) => {
-                              return item;
-                            }}
-                          />
-                        </View>
-                      </View>
-                    )}
-
-                    {/* State----------- */}
-                    {namesArray?.length > 0 && (
-                      <>
-                        <View
-                          style={{
-                            width: responsiveWidth(89),
-                            marginLeft: 'auto',
-                          }}>
-                          <Text style={[styles.text, {color: FourthColor}]}>
-                            State
-                          </Text>
-                        </View>
-
-                        <View
-                          style={{
-                            paddingVertical: 12,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <SelectDropdown
-                            data={namesArray}
-                            defaultButtonText="Select here"
-                            defaultValue={values.state}
-                            buttonStyle={[
-                              {
-                                width: '80%',
-                                backgroundColor: TextinputColor,
-                                borderRadius: 10,
-                                justifyContent: 'flex-start',
-                                paddingHorizontal: 25,
-                              },
-                              errors.state && {
-                                borderColor: 'red',
-                                borderWidth: 2,
-                              },
-                            ]}
-                            rowTextStyle={{
-                              textAlign: 'left',
-                              fontSize: responsiveFontSize(1.9),
-                            }}
-                            rowStyle={{paddingHorizontal: 8}}
-                            dropdownStyle={{borderRadius: 10}}
-                            buttonTextStyle={{
-                              textAlign: 'left',
-                              fontSize: responsiveFontSize(1.9),
-                            }}
-                            renderDropdownIcon={() => (
-                              <Image
-                                style={{
-                                  width: 16,
-                                  height: 16,
-                                  resizeMode: 'center',
-                                }}
-                                source={DROP_ICON}
-                              />
-                            )}
-                            onSelect={(selectedItem, index) => {
-                              setFieldValue('state', selectedItem);
-                              // selectedItems(selectedItem);
-                              const cities = userdata?.data?.find(
-                                data => data?.name === selectedItem,
-                              );
-                              if (cities) {
-                                dispatch(
-                                  userinfocity({
-                                    countryCode: cities?.countryCode,
-                                    isoCode: cities?.isoCode,
-                                  }),
-                                );
-                              }
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                              return selectedItem;
-                            }}
-                            rowTextForSelection={(item, index) => {
-                              return item;
-                            }}
-                          />
-                        </View>
-                      </>
-                    )}
-
+                  {namesCities?.length > 0 && (
                     <View>
                       <View
                         style={{
@@ -464,80 +314,232 @@ const SettingsProfile = () => {
                           marginLeft: 'auto',
                         }}>
                         <Text style={[styles.text, {color: FourthColor}]}>
-                          Zip Code
+                          City
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          paddingVertical: 12,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <SelectDropdown
+                          data={namesCities}
+                          defaultButtonText="Select here"
+                          defaultValue={values.city}
+                          // plac
+                          // searchPlaceHolderColor={"red"}
+                          renderDropdownIcon={() => (
+                            <Image
+                              style={{
+                                width: 16,
+                                height: 16,
+                                resizeMode: 'center',
+                              }}
+                              source={DROP_ICON}
+                            />
+                          )}
+                          buttonStyle={[
+                            {
+                              width: '80%',
+                              backgroundColor: TextinputColor,
+                              borderRadius: 10,
+                              justifyContent: 'flex-start',
+                              paddingHorizontal: 25,
+                            },
+                            errors.state && {
+                              borderColor: 'red',
+                              borderWidth: 2,
+                            },
+                          ]}
+                          rowTextStyle={{
+                            textAlign: 'left',
+                            fontSize: responsiveFontSize(1.9),
+                          }}
+                          rowStyle={{paddingHorizontal: 8}}
+                          dropdownStyle={{borderRadius: 10}}
+                          buttonTextStyle={{
+                            textAlign: 'left',
+                            fontSize: responsiveFontSize(1.9),
+                          }}
+                          onSelect={(selectedItem, index) => {
+                            setFieldValue('city', selectedItem);
+                            console.log('selectitem', selectedItem);
+                            handleInitCity(selectedItem);
+                          }}
+                          buttonTextAfterSelection={(selectedItem, index) => {
+                            return selectedItem;
+                          }}
+                          rowTextForSelection={(item, index) => {
+                            return item;
+                          }}
+                        />
+                      </View>
+                    </View>
+                  )}
+
+                  {/* State----------- */}
+                  {namesArray?.length > 0 && (
+                    <>
+                      <View
+                        style={{
+                          width: responsiveWidth(89),
+                          marginLeft: 'auto',
+                        }}>
+                        <Text style={[styles.text, {color: FourthColor}]}>
+                          State
                         </Text>
                       </View>
 
-                      <TextInputField
-                        placeholderText="Type here"
-                        type="zipcode"
-                        value={values.zipCode}
-                        // onChangeText={(val) => handlezipcode(val)}
-                        onChangeText={handleChange('zipCode')}
-                      />
-                    </View>
-
-                    <View
-                      style={{
-                        paddingVertical: responsiveWidth(6),
-                        alignSelf: 'center',
-                      }}>
-                      <TouchableOpacity
-                        onPress={handleSubmit}
+                      <View
                         style={{
-                          width: responsiveWidth(80),
-                          backgroundColor:
-                            values.email &&
-                            values.firstName &&
-                            values.lastName &&
-                            values.phoneNo &&
-                            values.username
-                              ? '#395E66'
-                              : 'rgba(57, 94, 102, 0.6)',
-                          borderRadius: 10,
-                          borderWidth: 1,
-                          borderColor: '#395E66',
+                          paddingVertical: 12,
                           justifyContent: 'center',
                           alignItems: 'center',
-                          height: responsiveHeight(6.6),
-                        }}
-                        disabled={
-                          !(
-                            values.email &&
-                            values.firstName &&
-                            values.lastName &&
-                            values.phoneNo &&
-                            values.username
-                          )
-                        }>
-                        <Text
-                          style={{
+                        }}>
+                        <SelectDropdown
+                          data={namesArray}
+                          defaultButtonText="Select here"
+                          defaultValue={values.state}
+                          buttonStyle={[
+                            {
+                              width: '80%',
+                              backgroundColor: TextinputColor,
+                              borderRadius: 10,
+                              justifyContent: 'flex-start',
+                              paddingHorizontal: 25,
+                            },
+                            errors.state && {
+                              borderColor: 'red',
+                              borderWidth: 2,
+                            },
+                          ]}
+                          rowTextStyle={{
+                            textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
-                            fontWeight: '600',
-                            letterSpacing: 0.28,
-                            color: 'white',
-                          }}>
-                          Save
-                        </Text>
-                      </TouchableOpacity>
+                          }}
+                          rowStyle={{paddingHorizontal: 8}}
+                          dropdownStyle={{borderRadius: 10}}
+                          buttonTextStyle={{
+                            textAlign: 'left',
+                            fontSize: responsiveFontSize(1.9),
+                          }}
+                          renderDropdownIcon={() => (
+                            <Image
+                              style={{
+                                width: 16,
+                                height: 16,
+                                resizeMode: 'center',
+                              }}
+                              source={DROP_ICON}
+                            />
+                          )}
+                          onSelect={(selectedItem, index) => {
+                            setFieldValue('state', selectedItem);
+                            // selectedItems(selectedItem);
+                            const cities = userdata?.data?.find(
+                              data => data?.name === selectedItem,
+                            );
+                            if (cities) {
+                              dispatch(
+                                userinfocity({
+                                  countryCode: cities?.countryCode,
+                                  isoCode: cities?.isoCode,
+                                }),
+                              );
+                            }
+                          }}
+                          buttonTextAfterSelection={(selectedItem, index) => {
+                            return selectedItem;
+                          }}
+                          rowTextForSelection={(item, index) => {
+                            return item;
+                          }}
+                        />
+                      </View>
+                    </>
+                  )}
+
+                  <View>
+                    <View
+                      style={{
+                        width: responsiveWidth(89),
+                        marginLeft: 'auto',
+                      }}>
+                      <Text style={[styles.text, {color: FourthColor}]}>
+                        Zip Code
+                      </Text>
                     </View>
+
+                    <TextInputField
+                      placeholderText="Type here"
+                      type="zipcode"
+                      value={values.zipCode}
+                      // onChangeText={(val) => handlezipcode(val)}
+                      onChangeText={handleChange('zipCode')}
+                    />
                   </View>
-                  {/* <Toast /> */}
-                </>
-              )}
-            </Formik>
-            <UploadImage
-              uploadImageRef={uploadProfileImageRef}
-              setImage={setProfileImage}
-            />
-            <UploadImage
-              uploadImageRef={uploadCoverImageRef}
-              setImage={setCoverImage}
-            />
-          </>
-        )}
-      </>
-    </BackgroundWrapper>
+
+                  <View
+                    style={{
+                      paddingVertical: responsiveWidth(6),
+                      alignSelf: 'center',
+                    }}>
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                      style={{
+                        width: responsiveWidth(80),
+                        backgroundColor:
+                          values.email &&
+                          values.firstName &&
+                          values.lastName &&
+                          values.phoneNo &&
+                          values.username
+                            ? '#395E66'
+                            : 'rgba(57, 94, 102, 0.6)',
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: '#395E66',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: responsiveHeight(6.6),
+                      }}
+                      disabled={
+                        !(
+                          values.email &&
+                          values.firstName &&
+                          values.lastName &&
+                          values.phoneNo &&
+                          values.username
+                        )
+                      }>
+                      <Text
+                        style={{
+                          fontSize: responsiveFontSize(1.9),
+                          fontWeight: '600',
+                          letterSpacing: 0.28,
+                          color: 'white',
+                        }}>
+                        Save
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {/* <Toast /> */}
+              </>
+            )}
+          </Formik>
+          <UploadImage
+            uploadImageRef={uploadProfileImageRef}
+            setImage={setProfileImage}
+          />
+          <UploadImage
+            uploadImageRef={uploadCoverImageRef}
+            setImage={setCoverImage}
+          />
+        </BackgroundWrapper>
+      )}
+    </>
   );
 };
 
