@@ -6,7 +6,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { FourthColor, TextinputColor } from '../screens/Styles/Style';
+import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import { verticalScale } from 'react-native-size-matters';
 
 const PhoneNumber = ({

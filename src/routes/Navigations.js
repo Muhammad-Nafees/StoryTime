@@ -197,7 +197,7 @@ const ProfileScreens = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
+    <Stack.Navigator screenOptions={{
       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       headerShown: false
     }}>

@@ -1,19 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import {Field} from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {moderateScale, verticalScale} from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
   responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {FourthColor, TextinputColor} from '../screens/Styles/Style';
-import {username_api} from '../../services/api/auth_mdule/auth';
+import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
+import { username_api } from '../../../services/api/auth_mdule/auth';
 import _ from 'lodash';
-import {Path, Svg} from 'react-native-svg';
-import {Inter_Regular} from '../constants/GlobalFonts';
+import { Path, Svg } from 'react-native-svg';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 const CustomPhoneInput = ({
   handleChange,
@@ -60,7 +60,7 @@ const CustomPhoneInput = ({
   ).current;
 
   const handleCountryChange = () => {
-    phoneInput.current?.setState({number: ''});
+    phoneInput.current?.setState({ number: '' });
     setFieldValue('phoneNo', '');
     setIsError('Phone number is required!');
   };
@@ -83,7 +83,7 @@ const CustomPhoneInput = ({
   };
 
   return (
-    <View style={{paddingVertical: 10}}>
+    <View style={{ paddingVertical: 10 }}>
       <Text
         style={{
           color: FourthColor,
@@ -96,7 +96,7 @@ const CustomPhoneInput = ({
       <Field name="phoneNo">
         {() => (
           <PhoneInput
-          
+
             ref={phoneInput}
             disabled={disabled}
             placeholder=" "
@@ -105,7 +105,7 @@ const CustomPhoneInput = ({
             containerStyle={styles.phoneContainer}
             textContainerStyle={styles.phoneTextContainer}
             textInputStyle={styles.phoneTextInput}
-            flagButtonStyle={{width: 90}}
+            flagButtonStyle={{ width: 90 }}
             value={value}
             codeTextStyle={{
               color: 'rgba(170, 170, 170, 1)',
@@ -172,7 +172,7 @@ const CustomPhoneInput = ({
             marginTop: 2,
           }}>
           <Icon name="alert-circle" size={22} color="red" />
-          <Text style={{color: 'red'}}>{error || isError}</Text>
+          <Text style={{ color: 'red' }}>{error || isError}</Text>
         </View>
       )}
     </View>

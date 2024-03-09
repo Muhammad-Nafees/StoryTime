@@ -158,7 +158,7 @@ export const get_Comment_api = async (paginations) => {
 
 export const createStory_api = async ({ type, creator, category, subCategory, contributors, content }) => {
     console.log("creatorsss=====", creator, category, subCategory, contributors, content)
-    let textstory = {}
+    let textstory = {};
     if (contributors) {
         textstory = {
             type,
@@ -189,7 +189,6 @@ export const createStory_api = async ({ type, creator, category, subCategory, co
             body: JSON.stringify(textstory)
         });
         const response = await responseData.json()
-        console.log("response=====", response)
         return response
     } catch (error) {
         console.log(error)

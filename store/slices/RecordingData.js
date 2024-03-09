@@ -9,7 +9,7 @@ const initialState = {
     extendStoryCheckVideo: null,
     extendVideo: null,
     extendCountingVideo: 30
-}
+};
 
 const RecordingData = createSlice({
     name: "Recording_Data",
@@ -43,7 +43,7 @@ const RecordingData = createSlice({
         },
         extendVideo: (state, { payload }) => {
             state.extendVideo = payload
-        }
+        },
 
         // recordingToHome(state, { payload }) {
         //     state.recordingTextToHome = payload,

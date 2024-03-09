@@ -4,9 +4,16 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFriends, removeUser, tagRemoveUsers } from '../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, addTagPlayers, removeUser, tagRemoveUsers } from '../../store/slices/addplayers/addPlayersSlice';
+import { tag_Friends } from '../../services/api/profile';
 
-const RemoveUsers_Categories = ({ item, userid, username, type }) => {
+const RemoveUsers_Categories = ({
+    item,
+    userid,
+    username,
+    type,
+    storyId
+}) => {
 
     const dispatch = useDispatch();
     const removeFriends = useSelector((state) => state?.addPlayers?.addFriends);
@@ -18,12 +25,21 @@ const RemoveUsers_Categories = ({ item, userid, username, type }) => {
             const removeuser = { userid, username }
             dispatch(removeUser(removeuser));
         } else {
-            const removeuser = { userid, username }
-            dispatch(tagRemoveUsers(removeuser));
+            tagFriendsRemove()
         }
     };
 
-    console.log("remvoeFriends------------- :", removeFriends)
+    const tagFriendsRemove = async () => {
+        const responseData = await tag_Friends({ userid, storyId });
+        if (responseData) {
+            const removeuser = { userid, username }
+            dispatch(tagRemoveUsers(removeuser));
+        }
+        console.log("responseDataTag----", responseData)
+        return responseData;
+    }
+
+    console.log("remvoeFriends------------- :", removeFriends);
 
     return (
         <>
@@ -38,7 +54,6 @@ const RemoveUsers_Categories = ({ item, userid, username, type }) => {
                     <Text style={{ color: "#209BCC", fontSize: responsiveFontSize(1.9) }}>Remove</Text>
                 </TouchableOpacity>
             </View>
-
         </>
 
     )

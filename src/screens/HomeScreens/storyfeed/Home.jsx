@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
+import { setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const Home = () => {
@@ -44,7 +45,7 @@ const Home = () => {
             setResponseapi(responseData?.data?.users);
             if (responseData?.statusCode == 401) {
                 const responseToken = await refresh_token_api(REFRESH_TOKEN);
-                console.log("responseTokenfunc-----", responseToken)
+                console.log("responseTokenfunc-----", responseToken);
                 return responseToken;
             }
             return responseData;
@@ -52,6 +53,8 @@ const Home = () => {
             console.log("err", error)
         }
     };
+
+
 
     useEffect(() => {
         addFriends_api_handler();
@@ -80,7 +83,7 @@ const Home = () => {
             }
         };
         fetchUsers();
-    }, [page, isRefreshing,])
+    }, [page, isRefreshing,]);
 
 
 
@@ -102,6 +105,13 @@ const Home = () => {
         setTimeout(() => {
             setIsRefreshing(false);
         }, 1000);
+    };
+
+    const handleFriends = (friendId) => {
+        navigation.navigate("profileStack", {
+            screen: "Profile",
+        })
+        dispatch(setFriendId(friendId))
     };
 
     return (
@@ -139,9 +149,10 @@ const Home = () => {
                         // onRefresh={onRefresh}
                         // refreshing={isRefreshing}
                         renderItem={({ item, index }) => {
+                            console.log("item---- :", item?._id);
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
+                                    <TouchableOpacity onPress={() => handleFriends(item?._id)} style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
                                         <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../../assets/first-img.png")} />
                                     </TouchableOpacity>
                                     <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>

@@ -1,14 +1,12 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
-import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
+import { Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import BackButton from '../components/BackButton';
-import TouchableButton from './TouchableButton';
-import { Img_Paths } from '../assets/Imagepaths';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/Constant';
-import { Inter_Medium, Inter_Regular } from '../constants/GlobalFonts';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
+import { Inter_Medium, Inter_Regular } from '../../constants/GlobalFonts';
+
 
 
 const UserErrors = ({ isVisible, setVisible, text, onPress, text1, bgImage }) => {
@@ -22,7 +20,7 @@ const UserErrors = ({ isVisible, setVisible, text, onPress, text1, bgImage }) =>
 
                     <View style={{ justifyContent: "center", alignItems: "center", }}>
                         <View style={{ backgroundColor: "rgba(48, 210, 152, 1)", borderRadius: 50, height: 40, width: 40, justifyContent: "center", alignItems: "center", }}>
-                            <Image style={{ width: SCREEN_WIDTH * 0.08, height: SCREEN_WIDTH * 0.08, resizeMode: "center", }} source={require("../assets/456-img.png")} />
+                            <Image style={{ width: SCREEN_WIDTH * 0.08, height: SCREEN_WIDTH * 0.08, resizeMode: "center", }} source={require("../../assets/456-img.png")} />
                         </View>
                         <Text style={{ paddingTop: responsiveWidth(3), fontSize: responsiveFontSize(1.9), fontWeight: "600", color: "#000", fontFamily: Inter_Regular.Inter_Regular }}>{text1}</Text>
                     </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -12,9 +12,10 @@ import SettingButton from '../../../components/SettingButton';
 import TouchableButton from '../../../components/TouchableButton';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { base, get_story_byId } from '../../../../services';
-import { getStory_Byid, hide_Story } from '../../../../services/api/profile';
+import { fetch_users_stories, getStory_Byid, hide_Story } from '../../../../services/api/profile';
 import CustomEmoji from '../../../components/likeDislikesandComments/CustomEmoji';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { Switch } from 'react-native-switch';
 
 const VoiceToTextProfile = ({ route }) => {
 
@@ -27,56 +28,63 @@ const VoiceToTextProfile = ({ route }) => {
     const [isMoreLength, setIsMoreLength] = useState(false);
     const [getresponseById, setGetresponseById] = useState([]);
     const [isClicked, setIsClicked] = useState(true);
-    const [isHidden, setIsHidden] = useState(false)
+    const [isHidden, setIsHidden] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(null);
+    const [isEnabled2, setIsEnabled2] = useState(null);
     const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
-    // const isHidden = useSelector((state) => state?.addPlayers?.isHidden);
     const storyId = route?.params?.storyuserId;
+    const storyuserid = route?.params;
+    const IS_HIDDEN = route?.params?.isHidden;
 
+    // console.log("userid,---- :", storyuserid);
 
     const getStory_Byid_api = async () => {
         try {
             const responseData = await getStory_Byid(storyId);
             setGetresponseById(responseData?.data)
             setIsHidden(responseData?.data?.isHidden)
-            console.log("responseData hiden------", responseData?.data?.isHidden);
             return responseData;
         } catch (error) {
         }
     };
+
+
+
+    const profile_story_api = async () => {
+        try {
+            const responseData = await fetch_users_stories({
+                recordingPage: 1,
+                type: "text"
+            });
+            console.log("testResponse", responseData?.data?.stories[0])
+            return responseData;
+        } catch (error) {
+            console.log("err", error);
+        };
+    };
+
+    const toggleSwitch = async (apiKey = null) => {
+        profile_story_api()
+        setIsEnabled(previousState => !previousState);
+        let response = await hide_Story(storyId);
+        console.log("response Hidden--- : ", response?.data);
+    };
+
+    // const getInitialToggleValue = async () => {
+    // };
 
     useEffect(() => {
+        setIsEnabled(IS_HIDDEN);
+        // getInitialToggleValue();
         getStory_Byid_api();
     }, []);
-
-    const hide_Storyapi = async () => {
-        try {
-            const responseData = await hide_Story(storyId);
-            // setIsHidden(responseData?.data?.isHidden);
-            console.log("response :", responseData);
-            return responseData;
-        } catch (error) {
-        }
-    };
-
-    const handleHideStory = () => {
-        if (isClicked) {
-            hide_Storyapi();
-            animation.value = withSpring(responsiveWidth(7.25))
-        } else {
-            hide_Storyapi();
-            animation.value = withSpring(responsiveWidth(-0.4))
-        };
-        setIsClicked(!isClicked);
-    };
-    console.log("iahiden------ :", isClicked)
-    const contentLength = getresponseById?.content?.length || 0;
 
     const animation = useSharedValue(0);
     const animationStyle = useAnimatedStyle(() => {
         return { transform: [{ translateX: animation.value }] }
     });
 
-    // console.log("ishide---- :", isHidden);
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -116,11 +124,28 @@ const VoiceToTextProfile = ({ route }) => {
                                         <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
                                     </View>
 
-                                    <TouchableOpacity onPress={() => {
-                                        handleHideStory()
-                                    }} activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}>
-                                        <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} />
-                                    </TouchableOpacity>
+                                    {/* <TouchableOpacity   activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}> */}
+                                    {/* <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} /> */}
+
+                                    {isEnabled !== null ?
+                                        <Switch
+                                            value={isEnabled}
+                                            onValueChange={() => {
+                                                toggleSwitch();
+                                            }}
+                                            circleSize={25}
+                                            barHeight={15}
+                                            backgroundActive={'#68AEBD'}
+                                            backgroundInactive={'#D4D4D4'}
+                                            circleActiveColor={'#2F4F56'}
+                                            circleInActiveColor={'#68AEBD'}
+                                            changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+                                            renderActiveText={false}
+                                            renderInActiveText={false}
+                                        /> : <ActivityIndicator />
+                                    }
+
+                                    {/* </TouchableOpacity> */}
 
                                 </View>
                             </View>
@@ -153,12 +178,11 @@ const VoiceToTextProfile = ({ route }) => {
 
                                             <View style={{ paddingTop: responsiveWidth(4), justifyContent: "center", alignItems: "center" }}>
                                                 <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
-                                                    {/* {
+                                                    {
                                                         !isMoreLength ?
                                                             getresponseById?.content?.slice(0, 220) :
                                                             getresponseById?.content
-                                                    } */}
-                                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo
+                                                    }
                                                     {/* "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo */}
                                                 </Text>
                                             </View>

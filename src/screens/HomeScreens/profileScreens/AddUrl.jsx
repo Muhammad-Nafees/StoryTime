@@ -8,7 +8,7 @@ import BackButton from '../../../components/BackButton';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
 import SelectDropdown from 'react-native-select-dropdown';
 import TouchableButton from '../../../components/TouchableButton';
-import CustomSelectDropDown from '../../../components/SelectDropDown';
+import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
@@ -17,6 +17,7 @@ import { setAddUrlId } from '../../../../store/slices/addplayers/addPlayersSlice
 import { createStory_api } from '../../../../services/api/storyfeed';
 import { userLoginid } from '../../../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserErrors from '../../../components/auth/UserErrors';
 
 
 
@@ -30,26 +31,28 @@ const AddUrl = () => {
     const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
 
 
-
-    console.log("addUrlId :", addUrlId)
     const [changeColor, setChangeColor] = useState("#AAA");
     const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
     const [textInputValue, setTextInputValue] = useState("");
     const [HasMorePages, setHasMorePages] = useState(false);
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [responseCategories, setResponseCategories] = useState([]);
-    const [checkSubCategory, setCheckSubCategory] = useState(false);
     const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [pageSubCategory, setPageSubCategory] = useState(1);
-    const [responseSubCategories, setResponseSubCategories] = useState([])
+    const [responseSubCategories, setResponseSubCategories] = useState([]);
     const dispatch = useDispatch();
 
-    // console.log("textonputvalue---- :", textInputValue);
+
 
     const categories_Api = async () => {
-
         try {
-            const responseData = await get_Categories_Sub_Categories({ page: page, id: addUrlId, page2: pageSubCategory });
+            const responseData = await get_Categories_Sub_Categories({
+                page: page,
+                id: addUrlId,
+                page2: pageSubCategory
+            });
             if (addUrlId) {
                 setResponseSubCategories(responseData?.data?.categories);
             } else {
@@ -64,19 +67,22 @@ const AddUrl = () => {
         }
     };
 
-    // console.log("categoryId", categoryId);
-    // console.log("subCategoryId", subCategoryId);
+
+
     const createStory_video = async () => {
+        setIsLoading(true);
         try {
             const userLoginId = await AsyncStorage.getItem('isUserId');
             console.log("userloginId---- :", userLoginId)
-            const response = createStory_api({
+            const response = await createStory_api({
                 type: "video",
                 creator: userLoginId,
                 category: categoryId,
                 subCategory: subCategoryId,
                 content: textInputValue
             });
+            setIsVisible(true);
+            setIsLoading(false);
             console.log("response---- :", response)
             return response;
         } catch (error) {
@@ -90,6 +96,8 @@ const AddUrl = () => {
             dispatch(setAddUrlId(""))
         }
     }, [page, addUrlId, pageSubCategory]);
+
+
 
     const categoriesNames = responseCategories?.map((category) => category?.name);
     const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
@@ -180,15 +188,20 @@ const AddUrl = () => {
                                     height: responsiveHeight(6.6),
                                 }}>
 
-                                <Text
-                                    style={{
-                                        fontSize: responsiveFontSize(1.9),
-                                        fontWeight: '600',
-                                        letterSpacing: 0.28,
-                                        color: "#FFF",
-                                    }}>
-                                    Post
-                                </Text>
+                                {
+                                    !isLoading ?
+                                        <Text
+                                            style={{
+                                                fontSize: responsiveFontSize(1.9),
+                                                fontWeight: '600',
+                                                letterSpacing: 0.28,
+                                                color: "#FFF",
+                                            }}>
+                                            Post
+                                        </Text>
+                                        :
+                                        <ActivityIndicator />
+                                }
 
                             </TouchableOpacity>
                         </View>
@@ -196,6 +209,17 @@ const AddUrl = () => {
                     </View>
                 </View>
 
+                {
+                    isVisible &&
+                    <UserErrors
+                        bgImage={BG_URL_PAGE}
+                        text={"Back"}
+                        isVisible={isVisible}
+                        setVisible={setIsVisible}
+                        text1={"Successfully Added!"}
+                        onPress={() => navigation.navigate("Profile")}
+                    />
+                }
             </ImageBackground>
         </View>
 

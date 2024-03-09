@@ -107,6 +107,7 @@ const TagFriends = ({ route }) => {
                                             item={item}
                                             userid={item.userid}
                                             username={item.username}
+                                            storyId={storyId}
                                             type="tagFriends"
                                         />
                                     ))

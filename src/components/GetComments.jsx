@@ -14,9 +14,6 @@ import {
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { useDispatch } from 'react-redux';
-import { getComments_func } from '../../store/slices/storyfeedslices/getCommentsSlice';
-import { Base_Url } from '../../services';
 import CommentImagePreview, {
   CommentsImagePreview,
 } from './comments/CommentImagePreview';
@@ -27,14 +24,8 @@ const GetComments = ({
   firstName,
   lastName,
   createdAt,
-  handleLoadMore,
-  isLoadMore,
-  commentsCount,
-  getCommentsstoryId,
   media,
   commentsUserid,
-  commentsUserid2,
-  isReplying,
   setIsReplyingId,
   setIsReply,
   replies,

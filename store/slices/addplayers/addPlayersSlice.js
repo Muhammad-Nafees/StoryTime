@@ -17,9 +17,10 @@ const initialState = {
     publicAndPrivateMode: null,
     addTagPlayers: [],
     isHidden: false,
+    friendId: "",
     addUrlid: "",
     urlCategoryname: "",
-    urlSubcategoryname: "",
+    urlSubcategoryname: ""
 };
 
 const addPlayers = createSlice({
@@ -120,9 +121,10 @@ const addPlayers = createSlice({
         subCategorynameUrl: (state, { payload }) => {
             state.urlSubcategoryname = payload;
         },
-        setUserIdandUsername: (state, { payload }) => {
-
-        }
+        setFriendId: (state, action) => {
+            state.friendId = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
     },
 });
 
@@ -146,7 +148,8 @@ export const {
     isHidden,
     setAddUrlId,
     categorynameUrl,
-    subCategorynameUrl
+    subCategorynameUrl,
+    setFriendId
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

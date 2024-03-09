@@ -8,36 +8,36 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import {SecondaryColor, TextColorGreen, White} from '../../Styles/Style';
-import {useNavigation} from '@react-navigation/native';
-import AuthImage from '../../../components/AuthImage';
+import { SecondaryColor, TextColorGreen, White } from '../../Styles/Style';
+import { useNavigation } from '@react-navigation/native';
+import AuthImage from '../../../components/auth/AuthImage';
 import NavigationsString from '../../../constants/NavigationsString';
-import {moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Inter_Regular} from '../../../constants/GlobalFonts';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const SplashScreen = () => {
-  const {STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS} = Img_Paths;
-  const {LOGIN, REGISTER} = NavigationsString;
+  const { STORY_TIME_IMG, BG_FRAME, LOGIN_IMG, BG_IMAGE_ELEMENTS } = Img_Paths;
+  const { LOGIN, REGISTER } = NavigationsString;
 
-  const {width, height} = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();
 
   return (
     <ImageBackground style={styles.container} source={BG_IMAGE_ELEMENTS}>
       <View style={styles.story_time_container}>
         <Image
-          style={[styles.img, {width: width * 0.8, height: height * 0.3}]}
+          style={[styles.img, { width: width * 0.8, height: height * 0.3 }]}
           source={STORY_TIME_IMG}
         />
       </View>
 
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <AuthImage
           onPress={() => navigation.navigate('GuestStack')}
           ImageSource={BG_FRAME}

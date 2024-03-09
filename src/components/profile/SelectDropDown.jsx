@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Image } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import { TextinputColor } from "../screens/Styles/Style";
+import { TextinputColor } from "../../screens/Styles/Style";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
-import { categorynameUrl, setAddUrlId, subCategorynameUrl } from "../../store/slices/addplayers/addPlayersSlice";
+import { categorynameUrl, setAddUrlId, subCategorynameUrl } from "../../../store/slices/addplayers/addPlayersSlice";
 import { useDispatch } from "react-redux";
 
 
@@ -29,14 +29,15 @@ const CustomSelectDropDown = ({ responseCategories,
 
     const handleLoadMore = async () => {
 
-        if (HasMorePages) {
-            // setshowTextUser(false);
-            setPageSubCategory((prevPage) => prevPage + 1);
-            setIsLoadMore(true);
-            console.log("hasmore Pages Dropdown", HasMorePages)
-        } else {
-            setIsLoadMore(false);
-        }
+        // if (HasMorePages) {
+        //     // setshowTextUser(false);
+        //     setPageSubCategory((prevPage) => prevPage + 1);
+        //     setIsLoadMore(true);
+        //     console.log("hasmore Pages Dropdown", HasMorePages)
+        // } else {
+        //     setIsLoadMore(false);
+        // }
+
     };
 
 
@@ -60,7 +61,7 @@ const CustomSelectDropDown = ({ responseCategories,
             renderDropdownIcon={() => (
                 <Image
                     style={{ width: 16, height: 16, resizeMode: 'center' }}
-                    source={require('../assets/bottom-icon.png')}
+                    source={require('../../assets/bottom-icon.png')}
                 />
             )}
 
@@ -79,11 +80,9 @@ const CustomSelectDropDown = ({ responseCategories,
                     console.log("subcategoir------- :", subcategoriesObj);
                     if (categoriesObj) {
                         const _id = categoriesObj?._id;
-                        // setResponseCategories([]);
                         setResponseSubCategories([]);
                         dispatch(categorynameUrl(_id));
                         dispatch(setAddUrlId(_id));
-                        console.log("catgiriesObj", categoriesObj?._id);
                     } else if (subcategoriesObj) {
                         const subcat_id = subcategoriesObj?._id;
                         dispatch(subCategorynameUrl(subcat_id));

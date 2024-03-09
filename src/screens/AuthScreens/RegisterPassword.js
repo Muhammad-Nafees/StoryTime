@@ -31,7 +31,7 @@ import { useNavigation } from '@react-navigation/native';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import UserErrors from '../../components/UserErrors';
+import UserErrors from '../../components/auth/UserErrors';
 import NavigationsString from '../../constants/NavigationsString';
 import { registerapi } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';

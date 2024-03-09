@@ -16,15 +16,15 @@ import {
   FourthColor,
   TextColorGreen,
   TextinputColor,
-} from '../screens/Styles/Style';
+} from '../../screens/Styles/Style';
 import _ from 'lodash';
-import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
+import reset_email, { username_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-import { Img_Paths } from '../assets/Imagepaths';
-import NavigationsString from '../constants/NavigationsString';
-import TouchableButton from './TouchableButton';
-import { Inter_Medium, Inter_SemiBold } from '../constants/GlobalFonts';
+import { Img_Paths } from '../../assets/Imagepaths';
+import NavigationsString from '../../constants/NavigationsString';
+import TouchableButton from '../TouchableButton';
+import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
   const { FORGET_BG_IMG } = Img_Paths;

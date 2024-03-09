@@ -3,23 +3,14 @@ import { StyleSheet, View, TextInput, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { verticalScale } from 'react-native-size-matters';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
-import { FourthColor, TextinputColor } from '../screens/Styles/Style';
+import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import _ from 'lodash';
-import { username_api } from '../../services/api/auth_mdule/auth';
+import { username_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
-import { Inter_Regular } from '../constants/GlobalFonts';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 const CustomInput = (props,) => {
-  // const [isFocused, setIsFocused] = useState(false);
-
-  // const handleInputFocus = () => {
-  //   setIsFocused(true);
-  // };
-
-  // const handleInputBlur = () => {
-  //   setIsFocused(false);
-  // };
 
   const debouncedApiCall = useRef(
     _.debounce(async (value, setFieldError, fieldName) => {

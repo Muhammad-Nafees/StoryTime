@@ -37,7 +37,7 @@ import { Formik } from 'formik';
 import { validationforgetEmail } from '../../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import _ from 'lodash';
-import CustomInputForgetEmail from '../../../components/CustomInputForgetEmail';
+import CustomInputForgetEmail from '../../../components/auth/CustomInputForgetEmail';
 import useKeyboard from '../../../hooks/AvoidingKeyboard';
 
 const ForgetEmail = () => {
