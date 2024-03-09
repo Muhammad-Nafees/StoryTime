@@ -9,14 +9,15 @@ export const fetch_users_stories = async ({
     friendId,
     user
 }) => {
-    console.log("friendId---- :", friendId);
+
 
     let url;
     if (isincognitoPage) {
         url = `${Base_Url}${story_profile}?page=${isincognitoPage}&limit=${10}&type=${type}`;
     } else {
-        url = `${Base_Url}${story_profile}?page=${recordingPage}&limit=${10}&type=${type}`;
+        url = `${Base_Url}${story_profile}?page=${recordingPage}&limit=${10}&type=${type}&user=${user}`;
     };
+
     console.log("url ---- :", url);
 
     try {

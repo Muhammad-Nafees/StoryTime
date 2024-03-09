@@ -107,12 +107,16 @@ const Home = () => {
         }, 1000);
     };
 
+
     const handleFriends = (friendId) => {
         navigation.navigate("profileStack", {
             screen: "Profile",
         })
+        console.log("friendId---- : ", friendId)
         dispatch(setFriendId(friendId))
     };
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>

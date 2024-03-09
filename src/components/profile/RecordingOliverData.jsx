@@ -14,7 +14,8 @@ const RecordingOliverData = ({
     isLoadingRecording,
     isNoDataProfile,
     setRecordingPage,
-    hasMorePagesRecording
+    hasMorePagesRecording,
+    isUserProfileData
 }) => {
 
     const navigation = useNavigation();
@@ -65,7 +66,7 @@ const RecordingOliverData = ({
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>
                     :
-                    isNoDataProfile && video_profile_response?.length == 0 ?
+                    isUserProfileData || isNoDataProfile && video_profile_response?.length == 0 ?
                         (
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                                 <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{isNoDataProfile}</Text>

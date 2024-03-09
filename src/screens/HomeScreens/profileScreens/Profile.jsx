@@ -28,7 +28,7 @@ import RecordingOliverData from '../../../components/profile/RecordingOliverData
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsPublicOrPrivateMode } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setFriendId, setIsPublicOrPrivateMode } from '../../../../store/slices/addplayers/addPlayersSlice';
 import LogoutBtn from '../../../components/profile/LogoutBtn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
@@ -47,34 +47,26 @@ const Profile = ({ route }) => {
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
   const [response_ProfileVideo, setResponse_ProfileVideo] = useState([]);
   const [profile_response, setProfileResponse] = useState([]);
+  const [responseUserProfile, setResponseUserProfile] = useState({});
+  const [isUserProfileData, setIsUserProfileData] = useState(false);
   const dispatch = useDispatch();
   const reduxPublicInc = useSelector((state) => state?.addPlayers?.publicAndPrivateMode);
   const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
 
-
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
 
-  // const FRIEND_ID = route?.params?.friendId;
-
   console.log("from Home", FriendIdRTK);
-  // const FRIEND_ID = parseFloat(FriendIdRTK);
 
   const getUsersProfile = async () => {
     try {
       const response = await getUsers_Profile({ user: FriendIdRTK });
-      console.log("response--- :", response);
+      setResponseUserProfile(response?.data);
+      console.log("response getUserProfile--- :", response);
       return response;
     } catch (error) {
     };
   };
-
-  useEffect(() => {
-    getUsersProfile();
-  }, [FriendIdRTK])
-
-
-
 
   const toggel_mode = async () => {
     try {
@@ -88,8 +80,6 @@ const Profile = ({ route }) => {
     };
   };
 
-  console.log("id ;========== :", typeof FriendIdRTK)
-
   const profile_story_api = async () => {
 
     if (hasMorePagesRecording) {
@@ -102,25 +92,29 @@ const Profile = ({ route }) => {
       const responseData = await fetch_users_stories({
         recordingPage: recordingPage,
         type: type,
-        // user: FriendIdRTK
+        user: FriendIdRTK,
       });
 
       const responsestories = responseData?.data?.stories;
-      console.log("responsestories---- :", responsestories);
-      console.log("FUNC-updated.... API----------------------:");
+      // console.log("responsestories---- :", responseData?.data);
+
       if (responsestories && type === "text") {
         setIsLoadingRecording(false);
         setProfileResponse((prevData) => [...prevData, ...responsestories]);
+        setIsUserProfileData(false);
       }
       else if (responsestories && type === "video") {
         console.log("responsestories Video---- :", responsestories);
         setIsLoadingRecording(false);
+        setIsUserProfileData(false);
         setResponse_ProfileVideo((prevData) => [...prevData, ...responsestories]);
+      } else if (responseData?.data === null) {
+        setIsUserProfileData(true);
+        setIsLoadingRecording(false);
+        console.log("DATA NULL ------------ :")
       }
-      else {
-        setIsNoDataProfile("No any story found");
-      };
-      console.log("FUNC-updated.... API again----------------------:");
+
+      console.log("responsestories---- :", responseData);
       setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
 
       return responseData;
@@ -130,18 +124,22 @@ const Profile = ({ route }) => {
   };
 
 
-
   useFocusEffect(
     useCallback(() => {
       setType("text");
       profile_story_api();
-    }, [type, recordingPage])
+      getUsersProfile();
+      return () => {
+        dispatch(setFriendId(""));
+        setProfileResponse([]);
+        setResponse_ProfileVideo([]);
+      }
+    }, [type, recordingPage, FriendIdRTK])
   );
 
+
   // useEffect(() => {
-
-  // }, [type, recordingPage, FriendIdRTK,]);
-
+  // }, [type, recordingPage, FriendIdRTK]);
 
 
   // <>
@@ -281,6 +279,7 @@ const Profile = ({ route }) => {
               setRecordingPage={setRecordingPage}
               setIsLoadingRecording={setIsLoadingRecording}
               isLoadingRecording={isLoadingRecording}
+              isUserProfileData={isUserProfileData}
             />
           )
             :
@@ -291,6 +290,7 @@ const Profile = ({ route }) => {
                 hasMorePagesRecording={hasMorePagesRecording}
                 setRecordingPage={setRecordingPage}
                 isLoadingRecording={isLoadingRecording}
+                isUserProfileData={isUserProfileData}
               />
             )}
         </View>
