@@ -10,6 +10,7 @@ import {
   ScrollViewBase,
   Dimensions,
   BackHandler,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
@@ -30,7 +31,7 @@ import RecordingOliverData from '../../../components/profile/RecordingOliverData
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setFriendId, setIsPublicOrPrivateMode, setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setEndUserProfile, setFriendId, setIsPublicOrPrivateMode, setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
@@ -49,26 +50,37 @@ const Profile = ({ route }) => {
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
   const [response_ProfileVideo, setResponse_ProfileVideo] = useState([]);
   const [profile_response, setProfileResponse] = useState([]);
-  const [responseUserProfile, setResponseUserProfile] = useState(null);
+  const [responseUserProfile, setResponseUserProfile] = useState({});
   const [isUserProfileData, setIsUserProfileData] = useState(false);
+
+  const [isUserLoading, setIsUserLoading] = useState(false);
+
   const dispatch = useDispatch();
+
   const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+
+  const randomNumberforUpdateProfile = useSelector((state) => state?.addPlayers?.randomForProfileUpdate);
+
+
+
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
 
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-  console.log("user- :", USER?._id)
-
-  const isUserProfile = useMemo(() => user, [user]);
 
   const getUsersProfile = async () => {
+    setIsUserLoading(true);
     try {
       const response = await getUsers_Profile({ user: FriendIdRTK });
+      if (response) {
+        setResponseUserProfile(response);
+        setIsUserLoading(false);
+      }
+      console.log("response--- :", response)
       setRecordingPage(1);
       dispatch(setResponseUsersProfile(response))
-      setResponseUserProfile(response);
       setIsPublicOrPrivate(response?.data?.isPublic);
       return response;
     } catch (error) {
@@ -79,11 +91,9 @@ const Profile = ({ route }) => {
 
   useEffect(() => {
     setRecordingPage(1);
-    setResponse_ProfileVideo([]);
-    setProfileResponse([]);
     setType("text");
     getUsersProfile();
-  }, [FriendIdRTK]);
+  }, [FriendIdRTK,]);
 
 
 
@@ -98,7 +108,6 @@ const Profile = ({ route }) => {
     } catch (error) {
     };
   };
-
 
 
   const profile_story_api = async () => {
@@ -117,7 +126,8 @@ const Profile = ({ route }) => {
       });
 
       const responsestories = responseData?.data?.stories;
-
+      console.log("response in", responseData?.data)
+      setIsLoadingRecording(false);
       if (responsestories && type === "text") {
         console.log("responsestories text---- :", responsestories);
         setIsLoadingRecording(false);
@@ -129,11 +139,14 @@ const Profile = ({ route }) => {
         setIsLoadingRecording(false);
         setIsUserProfileData(false);
         setResponse_ProfileVideo((prevData) => [...prevData, ...responsestories]);
-      } else if (responseData?.data === null) {
-        setIsUserProfileData(true);
-        setIsLoadingRecording(false);
-        console.log("DATA NULL ------------ :")
       }
+
+      // else if (responseData?.data === null) {
+      //   setIsUserProfileData(true);
+      //   setIsLoadingRecording(false);
+      //   console.log("DATA NULL ------------ :")
+      // }
+
       setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
 
       return responseData;
@@ -141,7 +154,6 @@ const Profile = ({ route }) => {
       console.log("err", error);
     };
   };
-
 
 
   useEffect(() => {
@@ -163,6 +175,7 @@ const Profile = ({ route }) => {
             source={BG_CONTAINER}>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+
               <View style={{ paddingTop: responsiveWidth(6) }}>
                 <BackButton onPress={() => navigation?.goBack()} />
               </View>
@@ -175,30 +188,39 @@ const Profile = ({ route }) => {
                   position: "relative",
                   left: 10
                 }}>
-                <View style={{ paddingBottom: 20 }}>
-                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                    {`@${responseUserProfile?.data?.username || 0}`}
-                  </Text>
-                </View>
 
-                <View>
-                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                    {`${responseUserProfile?.data?.noOfFollowings || 0}`}
-                  </Text>
-                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                    Following
-                  </Text>
-                </View>
+                {
+                  isUserLoading ?
+                    <ActivityIndicator /> :
+                    <>
 
-                <View>
-                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                    {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+                      <View style={{ paddingBottom: 20 }}>
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                          {`@${responseUserProfile?.data?.username || 0}`}
+                        </Text>
+                      </View>
 
-                  </Text>
-                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                    Follower
-                  </Text>
-                </View>
+                      <View>
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                          {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                        </Text>
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                          Following
+                        </Text>
+                      </View>
+
+                      <View>
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                          {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+
+                        </Text>
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                          Follower
+                        </Text>
+                      </View>
+                    </>
+                }
+
                 {/* <Image
                   style={{ width: 180, height: 200, resizeMode: 'center' }}
                   source={require('../../../assets/bgoliver.png')}
@@ -207,42 +229,45 @@ const Profile = ({ route }) => {
 
               {/* Incognito Icon----- */}
 
-              <View style={{ paddingTop: responsiveWidth(6) }}>
+              <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
                 {
                   USER?._id === FriendIdRTK ? (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setChangeMode(1)
-                        setType("video");
-                        toggel_mode();
-                      }
-                      }
-                      style={[
-                        styles.back_button,
-                        {
-                          backgroundColor:
-                            changeMode == 1
-                              ? TextColorGreen
-                              : 'rgba(57, 94, 102, 0.5)',
-                        },
-                      ]}>
-                      <Image
-                        style={styles.left_arrow}
-                        source={require('../../../assets/incognito-icon.png')}
-                      />
-                    </TouchableOpacity>
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setChangeMode(1)
+                          setType("video");
+                          toggel_mode();
+                        }
+                        }
+                        style={[
+                          styles.back_button,
+                          {
+                            backgroundColor:
+                              changeMode == 1
+                                ? TextColorGreen
+                                : 'rgba(57, 94, 102, 0.5)',
+                          },
+                        ]}>
+                        <Image
+                          style={styles.left_arrow}
+                          source={require('../../../assets/incognito-icon.png')}
+                        />
+                      </TouchableOpacity>
+
+                      <View style={{ paddingHorizontal: moderateScale(7) }}>
+                        <SettingButton
+                          onPress={() => navigation.navigate(SETTING)}
+                          image={SETTINGS_ICON}
+                        />
+                      </View>
+                    </>
                   )
                     :
                     null
                 }
               </View>
 
-              <View style={{ paddingTop: responsiveWidth(6) }}>
-                <SettingButton
-                  onPress={() => navigation.navigate(SETTING)}
-                  image={SETTINGS_ICON}
-                />
-              </View>
 
             </View>
           </ImageBackground>
@@ -321,6 +346,7 @@ const Profile = ({ route }) => {
               setIsLoadingRecording={setIsLoadingRecording}
               isLoadingRecording={isLoadingRecording}
               isUserProfileData={isUserProfileData}
+              isUserLoading={isUserLoading}
             />
           )
             :
@@ -332,6 +358,7 @@ const Profile = ({ route }) => {
                 setRecordingPage={setRecordingPage}
                 isLoadingRecording={isLoadingRecording}
                 isUserProfileData={isUserProfileData}
+                isUserLoading={isUserLoading}
               />
             )}
         </View>
@@ -340,6 +367,7 @@ const Profile = ({ route }) => {
           toggel_mode={toggel_mode}
           setChangeMode={setChangeMode}
           hasMorePagesRecording={hasMorePagesRecording}
+          username={responseUserProfile?.data?.username}
         />
       )}
     </>

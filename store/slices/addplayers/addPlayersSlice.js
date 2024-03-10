@@ -20,7 +20,9 @@ const initialState = {
     addUrlid: "",
     urlCategoryname: "",
     urlSubcategoryname: "",
-    responseUsersProfile: null
+    responseUsersProfile: null,
+    endUserProfile: true,
+    randomForProfileUpdate: ""
 };
 
 const addPlayers = createSlice({
@@ -57,7 +59,6 @@ const addPlayers = createSlice({
                 state.addFriends.pop(action.payload);
             }
         },
-
         userId: (state, action) => {
             state.userId = action.payload;
             state.addFriends.some((friend) => friend.userid === action.payload);
@@ -129,8 +130,17 @@ const addPlayers = createSlice({
             state.responseUsersProfile = action.payload
             console.log("state.fridn Id", state.friendId);
         },
+        setEndUserProfile: (state, action) => {
+            state.endUserProfile = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
+        setRandomForProfileUpdate: (state, action) => {
+            state.randomForProfileUpdate = action.payload
+        },
     },
 });
+
+
 
 export const {
     addFriends,
@@ -154,7 +164,9 @@ export const {
     categorynameUrl,
     subCategorynameUrl,
     setFriendId,
-    setResponseUsersProfile
+    setResponseUsersProfile,
+    setEndUserProfile,
+    setRandomForProfileUpdate
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

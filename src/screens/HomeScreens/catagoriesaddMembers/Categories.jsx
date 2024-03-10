@@ -71,6 +71,7 @@ const Categories = () => {
   //redux states
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
 
   //states
   const [isLoading, setIsLoading] = useState(false);
@@ -117,7 +118,7 @@ const Categories = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(setFriendId(""));
+      dispatch(setFriendId(USER?._id));
     }, [])
   );
 

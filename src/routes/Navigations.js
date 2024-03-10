@@ -51,8 +51,7 @@ import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
 import { useSelector } from 'react-redux';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -254,6 +253,9 @@ const BottomTavNavigator = ({ route }) => {
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
 
+  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
   return (
     <Tab.Navigator
       // tabBar={(props) => <AnimatedTapBar {...props} />}
@@ -262,7 +264,7 @@ const BottomTavNavigator = ({ route }) => {
         tabBarLabel: () => null,
         tabBarIcon: () => null,
         // tabBarVisible: shouldShowTabBar(route),
-        tabBarStyle: { height: responsiveHeight(10) },
+        tabBarStyle: { height: responsiveHeight(10), display: USER?._id !== FriendIdRTK ? "none" : "flex" },
       }}>
       <Tab.Screen
         name="HomeStack"

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
-import { setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setEndUserProfile, setFriendId, setRandomForProfileUpdate } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
 const Home = () => {
@@ -95,6 +95,8 @@ const Home = () => {
         }
     }, [HasMorePages]);
 
+
+
     const onRefresh = () => {
         setIsRefreshing(true);
         addFriends_api_handler()
@@ -106,6 +108,11 @@ const Home = () => {
     };
 
     const handleFriends = (friendId) => {
+
+        const randomNumbers = Math.floor(Math.random() * 100);
+        dispatch(setRandomForProfileUpdate(randomNumbers));
+        console.log("randomNumbers :", randomNumbers)
+
         dispatch(setFriendId(friendId));
         navigation.navigate("profileStack", {
             screen: "Profile",
@@ -115,9 +122,11 @@ const Home = () => {
 
     useFocusEffect(
         useCallback(() => {
-            dispatch(setFriendId(""));
+            dispatch(setFriendId(USER?._id));
         }, [])
     );
+
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -138,6 +147,7 @@ const Home = () => {
                                 screen: "Profile",
                             });
                             dispatch(setFriendId(USER?._id));
+                            setRandomForProfileUpdate
                         }}>
                             <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../../assets/avatar.png")} />
                         </TouchableOpacity>
@@ -156,8 +166,6 @@ const Home = () => {
                         data={Responseapi}
                         scrollEnabled={true}
                         horizontal
-                        // onRefresh={onRefresh}
-                        // refreshing={isRefreshing}
                         renderItem={({ item, index }) => {
                             console.log("item---- :", item?._id);
                             return (

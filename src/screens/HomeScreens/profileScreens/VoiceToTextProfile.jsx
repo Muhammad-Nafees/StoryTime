@@ -35,6 +35,9 @@ const VoiceToTextProfile = ({ route }) => {
     const storyId = route?.params?.storyuserId;
     const storyuserid = route?.params;
     const IS_HIDDEN = route?.params?.isHidden;
+    const { user } = useSelector(state => state?.authSlice);
+    const USER = user?.data?.user || user?.data;
+    const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
 
 
     const getStory_Byid_api = async () => {
@@ -103,7 +106,7 @@ const VoiceToTextProfile = ({ route }) => {
                         {/* Back Button */}
 
                         <View>
-                            <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
+                            <View style={{ flexDirection: "row", justifyContent: USER?._id === FriendIdRTK ? "space-evenly" : "flex-start", paddingLeft: USER?._id === FriendIdRTK ? moderateScale(0) : moderateScale(20), alignItems: "center", paddingVertical: moderateVerticalScale(24) }}>
                                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-between', }}>
                                     <View>
                                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular }}>Posted by:</Text>
@@ -113,36 +116,37 @@ const VoiceToTextProfile = ({ route }) => {
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                    <View>
-                                        <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
-                                    </View>
+                                {
+                                    USER?._id === FriendIdRTK ?
+                                        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                            <View>
+                                                <Text style={{ color: "#393939", paddingHorizontal: moderateScale(4) }}>Hide this story</Text>
+                                            </View>
+                                            {
+                                                isEnabled !== null ?
+                                                    <Switch
+                                                        value={isEnabled}
+                                                        onValueChange={() => {
+                                                            toggleSwitch();
+                                                        }}
+                                                        circleSize={25}
+                                                        barHeight={15}
+                                                        backgroundActive={'#68AEBD'}
+                                                        backgroundInactive={'#D4D4D4'}
+                                                        circleActiveColor={'#2F4F56'}
+                                                        circleInActiveColor={'#68AEBD'}
+                                                        changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+                                                        renderActiveText={false}
+                                                        renderInActiveText={false}
+                                                    /> : <ActivityIndicator />
+                                            }
 
-                                    {/* <TouchableOpacity   activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}> */}
-                                    {/* <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} /> */}
 
-                                    {
-                                        isEnabled !== null ?
-                                            <Switch
-                                                value={isEnabled}
-                                                onValueChange={() => {
-                                                    toggleSwitch();
-                                                }}
-                                                circleSize={25}
-                                                barHeight={15}
-                                                backgroundActive={'#68AEBD'}
-                                                backgroundInactive={'#D4D4D4'}
-                                                circleActiveColor={'#2F4F56'}
-                                                circleInActiveColor={'#68AEBD'}
-                                                changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-                                                renderActiveText={false}
-                                                renderInActiveText={false}
-                                            /> : <ActivityIndicator />
-                                    }
 
-                                    {/* </TouchableOpacity> */}
-
-                                </View>
+                                        </View>
+                                        :
+                                        null
+                                }
                             </View>
                         </View>
 
@@ -212,12 +216,18 @@ const VoiceToTextProfile = ({ route }) => {
                                 <CustomEmoji image={SHARE_BTN} text="Share" />
                             </View>
                             <TouchableButton
-                                onPress={() => navigation.navigate("ProfileScreens", {
-                                    screen: "TagFriends",
-                                    params: {
-                                        storyId: storyId
-                                    }
-                                })}
+                                onPress={() => {
+                                    USER?._id === FriendIdRTK ?
+                                        navigation.navigate("ProfileScreens", {
+                                            screen: "TagFriends",
+                                            params: {
+                                                storyId: storyId
+                                            }
+                                        })
+                                        :
+                                        navigation.navigate("Profile")
+                                }
+                                }
                                 backgroundColor={TextColorGreen}
                                 color="#FFF"
                                 type={"tagFriends"}

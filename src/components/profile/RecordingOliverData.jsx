@@ -15,7 +15,8 @@ const RecordingOliverData = ({
     isNoDataProfile,
     setRecordingPage,
     hasMorePagesRecording,
-    isUserProfileData
+    isUserProfileData,
+    isUserLoading
 }) => {
 
     const navigation = useNavigation();
@@ -61,15 +62,15 @@ const RecordingOliverData = ({
             </View>
 
             {
-                isLoadingRecording ?
+                isUserLoading || isLoadingRecording ?
                     <View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(40), }}>
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>
                     :
-                    isUserProfileData || isNoDataProfile && video_profile_response?.length == 0 ?
+                    isUserProfileData || video_profile_response?.length == 0 ?
                         (
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{isNoDataProfile}</Text>
+                                <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>No story Found</Text>
                             </View>
                         ) :
                         <FlatList

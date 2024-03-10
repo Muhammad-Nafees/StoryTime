@@ -17,7 +17,8 @@ const ProfileOliverData = ({
     setIsLoadingRecording,
     isLoadingRecording,
     hasMorePagesRecording,
-    isUserProfileData
+    isUserProfileData,
+    isUserLoading
 
 }) => {
 
@@ -47,7 +48,7 @@ const ProfileOliverData = ({
     return (
         <>
             {
-                isLoadingRecording ?
+                isUserLoading || isLoadingRecording ?
                     <View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(40), }}>
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>

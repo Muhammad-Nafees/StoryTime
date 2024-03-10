@@ -11,10 +11,14 @@ import NavigationsString from '../../constants/NavigationsString';
 import RecordingIncognito from './RecordingIncognito';
 import { fetch_users_stories } from '../../../services/api/profile';
 import IncognitoVideo from './IncognitoVideo';
-import { PassionOne_Regular } from '../../constants/GlobalFonts';
+import { Inter_SemiBold, PassionOne_Regular } from '../../constants/GlobalFonts';
 
 
-const IncognitoMode = ({ setChangeMode, toggel_mode, hasMorePagesRecording, }) => {
+const IncognitoMode = ({ setChangeMode,
+    toggel_mode,
+    hasMorePagesRecording,
+    username
+}) => {
 
     const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON, BG_BLACK_INCOGNITO } = Img_Paths;
     const navigation = useNavigation();
@@ -30,6 +34,7 @@ const IncognitoMode = ({ setChangeMode, toggel_mode, hasMorePagesRecording, }) =
     const [type, setType] = useState("text");
     const [incognito_response, SetIncognito_response] = useState([])
     const [responseIncognitoVideo, setResponseIncognitoVideo,] = useState([]);
+
 
 
     const incognito_profileResponse = async () => {
@@ -68,21 +73,24 @@ const IncognitoMode = ({ setChangeMode, toggel_mode, hasMorePagesRecording, }) =
             <ImageBackground
                 style={{ width: '100%', height: responsiveHeight(35) }}
                 source={BG_BLACK_INCOGNITO}>
+
                 <View
                     style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <View style={{ paddingTop: responsiveWidth(6) }}>
                         <BackButton onPress={() => navigation?.goBack()} />
                     </View>
+
                     <View
                         style={{
-                            height: responsiveHeight(35),
+                            height: responsiveHeight(45),
                             justifyContent: 'center',
                             alignItems: 'center',
+                            position: "relative",
+                            left: 10
                         }}>
-                        <Image
-                            style={{ width: 180, height: 200, resizeMode: 'center' }}
-                            source={require('../../assets/bgoliver.png')}
-                        />
+                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                            {`@${username}`}
+                        </Text>
                     </View>
 
                     {/* Incognito Icon----- */}

@@ -171,8 +171,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // paddingVertical: moderateVerticalScale(20),
         // height: responsiveHeight(50),
-
-
     },
     story_time_container: {
         justifyContent: 'center',

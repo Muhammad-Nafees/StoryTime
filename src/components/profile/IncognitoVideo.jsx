@@ -63,7 +63,7 @@ const IncognitoVideo = ({
                             if (isLoadMore) {
                                 return (
                                     <View style={{ alignItems: 'center', height: SCREENHEIGHT / 4, }}>
-                                        <ActivityIndicator size={40} color={'#000'} />
+                                        <ActivityIndicator size={24} color={PrimaryColor} />
                                     </View>
                                 );
                             }
