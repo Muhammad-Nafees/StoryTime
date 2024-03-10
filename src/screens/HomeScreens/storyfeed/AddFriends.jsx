@@ -72,6 +72,8 @@ const AddFiends = () => {
     }
   };
 
+
+
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
@@ -98,6 +100,8 @@ const AddFiends = () => {
     };
     fetchUsers();
   }, [page, isRefreshing]);
+
+
 
   const filterUserData = useCallback(() => {
     const filteredData = responseUsers?.filter(item => {
@@ -135,6 +139,8 @@ const AddFiends = () => {
       setIsRefreshing(false);
     }, 1000);
   }, []);
+
+
 
   return (
     <View style={{ height: responsiveHeight(100) }}>

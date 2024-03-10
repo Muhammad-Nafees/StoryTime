@@ -36,7 +36,6 @@ const VoiceToTextProfile = ({ route }) => {
     const storyuserid = route?.params;
     const IS_HIDDEN = route?.params?.isHidden;
 
-    // console.log("userid,---- :", storyuserid);
 
     const getStory_Byid_api = async () => {
         try {
@@ -47,8 +46,6 @@ const VoiceToTextProfile = ({ route }) => {
         } catch (error) {
         }
     };
-
-
 
     const profile_story_api = async () => {
         try {
@@ -70,12 +67,9 @@ const VoiceToTextProfile = ({ route }) => {
         console.log("response Hidden--- : ", response?.data);
     };
 
-    // const getInitialToggleValue = async () => {
-    // };
 
     useEffect(() => {
         setIsEnabled(IS_HIDDEN);
-        // getInitialToggleValue();
         getStory_Byid_api();
     }, []);
 
@@ -127,22 +121,23 @@ const VoiceToTextProfile = ({ route }) => {
                                     {/* <TouchableOpacity   activeOpacity={0.7} style={{ paddingLeft: 2, width: responsiveWidth(14), height: responsiveHeight(3), borderRadius: 14, backgroundColor: "rgba(0, 0, 0, 0.15)", justifyContent: "center" }}> */}
                                     {/* <Animated.View style={[{ width: 21, height: 21, borderRadius: 50, backgroundColor: "#FFF" }, animationStyle]} /> */}
 
-                                    {isEnabled !== null ?
-                                        <Switch
-                                            value={isEnabled}
-                                            onValueChange={() => {
-                                                toggleSwitch();
-                                            }}
-                                            circleSize={25}
-                                            barHeight={15}
-                                            backgroundActive={'#68AEBD'}
-                                            backgroundInactive={'#D4D4D4'}
-                                            circleActiveColor={'#2F4F56'}
-                                            circleInActiveColor={'#68AEBD'}
-                                            changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-                                            renderActiveText={false}
-                                            renderInActiveText={false}
-                                        /> : <ActivityIndicator />
+                                    {
+                                        isEnabled !== null ?
+                                            <Switch
+                                                value={isEnabled}
+                                                onValueChange={() => {
+                                                    toggleSwitch();
+                                                }}
+                                                circleSize={25}
+                                                barHeight={15}
+                                                backgroundActive={'#68AEBD'}
+                                                backgroundInactive={'#D4D4D4'}
+                                                circleActiveColor={'#2F4F56'}
+                                                circleInActiveColor={'#68AEBD'}
+                                                changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+                                                renderActiveText={false}
+                                                renderInActiveText={false}
+                                            /> : <ActivityIndicator />
                                     }
 
                                     {/* </TouchableOpacity> */}

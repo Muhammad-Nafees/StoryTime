@@ -68,6 +68,7 @@ const SubCategories = ({ route }) => {
   const { LUDO_ICON } = Img_Paths;
   const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS } = NavigationsString;
 
+
   //hooks
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -193,7 +194,6 @@ const SubCategories = ({ route }) => {
   };
 
 
-
   const handleStoryUser = (id, name, image) => {
     const imageLink = URL + image;
     user
@@ -232,6 +232,8 @@ const SubCategories = ({ route }) => {
     return !allowedCategories.includes(category?.name) && isUserGuest;
   };
 
+
+
   const keyExtractor = (_, index) => `sub_categories.${index}`;
 
   //render functions
@@ -261,7 +263,7 @@ const SubCategories = ({ route }) => {
             text={item?.name}
             item={item}
             mainbgColor={TextColorGreen}
-            backgroundColor={isUserGuest ? "#497780" : "#56B6A4"}
+            backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
             handleRandomClick={() => handleRandomSub_category(item)}
           />
           {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (

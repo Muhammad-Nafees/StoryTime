@@ -21,6 +21,8 @@ const TranscriptVoice = () => {
     const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
     const navigation = useNavigation();
 
+
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
             <SafeAreaView>

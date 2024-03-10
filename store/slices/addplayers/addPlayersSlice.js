@@ -19,7 +19,8 @@ const initialState = {
     friendId: "",
     addUrlid: "",
     urlCategoryname: "",
-    urlSubcategoryname: ""
+    urlSubcategoryname: "",
+    responseUsersProfile: null
 };
 
 const addPlayers = createSlice({
@@ -124,6 +125,10 @@ const addPlayers = createSlice({
             state.friendId = action.payload
             console.log("state.fridn Id", state.friendId);
         },
+        setResponseUsersProfile: (state, action) => {
+            state.responseUsersProfile = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
     },
 });
 
@@ -148,7 +153,8 @@ export const {
     setAddUrlId,
     categorynameUrl,
     subCategorynameUrl,
-    setFriendId
+    setFriendId,
+    setResponseUsersProfile
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

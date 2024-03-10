@@ -87,6 +87,7 @@ const FirstUser = ({ route }) => {
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
 
+
   // console.log("isNextUser", isNextUser);
 
   const GuestModalRef = useRef(null);

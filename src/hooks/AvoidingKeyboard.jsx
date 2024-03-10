@@ -20,4 +20,4 @@ export const useKeyboard = () => {
     return keyboardHeight;
 };
 
-export default useKeyboard
+export default useKeyboard;

@@ -251,8 +251,6 @@ const Categories = () => {
     } catch (error) { }
   };
 
-
-
   const handleStoryUser = (id, name) => {
     console.log('id----', id);
     dispatch(setCategoriesId(id));

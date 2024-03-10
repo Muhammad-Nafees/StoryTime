@@ -21,7 +21,7 @@ const Home = () => {
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, } = Img_Paths;
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingMain, setIsLoadingMain] = useState(true)
+    const [isLoadingMain, setIsLoadingMain] = useState(true);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [HasMorePages, setHasMorePages] = useState();
@@ -36,8 +36,10 @@ const Home = () => {
     const navigation = useNavigation();
     const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
+    const { user } = useSelector(state => state?.authSlice);
+    const USER = user?.data?.user || user?.data;
 
-
+    console.log("user----", USER?._id);
 
     const addFriends_api_handler = async () => {
         try {
@@ -53,8 +55,6 @@ const Home = () => {
             console.log("err", error)
         }
     };
-
-
 
     useEffect(() => {
         addFriends_api_handler();
@@ -85,8 +85,6 @@ const Home = () => {
         fetchUsers();
     }, [page, isRefreshing,]);
 
-
-
     const handleLoadMore = useCallback(() => {
         console.log("HasMorePages-----", HasMorePages);
         if (HasMorePages) {
@@ -107,16 +105,13 @@ const Home = () => {
         }, 1000);
     };
 
-
     const handleFriends = (friendId) => {
+        dispatch(setFriendId(friendId));
         navigation.navigate("profileStack", {
             screen: "Profile",
-        })
-        console.log("friendId---- : ", friendId)
-        dispatch(setFriendId(friendId))
+        });
+        console.log("friendId---- : ", friendId);
     };
-
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -132,7 +127,12 @@ const Home = () => {
                             <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../../assets/plus-icon.png")} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("profileStack", {
+                                screen: "Profile",
+                            });
+                            dispatch(setFriendId(USER?._id));
+                        }}>
                             <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../../assets/avatar.png")} />
                         </TouchableOpacity>
 

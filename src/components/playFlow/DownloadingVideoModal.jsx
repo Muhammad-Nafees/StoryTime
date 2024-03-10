@@ -61,8 +61,6 @@ const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideo
         }, 1000);
     };
 
-
-
     return (
         <>
             <Modal onRequestClose={() => setIsVisibleFirstVideoFlow(false)} visible={isVisibleFirstVideoFlow}>

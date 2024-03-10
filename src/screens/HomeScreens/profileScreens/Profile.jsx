@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ScrollViewBase,
+  Dimensions,
 } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
@@ -28,14 +29,14 @@ import RecordingOliverData from '../../../components/profile/RecordingOliverData
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setFriendId, setIsPublicOrPrivateMode } from '../../../../store/slices/addplayers/addPlayersSlice';
-import LogoutBtn from '../../../components/profile/LogoutBtn';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { setFriendId, setIsPublicOrPrivateMode, setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
 
   const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
+  const SCREEN_HEIGHT = Dimensions.get("window").height;
+  const SCREEN_WIDTH = Dimensions.get("window").width;
   const navigation = useNavigation();
   const { FEED_CHAT, SETTING } = NavigationsString;
   const [isContent, setIsContent] = useState(0);
@@ -47,26 +48,40 @@ const Profile = ({ route }) => {
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
   const [response_ProfileVideo, setResponse_ProfileVideo] = useState([]);
   const [profile_response, setProfileResponse] = useState([]);
-  const [responseUserProfile, setResponseUserProfile] = useState({});
+  const [responseUserProfile, setResponseUserProfile] = useState(null);
   const [isUserProfileData, setIsUserProfileData] = useState(false);
   const dispatch = useDispatch();
-  const reduxPublicInc = useSelector((state) => state?.addPlayers?.publicAndPrivateMode);
   const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
 
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
+  const { responseUsersProfile } = useSelector(state => state?.addPlayers)
+  const USER_PROFILE = responseUsersProfile;
+  console.log("USER_PROFILE ----", USER_PROFILE);
 
-  console.log("from Home", FriendIdRTK);
 
   const getUsersProfile = async () => {
     try {
       const response = await getUsers_Profile({ user: FriendIdRTK });
-      setResponseUserProfile(response?.data);
+      setRecordingPage(1);
+      dispatch(setResponseUsersProfile(response))
+      setResponseUserProfile(response);
       console.log("response getUserProfile--- :", response);
       return response;
     } catch (error) {
     };
   };
+
+
+
+  useEffect(() => {
+    setRecordingPage(1);
+    setResponse_ProfileVideo([]);
+    setProfileResponse([]);
+    setType("text");
+    getUsersProfile();
+  }, [FriendIdRTK]);
+
 
   const toggel_mode = async () => {
     try {
@@ -96,9 +111,9 @@ const Profile = ({ route }) => {
       });
 
       const responsestories = responseData?.data?.stories;
-      // console.log("responsestories---- :", responseData?.data);
 
       if (responsestories && type === "text") {
+        console.log("responsestories text---- :", responsestories);
         setIsLoadingRecording(false);
         setProfileResponse((prevData) => [...prevData, ...responsestories]);
         setIsUserProfileData(false);
@@ -113,8 +128,7 @@ const Profile = ({ route }) => {
         setIsLoadingRecording(false);
         console.log("DATA NULL ------------ :")
       }
-
-      console.log("responsestories---- :", responseData);
+      // console.log("responsestories---- :", responseData);
       setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
 
       return responseData;
@@ -123,86 +137,120 @@ const Profile = ({ route }) => {
     };
   };
 
-
   useFocusEffect(
     useCallback(() => {
-      setType("text");
-      profile_story_api();
-      getUsersProfile();
+      // Reset FriendIdRTK when screen is focused
       return () => {
         dispatch(setFriendId(""));
-        setProfileResponse([]);
-        setResponse_ProfileVideo([]);
-      }
-    }, [type, recordingPage, FriendIdRTK])
+        // Cleanup function, can be used if needed
+      };
+    }, [])
   );
 
 
-  // useEffect(() => {
-  // }, [type, recordingPage, FriendIdRTK]);
+
+  useEffect(() => {
+    setType("text");
+    profile_story_api();
+
+  }, [type, recordingPage, FriendIdRTK]);
 
 
-  // <>
-  //   <View style={{ height: responsiveHeight(90), justifyContent: "flex-end" }}>
-  //     <LogoutBtn />
-  //   </View>
-  // </>
 
   return (
     <>
       {isPublicOrPrivate ? (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
           <ImageBackground
-            style={{ width: '100%', height: responsiveHeight(35) }}
+            style={{
+              height: SCREEN_HEIGHT / 3,
+              width: SCREEN_WIDTH,
+            }}
             source={BG_CONTAINER}>
             <View
-              style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+              style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
               <View style={{ paddingTop: responsiveWidth(6) }}>
                 <BackButton onPress={() => navigation?.goBack()} />
               </View>
+
               <View
                 style={{
-                  height: responsiveHeight(35),
+                  height: responsiveHeight(45),
                   justifyContent: 'center',
                   alignItems: 'center',
+                  position: "relative",
+                  left: 10
                 }}>
-                <Image
+                <View style={{ paddingBottom: 20 }}>
+                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                    {`@${responseUserProfile?.data?.username || 0}`}
+                  </Text>
+                </View>
+
+                <View>
+                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                    {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                  </Text>
+                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                    Following
+                  </Text>
+                </View>
+
+                <View>
+                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                    {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+
+                  </Text>
+                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                    Follower
+                  </Text>
+                </View>
+                {/* <Image
                   style={{ width: 180, height: 200, resizeMode: 'center' }}
                   source={require('../../../assets/bgoliver.png')}
-                />
+                /> */}
               </View>
 
               {/* Incognito Icon----- */}
 
               <View style={{ paddingTop: responsiveWidth(6) }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setChangeMode(1)
-                    setType("video");
-                    toggel_mode();
-                  }
-                  }
-                  style={[
-                    styles.back_button,
-                    {
-                      backgroundColor:
-                        changeMode == 1
-                          ? TextColorGreen
-                          : 'rgba(57, 94, 102, 0.5)',
-                    },
-                  ]}>
-                  <Image
-                    style={styles.left_arrow}
-                    source={require('../../../assets/incognito-icon.png')}
-                  />
-                </TouchableOpacity>
+
+                {
+                  !USER_PROFILE ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setChangeMode(1)
+                        setType("video");
+                        toggel_mode();
+                      }
+                      }
+                      style={[
+                        styles.back_button,
+                        {
+                          backgroundColor:
+                            changeMode == 1
+                              ? TextColorGreen
+                              : 'rgba(57, 94, 102, 0.5)',
+                        },
+                      ]}>
+                      <Image
+                        style={styles.left_arrow}
+                        source={require('../../../assets/incognito-icon.png')}
+                      />
+                    </TouchableOpacity>
+                  )
+                    :
+                    null
+                }
               </View>
+
               <View style={{ paddingTop: responsiveWidth(6) }}>
                 <SettingButton
                   onPress={() => navigation.navigate(SETTING)}
                   image={SETTINGS_ICON}
                 />
               </View>
+
             </View>
           </ImageBackground>
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -9,7 +9,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import {FourthColor, SecondaryColor, TextColorGreen} from '../Styles/Style';
+import { FourthColor, SecondaryColor, TextColorGreen } from '../Styles/Style';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -18,36 +18,36 @@ import {
 import TextInputField from '../../components/TextInputField';
 import TouchableButton from '../../components/TouchableButton';
 import SocialsLogin from '../../components/SocialsLogin';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   login,
   setRefreshToken,
   userLoginid,
 } from '../../../store/slices/authSlice';
-import {useDispatch, useSelector} from 'react-redux';
-import {Formik} from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NavigationsString from '../../constants/NavigationsString';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {Base_Url, login_andpoint} from '../../../services';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { Base_Url, login_andpoint } from '../../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {setAccessToken} from '../../../store/slices/authSlice';
+import { setAccessToken } from '../../../store/slices/authSlice';
 import Toast from 'react-native-toast-message';
-import {validationUserLogin} from '../../../validation/validation';
-import {Path, Svg} from 'react-native-svg';
-import {refresh_token_api} from '../../../services/api/auth_mdule/auth';
-import {Inter_Regular} from '../../constants/GlobalFonts';
+import { validationUserLogin } from '../../../validation/validation';
+import { Path, Svg } from 'react-native-svg';
+import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
+import { Inter_Regular, Poppins_Regular } from '../../constants/GlobalFonts';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
 
 const Login = () => {
-  const {REGISTER, FORGET_EMAIL} = NavigationsString;
+  const { REGISTER, FORGET_EMAIL } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
   const [isEmail, setIsEmail] = useState('');
   const [isPasswordErr, setPasswordErr] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const [] = useState();
-  const {GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON} = Img_Paths;
+  const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -72,7 +72,7 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-          const {email, password, fcmToken} = values;
+          const { email, password, fcmToken } = values;
           const response = await fetch(Base_Url + login_andpoint, {
             method: 'POST',
             headers: {
@@ -117,7 +117,7 @@ const Login = () => {
               setIsEmail('Invalid email');
             } else if (
               message ===
-                'password length must be at least 8 characters long' ||
+              'password length must be at least 8 characters long' ||
               message === 'Invalid password'
             ) {
               setPasswordErr('Invalid password');
@@ -143,14 +143,14 @@ const Login = () => {
         <View style={styles.container}>
           <ScrollView keyboardShouldPersistTaps="always">
             <View
-              style={[styles.img_container, {paddingTop: responsiveWidth(6)}]}>
+              style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
               <Image
                 style={styles.img_child}
                 source={require('../../assets/story-time-without.png')}
               />
             </View>
-            <View style={{paddingBottom: moderateVerticalScale(6)}}>
-              <View style={{width: responsiveWidth(90), marginLeft: 'auto'}}>
+            <View style={{ paddingBottom: moderateVerticalScale(6) }}>
+              <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
                 <Text
                   style={{
                     color: FourthColor,
@@ -171,16 +171,16 @@ const Login = () => {
                 onBlur={() => setFieldTouched('email')}
               />
 
-              <View style={{height: responsiveHeight(3)}}>
+              <View style={{ height: responsiveHeight(3) }}>
                 {isEmail.length > 0 ? (
-                  <View style={{height: responsiveHeight(3)}}>
+                  <View style={{ height: responsiveHeight(3) }}>
                     <View
                       style={{
                         width: responsiveWidth(90),
                         marginLeft: 'auto',
                         paddingBottom: responsiveWidth(1),
                       }}>
-                      <View style={{flexDirection: 'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         <View>
                           <Svg
                             width={20}
@@ -190,7 +190,7 @@ const Login = () => {
                             <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                           </Svg>
                         </View>
-                        <View style={{paddingHorizontal: moderateScale(5)}}>
+                        <View style={{ paddingHorizontal: moderateScale(5) }}>
                           <Text
                             style={{
                               color: 'red',
@@ -238,16 +238,16 @@ const Login = () => {
                 type="password"
               />
 
-              <View style={{height: responsiveHeight(3)}}>
+              <View style={{ height: responsiveHeight(3) }}>
                 {isPasswordErr.length > 0 ? (
-                  <View style={{height: responsiveHeight(3)}}>
+                  <View style={{ height: responsiveHeight(3) }}>
                     <View
                       style={{
                         width: responsiveWidth(90),
                         marginLeft: 'auto',
                         paddingBottom: responsiveWidth(1),
                       }}>
-                      <View style={{flexDirection: 'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         <View>
                           <Svg
                             width={20}
@@ -257,7 +257,7 @@ const Login = () => {
                             <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                           </Svg>
                         </View>
-                        <View style={{paddingHorizontal: moderateScale(5)}}>
+                        <View style={{ paddingHorizontal: moderateScale(5) }}>
                           <Text
                             style={{
                               color: 'red',
@@ -281,7 +281,7 @@ const Login = () => {
 
             <TouchableOpacity
               onPress={() => navigation.navigate(FORGET_EMAIL)}
-              style={{justifyContent: 'center', alignItems: 'center'}}>
+              style={{ justifyContent: 'center', alignItems: 'center' }}>
               <Text
                 style={{
                   color: FourthColor,
@@ -292,7 +292,7 @@ const Login = () => {
               </Text>
             </TouchableOpacity>
 
-            <View style={{paddingVertical: moderateVerticalScale(14)}}>
+            <View style={{ paddingVertical: moderateVerticalScale(14) }}>
               <TouchableButton
                 type="login"
                 isLoading={isLoading}
@@ -313,7 +313,7 @@ const Login = () => {
                 alignItems: 'center',
               }}>
               <View style={styles.text_container}>
-                <Text style={[styles.text, {color: FourthColor}]}>
+                <Text style={[styles.text, { color: FourthColor }]}>
                   By logging in, you agree to our
                 </Text>
                 <TouchableOpacity
@@ -322,19 +322,19 @@ const Login = () => {
                       screen: 'LoginTermsAndConditions',
                     })
                   }>
-                  <Text style={[styles.text, {color: TextColorGreen}]}>
+                  <Text style={[styles.text, { color: TextColorGreen, fontWeight: "600" }]}>
                     {' '}
                     Terms & Conditions
                   </Text>
                 </TouchableOpacity>
-                <Text style={[styles.text, {color: FourthColor}]}> and</Text>
+                <Text style={[styles.text, { color: FourthColor }]}> and</Text>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('TermsAndConditionsStack', {
                       screen: 'LoginPrivacyAndPolicy',
                     })
                   }>
-                  <Text style={[styles.text, {color: TextColorGreen}]}>
+                  <Text style={[styles.text, { color: TextColorGreen, fontWeight: "600" }]}>
                     {' '}
                     Privacy Policy
                   </Text>
@@ -379,14 +379,18 @@ const Login = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.text, {color: FourthColor}]}>
+              <Text style={[styles.text, { color: FourthColor }]}>
                 Don’t have an account yet?{' '}
               </Text>
               <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
                 <Text
                   style={[
                     styles.text,
-                    {color: TextColorGreen, fontWeight: '600'},
+                    {
+                      color: TextColorGreen,
+                      fontWeight: '400',
+                      fontFamily: Poppins_Regular.Poppins_regular
+                    },
                   ]}>
                   Create one
                 </Text>
@@ -410,8 +414,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: responsiveFontSize(1.7),
-    fontWeight: '400',
     fontFamily: Inter_Regular.Inter_Regular,
+    fontWeight: "600"
   },
   img_container: {
     paddingVertical: moderateVerticalScale(8),

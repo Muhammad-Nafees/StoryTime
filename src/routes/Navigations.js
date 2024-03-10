@@ -7,12 +7,13 @@ import {
   NavigationContainer,
   useFocusEffect,
   useNavigation,
+  useRoute,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import { Image, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
   responsiveHeight,
@@ -48,7 +49,10 @@ import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTex
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
+import { useSelector } from 'react-redux';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -92,6 +96,7 @@ const Navigations = () => {
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
       <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
+      {/* <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} /> */}
       <Stack.Screen
         name={LOGIN}
         component={Login}
@@ -211,7 +216,8 @@ const CategoriesStackBottom = () => {
 
 // Profile Bottom And Stack Screens -----
 
-const ProfileStacksBottom = () => {
+const ProfileStacksBottom = ({ navigation, route, }) => {
+  console.log("route-------------- :substack", route?.params?.screen);
   const Stack = createStackNavigator();
   const { HOME } = NavigationsString;
   return (
@@ -242,22 +248,26 @@ const ProfileScreens = () => {
   );
 };
 
-const BottomTavNavigator = () => {
+const BottomTavNavigator = ({ route }) => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation();
 
   return (
     <Tab.Navigator
+      // tabBar={(props) => <AnimatedTapBar {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarLabel: () => null,
         tabBarIcon: () => null,
+        // tabBarVisible: shouldShowTabBar(route),
         tabBarStyle: { height: responsiveHeight(10) },
       }}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackBottom}
+        initialParams={route}
         options={{
           tabBarIcon: ({ focused }) => (
             <View>
@@ -288,6 +298,8 @@ const BottomTavNavigator = () => {
       <Tab.Screen
         name="categoriesStack"
         component={CategoriesStackBottom}
+        initialParams={route}
+
         options={{
           tabBarIcon: ({ focused }) => (
             <View>
@@ -313,6 +325,7 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+
         listeners={({ navigation, route }) => ({
           tabPress: e => {
             e.preventDefault();
@@ -324,6 +337,7 @@ const BottomTavNavigator = () => {
       <Tab.Screen
         name="profileStack"
         component={ProfileStacksBottom}
+        initialParams={route}
         options={{
           tabBarIcon: ({ focused }) => (
             <View>
@@ -333,7 +347,7 @@ const BottomTavNavigator = () => {
                     width: responsiveWidth(6),
                     height: responsiveHeight(3),
                     resizeMode: 'center',
-                    tintColor: 'red',
+                    tintColor: '#E44173',
                   }}
                   source={require('../assets/profile_focused.png')}
                 />
@@ -350,9 +364,145 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+
+        listeners={({ navigation, route }) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('profileStack', { screen: "Profile" });
+          },
+        })}
       />
     </Tab.Navigator>
   );
 };
 
-export default Navigations;
+// const shouldShowTabBar = (route) => {
+//   // Implement your logic here to determine whether to show tabBar or not
+//   console.log("route---- :", route)
+//   if (route.state && route.state.index > 0) {
+//     return false; // Hide tabBar when navigating deeper into screens
+//   }
+//   return true; // Show tabBar by default
+// };
+
+// export default Navigations;
+
+
+
+// const AnimatedTapBar = ({ state: { index: activeIndex, routes }, navigation, descriptors }) => {
+
+//   console.log("activeince----- :", activeIndex)
+//   const route = useRoute();
+//   const { bottom } = useSafeAreaInsets();
+
+//   const reducer = (state, action) => {
+//     return [...state, { x: action.x, index: action.index }];
+//   };
+
+//   const [layout, dispatch] = useReducer(reducer, []);
+
+//   const handleLayout = (event, index) => {
+//     dispatch({ x: event.nativeEvent.layout.x, index });
+//   };
+
+//   return (
+//     <View style={[styles.tabBar, { paddingBottom: bottom }]}>
+
+//       <View style={styles.tabBarContainer}>
+//         {
+//           routes.map((route, index) => {
+//             console.log("route--------", route)
+//             const active = index === activeIndex;
+//             const { options } = descriptors[route.key];
+
+
+//             return (
+//               <TabBarComponent
+//                 //    descriptors={descriptors?.tabBarStyle}
+//                 key={route.key}
+//                 route={route?.name}
+//                 active={active}
+//                 options={options}
+//                 index={index}
+//                 onLayout={(e) => handleLayout(e, index)}
+//                 onPress={() => navigation.navigate(route.name)}
+//               />
+//             );
+//           })}
+//       </View>
+//     </View>
+//   );
+// };
+
+
+
+// const TabBarComponent = ({ active, options, onLayout, onPress, route, index, descriptors }) => {
+
+//   // console.log('descriptors0-0=-=',descriptors)
+//   const ref = useRef(null);
+//   return (
+//     <Pressable onPress={onPress} onLayout={onLayout} style={{ ...styles.component }}>
+
+//       <View style={[styles.iconContainer]}>
+//         {options.tabBarIcon ? options.tabBarIcon({}) : <Text>?</Text>}
+//       </View>
+//     </Pressable>
+//   );
+// };
+
+
+
+// const styles = StyleSheet.create({
+//   tabBar: {
+//     backgroundColor: '#FFF',
+//     height: 80,
+//   },
+//   activeBackground: {
+//     position: 'absolute',
+//   },
+//   tabBarContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-evenly',
+//   },
+//   component: {
+//     height: 60,
+//     width: 60,
+//     marginTop: 10
+//   },
+//   componentCircle: {
+//     flex: 1,
+//     borderRadius: 30,
+//   },
+//   iconContainer: {
+//     position: 'absolute',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     justifyContent: 'center',
+//     alignItems: 'center'
+//   },
+//   icon: {
+//     height: 36,
+//     width: 36,
+//   },
+//   tab_icon: {
+//     marginHorizontal: 10,
+//     paddingHorizontal: 10
+//   },
+//   icon_badge: {
+//     // backgroundColor: 'red',
+//     color: '#fff',
+//     position: 'absolute',
+//     top: -6,
+//     right: -10,
+//     borderRadius: 20,
+//     width: 15,
+//     height: 15,
+//     fontWeight: 'bold',
+//     fontSize: 10,
+//     textAlign: 'center'
+//   }
+// });
+
+export default Navigations

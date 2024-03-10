@@ -6,7 +6,6 @@ export const fetch_users_stories = async ({
     type,
     recordingPage,
     isincognitoPage,
-    friendId,
     user
 }) => {
 
@@ -19,6 +18,7 @@ export const fetch_users_stories = async ({
     };
 
     console.log("url ---- :", url);
+    console.log("user in api---- :", user);
 
     try {
         const responseData = await fetch(url, {
