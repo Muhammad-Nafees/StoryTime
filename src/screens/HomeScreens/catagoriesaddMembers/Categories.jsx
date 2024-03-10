@@ -47,7 +47,7 @@ import RandomCategories from '../../../components/customCategories/RandomCategor
 import { get_random } from '../../../../store/slices/randomCategorySlice';
 import { setCategoriesId } from '../../../../store/slices/getCategoriesSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
-import { addFriends } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { addFriends, setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { BlurView } from '@react-native-community/blur';
@@ -89,6 +89,7 @@ const Categories = () => {
 
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
+
   const allowedCategories = ['Animals'];
   const guestNumber = guestNumberRef.current;
   const randomObject = {
@@ -113,6 +114,12 @@ const Categories = () => {
   useEffect(() => {
     fetchCategories(1);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(setFriendId(""));
+    }, [])
+  );
 
   useEffect(() => {
     if (!guestNumberRef.current) {

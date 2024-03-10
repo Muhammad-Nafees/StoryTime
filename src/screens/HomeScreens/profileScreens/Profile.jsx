@@ -9,8 +9,9 @@ import {
   ScrollView,
   ScrollViewBase,
   Dimensions,
+  BackHandler,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
@@ -18,7 +19,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/BackButton';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -52,13 +53,15 @@ const Profile = ({ route }) => {
   const [isUserProfileData, setIsUserProfileData] = useState(false);
   const dispatch = useDispatch();
   const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
-
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
-  const { responseUsersProfile } = useSelector(state => state?.addPlayers)
-  const USER_PROFILE = responseUsersProfile;
-  console.log("USER_PROFILE ----", USER_PROFILE);
 
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
+
+  console.log("user- :", USER?._id)
+
+  const isUserProfile = useMemo(() => user, [user]);
 
   const getUsersProfile = async () => {
     try {
@@ -66,7 +69,7 @@ const Profile = ({ route }) => {
       setRecordingPage(1);
       dispatch(setResponseUsersProfile(response))
       setResponseUserProfile(response);
-      console.log("response getUserProfile--- :", response);
+      setIsPublicOrPrivate(response?.data?.isPublic);
       return response;
     } catch (error) {
     };
@@ -83,6 +86,7 @@ const Profile = ({ route }) => {
   }, [FriendIdRTK]);
 
 
+
   const toggel_mode = async () => {
     try {
       const responseData = await toggle_publicandPrivateMode();
@@ -94,6 +98,8 @@ const Profile = ({ route }) => {
     } catch (error) {
     };
   };
+
+
 
   const profile_story_api = async () => {
 
@@ -128,7 +134,6 @@ const Profile = ({ route }) => {
         setIsLoadingRecording(false);
         console.log("DATA NULL ------------ :")
       }
-      // console.log("responsestories---- :", responseData);
       setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
 
       return responseData;
@@ -137,22 +142,11 @@ const Profile = ({ route }) => {
     };
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      // Reset FriendIdRTK when screen is focused
-      return () => {
-        dispatch(setFriendId(""));
-        // Cleanup function, can be used if needed
-      };
-    }, [])
-  );
-
 
 
   useEffect(() => {
     setType("text");
     profile_story_api();
-
   }, [type, recordingPage, FriendIdRTK]);
 
 
@@ -214,9 +208,8 @@ const Profile = ({ route }) => {
               {/* Incognito Icon----- */}
 
               <View style={{ paddingTop: responsiveWidth(6) }}>
-
                 {
-                  !USER_PROFILE ? (
+                  USER?._id === FriendIdRTK ? (
                     <TouchableOpacity
                       onPress={() => {
                         setChangeMode(1)

@@ -80,8 +80,6 @@ const FirstUser = ({ route }) => {
   const [speaking, setSpeaking] = useState(false);
 
   const USER = user?.data?.user || user?.data;
-  // const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
-  // ], [USER, addedUsers]);
 
   const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);

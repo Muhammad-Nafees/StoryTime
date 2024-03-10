@@ -113,6 +113,12 @@ const Home = () => {
         console.log("friendId---- : ", friendId);
     };
 
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(setFriendId(""));
+        }, [])
+    );
+
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
 
