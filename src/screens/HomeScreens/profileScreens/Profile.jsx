@@ -72,6 +72,8 @@ const Profile = ({ route }) => {
 
   const getUsersProfile = async () => {
     setIsUserLoading(true);
+    setProfileResponse([]);
+    setResponse_ProfileVideo([]);
     try {
       const response = await getUsers_Profile({ user: FriendIdRTK });
       if (response) {
@@ -94,7 +96,6 @@ const Profile = ({ route }) => {
     setType("text");
     getUsersProfile();
   }, [FriendIdRTK,]);
-
 
 
   const toggel_mode = async () => {
@@ -156,12 +157,16 @@ const Profile = ({ route }) => {
   };
 
 
+
   useEffect(() => {
     setType("text");
     profile_story_api();
   }, [type, recordingPage, FriendIdRTK]);
 
-
+  (function show() {
+    console.log("show")
+  }
+  )();
 
   return (
     <>

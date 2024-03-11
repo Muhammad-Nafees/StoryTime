@@ -129,12 +129,14 @@ const VoiceToTextProfile = ({ route }) => {
                                                         onValueChange={() => {
                                                             toggleSwitch();
                                                         }}
-                                                        circleSize={25}
-                                                        barHeight={15}
-                                                        backgroundActive={'#68AEBD'}
+                                                        circleSize={20}
+                                                        barHeight={22}
+                                                        innerCircleStyle={{ marginLeft: moderateScale(3) }}
+                                                        backgroundActive={'#D4D4D4'}
                                                         backgroundInactive={'#D4D4D4'}
-                                                        circleActiveColor={'#2F4F56'}
-                                                        circleInActiveColor={'#68AEBD'}
+                                                        circleActiveColor={'#FFF'}
+                                                        circleInActiveColor={'#FFF'}
+                                                        circleBorderWidth={0}
                                                         changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
                                                         renderActiveText={false}
                                                         renderInActiveText={false}

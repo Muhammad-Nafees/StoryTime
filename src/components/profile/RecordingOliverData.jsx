@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, ActivityIndicator, } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, ActivityIndicator, Linking, } from 'react-native'
 import React, { useState } from 'react'
 import { Recording_oliverPierce } from '../../../dummyData/DummyData'
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style'
@@ -7,16 +7,18 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
 import { PassionOne_Regular } from '../../constants/GlobalFonts'
-
+import InAppBrowser from 'react-native-inappbrowser-reborn'
 
 const RecordingOliverData = ({
+
     video_profile_response,
     isLoadingRecording,
     isNoDataProfile,
     setRecordingPage,
     hasMorePagesRecording,
     isUserProfileData,
-    isUserLoading
+    isUserLoading,
+
 }) => {
 
     const navigation = useNavigation();
@@ -33,10 +35,24 @@ const RecordingOliverData = ({
         }
     };
 
+    async function linkTo(item) {
+        try {
+            const url = item;
+            if (await InAppBrowser.isAvailable()) {
+                const result = await InAppBrowser.open(url, {
+                    // You can customize the in-app browser behavior and appearance here
+                });
+            } else {
+                Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     // const handleProfile = (id) => {
     //     navigation?.navigate("profileStack", { screen: "VoiceToTextProfile", params: { storyuserId: id }, })
     // };
-
 
 
     return (
@@ -76,7 +92,7 @@ const RecordingOliverData = ({
                         <FlatList
                             data={video_profile_response}
                             renderItem={({ item, index }) => (
-
+                                console.log("video rec api", item?.content),
                                 <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-around", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
                                     <View style={{ flexDirection: "row", width: responsiveWidth(71), justifyContent: "space-between", alignItems: "center", }}>
                                         <View style={{ backgroundColor: "#56B6A4", flexDirection: "row", width: 110, height: 47, justifyContent: "space-around", alignItems: "center", borderRadius: 10 }}>
@@ -99,7 +115,7 @@ const RecordingOliverData = ({
                                         </View>
                                     </View>
 
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => linkTo(item?.content)}>
                                         <Image style={{ width: 27, height: 27, alignItems: "center", paddingVertical: moderateVerticalScale(16), resizeMode: "center" }} source={require("../../assets/profileurl_icon.png")} />
                                         <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9) }}>URL</Text>
                                     </TouchableOpacity>
