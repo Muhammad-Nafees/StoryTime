@@ -58,6 +58,7 @@ const FrameContent = ({
   likesCountuser,
   dislikesCount,
   userId,
+  linkTo
 }) => {
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
@@ -254,7 +255,7 @@ const FrameContent = ({
                       </Text>
                     </View>
 
-                    <TouchableOpacity
+                    <TouchableOpacity onPress={() => linkTo(content)}
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',

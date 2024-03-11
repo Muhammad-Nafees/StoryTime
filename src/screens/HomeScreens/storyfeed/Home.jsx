@@ -14,7 +14,7 @@ import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
 import { setEndUserProfile, setFriendId, setRandomForProfileUpdate } from '../../../../store/slices/addplayers/addPlayersSlice';
-
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const Home = () => {
 
@@ -126,6 +126,19 @@ const Home = () => {
         }, [])
     );
 
+    async function linkTo(item) {
+        try {
+            const url = item;
+            if (await InAppBrowser.isAvailable()) {
+                const result = await InAppBrowser.open(url, {
+                });
+            } else {
+                Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
     return (
@@ -213,6 +226,7 @@ const Home = () => {
                                     dislikeslength={item?.dislikes}
                                     dislikesCount={item?.dislikesCount}
                                     dislikesByMe={item?.dislikesByMe}
+                                    linkTo={linkTo}
                                 />
                             )}
 
