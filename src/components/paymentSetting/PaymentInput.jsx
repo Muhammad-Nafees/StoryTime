@@ -3,7 +3,14 @@ import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import Typography from '../Typography';
 
-const PaymentInput = ({label, numeric, placeholderText}) => {
+const PaymentInput = ({
+  label,
+  numeric,
+  placeholderText,
+  onchange,
+  keyValue,
+}) => {
+  // console.log('🚀 ~ PaymentInput ~ key:', keyValue);
   return (
     <View style={styles.inputCOntainer}>
       <Typography style={styles.label}>{label}</Typography>
@@ -12,6 +19,7 @@ const PaymentInput = ({label, numeric, placeholderText}) => {
         placeholderTextColor="#AAAAAA"
         style={styles.inputfield}
         keyboardType={numeric && 'numeric'}
+        onChangeText={e => onchange(e, keyValue)}
       />
     </View>
   );

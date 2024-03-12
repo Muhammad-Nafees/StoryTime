@@ -56,7 +56,7 @@ const Setting = () => {
       key: '3',
       text: 'Payment Settings',
       iconName: 'PaymentSettings',
-      routeName: PAYEMENT,
+      // routeName: PAYEMENT,
     },
     {
       key: '4',
@@ -68,7 +68,7 @@ const Setting = () => {
       key: '5',
       text: 'Report a problem',
       iconName: 'ReportAProblem',
-      routeName: SUPPORT,
+      // routeName: SUPPORT,
     },
     {
       key: '6',

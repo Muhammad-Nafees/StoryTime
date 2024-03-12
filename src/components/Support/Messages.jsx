@@ -15,7 +15,7 @@ const Message = ({item}) => {
             <View style={styles.message_icon}>
               <Image source={MESSAGE_ICON} />
             </View>
-            <View style={styles.message_text_container}>
+            {/* <View style={styles.message_text_container}> */}
               <View style={styles.message_text_container_wrapper}>
                 <View style={styles.message_text_date_container}>
                   <Typography style={styles.message_date_text}>
@@ -34,7 +34,7 @@ const Message = ({item}) => {
               </View>
             </View>
           </View>
-        </View>
+        {/* </View> */}
       </View>
     </View>
   );
