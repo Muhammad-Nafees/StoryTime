@@ -4,7 +4,7 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
-
+import com.proyecto26.inappbrowser.RNInAppBrowserPackage;
 public class MainActivity extends ReactActivity {
 
   /**

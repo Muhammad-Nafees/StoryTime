@@ -1,5 +1,5 @@
-import {PermissionsAndroid, Platform} from 'react-native';
-import {requestMultiple, PERMISSIONS} from 'react-native-permissions';
+import { PermissionsAndroid, Platform } from 'react-native';
+import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
 
 const Permissions = [
   Platform.OS === 'android'

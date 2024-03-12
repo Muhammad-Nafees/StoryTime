@@ -1,15 +1,15 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateVerticalScale} from 'react-native-size-matters';
-import {useDispatch} from 'react-redux';
-import {setStoryUserImage} from '../../store/slices/addplayers/addPlayersSlice';
-import {URL} from '../constants/Constant';
-import {PassionOne_Regular} from '../constants/GlobalFonts';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
+import { setStoryUserImage } from '../../store/slices/addplayers/addPlayersSlice';
+import { URL } from '../constants/Constant';
+import { PassionOne_Regular } from '../constants/GlobalFonts';
 
 const StoryUsers = ({
   images,
@@ -23,7 +23,6 @@ const StoryUsers = ({
 }) => {
   const dispatch = useDispatch();
   const imageLink = URL + images;
-  console.log(imageLink);
   const handlePress = () => {
     if (!disabled) {
       onPress();
@@ -31,10 +30,8 @@ const StoryUsers = ({
     }
   };
 
-  console.log('item---bg', text);
-
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity
         onPress={item?.namerandom == 'Random' ? handleRandomClick : handlePress}
         style={{
@@ -48,15 +45,15 @@ const StoryUsers = ({
             item?.namerandom === 'Random'
               ? 'rgba(238, 95, 138, 1)'
               : item.background
-              ? item.background
-              : backgroundColor
-              ? backgroundColor
-              : '#56B6A4',
+                ? item.background
+                : backgroundColor
+                  ? backgroundColor
+                  : '#56B6A4',
         }}
         disabled={disabled}>
         {item?.namerandom == 'Random' ? (
           <Image
-            style={{width: 65, height: 65, borderRadius: 10}}
+            style={{ width: 65, height: 65, borderRadius: 10 }}
             resizeMode="center"
             source={item?.imageludo}
           />
@@ -68,7 +65,7 @@ const StoryUsers = ({
               borderRadius: 10,
             }}
             resizeMode="contain"
-            source={{uri: imageLink}}
+            source={{ uri: imageLink }}
           />
         )}
       </TouchableOpacity>

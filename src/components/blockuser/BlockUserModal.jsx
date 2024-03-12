@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Inter_Regular, PassionOne_Regular } from '../../constants/GlobalFonts';
 import { SPACING } from '../../constants/Constant';
 import { blockUser_Story } from '../../../services/api/storyfeed';
-import UserErrors from '../UserErrors';
+import UserErrors from '../auth/UserErrors';
 
 
 const BlockUserStory = ({ isVisible, setIsVisible }) => {

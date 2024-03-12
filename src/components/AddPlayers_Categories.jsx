@@ -10,6 +10,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addFriends,
+  addTagPlayers,
   userId,
 } from '../../store/slices/addplayers/addPlayersSlice';
 import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
@@ -20,16 +21,20 @@ const AddFriends_Categories = ({
   username,
   userchoice,
   userid,
-  indexNo,
-  type
+  type,
+  storyId,
+
 }) => {
+
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const isUserAdded = addedUsers.some(user => user.userid === userid);
 
-  const dispatch = useDispatch();
-  // const [friendsArr, setFriendsArr] = useState([]);
+  const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers)
+  const isAddedtagPlayers = tagPlayersRTK.some(user => user.userid === userid);
 
-  console.log('userid----', userid);
+  console.log("isAddedtagPlayers----- :", isAddedtagPlayers);
+
+  const dispatch = useDispatch();
 
   const addFriendHandler = () => {
     if (type !== "tagFriends") {
@@ -38,64 +43,118 @@ const AddFriends_Categories = ({
       dispatch(playerContributorsIds(userid));
       dispatch(userId(userid));
     } else {
-      console.log("Im in Tag Friends Component");
-      tag_FriendsApi_Handler()
+      tag_FriendsApi_Handler();
     }
   };
 
+
+
   const tag_FriendsApi_Handler = async () => {
-    const responseData = await tag_Friends();
+    const responseData = await tag_Friends({ userid, storyId });
+    if (responseData) {
+      dispatch(addTagPlayers({ username, userid }))
+    }
     console.log("responseDataTag----", responseData)
     return responseData;
-  }
+  };
 
   return (
     <>
-      {!isUserAdded && (
-        <View
-          style={{
-            paddingVertical: moderateVerticalScale(3),
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: responsiveWidth(90),
-            alignItems: 'center',
-          }}>
+      {
+        type !== "tagFriends" ? !isUserAdded && (
           <View
             style={{
+              paddingVertical: moderateVerticalScale(3),
               flexDirection: 'row',
-              width: responsiveWidth(31),
               justifyContent: 'space-between',
+              width: responsiveWidth(90),
               alignItems: 'center',
             }}>
-            <Image
-              style={{
-                width: responsiveWidth(11.5),
-                height: responsiveHeight(5.5),
-                resizeMode: 'center',
-              }}
-              source={profileimage}
-            />
             <View
               style={{
-                width: responsiveWidth(45),
-                paddingLeft: moderateScale(8),
+                flexDirection: 'row',
+                width: responsiveWidth(31),
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}>
-              <Text
+              <Image
                 style={{
-                  color: '#000',
-                  fontWeight: '400',
-                  fontSize: responsiveFontSize(1.8),
-                }}>{`@${username}`}</Text>
+                  width: responsiveWidth(11.5),
+                  height: responsiveHeight(5.5),
+                  resizeMode: 'center',
+                }}
+                source={profileimage}
+              />
+              <View
+                style={{
+                  width: responsiveWidth(45),
+                  paddingLeft: moderateScale(8),
+                }}>
+                <Text
+                  style={{
+                    color: '#000',
+                    fontWeight: '400',
+                    fontSize: responsiveFontSize(1.8),
+                  }}>{`@${username}`}</Text>
+              </View>
             </View>
-          </View>
 
-          <TouchableOpacity onPress={() => addFriendHandler()}>
-            <Text style={{ color: '#209BCC', fontSize: responsiveFontSize(1.9) }}>
-              {userchoice}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+            <TouchableOpacity onPress={() => addFriendHandler()}>
+              <Text style={{ color: '#209BCC', fontSize: responsiveFontSize(1.9) }}>
+                {userchoice}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )
+          :
+          !isAddedtagPlayers && (
+            <View
+              style={{
+                paddingVertical: moderateVerticalScale(3),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: responsiveWidth(90),
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: responsiveWidth(31),
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{
+                    width: responsiveWidth(11.5),
+                    height: responsiveHeight(5.5),
+                    resizeMode: 'center',
+                  }}
+                  source={profileimage}
+                />
+                <View
+                  style={{
+                    width: responsiveWidth(45),
+                    paddingLeft: moderateScale(8),
+                  }}>
+                  <Text
+                    style={{
+                      color: '#000',
+                      fontWeight: '400',
+                      fontSize: responsiveFontSize(1.8),
+                    }}>{`@${username}`}</Text>
+                </View>
+              </View>
+
+              <TouchableOpacity onPress={() => addFriendHandler()}>
+                <Text style={{ color: '#209BCC', fontSize: responsiveFontSize(1.9) }}>
+                  {userchoice}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )
+      }
+
+
     </>
   );
 };

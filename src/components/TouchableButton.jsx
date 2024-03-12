@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {SecondaryColor, ThirdColor} from '../screens/Styles/Style';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
 import {
   responsiveHeight,
   responsiveFontSize,
@@ -23,29 +23,25 @@ const TouchableButton = ({
   selectedIndices,
   validate,
   values,
-  StatusCodeSuccess,
+  StatusCodeSuccess
+
 }) => {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         disabled={
-          type === 'register' && StatusCodeSuccess
-            ? false
-            : type === 'login'
-            ? false
-            : type === 'forgetemail' && StatusCodeSuccess
-            ? false
-            : type === 'optForget'
-            ? false
-            : type === 'registeruserInfo'
-            ? false
-            : type === 'backuser'
-            ? false
-            : type === 'addPlayers'
-            ? false
-            : type === 'sequence'
-            ? false
-            : false
+          type === 'register' && StatusCodeSuccess ? false :
+            type === "login" ? false :
+              type === "forgetemail" && StatusCodeSuccess ? false :
+                type === "optForget" ? false :
+                  type === "registeruserInfo" ? false :
+                    type === "backuser" ? false :
+                      type === "addPlayers" ? false :
+                        type === "sequence" ? false :
+                          type === "tagFriends" ? false :
+                            type === "tag" ? false :
+                              type == "savestoryphone" ? false :
+                                true
         }
         onPress={onPress}
         style={{

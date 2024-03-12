@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useMemo} from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   Dimensions,
   Image,
@@ -22,21 +22,21 @@ import {
   White,
   pinkColor,
 } from '../../Styles/Style';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import FrameContent from '../../../components/FrameContent';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import SearchField from '../../../components/SearchField';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getCategories,
   setSubCategoriesId,
@@ -50,32 +50,33 @@ import {
   randomNames,
   setStoryUserImage,
 } from '../../../../store/slices/addplayers/addPlayersSlice';
-import {addFriends_api} from '../../../../services/api/add-members';
+import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
-import {BlurView} from '@react-native-community/blur';
+import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
-import {Inter_Regular, PassionOne_Regular} from '../../../constants/GlobalFonts';
-import {SPACING, URL} from '../../../constants/Constant';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { SPACING, URL } from '../../../constants/Constant';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 
-const SubCategories = ({route}) => {
+const SubCategories = ({ route }) => {
   //destructures
-  const {id, name, guestNumber} = route?.params || {};
-  const {height} = Dimensions.get('window');
-  const {SPLASH_SCREEN_IMAGE} = Img_Paths;
-  const {LUDO_ICON} = Img_Paths;
-  const {PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS} = NavigationsString;
+  const { id, name, guestNumber } = route?.params || {};
+  const { height } = Dimensions.get('window');
+  const { SPLASH_SCREEN_IMAGE } = Img_Paths;
+  const { LUDO_ICON } = Img_Paths;
+  const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS } = NavigationsString;
+
 
   //hooks
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {bottom} = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
 
   //redux states
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
 
   //states
   const [responsesubCategories, setResponseSubCategories] = useState([]);
@@ -121,7 +122,7 @@ const SubCategories = ({route}) => {
         const userid = usernameObj._id;
         const username = usernameObj?.username;
         console.log('username----', username);
-        dispatch(addFriends({username, userid}));
+        dispatch(addFriends({ username, userid }));
         // Now you have the _id of the matched user, you can use it as needed.
         console.log('Matched User ID:', userid);
         setIsUsernameInputValue('');
@@ -146,7 +147,7 @@ const SubCategories = ({route}) => {
 
   //functions
 
-  const fetchSubcategories = async (page =1) => {
+  const fetchSubcategories = async (page = 1) => {
     try {
       setIsLoading(true);
       const response = await get_Categories_Sub_Categories({
@@ -193,7 +194,6 @@ const SubCategories = ({route}) => {
   };
 
 
-
   const handleStoryUser = (id, name, image) => {
     const imageLink = URL + image;
     user
@@ -204,7 +204,7 @@ const SubCategories = ({route}) => {
     dispatch(setSubCategoriesId(id));
   };
 
-  const onRefresh = () =>{
+  const onRefresh = () => {
     setIsRefreshing(true);
     setResponseSubCategories([]);
     fetchSubcategories(1);
@@ -229,14 +229,16 @@ const SubCategories = ({route}) => {
   };
 
   const isCategoryBlurred = category => {
-    return !allowedCategories.includes(category?.name) && isUserGuest; 
+    return !allowedCategories.includes(category?.name) && isUserGuest;
   };
+
+
 
   const keyExtractor = (_, index) => `sub_categories.${index}`;
 
   //render functions
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <>
         <View
@@ -261,7 +263,7 @@ const SubCategories = ({route}) => {
             text={item?.name}
             item={item}
             mainbgColor={TextColorGreen}
-            backgroundColor={isUserGuest?"#497780":"#56B6A4"}
+            backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
             handleRandomClick={() => handleRandomSub_category(item)}
           />
           {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
@@ -292,13 +294,13 @@ const SubCategories = ({route}) => {
   };
 
   const renderListFooterComponent = () => {
-    if(isLoading || DATA.length === 0){
+    if (isLoading || DATA.length === 0) {
       return <></>
     }
     if (isLoadMore) {
       return (
-        <View style={{alignItems: 'center',paddingVertical:SPACING}}>
-          <ActivityIndicator size={40} color={PrimaryColor} /> 
+        <View style={{ alignItems: 'center', paddingVertical: SPACING }}>
+          <ActivityIndicator size={40} color={PrimaryColor} />
         </View>
       );
     }
@@ -306,7 +308,7 @@ const SubCategories = ({route}) => {
 
   const renderListEmptyComponent = () => {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {isRefreshing ? (
           <></>
         ) : isLoading ? (
@@ -323,23 +325,23 @@ const SubCategories = ({route}) => {
     <LinearGradient
       colors={["#75BDCD", "#FFB5CB",]}
       start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
-      style={[ styles.container, {backgroundColor: pinkColor}] }>
+      style={[styles.container, { backgroundColor: pinkColor }]}>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-      <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: responsiveWidth(5),
-            marginBottom: moderateVerticalScale(10),
-          }}>
-          <View style={styles.first_container}>
-            <BackButton onPress={() => navigation.goBack()} />
-            <View style={styles.categories_text_container}>
-              <Text style={styles.categories_text}>{name}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginHorizontal: responsiveWidth(5),
+              marginBottom: moderateVerticalScale(10),
+            }}>
+            <View style={styles.first_container}>
+              <BackButton onPress={() => navigation.goBack()} />
+              <View style={styles.categories_text_container}>
+                <Text style={styles.categories_text}>{name}</Text>
+              </View>
             </View>
-          </View>
             {isUserGuest && (
               <View style={{ marginTop: moderateVerticalScale(10) }}>
                 <View
@@ -357,92 +359,92 @@ const SubCategories = ({route}) => {
             )}
           </View>
 
-        {/* MainnputField----------*/}
+          {/* MainnputField----------*/}
 
-      {user ? (
-        <>
-          <MainInputField
-            onPress={addFriends_api_handler}
-            inputValue={isUsernameInputValue}
-            OnchangeText={setIsUsernameInputValue}
-            placeholder="Username"
-          />
-          <View
-            style={{
-              paddingVertical: moderateVerticalScale(6),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-             <View
+          {user ? (
+            <>
+              <MainInputField
+                onPress={addFriends_api_handler}
+                inputValue={isUsernameInputValue}
+                OnchangeText={setIsUsernameInputValue}
+                placeholder="Username"
+              />
+              <View
                 style={{
-                  width: responsiveWidth(90),
-                  flexDirection: 'row',
+                  paddingVertical: moderateVerticalScale(6),
+                  justifyContent: 'center',
                   alignItems: 'center',
-                  flexWrap: 'wrap',
                 }}>
-                <View>
-                  <Text
-                    style={{
-                      color: '#393939',
-                      fontWeight: '600',
-                      textAlign: 'center',
-                      fontSize: responsiveHeight(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
-                    }}>
-                    Players:
-                  </Text>
-                </View>
-
-              {addUsersGame?.map((item, index) => (
                 <View
-                  key={index}
                   style={{
-                    margin: 4,
-                    backgroundColor: '#395E66',
-                    paddingHorizontal: moderateScale(14),
-                    paddingVertical: moderateVerticalScale(4.5),
-                    borderRadius: 40,
+                    width: responsiveWidth(90),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
                   }}>
-                  <Text
-                    style={{
-                      color: '#FFF',
-                      fontSize: responsiveFontSize(1.9),
-                    }}>{`@${item.username}`}</Text>
+                  <View>
+                    <Text
+                      style={{
+                        color: '#393939',
+                        fontWeight: '600',
+                        textAlign: 'center',
+                        fontSize: responsiveHeight(1.9),
+                        fontFamily: Inter_Regular.Inter_Regular,
+                      }}>
+                      Players:
+                    </Text>
+                  </View>
+
+                  {addUsersGame?.map((item, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        margin: 4,
+                        backgroundColor: '#395E66',
+                        paddingHorizontal: moderateScale(14),
+                        paddingVertical: moderateVerticalScale(4.5),
+                        borderRadius: 40,
+                      }}>
+                      <Text
+                        style={{
+                          color: '#FFF',
+                          fontSize: responsiveFontSize(1.9),
+                        }}>{`@${item.username}`}</Text>
+                    </View>
+                  ))}
                 </View>
-              ))}
-            </View>
-          </View>
-        </>
-      ) : (
-        <SearchField
-          placeholder="Search"
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        />
-      )}
-      <FlatList
-        data={DATA}
-        scrollsToTop
-        scrollEnabled
-        numColumns={3}
-        nestedScrollEnabled
-        onRefresh={onRefresh}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        keyExtractor={keyExtractor}
-        onEndReachedThreshold={0.3}
-        onEndReached={handleLoadMore}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: bottom + 30,
-          paddingHorizontal: moderateScale(4),
-        }}
-        ListEmptyComponent={renderListEmptyComponent}
-        ListFooterComponent={renderListFooterComponent}
-      />
-      <Toast />
-      </SafeAreaView>
-    </ImageBackground>    
+              </View>
+            </>
+          ) : (
+            <SearchField
+              placeholder="Search"
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          )}
+          <FlatList
+            data={DATA}
+            scrollsToTop
+            scrollEnabled
+            numColumns={3}
+            nestedScrollEnabled
+            onRefresh={onRefresh}
+            renderItem={renderItem}
+            refreshing={isRefreshing}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={handleLoadMore}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingBottom: bottom + 30,
+              paddingHorizontal: moderateScale(4),
+            }}
+            ListEmptyComponent={renderListEmptyComponent}
+            ListFooterComponent={renderListFooterComponent}
+          />
+          <Toast />
+        </SafeAreaView>
+      </ImageBackground>
     </LinearGradient>
   );
 };
@@ -482,7 +484,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '800',
     letterSpacing: 0.36,
-    fontFamily:Inter_Regular.Inter_Regular
+    fontFamily: Inter_Regular.Inter_Regular
   },
   text_Input_container: {
     justifyContent: 'center',

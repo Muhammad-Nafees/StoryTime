@@ -16,9 +16,10 @@ const Routes = () => {
         const accessToken = await AsyncStorage.getItem('isLoggedIn');
         const userData = await AsyncStorage.getItem('userData');
 
-          dispatch(setAccessToken(accessToken));
-          dispatch(login(JSON.parse(userData)));
-          setLoading(false);
+        dispatch(setAccessToken(accessToken));
+        dispatch(login(JSON.parse(userData)));
+
+        setLoading(false);
       } catch (error) {
         console.error('Error authenticating user:', error);
         setLoading(false);

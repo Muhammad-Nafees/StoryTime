@@ -8,36 +8,36 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import UserNames from '../../../components/UserNames';
-import {useDispatch, useSelector} from 'react-redux';
-import {recordingData} from '../../../../store/slices/RecordingData';
+import { useDispatch, useSelector } from 'react-redux';
+import { recordingData } from '../../../../store/slices/RecordingData';
 import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
-import {PassionOne_Regular} from '../../../constants/GlobalFonts';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {PrimaryColor, TextColorGreen} from '../../Styles/Style';
-import {checkTrueOrFalse} from '../../../../store/slices/addplayers/addPlayersSlice';
-import {SCREEN_HEIGHT,SCREEN_WIDTH, SPACING} from '../../../constants/Constant';
-import {Inter_Regular} from '../../../constants/GlobalFonts';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
+import { checkTrueOrFalse } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 import GuestModals from '../../../components/GuestModals';
-import Voice, {SpeechResultsEvent} from '@react-native-voice/voice';
+import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
 import NavigationsString from '../../../constants/NavigationsString';
 import LinearGradient from 'react-native-linear-gradient';
 
-const FirstUser = ({route}) => {
+const FirstUser = ({ route }) => {
   let longPressTimeout;
-  const {SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, BG_VOICE_TO_TEXT_IMG} = Img_Paths;
-  const {PLAY_STORY_TIME} = NavigationsString;
+  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME, BG_VOICE_TO_TEXT_IMG } = Img_Paths;
+  const { PLAY_STORY_TIME } = NavigationsString;
 
   const navigation = useNavigation();
   const SCREENWIDTH = Dimensions.get('window').width;
@@ -47,7 +47,7 @@ const FirstUser = ({route}) => {
   const [timeText, setTimeText] = useState('02:00');
   const [isLongPress, setIsLongPress] = useState(false);
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
 
   const checkUserTrueorFalse = useSelector(
     state => state.addPlayers.checkTrueOrFalse,
@@ -80,14 +80,11 @@ const FirstUser = ({route}) => {
   const [speaking, setSpeaking] = useState(false);
 
   const USER = user?.data?.user || user?.data;
-  // const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })
-  // ], [USER, addedUsers]);
 
   const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
-  console.log('sequence-users-------', sequenceUser);
-  console.log('sequenceUsers FirstUser--', sequenceUser[1]);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
+
 
   // console.log("isNextUser", isNextUser);
 
@@ -97,10 +94,6 @@ const FirstUser = ({route}) => {
 
   const stringText = recordingText.toString();
 
-  //consts
-  const isUserGuest = useMemo(() => !user, [user]);
-  const SHOW_DONE_BTN =
-    (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
   // ----------XXXXXXXXXX----------
 
   useEffect(() => {
@@ -123,7 +116,7 @@ const FirstUser = ({route}) => {
 
   // onSpeechEnd ----------
 
-  const onSpeechEnd = e => {};
+  const onSpeechEnd = e => { };
 
   // ---------- onSpeechResult----------
 
@@ -148,7 +141,7 @@ const FirstUser = ({route}) => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  }
+  };
 
   useEffect(() => {
     setTimeLeft(null);
@@ -199,12 +192,12 @@ const FirstUser = ({route}) => {
     user
       ? navigation.navigate('FirstUserStorytext')
       : modalOpen(
-          GuestModalRef,
-          'Get Story Time Premium',
-          'Subscribe now to save your Story to your profile',
-          'Subscribe',
-          'Back',
-        );
+        GuestModalRef,
+        'Get Story Time Premium',
+        'Subscribe now to save your Story to your profile',
+        'Subscribe',
+        'Back',
+      );
   };
 
   // console.log("extendStoryTrueOrFalse=============", extendStoryTrueOrFalse);
@@ -214,7 +207,7 @@ const FirstUser = ({route}) => {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    }
+    };
 
     if (checkUserTrueorFalse) {
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
@@ -235,6 +228,8 @@ const FirstUser = ({route}) => {
       setisCancelingStory(true);
     };
   }, [checkUserTrueorFalse, nextRandomNumvalue, nextRandomNumvalueExtend]);
+
+
 
   const saveBtnHandler = () => {
     if (!user) {
@@ -275,7 +270,7 @@ const FirstUser = ({route}) => {
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
-    }
+    };
 
     if (timeLeft !== 0) {
       setIsPressed(true);
@@ -290,8 +285,6 @@ const FirstUser = ({route}) => {
   const pressHandlerOut = () => {
     console.log('On PressOut-----');
 
-    // if (timeLeft !== null && timeLeft > 0) {
-    // }
     setIsFirstCall(true);
     setisCancelingStory(false);
     stopRecording();
@@ -300,9 +293,6 @@ const FirstUser = ({route}) => {
     setIsPressed(false);
     setTimeLeft(0);
     console.log('STOP RECORDING-----');
-
-    // if (isFirstCall) {
-    // };
   };
 
   // Timer 2 Minutes ---------
@@ -310,7 +300,7 @@ const FirstUser = ({route}) => {
   useEffect(() => {
     if (USER_LENGTH_CHECK) {
       setIsNext(false);
-    }
+    };
 
     let countdown;
 
@@ -347,6 +337,8 @@ const FirstUser = ({route}) => {
     }
   }, [timeLeft]);
 
+
+
   return (
     <>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -360,13 +352,15 @@ const FirstUser = ({route}) => {
             style={{
               paddingTop: responsiveWidth(5),
               flexDirection: 'row',
-              width: SCREEN_WIDTH - moderateScale(22) * 2,
+              width: isCancelingStory
+                ? responsiveWidth(60)
+                : responsiveWidth(90),
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              style={{width: responsiveWidth(10)}}>
+              style={{ width: responsiveWidth(10) }}>
               <Image
                 style={{
                   width: responsiveWidth(5),
@@ -377,8 +371,36 @@ const FirstUser = ({route}) => {
               />
             </TouchableOpacity>
 
-            <View>
-              {SHOW_DONE_BTN ? (
+            <View style={{}}>
+              {isCancelingStory ? (
+                <View
+                  style={{
+                    borderWidth: 4,
+                    borderColor: 'rgba(255, 153, 166, 1)',
+                    borderRadius: 8,
+                  }}>
+                  <LinearGradient
+                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
+                    start={{ x: 1, y: 0.5 }}
+                    end={{ x: 1, y: 0 }}
+                    locations={[0, 1]}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: moderateVerticalScale(10),
+                      paddingHorizontal: moderateScale(12),
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: TextColorGreen,
+                        fontSize: responsiveFontSize(2),
+                      }}>
+                      Time: {timeText}
+                    </Text>
+                  </LinearGradient>
+                </View>
+              ) : !user ? (
                 <TouchableOpacity
                   onPress={() => {
                     modalOpen(
@@ -407,42 +429,10 @@ const FirstUser = ({route}) => {
                     Done
                   </Text>
                 </TouchableOpacity>
-              ) : isCancelingStory ? (
-                <View
-                  style={{
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    borderRadius: 8,
-                  }}>
-                  <LinearGradient
-                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
-                    start={{x: 1, y: 0.5}}
-                    end={{x: 1, y: 0}}
-                    locations={[0, 1]}
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingVertical: moderateVerticalScale(10),
-                      paddingHorizontal: moderateScale(12),
-                    }}>
-                    <Text
-                      style={{
-                        fontWeight: '600',
-                        color: TextColorGreen,
-                        fontSize: responsiveFontSize(2),
-                      }}>
-                      Time: {timeText}
-                    </Text>
-                  </LinearGradient>
-                </View>
               ) : (
                 <></>
               )}
             </View>
-              {
-                //Layout adjuster text
-                !SHOW_DONE_BTN && <Text></Text>
-              }
           </View>
         </View>
 
@@ -465,7 +455,7 @@ const FirstUser = ({route}) => {
             )}
 
             <ScrollView>
-              <View style={{paddingHorizontal: moderateVerticalScale(35)}}>
+              <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
                 <Text
                   style={{
                     paddingTop: responsiveWidth(3),
@@ -500,7 +490,7 @@ const FirstUser = ({route}) => {
           </View>
         </ImageBackground>
 
-        <View style={{height: responsiveHeight(35), marginBottom: SPACING * 4}}>
+        <View style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
           <View
             style={{
               paddingVertical: moderateVerticalScale(25),
@@ -523,7 +513,7 @@ const FirstUser = ({route}) => {
                   backgroundColor:
                     isFirstCall || timeLeft == 0
                       ? 'rgba(87, 150, 164, 0.3)'
-                      : undefined,
+                      : TextColorGreen,
                   width: SCREENWIDTH * 0.32,
                   height: SCREENWIDTH * 0.32,
                   borderRadius: SCREENWIDTH / 2,
@@ -549,14 +539,13 @@ const FirstUser = ({route}) => {
               isLongPress={isLongPress}
               backgroundColor={TextColorGreen}
               color="#FFF"
-              text={`Next Player${
-                isNextUser?.username ? ': @' + isNextUser?.username : ''
-              }`}
+              text={`Next Player${isNextUser?.username ? ': @' + isNextUser?.username : ''
+                }`}
               timeLeft={timeLeft}
               isNextUser={isNextUser}
               isCancelingStory={isCancelingStory}
             />
-          ) : (
+          ) :
             !user && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
@@ -565,13 +554,14 @@ const FirstUser = ({route}) => {
                 color="#FFF"
                 timeLeft={timeLeft}
                 isNextUser={isNextUser}
+                user={user}
                 text={'Next Player'}
                 isCancelingStory={isCancelingStory}
               />
             )
-          )}
+          }
 
-          <View style={{paddingTop: responsiveWidth(6)}}>
+          <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
               onPress={!user ? saveStoryhandler : saveBtnHandler}
               text={!user ? 'Save to phone' : 'Save Story'}
@@ -582,7 +572,9 @@ const FirstUser = ({route}) => {
           </View>
 
           {saveStoryModal && (
-            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
+            <SaveStoryPhone
+              isVisible={isVisible}
+              setIsVisible={setVisible} />
           )}
         </View>
 
@@ -639,7 +631,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: moderateVerticalScale(6),
-    // backgroundColor: "orange"
   },
   bg_content: {
     justifyContent: 'center',

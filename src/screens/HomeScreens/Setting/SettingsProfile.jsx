@@ -22,11 +22,11 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Formik} from 'formik';
-import {validationSettingsProfile} from '../../../../validation/validation';
-import CustomInput from '../../../components/CustomInput';
+import { Formik } from 'formik';
+import { validationSettingsProfile } from '../../../../validation/validation';
+import CustomInput from '../../../components/auth/CustomInput';
 import UploadImage from '../../../components/UploadImage';
-import CustomPhoneInput from '../../../components/CustomPhoneInput';
+import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
 import TouchableButton from '../../../components/TouchableButton';
 import {
   FourthColor,

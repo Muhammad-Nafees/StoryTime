@@ -14,13 +14,20 @@ const initialState = {
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
     publicAndPrivateMode: null,
-
+    addTagPlayers: [],
+    isHidden: false,
+    friendId: "",
+    addUrlid: "",
+    urlCategoryname: "",
+    urlSubcategoryname: "",
+    responseUsersProfile: null,
+    endUserProfile: true,
+    randomForProfileUpdate: ""
 };
 
 const addPlayers = createSlice({
     name: 'addFriends',
     initialState,
-
     reducers: {
 
         addFriends: (state, action) => {
@@ -28,26 +35,22 @@ const addPlayers = createSlice({
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (!isUserExist) {
                 state.addFriends.push(action.payload);
-            } else {
-                console.log("User with the same userid already exists in the array");
             }
+        },
+        resetFriends: (state) => {
+            state.addFriends = [];
         },
 
         rearrangedFriends: (state, { payload }) => {
-            const { selectedIndices, sequenceUser, userIds } = payload;
-            // const uniqueVal = new Set([sequenceUser]);
+            const { selectedIndices, sequenceUser, } = payload;
 
             state.gameFriends = [];
             for (const index of selectedIndices) {
                 if (index >= 0 && index < sequenceUser.length) {
                     state.gameFriends.push(sequenceUser[index]);
-                } else {
-                    console.log("Players Already Exist");
-                };
+                }
             };
-            console.log("state.gameFriends--------", state.gameFriends)
         },
-
 
         removeUser: (state, action) => {
             const { userid } = action.payload;
@@ -55,23 +58,18 @@ const addPlayers = createSlice({
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
             }
-
         },
-
         userId: (state, action) => {
             state.userId = action.payload;
-            const isUserExist = state.addFriends.some((friend) => friend.userid === action.payload);
-            console.log("state.--", isUserExist)
+            state.addFriends.some((friend) => friend.userid === action.payload);
         },
 
         randomNames: (state, payload) => {
             state.randomnames = payload
-            console.log("state-random---", state.randomnames);
         },
 
         setStoryUserImage: (state, payload) => {
             state.storyUserImage = payload
-            console.log("state-storyUser---", state.storyUserImage)
         },
 
         checkTrueOrFalse: (state, { payload }) => {
@@ -95,9 +93,54 @@ const addPlayers = createSlice({
         setIsPublicOrPrivateMode: (state, { payload }) => {
             state.publicAndPrivateMode = payload
         },
+        addTagPlayers: ({ addTagPlayers }, { payload }) => {
+            const { userid } = payload;
+            const isAlreadyExist = addTagPlayers.some((friend) => friend?.userid === userid)
+            if (!isAlreadyExist) {
+                addTagPlayers.push(payload)
+            }
+        },
+        tagRemoveUsers: ({ addTagPlayers }, { payload }) => {
+            const { userid } = payload;
+            const isAlreadyExist = addTagPlayers.some((friend) => friend?.userid === userid)
+            if (isAlreadyExist) {
+                addTagPlayers.pop(payload)
+            };
+        },
+        isHidden: (state, { payload }) => {
+            console.log("payload value---- :", payload)
+            console.log("state.isHidden---- :", state.isHidden)
+            state.isHidden = payload
+        },
+        setAddUrlId: (state, { payload }) => {
+            state.addUrlid = payload;
+        },
 
+        categorynameUrl: (state, { payload }) => {
+            state.urlCategoryname = payload;
+        },
+        subCategorynameUrl: (state, { payload }) => {
+            state.urlSubcategoryname = payload;
+        },
+        setFriendId: (state, action) => {
+            state.friendId = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
+        setResponseUsersProfile: (state, action) => {
+            state.responseUsersProfile = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
+        setEndUserProfile: (state, action) => {
+            state.endUserProfile = action.payload
+            console.log("state.fridn Id", state.friendId);
+        },
+        setRandomForProfileUpdate: (state, action) => {
+            state.randomForProfileUpdate = action.payload
+        },
     },
 });
+
+
 
 export const {
     addFriends,
@@ -112,7 +155,18 @@ export const {
     nextRandomNumVideo,
     nextRandomNumVideoExtend,
     setIsPublicOrPrivateMode,
-    rearrangedFriends
+    rearrangedFriends,
+    addTagPlayers,
+    tagRemoveUsers,
+    resetFriends,
+    isHidden,
+    setAddUrlId,
+    categorynameUrl,
+    subCategorynameUrl,
+    setFriendId,
+    setResponseUsersProfile,
+    setEndUserProfile,
+    setRandomForProfileUpdate
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

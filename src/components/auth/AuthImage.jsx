@@ -13,8 +13,6 @@ const AuthImage = ({ ImageSource, onPress }) => {
     )
 }
 
-export default AuthImage
-
 
 const styles = StyleSheet.create({
     container: {
@@ -30,3 +28,5 @@ const styles = StyleSheet.create({
         alignItems: "center"
     }
 })
+
+export default AuthImage;

@@ -29,7 +29,6 @@ const SaveStory = ({ isVisible, setVisible }) => {
         setVisibleSavePhone(true); // Set isVisible to true to open the modal
     };
 
-
     return (
         <Modal onRequestClose={() => setVisible(false)} visible={isVisible} >
             <ImageBackground style={styles.container} source={BG_PLAYFLOW}>
@@ -44,7 +43,6 @@ const SaveStory = ({ isVisible, setVisible }) => {
                     </View>
 
                 </View>
-
 
             </ImageBackground>
         </Modal>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputColor, ThirdColor, pinkColor } from "../../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
@@ -8,9 +8,16 @@ import BackButton from '../../../components/BackButton';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
 import SelectDropdown from 'react-native-select-dropdown';
 import TouchableButton from '../../../components/TouchableButton';
-import CustomSelectDropDown from '../../../components/SelectDropDown';
+import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAddUrlId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { createStory_api } from '../../../../services/api/storyfeed';
+import { userLoginid } from '../../../../store/slices/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserErrors from '../../../components/auth/UserErrors';
 
 
 
@@ -19,154 +26,212 @@ const AddUrl = () => {
     const { BG_PLAYFLOW, BG_URL_PAGE } = Img_Paths;
     const navigation = useNavigation();
 
+    const addUrlId = useSelector((state) => state?.addPlayers?.addUrlid);
+    const categoryId = useSelector((state) => state?.addPlayers?.urlCategoryname);
+    const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
+
+
     const [changeColor, setChangeColor] = useState("#AAA");
     const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
-    const [textInputValue, setTextInputValue] = useState("")
+    const [textInputValue, setTextInputValue] = useState("");
+    const [HasMorePages, setHasMorePages] = useState(false);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    const [responseCategories, setResponseCategories] = useState([]);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [pageSubCategory, setPageSubCategory] = useState(1);
+    const [responseSubCategories, setResponseSubCategories] = useState([]);
+    const dispatch = useDispatch();
 
-    const arrayurl = ["Animals"]
-    const SubCategory = ["Dog"]
-    const urlArr = ["http://example.com"]
-    console.log("textInputValue----", textInputValue)
+
+
+    const categories_Api = async () => {
+        try {
+            const responseData = await get_Categories_Sub_Categories({
+                page: page,
+                id: addUrlId,
+                page2: pageSubCategory
+            });
+            if (addUrlId) {
+                setResponseSubCategories(responseData?.data?.categories);
+            } else {
+                setResponseCategories(responseData?.data?.categories);
+            };
+            setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+            console.log("responseData----- :", responseData);
+
+            return responseData;
+        } catch (error) {
+
+        }
+    };
+
+
+    const createStory_video = async () => {
+        setIsLoading(true);
+        try {
+            const userLoginId = await AsyncStorage.getItem('isUserId');
+            console.log("userloginId---- :", userLoginId)
+            const response = await createStory_api({
+                type: "video",
+                creator: userLoginId,
+                category: categoryId,
+                subCategory: subCategoryId,
+                content: textInputValue
+            });
+            setIsVisible(true);
+            setIsLoading(false);
+            console.log("response---- :", response)
+            return response;
+        } catch (error) {
+            console.log(error)
+        };
+    };
+
+    useEffect(() => {
+        categories_Api();
+        return () => {
+            dispatch(setAddUrlId(""))
+        }
+    }, [page, addUrlId, pageSubCategory]);
+
+
+
+    const categoriesNames = responseCategories?.map((category) => category?.name);
+    const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
+
+
+
     return (
-
-        <ImageBackground style={styles.container} source={BG_URL_PAGE}>
-            <View style={{ width: responsiveWidth(95), marginLeft: "auto", paddingVertical: responsiveWidth(8) }}>
-                <BackButton onPress={() => navigation.goBack()} />
-            </View>
-
-            <View style={{ backgroundColor: "#FFF", height: responsiveHeight(70), width: responsiveWidth(90), }}>
-                <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(20) }}>
-                    <Text style={{ color: "rgba(47, 79, 86, 1)", fontSize: responsiveFontSize(3), fontWeight: "400", fontFamily: PassionOne_Regular.passionOne }}>Add URL</Text>
+        <View style={{ height: responsiveHeight(100), }}>
+            <ImageBackground style={{ height: responsiveHeight(100), }} source={BG_URL_PAGE}>
+                <View style={{ width: responsiveWidth(95), marginLeft: "auto", paddingVertical: responsiveWidth(8) }}>
+                    <BackButton onPress={() => navigation.goBack()} />
                 </View>
+                <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
+                    <View style={{ backgroundColor: "#FFF", height: responsiveHeight(70), width: responsiveWidth(90), }}>
+                        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(20) }}>
+                            <Text style={{ color: "rgba(47, 79, 86, 1)", fontSize: responsiveFontSize(3), fontWeight: "400", fontFamily: PassionOne_Regular.passionOne }}>Add URL</Text>
+                        </View>
 
-                <View style={{ width: responsiveWidth(80), marginLeft: "auto", }}>
-                    <View style={{ paddingVertical: moderateVerticalScale(10) }}>
-                        <Text style={{ color: "#000", fontWeight: "500" }}>Category</Text>
+                        <View style={{ width: responsiveWidth(80), marginLeft: "auto", }}>
+                            <View style={{ paddingVertical: moderateVerticalScale(10) }}>
+                                <Text style={{ color: "#000", fontWeight: "500" }}>Category</Text>
+                            </View>
+
+                            <CustomSelectDropDown
+                                categoriesNames={categoriesNames}
+                                addUrlid={addUrlId}
+                                setResponseCategories={setResponseCategories}
+                                responseCategories={responseCategories}
+                                defaultText="Select a Category"
+                                changeColor={changeColor}
+                                setChangeColor={setChangeColor}
+                                setResponseSubCategories={setResponseSubCategories}
+                                HasMorePages={HasMorePages}
+                                setIsLoadMore={setIsLoadMore}
+                            />
+                        </View>
+
+                        <View style={{ width: responsiveWidth(80), marginLeft: "auto", paddingVertical: 6 }}>
+                            <View style={{ paddingVertical: moderateVerticalScale(10) }}>
+                                <Text style={{ color: "#000", fontWeight: "500" }}>Sub-Category</Text>
+                            </View>
+
+                            <CustomSelectDropDown
+                                subCategoriesNames={subCategoriesNames}
+                                subResponseCategories={responseSubCategories}
+                                defaultText="Select a Sub-Category"
+                                changeColor={secondChangeColor}
+                                addUrlid={addUrlId}
+                                setChangeColor={setSecondChangeColor}
+                                setResponseSubCategories={setResponseSubCategories}
+                                HasMorePages={HasMorePages}
+                                setPageSubCategory={setPageSubCategory}
+                                setIsLoadMore={setIsLoadMore}
+                            />
+
+                        </View>
+
+                        <View>
+                            <View style={{ width: responsiveWidth(80), marginLeft: 'auto' }}>
+                                <Text style={[styles.text, { color: FourthColor }]}>
+                                    URL
+                                </Text>
+                            </View>
+
+                            <TextInputField
+                                placeholderText="Paste URL here"
+                                type="URL"
+                                value={textInputValue}
+                                onChangeText={(val) => setTextInputValue(val)}
+                            />
+                        </View>
+
+                        <View style={{ paddingTop: responsiveWidth(24), justifyContent: "center", alignItems: "center", }}>
+                            <TouchableOpacity
+                                disabled={changeColor === "#000"
+                                    && secondChangeColor == "#000"
+                                    && textInputValue !== "" ? false : true}
+                                onPress={() => createStory_video()}
+                                style={{
+                                    width: responsiveWidth(72),
+                                    backgroundColor: changeColor === "#000"
+                                        && secondChangeColor == "#000"
+                                        && textInputValue !== "" ? TextColorGreen : "'rgba(57, 94, 102, 0.4)'",
+                                    borderRadius: 10,
+                                    borderColor: '#395E66',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: responsiveHeight(6.6),
+                                }}>
+
+                                {
+                                    !isLoading ?
+                                        <Text
+                                            style={{
+                                                fontSize: responsiveFontSize(1.9),
+                                                fontWeight: '600',
+                                                letterSpacing: 0.28,
+                                                color: "#FFF",
+                                            }}>
+                                            Post
+                                        </Text>
+                                        :
+                                        <ActivityIndicator />
+                                }
+
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
+                </View>
 
-
-
-                    <CustomSelectDropDown
-                        arrayurl={arrayurl}
-                        defaultText="Select a Category"
-                        changeColor={changeColor}
-                        setChangeColor={setChangeColor}
+                {
+                    isVisible &&
+                    <UserErrors
+                        bgImage={BG_URL_PAGE}
+                        text={"Back"}
+                        isVisible={isVisible}
+                        setVisible={setIsVisible}
+                        text1={"Successfully Added!"}
+                        onPress={() => navigation.navigate("Profile")}
                     />
+                }
+            </ImageBackground>
+        </View>
 
-                </View>
-
-
-                <View style={{ width: responsiveWidth(80), marginLeft: "auto", paddingVertical: 6 }}>
-                    <View style={{ paddingVertical: moderateVerticalScale(10) }}>
-                        <Text style={{ color: "#000", fontWeight: "500" }}>Sub-Category</Text>
-                    </View>
-
-                    {/* <SelectDropdown
-                        data={SubCategory}
-                        defaultButtonText="Select a Sub-Category"
-                        buttonStyle={[
-                            {
-                                width: '90%',
-                                backgroundColor: TextinputColor,
-                                borderRadius: 10,
-                                justifyContent: 'flex-start',
-                                paddingHorizontal: 25,
-                            },
-                        ]}
-
-                        rowTextStyle={{ textAlign: 'left', fontSize: responsiveFontSize(1.9) }}
-                        rowStyle={{ paddingHorizontal: 8, }}
-                        dropdownStyle={{ borderRadius: 10, }}
-                        buttonTextStyle={{
-                            textAlign: 'left',
-                            fontSize: responsiveFontSize(1.9),
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            return selectedItem;
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            return item;
-                        }}
-                    /> */}
-                    <CustomSelectDropDown
-                        arrayurl={SubCategory}
-                        defaultText="Select a Sub-Category"
-                        changeColor={secondChangeColor}
-                        setChangeColor={setSecondChangeColor}
-
-                    />
-
-                </View>
-
-
-                <View>
-                    <View style={{ width: responsiveWidth(80), marginLeft: 'auto' }}>
-                        <Text style={[styles.text, { color: FourthColor }]}>
-                            URL
-                        </Text>
-                    </View>
-
-
-                    <TextInputField
-                        placeholderText="Paste URL here"
-                        type="URL"
-                        value={textInputValue}
-                        //   value={values.zipCode}
-                        onChangeText={(val) => setTextInputValue(val)}
-                    //   onChangeText={handleChange('zipCode')}
-                    //   setFieldTouched={() => setFieldTouched("zipcode")}
-                    />
-
-
-                </View>
-                <View style={{ paddingTop: responsiveWidth(24), justifyContent: "center", alignItems: "center", }}>
-                    <TouchableOpacity
-                        style={{
-                            width: responsiveWidth(72),
-                            backgroundColor: TextColorGreen,
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            borderColor: '#395E66',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: responsiveHeight(6.6),
-                        }}>
-
-                        <Text
-                            style={{
-                                fontSize: responsiveFontSize(1.9),
-                                fontWeight: '600',
-                                letterSpacing: 0.28,
-                                color: "#FFF",
-                            }}>
-                            Post
-                        </Text>
-
-                    </TouchableOpacity>
-                </View>
-
-            </View>
-        </ImageBackground>
     )
 };
 
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
 
-        alignItems: "center"
-    },
     img: {
         resizeMode: "center"
     },
-    // container: {
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //     paddingVertical: moderateVerticalScale(10),
-    //     flex: 1
-    // },
     text: {
         fontSize: responsiveFontSize(1.7),
         fontWeight: '600',

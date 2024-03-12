@@ -12,17 +12,17 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Img_Paths} from '../../../../assets/Imagepaths';
-import {PrimaryColor, TextColorGreen} from '../../../Styles/Style';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Img_Paths } from '../../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveScreenHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
 import TouchableButton from '../../../../components/TouchableButton';
 import NavigationsString from '../../../../constants/NavigationsString';
@@ -37,22 +37,23 @@ import SaveVideo from '../../../../components/SaveVideo';
 import {
   checkVideoTrue,
   extendStoryCheckVideo,
-  recordingVideo,
   saveRecordingVideoUser,
 } from '../../../../../store/slices/RecordingData';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
-import {Inter_Regular} from '../../../../constants/GlobalFonts';
+import { Inter_Regular } from '../../../../constants/GlobalFonts';
 import GuestModals from '../../../../components/GuestModals';
-import {SCREEN_WIDTH, WINDOW_WIDTH} from '../../../../constants/Constant';
+import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
+
+let videoPath;
 
 const VideoFirstUser = () => {
   //destructures
-  const {SECOND_USER_STORY, PLAY_STORY_TIME} = NavigationsString;
-  const {SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME} = Img_Paths;
+  const { SECOND_USER_STORY, PLAY_STORY_TIME } = NavigationsString;
+  const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
 
   //hooks
   const navigation = useNavigation();
@@ -76,7 +77,7 @@ const VideoFirstUser = () => {
   const extendCountingVideo = useSelector(
     state => state.recordingData.extendCountingVideo,
   );
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
 
   const nextRandomValueVideo = useSelector(
     state => state?.addPlayers?.nextRandomNumberVideo,
@@ -85,16 +86,18 @@ const VideoFirstUser = () => {
   const nextRandomValueVideoExtend = useSelector(
     state => state?.addPlayers?.nextRandomNumberVideoExtend,
   );
-
   //dependant consts
-  const sequenceUser = useMemo(
-    () => [
-      ...addedUsers,
-      USER?._id &&
-        USER?.username && {userid: USER?._id, username: USER?.username},
-    ],
-    [USER, addedUsers],
-  );
+  // const sequenceUser = useMemo(
+  //   () => [
+  //     ...addedUsers,
+  //     USER?._id &&
+  //       USER?.username && {userid: USER?._id, username: USER?.username},
+  //   ],
+  //   [USER, addedUsers],
+  // );
+
+  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
+  console.log(sequenceUser, "SEQUESNCE")
 
   //states
   const [started, setStarted] = useState(false);
@@ -114,6 +117,7 @@ const VideoFirstUser = () => {
   const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
 
   //refs
+
   const cameraRef = useRef(null);
   const GuestModalRef = useRef(null);
   const GuestModalRefForAds = useRef(null);
@@ -130,12 +134,9 @@ const VideoFirstUser = () => {
   const USER_LENGTH_CHECK = sequenceUser?.length == 1;
   const activeCamera = getCameraDetails();
   const SHOW_DONE_BTN =
-  (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
+    (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
 
-
-  //effects
   useEffect(() => {
-    // checkpermission()
     checkPermission();
   }, []);
 
@@ -202,13 +203,13 @@ const VideoFirstUser = () => {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    }
+    };
 
     if (checkVideoisTrue) {
+
       const currentIndex = sequenceUser.indexOf(currentDisplayUser);
       const nextIndex = (currentIndex + 1) % sequenceUser.length;
       const nextPlayer = (currentIndex + 2) % sequenceUser.length;
-
       if (currentIndex !== addedUsers?.length) {
         setCurrentDisplayUser(sequenceUser[nextIndex]);
         setIsNextUser(sequenceUser[nextPlayer]);
@@ -227,6 +228,7 @@ const VideoFirstUser = () => {
     };
   }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend]);
 
+
   //     }, [checkVideoisTrue])
   // );
 
@@ -238,7 +240,6 @@ const VideoFirstUser = () => {
       };
     }, []),
   );
-
 
   const checkPermission = async () => {
     try {
@@ -263,7 +264,7 @@ const VideoFirstUser = () => {
     setCurrentCamera(newCamera);
   };
 
-  const recordVideos = useCallback(() => {
+  const recordVideos = () => {
     if (!cameraRef.current) {
       return;
     }
@@ -276,11 +277,12 @@ const VideoFirstUser = () => {
         const pathVideo = video.path;
         console.log(video, 'VIDEO');
         setPath(pathVideo);
+        videoPath = pathVideo;
         dispatch(saveRecordingVideoUser(pathVideo));
       },
       onRecordingError: error => console.error('ON-RECORD-ERR-----', error),
     });
-  }, [cameraRef, path]);
+  };
 
   const stopRecordings = async () => {
     try {
@@ -290,6 +292,7 @@ const VideoFirstUser = () => {
       console.log('RECORDINGESTOPErr------', error);
     }
   };
+  console.log(videoPath, 'VIDEOPATHH');
 
   const resumeRecording = async () => {
     try {
@@ -314,19 +317,20 @@ const VideoFirstUser = () => {
     stopRecordings();
   };
 
+
   const pressHandlerIn = () => {
     if (timeLeft === null) {
       if (extendStoryCheckVideoTrue == true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(120);
+        console.log('IF IS RUNNIGN!');
       } else if (extendVideoCheck == true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(30);
         console.log('RESUME VIDEO-----');
-      }
-
+      };
       if (timeLeft == null && extendStoryCheckVideoTrue == null) {
         setIsPressed(true);
         setTimeLeft(120);
@@ -336,6 +340,8 @@ const VideoFirstUser = () => {
     }
   };
 
+
+
   const pressHandlerOut = () => {
     if (timeLeft > 0) {
       dispatch(extendStoryCheckVideo(false));
@@ -343,8 +349,7 @@ const VideoFirstUser = () => {
       setIsFirstCall(true);
       setIsPressed(false);
       setTimeLeft(0);
-      console.log('CALLED CANCELING=============');
-    }
+    };
 
     if (timeLeft === null) {
       if (extendStoryCheckVideoTrue === true) {
@@ -385,7 +390,6 @@ const VideoFirstUser = () => {
     saverecordingvideo();
   };
 
-
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       {/* BACK BUTTON AND TIMER */}
@@ -414,6 +418,7 @@ const VideoFirstUser = () => {
                 source={require('../../../../assets/back-playflowicon.png')}
               />
             </TouchableOpacity>
+
             <View>
               {SHOW_DONE_BTN ? (
                 <TouchableOpacity
@@ -453,8 +458,8 @@ const VideoFirstUser = () => {
                   }}>
                   <LinearGradient
                     colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
-                    start={{x: 1, y: 0.5}}
-                    end={{x: 1, y: 0}}
+                    start={{ x: 1, y: 0.5 }}
+                    end={{ x: 1, y: 0 }}
                     locations={[0, 1]}
                     style={{
                       justifyContent: 'center',
@@ -490,7 +495,7 @@ const VideoFirstUser = () => {
             source={PLAYFLOW_FRAME}>
             <View
               activeOpacity={0.9}
-              style={[styles.bg_content, {backgroundColor: TextColorGreen}]}>
+              style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
               {!showCamera ? (
                 <ImageBackground
                   style={{
@@ -611,7 +616,7 @@ const VideoFirstUser = () => {
                 backgroundColor:
                   isFirstCall || timeLeft == 0
                     ? 'rgba(87, 150, 164, 0.3)'
-                    : undefined,
+                    : TextColorGreen,
                 width: WINDOW_WIDTH * 0.32,
                 height: WINDOW_WIDTH * 0.32,
                 borderRadius: WINDOW_WIDTH / 2,
@@ -639,9 +644,8 @@ const VideoFirstUser = () => {
             backgroundColor={TextColorGreen}
             color="#FFF"
             timeLeft={timeLeft}
-            text={`Next Player${
-              isNextUser?.username ? ': @' + isNextUser?.username : ''
-            }`}
+            text={`Next Player${isNextUser?.username ? ': @' + isNextUser?.username : ''
+              }`}
             isNextUser={isNextUser}
           />
         ) : (
@@ -656,9 +660,8 @@ const VideoFirstUser = () => {
             />
           )
         )}
-        {/* <TouchableButton onPress={saverecordingvideo} text="Save Story" color={TextColorGreen} isNext={isNext} /> */}
 
-        <View style={{paddingVertical: responsiveWidth(4)}}>
+        <View style={{ paddingVertical: responsiveWidth(4) }}>
           <SaveStoryBtn
             timeLeft={timeLeft}
             onPress={isUserGuest ? saverecordingvideo : saveBtnHandler}
@@ -673,7 +676,7 @@ const VideoFirstUser = () => {
             type="savevideo"
             isVisible={isVisible}
             setIsVisible={setIsVisible}
-            path={path}
+            path={videoPath}
           />
         )}
 

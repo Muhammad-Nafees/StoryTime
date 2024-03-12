@@ -15,9 +15,9 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {useSelector} from 'react-redux';
-import {base} from '../../../../services';
-import LogoutBtn from '../../../components/LogoutBtn';
+import { useSelector } from 'react-redux';
+import { base } from '../../../../services';
+import LogoutBtn from '../../../components/profile/LogoutBtn';
 import Typography from '../../../components/Typography';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -83,6 +83,7 @@ const Setting = () => {
       routeName: DELETE_ACCOUNT,
     },
   ];
+
   const legalData = [
     {
       key: '8',

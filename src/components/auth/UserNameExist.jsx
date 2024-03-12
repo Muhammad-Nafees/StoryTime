@@ -1,12 +1,10 @@
 import React from 'react'
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../screens/Styles/Style";
+import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import BackButton from '../components/BackButton';
-import TouchableButton from './TouchableButton';
-import { Img_Paths } from '../assets/Imagepaths';
+import { Img_Paths } from '../../assets/Imagepaths';
 
 const UserNameExist = ({ isVisible, setVisible, text, onPress }) => {
 
@@ -18,7 +16,7 @@ const UserNameExist = ({ isVisible, setVisible, text, onPress }) => {
 
                     <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(12) }}>
                         <View style={{ backgroundColor: "#FF4545", borderRadius: 50, height: 42, width: 42, justifyContent: "center", alignItems: "center" }}>
-                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center", }} source={require("../assets/usererror.png")} />
+                            <Image style={{ width: responsiveWidth(8), height: responsiveHeight(4), resizeMode: "center", }} source={require("../../assets/usererror.png")} />
                         </View>
                         <Text style={{ fontSize: responsiveFontSize(1.9), color: "#000" }}>Username already taken</Text>
                     </View>
@@ -31,7 +29,6 @@ const UserNameExist = ({ isVisible, setVisible, text, onPress }) => {
 
                 </View>
             </View>
-            {/* </ImageBackground> */}
         </Modal>
     )
 };

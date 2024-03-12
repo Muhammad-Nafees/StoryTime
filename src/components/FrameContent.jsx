@@ -1,4 +1,4 @@
-import React, {useEffect, useState, memo, useCallback} from 'react';
+import React, { useEffect, useState, memo, useCallback } from 'react';
 import {
   Image,
   ImageBackground,
@@ -19,11 +19,11 @@ import {
   TextColorGreen,
   pinkColor,
 } from '../screens/Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../assets/Imagepaths';
-import {useNavigation} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths';
+import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../constants/NavigationsString';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   likedstoryfeed,
   disLikedCountingRTK,
@@ -37,16 +37,11 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {
-  storyFeed,
-  storyUserId,
-} from '../../store/slices/storyfeedslices/storyFeedSlice';
-import {Base_Url} from '../../services';
-import {PassionOne_Regular} from '../constants/GlobalFonts';
-import {storyLikedFeed, storydisLikedFeed} from '../../services/api/storyfeed';
+import { PassionOne_Regular } from '../constants/GlobalFonts';
+import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed';
 import LinearGradient from 'react-native-linear-gradient';
 import BlockUserStory from './blockuser/BlockUserModal';
-import {debounce} from 'lodash'; // Import debounce function from lodash
+import { debounce } from 'lodash'; // Import debounce function from lodash
 
 const FrameContent = ({
   type,
@@ -63,12 +58,13 @@ const FrameContent = ({
   likesCountuser,
   dislikesCount,
   userId,
+  linkTo
 }) => {
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
   const navigation = useNavigation();
-  const {HOME_FRAME, SHARE_BTN} = Img_Paths;
-  const {FEED_CHAT, REPORT_USER} = NavigationsString;
+  const { HOME_FRAME, SHARE_BTN } = Img_Paths;
+  const { FEED_CHAT, REPORT_USER } = NavigationsString;
   const [isLiked, setIsLiked] = useState(likedByMe);
   const [isDisLike, setIsDisliked] = useState(dislikesByMe);
   const [likesCounting, setLikesCounting] = useState(likesCountuser);
@@ -79,13 +75,10 @@ const FrameContent = ({
 
   const dispatch = useDispatch();
 
-  // console.log("userId---", userId);
-
   const storyLikedHandled = useCallback(async () => {
     try {
-      // Check if like count has already been updated
       if (!likeCountUpdated) {
-        // Set flag to indicate that like count is being updated
+
         setLikeCountUpdated(true);
 
         const responseData = await storyLikedFeed(likedUserId);
@@ -130,6 +123,8 @@ const FrameContent = ({
     }
   }, [dislikesCounting, disLikeCountUpdated]);
 
+
+
   const commentsHandled = useCallback(() => {
     dispatch(likedstoryfeed(likedUserId));
     dispatch(likedCountingRTK(likesCounting));
@@ -141,7 +136,7 @@ const FrameContent = ({
 
   return (
     <View style={styles.container}>
-      <View style={{width: responsiveWidth(90)}}>
+      <View style={{ width: responsiveWidth(90) }}>
         <ImageBackground
           style={[
             styles.img_backgroung_content,
@@ -164,8 +159,8 @@ const FrameContent = ({
               <>
                 <LinearGradient
                   colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-                  start={{x: 1, y: 1}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: 1, y: 1 }}
+                  end={{ x: 1, y: 0 }}
                   locations={[0.8, 1]}
                   style={[styles.child_bg]}>
                   <View style={styles.second_childbg}>
@@ -205,8 +200,8 @@ const FrameContent = ({
               <>
                 <LinearGradient
                   colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-                  start={{x: 1, y: 1}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: 1, y: 1 }}
+                  end={{ x: 1, y: 0 }}
                   locations={[0.8, 1]}
                   style={styles.child_bg}>
                   <View style={styles.second_childbg}>
@@ -228,7 +223,7 @@ const FrameContent = ({
                   </View>
 
                   <View
-                    style={{justifyContent: 'center', alignItems: 'center'}}>
+                    style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <View
                       style={{
                         width: responsiveWidth(46),
@@ -242,7 +237,7 @@ const FrameContent = ({
                         marginVertical: moderateVerticalScale(10),
                       }}>
                       <Image
-                        style={{width: 30, height: 30, resizeMode: 'contain'}}
+                        style={{ width: 30, height: 30, resizeMode: 'contain' }}
                         source={{
                           uri:
                             'http://storytime.yameenyousuf.com/' +
@@ -260,14 +255,14 @@ const FrameContent = ({
                       </Text>
                     </View>
 
-                    <TouchableOpacity
+                    <TouchableOpacity onPress={() => linkTo(content)}
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingTop: responsiveWidth(4),
                       }}>
                       <Image
-                        style={{width: 30, height: 30, resizeMode: 'center'}}
+                        style={{ width: 30, height: 30, resizeMode: 'center' }}
                         source={require('../assets/profileurl_icon.png')}
                       />
                       <Text
@@ -390,7 +385,7 @@ const FrameContent = ({
                       justifyContent: 'flex-end',
                       alignItems: 'flex-end',
                     }}>
-                    <TouchableOpacity style={{width: responsiveWidth(6)}}>
+                    <TouchableOpacity style={{ width: responsiveWidth(6) }}>
                       <Menu>
                         <MenuTrigger>
                           <Image
@@ -433,9 +428,13 @@ const FrameContent = ({
                           </MenuOption>
                           <MenuOption
                             onSelect={() => {
-                              dispatch(storyUserId(userId));
-                              navigation.navigate(REPORT_USER);
+                              // dispatch(storyUserId(userId));
+                              // navigation.navigate(REPORT_USER);
                             }}
+                            // onSelect={() => {
+                            //   dispatch(storyUserId(userId));
+                            //   navigation.navigate(REPORT_USER);
+                            // }}
                             style={{
                               paddingBottom: 10,
                               paddingLeft: responsiveWidth(5),

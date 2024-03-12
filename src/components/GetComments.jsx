@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, memo} from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import {
   View,
   Text,
@@ -12,11 +12,8 @@ import {
   responsiveFontSize,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../assets/Imagepaths';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {useDispatch} from 'react-redux';
-import {getComments_func} from '../../store/slices/storyfeedslices/getCommentsSlice';
-import {Base_Url} from '../../services';
+import { Img_Paths } from '../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import CommentImagePreview, {
   CommentsImagePreview,
 } from './comments/CommentImagePreview';
@@ -27,20 +24,14 @@ const GetComments = ({
   firstName,
   lastName,
   createdAt,
-  handleLoadMore,
-  isLoadMore,
-  commentsCount,
-  getCommentsstoryId,
   media,
   commentsUserid,
-  commentsUserid2,
-  isReplying,
   setIsReplyingId,
   setIsReply,
   replies,
   inputRef,
 }) => {
-  const {HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN} = Img_Paths;
+  const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
   const [isImageFullscreen, setImageFullscreen] = useState(false);
   const width = Dimensions.get('window').width;
 
@@ -81,14 +72,14 @@ const GetComments = ({
 
   return (
     <>
-      <View style={{paddingVertical: 4}}>
+      <View style={{ paddingVertical: 4 }}>
         <View
           style={{
             width: responsiveWidth(83),
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Image
               style={{
                 width: responsiveWidth(9),
@@ -127,15 +118,15 @@ const GetComments = ({
             {media && media?.length > 0 && (
               <TouchableOpacity onPress={() => setImageFullscreen(true)}>
                 <Image
-                  style={{width: 100, height: 100, resizeMode: 'contain'}}
-                  source={{uri: 'http://storytime.yameenyousuf.com/' + media}}
+                  style={{ width: 100, height: 100, resizeMode: 'contain' }}
+                  source={{ uri: 'http://storytime.yameenyousuf.com/' + media }}
                 />
               </TouchableOpacity>
             )}
           </View>
         </View>
 
-        <View style={{justifyContent: 'center', alignItems: 'flex-end'}}>
+        <View style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
           <View
             style={{
               flexDirection: 'row',
@@ -145,19 +136,19 @@ const GetComments = ({
             <Text
               style={{
                 color: '#b3b3b3',
-                fontSize: responsiveFontSize(1.5),
+                fontSize: responsiveFontSize(1.6),
                 paddingHorizontal: moderateScale(3),
               }}>
               {calculateTimeDifference(createdAt)}
             </Text>
             <TouchableOpacity
               onPress={handleReplying}
-              style={{paddingLeft: 10}}>
+              style={{ paddingLeft: 10 }}>
               <Text
                 style={{
                   color: '#b3b3b3',
                   fontWeight: '500',
-                  fontSize: responsiveFontSize(1.7),
+                  fontSize: responsiveFontSize(1.6),
                 }}>
                 Reply
               </Text>

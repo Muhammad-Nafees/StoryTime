@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import Typography from './Typography';
-import { Red02, White } from '../screens/Styles/Style';
+import Typography from '../Typography';
+import { Red02, White } from '../../screens/Styles/Style';
 import { useDispatch, useSelector } from 'react-redux';
-import { SCREEN_WIDTH, SPACING } from '../constants/Constant';
+import { SCREEN_WIDTH, SPACING } from '../../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
-import { logout_user } from '../../services/api/auth_mdule/auth';
-import { logout } from '../../store/slices/authSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../constants/NavigationsString';
-import { useLogout } from '../hooks/useLogout';
+import { useLogout } from '../../hooks/useLogout';
 
 const LogoutBtn = () => {
-  const {handleLogout} = useLogout()
+  const { handleLogout } = useLogout()
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogoutPress = async () => {
@@ -28,7 +23,7 @@ const LogoutBtn = () => {
   return (
     <TouchableOpacity onPress={handleLogoutPress} activeOpacity={0.3} style={styles.btn}>
       {isLoggingOut ? (
-        <ActivityIndicator color={White}  />
+        <ActivityIndicator color={White} />
       ) : (
         <Typography style={styles.txt}>Log out</Typography>
       )}

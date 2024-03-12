@@ -31,12 +31,12 @@ import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { register } from '../../../store/slices/authSlice';
 
-import CustomInput from '../../components/CustomInput';
+import CustomInput from '../../components/auth/CustomInput';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
 import Toast from 'react-native-toast-message';
-import CustomPhoneInput from '../../components/CustomPhoneInput';
+import CustomPhoneInput from '../../components/auth/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
 import { username_api } from '../../../services/api/auth_mdule/auth';
 
@@ -242,7 +242,6 @@ const Register = () => {
                       backgroundColor="#FFF"
                       borderWidth="1"
                       type={"backuser"}
-
                       color="#395E66"
                       text="Back"
                     />

@@ -5,6 +5,7 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
@@ -16,15 +17,15 @@ import {
   FourthColor,
   TextColorGreen,
   TextinputColor,
-} from '../screens/Styles/Style';
+} from '../../screens/Styles/Style';
 import _ from 'lodash';
-import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
+import reset_email, { username_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-import { Img_Paths } from '../assets/Imagepaths';
-import NavigationsString from '../constants/NavigationsString';
-import TouchableButton from './TouchableButton';
-import { Inter_Medium, Inter_SemiBold } from '../constants/GlobalFonts';
+import { Img_Paths } from '../../assets/Imagepaths';
+import NavigationsString from '../../constants/NavigationsString';
+import TouchableButton from '../TouchableButton';
+import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
   const { FORGET_BG_IMG } = Img_Paths;
@@ -78,6 +79,23 @@ const CustomInputForgetEmail = props => {
     debouncedApiCall(text);
   };
 
+
+  const [keyboardStatus, setKeyboardStatus] = useState('');
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus('KeyboardShown');
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus('KeyboardHidden');
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  console.log("keyboard status", keyboardStatus);
   const inputStyle = {
     width: responsiveWidth(80),
     backgroundColor: TextinputColor,
@@ -157,7 +175,7 @@ const CustomInputForgetEmail = props => {
         </>
       }
 
-      <View style={{ marginTop: 'auto', paddingBottom: responsiveWidth(12) }}>
+      <View style={{ marginTop: keyboardStatus === "KeyboardShown" ? "auto" : responsiveWidth(80), }}>
         <TouchableOpacity onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
           <Text
             style={{
@@ -190,48 +208,13 @@ const CustomInputForgetEmail = props => {
             }
           }}
           backgroundColor={isStatusCodeSuccess ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
-
           color="#FFF"
           text="Next"
         />
       </View>
     </View>
 
-    /* <View>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate(FORGET_PHONE_NO)}>
-                    <Text
-                        style={{
-                            color: TextColorGreen,
-                            fontWeight: '600',
-                            textAlign: 'center',
-                            paddingVertical: moderateVerticalScale(20),
-                            fontSize: responsiveFontSize(1.7),
-                        }}>
-                        Use phone number instead
-                    </Text>
-                </TouchableOpacity>
-            </View>
 
-            <TouchableButton
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                onPress={() => {
-                    props?.value !== '' ? props?.handleSubmit : null
-                    navigation.navigate(OTP_FORGET, {
-                        // code: responses?.data?.code,
-                        // email: text,
-                        type: 'email',
-                    });
-                }}
-
-                backgroundColor={
-                    props?.email !== '' ? '#395E66' : 'rgba(57, 94, 102, 0.5)'
-                }
-                color="#FFF"
-                text="Next"
-            /> */
-    /* </> */
   );
 };
 

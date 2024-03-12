@@ -1,12 +1,44 @@
 import React, { useState } from "react";
 import { Image } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import { TextinputColor } from "../screens/Styles/Style";
+import { TextinputColor } from "../../screens/Styles/Style";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
+import { categorynameUrl, setAddUrlId, subCategorynameUrl } from "../../../store/slices/addplayers/addPlayersSlice";
+import { useDispatch } from "react-redux";
 
 
 
-const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeColor, secondChangeColor, setSecondChangeColor }) => {
+const CustomSelectDropDown = ({ responseCategories,
+    defaultText,
+    setChangeColor,
+    changeColor,
+    secondChangeColor,
+    categoriesNames,
+    addUrlid,
+    subCategoriesNames,
+    setResponseCategories,
+    setResponseSubCategories,
+    HasMorePages,
+    setPageSubCategory,
+    setIsLoadMore,
+    subResponseCategories
+}) => {
+
+    const dispatch = useDispatch();
+
+
+    const handleLoadMore = async () => {
+
+        // if (HasMorePages) {
+        //     // setshowTextUser(false);
+        //     setPageSubCategory((prevPage) => prevPage + 1);
+        //     setIsLoadMore(true);
+        //     console.log("hasmore Pages Dropdown", HasMorePages)
+        // } else {
+        //     setIsLoadMore(false);
+        // }
+
+    };
 
 
 
@@ -14,8 +46,7 @@ const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeCol
     return (
 
         <SelectDropdown
-
-            data={arrayurl}
+            data={categoriesNames || subCategoriesNames}
             defaultButtonText={defaultText}
             buttonStyle={[
                 {
@@ -30,7 +61,7 @@ const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeCol
             renderDropdownIcon={() => (
                 <Image
                     style={{ width: 16, height: 16, resizeMode: 'center' }}
-                    source={require('../assets/bottom-icon.png')}
+                    source={require('../../assets/bottom-icon.png')}
                 />
             )}
 
@@ -44,14 +75,31 @@ const CustomSelectDropDown = ({ arrayurl, defaultText, setChangeColor, changeCol
             }}
             onSelect={(selectedItem, index) => {
                 if (selectedItem) {
+                    const categoriesObj = responseCategories?.find((category) => category?.name === selectedItem);
+                    const subcategoriesObj = subResponseCategories?.find((category) => category?.name === selectedItem);
+                    console.log("subcategoir------- :", subcategoriesObj);
+                    if (categoriesObj) {
+                        const _id = categoriesObj?._id;
+                        setResponseSubCategories([]);
+                        dispatch(categorynameUrl(_id));
+                        dispatch(setAddUrlId(_id));
+                    } else if (subcategoriesObj) {
+                        const subcat_id = subcategoriesObj?._id;
+                        dispatch(subCategorynameUrl(subcat_id));
+                    }
                     setChangeColor("#000")
                 }
+
                 console.log('selectitem', selectedItem);
+            }}
+            onScrollEndReached={() => {
+                handleLoadMore()
             }}
 
             buttonTextAfterSelection={(selectedItem, index) => {
                 return selectedItem;
             }}
+
             rowTextForSelection={(item, index) => {
                 return item;
             }}

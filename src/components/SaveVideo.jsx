@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -23,30 +23,40 @@ import {
   ThirdColor,
   pinkColor,
 } from '../screens/Styles/Style';
-import {useNavigation, useNavigationBuilder} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useNavigationBuilder,
+} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../assets/Imagepaths/index';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths/index';
 import BackButton from '../components/BackButton';
 import NavigationsString from '../constants/NavigationsString';
 import TouchableButton from './TouchableButton';
 import RNFS from 'react-native-fs';
-import {useDispatch, useSelector} from 'react-redux';
-import {PassionOne_Regular} from '../constants/GlobalFonts';
+import { useDispatch, useSelector } from 'react-redux';
+import { PassionOne_Regular } from '../constants/GlobalFonts';
 import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
 import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
-import {SPACING} from '../constants/Constant';
+import { SPACING } from '../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
+import {
+  recordingData,
+  saveRecordingVideoUser,
+} from '../../store/slices/RecordingData';
+import { resetFriends } from '../../store/slices/addplayers/addPlayersSlice';
 
-const SaveVideo = ({isVisible, setIsVisible, path}) => {
+const SaveVideo = ({ isVisible, setIsVisible, path }) => {
+  console.log(path, 'PATG');
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] =
     useState(false);
-  const {width, height} = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
   const {
     STORY_TIME_IMG,
     BG_PLAYFLOW,
@@ -59,7 +69,7 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   } = Img_Paths;
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
-  const {VIDEO_SECOND_USER, FIRST_USER} = NavigationsString;
+  const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
   const [saveStoryVideoModal, setSaveStoryVideoModal] = useState(false);
   const [isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow] = useState(false);
   const navigation = useNavigation();
@@ -107,42 +117,53 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   const convertExternalStorageUriToAbsolutePath = uri => {
     let dirToRead = uri.split('tree')[1];
     dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
-    console.log(dirToRead);
     return decodeURIComponent(dirToRead);
   };
 
   const convertInternalStoragePathToAbsolutePath = uri => {
     let dirToRead = uri?.split('primary')[1];
     const InternalStoragePath = RNFS.ExternalStorageDirectoryPath;
-    console.log(InternalStoragePath);
     dirToRead = InternalStoragePath + dirToRead.replace(/%3A/g, '%2F');
-    console.log(dirToRead);
     return decodeURIComponent(dirToRead);
   };
 
-  const pickDirectory = async () => {
-    try {
-      const result = await DocumentPicker.pickDirectory({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log('result', result);
 
-      let absolutePath;
-      if (
-        result?.uri?.startsWith(
-          'content://com.android.externalstorage.documents/tree/primary',
-        )
-      ) {
-        absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
-      } else {
-        absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
-      }
-      downloadRecording(absolutePath);
-    } catch (err) {
-      // Handle errors
-      console.error('Error picking directory:', err);
-    }
+
+  const pickDirectory = async () => {
+    setSaveStoryVideoModal(true);
+    setIsDownloadingModalVisible(true);
+    dispatch(saveRecordingVideoUser(null));
+    dispatch(recordingData(null));
+    dispatch(resetFriends());
   };
+
+  // const pickDirectory = async () => {
+  //   try {
+  //     const result = await DocumentPicker.pickDirectory({
+  //       type: [DocumentPicker.types.allFiles],
+  //     });
+
+  //     let absolutePath;
+  //     if (
+  //       result?.uri?.startsWith(
+  //         'content://com.android.externalstorage.documents/tree/primary',
+  //       )
+  //     ) {
+  //       absolutePath = convertInternalStoragePathToAbsolutePath(result.uri);
+  //     } else {
+  //       absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
+  //     }
+  //     setSaveStoryVideoModal(true);
+  //     setIsDownloadingModalVisible(true);
+  //     dispatch(saveRecordingVideoUser(null));
+  //     dispatch(recordingData(null));
+  //     dispatch(resetFriends());
+  //     // downloadRecording(absolutePath);
+  //   } catch (err) {
+  //     // Handle errors
+  //     console.error('Error picking directory:', err);
+  //   }
+  // };
   // const downloadRecording = async absolutePath => {
   //   // try {
   //   //   const destinationPath = `${
@@ -185,39 +206,40 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   //     console.error('Error downloading recording or generating PDF:', error);
   //   }
   // };
+
   const downloadRecording = async selectedPath => {
-    console.log('downloading video!');
     try {
       // Ensure the selected path exists
       if (!(await RNFS.exists(selectedPath))) {
         await RNFS.mkdir(selectedPath);
-      }
+      };
 
       // Generate a random filename for the downloaded video
       const destinationPath = `${selectedPath}/downloaded_video${Math.floor(
         Math.random() * 100000,
       )}.mov`;
-      console.log(recordedVideo, 'RECORDED VIDOE!');
 
       // Copy the recorded video to the selected path
-      const sourcePath = `file://${recordedVideo}`;
-      console.log(recordedVideo, 'RECORDED VIDEO');
+      const sourcePath = `file://${path}`;
       if (!sourcePath) {
         console.error('Recording path not found.');
         return;
-      }
+      };
 
       await RNFS.copyFile(sourcePath, destinationPath);
-
-      console.log('Video saved successfully:', destinationPath);
 
       // Additional logic or UI updates after the video is saved
       setSaveStoryVideoModal(true);
       setIsDownloadingModalVisible(true);
+      dispatch(saveRecordingVideoUser(null));
+      dispatch(recordingData(null));
+      dispatch(resetFriends());
     } catch (error) {
       console.error('Error saving video:', error);
     }
   };
+
+
 
   return (
     <>
@@ -265,8 +287,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
                 Do you want to save your Story Time in your phone?
               </Text>
 
-              <View style={{paddingVertical: 12}}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{ paddingVertical: 12 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity
                     onPress={pickDirectory}
                     style={{
@@ -310,6 +332,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
     </>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

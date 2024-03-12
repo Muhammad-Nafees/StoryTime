@@ -25,7 +25,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import TouchableButton from '../../../components/TouchableButton';
-import PhoneNumber from '../../../components/PhoneNumber';
+import PhoneNumber from '../../../components/auth/PhoneNumber';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
@@ -33,7 +33,7 @@ import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { Path, Svg } from 'react-native-svg';
 import { Formik } from 'formik';
-import CustomPhoneInput from '../../../components/CustomPhoneInput';
+import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
 import ForgetCustomInput from '../../../components/ForgetCustomInput';
 
 const ForgetPhoneNumber = () => {

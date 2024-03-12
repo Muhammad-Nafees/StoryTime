@@ -1,19 +1,15 @@
-import { createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import Navigations from "./Navigations";
-
-
+import Navigations from './Navigations';
 
 const MainStack = () => {
+  const Stack = createStackNavigator();
 
-    const Stack = createStackNavigator()
-
-    return (
-        <NavigationContainer independent={true}>
-            <Navigations />
-        </NavigationContainer>
-    )
-
-}
+  return (
+    <NavigationContainer independent={true}>
+      <Navigations />
+    </NavigationContainer>
+  );
+};
 
 export default MainStack;

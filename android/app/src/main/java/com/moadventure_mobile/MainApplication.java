@@ -9,6 +9,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.wenkesj.voice.VoicePackage;
+import com.proyecto26.inappbrowser.RNInAppBrowserPackage;
 // import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 public class MainApplication extends Application implements ReactApplication {
 
@@ -22,12 +23,12 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages() ;
+          List<ReactPackage> packages = new PackageList(this).getPackages();
+          new RNInAppBrowserPackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new MainReactPackage());
           // packages.add(new RNHTMLtoPDFPackage());
-          
           return packages;
         }
 

@@ -15,7 +15,7 @@ export const Img_Paths = {
   HOME_FOCUSED: require('../../assets/home_focused.png'),
   EYE_ICON: require('../../assets/eye-icon.png'),
   NOT_EYE_ICON: require('../../assets/not-eye-icon.png'),
-  BGIMAGE_DOWNLOADING: require('../../assets/downloadingBgImage.png'),
+  BGIMAGE_DOWNLOADING: require('../../assets/savestoryimageBg.png'),
   BGIMAGE_BLOCKUSER: require('../../assets/bgimageblockuser.png'),
   BGIMAGE_ACCOUNT_CREATED: require('../../assets/bgaccount_created.png'),
   USERNAME_IMAGE_REPORT: require('../../assets/usernameimageReport.png'),
@@ -48,7 +48,7 @@ export const Img_Paths = {
   NEXT_PLAYER_IMAGE: require('../../assets/nextplayerimage.png'),
   EXTEND_STORYTIME_IMAGE: require('../../assets/extendstoryTimeimage.png'),
   CONTINUE_IMAGE: require('../../assets/continueimage.png'),
-  SAVE_STORY_BACKGROUND: require('../../assets/savestorybackgroundImage.png'),
+  SAVE_STORY_BACKGROUND: require('../../assets/savestoryimageBg.png'),
   // c:\Users\dell\Downloads\extendstoryTimeimage.png c:\Users\dell\Downloads\continueimage.png
   // VOICE_TO_TEXT_IMAGE2: require("../../assets/voiceTotextimage2.png"),
   // BORDER_VOICE_TO_TEXT: require("../../assets/borderVoiceToText.png"),

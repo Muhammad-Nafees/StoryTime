@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   Dimensions,
   Image,
@@ -31,49 +31,47 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import SearchField from '../../../components/SearchField';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
 import RandomCategories from '../../../components/customCategories/RandomCategories';
-import {get_random} from '../../../../store/slices/randomCategorySlice';
-import {setCategoriesId} from '../../../../store/slices/getCategoriesSlice';
-import {addFriends_api} from '../../../../services/api/add-members';
-import {addFriends} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { get_random } from '../../../../store/slices/randomCategorySlice';
+import { setCategoriesId } from '../../../../store/slices/getCategoriesSlice';
+import { addFriends_api } from '../../../../services/api/add-members';
+import { addFriends, setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
-import {
-  Inter_Regular,
-  PassionOne_Regular,
-} from '../../../constants/GlobalFonts';
-import {BlurView} from '@react-native-community/blur';
+import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
-import {SPACING} from '../../../constants/Constant';
+import { SPACING } from '../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 
 const Categories = () => {
   //destructures
-  const {height} = Dimensions.get('window');
-  const {SPLASH_SCREEN_IMAGE, LUDO_ICON} = Img_Paths;
-  const {ADD_PLAYERS} = NavigationsString;
+  const { height } = Dimensions.get('window');
+  const { SPLASH_SCREEN_IMAGE, LUDO_ICON } = Img_Paths;
+  const { ADD_PLAYERS } = NavigationsString;
 
   //hooks
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {bottom} = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
 
   //redux states
   const addUsersGame = useSelector(state => state.addPlayers.addFriends);
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
 
   //states
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +90,7 @@ const Categories = () => {
 
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
+
   const allowedCategories = ['Animals'];
   const guestNumber = guestNumberRef.current;
   const randomObject = {
@@ -105,7 +104,7 @@ const Categories = () => {
       const filtered = responseCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
-      return filtered;
+      return filtered?.length > 0 ? [...filtered, randomObject] : [];
     }
     return responseCategories?.length > 0
       ? [...responseCategories, randomObject]
@@ -116,6 +115,12 @@ const Categories = () => {
   useEffect(() => {
     fetchCategories(1);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(setFriendId(USER?._id));
+    }, [])
+  );
 
   useEffect(() => {
     if (!guestNumberRef.current) {
@@ -132,7 +137,7 @@ const Categories = () => {
 
     try {
       while (!found) {
-        const response = await get_Categories_Sub_Categories({page});
+        const response = await get_Categories_Sub_Categories({ page });
 
         if (response.data && response.data.categories) {
           const responseArray = response.data.categories;
@@ -153,7 +158,6 @@ const Categories = () => {
           } else if (responseArray.length > 0) {
             page++;
           } else {
-            // No more data available
             break;
           }
         } else {
@@ -161,7 +165,7 @@ const Categories = () => {
           console.error('Unexpected API response format:', response);
           break;
         }
-      }
+      };
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -173,14 +177,11 @@ const Categories = () => {
       const usernameObj = responseData?.data?.users?.find(
         item => item.username === isUsernameInputValue,
       );
-      console.log('usernameObj=====', usernameObj);
       if (usernameObj) {
         const userid = usernameObj._id;
         const username = usernameObj?.username;
         console.log('username----', username);
-        dispatch(addFriends({username, userid}));
-        // Now you have the _id of the matched user, you can use it as needed.
-        console.log('Matched User ID:', userid);
+        dispatch(addFriends({ username, userid }));
         setIsUsernameInputValue('');
       } else if (isUsernameInputValue?.length == 0) {
         navigation.navigate(ADD_PLAYERS);
@@ -202,8 +203,8 @@ const Categories = () => {
       if (isUserGuest) {
         fetchCategoriesUntilFound('animals');
         return;
-      }
-      const response = await get_Categories_Sub_Categories({page: page});
+      };
+      const response = await get_Categories_Sub_Categories({ page: page });
       const valObj = [
         '#56B6A4',
         '#79905C',
@@ -218,11 +219,10 @@ const Categories = () => {
         '#8482D1',
         '#C45E89',
       ];
-
-      for (let i = 0; i < response?.data?.categories.length; i++) {
+      for (let i = 0; i < response?.data?.categories?.length; i++) {
         const colorIndex = i % valObj.length;
         response.data.categories[i].background = valObj[colorIndex];
-      }
+      };
 
       setResponseCategories(prevData => [
         ...prevData,
@@ -245,20 +245,18 @@ const Categories = () => {
       const filteredCategory = responseCategories.find(category =>
         category.name.includes(randomCatName),
       );
-      console.log('randomCat', filteredCategory);
+
       const response = isUserGuest ? filteredCategory : await get_Random();
-      console.log('res', response.data);
 
       navigation.navigate('SubCategories', {
         id: isUserGuest ? response?._id : response?.data?._id,
         name: isUserGuest ? response?.name : response?.data?.name,
       });
-      console.log('response_id', response?.data?._id);
-      console.log('Random Clicked Category');
+
       setRandomId(isUserGuest ? response?._id : response?.data?._id);
       setRandomName(isUserGuest ? response?.name : response?.data?.name);
       return response;
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleStoryUser = (id, name) => {
@@ -307,9 +305,7 @@ const Categories = () => {
 
   const keyExtractor = (_, index) => `categories.${index}`;
 
-  //render functions
-
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View
         key={item?.id}
@@ -362,11 +358,11 @@ const Categories = () => {
 
   const renderListFooterComponent = () => {
     if (isLoading || DATA.length === 0) {
-      return <></>;
+      return <></>
     }
     if (isLoadMore) {
       return (
-        <View style={{alignItems: 'center', paddingVertical: SPACING}}>
+        <View style={{ alignItems: 'center', paddingVertical: SPACING }}>
           <ActivityIndicator size={40} color={PrimaryColor} />
         </View>
       );
@@ -375,40 +371,29 @@ const Categories = () => {
 
   const renderListEmptyComponent = () => {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {isRefreshing ? (
           <></>
         ) : isLoading ? (
           <ActivityIndicator size={40} color={PrimaryColor} />
         ) : (
-          <Typography
-            ff={PassionOne_Regular.passionOne}
-            size={responsiveFontSize(2.6)}
-            clr={PrimaryColor}>
-            No Data Found!
-          </Typography>
+          <Typography ff={PassionOne_Regular.passionOne} size={responsiveFontSize(2.6)} clr={PrimaryColor}>No Data Found!</Typography>
         )}
       </View>
     );
   };
 
   return (
+
     <LinearGradient
-      colors={['#75BDCD', '#FFB5CB']}
-      start={{x: 1.5, y: 1}}
-      end={{x: 1, y: 0}}
-      locations={[0, 1]}
-      style={[styles.container, {backgroundColor: pinkColor}]}>
+      colors={["#75BDCD", "#FFB5CB",]}
+      start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
+      style={[styles.container, { backgroundColor: pinkColor }]}>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
         <SafeAreaView style={styles.container}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: responsiveWidth(5),
-              marginBottom: moderateVerticalScale(10),
-            }}>
+          <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
             <View style={styles.first_container}>
+
               <BackButton onPress={() => navigation.goBack()} />
               <View style={styles.categories_text_container}>
                 <Text style={styles.categories_text}>Categories</Text>
@@ -416,14 +401,12 @@ const Categories = () => {
             </View>
 
             {isUserGuest && (
-              <View style={{marginTop: moderateVerticalScale(10)}}>
+              <View style={{ marginTop: moderateVerticalScale(10) }}>
                 <View
                   style={{
                     marginBottom: 'auto',
                     marginTop: 'auto',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    alignItems: 'center',
+                    marginLeft: 5,
                   }}>
                   <SvgIcons name={'Guest'} width={36} height={36} />
                 </View>
@@ -431,16 +414,12 @@ const Categories = () => {
               </View>
             )}
           </View>
+
           {/* MainInputField----- */}
 
-          {user ? (
-            <>
-              <MainInputField
-                onPress={addFriends_api_handler}
-                inputValue={isUsernameInputValue}
-                OnchangeText={setIsUsernameInputValue}
-                placeholder="Username"
-              />
+          {user ?
+            (<>
+              <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
               <View
                 style={{
                   paddingVertical: moderateVerticalScale(6),
@@ -467,7 +446,7 @@ const Categories = () => {
                     </Text>
                   </View>
 
-                  {addUsersGame?.map(item => (
+                  {addUsersGame?.map((item) => (
                     <View
                       style={{
                         margin: 4,
@@ -487,13 +466,13 @@ const Categories = () => {
                 </View>
               </View>
             </>
-          ) : (
-            <SearchField
-              placeholder="Search"
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-            />
-          )}
+            ) : (
+              <SearchField
+                placeholder="Search"
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+              />
+            )}
           <FlatList
             data={DATA}
             scrollsToTop
@@ -518,6 +497,8 @@ const Categories = () => {
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
+
+
   );
 };
 
@@ -554,7 +535,8 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '800',
     letterSpacing: 0.36,
-    fontFamily: Inter_Regular.Inter_Regular,
+    fontFamily: Inter_Regular.Inter_Regular
+
   },
   text_Input_container: {
     justifyContent: 'center',
@@ -611,49 +593,3 @@ const styles = StyleSheet.create({
 });
 
 export default Categories;
-
-// {!isLoading && (
-//   <View style={{
-//     //  backgroundColor: "red",
-//     alignItems: 'center',
-//     paddingBottom: moderateVerticalScale(10)
-//   }}>
-//     <TouchableOpacity
-//       onPress={() => handleRandomClick()}
-//       style={{
-//         backgroundColor: '#E44173',
-//         width: responsiveWidth(29),
-//         borderRadius: 10,
-//         height: responsiveHeight(18.5),
-//         alignItems: 'center',
-//       }}>
-//       <View
-//         style={{
-//           marginVertical: moderateVerticalScale(10),
-//           borderRadius: 10,
-//           width: responsiveWidth(25),
-//           height: responsiveHeight(11),
-//           backgroundColor: '#EE5F8A',
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//         }}>
-//         <Image
-//           style={{
-//             width: responsiveWidth(16),
-//             height: responsiveHeight(8),
-//             resizeMode: 'center',
-//           }}
-//           source={LUDO_ICON}
-//         />
-//       </View>
-//       <Text
-//         style={{
-//           color: '#FFF',
-//           fontWeight: '700',
-//           fontSize: responsiveFontSize(1.9),
-//         }}>
-//         Random
-//       </Text>
-//     </TouchableOpacity>
-//   </View>
-// )}

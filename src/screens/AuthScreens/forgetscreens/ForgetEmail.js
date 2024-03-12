@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -25,24 +25,24 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import TextInputField from '../../../components/TextInputField';
 import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import {Formik} from 'formik';
-import {validationforgetEmail} from '../../../../validation/validation';
-import {Path, Svg} from 'react-native-svg';
+import { Formik } from 'formik';
+import { validationforgetEmail } from '../../../../validation/validation';
+import { Path, Svg } from 'react-native-svg';
 import _ from 'lodash';
-import CustomInputForgetEmail from '../../../components/CustomInputForgetEmail';
+import CustomInputForgetEmail from '../../../components/auth/CustomInputForgetEmail';
 import useKeyboard from '../../../hooks/AvoidingKeyboard';
 
 const ForgetEmail = () => {
-  const {FORGET_PHONE_NO, OTP_FORGET} = NavigationsString;
-  const {ANOTHER_FORGET_BG_IMG, GREEN_COLOUR_FORGETIMAGE} = Img_Paths;
+  const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
+  const { ANOTHER_FORGET_BG_IMG, GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
   const [EmailError, setEmailError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
@@ -56,7 +56,7 @@ const ForgetEmail = () => {
           email: '',
         }}
         validationSchema={validationforgetEmail}
-        onSubmit={async values => {}}>
+        onSubmit={async values => { }}>
         {({
           values,
           errors,
@@ -85,8 +85,9 @@ const ForgetEmail = () => {
                   alignItems: 'center',
                   flex: 1,
                 }}>
+
                 <CustomInputForgetEmail
-                  label="Email Address"
+                  label="Email Adress"
                   placeholder="Type here"
                   value={values.email}
                   error={errors.email}
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   img_child: {
     width: responsiveWidth(50),
     height: responsiveHeight(20),
-    resizeMode: 'center',
+    resizeMode: "center",
   },
 });
 

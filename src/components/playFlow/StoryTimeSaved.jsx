@@ -1,16 +1,18 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
-import {TextColorGreen, pastelGreen} from '../../screens/Styles/Style';
+import { TextColorGreen, pastelGreen } from '../../screens/Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import SvgIcons from '../svgIcon/svgIcons';
-import {Circle, Path, Svg} from 'react-native-svg';
-import {moderateVerticalScale} from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
+import { Circle, Path, Svg } from 'react-native-svg';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { rearrangedFriends } from '../../../store/slices/addplayers/addPlayersSlice';
 
 const StoryTimeSaved = ({
   isVisible,
@@ -22,20 +24,25 @@ const StoryTimeSaved = ({
   loading,
 }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
 
   const close = () => {
     if (onPress) {
       onPress();
       setVisible(false);
-    } else {
-      // setVisible(false);
       navigation.navigate('Home');
+    } else {
+      setVisible(false);
+      // navigation.navigate('Home');
+      navigation.navigate('Home');
+      // dispatch(sequenceUser);
     }
   };
 
   return (
     <Modal
-      style={{flex: 1}}
+      style={{ flex: 1 }}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
