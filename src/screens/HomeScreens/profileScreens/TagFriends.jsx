@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -28,14 +28,16 @@ const TagFriends = ({ route }) => {
     const navigation = useNavigation();
     const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
     const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers);
     const storyId = route?.params?.storyId;
 
     const addFriends_api_handler = async () => {
-
+        setIsLoading(true);
         try {
             const responseData = await addFriends_api();
+            setIsLoading(false);
             setResponseapiFriends(responseData.data.users);
             return responseData;
         } catch (error) {
@@ -51,9 +53,9 @@ const TagFriends = ({ route }) => {
         try {
             const responseData = await addFriends_api({ search: text });
             if (responseData?.data == null) {
-                setIsNoFriends(false)
+                setIsNoFriends(false);
             } else {
-                setIsNoFriends(true)
+                setIsNoFriends(true);
             }
             setResponseapiFriends(responseData.data?.users)
             return responseData
@@ -121,27 +123,32 @@ const TagFriends = ({ route }) => {
 
                             <View style={{ paddingVertical: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
                                 {
-                                    !isNoFriends ?
-                                        (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
-                                            <Text style={{ fontSize: responsiveFontSize(3.5), color: PrimaryColor, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
-                                        </View>)
+                                    isLoading ?
+                                        <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
+                                            <ActivityIndicator size={24} color={PrimaryColor} />
+                                        </View>
                                         :
-                                        ResponseapiFriends?.map((item, index) => {
-                                            console.log("item====", item._id);
-                                            return (
-                                                <AddFriends_Categories
-                                                    key={item?._id}
-                                                    indexNo={index}
-                                                    username={item?.username}
-                                                    userchoice="Tag"
-                                                    profileimage={SECOND_PROFILE}
-                                                    item={item}
-                                                    userid={item?._id}
-                                                    storyId={storyId}
-                                                    type="tagFriends"
-                                                />
-                                            )
-                                        })
+                                        !isNoFriends ?
+                                            (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
+                                                <Text style={{ fontSize: responsiveFontSize(3.5), color: PrimaryColor, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
+                                            </View>)
+                                            :
+                                            ResponseapiFriends?.map((item, index) => {
+                                                console.log("item====", item._id);
+                                                return (
+                                                    <AddFriends_Categories
+                                                        key={item?._id}
+                                                        indexNo={index}
+                                                        username={item?.username}
+                                                        userchoice="Tag"
+                                                        profileimage={SECOND_PROFILE}
+                                                        item={item}
+                                                        userid={item?._id}
+                                                        storyId={storyId}
+                                                        type="tagFriends"
+                                                    />
+                                                )
+                                            })
                                 }
                             </View>
                         </View>

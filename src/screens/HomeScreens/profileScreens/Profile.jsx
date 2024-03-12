@@ -163,10 +163,7 @@ const Profile = ({ route }) => {
     profile_story_api();
   }, [type, recordingPage, FriendIdRTK]);
 
-  (function show() {
-    console.log("show")
-  }
-  )();
+
 
   return (
     <>
