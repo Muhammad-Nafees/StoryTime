@@ -404,9 +404,6 @@ const VideoFirstUser = () => {
             style={{
               paddingTop: responsiveWidth(5),
               flexDirection: 'row',
-              // width: isCancelingStory
-              //   ? responsiveWidth(60)
-              //   : responsiveWidth(90),
               width: SCREEN_WIDTH - moderateScale(22) * 2,
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -494,7 +491,7 @@ const VideoFirstUser = () => {
         <View>
           <ImageBackground
             style={styles.img_backgroung_content}
-            resizeMode="center"
+            resizeMode="stretch"
             source={PLAYFLOW_FRAME}>
             <View
               activeOpacity={0.9}
@@ -731,11 +728,12 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(4.3),
   },
   img_backgroung_content: {
-    width: responsiveWidth(100),
+    width: responsiveWidth(90),
     height: responsiveHeight(45),
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: moderateVerticalScale(6),
+    alignSelf:'center'
   },
   bg_content: {
     // backgroundColor: PrimaryColor,

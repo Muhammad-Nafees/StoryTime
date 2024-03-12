@@ -41,7 +41,7 @@ const UploadImage = ({ uploadImageRef, setImage }) => {
       height={267}
       customStyles={{
         wrapper: {
-          backgroundColor: "rgba(0,0,0,0.5)", //above bottom bar
+          backgroundColor: "rgba(122,122,122,0.98)", //above bottom bar
         },
         container: {
           backgroundColor: White,

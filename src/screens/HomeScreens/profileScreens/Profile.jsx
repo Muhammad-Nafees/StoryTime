@@ -40,7 +40,7 @@ const Profile = ({ route }) => {
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
   const navigation = useNavigation();
-  const { FEED_CHAT, SETTING } = NavigationsString;
+  const {FEED_CHAT, SETTING} = NavigationsString;
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
   const [recordingPage, setRecordingPage] = useState(1);
@@ -163,9 +163,19 @@ const Profile = ({ route }) => {
     profile_story_api();
   }, [type, recordingPage, FriendIdRTK]);
 
+  (function show() {
+    console.log("show")
+  }
+  )();
 
-
-  return (
+  // return (
+  //   <>
+  //     <View style={{ height: responsiveHeight(90), justifyContent: "flex-end" }}>
+  //       <LogoutBtn />
+  //     </View>
+  //   </>
+  // );
+  return(
     <>
       {isPublicOrPrivate ? (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -286,7 +296,6 @@ const Profile = ({ route }) => {
                 width: responsiveWidth(91),
                 justifyContent: 'space-around',
               }}>
-
               <TouchableOpacity
                 onPress={() => {
                   setIsContent(0)
@@ -312,7 +321,6 @@ const Profile = ({ route }) => {
                   source={require('../../../assets/recordingProfile.png')}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity
                 onPress={() => {
                   setIsContent(1);
@@ -373,7 +381,7 @@ const Profile = ({ route }) => {
         />
       )}
     </>
-  );
+  )
 };
 
 

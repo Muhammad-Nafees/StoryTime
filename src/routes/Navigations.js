@@ -19,7 +19,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../assets/Imagepaths';
+import {Img_Paths} from '../assets/Imagepaths';
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
 import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
@@ -52,6 +52,13 @@ import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
 import { useSelector } from 'react-redux';
 
+import Support from '../screens/HomeScreens/setting/Support';
+import SupportMessage from '../screens/HomeScreens/setting/SupportMessage';
+import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageList';
+import Report from '../screens/HomeScreens/setting/Report';
+import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
+import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
+import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -69,6 +76,13 @@ const Navigations = () => {
     BLOCK_USER,
     DELETE_ACCOUNT,
     LOGIN,
+    SUPPORT,
+    SUPPORT_MESSAGE,
+    SUPPORT_MESSAGE_LIST,
+    REPORT,
+    PAYEMENT,
+    ADD_PAYMENT_CARD,
+    ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -99,12 +113,25 @@ const Navigations = () => {
       <Stack.Screen
         name={LOGIN}
         component={Login}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name={SUPPORT} component={Support} />
+      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
+      <Stack.Screen name={REPORT} component={Report} />
+      <Stack.Screen
+        name={SUPPORT_MESSAGE_LIST}
+        component={SupportMessageList}
+      />
+      <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
+      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} />
+      <Stack.Screen
+        name={ADD_PAYMENT_CARD_DETAIL}
+        component={AddPaymentCardDetail}
       />
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -117,12 +144,12 @@ const GuestStack = () => {
       <Stack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="PrivacyAndPolicy"
         component={PrivacyAndPolicy}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
@@ -175,7 +202,7 @@ const PLayFlowScreens = () => {
 
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT, REPORT_USER } = NavigationsString;
+  const {HOME, FEED_CHAT, REPORT_USER} = NavigationsString;
   return (
     <Stack.Navigator
       screenOptions={{
@@ -192,7 +219,7 @@ const HomeStackBottom = () => {
 
 const CategoriesStackBottom = () => {
   const Stack = createStackNavigator();
-  const { CATEGORIES } = NavigationsString;
+  const {CATEGORIES} = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -218,7 +245,7 @@ const CategoriesStackBottom = () => {
 const ProfileStacksBottom = ({ navigation, route, }) => {
   console.log("route-------------- :substack", route?.params?.screen);
   const Stack = createStackNavigator();
-  const { HOME } = NavigationsString;
+  const {HOME} = NavigationsString;
   return (
     <Stack.Navigator
       initialRouteName="Profile"
@@ -235,7 +262,7 @@ const ProfileStacksBottom = ({ navigation, route, }) => {
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT } = NavigationsString;
+  const {HOME, FEED_CHAT} = NavigationsString;
   return (
     <Stack.Navigator screenOptions={{
       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -271,7 +298,7 @@ const BottomTavNavigator = ({ route }) => {
         component={HomeStackBottom}
         initialParams={route}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image
@@ -303,7 +330,7 @@ const BottomTavNavigator = ({ route }) => {
         initialParams={route}
 
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image
@@ -341,7 +368,7 @@ const BottomTavNavigator = ({ route }) => {
         component={ProfileStacksBottom}
         initialParams={route}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               {focused ? (
                 <Image

@@ -1,4 +1,4 @@
-export const base = "http://storytime.yameenyousuf.com/"
+export const base = 'http://storytime.yameenyousuf.com/';
 // export const base = 'http://3.128.201.197/storytime/'
 export const Base_Url = base + 'api/';
 export const register_endpoint = 'auth/register';
@@ -27,3 +27,7 @@ export const update_profile = "user/update-profile";
 export const story_profile = "story/user";
 export const get_story_byId = "story/";
 export const delete_account_endpoint = "user/delete-account"
+export const support_chat_list = 'support/chat-list';
+export const support_send_message = 'support/send-message';
+export const support_send_message_with_id = 'support/';
+export const report = 'user/report-user';
