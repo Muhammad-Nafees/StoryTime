@@ -9,7 +9,7 @@ import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import AddFriendUsers from '../../../components/AddFriendUsers';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { addFriends_api } from '../../../../services/api/add-members';
 import AddFriends_Categories from '../../../components/AddPlayers_Categories';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';

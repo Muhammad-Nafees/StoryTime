@@ -13,7 +13,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';

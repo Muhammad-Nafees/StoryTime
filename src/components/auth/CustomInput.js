@@ -10,6 +10,8 @@ import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
 import { Inter_Regular } from '../../constants/GlobalFonts';
 import { Img_Paths } from '../../assets/Imagepaths';
+import ErrorMessageForm from '../ErrorMessagesForm';
+import CustomErrorField from './CustomErrorField';
 
 const CustomInput = (props) => {
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths
@@ -48,12 +50,12 @@ const CustomInput = (props) => {
     fontFamily: Inter_Regular.Inter_Regular,
     fontSize: responsiveFontSize(1.8),
     backgroundColor: TextinputColor,
-
   };
 
+  // paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10
   return (
 
-    <View style={{ paddingVertical: props?.type == "email" || props?.type == "password" ? null : 10 }}>
+    <View style={{ paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10 }}>
       <Text
         style={[
           {
@@ -74,7 +76,8 @@ const CustomInput = (props) => {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          paddingVertical: moderateVerticalScale(10),
+          paddingVertical: moderateVerticalScale(2),
+
         }}>
         <View
           style={{
@@ -123,23 +126,21 @@ const CustomInput = (props) => {
         </View>
       </View>
 
-      {
-        !props.error && props.customError && (
-          <View
-            style={[
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2,
-                marginTop: verticalScale(7),
-              },
-            ]}
-          >
-            <Icon name="alert-circle" size={22} color="red" />
-            <Text style={[{ color: 'red' }]}>{props.customError}</Text>
-          </View>
-        )
-      }
+      {!props.error && props.customError && (
+        <View
+          style={[
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+              marginTop: verticalScale(7),
+            },
+          ]}
+        >
+          <Icon name="alert-circle" size={22} color="red" />
+          <Text style={[{ color: 'red' }]}>{props.customError}</Text>
+        </View>
+      )}
 
       {
         props.touched && props.error && (
@@ -158,7 +159,6 @@ const CustomInput = (props) => {
           </View>
         )
       }
-
 
       {
         props.isVisible && (

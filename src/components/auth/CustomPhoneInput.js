@@ -35,7 +35,6 @@ const CustomPhoneInput = ({
   setphoneNumberStatusCode,
   defaultCode,
 }) => {
-  // console.log("error && isError", error,"//",isError)
 
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
@@ -48,6 +47,9 @@ const CustomPhoneInput = ({
       const response = await username_api({
         completePhone: `+${code}${phoneNumber}`,
       });
+
+      console.log("resposneStatusCode--- :", response?.statusCode);
+
       setphoneNumberStatusCode(response?.statusCode);
       setStatusCodePhone(response?.statusCode);
       console.log(response?.statusCode);

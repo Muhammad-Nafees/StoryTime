@@ -15,7 +15,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextInputField from '../../components/TextInputField';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -25,7 +25,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import NavigationsString from '../../constants/NavigationsString';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { Base_Url, login_andpoint } from '../../../services';
 import { setAccessToken } from '../../../store/slices/authSlice';
@@ -35,14 +35,13 @@ import { Inter_Regular, Poppins_Regular } from '../../constants/GlobalFonts';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
 import CustomErrorField from '../../components/auth/CustomErrorField';
 import CustomInput from '../../components/auth/CustomInput';
+import Toast from 'react-native-toast-message';
+import axios from 'axios';
 
 const Login = () => {
   const { REGISTER, FORGET_EMAIL } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmail, setIsEmail] = useState('');
-  const [isPasswordErr, setPasswordErr] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const [] = useState();
   const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -52,69 +51,114 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-
   const handleLoginSubmit = async (values) => {
     setIsSubmitted(false);
     setIsLoading(true);
 
     try {
-      const { email, password, fcmToken } = values;
-      const response = await fetch(Base_Url + login_andpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          fcmToken,
-        }),
-      });
-
-      const responseData = await response.json();
-      console.log('RESPONSE_LOGIN----', responseData);
+      const responseData = await axios.post(Base_Url + login_andpoint, values);
+      console.log(responseData, 'RESPONSE FROM LOGIN!');
       dispatch(login(responseData));
-      await AsyncStorage.setItem('userData', JSON.stringify(responseData));
+      await AsyncStorage.setItem('userData', responseData);
 
-      if (responseData?.data) {
-        setIsLoading(false);
-      };
+      setIsLoading(false);
 
-      const statusCode = responseData?.statusCode;
-      const message = responseData?.message;
       const accessToken = responseData?.data?.accessToken;
       const refreshToken = responseData?.data?.refreshToken;
-      const username = responseData?.data?.user?.username;
-      const userLoginId = responseData?.data?.user?._id;
-      const error = responseData?.stack;
+      // const username = responseData?.data?.user?.username;
+      // const userLoginId = responseData?.data?.user?._id;
 
-      if (statusCode === 200) {
-        await AsyncStorage.setItem('isLoggedIn', accessToken);
-        await AsyncStorage.setItem('isUsername', username);
-        await AsyncStorage.setItem('isUserId', userLoginId);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
-        dispatch(setAccessToken(accessToken));
-        dispatch(setRefreshToken(refreshToken));
-      }
-      setIsLoading(false);
-      return responseData;
+      await AsyncStorage.setItem('isLoggedIn', accessToken);
+      // await AsyncStorage.setItem('isUsername', username);
+      // await AsyncStorage.setItem('isUserId', userLoginId);
+      // await AsyncStorage.setItem('refreshToken', refreshToken);
+      dispatch(setAccessToken(accessToken));
+      dispatch(setRefreshToken(refreshToken));
+
     } catch (error) {
-      if (error?.response) {
-        console.log("errrr _", error);
-      }
-
-      // if (message === 'Email not found') {
-      //   setIsEmail('Invalid email');
-      // } else if (
-      //   message ===
-      //   'password length must be at least 8 characters long' ||
-      //   message === 'Invalid password'
-      // ) {
-      //   setPasswordErr('Invalid password');
-      //   setIsEmail('');
-      // }
+      console.log(error?.response?.data, 'ERROR FROM LOGIN!');
+      Toast.show({
+        type: "error",
+        text1: `${error?.response?.data?.message}`,
+      });
     }
+    setIsLoading(false);
   };
+
+
+
+  // const handleLoginSubmit = async (values) => {
+  //   setIsSubmitted(false);
+  //   setIsLoading(true);
+
+  //   try {
+  //     const response = await axios.post(Base_Url + login_andpoint, values);
+  //     console.log(response, 'RESPONSE FROM LOGIN!');
+  //   } catch (error) {
+  //     console.log(error?.response?.data, 'ERROR FROM LOGIN!');
+  //     Toast.show({
+  //       text1: ${error?.response?.data?.message},
+  //     });
+  //   }
+  //   setIsLoading(false);
+
+  // try {
+  //   const { email, password, fcmToken } = values;
+  //   const response = await fetch(Base_Url + login_andpoint, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email,
+  //       password,
+  //       fcmToken,
+  //     }),
+  //   });
+
+  //   const responseData = await response.json();
+  //   console.log('RESPONSE_LOGIN----', responseData);
+  //   dispatch(login(responseData));
+  //   await AsyncStorage.setItem('userData', JSON.stringify(responseData));
+
+  //   if (responseData?.data) {
+  //     setIsLoading(false);
+  //   };
+
+  //   const statusCode = responseData?.statusCode;
+  //   const message = responseData?.message;
+  //   const accessToken = responseData?.data?.accessToken;
+  //   const refreshToken = responseData?.data?.refreshToken;
+  //   const username = responseData?.data?.user?.username;
+  //   const userLoginId = responseData?.data?.user?._id;
+  //   const error = responseData?.stack;
+
+  //   if (statusCode === 200) {
+  //     await AsyncStorage.setItem('isLoggedIn', accessToken);
+  //     await AsyncStorage.setItem('isUsername', username);
+  //     await AsyncStorage.setItem('isUserId', userLoginId);
+  //     await AsyncStorage.setItem('refreshToken', refreshToken);
+  //     dispatch(setAccessToken(accessToken));
+  //     dispatch(setRefreshToken(refreshToken));
+  //   }
+  //   if (message === 'Email not found') {
+  //     setIsEmail('Invalid email');
+  //   } else if (
+  //     message ===
+  //     'password length must be at least 8 characters long' ||
+  //     message === 'Invalid password'
+  //   ) {
+  //     setPasswordErr('Invalid password');
+  //     setIsEmail('');
+  //   }
+  //   setIsLoading(false);
+  //   return responseData;
+  // } catch (error) {
+  //   if (error?.response) {
+  //     console.log("errrr _", error);
+  //   }
+  // }
+  // };
 
   return (
     <Formik
@@ -155,16 +199,12 @@ const Login = () => {
                   onBlur={() => setFieldTouched('email')}
                 />
 
-                <View style={{}}>
-                  {isEmail.length > 0 ? (
-                    <CustomErrorField error={isEmail} />
-                  ) : (
-                    <ErrorMessageForm
-                      errorsField={errors.email}
-                      isSubmitted={isSubmitted}
-                    />
-                  )}
-                </View>
+                {
+                  <ErrorMessageForm
+                    errorsField={errors.email}
+                    isSubmitted={isSubmitted}
+                  />
+                }
 
                 <CustomInput
                   label={"Password"}
@@ -178,16 +218,14 @@ const Login = () => {
                   type="password"
                 />
 
-                <View style={{ height: responsiveHeight(3) }}>
-                  {isPasswordErr.length > 0 ? (
-                    <CustomErrorField error={isPasswordErr} />
-                  ) : (
-                    <ErrorMessageForm
-                      errorsField={errors.password}
-                      isSubmitted={isSubmitted}
-                    />
-                  )}
-                </View>
+                {
+                  <ErrorMessageForm
+                    errorsField={errors.password}
+                    isSubmitted={isSubmitted}
+                  />
+                }
+
+
               </View>
             </View>
 
@@ -256,7 +294,7 @@ const Login = () => {
 
             <View
               style={{
-                paddingVertical: moderateVerticalScale(16),
+                paddingTop: responsiveWidth(5),
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -285,7 +323,7 @@ const Login = () => {
 
             <View
               style={{
-                paddingTop: responsiveWidth(7),
+                paddingVertical: verticalScale(30),
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
@@ -309,7 +347,7 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </ScrollView>
-
+          <Toast />
         </View>
       )}
     </Formik>

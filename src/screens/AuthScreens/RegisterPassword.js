@@ -26,7 +26,7 @@ import {
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Formik } from 'formik';
@@ -41,15 +41,15 @@ import { Img_Paths } from '../../assets/Imagepaths';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
 import CustomErrorField from '../../components/auth/CustomErrorField';
 import CustomInput from '../../components/auth/CustomInput';
+import axios from 'axios';
+import { Base_Url } from '../../../services';
 
 const RegisterPassword = ({ route }) => {
     const navigation = useNavigation();
     const [showPassword, setShowPassword] = useState(true);
     const [confirmShowPassword, setConfirmShowPassword] = useState(true);
-    const [response, setResponse] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setVisible] = useState(false);
-    const [firstPasswordError, setFirstPasswordError] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
@@ -57,21 +57,15 @@ const RegisterPassword = ({ route }) => {
     const { registerData } = useSelector(state => state.authSlice);
     const { registerLocationData } = useSelector(state => state.authSlice);
 
-    console.log("registerData :", registerData)
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-    // [{"countryCode": "AU", "phoneCode": "61", "values": {"email": "cjcucu@gmail.com", "fcmToken": "1234567", "firstName": "Fufu", "lastName": "Xjjcu", "phoneNo": "369362662", "role": "user", "username": "Bdjfj"}}]
+
+    // [{"countryCode": "AU", "phoneCode": "61", "values": {"email": "cjcucu@gmail.com", "fcmToken": "1234567", "firstName": "Fufu", "lastName": "Xjjcu", "phoneNo": "369362662", "role": "user", "username": "Bdjfj"}}] 
 
     const { countryCode, phoneCode } = registerData
     const { email, fcmToken, firstName, lastName, phoneNo, role, username } = registerData?.values
     const { city, state, zipCode } = registerLocationData;
-
-    console.log("register redux data", email, fcmToken, firstName, lastName, phoneNo, role, username);
-    console.log("register redux data", countryCode, phoneCode,);
-    console.log("state city zipcode", city, state, zipCode);
-
-
 
     const toggleconfirmshowpassword = () => {
         setConfirmShowPassword(!confirmShowPassword);
@@ -81,37 +75,38 @@ const RegisterPassword = ({ route }) => {
         return values.password && values.confirmPassword;
     };
 
-    const handleRegisterPassword = async (values) => {
+    // registerData,
+    // registerLocationData,
+    // values,
 
+    const requestData = {
+        ...registerData,
+        ...registerLocationData,
+        ...values,
+    };
+
+    const handleRegisterPassword = async (values) => {
         try {
             setIsLoading(true);
-            const responseData = await registerapi(
-                registerData,
-                registerLocationData,
-                values,
-            );
-            const statusCode = responseData?.statusCode;
-            const accessToken = responseData?.data?.accessToken;
-            const error = responseData?.stack;
+            const responseData = await axios.post(Base_Url + register_endpoint, requestData);
             const message = responseData?.message;
-            if (statusCode === 200) {
-                setVisible(true);
-                setIsLoading(false);
-                Toast.show({
-                    type: 'error',
-                    text1: message,
-                    position: 'top',
-                    visibilityTime: 2500,
-                });
-            }
-            if (error) {
-                setFirstPasswordError(message);
-                console.log('message====', message);
-                setIsLoading(false);
-            }
-            setResponse(responseData);
+
+            setVisible(true);
+            setIsLoading(false);
+            Toast.show({
+                type: 'success',
+                text1: message,
+                position: 'top',
+                visibilityTime: 2500,
+            });
         }
+
         catch (error) {
+            console.log(error?.response?.data, 'ERROR FROM REGISTER!');
+            Toast.show({
+                type: "error",
+                text1: `${error?.response?.data?.message}`,
+            });
         }
     };
 
@@ -154,16 +149,12 @@ const RegisterPassword = ({ route }) => {
                             />
 
                             <View style={{ height: responsiveHeight(3.2) }}>
-                                {firstPasswordError.length > 0 ? (
-                                    <CustomErrorField
-                                        error={firstPasswordError}
-                                    />
-                                ) : (
+                                {
                                     <ErrorMessageForm
                                         errorsField={errors.password}
                                         isSubmitted={isSubmitted}
                                     />
-                                )}
+                                }
                             </View>
 
                             {/* <View */}
@@ -185,16 +176,12 @@ const RegisterPassword = ({ route }) => {
                                 />
                             </View>
 
-                            {firstPasswordError.length > 0 ? (
-                                <CustomErrorField
-                                    error={firstPasswordError}
-                                />
-                            ) : (
+                            {
                                 <ErrorMessageForm
                                     errorsField={errors.confirmPassword}
                                     isSubmitted={isSubmitted}
                                 />
-                            )}
+                            }
 
                             {/* Next and Back------------ */}
 
@@ -246,6 +233,8 @@ const RegisterPassword = ({ route }) => {
         </Formik>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {

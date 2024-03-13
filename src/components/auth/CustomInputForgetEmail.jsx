@@ -24,7 +24,7 @@ import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
-import CustomButton from '../CustomButton';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {

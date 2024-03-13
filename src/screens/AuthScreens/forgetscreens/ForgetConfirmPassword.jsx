@@ -25,7 +25,7 @@ import {
     responsiveWidth,
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import TextInputField from '../../../components/TextInputField';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';

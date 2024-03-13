@@ -30,7 +30,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import CustomButton from '../CustomButton';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
 import {

@@ -8,7 +8,7 @@ import { moderateScale } from 'react-native-size-matters';
 const CustomErrorField = ({ error }) => {
     console.log("email==== :");
     return (
-        <View style={{ height: responsiveHeight(3) }}>
+        <View style={{}}>
             <View
                 style={{
                     width: responsiveWidth(90),

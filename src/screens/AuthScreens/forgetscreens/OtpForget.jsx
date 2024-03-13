@@ -19,7 +19,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';

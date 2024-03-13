@@ -20,7 +20,7 @@ import {
 } from '../screens/Styles/Style';
 import reset_email, { username_api } from '../../services/api/auth_mdule/auth';
 import _ from 'lodash';
-import CustomButton from './CustomButton';
+import CustomButton from './reusable-components/CustomButton/CustomButton';
 import NavigationsString from '../constants/NavigationsString';
 import { useNavigation } from '@react-navigation/native';
 import { Path, Svg, err } from 'react-native-svg';

@@ -6,7 +6,7 @@ import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsive
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import AddFriends_Categories from '../../../components/AddPlayers_Categories';
 import { addFriends_api } from '../../../../services/api/add-members';
 import _ from 'lodash';

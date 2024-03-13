@@ -18,7 +18,7 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
@@ -57,7 +57,7 @@ const RegisterUserInformation = ({ }) => {
       registerLocation({ state: values?.state, city: values?.city, zipCode: values?.zipCode }),
     );
     navigation.navigate("RegisterPassword");
-  }
+  };
 
 
 

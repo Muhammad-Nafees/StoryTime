@@ -18,7 +18,7 @@ import {
 import { PrimaryColor, TextColorGreen } from '../screens/Styles/Style';
 import UserNames from './UserNames';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
-import CustomButton from './CustomButton';
+import CustomButton from './reusable-components/CustomButton/CustomButton';
 
 const FirstScreen = ({
   image,

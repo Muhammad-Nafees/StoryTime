@@ -7,7 +7,7 @@ import BackButton from '../../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { reportUser_Story } from '../../../../services/api/storyfeed';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';

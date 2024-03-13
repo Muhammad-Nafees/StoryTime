@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
 import {
   responsiveHeight,
   responsiveFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+
+
 const CustomButton = ({
+
   text,
   onPress,
   backgroundColor,

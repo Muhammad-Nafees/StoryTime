@@ -9,7 +9,7 @@ import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';
-import CustomButton from '../../../components/CustomButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { base, get_story_byId } from '../../../../services';
 import { fetch_users_stories, getStory_Byid, hide_Story } from '../../../../services/api/profile';
