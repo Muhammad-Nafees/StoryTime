@@ -9,7 +9,6 @@ import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentUserplay, isNextUserplay } from '../../../../store/slices/playflow/startGameSlice';
 import { checkTrueOrFalse, extendStoryCheck, nextRandomNum, nextRandomNumExtend, userId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 
@@ -44,6 +43,7 @@ const FirstUserStory = () => {
         dispatch(nextRandomNum(randomvalue))
         navigation.navigate(FIRST_USER);
     };
+
 
 
     return (

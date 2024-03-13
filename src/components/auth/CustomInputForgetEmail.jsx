@@ -24,7 +24,7 @@ import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
+import CustomButton from '../CustomButton';
 import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
@@ -32,8 +32,6 @@ const CustomInputForgetEmail = props => {
   const [isFocused, setIsFocused] = useState(false);
   const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState();
-  const [navigatee, setNavigate] = useState(false);
   const [responses, setResponse] = useState('');
   const [isStatusCodeSuccess, setIsStatusCodeSuccess] = useState(false);
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
@@ -141,23 +139,6 @@ const CustomInputForgetEmail = props => {
         />
       </View>
 
-      {/* {!props.error && props.customError && (
-                <View
-                    style={[
-                        {
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 2,
-                            marginTop: verticalScale(7),
-                        },
-                    ]}
-                >
-                    <Icon name="alert-circle" size={22} color="red" />
-                    <Text style={[{ color: 'red' }]}>{props.customError}</Text>
-                </View>
-            )} */}
-      {console.log('res-=', responses)}
-
       {
         invalidPhoneNumber &&
         <>
@@ -190,7 +171,7 @@ const CustomInputForgetEmail = props => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableButton
+        <CustomButton
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           type="forgetemail"

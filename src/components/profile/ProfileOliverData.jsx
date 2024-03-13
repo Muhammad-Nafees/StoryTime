@@ -18,7 +18,7 @@ const ProfileOliverData = ({
     isLoadingRecording,
     hasMorePagesRecording,
     isUserProfileData,
-    isUserLoading
+    isUserLoading,
 
 }) => {
 

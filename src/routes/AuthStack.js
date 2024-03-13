@@ -81,16 +81,14 @@ const AuthStack = () => {
     initialRouteName = LOGIN;
   } else {
     initialRouteName = POPUP_START;
-  }
-
-  console.log(initialRouteName);
+  };
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          animationEnabled: false,
+
         }}
         initialRouteName={initialRouteName}>
         <Stack.Screen

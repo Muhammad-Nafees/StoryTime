@@ -24,7 +24,6 @@ import {
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FeedChatFrame from '../../../../components/FeedChatFrame';
-import TouchableButton from '../../../../components/TouchableButton';
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
 import {
@@ -86,15 +85,6 @@ const VideoFirstUser = () => {
   const nextRandomValueVideoExtend = useSelector(
     state => state?.addPlayers?.nextRandomNumberVideoExtend,
   );
-  //dependant consts
-  // const sequenceUser = useMemo(
-  //   () => [
-  //     ...addedUsers,
-  //     USER?._id &&
-  //       USER?.username && {userid: USER?._id, username: USER?.username},
-  //   ],
-  //   [USER, addedUsers],
-  // );
 
   const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
   console.log(sequenceUser, "SEQUESNCE")
@@ -177,21 +167,11 @@ const VideoFirstUser = () => {
     }
   }, [timeLeft]);
 
-  // const handlePressOut = () => {
-  //     setIsPressed(false);
-  //     stopRecording()
-  //     dispatch(recordingVideo(path))
-  //     if (isPressed) {
-  //         Alert.alert("Video Recorded Successfully")
-  //     }
-  // };
 
   useEffect(() => {
     setShowCamera(true);
   }, []);
 
-  // useFocusEffect(
-  //     useCallback(() => {
 
   useEffect(() => {
     setTimeLeft(null);
@@ -228,9 +208,6 @@ const VideoFirstUser = () => {
     };
   }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend]);
 
-
-  //     }, [checkVideoisTrue])
-  // );
 
   useFocusEffect(
     useCallback(() => {

@@ -1,30 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Text,
   View,
   Image,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Button,
-  Alert,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import {
-  FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  TextinputColor,
-  ThirdColor,
 } from '../Styles/Style';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TouchableButton from '../../components/TouchableButton';
+import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import { Img_Paths } from '../../assets/Imagepaths';
@@ -35,7 +24,6 @@ import CustomInput from '../../components/auth/CustomInput';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
-import Toast from 'react-native-toast-message';
 import CustomPhoneInput from '../../components/auth/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
 import { username_api } from '../../../services/api/auth_mdule/auth';
@@ -64,13 +52,43 @@ const Register = () => {
 
   const validate = (values) => {
     return (
-      values.email &&
-      values.firstName &&
-      values.lastName &&
-      values.phoneNo &&
-      values.username
+      values?.email &&
+      values?.firstName &&
+      values?.lastName &&
+      values?.phoneNo &&
+      values?.username
     )
-  }
+  };
+
+
+  const handleSubmitRegister = async (values) => {
+    // console.log("values", values)
+    const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+    setIsLoading(true);
+    try {
+      dispatch(userinfoState(countryCode));
+
+      const responseData = await username_api({ username: values?.username })
+      setIsLoading(false);
+      setStatusCodeusername(responseData.statusCode);
+
+      if (responseData?.statusCode !== 200) {
+        setVisible(true);
+      }
+      if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
+        return;
+      }
+
+      dispatch(register({ values: values, countryCode: countryCode, phoneCode: phoneCode }));
+
+      navigation.navigate(REGISTER_USER_INFO);
+
+      return responseData;
+    } catch (error) {
+    }
+    setIsLoading(true);
+    setIsLoading(false);
+  };
 
   return (
     <Formik
@@ -84,30 +102,7 @@ const Register = () => {
         fcmToken: '1234567',
       }}
       validationSchema={validationSignUp}
-
-      onSubmit={async (values) => {
-        setIsLoading(true);
-        try {
-          dispatch(userinfoState(countryCode));
-          dispatch(register({ values, countryCode: countryCode, phoneCode: phoneCode }));
-          const responseData = await username_api({ username: values?.username })
-          setIsLoading(false);
-          setStatusCodeusername(responseData.statusCode)
-
-          if (responseData?.statusCode !== 200) {
-            setVisible(true)
-          }
-          if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
-            return;
-          }
-          navigation.navigate(REGISTER_USER_INFO);
-          return responseData;
-        } catch (error) {
-        }
-        setIsLoading(true);
-        setIsLoading(false);
-        const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
-      }}
+      onSubmit={handleSubmitRegister}
     >
       {({
         values,
@@ -120,13 +115,12 @@ const Register = () => {
         setFieldTouched
       }) => (
         <>
-          {
-            console.log("touchedOutside======", touched)
-          }
+
           <ScrollView
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
+
               <View style={styles.img_container}>
                 <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
               </View>
@@ -159,7 +153,6 @@ const Register = () => {
                   fieldName="firstName"
                   handleChange={text => setFieldValue('firstName', text)}
                   setFieldTouched={() => setFieldTouched("firstName")}
-
                 />
 
                 <CustomInput
@@ -207,37 +200,20 @@ const Register = () => {
                 />
 
                 <View style={{ paddingVertical: responsiveWidth(6) }}>
-                  <TouchableOpacity
-                    disabled={!validate(values) ? true : false}
+                  <CustomButton
+                    backgroundColor={validate(values) ? '#395E66'
+                      : 'rgba(57, 94, 102, 0.4)'}
+                    color={"#FFF"}
+                    validate={validate}
+                    isLoading={isLoading}
                     onPress={handleSubmit}
-                    style={{
-                      width: responsiveWidth(80),
-                      backgroundColor: validate(values) ? '#395E66'
-                        : 'rgba(57, 94, 102, 0.4)',
-                      borderRadius: 10,
-                      // borderWidth: 1,
-                      borderColor: '#395E66',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: responsiveHeight(6.6),
-                    }}
-                  >
-                    {!isLoading ?
-                      <Text
-                        style={{
-                          fontSize: responsiveFontSize(1.9),
-                          fontWeight: '600',
-                          letterSpacing: 0.28,
-                          color: 'white',
-                        }}>
-                        Next
-                      </Text> :
-                      <ActivityIndicator size={22} />
-                    }
-                  </TouchableOpacity>
+                    values={values}
+                    text={"Next"}
+                    type="registerFirst"
+                  />
 
                   <View style={{ marginVertical: moderateVerticalScale(7) }}>
-                    <TouchableButton
+                    <CustomButton
                       onPress={() => navigation.goBack()}
                       backgroundColor="#FFF"
                       borderWidth="1"
@@ -251,7 +227,6 @@ const Register = () => {
               </View>
             </View>
           </ScrollView>
-          <Toast />
         </>
       )}
     </Formik>

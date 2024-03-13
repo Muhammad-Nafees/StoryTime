@@ -8,17 +8,15 @@ import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';
-import TouchableButton from '../../../components/TouchableButton';
-
 
 
 const TranscriptVoice = () => {
 
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, BG_PLAYFLOW, FULL_BORDER_FRAME, HOME_FRAME, SHARE_BTN, PROFILE_BG_FRAME } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
-    const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
+    const { FEED_CHAT } = NavigationsString;
     const navigation = useNavigation();
 
 

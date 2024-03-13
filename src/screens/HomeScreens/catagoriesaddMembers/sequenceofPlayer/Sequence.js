@@ -17,7 +17,7 @@ import NavigationsString from '../../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../../assets/Imagepaths';
 import { TextColorGreen } from '../../../Styles/Style';
-import TouchableButton from '../../../../components/TouchableButton';
+import CustomButton from '../../../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Inter_Medium, PassionOne_Regular } from '../../../../constants/GlobalFonts';
@@ -222,7 +222,7 @@ const Sequence = () => {
         </ScrollView>
 
         <View>
-          <TouchableButton
+          <CustomButton
             onPress={() => handlesequence()}
             backgroundColor={TextColorGreen}
             text="Next"

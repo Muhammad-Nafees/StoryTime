@@ -26,7 +26,7 @@ import {
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import TextInputField from '../../components/TextInputField';
-import TouchableButton from '../../components/TouchableButton';
+import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Formik } from 'formik';
@@ -39,6 +39,8 @@ import { validationUserPassword } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import { Img_Paths } from '../../assets/Imagepaths';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
+import CustomErrorField from '../../components/auth/CustomErrorField';
+import CustomInput from '../../components/auth/CustomInput';
 
 const RegisterPassword = ({ route }) => {
     const navigation = useNavigation();
@@ -52,12 +54,24 @@ const RegisterPassword = ({ route }) => {
     const dispatch = useDispatch();
     const { LOGIN } = NavigationsString;
     const { BGIMAGE_ACCOUNT_CREATED, CREATE_PASSWORD_IMG } = Img_Paths;
-    const firstuserData = useSelector(state => state.authSlice.firstpageData);
-    const seconduserData = useSelector(state => state.authSlice.secondpageData);
+    const { registerData } = useSelector(state => state.authSlice);
+    const { registerLocationData } = useSelector(state => state.authSlice);
 
+    console.log("registerData :", registerData)
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
+    // [{"countryCode": "AU", "phoneCode": "61", "values": {"email": "cjcucu@gmail.com", "fcmToken": "1234567", "firstName": "Fufu", "lastName": "Xjjcu", "phoneNo": "369362662", "role": "user", "username": "Bdjfj"}}]
+
+    const { countryCode, phoneCode } = registerData
+    const { email, fcmToken, firstName, lastName, phoneNo, role, username } = registerData?.values
+    const { city, state, zipCode } = registerLocationData;
+
+    console.log("register redux data", email, fcmToken, firstName, lastName, phoneNo, role, username);
+    console.log("register redux data", countryCode, phoneCode,);
+    console.log("state city zipcode", city, state, zipCode);
+
+
 
     const toggleconfirmshowpassword = () => {
         setConfirmShowPassword(!confirmShowPassword);
@@ -67,6 +81,42 @@ const RegisterPassword = ({ route }) => {
         return values.password && values.confirmPassword;
     };
 
+    const handleRegisterPassword = async (values) => {
+
+        try {
+            setIsLoading(true);
+            const responseData = await registerapi(
+                registerData,
+                registerLocationData,
+                // firstuserData,
+                // seconduserData,
+                values,
+            );
+            const statusCode = responseData?.statusCode;
+            const accessToken = responseData?.data?.accessToken;
+            const error = responseData?.stack;
+            const message = responseData?.message;
+            if (statusCode === 200) {
+                setVisible(true);
+                setIsLoading(false);
+                Toast.show({
+                    type: 'error',
+                    text1: message,
+                    position: 'top',
+                    visibilityTime: 2500,
+                });
+            }
+            if (error) {
+                setFirstPasswordError(message);
+                console.log('message====', message);
+                setIsLoading(false);
+            }
+            setResponse(responseData);
+        }
+        catch (error) {
+        }
+    };
+
     return (
         <Formik
             initialValues={{
@@ -74,43 +124,13 @@ const RegisterPassword = ({ route }) => {
                 confirmPassword: '',
             }}
             validationSchema={validationUserPassword}
-            onSubmit={async values => {
-                setIsLoading(true);
-                const responseData = await registerapi(
-                    firstuserData,
-                    seconduserData,
-                    values,
-                );
-                const statusCode = responseData?.statusCode;
-                const accessToken = responseData?.data?.accessToken;
-                const error = responseData?.stack;
-                const message = responseData?.message;
-                if (statusCode === 200) {
-                    setVisible(true);
-                    setIsLoading(false);
-                    Toast.show({
-                        type: 'error',
-                        text1: message,
-                        position: 'top',
-                        visibilityTime: 2500,
-                    });
-                }
-                if (error) {
-                    setFirstPasswordError(message);
-                    console.log('message====', message);
-                    setIsLoading(false);
-                }
-                setResponse(responseData);
-            }}>
+            onSubmit={handleRegisterPassword}>
             {({
                 values,
                 errors,
                 handleChange,
                 handleSubmit,
-                setFieldValue,
-                touched,
                 setFieldTouched,
-                isValid,
             }) => (
                 <>
                     <View style={styles.container}>
@@ -121,179 +141,94 @@ const RegisterPassword = ({ route }) => {
 
                             {/* Password------------ */}
 
-                            <View>
-                                <View>
-                                    <View
-                                        style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                        <Text
-                                            style={{
-                                                color: FourthColor,
-                                                fontWeight: '600',
-                                                fontSize: responsiveFontSize(1.9),
-                                            }}>
-                                            Password
-                                        </Text>
-                                    </View>
-                                    <TextInputField
-                                        onPress={toggleconfirmshowpassword}
-                                        showPassword={confirmShowPassword}
-                                        value={values.password}
-                                        onChangeText={handleChange('password')}
-                                        type="password"
-                                        onBlur={() => setFieldTouched('password')}
-                                        placeholderText="Enter here"
-                                    />
-                                </View>
+                            <CustomInput
+                                label={"Password"}
+                                value={values.confirmPassword}
+                                width={responsiveWidth(90)}
+                                handleChange={handleChange('confirmPassword')}
+                                onPress={toggleconfirmshowpassword}
+                                showPassword={confirmShowPassword}
+                                setShowPassword={setConfirmShowPassword}
+                                placeholder={"Enter here"}
+                                typeStyle="alignStyling"
+                                onBlur={() => setFieldTouched('confirmPassword')}
+                                type="password"
+                            />
 
-                                <View style={{ height: responsiveHeight(3.2) }}>
-                                    {firstPasswordError.length > 0 ? (
-                                        <View style={{ height: responsiveHeight(3) }}>
-                                            <View
-                                                style={{
-                                                    width: responsiveWidth(90),
-                                                    marginLeft: 'auto',
-                                                    paddingBottom: responsiveWidth(1),
-                                                }}>
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <View>
-                                                        <Svg
-                                                            width={20}
-                                                            height={20}
-                                                            viewBox="0 0 24 24"
-                                                            fill="red">
-                                                            <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                                        </Svg>
-                                                    </View>
-                                                    <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                        <Text
-                                                            style={{
-                                                                color: 'red',
-                                                                fontSize: responsiveFontSize(1.9),
-                                                                fontWeight: '600',
-                                                            }}>
-                                                            {firstPasswordError}
-                                                        </Text>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    ) : (
-                                        <ErrorMessageForm
-                                            errorsField={errors.password}
-                                            isSubmitted={isSubmitted}
-                                        />
-                                    )}
-                                </View>
-
-                                {/* <View */}
-                                {/* Confirm Password------------ */}
-
-                                <View>
-                                    <View
-                                        style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                                        <Text style={{ color: FourthColor, fontWeight: '600' }}>
-                                            Confirm Password
-                                        </Text>
-                                    </View>
-                                    <TextInputField
-                                        onPress={toggleShowPassword}
-                                        showPassword={showPassword}
-                                        value={values.confirmPassword}
-                                        onChangeText={handleChange('confirmPassword')}
-                                        onBlur={() => setFieldTouched('confirmPassword')}
-                                        type="password"
-                                        placeholderText="Enter here"
-                                    />
-                                </View>
-
+                            <View style={{ height: responsiveHeight(3.2) }}>
                                 {firstPasswordError.length > 0 ? (
-                                    <View style={{ height: responsiveHeight(3) }}>
-                                        <View
-                                            style={{
-                                                width: responsiveWidth(90),
-                                                marginLeft: 'auto',
-                                                paddingBottom: responsiveWidth(1),
-                                            }}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <View>
-                                                    <Svg
-                                                        width={20}
-                                                        height={20}
-                                                        viewBox="0 0 24 24"
-                                                        fill="red">
-                                                        <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                                    </Svg>
-                                                </View>
-                                                <View style={{ paddingHorizontal: moderateScale(5) }}>
-                                                    <Text
-                                                        style={{
-                                                            color: 'red',
-                                                            fontSize: responsiveFontSize(1.9),
-                                                            fontWeight: '600',
-                                                        }}>
-                                                        {firstPasswordError}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
+                                    <CustomErrorField
+                                        error={firstPasswordError}
+                                    />
                                 ) : (
                                     <ErrorMessageForm
-                                        errorsField={errors.confirmPassword}
+                                        errorsField={errors.password}
                                         isSubmitted={isSubmitted}
                                     />
                                 )}
+                            </View>
 
-                                {/* Next and Back------------ */}
+                            {/* <View */}
+                            {/* Confirm Password------------ */}
 
-                                <View style={{ paddingTop: responsiveWidth(42.5) }}>
-                                    <View
-                                        style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            disabled={validate(values) ? false : true}
-                                            onPress={() => {
-                                                setIsSubmitted(true);
-                                                handleSubmit();
-                                            }}
-                                            style={{
-                                                width: responsiveWidth(80),
-                                                backgroundColor: validate(values)
-                                                    ? TextColorGreen
-                                                    : 'rgba(57, 94, 102, 0.3)',
-                                                borderRadius: 10,
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                height: responsiveHeight(6.6),
-                                            }}>
-                                            {!isLoading ? (
-                                                <Text
-                                                    style={{
-                                                        fontSize: responsiveFontSize(1.9),
-                                                        fontWeight: '600',
-                                                        letterSpacing: 0.28,
-                                                        color: '#FFF',
-                                                    }}>
-                                                    Create
-                                                </Text>
-                                            ) : (
-                                                <ActivityIndicator color={'#FFF'} />
-                                            )}
-                                        </TouchableOpacity>
-                                    </View>
+                            <View>
+                                <CustomInput
+                                    label={"Confirm Password"}
+                                    value={values.password}
+                                    width={responsiveWidth(90)}
+                                    handleChange={handleChange('password')}
+                                    onPress={toggleShowPassword}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                    placeholder={"Enter here"}
+                                    onBlur={() => setFieldTouched('password')}
+                                    type="password"
+                                    typeStyle="alignStyling"
+                                />
+                            </View>
 
-                                    {/*  */}
-                                    <View style={{ marginVertical: 7 }}>
-                                        <TouchableButton
-                                            onPress={() => navigation.goBack()}
-                                            type={'backRegisterpassword'}
-                                            backgroundColor="#FFF"
-                                            borderWidth="1"
-                                            color="#395E66"
-                                            text="Back"
-                                        />
-                                    </View>
+                            {firstPasswordError.length > 0 ? (
+                                <CustomErrorField
+                                    error={firstPasswordError}
+                                />
+                            ) : (
+                                <ErrorMessageForm
+                                    errorsField={errors.confirmPassword}
+                                    isSubmitted={isSubmitted}
+                                />
+                            )}
+
+                            {/* Next and Back------------ */}
+
+                            <View style={{ paddingTop: responsiveWidth(42.5) }}>
+                                <View
+                                    style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <CustomButton
+                                        backgroundColor={validate(values) ? '#395E66'
+                                            : 'rgba(57, 94, 102, 0.4)'}
+                                        color={"#FFF"}
+                                        validate={validate}
+                                        isLoading={isLoading}
+                                        onPress={handleSubmit}
+                                        values={values}
+                                        text={"Next"}
+                                        type="registerpassword"
+                                    />
+                                </View>
+
+                                {/*  */}
+                                <View style={{ marginVertical: 7 }}>
+                                    <CustomButton
+                                        onPress={() => navigation.goBack()}
+                                        type={'backRegisterpassword'}
+                                        backgroundColor="#FFF"
+                                        borderWidth="1"
+                                        color="#395E66"
+                                        text="Back"
+                                    />
                                 </View>
                             </View>
+
 
                             {isVisible && (
                                 <UserErrors

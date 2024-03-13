@@ -20,7 +20,8 @@ const UserApp = () => {
             </Provider>
         </>
     )
-}
+};
+
 
 
 AppRegistry.registerComponent(appName, () => UserApp);

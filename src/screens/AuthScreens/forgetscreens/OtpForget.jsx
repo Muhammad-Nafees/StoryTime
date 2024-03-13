@@ -19,7 +19,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TouchableButton from '../../../components/TouchableButton';
+import CustomButton from '../../../components/CustomButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -263,7 +263,7 @@ const OtpForget = ({ route }) => {
           </View>
         </View>
 
-        <TouchableButton
+        <CustomButton
           onPress={otptext.length === 6 ? otp_forget_api : null}
           type="optForget"
           backgroundColor={

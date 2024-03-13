@@ -20,27 +20,28 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/BackButton';
-import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
-import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
+import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import NavigationsString from '../../../constants/NavigationsString';
-import { profile_oliverPierce } from '../../../../dummyData/DummyData';
 import ProfileOliverData from '../../../components/profile/ProfileOliverData';
 import RecordingOliverData from '../../../components/profile/RecordingOliverData';
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setEndUserProfile, setFriendId, setIsPublicOrPrivateMode, setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
 
-  const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON } = Img_Paths;
+  const { BG_CONTAINER, SETTINGS_ICON } = Img_Paths;
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
+  const { SETTING } = NavigationsString;
   const navigation = useNavigation();
-  const { FEED_CHAT, SETTING } = NavigationsString;
+
+  // states
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
   const [recordingPage, setRecordingPage] = useState(1);
@@ -52,22 +53,18 @@ const Profile = ({ route }) => {
   const [profile_response, setProfileResponse] = useState([]);
   const [responseUserProfile, setResponseUserProfile] = useState({});
   const [isUserProfileData, setIsUserProfileData] = useState(false);
-
   const [isUserLoading, setIsUserLoading] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
-
-  const randomNumberforUpdateProfile = useSelector((state) => state?.addPlayers?.randomForProfileUpdate);
-
-
-
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
   const [isNoDataProfile, setIsNoDataProfile] = useState("");
 
+  // Redux
+  const dispatch = useDispatch();
+  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+  const randomNumberforUpdateProfile = useSelector((state) => state?.addPlayers?.randomForProfileUpdate);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
+
+
 
 
   const getUsersProfile = async () => {
@@ -90,32 +87,12 @@ const Profile = ({ route }) => {
   };
 
 
-
-  useEffect(() => {
-    setRecordingPage(1);
-    setType("text");
-    getUsersProfile();
-  }, [FriendIdRTK,]);
-
-
-  const toggel_mode = async () => {
-    try {
-      const responseData = await toggle_publicandPrivateMode();
-      if (responseData) {
-        setIsPublicOrPrivate(responseData?.data?.isPublic);
-      };
-      console.log("toggleModeResponse=====", responseData?.data);
-      return responseData;
-    } catch (error) {
-    };
-  };
-
-
   const profile_story_api = async () => {
 
     if (hasMorePagesRecording) {
       setIsLoadingRecording(false);
-    } else {
+    }
+    else {
       setIsLoadingRecording(true);
     };
 
@@ -140,14 +117,7 @@ const Profile = ({ route }) => {
         setIsLoadingRecording(false);
         setIsUserProfileData(false);
         setResponse_ProfileVideo((prevData) => [...prevData, ...responsestories]);
-      }
-
-      // else if (responseData?.data === null) {
-      //   setIsUserProfileData(true);
-      //   setIsLoadingRecording(false);
-      //   console.log("DATA NULL ------------ :")
-      // }
-
+      };
       setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
 
       return responseData;
@@ -156,7 +126,25 @@ const Profile = ({ route }) => {
     };
   };
 
+  const toggel_mode = async () => {
+    try {
+      const responseData = await toggle_publicandPrivateMode();
+      if (responseData) {
+        setIsPublicOrPrivate(responseData?.data?.isPublic);
+      };
+      console.log("toggleModeResponse=====", responseData?.data);
+      return responseData;
+    } catch (error) {
+    };
+  };
 
+
+
+  useEffect(() => {
+    setRecordingPage(1);
+    setType("text");
+    getUsersProfile();
+  }, [FriendIdRTK]);
 
   useEffect(() => {
     setType("text");
@@ -240,6 +228,8 @@ const Profile = ({ route }) => {
                           setChangeMode(1)
                           setType("video");
                           toggel_mode();
+                          setProfileResponse([]);
+                          setResponse_ProfileVideo([]);
                         }
                         }
                         style={[

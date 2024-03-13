@@ -27,7 +27,6 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 import TextInputField from '../../../components/TextInputField';
-import TouchableButton from '../../../components/TouchableButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';

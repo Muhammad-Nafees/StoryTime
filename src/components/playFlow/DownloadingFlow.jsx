@@ -7,7 +7,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from "../../assets/Imagepaths/index";
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
+import CustomButton from '../CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { Defs, G, Path, Rect, Svg } from 'react-native-svg';
 import { useEffect, useState } from 'react';

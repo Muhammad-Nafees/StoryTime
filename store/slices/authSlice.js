@@ -9,10 +9,10 @@ const initialState = {
     refreshToken: null,
     forgetAccesstoken: null,
     randomNumber: "",
-    firstpageData: [],
-    secondpageData: [],
-    thirdpageData: [],
-    userLoginid: ""
+    registerData: [],
+    registerLocationData: [],
+    // secondpageData: [],
+    // thirdpageData: [],
 };
 
 const authSlice = createSlice({
@@ -45,26 +45,26 @@ const authSlice = createSlice({
             state.randomNumber = action.payload
         },
         register: (state, action) => {
-            // state.token = action.payload;
-            state.firstpageData = action.payload
-            console.log("register---data", state.firstpageData);
+            const { values, countryCode, phoneCode } = action.payload;
+            state.registerData = action.payload;
+            console.log("register---data", state.registerData);
         },
-        registeruser_city: (state, action) => {
-            state.secondpageData = action.payload;
-            console.log("registercity", state.secondpageData)
+        registerLocation: (state, action) => {
+            state.registerLocationData = action.payload
         },
-        registeruser_password: (state, action) => {
-            // state.token = action.payload;
-            state.thirdpageData = action.payload;
-            console.log("registerpassword", state.thirdpageData)
-        },
-        userLoginid: (state, { payload }) => {
-            state.userLoginid = payload
-        }
+
+        // registeruser_city: (state, action) => {
+        //     state.secondpageData = action.payload;
+        //     console.log("registercity", state.secondpageData)
+        // },
+        // registeruser_password: (state, action) => {
+        //     // state.token = action.payload;
+        //     state.thirdpageData = action.payload;
+        //     console.log("registerpassword", state.thirdpageData)
+        // },
 
     },
 });
-
 
 export const {
     setuserRole,
@@ -81,7 +81,8 @@ export const {
     register,
     registeruser_city,
     userLoginid,
-    registeruser_password
+    registeruser_password,
+    registerLocation
 } = authSlice.actions;
 
 export default authSlice.reducer;

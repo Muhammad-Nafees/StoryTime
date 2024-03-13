@@ -25,7 +25,7 @@ import {
     responsiveWidth,
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TouchableButton from '../../../components/TouchableButton';
+import CustomButton from '../../../components/CustomButton';
 import TextInputField from '../../../components/TextInputField';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
@@ -39,6 +39,7 @@ import NavigationsString from '../../../constants/NavigationsString';
 import * as Yup from 'yup';
 import ResetPasswordModal from '../../../components/forget-screens-modal/ResetpasswordModal';
 import ErrorMessageForm from '../../../components/ErrorMessagesForm';
+import CustomInput from '../../../components/auth/CustomInput';
 
 export const validationForgetConfirmPassword = Yup.object().shape({
     newPassword: Yup.string()
@@ -84,6 +85,39 @@ const ForgetConfirmPassword = () => {
         )
     };
 
+    const handleForgetConfirm = async (values) => {
+        const { newPassword, confirmPassword } = values;
+        setIsLoading(true);
+        try {
+            const response = await reset_password(
+                newPassword,
+                confirmPassword,
+                forgetuserToken,
+            );
+            if (response?.statusCode === 200) {
+                setVisible(true)
+                setIsLoading(false),
+                    Toast.show({
+                        type: 'success',
+                        text1: response?.message,
+                    });
+                setTimeout(() => {
+                    navigation.navigate(LOGIN);
+                }, 1000);
+
+            } else if (response?.stack) {
+                if (response?.message === "newPassword length must be at least 8 characters long") {
+                    setErrorMessage("newPassword length must be at least 8 characters long")
+                }
+                setIsLoading(false);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <Formik
             initialValues={{
@@ -92,38 +126,7 @@ const ForgetConfirmPassword = () => {
             }}
             validationSchema={validationForgetConfirmPassword}
             validateOnChange={false}
-            onSubmit={async values => {
-                const { newPassword, confirmPassword } = values;
-                setIsLoading(true);
-                try {
-                    const response = await reset_password(
-                        newPassword,
-                        confirmPassword,
-                        forgetuserToken,
-                    );
-                    if (response?.statusCode === 200) {
-                        setVisible(true)
-                        setIsLoading(false),
-                            Toast.show({
-                                type: 'success',
-                                text1: response?.message,
-                            });
-                        setTimeout(() => {
-                            navigation.navigate(LOGIN);
-                        }, 1000);
-
-                    } else if (response?.stack) {
-                        if (response?.message === "newPassword length must be at least 8 characters long") {
-                            setErrorMessage("newPassword length must be at least 8 characters long")
-                        }
-                        setIsLoading(false);
-                    }
-                } catch (err) {
-                    console.log(err);
-                } finally {
-                    setIsLoading(false);
-                }
-            }}>
+            onSubmit={handleForgetConfirm}>
 
             {({ values, errors, handleChange, handleSubmit, touched, setFieldTouched }) => (
 
@@ -138,17 +141,18 @@ const ForgetConfirmPassword = () => {
 
                         <View>
                             <View>
-                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                    <Text style={{ color: FourthColor, fontWeight: "600", fontSize: responsiveFontSize(1.9) }}>New Password</Text>
-                                </View>
-                                <TextInputField
-                                    onChangeText={handleChange('newPassword')}
+                                <CustomInput
+                                    handleChange={handleChange('newPassword')}
+                                    label={"New password"}
                                     onPress={toggleShowPassword}
                                     showPassword={showPassword}
                                     setShowPassword={setShowPassword}
                                     value={values.newPassword}
                                     type="password"
-                                    placeholderText="Enter here"
+                                    placeholder="Enter here"
+                                    width={responsiveWidth(90)}
+                                    onBlur={() => setFieldTouched('password')}
+                                    typeStyle="alignStyling"
                                     setFieldTouched={() => setFieldTouched("password")}
                                 />
                             </View>
@@ -164,15 +168,15 @@ const ForgetConfirmPassword = () => {
                             {/* Confirm Password------------ */}
 
                             <View>
-                                <View style={{ width: responsiveWidth(90), marginLeft: "auto" }}>
-                                    <Text style={{ color: FourthColor, fontWeight: "600" }}>Confirm Password</Text>
-                                </View>
-                                <TextInputField
-                                    onChangeText={handleChange('confirmPassword')}
+                                <CustomInput
+                                    handleChange={handleChange('confirmPassword')}
                                     onPress={toggleShowPasswordConfir}
                                     showPassword={showPasswordConfirm}
                                     type="password"
-                                    placeholderText="Enter here"
+                                    label={"Confirm Password"}
+                                    typeStyle="alignStyling"
+                                    width={responsiveWidth(90)}
+                                    placeholder="Enter here"
                                     value={values.confirmPassword}
                                 />
                             </View>
@@ -181,6 +185,7 @@ const ForgetConfirmPassword = () => {
                                 errorsField={errors.confirmPassword}
                                 isSubmitted={isSubmitted}
                             />
+
                             {/* Next and Back------------ */}
 
                             <View style={{ paddingTop: responsiveWidth(60) }}>

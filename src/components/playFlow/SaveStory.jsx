@@ -7,7 +7,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from "../../assets/Imagepaths/index";
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
+import CustomButton from '../CustomButton';
 import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -38,8 +38,8 @@ const SaveStory = ({ isVisible, setVisible }) => {
                         <BackButton onPress={() => setVisible(false)} />
                     </View>
                     <View style={styles.container}>
-                        <TouchableButton onPress={saveStoryhandler} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        <TouchableButton text="Save as Pdf" color={"#FFF"} />
+                        <CustomButton onPress={saveStoryhandler} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                        <CustomButton text="Save as Pdf" color={"#FFF"} />
                     </View>
 
                 </View>

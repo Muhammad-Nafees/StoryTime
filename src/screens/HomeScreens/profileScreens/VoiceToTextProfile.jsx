@@ -9,7 +9,7 @@ import BackButton from '../../../components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';
-import TouchableButton from '../../../components/TouchableButton';
+import CustomButton from '../../../components/CustomButton';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
 import { base, get_story_byId } from '../../../../services';
 import { fetch_users_stories, getStory_Byid, hide_Story } from '../../../../services/api/profile';
@@ -20,21 +20,21 @@ import { Switch } from 'react-native-switch';
 const VoiceToTextProfile = ({ route }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, BG_PLAYFLOW, FULL_BORDER_FRAME, HOME_FRAME, SHARE_BTN, PROFILE_BG_FRAME } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, SHARE_BTN } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height
-    const { FEED_CHAT, SECONDSCREENPLAYFLOW, THIRDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN } = NavigationsString;
+    const { FEED_CHAT } = NavigationsString;
     const navigation = useNavigation();
+    // states
     const [isMoreLength, setIsMoreLength] = useState(false);
     const [getresponseById, setGetresponseById] = useState([]);
-    const [isClicked, setIsClicked] = useState(true);
     const [isHidden, setIsHidden] = useState(false);
     const [isEnabled, setIsEnabled] = useState(null);
-    const [isEnabled2, setIsEnabled2] = useState(null);
-    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
+    //route params
     const storyId = route?.params?.storyuserId;
-    const storyuserid = route?.params;
     const IS_HIDDEN = route?.params?.isHidden;
+    // redux
+    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
     const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
@@ -70,18 +70,10 @@ const VoiceToTextProfile = ({ route }) => {
         console.log("response Hidden--- : ", response?.data);
     };
 
-
     useEffect(() => {
         setIsEnabled(IS_HIDDEN);
         getStory_Byid_api();
     }, []);
-
-    const animation = useSharedValue(0);
-    const animationStyle = useAnimatedStyle(() => {
-        return { transform: [{ translateX: animation.value }] }
-    });
-
-
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -111,7 +103,7 @@ const VoiceToTextProfile = ({ route }) => {
                                     <View>
                                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontFamily: Inter_Regular.Inter_Regular }}>Posted by:</Text>
                                     </View>
-                                    <View style={{ backgroundColor: "#395E66", paddingHorizontal: moderateScale(10), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
+                                    <View style={{ marginLeft: USER?._id !== FriendIdRTK ? moderateScale(10) : null, backgroundColor: "#395E66", paddingHorizontal: moderateScale(10), paddingVertical: moderateVerticalScale(4.5), borderRadius: 40, justifyContent: "center", alignItems: "center" }}>
                                         <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontWeight: "400" }}>{`@${getresponseById?.creator?.username}` || "loading.."}</Text>
                                     </View>
                                 </View>
@@ -154,6 +146,7 @@ const VoiceToTextProfile = ({ route }) => {
 
                         <View style={{ justifyContent: "center", alignItems: "center" }}>
                             <View style={{ width: responsiveWidth(90), }}>
+
                                 {/* <ImageBackground
                                     style={[styles.img_background_content,
                                     {
@@ -166,30 +159,31 @@ const VoiceToTextProfile = ({ route }) => {
                                 > */}
 
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <View style={[styles.bg_content, { height: SCREENHEIGHT / 3 }]}>
-                                        {/* <View > */}
-                                        <ScrollView style={[styles.child_bg,]} >
-                                            {/* <View style={styles.second_childbg}> */}
-                                            <View style={{ justifyContent: "center", alignItems: "center" }}>
-                                                <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(6), }}>
-                                                    <Image style={{ width: 40, height: 40, resizeMode: "center" }} source={{ uri: base + getresponseById?.subCategory?.image }} />
-                                                    <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{getresponseById?.subCategory?.name}</Text>
+                                    <View style={[styles.bg_content, { minHeight: !isMoreLength ? SCREENHEIGHT / 3 : "auto", }]}>
+                                        <View >
+                                            <View style={[styles.child_bg, { minHeight: !isMoreLength ? SCREENHEIGHT / 3.2 : "auto", }]}>
+                                                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                                    <View style={{ height: 45, width: responsiveWidth(50), borderRadius: 10, justifyContent: "space-around", flexDirection: "row", backgroundColor: "#56B6A4", alignItems: "center", paddingHorizontal: moderateVerticalScale(20), marginVertical: moderateVerticalScale(6), }}>
+                                                        <Image style={{ width: 40, height: 40, resizeMode: "center" }} source={{ uri: base + getresponseById?.subCategory?.image }} />
+                                                        <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2.2) }}>{getresponseById?.subCategory?.name}</Text>
+                                                    </View>
+                                                </View>
+
+                                                <View style={{ paddingTop: responsiveWidth(4), justifyContent: "center", alignItems: "center" }}>
+                                                    <ScrollView style={{ flexGrow: 0 }}>
+                                                        <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
+                                                            {
+                                                                !isMoreLength ?
+                                                                    getresponseById?.content?.slice(0, 220) :
+                                                                    getresponseById?.content
+                                                            }
+                                                            {/* "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo */}
+                                                        </Text>
+                                                    </ScrollView>
                                                 </View>
                                             </View>
 
-                                            <View style={{ paddingTop: responsiveWidth(4), justifyContent: "center", alignItems: "center" }}>
-                                                <Text style={{ fontSize: responsiveWidth(3.7), color: SecondaryColor, lineHeight: 16, textAlign: "center", paddingHorizontal: moderateScale(24) }}>
-                                                    {
-                                                        !isMoreLength ?
-                                                            getresponseById?.content?.slice(0, 220) :
-                                                            getresponseById?.content
-                                                    }
-                                                    {/* "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo */}
-                                                </Text>
-                                            </View>
-                                        </ScrollView>
-
-                                        {/* </View> */}
+                                        </View>
                                         {/* </View> */}
                                     </View>
                                 </View>
@@ -217,7 +211,8 @@ const VoiceToTextProfile = ({ route }) => {
                                 <CustomEmoji image={require("../../../assets/message-icon.png")} text={getresponseById?.commentsCount || 0} />
                                 <CustomEmoji image={SHARE_BTN} text="Share" />
                             </View>
-                            <TouchableButton
+
+                            <CustomButton
                                 onPress={() => {
                                     USER?._id === FriendIdRTK ?
                                         navigation.navigate("ProfileScreens", {
@@ -233,15 +228,11 @@ const VoiceToTextProfile = ({ route }) => {
                                 backgroundColor={TextColorGreen}
                                 color="#FFF"
                                 type={"tagFriends"}
-                                text="Tag Friends" />
+                                text="Tag Friends"
+                            />
+
                         </View>
 
-                        {/* {
-                            Array.from({ length: 1 }, (item, index) => {
-                                return (
-                                )
-                            })
-                        } */}
                     </View>
 
                 </ScrollView>
@@ -257,7 +248,6 @@ const VoiceToTextProfile = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: SecondaryColor,
-        flex: 1,
     },
     img: {
         resizeMode: "center"

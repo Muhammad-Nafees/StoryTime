@@ -9,16 +9,16 @@ import {
   Dimensions,
 } from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   responsiveHeight,
   responsiveWidth,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {PrimaryColor, TextColorGreen} from '../screens/Styles/Style';
+import { PrimaryColor, TextColorGreen } from '../screens/Styles/Style';
 import UserNames from './UserNames';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import TouchableButton from './TouchableButton';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import CustomButton from './CustomButton';
 
 const FirstScreen = ({
   image,
@@ -51,7 +51,7 @@ const FirstScreen = ({
           }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{width: responsiveWidth(10)}}>
+            style={{ width: responsiveWidth(10) }}>
             <Image
               style={{
                 width: responsiveWidth(5),
@@ -92,7 +92,7 @@ const FirstScreen = ({
         source={image}>
         <View
           activeOpacity={0.9}
-          style={[styles.bg_content, {backgroundColor: TextColorGreen}]}>
+          style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
           <View
             style={{
               borderRadius: 20,
@@ -106,7 +106,7 @@ const FirstScreen = ({
             <UserNames username="@Cedrick101" />
 
             <ScrollView>
-              <View style={{paddingHorizontal: moderateVerticalScale(35)}}>
+              <View style={{ paddingHorizontal: moderateVerticalScale(35) }}>
                 <Text
                   style={{
                     paddingTop: responsiveWidth(3),
@@ -177,7 +177,7 @@ const FirstScreen = ({
       </View>
 
       <View>
-        <TouchableButton
+        <CustomButton
           onPress={() => {
             onPressnext();
           }}
@@ -185,7 +185,7 @@ const FirstScreen = ({
           backgroundColor={TextColorGreen}
           color="#FFF"
         />
-        <TouchableButton text="Save Story" color={TextColorGreen} />
+        <CustomButton text="Save Story" color={TextColorGreen} />
       </View>
     </>
   );

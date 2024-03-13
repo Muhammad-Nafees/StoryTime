@@ -33,7 +33,6 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordingVideo } from '../../../store/slices/RecordingData';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -303,12 +302,8 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
                             </View>
 
                             <SaveStoryBtn
-                                isDisabled={isLoadingDirectory}
                                 timeLeft={0}
-                                onPress={() => {
-                                    setIsVisiblePdf(false);
-                                    setDontSaveToPdf(true);
-                                }}
+                                onPress={() => setIsVisiblePdf(false)}
                                 text="No"
                             />
 

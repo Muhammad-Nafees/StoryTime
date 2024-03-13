@@ -7,7 +7,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
-const TouchableButton = ({
+const CustomButton = ({
   text,
   onPress,
   backgroundColor,
@@ -41,7 +41,9 @@ const TouchableButton = ({
                           type === "tagFriends" ? false :
                             type === "tag" ? false :
                               type == "savestoryphone" ? false :
-                                true
+                                type == "registerFirst" && !validate(values) ? true :
+                                  type == "registerpassword" && !validate(values) ? true :
+                                    false
         }
         onPress={onPress}
         style={{
@@ -53,7 +55,6 @@ const TouchableButton = ({
             selectedIndices?.length === sequenceUser?.length
               ? backgroundColor
               : 'rgba(57, 94, 102, 0.3)',
-          // backgroundColor:  "red" : "green",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,
           borderColor: borderWidth == '1' ? '#395E66' : null,
@@ -79,4 +80,4 @@ const TouchableButton = ({
   );
 };
 
-export default TouchableButton;
+export default CustomButton;

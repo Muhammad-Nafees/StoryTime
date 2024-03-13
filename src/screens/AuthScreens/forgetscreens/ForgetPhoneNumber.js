@@ -11,12 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {
-  FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  TextinputColor,
-  ThirdColor,
 } from '../../Styles/Style';
 import {
   responsiveFontSize,
@@ -24,21 +19,17 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
-import TouchableButton from '../../../components/TouchableButton';
-import PhoneNumber from '../../../components/auth/PhoneNumber';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
-import { Path, Svg } from 'react-native-svg';
 import { Formik } from 'formik';
-import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
 import ForgetCustomInput from '../../../components/ForgetCustomInput';
+
+
 
 const ForgetPhoneNumber = () => {
   const navigation = useNavigation();
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const [formatText, setFormatText] = useState('');
@@ -47,11 +38,6 @@ const ForgetPhoneNumber = () => {
   const [phoneError, setPhoneError] = useState('');
   const { ANOTHER_FORGET_BG_IMG } = Img_Paths;
   const phoneInput = useRef();
-
-  const toggleCountryPicker = () => {
-    setCountryPickerVisible(!countryPickerVisible);
-  };
-
 
 
   return (

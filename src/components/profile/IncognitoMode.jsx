@@ -99,6 +99,8 @@ const IncognitoMode = ({ setChangeMode,
                         <TouchableOpacity onPress={() => {
                             setChangeMode(0);
                             toggel_mode();
+                            SetIncognito_response([]);
+                            setResponseIncognitoVideo([]);
                         }} style={styles.back_button}>
                             <Image style={styles.left_arrow} source={require("../../assets/incognito-icon.png")} />
                         </TouchableOpacity>

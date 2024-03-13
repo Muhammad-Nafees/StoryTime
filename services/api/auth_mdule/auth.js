@@ -99,15 +99,15 @@ export const refresh_token_api = async (refreshToken) => {
 };
 
 
-export const registerapi = async (firstpageData, secondpageData, values) => {
-  const countryCode = firstpageData?.countryCode;
-  const phonecodee = firstpageData?.phoneCode;
+export const registerapi = async (registerData, registerLocationData, values) => {
+  const countryCode = registerData?.countryCode;
+  const phonecodee = registerData?.phoneCode;
   console.log("inside----------pa", countryCode, phonecodee)
   console.log(countryCode, phonecodee)
   const { email, fcmToken, firstName, lastName, phoneNo, role, username } =
-    firstpageData?.values;
+    registerData?.values;
   const phoneCode = `+${phonecodee}`;
-  const { city, state, zipCode } = secondpageData;
+  const { city, state, zipCode } = registerLocationData;
   const { confirmPassword, password } = values;
 
   try {
