@@ -94,6 +94,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         />
         {!loading ? (
           <TouchableOpacity
+            style={{opacity:sendDisabled?0.3:1}}
             onPress={sendDisabled ? null : handleSendMessage}
             disabled={sendDisabled}>
             <Image source={MESSAGE_SEND} />

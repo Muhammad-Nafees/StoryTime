@@ -3,7 +3,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
@@ -16,8 +17,9 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import SvgIcons from './svgIcon/svgIcons';
+import {Img_Paths} from '../assets/Imagepaths/index';
 import { moderateVerticalScale } from 'react-native-size-matters';
-
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Constant';
 
 const SuccessModal = ({
   isVisible,
@@ -28,6 +30,7 @@ const SuccessModal = ({
   iconName,
   loading
 }) => {
+  const {BG_Del} = Img_Paths;
 
   const close = () => {
     if (onPress) {
@@ -37,19 +40,17 @@ const SuccessModal = ({
      setVisible(false);
     }
   };
-
-
   return (
     <Modal
       style={{ flex: 1 }}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      backdropColor='#979797'
+      backdropColor='transparent'
       onModalHide={close}
       backdropOpacity={0.98}
       onBackdropPress={close}>
-        
+    <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
       <View
         style={{
           width: responsiveWidth(80),
@@ -119,6 +120,7 @@ const SuccessModal = ({
           </View>
         }
       </View>
+      </ImageBackground>
     </Modal>
   );
 };

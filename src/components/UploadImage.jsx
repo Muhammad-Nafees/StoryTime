@@ -7,6 +7,13 @@ import {
   White
 } from '../screens/Styles/Style';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import { BlurView } from '@react-native-community/blur';
+import {
+  responsiveWidth,
+  responsiveHeight,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import { Poppins_Regular } from '../constants/GlobalFonts';
 
 const UploadImage = ({ uploadImageRef, setImage }) => {
 
@@ -38,28 +45,28 @@ const UploadImage = ({ uploadImageRef, setImage }) => {
       ref={uploadImageRef}
       closeOnDragDown={true}
       closeOnPressMask={true}
-      height={267}
+      height={250}
       customStyles={{
         wrapper: {
-          backgroundColor: "rgba(122,122,122,0.98)", //above bottom bar
+          backgroundColor: "rgba(64, 64, 64, 0.97)", //above bottom bar
         },
         container: {
           backgroundColor: White,
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-          paddingHorizontal: 10,
+          borderTopRightRadius: 30,
+          borderTopLeftRadius: 30,
+          paddingHorizontal: responsiveWidth(5),
           paddingVertical: 15
         },
         draggableIcon: {
           backgroundColor: Black02,
         },
       }}>
-
-      <TouchableOpacity onPress={openImagePicker} style={{ flexDirection: 'row', alignItems: 'center' }}>
+    
+      <TouchableOpacity onPress={openImagePicker} style={{ flexDirection: 'row', alignItems: 'center',marginTop:responsiveHeight(2) }}>
         <View style={styles.svgIcon}>
-          <SvgIcons name={'UploadImage'} width={24} height={24} />
+          <SvgIcons name={'UploadImage'} width={responsiveWidth(8)} height={responsiveHeight(5)} />
         </View>
-        <Text style={{ color: "#101010", fontWeight: '500', fontSize: 14, marginLeft: 10 }}>Upload picture</Text>
+        <Text style={{ color: "#101010", fontWeight: '600', fontSize:responsiveFontSize(2), marginLeft: 10,fontFamily:Poppins_Regular.Poppins_regular }}>Upload picture</Text>
       </TouchableOpacity>
     </RBSheet>
   )
@@ -71,5 +78,16 @@ const styles = StyleSheet.create({
   svgIcon: {
     marginTop: 'auto',
     marginBottom: 'auto',
+  },
+  blur_view: {
+    width:responsiveWidth(100),
+    height:responsiveHeight(100),
+    alignContent:'center',
+    justifyContent:'center',
+    alignSelf:'center',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent',
+ 
   },
 });

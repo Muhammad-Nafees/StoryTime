@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator, ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import { TextColorGreen, pastelGreen } from '../../screens/Styles/Style';
 import {
@@ -13,6 +13,8 @@ import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { rearrangedFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
+import { Img_Paths } from '../../assets/Imagepaths/index';
 
 const StoryTimeSaved = ({
   isVisible,
@@ -26,6 +28,7 @@ const StoryTimeSaved = ({
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
+  const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
 
   const close = () => {
     if (onPress) {
@@ -50,6 +53,7 @@ const StoryTimeSaved = ({
       onModalHide={close}
       backdropOpacity={0.95}
       onBackdropPress={close}>
+        <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={SAVE_STORY_BACKGROUND}>
       <View
         style={{
           width: responsiveWidth(80),
@@ -137,6 +141,7 @@ const StoryTimeSaved = ({
           </View>
         )}
       </View>
+      </ImageBackground>
     </Modal>
   );
 };

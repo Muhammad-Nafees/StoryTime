@@ -9,12 +9,15 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { View, StyleSheet,TouchableOpacity, Keyboard } from 'react-native'
 import {responsiveFontSize, responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
 import { useLogout } from '../../../hooks/useLogout';
+import {BlurView} from '@react-native-community/blur';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constant';
 
 
 const DeleteAccount = () => {
     const navigation = useNavigation();
     const {handleLogout} = useLogout()
     const ConfirmationModalRef = useRef(null);
+    const [blurr, setBlurr] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -34,7 +37,9 @@ const DeleteAccount = () => {
             ConfirmationModalRef.current.open();
         }
      };
-    
+    const isBlurred = () =>{
+      return  !!successModalVisible
+    }
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow',
@@ -58,8 +63,7 @@ const DeleteAccount = () => {
   return (
     <BackgroundWrapper disableScrollView coverScreen>
     <ScreenHeader title={'Delete Account'} />
-  
-    <View style={{flex:1, justifyContent:'center',alignItems:'center',paddingHorizontal:responsiveWidth(6),display:isKeyboardVisible ? 'none' : 'flex',}}>
+    <View style={{flex:1, justifyContent:'center',alignItems:'center',paddingHorizontal:responsiveWidth(6)}}>
     <Typography style={styles.heading_txt}>Delete your account?</Typography>
     <Typography style={styles.txt}>Delete your account will remove all of your account's data, contacts and other information. Are you sure you want to proceed?</Typography>
     <TouchableOpacity 
@@ -74,6 +78,10 @@ const DeleteAccount = () => {
     <Typography style={styles.txt}>Cancel</Typography>
     </TouchableOpacity>
     </View>
+    {
+   isBlurred() &&
+    <BlurView style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,position:'absolute'}}></BlurView>
+    }
     <ConfirmationModal ref={ConfirmationModalRef} handleSuccessCallback={()=>setSuccessModalVisible(true)}/>
     <SuccessModal text={"Account Deleted"} textButton={'Return'} isVisible={successModalVisible} setVisible={setSuccessModalVisible} iconName={"Success"} onPress={handleDeleteUser} loading={isLoading}/>
     </BackgroundWrapper>
