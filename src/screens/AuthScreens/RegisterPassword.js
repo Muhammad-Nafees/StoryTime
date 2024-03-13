@@ -88,8 +88,6 @@ const RegisterPassword = ({ route }) => {
             const responseData = await registerapi(
                 registerData,
                 registerLocationData,
-                // firstuserData,
-                // seconduserData,
                 values,
             );
             const statusCode = responseData?.statusCode;
