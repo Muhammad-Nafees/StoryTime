@@ -52,4 +52,5 @@ export default NavigationString = {
   PAYEMENT: 'PayementSetting',
   ADD_PAYMENT_CARD: 'AddCard',
   ADD_PAYMENT_CARD_DETAIL: 'AddPaymentCardDetail',
+  EDIT_ADD_PAYMENT_CARD_DETAIL: 'EditAddPaymentCardDetail',
 };
