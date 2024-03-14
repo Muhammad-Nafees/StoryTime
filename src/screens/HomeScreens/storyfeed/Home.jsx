@@ -91,7 +91,6 @@ const Home = () => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    addFriends_api_handler();
     setPage(1);
     setResponseUsers([]);
     setTimeout(() => {
