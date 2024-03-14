@@ -60,20 +60,24 @@ const ChatBottom = ({setReload, reload, chatID}) => {
     }
   };
   const handleSendMessage = async () => {
-    const image = profileImage?.uri && {profileImage: profileImage?.uri};
-    const payload = {
-      text: input,
-      media: image,
-      chat: chatID,
-    };
-    setLoading(true);
-    const response = await sendMessage(payload);
-    const data = response.data;
-    if (response?.statusCode === 200) {
-      setReload(!reload);
-      setInput('');
-      setLoading(false);
-      setProfileImage(null);
+    try {
+      const image = profileImage?.uri && {profileImage: profileImage?.uri};
+      const payload = {
+        text: input,
+        media: image,
+        chat: chatID,
+      };
+      setLoading(true);
+      const response = await sendMessage(payload);
+      const data = response.data;
+      if (response?.statusCode === 200) {
+        setReload(!reload);
+        setInput('');
+        setLoading(false);
+        setProfileImage(null);
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleSendMessage ~ error:', error);
     }
   };
   return (
@@ -85,13 +89,23 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         <TouchableOpacity onPress={handleCameraPress}>
           <Image source={CAMERA__ICON} />
         </TouchableOpacity>
-        <TextInput
-          placeholder="Send Message"
-          placeholderTextColor="#AAAAAA"
-          style={styles.inputfield}
-          onChangeText={e => setInput(e)}
-          value={input}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {profileImage && (
+            <Image
+              source={{uri: profileImage.uri}}
+              style={styles.selectedImage}
+            />
+          )}
+          <TextInput
+            placeholder="Send Message"
+            placeholderTextColor="#AAAAAA"
+            style={[styles.inputfield, profileImage && {paddingLeft: 30}]}
+            onChangeText={e => setInput(e)}
+            value={input}
+            // multiline
+            // numberOfLines={4}
+          />
+        </View>
         {!loading ? (
           <TouchableOpacity
             onPress={sendDisabled ? null : handleSendMessage}
@@ -134,5 +148,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 17,
     paddingVertical: 7,
     marginHorizontal: 5,
+  },
+  selectedImage: {
+    width: 15,
+    height: 15,
+    borderRadius: 2,
+    position: 'absolute',
+    left: 15,
   },
 });
