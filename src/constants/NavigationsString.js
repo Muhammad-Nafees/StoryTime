@@ -9,7 +9,6 @@ export default NavigationString = {
   FORGET_PHONE_NO: 'ForgetPhoneNumber',
   OTP_FORGET: 'OtpForget',
   FORGET_CONFIRM_PASSWORD: 'ForgetConfirmPassword',
-  FRAME_CONTENT: 'FrameContent',
   HOME: 'Home',
   CATEGORIES: 'Categories',
   PROFILE: 'Profile',

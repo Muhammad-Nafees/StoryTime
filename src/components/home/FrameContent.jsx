@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback } from 'react';
+import React, {useEffect, useState, memo, useCallback} from 'react';
 import {
   Image,
   ImageBackground,
@@ -18,53 +18,56 @@ import {
   SecondaryColor,
   TextColorGreen,
   pinkColor,
-} from '../screens/Styles/Style';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../assets/Imagepaths';
-import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../constants/NavigationsString';
-import { useDispatch, useSelector } from 'react-redux';
+} from '../../screens/Styles/Style';
+import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import {Img_Paths} from '../../assets/Imagepaths';
+import {useNavigation} from '@react-navigation/native';
+import NavigationsString from '../../constants/NavigationsString';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   likedstoryfeed,
   disLikedCountingRTK,
   likedCountingRTK,
   storyFeedContent,
   storyFeedUsername,
-} from '../../store/slices/storyfeedslices/likedStorySlice';
+} from '../../../store/slices/storyfeedslices/likedStorySlice';
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { PassionOne_Regular } from '../constants/GlobalFonts';
-import { storyLikedFeed, storydisLikedFeed } from '../../services/api/storyfeed';
+import {PassionOne_Regular} from '../../constants/GlobalFonts';
+import {
+  storyLikedFeed,
+  storydisLikedFeed,
+} from '../../../services/api/storyfeed';
 import LinearGradient from 'react-native-linear-gradient';
-import BlockUserStory from './blockuser/BlockUserModal';
-import { debounce } from 'lodash'; // Import debounce function from lodash
+import BlockUserStory from '../blockuser/BlockUserModal';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {debounce} from 'lodash'; // Import debounce function from lodash
 
-const FrameContent = ({
-  type,
-  profileImage,
-  content,
-  commentsCount,
-  likedUserId,
-  subCategoryname,
-  subCategoryimage,
-  username,
-  likedByMe,
-  likedapiId,
-  dislikesByMe,
-  likesCountuser,
-  dislikesCount,
-  userId,
-  linkTo
-}) => {
+const FrameContent = ({item}) => {
+  //destructures
+  const {
+    type,
+    content,
+    commentsCount,
+    likedUserId,
+    subCategoryname,
+    subCategoryimage,
+    username,
+    likedByMe,
+    dislikesByMe,
+    likesCountuser,
+    dislikesCount,
+  } = item || {};
+
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
   const navigation = useNavigation();
-  const { HOME_FRAME, SHARE_BTN } = Img_Paths;
-  const { FEED_CHAT, REPORT_USER } = NavigationsString;
+  const {HOME_FRAME, SHARE_BTN} = Img_Paths;
+  const {FEED_CHAT, REPORT_USER} = NavigationsString;
   const [isLiked, setIsLiked] = useState(likedByMe);
   const [isDisLike, setIsDisliked] = useState(dislikesByMe);
   const [likesCounting, setLikesCounting] = useState(likesCountuser);
@@ -73,12 +76,25 @@ const FrameContent = ({
   const [likeCountUpdated, setLikeCountUpdated] = useState(false);
   const [disLikeCountUpdated, setDisLikeCountUpdated] = useState(false);
 
+  //const
+  const profileImage = require('../../assets/avatar-inn.png');
+
   const dispatch = useDispatch();
+
+  //functions
+  const linkTo = async url => {
+    try {
+      if (!(await InAppBrowser.isAvailable())) {
+        Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const storyLikedHandled = useCallback(async () => {
     try {
       if (!likeCountUpdated) {
-
         setLikeCountUpdated(true);
 
         const responseData = await storyLikedFeed(likedUserId);
@@ -123,8 +139,6 @@ const FrameContent = ({
     }
   }, [dislikesCounting, disLikeCountUpdated]);
 
-
-
   const commentsHandled = useCallback(() => {
     dispatch(likedstoryfeed(likedUserId));
     dispatch(likedCountingRTK(likesCounting));
@@ -136,7 +150,7 @@ const FrameContent = ({
 
   return (
     <View style={styles.container}>
-      <View style={{ width: responsiveWidth(90) }}>
+      <View style={{width: responsiveWidth(90)}}>
         <ImageBackground
           style={[
             styles.img_backgroung_content,
@@ -159,8 +173,8 @@ const FrameContent = ({
               <>
                 <LinearGradient
                   colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-                  start={{ x: 1, y: 1 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{x: 1, y: 1}}
+                  end={{x: 1, y: 0}}
                   locations={[0.8, 1]}
                   style={[styles.child_bg]}>
                   <View style={styles.second_childbg}>
@@ -200,8 +214,8 @@ const FrameContent = ({
               <>
                 <LinearGradient
                   colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-                  start={{ x: 1, y: 1 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{x: 1, y: 1}}
+                  end={{x: 1, y: 0}}
                   locations={[0.8, 1]}
                   style={styles.child_bg}>
                   <View style={styles.second_childbg}>
@@ -223,7 +237,7 @@ const FrameContent = ({
                   </View>
 
                   <View
-                    style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    style={{justifyContent: 'center', alignItems: 'center'}}>
                     <View
                       style={{
                         width: responsiveWidth(46),
@@ -237,7 +251,7 @@ const FrameContent = ({
                         marginVertical: moderateVerticalScale(10),
                       }}>
                       <Image
-                        style={{ width: 30, height: 30, resizeMode: 'contain' }}
+                        style={{width: 30, height: 30, resizeMode: 'contain'}}
                         source={{
                           uri:
                             'http://storytime.yameenyousuf.com/' +
@@ -255,15 +269,16 @@ const FrameContent = ({
                       </Text>
                     </View>
 
-                    <TouchableOpacity onPress={() => linkTo(content)}
+                    <TouchableOpacity
+                      onPress={() => linkTo(content)}
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingTop: responsiveWidth(4),
                       }}>
                       <Image
-                        style={{ width: 30, height: 30, resizeMode: 'center' }}
-                        source={require('../assets/profileurl_icon.png')}
+                        style={{width: 30, height: 30, resizeMode: 'center'}}
+                        source={require('../../assets/profileurl_icon.png')}
                       />
                       <Text
                         style={{
@@ -308,7 +323,7 @@ const FrameContent = ({
                           height: responsiveHeight(4.5),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/456-img.png')}
+                        source={require('../../assets/456-img.png')}
                       />
                       <Text
                         style={{
@@ -328,7 +343,7 @@ const FrameContent = ({
                           height: responsiveHeight(4.5),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/1.5k-img.png')}
+                        source={require('../../assets/1.5k-img.png')}
                       />
                       <Text
                         style={{
@@ -348,7 +363,7 @@ const FrameContent = ({
                           height: responsiveHeight(4.5),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/message-icon.png')}
+                        source={require('../../assets/message-icon.png')}
                       />
                       <Text
                         style={{
@@ -385,7 +400,7 @@ const FrameContent = ({
                       justifyContent: 'flex-end',
                       alignItems: 'flex-end',
                     }}>
-                    <TouchableOpacity style={{ width: responsiveWidth(6) }}>
+                    <TouchableOpacity style={{width: responsiveWidth(6)}}>
                       <Menu>
                         <MenuTrigger>
                           <Image
@@ -394,7 +409,7 @@ const FrameContent = ({
                               height: responsiveHeight(3.5),
                               resizeMode: 'center',
                             }}
-                            source={require('../assets/three-dots-mod.png')}
+                            source={require('../../assets/three-dots-mod.png')}
                           />
                         </MenuTrigger>
 
