@@ -18,7 +18,7 @@ import {Inter_SemiBold} from '../../../constants/GlobalFonts';
 const SupportMessageList = ({navigation, route}) => {
   const [messageList, setMessageList] = React.useState([]);
   const [reload, setReload] = React.useState(false);
-  const {chatID} = route.params;
+  const {chatID,img} = route.params;
   console.log('🚀 ~ SupportMessageList ~ chatID:', chatID);
   const {LEFT_ARROW_IMG} = Img_Paths;
 
@@ -48,7 +48,7 @@ const SupportMessageList = ({navigation, route}) => {
           <Typography style={styles.categories_text}>Support</Typography>
         </View>
       </View>
-      <MessageListItems messageList={messageList} chatID={chatID} />
+      <MessageListItems messageList={messageList} chatID={chatID} img={img}/>
       <ChatBottom setReload={setReload} reload={reload} chatID={chatID} />
     </BackgroundWrapper>
   );

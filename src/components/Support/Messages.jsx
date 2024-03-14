@@ -4,6 +4,7 @@ import Typography from '../Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { URL } from '../../constants/Constant';
 
 const Message = ({item}) => {
   const {MESSAGE_ICON} = Img_Paths;
@@ -31,6 +32,17 @@ const Message = ({item}) => {
                 <Typography style={styles.message}>
                   {item?.lastMessage?.text}
                 </Typography>
+                <View style={{}}>
+          <Image 
+          resizeMode='contain'
+            source={{uri:URL+item.lastMessage.media[0]}}
+            style={{            
+            width:40,
+            height: 40,
+            borderRadius: 2,
+            marginLeft:responsiveWidth(5)
+          }}></Image>
+          </View>
               </View>
             </View>
           </View>

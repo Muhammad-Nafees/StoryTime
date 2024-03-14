@@ -33,6 +33,7 @@ const SupportMessage = ({navigation}) => {
     if (response?.statusCode === 200) {
       navigation.navigate('SupportMessageList', {
         chatID: data.chat,
+        img: data.media
       });
       setInput('');
       setLoading(false);

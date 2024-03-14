@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {TextInput} from 'react-native-gesture-handler';
+import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import Typography from '../Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import { responsiveHeight, responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
 const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
   const {CAMERA_ICON} = Img_Paths;
@@ -27,6 +28,10 @@ const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
     }
   };
   return (
+    <ScrollView contentContainerStyle={{
+      paddingBottom:responsiveHeight(20)
+    }
+    }>
     <View style={styles.container}>
       <Typography style={styles.label}>Your Message</Typography>
       <TextInput
@@ -41,16 +46,23 @@ const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
         style={styles.camera_container}
         onPress={handleGalleryPress}>
         <Image
+        resizeMode='contain'
           style={profileImage && styles.image}
           source={profileImage ? {uri: profileImage.uri} : CAMERA_ICON}
           height={50}
           width={50}
         />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.camera_container}
+        onPress={()=>profileImage?setProfileImage(null):handleGalleryPress()}>
         <Typography style={styles.camera_text}>
-          {profileImage ? 'Change Image' : 'Attach Image or Proof'}
+          {profileImage ? 'Cancel Image' : 'Attach Image or Proof'}
         </Typography>
       </TouchableOpacity>
+    
     </View>
+    </ScrollView>
   );
 };
 

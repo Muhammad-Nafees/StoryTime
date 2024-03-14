@@ -2,9 +2,12 @@ import {Image, StyleSheet, View} from 'react-native';
 import Typography from '../Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import React from 'react';
+import { URL } from '../../constants/Constant';
+import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
 const Chat = ({item}) => {
   const {STORY_ICON} = Img_Paths;
+  console.log("media",URL+item.media[0])
   const timestamp = new Date(item.updatedAt);
   const time = timestamp.toLocaleTimeString([], {
     hour: '2-digit',
@@ -24,8 +27,19 @@ const Chat = ({item}) => {
               <Typography style={styles.message_id}>{item.id}</Typography>
             </View>
           </View>
-          <View>
+          <View style={{}}>
             <Typography style={styles.message_text}>{item.text}</Typography>
+          </View>
+          <View style={{}}>
+          <Image 
+          resizeMode='contain'
+            source={{uri:URL+item.media[0]}}
+            style={{            
+            width:30,
+            height: 30,
+            borderRadius: 2,
+            marginLeft:responsiveScreenWidth(5)
+          }}></Image>
           </View>
         </View>
       </View>
