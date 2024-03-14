@@ -52,6 +52,13 @@ import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
 import { useSelector } from 'react-redux';
 
+import Support from '../screens/HomeScreens/Setting/Support';
+import SupportMessage from '../screens/HomeScreens/Setting/SupportMessage';
+import SupportMessageList from '../screens/HomeScreens/Setting/SupportMessageList';
+import Report from '../screens/HomeScreens/Setting/Report';
+import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
+import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
+import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -69,6 +76,13 @@ const Navigations = () => {
     BLOCK_USER,
     DELETE_ACCOUNT,
     LOGIN,
+    SUPPORT,
+    SUPPORT_MESSAGE,
+    SUPPORT_MESSAGE_LIST,
+    REPORT,
+    PAYEMENT,
+    ADD_PAYMENT_CARD,
+    ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -100,6 +114,19 @@ const Navigations = () => {
         name={LOGIN}
         component={Login}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen name={SUPPORT} component={Support} />
+      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
+      <Stack.Screen name={REPORT} component={Report} />
+      <Stack.Screen
+        name={SUPPORT_MESSAGE_LIST}
+        component={SupportMessageList}
+      />
+      <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
+      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} />
+      <Stack.Screen
+        name={ADD_PAYMENT_CARD_DETAIL}
+        component={AddPaymentCardDetail}
       />
       <Stack.Screen
         name="GuestStack"

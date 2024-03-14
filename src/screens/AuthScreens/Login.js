@@ -51,6 +51,8 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+
+
   const handleLoginSubmit = async (values) => {
     setIsSubmitted(false);
     setIsLoading(true);
@@ -60,9 +62,7 @@ const Login = () => {
       console.log(responseData, 'RESPONSE FROM LOGIN!');
       dispatch(login(responseData));
       await AsyncStorage.setItem('userData', responseData);
-
       setIsLoading(false);
-
       const accessToken = responseData?.data?.accessToken;
       const refreshToken = responseData?.data?.refreshToken;
       // const username = responseData?.data?.user?.username;

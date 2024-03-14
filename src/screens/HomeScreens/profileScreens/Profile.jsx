@@ -38,10 +38,8 @@ const Profile = ({ route }) => {
   const { BG_CONTAINER, SETTINGS_ICON } = Img_Paths;
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
-  const { SETTING } = NavigationsString;
   const navigation = useNavigation();
-
-  // states
+  const { FEED_CHAT, SETTING } = NavigationsString;
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
   const [recordingPage, setRecordingPage] = useState(1);
@@ -87,6 +85,7 @@ const Profile = ({ route }) => {
   };
 
 
+
   const profile_story_api = async () => {
 
     if (hasMorePagesRecording) {
@@ -126,6 +125,8 @@ const Profile = ({ route }) => {
     };
   };
 
+
+
   const toggel_mode = async () => {
     try {
       const responseData = await toggle_publicandPrivateMode();
@@ -145,6 +146,8 @@ const Profile = ({ route }) => {
     setType("text");
     getUsersProfile();
   }, [FriendIdRTK]);
+
+
 
   useEffect(() => {
     setType("text");
@@ -276,7 +279,6 @@ const Profile = ({ route }) => {
                 width: responsiveWidth(91),
                 justifyContent: 'space-around',
               }}>
-
               <TouchableOpacity
                 onPress={() => {
                   setIsContent(0)
@@ -302,7 +304,6 @@ const Profile = ({ route }) => {
                   source={require('../../../assets/recordingProfile.png')}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity
                 onPress={() => {
                   setIsContent(1);
@@ -363,7 +364,7 @@ const Profile = ({ route }) => {
         />
       )}
     </>
-  );
+  )
 };
 
 

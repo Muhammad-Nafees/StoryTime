@@ -27,6 +27,8 @@ import { validationSignUp } from '../../../validation/validation';
 import CustomPhoneInput from '../../components/auth/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
 import { username_api } from '../../../services/api/auth_mdule/auth';
+import { Base_Url, username_endpoint } from '../../../services';
+import axios from 'axios';
 
 
 const Register = () => {
@@ -61,34 +63,37 @@ const Register = () => {
   };
 
 
+
   const handleSubmitRegister = async (values) => {
-    // console.log("values", values)
+    // console.log("values", values);
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
     setIsLoading(true);
     try {
-      dispatch(userinfoState(countryCode));
-
       const responseData = await username_api({ username: values?.username })
+      // const responseData = await axios.post(Base_Url + username_endpoint, { username: values?.username });
+      dispatch(userinfoState(countryCode));
+      // const responseData = await axios.post(Base_Url + username_endpoint, values?.username);
+      console.log("responseDat -- :", responseData);
       setIsLoading(false);
       setStatusCodeusername(responseData.statusCode);
-
-      if (responseData?.statusCode !== 200) {
-        setVisible(true);
-      }
-      if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
+      console.log("check---- ");
+      if (!checkValid) {
         return;
-      }
-
-      dispatch(register({ values: values, countryCode: countryCode, phoneCode: phoneCode }));
-
+      };
       navigation.navigate(REGISTER_USER_INFO);
-
+      dispatch(register({ values: values, countryCode: countryCode, phoneCode: phoneCode }));
       return responseData;
     } catch (error) {
+      if (error?.response?.data?.message === "username already exists") {
+        setVisible(true);
+      }
+      console.log(error?.response, "ERROR FROM REGISTER :")
     }
     setIsLoading(true);
     setIsLoading(false);
   };
+
+
 
   return (
     <Formik
@@ -192,7 +197,7 @@ const Register = () => {
                   customError={emailError}
                   touched={touched.email}
                   initialTouched={true}
-                  setFieldError={setEmailError}
+                  setFieldError={setFieldError}
                   setEmailstatusCode={setEmailstatusCode}
                   setFieldTouched={() => setFieldTouched("email")}
                   fieldName="email"

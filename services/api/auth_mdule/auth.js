@@ -13,6 +13,7 @@ import {
   delete_account_endpoint
 } from '../..';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const reset_email = async (values) => {
   console.log('values---', values);
@@ -185,22 +186,28 @@ export const userandcity_api = async statesinfo => {
   }
 };
 
-export const username_api = async (data) => {
-  console.log("=========data", data)
-  const requestBody = {};
+export const username_api = async ({ username, completePhone, email }) => {
 
-  const response = await fetch(Base_Url + username_endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  const data = {
+    username,
+    completePhone,
+    email
+  }
 
-  const responseData = await response.json();
-  console.log('usernameapi---', responseData);
-  return responseData;
+  console.log("username---- :", username)
+  const response = await axios.post(Base_Url + username_endpoint, data)
+  console.log('usernameapi---', response?.data);
+  return response;
+
+  // const response = await fetch(Base_Url + username_endpoint, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(data),
+  // });
 };
+
 
 export const logout_user = async () => {
   try {

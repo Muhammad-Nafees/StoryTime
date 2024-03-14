@@ -10,26 +10,37 @@ import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
 import { Inter_Regular } from '../../constants/GlobalFonts';
 import { Img_Paths } from '../../assets/Imagepaths';
-import ErrorMessageForm from '../ErrorMessagesForm';
-import CustomErrorField from './CustomErrorField';
+import axios from 'axios';
+import { Base_Url, username_endpoint } from '../../../services';
+
+
 
 const CustomInput = (props) => {
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths
-  console.log("value--- :", props?.value)
+  console.log("value--- :", props?.value);
+  const [isEmailerr, setIsEmailerr] = useState("");
+  const [isError, setIsError] = useState(false);
+
   const debouncedApiCall = useRef(
+
     _.debounce(async (value, setFieldError, fieldName) => {
-      const response = await username_api({ email: fieldName === 'email' ? value : '' });
-      props.setEmailstatusCode(response.statusCode)
-      if (response?.statusCode !== 200) {
-        if (fieldName === 'email') {
-          setFieldError('Email already exists');
-        }
-      } else {
-        setFieldError('');
-        setFieldError('');
+      try {
+        // const response = await username_api({ email: fieldName === 'email' ? value : '' });
+        const response = await axios.post(Base_Url + username_endpoint, { email: fieldName === 'email' ? value : '' });
+
+        console.log("respose DATA ", response);
+        props.setEmailstatusCode(response.statusCode);
+
+      } catch (error) {
+        setIsEmailerr(error?.response?.data?.message)
+        setFieldError("email", error?.response?.data?.message);
+        setIsError(true);
+        console.log(error?.response?.data?.message, "ERROR FROM CUSTOMINPUT");
       }
     }, 850)
   ).current;
+
+
 
   const handleChangeText = async (text, fieldName) => {
     props.handleChange(text);
@@ -38,21 +49,8 @@ const CustomInput = (props) => {
     }
   };
 
-  const inputStyle = {
-    color: "rgba(0,0,0,1)",
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: verticalScale(50),
-    textAlignVertical: 'center',
-    color: '#000',
-    paddingLeft: 28,
-    fontFamily: Inter_Regular.Inter_Regular,
-    fontSize: responsiveFontSize(1.8),
-    backgroundColor: TextinputColor,
-  };
-
   // paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10
+
   return (
 
     <View style={{ paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10 }}>
@@ -112,8 +110,9 @@ const CustomInput = (props) => {
             keyboardType={props.keyboardType}
             autoCapitalize={props.autoCapitalize}
             editable={props.editable}
-            onBlur={props.setFieldTouched}
+            onBlur={() => props.setFieldTouched}
           />
+
 
           {props?.type == 'password' && (
             <TouchableOpacity activeOpacity={0.7} onPress={props?.onPress}>
@@ -126,24 +125,26 @@ const CustomInput = (props) => {
         </View>
       </View>
 
-      {!props.error && props.customError && (
-        <View
-          style={[
-            {
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 2,
-              marginTop: verticalScale(7),
-            },
-          ]}
-        >
-          <Icon name="alert-circle" size={22} color="red" />
-          <Text style={[{ color: 'red' }]}>{props.customError}</Text>
-        </View>
-      )}
+      {
+        isError && props.fieldName === 'email' && (
+          <View
+            style={[
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 2,
+                marginTop: verticalScale(7),
+              },
+            ]}
+          >
+            <Icon name="alert-circle" size={22} color="red" />
+            <Text style={[{ color: 'red' }]}>{props.error}</Text>
+          </View>
+        )
+      }
 
       {
-        props.touched && props.error && (
+        !isError && props.touched && props.error && (
           <View
             style={[
               {
