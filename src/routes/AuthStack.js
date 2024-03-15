@@ -34,7 +34,7 @@ import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCatego
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
+import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 

@@ -33,18 +33,21 @@ import Toast from 'react-native-toast-message';
 import { login_api } from '../../../services/api/auth_mdule/auth';
 
 const Login = () => {
-
+  // states
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // images
   const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
+  // navigation
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
+  // api calling
   const handleLoginSubmit = async (values) => {
     setIsSubmitted(false);
     setIsLoading(true);
@@ -72,7 +75,7 @@ const Login = () => {
       }
     }
   };
-
+  // form handling
   return (
     <Formik
       initialValues={{

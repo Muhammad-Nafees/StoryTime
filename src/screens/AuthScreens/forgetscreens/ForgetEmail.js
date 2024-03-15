@@ -13,7 +13,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale, } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { Formik } from 'formik';
 import { validationforgetEmail } from '../../../../validation/validation';
@@ -24,11 +24,14 @@ import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 const ForgetEmail = () => {
-  const { GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
-  const navigation = useNavigation();
+  // states
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  // images
+  const { GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
+  // navigation
+  const navigation = useNavigation();
+  // api calling
   const handleForgetEmail = async (values) => {
 
     setIsSubmitted(false);
@@ -52,7 +55,7 @@ const ForgetEmail = () => {
       console.log(error?.response?.data?.message, "ERROE FROM EMAIL")
     }
   };
-
+  // form handling
   return (
     <KeyboardAvoidingView>
       <Formik

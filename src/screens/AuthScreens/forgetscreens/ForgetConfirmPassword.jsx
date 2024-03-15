@@ -30,18 +30,20 @@ import CustomInput from '../../../components/auth/CustomInput';
 
 
 const ForgetConfirmPassword = () => {
-
+    // states
     const [showPassword, setShowPassword] = useState(true);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(true);
-    const { CREATE_NEW_PASSWORD_IMG } = Img_Paths;
     const [isVisible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    // images
+    const { CREATE_NEW_PASSWORD_IMG } = Img_Paths;
+    // navigation
     const navigation = useNavigation();
+    // redux state
     const forgetuserToken = useSelector(
         state => state?.authSlice?.forgetAccesstoken,
     );
-
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -57,7 +59,7 @@ const ForgetConfirmPassword = () => {
         )
     };
 
-
+    // api calling
     const handleConfirmForget = async (values) => {
         setIsSubmitted(false)
         const { newPassword, confirmPassword } = values;
@@ -178,12 +180,6 @@ const ForgetConfirmPassword = () => {
                             {/*  */}
 
                         </View>
-
-
-                        {/* -------------------------------------------------------------------------- */}
-                        {/* <View>
-                            <View>
-                                {/*New Password----------- */}
 
                         {
                             isVisible && (

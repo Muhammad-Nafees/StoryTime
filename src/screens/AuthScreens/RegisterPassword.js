@@ -26,17 +26,20 @@ import { Img_Paths } from '../../assets/Imagepaths';
 import CustomInput from '../../components/auth/CustomInput';
 
 const RegisterPassword = () => {
-    const navigation = useNavigation();
+    // states
     const [showPassword, setShowPassword] = useState(true);
     const [confirmShowPassword, setConfirmShowPassword] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setVisible] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    // images
     const { BGIMAGE_ACCOUNT_CREATED, CREATE_PASSWORD_IMG } = Img_Paths;
+    // redux state
     const { registerData } = useSelector(state => state.authSlice);
+    // navigation
+    const navigation = useNavigation();
 
-
-
+    // api calling
     const handleRegisterPassword = async (values) => {
         setIsSubmitted(false);
         setIsLoading(true);

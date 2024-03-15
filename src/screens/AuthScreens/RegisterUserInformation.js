@@ -24,19 +24,22 @@ import AuthCustomSelectDropdown from '../../components/auth/AuthSelectDropDown';
 import CustomInput from '../../components/auth/CustomInput';
 
 const RegisterUserInformation = ({ }) => {
+  // states
   const [changeColor, setChangeColor] = useState("#AAA")
   const [secondChangeColor, setSecondChangeColor] = useState("#AAA")
-  const navigation = useNavigation();
-
+  // redux states
   const { userdata } = useSelector(state => state?.userinfostate);
   const { userdatacity } = useSelector(state => state?.userinfocity);
   const { registerData } = useSelector(state => state?.authSlice);
-
+  // dropdown names
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
+  // navigation
+  const navigation = useNavigation();
+
+
+  // dispatch
   const dispatch = useDispatch();
-
-
 
   const handlerSubmitUserInfo = async (values) => {
     dispatch(
