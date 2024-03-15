@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Text,
   View,
   Image,
   StyleSheet,
@@ -14,20 +13,45 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import Toast from 'react-native-toast-message';
 import { Formik } from 'formik';
 import { validationforgetEmail } from '../../../../validation/validation';
 import _ from 'lodash';
 import CustomInputForgetEmail from '../../../components/auth/CustomInputForgetEmail';
+import reset_email from '../../../../services/api/auth_mdule/auth';
+import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const ForgetEmail = () => {
   const { GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const handleForgetEmail = async (values) => {
+
+    setIsSubmitted(false);
+    setIsLoading(true);
+
+    try {
+      const responseData = await reset_email({ email: values?.email })
+      console.log(responseData.data?.data, "RESPONSE FROM EMAIL")
+      setIsLoading(false);
+      navigation.navigate("OtpForget", {
+        code: responseData?.data?.data?.code,
+        email: values?.email,
+        type: 'email',
+      });
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: "error",
+        text1: error?.response?.data?.message
+      })
+      console.log(error?.response?.data?.message, "ERROE FROM EMAIL")
+    }
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -36,11 +60,10 @@ const ForgetEmail = () => {
           email: '',
         }}
         validationSchema={validationforgetEmail}
-        onSubmit={async values => { }}>
+        onSubmit={handleForgetEmail}>
         {({
           values,
           errors,
-          handleChange,
           handleSubmit,
           setFieldError,
           touched,
@@ -79,6 +102,9 @@ const ForgetEmail = () => {
                   fieldName="email"
                   dirty={dirty}
                   isValid={isValid}
+                  isLoading={isLoading}
+                  isSubmitted={isSubmitted}
+                  setIsSubmitted={setIsSubmitted}
                   handleChange={text => setFieldValue('email', text)}
                 />
               </View>
@@ -88,6 +114,7 @@ const ForgetEmail = () => {
           </>
         )}
       </Formik>
+      <Toast />
     </KeyboardAvoidingView>
   );
 };

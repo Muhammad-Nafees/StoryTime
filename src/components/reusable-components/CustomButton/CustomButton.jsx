@@ -16,25 +16,22 @@ const CustomButton = ({
   color,
   borderWidth,
   isLoading,
-  setIsLoading,
   type,
-  isValid,
-  dirty,
-  timeLeft,
   sequenceUser,
   selectedIndices,
   validate,
   values,
-  StatusCodeSuccess
+  StatusCodeSuccess,
+  value
 
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         disabled={
-          type === 'register' && StatusCodeSuccess ? false :
+          type === 'register' && value == "" ? true :
             type === "login" ? false :
-              type === "forgetemail" && StatusCodeSuccess ? false :
+              type === "forgetemail" && value == "" ? true :
                 type === "optForget" ? false :
                   type === "registeruserInfo" ? false :
                     type === "backuser" ? false :
@@ -45,8 +42,10 @@ const CustomButton = ({
                               type == "savestoryphone" ? false :
                                 type == "registerFirst" && !validate(values) ? true :
                                   type == "registerpassword" && !validate(values) ? true :
+
                                     false
         }
+
         onPress={onPress}
         style={{
           width:

@@ -1,13 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Text,
   View,
   Image,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Button,
-  Alert,
   ScrollView,
 } from 'react-native';
 import {
@@ -18,28 +13,53 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../../../constants/NavigationsString';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import Toast from 'react-native-toast-message';
 import { Formik } from 'formik';
 import ForgetCustomInput from '../../../components/ForgetCustomInput';
+import reset_email from '../../../../services/api/auth_mdule/auth';
+import { useNavigation } from '@react-navigation/native';
+import { validationforgetPhone } from '../../../../validation/validation';
 
 
 
 const ForgetPhoneNumber = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [formatText, setFormatText] = useState('');
-  const [phoneCode, setPhoneCode] = useState('');
-  const [isError, setIsError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const { ANOTHER_FORGET_BG_IMG } = Img_Paths;
   const phoneInput = useRef();
+  const navigation = useNavigation();
+
+  const handleForgetPhoneNumber = async (values) => {
+    setIsSubmitted(false);
+    setIsLoading(true);
+    try {
+      const responseData = await reset_email({ phone: values?.phone })
+      console.log(responseData.data?.data, "RESPONSE FROM PHONE")
+      setIsLoading(false);
+      navigation.navigate("OtpForget", {
+        code: responseData?.data?.data?.code,
+        phone: values?.phone,
+      });
+
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: "error",
+        text1: error?.response?.data?.message
+      })
+      console.log(error?.response?.data?.message, "ERROR FROM PHONE")
+    }
+  };
 
 
   return (
-    <Formik initialValues={{ phone: '' }} onSubmit={async values => { }}>
+    <Formik
+      initialValues={{ phone: '' }}
+      validationSchema={validationforgetPhone}
+      onSubmit={handleForgetPhoneNumber}
+    >
       {({
         values,
         errors,
@@ -47,9 +67,6 @@ const ForgetPhoneNumber = () => {
         handleSubmit,
         setFieldValue,
         touched,
-        isValid,
-        dirty,
-        setFieldError,
       }) => (
 
         <View style={styles.container}>
@@ -73,12 +90,8 @@ const ForgetPhoneNumber = () => {
                 handleChange={handleChange('phone')}
                 setFieldValue={setFieldValue}
                 phoneInput={phoneInput}
-                setIsError={setIsError}
-                setFieldError={setFieldError}
-                setFormatText={setFormatText}
-                isError={isError}
-                setPhoneCode={setPhoneCode}
-                setPhoneError={setPhoneError}
+                isSubmitted={isSubmitted}
+                setIsSubmitted={setIsSubmitted}
                 isLoading={isLoading}
                 handleSubmit={handleSubmit}
               />
@@ -94,6 +107,8 @@ const ForgetPhoneNumber = () => {
     </Formik>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -111,9 +126,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   img_child: {
-    // width: responsiveWidth(50),
-    // height: responsiveHeight(20),
-    // resizeMode: 'center',
     width: responsiveWidth(50),
     height: responsiveHeight(20),
     resizeMode: "center",

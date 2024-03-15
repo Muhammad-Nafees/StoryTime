@@ -32,42 +32,44 @@ const reset_email = async (values) => {
   console.log('values---', values);
 
   try {
-
-    const response = await fetch(Base_Url + reset_email_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-
-    });
-
-    const responseData = await response.json();
-    console.log("responseData-------------- :", responseData)
+    const responseData = await axios.post(Base_Url + reset_email_endpoint, values)
+    // const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error('Error:', error);
+    throw error;
   }
 };
+
+// const response = await fetch(Base_Url + reset_email_endpoint, {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify(values),
+
+// });
 
 export const otp_forget = async code => {
   try {
-    const response = await fetch(Base_Url + reset_verify_code, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code: code }),
-    });
-
-    const responseData = await response.json();
+    const responseData = await axios.put(Base_Url + reset_verify_code, {
+      code: code
+    })
+    // const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error('Error:', error);
+    throw error;
   }
 };
 
-export const reset_password = async (newPassword, confirmPassword, forgetuserToken) => {
+//   const response = await fetch(Base_Url + reset_verify_code, {
+//   method: 'PUT',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify({ code: code }),
+// });
+
+export const reset_password = async (newPassword, confirmPassword, accessToken) => {
 
   const bodyData = {
     newPassword: newPassword,
@@ -76,7 +78,7 @@ export const reset_password = async (newPassword, confirmPassword, forgetuserTok
 
   const headers = {
     'Content-Type': 'application/json',
-    accessToken: forgetuserToken,
+    accessToken: accessToken,
   };
 
   try {
@@ -183,21 +185,28 @@ export const userandcity_api = async statesinfo => {
 };
 
 
+
 export const username_api = async (data) => {
-  console.log("=========data", data)
-  const requestBody = {};
+  try {
 
-  const response = await fetch(Base_Url + username_endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+    console.log("=========data", data)
+    const requestBody = {};
 
-  const responseData = await response.json();
-  console.log('usernameapi---', responseData);
-  return responseData;
+    // const responseData = await axios.post(Base_Url + username_endpoint, data)
+    const response = await fetch(Base_Url + username_endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const responseData = await response.json();
+    console.log('usernameapi---', responseData);
+    return responseData;
+  } catch (error) {
+    throw error;
+  }
 };
 
 

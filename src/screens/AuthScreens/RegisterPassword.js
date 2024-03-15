@@ -1,57 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-    Text,
     View,
     Image,
-    TextInput,
-    TouchableOpacity,
     StyleSheet,
-    Button,
-    Alert,
-    SafeAreaView,
     ScrollView,
-    ActivityIndicator,
 } from 'react-native';
 import {
-    FourthColor,
-    PrimaryColor,
     SecondaryColor,
-    TextColorGreen,
-    TextinputColor,
-    ThirdColor,
 } from '../Styles/Style';
 import {
     responsiveFontSize,
     responsiveWidth,
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TextInputField from '../../components/TextInputField';
 import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Formik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserErrors from '../../components/auth/UserErrors';
-import NavigationsString from '../../constants/NavigationsString';
 import { registerapi } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { validationUserPassword } from '../../../validation/validation';
-import { Path, Svg } from 'react-native-svg';
 import { Img_Paths } from '../../assets/Imagepaths';
-import ErrorMessageForm from '../../components/ErrorMessagesForm';
 import CustomInput from '../../components/auth/CustomInput';
 
-const RegisterPassword = ({ route }) => {
+const RegisterPassword = () => {
     const navigation = useNavigation();
     const [showPassword, setShowPassword] = useState(true);
     const [confirmShowPassword, setConfirmShowPassword] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setVisible] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const dispatch = useDispatch();
-    const { LOGIN } = NavigationsString;
     const { BGIMAGE_ACCOUNT_CREATED, CREATE_PASSWORD_IMG } = Img_Paths;
     const { registerData } = useSelector(state => state.authSlice);
+
 
 
     const handleRegisterPassword = async (values) => {
@@ -197,7 +180,7 @@ const RegisterPassword = ({ route }) => {
                                     bgImage={BGIMAGE_ACCOUNT_CREATED}
                                     isVisible={isVisible}
                                     text="Login"
-                                    onPress={() => navigation.navigate(LOGIN)}
+                                    onPress={() => navigation.navigate("Login")}
                                 />
                             )}
                         </ScrollView>

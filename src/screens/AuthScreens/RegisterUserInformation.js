@@ -1,36 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Text,
   View,
   Image,
   StyleSheet,
-  Dimensions,
   SafeAreaView,
 } from 'react-native';
 import {
-  FourthColor,
   SecondaryColor,
-  TextinputColor,
 } from '../Styles/Style';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TextInputField from '../../components/TextInputField';
 import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, registerLocation, registeruser_city } from '../../../store/slices/authSlice';
-import { userinfocity } from '../../../store/slices/authStatesandCity/userinfoCity';
-import { Path, Svg } from 'react-native-svg';
+import { register, } from '../../../store/slices/authSlice';
 import { Formik } from 'formik';
 import { zipCodeValidation } from '../../../validation/validation';
-import SelectDropdown from 'react-native-select-dropdown';
-import CustomSelectDropDown from '../../components/profile/SelectDropDown';
-import ErrorMessageForm from '../../components/ErrorMessagesForm';
 import AuthCustomSelectDropdown from '../../components/auth/AuthSelectDropDown';
 import CustomInput from '../../components/auth/CustomInput';
 
@@ -45,15 +34,9 @@ const RegisterUserInformation = ({ }) => {
 
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
-  const SCREENWIDTH = Dimensions.get('window').width;
-  const SCREENHEIGHT = Dimensions.get('window').height;
   const dispatch = useDispatch();
 
 
-  const units = {
-    vw: SCREENWIDTH.width / 100,
-    vh: SCREENHEIGHT.height / 100,
-  };
 
   const handlerSubmitUserInfo = async (values) => {
     dispatch(
@@ -76,7 +59,6 @@ const RegisterUserInformation = ({ }) => {
       onSubmit={handlerSubmitUserInfo}>
       {({
         values,
-        error,
         errors,
         touched,
         handleSubmit,
@@ -199,8 +181,6 @@ const RegisterUserInformation = ({ }) => {
   );
 };
 
-export default RegisterUserInformation;
-
 const styles = StyleSheet.create({
   container: {
     height: '100%',
@@ -222,3 +202,5 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
 });
+
+export default RegisterUserInformation;

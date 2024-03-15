@@ -14,7 +14,6 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TextInputField from '../../components/TextInputField';
 import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
 import SocialsLogin from '../../components/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
@@ -24,27 +23,18 @@ import {
 } from '../../../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import NavigationsString from '../../constants/NavigationsString';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import { Base_Url, login_andpoint } from '../../../services';
 import { setAccessToken } from '../../../store/slices/authSlice';
 import { validationUserLogin } from '../../../validation/validation';
-import { Path, Svg } from 'react-native-svg';
 import { Inter_Regular, Poppins_Regular } from '../../constants/GlobalFonts';
-import ErrorMessageForm from '../../components/ErrorMessagesForm';
-import CustomErrorField from '../../components/auth/CustomErrorField';
 import CustomInput from '../../components/auth/CustomInput';
-import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import { login_api } from '../../../services/api/auth_mdule/auth';
 
 const Login = () => {
 
-  const { REGISTER, FORGET_EMAIL } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmail, setIsEmail] = useState('');
-  const [isPasswordErr, setPasswordErr] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
   const navigation = useNavigation();
@@ -56,9 +46,9 @@ const Login = () => {
   };
 
   const handleLoginSubmit = async (values) => {
-    console.log("values---------- :login in", values)
     setIsSubmitted(false);
     setIsLoading(true);
+
     try {
       const responseData = await login_api(values)
       console.log(responseData, "RESPONSE FROM LOGIN");
@@ -69,8 +59,8 @@ const Login = () => {
       await AsyncStorage.setItem('refreshToken', responseData?.data?.data?.refreshToken);
       dispatch(setAccessToken(responseData?.data?.data?.accessToken));
       dispatch(setRefreshToken(responseData?.data?.data.refreshToken));
-
       return responseData;
+
     } catch (error) {
       setIsLoading(false);
       console.log(error?.response, "ERROR FROM LOGIN");
@@ -82,8 +72,6 @@ const Login = () => {
       }
     }
   };
-
-
 
   return (
     <Formik
@@ -115,7 +103,6 @@ const Login = () => {
 
             <View style={{ paddingBottom: moderateVerticalScale(6) }}>
 
-              {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
               <CustomInput
                 value={values.email}
                 label={"Email"}
@@ -142,11 +129,10 @@ const Login = () => {
                 type="password"
               />
 
-              {/* </View> */}
             </View>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate(FORGET_EMAIL)}
+              onPress={() => navigation.navigate("ForgetEmail")}
               style={{ justifyContent: 'center', alignItems: 'center' }}>
               <Text
                 style={{
@@ -248,7 +234,7 @@ const Login = () => {
               <Text style={[styles.text, { color: FourthColor }]}>
                 Don’t have an account yet?{' '}
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
+              <TouchableOpacity onPress={() => navigation.navigate("Register")}>
                 <Text
                   style={[
                     styles.text,

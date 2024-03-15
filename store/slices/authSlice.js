@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
 
 
@@ -10,7 +9,6 @@ const initialState = {
     forgetAccesstoken: null,
     randomNumber: "",
     registerData: [],
-    registerLocationData: [],
 };
 
 
@@ -51,18 +49,6 @@ const authSlice = createSlice({
             state.registerData = action.payload;
             console.log("STATE REGISTERED DATA=== :", state.registerData)
         },
-
-        // registeruser_city: (state, action) => {
-        //     state.secondpageData = action.payload;
-        //     console.log("registercity", state.secondpageData)
-        // },
-
-        // registeruser_password: (state, action) => {
-        //     // state.token = action.payload;
-        //     state.thirdpageData = action.payload;
-        //     console.log("registerpassword", state.thirdpageData)
-        // },
-
     },
 });
 
@@ -79,9 +65,7 @@ export const {
     forgetResetToken,
     setRandomNumber,
     register,
-    registeruser_city,
     userLoginid,
-    registeruser_password,
 } = authSlice.actions;
 
 export default authSlice.reducer;

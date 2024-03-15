@@ -13,12 +13,8 @@ import BackButton from '../../components/BackButton';
 const LoginTermsAnd_Conditions = () => {
     const {
         SPLASH_SCREEN_IMAGE,
-        GET_STARTED_IMAGE,
-        STORY_TIME_IMG,
         LEFT_ARROW_IMG
     } = Img_Paths
-    const { SPLASH_SCREEN } = NavigationsString
-    const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
 
     return (

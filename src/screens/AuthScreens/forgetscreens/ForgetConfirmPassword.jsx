@@ -1,48 +1,31 @@
-import { useRef } from 'react';
 import React, { useState } from 'react';
 import {
     Text,
     View,
     Image,
-    TextInput,
     TouchableOpacity,
     StyleSheet,
-    Button,
-    Alert,
     ScrollView,
     ActivityIndicator,
 } from 'react-native';
 import {
-    FourthColor,
-    PrimaryColor,
     SecondaryColor,
     TextColorGreen,
-    TextinputColor,
-    ThirdColor,
 } from '../../Styles/Style';
 import {
     responsiveFontSize,
     responsiveWidth,
     responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
-import TextInputField from '../../../components/TextInputField';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import { reset_password } from '../../../../services/api/auth_mdule/auth';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import { Formik } from 'formik';
-import { Path, Svg } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../../../constants/NavigationsString';
-import * as Yup from 'yup';
 import ResetPasswordModal from '../../../components/forget-screens-modal/ResetpasswordModal';
-import ErrorMessageForm from '../../../components/ErrorMessagesForm';
 import { validationForgetConfirmPassword } from '../../../../validation/validation';
 import CustomInput from '../../../components/auth/CustomInput';
-
-
 
 
 
@@ -51,12 +34,29 @@ const ForgetConfirmPassword = () => {
     const [showPassword, setShowPassword] = useState(true);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(true);
     const { CREATE_NEW_PASSWORD_IMG } = Img_Paths;
-    const { LOGIN } = NavigationsString;
     const [isVisible, setVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const navigation = useNavigation();
+    const forgetuserToken = useSelector(
+        state => state?.authSlice?.forgetAccesstoken,
+    );
+
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    const toggleShowPasswordConfirm = () => {
+        setShowPasswordConfirm(!showPasswordConfirm);
+    };
+
+    const validate = (values) => {
+        return (
+            values.newPassword &&
+            values.confirmPassword
+        )
+    };
+
 
     const handleConfirmForget = async (values) => {
         setIsSubmitted(false)
@@ -69,7 +69,7 @@ const ForgetConfirmPassword = () => {
             setIsLoading(false)
 
             setTimeout(() => {
-                navigation.navigate(LOGIN);
+                navigation.navigate("Login");
             }, 1000);
         }
         catch (error) {
@@ -83,26 +83,6 @@ const ForgetConfirmPassword = () => {
             }
         }
     }
-
-
-    const forgetuserToken = useSelector(
-        state => state?.authSlice?.forgetAccesstoken,
-    );
-
-    const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const toggleShowPasswordConfirm = () => {
-        setShowPasswordConfirm(!showPasswordConfirm);
-    };
-
-    const validate = (values) => {
-        return (
-            values.newPassword &&
-            values.confirmPassword
-        )
-    };
 
     return (
         <Formik
@@ -218,7 +198,6 @@ const ForgetConfirmPassword = () => {
                         <Toast />
                     </ScrollView>
                 </View>
-
             )}
         </Formik>
     );

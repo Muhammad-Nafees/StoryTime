@@ -33,7 +33,6 @@ import { username_api } from '../../../services/api/auth_mdule/auth';
 const Register = () => {
   const { CREATE_ACCOUNT_ICON } = Img_Paths;
   const navigation = useNavigation();
-  const { REGISTER_USER_INFO } = NavigationsString;
   const [isError, setIsError] = useState('');
   const [phoneCodee, setPhoneCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -63,11 +62,11 @@ const Register = () => {
   };
 
 
-
   // setIsSubmitted(false);
   const handleSubmitRegister = async (values) => {
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
     setIsLoading(true);
+
     try {
       dispatch(userinfoState(countryCode));
 
@@ -84,7 +83,7 @@ const Register = () => {
 
       dispatch(register({ values, countryCode: countryCode, phoneCode: `+${phoneCode}` }));
 
-      navigation.navigate(REGISTER_USER_INFO);
+      navigation.navigate("RegisterUserInformation");
 
       return responseData;
     } catch (error) {

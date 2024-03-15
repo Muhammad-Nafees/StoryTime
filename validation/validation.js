@@ -105,3 +105,9 @@ export const validationForgetConfirmPassword = Yup.object().shape({
     .required('Confirm Password is required')
     .min(8, 'Password length should be at least 8 characters'),
 });
+
+export const validationforgetPhone = Yup.object().shape({
+  phone: Yup.string()
+    .required('phone Number is required')
+    .min(8, 'Password length should be at least 8 characters'),
+})

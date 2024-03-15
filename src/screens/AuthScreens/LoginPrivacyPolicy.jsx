@@ -13,13 +13,9 @@ import BackButton from '../../components/BackButton';
 const LoginTermsAnd_Conditions = () => {
     const {
         SPLASH_SCREEN_IMAGE,
-        GET_STARTED_IMAGE,
-        STORY_TIME_IMG,
         LEFT_ARROW_IMG
     } = Img_Paths
-    const { SPLASH_SCREEN } = NavigationsString
-    const { width, height } = Dimensions.get('window');
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     return (
 
@@ -49,7 +45,7 @@ const LoginTermsAnd_Conditions = () => {
                         </Text>
                     </View>
                     <View style={{ paddingVertical: moderateVerticalScale(15) }}>
-                    <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9), paddingBottom: responsiveWidth(1) }}>Removal of links from our website</Text>
+                        <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9), paddingBottom: responsiveWidth(1) }}>Removal of links from our website</Text>
                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontWeight: "400", lineHeight: 24 }}>
                             If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
                         </Text>
