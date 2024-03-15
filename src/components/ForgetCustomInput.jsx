@@ -48,7 +48,6 @@ const ForgetCustomInput = ({
   const [textphone, setPhone] = useState('');
   const [isStatusCodeSuccess, setIsStatusCodeSuccess] = useState(false);
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
-  const [recordNotFound, setRecordNotFound] = useState("");
   const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const navigation = useNavigation();
 

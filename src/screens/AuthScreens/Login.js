@@ -25,7 +25,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import NavigationsString from '../../constants/NavigationsString';
-import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { Base_Url, login_andpoint } from '../../../services';
 import { setAccessToken } from '../../../store/slices/authSlice';
@@ -35,12 +35,16 @@ import { Inter_Regular, Poppins_Regular } from '../../constants/GlobalFonts';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
 import CustomErrorField from '../../components/auth/CustomErrorField';
 import CustomInput from '../../components/auth/CustomInput';
-import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import { login_api } from '../../../services/api/auth_mdule/auth';
 
 const Login = () => {
+
   const { REGISTER, FORGET_EMAIL } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmail, setIsEmail] = useState('');
+  const [isPasswordErr, setPasswordErr] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
   const navigation = useNavigation();
@@ -51,114 +55,35 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-
-
   const handleLoginSubmit = async (values) => {
+    console.log("values---------- :login in", values)
     setIsSubmitted(false);
     setIsLoading(true);
-
     try {
-      const responseData = await axios.post(Base_Url + login_andpoint, values);
-      console.log(responseData, 'RESPONSE FROM LOGIN!');
-      dispatch(login(responseData));
-      await AsyncStorage.setItem('userData', responseData);
+      const responseData = await login_api(values)
+      console.log(responseData, "RESPONSE FROM LOGIN");
       setIsLoading(false);
-      const accessToken = responseData?.data?.accessToken;
-      const refreshToken = responseData?.data?.refreshToken;
-      // const username = responseData?.data?.user?.username;
-      // const userLoginId = responseData?.data?.user?._id;
+      dispatch(login(responseData?.data));
+      await AsyncStorage.setItem('userData', JSON.stringify(responseData.data));
+      await AsyncStorage.setItem('isLoggedIn', responseData?.data?.data?.accessToken);
+      await AsyncStorage.setItem('refreshToken', responseData?.data?.data?.refreshToken);
+      dispatch(setAccessToken(responseData?.data?.data?.accessToken));
+      dispatch(setRefreshToken(responseData?.data?.data.refreshToken));
 
-      await AsyncStorage.setItem('isLoggedIn', accessToken);
-      // await AsyncStorage.setItem('isUsername', username);
-      // await AsyncStorage.setItem('isUserId', userLoginId);
-      // await AsyncStorage.setItem('refreshToken', refreshToken);
-      dispatch(setAccessToken(accessToken));
-      dispatch(setRefreshToken(refreshToken));
-
+      return responseData;
     } catch (error) {
-      console.log(error?.response?.data, 'ERROR FROM LOGIN!');
-      Toast.show({
-        type: "error",
-        text1: `${error?.response?.data?.message}`,
-      });
+      setIsLoading(false);
+      console.log(error?.response, "ERROR FROM LOGIN");
+      if (error?.response?.data) {
+        Toast.show({
+          type: "error",
+          text1: error?.response?.data?.message
+        })
+      }
     }
-    setIsLoading(false);
   };
 
 
-
-  // const handleLoginSubmit = async (values) => {
-  //   setIsSubmitted(false);
-  //   setIsLoading(true);
-
-  //   try {
-  //     const response = await axios.post(Base_Url + login_andpoint, values);
-  //     console.log(response, 'RESPONSE FROM LOGIN!');
-  //   } catch (error) {
-  //     console.log(error?.response?.data, 'ERROR FROM LOGIN!');
-  //     Toast.show({
-  //       text1: ${error?.response?.data?.message},
-  //     });
-  //   }
-  //   setIsLoading(false);
-
-  // try {
-  //   const { email, password, fcmToken } = values;
-  //   const response = await fetch(Base_Url + login_andpoint, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email,
-  //       password,
-  //       fcmToken,
-  //     }),
-  //   });
-
-  //   const responseData = await response.json();
-  //   console.log('RESPONSE_LOGIN----', responseData);
-  //   dispatch(login(responseData));
-  //   await AsyncStorage.setItem('userData', JSON.stringify(responseData));
-
-  //   if (responseData?.data) {
-  //     setIsLoading(false);
-  //   };
-
-  //   const statusCode = responseData?.statusCode;
-  //   const message = responseData?.message;
-  //   const accessToken = responseData?.data?.accessToken;
-  //   const refreshToken = responseData?.data?.refreshToken;
-  //   const username = responseData?.data?.user?.username;
-  //   const userLoginId = responseData?.data?.user?._id;
-  //   const error = responseData?.stack;
-
-  //   if (statusCode === 200) {
-  //     await AsyncStorage.setItem('isLoggedIn', accessToken);
-  //     await AsyncStorage.setItem('isUsername', username);
-  //     await AsyncStorage.setItem('isUserId', userLoginId);
-  //     await AsyncStorage.setItem('refreshToken', refreshToken);
-  //     dispatch(setAccessToken(accessToken));
-  //     dispatch(setRefreshToken(refreshToken));
-  //   }
-  //   if (message === 'Email not found') {
-  //     setIsEmail('Invalid email');
-  //   } else if (
-  //     message ===
-  //     'password length must be at least 8 characters long' ||
-  //     message === 'Invalid password'
-  //   ) {
-  //     setPasswordErr('Invalid password');
-  //     setIsEmail('');
-  //   }
-  //   setIsLoading(false);
-  //   return responseData;
-  // } catch (error) {
-  //   if (error?.response) {
-  //     console.log("errrr _", error);
-  //   }
-  // }
-  // };
 
   return (
     <Formik
@@ -175,6 +100,7 @@ const Login = () => {
         handleChange,
         handleSubmit,
         setFieldTouched,
+        touched
       }) => (
         <View style={styles.container}>
           <ScrollView keyboardShouldPersistTaps="always">
@@ -189,44 +115,34 @@ const Login = () => {
 
             <View style={{ paddingBottom: moderateVerticalScale(6) }}>
 
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <CustomInput
-                  value={values.email}
-                  label={"Email"}
-                  placeholder={"Type here"}
-                  error={errors.email}
-                  handleChange={handleChange('email')}
-                  onBlur={() => setFieldTouched('email')}
-                />
+              {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
+              <CustomInput
+                value={values.email}
+                label={"Email"}
+                placeholder={"Type here"}
+                error={errors.email}
+                touched={touched}
+                Submitted={isSubmitted}
+                handleChange={handleChange('email')}
+                onBlur={() => setFieldTouched('email')}
+              />
 
-                {
-                  <ErrorMessageForm
-                    errorsField={errors.email}
-                    isSubmitted={isSubmitted}
-                  />
-                }
+              <CustomInput
+                label={"Password"}
+                value={values.password}
+                handleChange={handleChange('password')}
+                onPress={toggleShowPassword}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+                error={errors.password}
+                placeholder={"Type here"}
+                touched={touched}
+                onBlur={() => setFieldTouched('password')}
+                Submitted={isSubmitted}
+                type="password"
+              />
 
-                <CustomInput
-                  label={"Password"}
-                  value={values.password}
-                  handleChange={handleChange('password')}
-                  onPress={toggleShowPassword}
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                  placeholder={"Type here"}
-                  onBlur={() => setFieldTouched('password')}
-                  type="password"
-                />
-
-                {
-                  <ErrorMessageForm
-                    errorsField={errors.password}
-                    isSubmitted={isSubmitted}
-                  />
-                }
-
-
-              </View>
+              {/* </View> */}
             </View>
 
             <TouchableOpacity
@@ -294,7 +210,7 @@ const Login = () => {
 
             <View
               style={{
-                paddingTop: responsiveWidth(5),
+                paddingVertical: moderateVerticalScale(16),
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -323,7 +239,7 @@ const Login = () => {
 
             <View
               style={{
-                paddingVertical: verticalScale(30),
+                paddingTop: responsiveWidth(7),
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
@@ -346,8 +262,8 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
+            <Toast />
           </ScrollView>
-          <Toast />
         </View>
       )}
     </Formik>

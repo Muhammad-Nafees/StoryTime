@@ -39,7 +39,7 @@ const Profile = ({ route }) => {
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
   const navigation = useNavigation();
-  const { FEED_CHAT, SETTING } = NavigationsString;
+  const { SETTING } = NavigationsString;
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
   const [recordingPage, setRecordingPage] = useState(1);
@@ -63,8 +63,6 @@ const Profile = ({ route }) => {
   const USER = user?.data?.user || user?.data;
 
 
-
-
   const getUsersProfile = async () => {
     setIsUserLoading(true);
     setProfileResponse([]);
@@ -75,7 +73,7 @@ const Profile = ({ route }) => {
         setResponseUserProfile(response);
         setIsUserLoading(false);
       }
-      console.log("response--- :", response)
+      console.log("response--- :", response);
       setRecordingPage(1);
       dispatch(setResponseUsersProfile(response))
       setIsPublicOrPrivate(response?.data?.isPublic);
@@ -238,10 +236,7 @@ const Profile = ({ route }) => {
                         style={[
                           styles.back_button,
                           {
-                            backgroundColor:
-                              changeMode == 1
-                                ? TextColorGreen
-                                : 'rgba(57, 94, 102, 0.5)',
+                            backgroundColor: 'rgba(57, 94, 102, 0.5)',
                           },
                         ]}>
                         <Image
@@ -359,6 +354,7 @@ const Profile = ({ route }) => {
         <IncognitoMode
           toggel_mode={toggel_mode}
           setChangeMode={setChangeMode}
+          changeMode={changeMode}
           hasMorePagesRecording={hasMorePagesRecording}
           username={responseUserProfile?.data?.username}
         />

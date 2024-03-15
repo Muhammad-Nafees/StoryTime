@@ -38,8 +38,11 @@ const RegisterUserInformation = ({ }) => {
   const [changeColor, setChangeColor] = useState("#AAA")
   const [secondChangeColor, setSecondChangeColor] = useState("#AAA")
   const navigation = useNavigation();
+
   const { userdata } = useSelector(state => state?.userinfostate);
   const { userdatacity } = useSelector(state => state?.userinfocity);
+  const { registerData } = useSelector(state => state?.authSlice);
+
   const namesArray = userdata?.data?.map(item => item.name);
   const namesCities = userdatacity?.data?.map(item => item?.name);
   const SCREENWIDTH = Dimensions.get('window').width;
@@ -54,7 +57,7 @@ const RegisterUserInformation = ({ }) => {
 
   const handlerSubmitUserInfo = async (values) => {
     dispatch(
-      registerLocation({ state: values?.state, city: values?.city, zipCode: values?.zipCode }),
+      register({ ...registerData, state: values?.state, city: values?.city, zipCode: values?.zipCode }),
     );
     navigation.navigate("RegisterPassword");
   };
@@ -139,7 +142,7 @@ const RegisterUserInformation = ({ }) => {
                 </View>
               </View>
 
-              <View>
+              <View style={{ paddingTop: responsiveWidth(3) }}>
                 <CustomInput
                   placeholder="Type here"
                   type="customfield"
@@ -147,25 +150,18 @@ const RegisterUserInformation = ({ }) => {
                   value={values.zipCode}
                   label={"Zip Code"}
                   error={errors.zipCode}
+                  touched={touched.zipCode}
                   width={responsiveWidth(90)}
                   handleChange={handleChange('zipCode')}
                   setFieldTouched={() => setFieldTouched("zipcode")}
                 />
-
               </View>
-
-              {touched.zipCode && errors.zipCode && (
-                <ErrorMessageForm
-                  isSubmitted={touched.zipCode}
-                  errorsField={errors.zipCode}
-                />
-              )}
 
             </View>
 
             {/* Next and Back------------ */}
 
-            <View style={{ marginTop: responsiveWidth(30) }}>
+            <View style={{ paddingTop: responsiveWidth(25) }}>
 
               <CustomButton
                 onPress={

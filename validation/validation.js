@@ -33,12 +33,10 @@ export const validationUserAdressInfo = Yup.object().shape({
 export const validationUserPassword = Yup.object().shape({
   password: Yup.string()
     .required('password is required')
-    .min(8, 'password length should be 8 characters characters'),
-
+    .min(8, 'password length should be 8 characters'),
   confirmPassword: Yup.string()
     .min(8, 'Confirm password must be at least 8 characters ')
     .required('Confirm Password is required')
-    .oneOf([Yup.ref('password')], 'Password must be same'),
 });
 
 export const validationUserLogin = Yup.object().shape({
@@ -97,4 +95,13 @@ export const validationSettingsProfile = Yup.object().shape({
   zipCode: Yup.string()
     .min(4, 'Zip code should have more than 4 characters')
     .required('Zip code is required'),
+});
+
+export const validationForgetConfirmPassword = Yup.object().shape({
+  newPassword: Yup.string()
+    .required('New Password is required')
+    .min(8, 'Password length should be at least 8 characters'),
+  confirmPassword: Yup.string()
+    .required('Confirm Password is required')
+    .min(8, 'Password length should be at least 8 characters'),
 });

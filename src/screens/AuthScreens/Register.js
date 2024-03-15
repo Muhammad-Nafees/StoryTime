@@ -27,8 +27,7 @@ import { validationSignUp } from '../../../validation/validation';
 import CustomPhoneInput from '../../components/auth/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
 import { username_api } from '../../../services/api/auth_mdule/auth';
-import { Base_Url, username_endpoint } from '../../../services';
-import axios from 'axios';
+
 
 
 const Register = () => {
@@ -46,6 +45,7 @@ const Register = () => {
   const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState();
   const [phoneError, setPhoneError] = useState('');
   const [isVisible, setVisible] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const dispatch = useDispatch();
   const phoneInput = useRef(null);
 
@@ -64,36 +64,34 @@ const Register = () => {
 
 
 
+  // setIsSubmitted(false);
   const handleSubmitRegister = async (values) => {
-    // console.log("values", values);
     const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
     setIsLoading(true);
     try {
-      const responseData = await username_api({ username: values?.username })
-      // const responseData = await axios.post(Base_Url + username_endpoint, { username: values?.username });
       dispatch(userinfoState(countryCode));
-      // const responseData = await axios.post(Base_Url + username_endpoint, values?.username);
-      console.log("responseDat -- :", responseData);
+
+      const responseData = await username_api({ username: values?.username })
       setIsLoading(false);
       setStatusCodeusername(responseData.statusCode);
-      console.log("check---- ");
-      if (!checkValid) {
-        return;
-      };
-      navigation.navigate(REGISTER_USER_INFO);
-      dispatch(register({ values: values, countryCode: countryCode, phoneCode: phoneCode }));
-      return responseData;
-    } catch (error) {
-      if (error?.response?.data?.message === "username already exists") {
+
+      if (responseData?.statusCode !== 200) {
         setVisible(true);
       }
-      console.log(error?.response, "ERROR FROM REGISTER :")
+      if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
+        return;
+      }
+
+      dispatch(register({ values, countryCode: countryCode, phoneCode: `+${phoneCode}` }));
+
+      navigation.navigate(REGISTER_USER_INFO);
+
+      return responseData;
+    } catch (error) {
     }
     setIsLoading(true);
     setIsLoading(false);
   };
-
-
 
   return (
     <Formik
@@ -130,49 +128,53 @@ const Register = () => {
                 <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
               </View>
 
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <CustomInput
-                  label="Username"
-                  placeholder="Type here"
-                  value={values.username}
-                  error={errors.username}
-                  customError={usernameError}
-                  touched={touched.username}
-                  initialTouched={true}
-                  setFieldError={setUsernameError}
-                  isVisible={isVisible}
-                  setVisible={setVisible}
-                  fieldName="username"
-                  handleChange={text => setFieldValue('username', text)}
-                  setFieldTouched={() => setFieldTouched("username")}
-                />
 
-                <CustomInput
-                  label="First Name"
-                  placeholder="Type here"
-                  value={values.firstName}
-                  error={errors.firstName}
-                  touched={touched.firstName}
-                  initialTouched={true}
-                  setFieldError={setFieldError}
-                  fieldName="firstName"
-                  handleChange={text => setFieldValue('firstName', text)}
-                  setFieldTouched={() => setFieldTouched("firstName")}
-                />
+              <CustomInput
+                label="Username"
+                placeholder="Type here"
+                value={values.username}
+                error={errors.username}
+                customError={usernameError}
+                touched={touched.username}
+                initialTouched={true}
+                setFieldError={setUsernameError}
+                isVisible={isVisible}
+                setVisible={setVisible}
+                fieldName="username"
+                handleChange={text => setFieldValue('username', text)}
+                setFieldTouched={() => setFieldTouched("username")}
+              // isSubmitted={isSubmitted}
+              />
 
-                <CustomInput
-                  label="Last Name"
-                  placeholder="Type here"
-                  value={values.lastName}
-                  error={errors.lastName}
-                  touched={touched.lastName}
-                  initialTouched={true}
-                  setFieldTouched={() => setFieldTouched("lastName")}
-                  setFieldError={setFieldError}
-                  fieldName="lastName"
-                  handleChange={text => setFieldValue('lastName', text)}
-                />
+              <CustomInput
+                label="First Name"
+                placeholder="Type here"
+                value={values.firstName}
+                error={errors.firstName}
+                touched={touched.firstName}
+                initialTouched={true}
+                setFieldError={setFieldError}
+                fieldName="firstName"
+                handleChange={text => setFieldValue('firstName', text)}
+                setFieldTouched={() => setFieldTouched("firstName")}
+              // isSubmitted={isSubmitted}
+              />
 
+              <CustomInput
+                label="Last Name"
+                placeholder="Type here"
+                value={values.lastName}
+                error={errors.lastName}
+                touched={touched.lastName}
+                initialTouched={true}
+                setFieldTouched={() => setFieldTouched("lastName")}
+                setFieldError={setFieldError}
+                fieldName="lastName"
+                handleChange={text => setFieldValue('lastName', text)}
+              // isSubmitted={isSubmitted}
+              />
+
+              <View style={{ paddingBottom: responsiveWidth(9), justifyContent: "center", alignItems: "center" }}>
                 <CustomPhoneInput
                   value={values.phoneNo}
                   error={errors.phoneNo}
@@ -188,47 +190,52 @@ const Register = () => {
                   setPhoneError={setPhoneError}
                   setphoneNumberStatusCode={setphoneNumberStatusCode}
                 />
+              </View>
 
-                <CustomInput
-                  label="Email Address"
-                  placeholder="Type here"
-                  value={values.email}
-                  error={errors.email}
-                  customError={emailError}
-                  touched={touched.email}
-                  initialTouched={true}
-                  setFieldError={setFieldError}
-                  setEmailstatusCode={setEmailstatusCode}
-                  setFieldTouched={() => setFieldTouched("email")}
-                  fieldName="email"
-                  handleChange={text => setFieldValue('email', text)}
+              <CustomInput
+                label="Email Address"
+                placeholder="Type here"
+                value={values.email}
+                error={errors.email}
+                customError={emailError}
+                touched={touched.email}
+                initialTouched={true}
+                setFieldError={setEmailError}
+                setEmailstatusCode={setEmailstatusCode}
+                setFieldTouched={() => setFieldTouched("email")}
+                fieldName="email"
+                handleChange={text => setFieldValue('email', text)}
+              // isSubmitted={isSubmitted}
+              />
+
+              <View style={{ paddingVertical: responsiveWidth(6) }}>
+                <CustomButton
+                  backgroundColor={validate(values) ? '#395E66'
+                    : 'rgba(57, 94, 102, 0.4)'}
+                  color={"#FFF"}
+                  validate={validate}
+                  isLoading={isLoading}
+                  onPress={() => {
+                    // setIsSubmitted(true);
+                    handleSubmit();
+                  }
+                  }
+                  values={values}
+                  text={"Next"}
+                  type="registerFirst"
                 />
 
-                <View style={{ paddingVertical: responsiveWidth(6) }}>
+                <View style={{ marginVertical: moderateVerticalScale(7) }}>
                   <CustomButton
-                    backgroundColor={validate(values) ? '#395E66'
-                      : 'rgba(57, 94, 102, 0.4)'}
-                    color={"#FFF"}
-                    validate={validate}
-                    isLoading={isLoading}
-                    onPress={handleSubmit}
-                    values={values}
-                    text={"Next"}
-                    type="registerFirst"
+                    onPress={() => navigation.goBack()}
+                    backgroundColor="#FFF"
+                    borderWidth="1"
+                    type={"backuser"}
+                    color="#395E66"
+                    text="Back"
                   />
-
-                  <View style={{ marginVertical: moderateVerticalScale(7) }}>
-                    <CustomButton
-                      onPress={() => navigation.goBack()}
-                      backgroundColor="#FFF"
-                      borderWidth="1"
-                      type={"backuser"}
-                      color="#395E66"
-                      text="Back"
-                    />
-                  </View>
-
                 </View>
+
               </View>
             </View>
           </ScrollView>

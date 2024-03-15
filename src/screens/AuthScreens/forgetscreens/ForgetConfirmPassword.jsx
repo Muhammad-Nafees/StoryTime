@@ -39,17 +39,10 @@ import NavigationsString from '../../../constants/NavigationsString';
 import * as Yup from 'yup';
 import ResetPasswordModal from '../../../components/forget-screens-modal/ResetpasswordModal';
 import ErrorMessageForm from '../../../components/ErrorMessagesForm';
+import { validationForgetConfirmPassword } from '../../../../validation/validation';
 import CustomInput from '../../../components/auth/CustomInput';
 
-export const validationForgetConfirmPassword = Yup.object().shape({
-    newPassword: Yup.string()
-        .required('New Password is required')
-        .min(8, 'Password length should be at least 8 characters'),
-    confirmPassword: Yup.string()
-        .required('Confirm Password is required')
-        .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-        .min(8, 'Password length should be at least 8 characters'),
-});
+
 
 
 
@@ -63,20 +56,46 @@ const ForgetConfirmPassword = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const navigation = useNavigation();
+
+    const handleConfirmForget = async (values) => {
+        setIsSubmitted(false)
+        const { newPassword, confirmPassword } = values;
+        setIsLoading(true);
+        try {
+            const response = await reset_password(newPassword, confirmPassword, forgetuserToken);
+            console.log(response, "RESPONSE FROM FORGET_CONFIRM_PWD");
+            setVisible(true);
+            setIsLoading(false)
+
+            setTimeout(() => {
+                navigation.navigate(LOGIN);
+            }, 1000);
+        }
+        catch (error) {
+            setIsLoading(false);
+            console.log(error, "ERROR FROM FORGET_CONFIRM_PWD");
+            if (error?.response?.data) {
+                Toast.show({
+                    type: "error",
+                    text1: error?.response?.data?.message
+                })
+            }
+        }
+    }
+
 
     const forgetuserToken = useSelector(
         state => state?.authSlice?.forgetAccesstoken,
     );
-    const navigation = useNavigation();
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
-    const toggleShowPasswordConfir = () => {
+    const toggleShowPasswordConfirm = () => {
         setShowPasswordConfirm(!showPasswordConfirm);
     };
-
 
     const validate = (values) => {
         return (
@@ -84,39 +103,6 @@ const ForgetConfirmPassword = () => {
             values.confirmPassword
         )
     };
-
-    const handleForgetConfirm = async (values) => {
-        const { newPassword, confirmPassword } = values;
-        setIsLoading(true);
-        try {
-            const response = await reset_password(
-                newPassword,
-                confirmPassword,
-                forgetuserToken,
-            );
-            if (response?.statusCode === 200) {
-                setVisible(true)
-                setIsLoading(false),
-                    Toast.show({
-                        type: 'success',
-                        text1: response?.message,
-                    });
-                setTimeout(() => {
-                    navigation.navigate(LOGIN);
-                }, 1000);
-
-            } else if (response?.stack) {
-                if (response?.message === "newPassword length must be at least 8 characters long") {
-                    setErrorMessage("newPassword length must be at least 8 characters long")
-                }
-                setIsLoading(false);
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setIsLoading(false);
-        }
-    }
 
     return (
         <Formik
@@ -126,7 +112,7 @@ const ForgetConfirmPassword = () => {
             }}
             validationSchema={validationForgetConfirmPassword}
             validateOnChange={false}
-            onSubmit={handleForgetConfirm}>
+            onSubmit={handleConfirmForget}>
 
             {({ values, errors, handleChange, handleSubmit, touched, setFieldTouched }) => (
 
@@ -139,96 +125,80 @@ const ForgetConfirmPassword = () => {
 
                         {/* Code------------ */}
 
-                        <View>
-                            <View>
-                                <CustomInput
-                                    handleChange={handleChange('newPassword')}
-                                    label={"New password"}
-                                    onPress={toggleShowPassword}
-                                    showPassword={showPassword}
-                                    setShowPassword={setShowPassword}
-                                    value={values.newPassword}
-                                    type="password"
-                                    placeholder="Enter here"
-                                    width={responsiveWidth(90)}
-                                    onBlur={() => setFieldTouched('password')}
-                                    typeStyle="alignStyling"
-                                    setFieldTouched={() => setFieldTouched("password")}
-                                />
+                        <CustomInput
+                            label={"New Password"}
+                            handleChange={handleChange('newPassword')}
+                            onPress={toggleShowPassword}
+                            showPassword={showPassword}
+                            setShowPassword={setShowPassword}
+                            value={values.newPassword}
+                            touched={touched.newPassword}
+                            error={errors.newPassword}
+                            type="password"
+                            placeholder="Enter here"
+                            setFieldTouched={() => setFieldTouched("password")}
+                            Submitted={isSubmitted}
+                        />
+
+                        {/* <View */}
+                        {/* Confirm Password------------ */}
+
+                        <CustomInput
+                            label={"Confirm Password"}
+                            handleChange={handleChange('confirmPassword')}
+                            onPress={toggleShowPasswordConfirm}
+                            showPassword={showPasswordConfirm}
+                            error={errors.confirmPassword}
+                            touched={touched.confirmPassword}
+                            type="password"
+                            placeholder="Enter here"
+                            value={values.confirmPassword}
+                            setFieldTouched={() => setFieldTouched("confirmPassword")}
+                            Submitted={isSubmitted}
+                        />
+
+                        {/* Next and Back------------ */}
+
+                        <View style={{ paddingTop: responsiveWidth(60) }}>
+
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity
+                                    disabled={validate(values) ? false : true}
+                                    onPress={() => {
+                                        setIsSubmitted(true)
+                                        handleSubmit();
+                                    }
+                                    }
+                                    style={{
+                                        width: responsiveWidth(80),
+                                        backgroundColor: validate(values) ? TextColorGreen : "rgba(57, 94, 102, 0.3)",
+                                        borderRadius: 10,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: responsiveHeight(6.6),
+                                    }}
+                                >
+                                    {
+                                        !isLoading ? (
+                                            <Text
+                                                style={{
+                                                    fontSize: responsiveFontSize(1.9),
+                                                    fontWeight: '600',
+                                                    letterSpacing: 0.28,
+                                                    color: "#FFF",
+                                                }}>
+                                                Create
+                                            </Text>
+                                        ) :
+                                            <ActivityIndicator color={'#FFF'} />
+                                    }
+                                </TouchableOpacity>
                             </View>
 
-                            <View style={{ height: responsiveHeight(3.2) }}>
-                                <ErrorMessageForm
-                                    errorsField={errors.newPassword}
-                                    isSubmitted={isSubmitted}
-                                />
-                            </View>
-
-                            {/* <View */}
-                            {/* Confirm Password------------ */}
-
-                            <View>
-                                <CustomInput
-                                    handleChange={handleChange('confirmPassword')}
-                                    onPress={toggleShowPasswordConfir}
-                                    showPassword={showPasswordConfirm}
-                                    type="password"
-                                    label={"Confirm Password"}
-                                    typeStyle="alignStyling"
-                                    width={responsiveWidth(90)}
-                                    placeholder="Enter here"
-                                    value={values.confirmPassword}
-                                />
-                            </View>
-
-                            <ErrorMessageForm
-                                errorsField={errors.confirmPassword}
-                                isSubmitted={isSubmitted}
-                            />
-
-                            {/* Next and Back------------ */}
-
-                            <View style={{ paddingTop: responsiveWidth(60) }}>
-
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <TouchableOpacity
-                                        disabled={validate(values) ? false : true}
-                                        onPress={() => {
-                                            setIsSubmitted(true)
-                                            handleSubmit()
-                                        }
-                                        }
-                                        style={{
-                                            width: responsiveWidth(80),
-                                            backgroundColor: validate(values) ? TextColorGreen : "rgba(57, 94, 102, 0.3)",
-                                            borderRadius: 10,
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: responsiveHeight(6.6),
-                                        }}
-                                    >
-                                        {
-                                            !isLoading ? (
-                                                <Text
-                                                    style={{
-                                                        fontSize: responsiveFontSize(1.9),
-                                                        fontWeight: '600',
-                                                        letterSpacing: 0.28,
-                                                        color: "#FFF",
-                                                    }}>
-                                                    Create
-                                                </Text>
-                                            ) :
-                                                <ActivityIndicator color={'#FFF'} />
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-
-                                {/*  */}
-
-                            </View>
+                            {/*  */}
 
                         </View>
+
 
                         {/* -------------------------------------------------------------------------- */}
                         {/* <View>

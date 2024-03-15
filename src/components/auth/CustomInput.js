@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import _ from 'lodash';
@@ -10,37 +10,24 @@ import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
 import { Inter_Regular } from '../../constants/GlobalFonts';
 import { Img_Paths } from '../../assets/Imagepaths';
-import axios from 'axios';
-import { Base_Url, username_endpoint } from '../../../services';
-
-
 
 const CustomInput = (props) => {
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths
-  console.log("value--- :", props?.value);
-  const [isEmailerr, setIsEmailerr] = useState("");
-  const [isError, setIsError] = useState(false);
-
+  console.log("value--- :", props?.value)
   const debouncedApiCall = useRef(
-
     _.debounce(async (value, setFieldError, fieldName) => {
-      try {
-        // const response = await username_api({ email: fieldName === 'email' ? value : '' });
-        const response = await axios.post(Base_Url + username_endpoint, { email: fieldName === 'email' ? value : '' });
-
-        console.log("respose DATA ", response);
-        props.setEmailstatusCode(response.statusCode);
-
-      } catch (error) {
-        setIsEmailerr(error?.response?.data?.message)
-        setFieldError("email", error?.response?.data?.message);
-        setIsError(true);
-        console.log(error?.response?.data?.message, "ERROR FROM CUSTOMINPUT");
+      const response = await username_api({ email: fieldName === 'email' ? value : '' });
+      props.setEmailstatusCode(response.statusCode)
+      if (response?.statusCode !== 200) {
+        if (fieldName === 'email') {
+          setFieldError('Email already exists');
+        }
+      } else {
+        setFieldError('');
+        setFieldError('');
       }
     }, 850)
   ).current;
-
-
 
   const handleChangeText = async (text, fieldName) => {
     props.handleChange(text);
@@ -49,33 +36,45 @@ const CustomInput = (props) => {
     }
   };
 
-  // paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10
+  const inputStyle = {
+    color: "rgba(0,0,0,1)",
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: verticalScale(50),
+    textAlignVertical: 'center',
+    color: '#000',
+    paddingLeft: 28,
+    fontFamily: Inter_Regular.Inter_Regular,
+    fontSize: responsiveFontSize(1.8),
+    backgroundColor: TextinputColor,
+  };
+
+  // paddingVertical: props?.type == "email" || props?.type == "password" ? null : 10
+
+  // {
+  //   color: FourthColor,
+  //   fontWeight: '600',
+  //   paddingBottom: props?.type !== "customfield" || props?.typeStyle == "alignStyling" ? verticalScale(7) : null,
+  //   paddingVertical: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 5 : null,
+  //   width: props?.width,
+  //   marginLeft: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 'auto' : null
+  // },
 
   return (
-
-    <View style={{ paddingVertical: props?.type == "email" || props?.type == "password" ? 0 : 10 }}>
-      <Text
-        style={[
-          {
-            color: FourthColor,
-            fontWeight: '600',
-            paddingBottom: props?.type !== "customfield" || props?.typeStyle == "alignStyling" ? verticalScale(7) : null,
-            paddingVertical: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 5 : null,
-            width: props?.width,
-            marginLeft: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 'auto' : null
-          },
-          // props.labelStyles,
-        ]}
-      >
-        {props.label}
-      </Text>
+    <>
+      <View style={{ marginLeft: "auto", width: responsiveWidth(90), }}>
+        <Text style={{ color: FourthColor, fontWeight: "600", }}>
+          {props.label}
+        </Text>
+      </View>
 
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          paddingVertical: moderateVerticalScale(2),
-
+          paddingVertical: moderateVerticalScale(4),
+          paddingTop: responsiveWidth(3),
         }}>
         <View
           style={{
@@ -110,9 +109,8 @@ const CustomInput = (props) => {
             keyboardType={props.keyboardType}
             autoCapitalize={props.autoCapitalize}
             editable={props.editable}
-            onBlur={() => props.setFieldTouched}
+            onBlur={props.setFieldTouched}
           />
-
 
           {props?.type == 'password' && (
             <TouchableOpacity activeOpacity={0.7} onPress={props?.onPress}>
@@ -126,7 +124,7 @@ const CustomInput = (props) => {
       </View>
 
       {
-        isError && props.fieldName === 'email' && (
+        !props.error && props.customError && (
           <View
             style={[
               {
@@ -138,28 +136,35 @@ const CustomInput = (props) => {
             ]}
           >
             <Icon name="alert-circle" size={22} color="red" />
-            <Text style={[{ color: 'red' }]}>{props.error}</Text>
+            <Text style={[{ color: 'red' }]}>{props.customError}</Text>
           </View>
         )
       }
 
-      {
-        !isError && props.touched && props.error && (
-          <View
-            style={[
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2,
-                marginTop: verticalScale(7),
-              },
-            ]}
-          >
-            <Icon name="alert-circle" size={22} color="red" />
-            <Text style={[{ color: 'red' }]}>{props.error}</Text>
-          </View>
-        )
-      }
+      <View style={{ height: responsiveHeight(3.5) }}>
+        {
+          props?.Submitted && props.touched && props.error && (
+            <View
+              style={[
+                {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: moderateScale(16),
+                  gap: 5,
+                  // backgroundColor: "orange",
+                  // height: responsiveHeight(4.5),
+                  // marginTop: verticalScale(7),
+                },
+              ]}
+            >
+              <Icon name="alert-circle" size={22} color="red" />
+              <Text style={[{ color: 'red', fontSize: responsiveFontSize(1.9), fontWeight: "600" }]}>{props.error}</Text>
+            </View>
+          )
+        }
+      </View>
+
+
 
       {
         props.isVisible && (
@@ -168,7 +173,8 @@ const CustomInput = (props) => {
         )
       }
 
-    </View>
+
+    </>
   );
 };
 

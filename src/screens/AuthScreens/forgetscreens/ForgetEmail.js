@@ -3,50 +3,31 @@ import {
   Text,
   View,
   Image,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Button,
-  Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
 import {
-  FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  TextinputColor,
-  ThirdColor,
 } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-
 import { useNavigation } from '@react-navigation/native';
-import TextInputField from '../../../components/TextInputField';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import reset_email from '../../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import { Formik } from 'formik';
 import { validationforgetEmail } from '../../../../validation/validation';
-import { Path, Svg } from 'react-native-svg';
 import _ from 'lodash';
 import CustomInputForgetEmail from '../../../components/auth/CustomInputForgetEmail';
-import useKeyboard from '../../../hooks/AvoidingKeyboard';
 
 const ForgetEmail = () => {
-  const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
-  const { ANOTHER_FORGET_BG_IMG, GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
-  const [EmailError, setEmailError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
   const navigation = useNavigation();
 
-  // const keyboardHeight = useKeyboard();
 
   return (
     <KeyboardAvoidingView>
@@ -104,7 +85,6 @@ const ForgetEmail = () => {
 
               {/* Next------------ */}
             </View>
-            <Toast />
           </>
         )}
       </Formik>

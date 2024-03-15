@@ -39,10 +39,7 @@ import { validationUserPassword } from '../../../validation/validation';
 import { Path, Svg } from 'react-native-svg';
 import { Img_Paths } from '../../assets/Imagepaths';
 import ErrorMessageForm from '../../components/ErrorMessagesForm';
-import CustomErrorField from '../../components/auth/CustomErrorField';
 import CustomInput from '../../components/auth/CustomInput';
-import axios from 'axios';
-import { Base_Url } from '../../../services';
 
 const RegisterPassword = ({ route }) => {
     const navigation = useNavigation();
@@ -55,17 +52,36 @@ const RegisterPassword = ({ route }) => {
     const { LOGIN } = NavigationsString;
     const { BGIMAGE_ACCOUNT_CREATED, CREATE_PASSWORD_IMG } = Img_Paths;
     const { registerData } = useSelector(state => state.authSlice);
-    const { registerLocationData } = useSelector(state => state.authSlice);
+
+
+    const handleRegisterPassword = async (values) => {
+        setIsSubmitted(false);
+        setIsLoading(true);
+        try {
+            console.log("BEFORE api CALL ")
+            const responseData = await registerapi(
+                registerData,
+                values,
+            );
+            setIsLoading(false);
+            console.log("AFTER api CALL ");
+            setVisible(true);
+        }
+        catch (error) {
+            console.log(error?.response, 'ERROR FROM REGISTER PASSWORD!');
+            if (error?.response?.data) {
+                setIsLoading(false);
+                Toast.show({
+                    type: "error",
+                    text1: `${error?.response?.data?.message}`,
+                });
+            }
+        }
+    };
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
-    // [{"countryCode": "AU", "phoneCode": "61", "values": {"email": "cjcucu@gmail.com", "fcmToken": "1234567", "firstName": "Fufu", "lastName": "Xjjcu", "phoneNo": "369362662", "role": "user", "username": "Bdjfj"}}] 
-
-    const { countryCode, phoneCode } = registerData
-    const { email, fcmToken, firstName, lastName, phoneNo, role, username } = registerData?.values
-    const { city, state, zipCode } = registerLocationData;
 
     const toggleconfirmshowpassword = () => {
         setConfirmShowPassword(!confirmShowPassword);
@@ -73,41 +89,6 @@ const RegisterPassword = ({ route }) => {
 
     const validate = values => {
         return values.password && values.confirmPassword;
-    };
-
-    // registerData,
-    // registerLocationData,
-    // values,
-
-    const requestData = {
-        ...registerData,
-        ...registerLocationData,
-        ...values,
-    };
-
-    const handleRegisterPassword = async (values) => {
-        try {
-            setIsLoading(true);
-            const responseData = await axios.post(Base_Url + register_endpoint, requestData);
-            const message = responseData?.message;
-
-            setVisible(true);
-            setIsLoading(false);
-            Toast.show({
-                type: 'success',
-                text1: message,
-                position: 'top',
-                visibilityTime: 2500,
-            });
-        }
-
-        catch (error) {
-            console.log(error?.response?.data, 'ERROR FROM REGISTER!');
-            Toast.show({
-                type: "error",
-                text1: `${error?.response?.data?.message}`,
-            });
-        }
     };
 
     return (
@@ -124,6 +105,7 @@ const RegisterPassword = ({ route }) => {
                 handleChange,
                 handleSubmit,
                 setFieldTouched,
+                touched
             }) => (
                 <>
                     <View style={styles.container}>
@@ -136,52 +118,41 @@ const RegisterPassword = ({ route }) => {
 
                             <CustomInput
                                 label={"Password"}
+                                value={values.password}
+                                width={responsiveWidth(90)}
+                                handleChange={handleChange('password')}
+                                onPress={toggleShowPassword}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                error={errors.password}
+                                touched={touched.password}
+                                placeholder={"Enter here"}
+                                typeStyle="alignStyling"
+                                onBlur={() => setFieldTouched('password')}
+                                type="password"
+                                Submitted={isSubmitted}
+                            />
+
+
+                            {/* Confirm Password------------ */}
+
+
+                            <CustomInput
+                                label={"Confirm Password"}
                                 value={values.confirmPassword}
                                 width={responsiveWidth(90)}
                                 handleChange={handleChange('confirmPassword')}
                                 onPress={toggleconfirmshowpassword}
                                 showPassword={confirmShowPassword}
                                 setShowPassword={setConfirmShowPassword}
+                                error={errors.confirmPassword}
                                 placeholder={"Enter here"}
-                                typeStyle="alignStyling"
+                                touched={touched.confirmPassword}
                                 onBlur={() => setFieldTouched('confirmPassword')}
                                 type="password"
+                                typeStyle="alignStyling"
+                                Submitted={isSubmitted}
                             />
-
-                            <View style={{ height: responsiveHeight(3.2) }}>
-                                {
-                                    <ErrorMessageForm
-                                        errorsField={errors.password}
-                                        isSubmitted={isSubmitted}
-                                    />
-                                }
-                            </View>
-
-                            {/* <View */}
-                            {/* Confirm Password------------ */}
-
-                            <View>
-                                <CustomInput
-                                    label={"Confirm Password"}
-                                    value={values.password}
-                                    width={responsiveWidth(90)}
-                                    handleChange={handleChange('password')}
-                                    onPress={toggleShowPassword}
-                                    showPassword={showPassword}
-                                    setShowPassword={setShowPassword}
-                                    placeholder={"Enter here"}
-                                    onBlur={() => setFieldTouched('password')}
-                                    type="password"
-                                    typeStyle="alignStyling"
-                                />
-                            </View>
-
-                            {
-                                <ErrorMessageForm
-                                    errorsField={errors.confirmPassword}
-                                    isSubmitted={isSubmitted}
-                                />
-                            }
 
                             {/* Next and Back------------ */}
 
@@ -194,9 +165,13 @@ const RegisterPassword = ({ route }) => {
                                         color={"#FFF"}
                                         validate={validate}
                                         isLoading={isLoading}
-                                        onPress={handleSubmit}
+                                        onPress={() => {
+                                            setIsSubmitted(true);
+                                            handleSubmit();
+                                        }
+                                        }
                                         values={values}
-                                        text={"Next"}
+                                        text={"Save"}
                                         type="registerpassword"
                                     />
                                 </View>
@@ -233,7 +208,6 @@ const RegisterPassword = ({ route }) => {
         </Formik>
     );
 };
-
 
 
 const styles = StyleSheet.create({

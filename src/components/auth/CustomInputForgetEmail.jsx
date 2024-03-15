@@ -20,15 +20,12 @@ import {
 } from '../../screens/Styles/Style';
 import _ from 'lodash';
 import reset_email, { username_api } from '../../../services/api/auth_mdule/auth';
-import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
 import CustomButton from '../reusable-components/CustomButton/CustomButton';
-import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
+import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
-  const { FORGET_BG_IMG } = Img_Paths;
   const [isFocused, setIsFocused] = useState(false);
   const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
@@ -38,27 +35,21 @@ const CustomInputForgetEmail = props => {
   const [textval, seText] = useState('');
   const navigation = useNavigation();
 
-  const handleInputFocus = () => {
-    setIsFocused(true);
-  };
 
-  const handleInputBlur = () => {
-    setIsFocused(false);
-  };
 
   const debouncedApiCall = useRef(
     _.debounce(async text => {
       try {
         const response = await reset_email({ email: text });
+        console.log("response --- :", response);
         seText(text);
         setResponse(response?.data?.code);
         console.log('response---', response?.data?.code);
         if (response?.message === "Invalid Information, Record Not Found!") {
           setInvalidPhoneNumber("Invalid Information, Record Not Found!");
         } else {
-          setInvalidPhoneNumber("Invalid email")
+          setInvalidPhoneNumber("Invalid email");
         }
-
         if (response?.statusCode === 200) {
           setIsStatusCodeSuccess(true);
           setInvalidPhoneNumber("");
@@ -72,7 +63,16 @@ const CustomInputForgetEmail = props => {
     }, 300),
   ).current;
 
+  const handleInputFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
+  };
+
   const handleChangeText = async (text, fieldName) => {
+    console.log("handletext-- :", text)
     props.handleChange(text);
     debouncedApiCall(text);
   };
@@ -138,6 +138,23 @@ const CustomInputForgetEmail = props => {
           editable={props.editable}
         />
       </View>
+
+      {/* {!props.error && props.customError && (
+                <View
+                    style={[
+                        {
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 2,
+                            marginTop: verticalScale(7),
+                        },
+                    ]}
+                >
+                    <Icon name="alert-circle" size={22} color="red" />
+                    <Text style={[{ color: 'red' }]}>{props.customError}</Text>
+                </View>
+            )} */}
+      {console.log('res-=', responses)}
 
       {
         invalidPhoneNumber &&

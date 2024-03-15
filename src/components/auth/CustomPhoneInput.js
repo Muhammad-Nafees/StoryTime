@@ -3,9 +3,10 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { verticalScale } from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
+  responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
@@ -13,8 +14,6 @@ import { username_api } from '../../../services/api/auth_mdule/auth';
 import _ from 'lodash';
 import { Path, Svg } from 'react-native-svg';
 import { Inter_Regular } from '../../constants/GlobalFonts';
-import axios from 'axios';
-import { Base_Url, username_endpoint } from '../../../services';
 
 const CustomPhoneInput = ({
   handleChange,
@@ -32,37 +31,33 @@ const CustomPhoneInput = ({
   setPhoneError,
   disabled = false,
   extraStyles,
+  setFormatText,
   setphoneNumberStatusCode,
   defaultCode,
 }) => {
+  // console.log("error && isError", error,"//",isError)
 
   const [isFocused, setIsFocused] = useState(false);
   const [response, setResponse] = useState();
   const [statusCodePhone, setStatusCodePhone] = useState();
-  const [phoneAlreadyExist, setPhoneAlreadyExist] = useState("")
-
-  // const response = await axios.post(Base_Url + username_endpoint, `+${code}${phoneNumber}`)
 
   const debouncedApiCall = useRef(
-    _.debounce(async (phoneNumber) => {
+    _.debounce(async (phoneNumber, setFieldError) => {
       const code = phoneInput?.current?.state?.code;
       setResponse(response?.status);
-
-      try {
-        // const response = await username_api({ completePhone: `+${code}${phoneNumber}` });
-        const response = await axios.post(Base_Url + username_endpoint, { completePhone: `+${code}${phoneNumber}` });
-        console.log("CUSTOM phone RESPONSE--- :", response?.data);
-        setphoneNumberStatusCode(response?.statusCode);
-        setStatusCodePhone(response?.statusCode);
-        console.log(response?.statusCode);
-      } catch (error) {
-        setFieldError("phoneNo", error?.response?.data?.message);
-        console.log(error?.response?.data, 'ERROR FROM PHONENUMBER!');
+      const response = await username_api({
+        completePhone: `+${code}${phoneNumber}`,
+      });
+      setphoneNumberStatusCode(response?.statusCode);
+      setStatusCodePhone(response?.statusCode);
+      console.log(response?.statusCode);
+      if (response?.statusCode !== 200) {
+        setPhoneError('Phone Number already exists'); //no need for this
+        setIsError('Phone Number already exists');
+        setFieldError('phoneNo', `Phone Number already exists`);
       }
     }, 300),
   ).current;
-
-
 
   const handleCountryChange = () => {
     phoneInput.current?.setState({ number: '' });
@@ -88,7 +83,7 @@ const CustomPhoneInput = ({
   };
 
   return (
-    <View style={{ paddingVertical: 10 }}>
+    <View style={{}}>
       <Text
         style={{
           color: FourthColor,
@@ -106,6 +101,7 @@ const CustomPhoneInput = ({
             disabled={disabled}
             placeholder=" "
             defaultCode={defaultCode || 'AU'}
+            onChangeFormattedText={text => setFormatText(text)}
             containerStyle={styles.phoneContainer}
             textContainerStyle={styles.phoneTextContainer}
             textInputStyle={styles.phoneTextInput}

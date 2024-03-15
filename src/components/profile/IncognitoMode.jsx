@@ -17,7 +17,8 @@ import { Inter_SemiBold, PassionOne_Regular } from '../../constants/GlobalFonts'
 const IncognitoMode = ({ setChangeMode,
     toggel_mode,
     hasMorePagesRecording,
-    username
+    username,
+    changeMode
 }) => {
 
     const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON, BG_BLACK_INCOGNITO } = Img_Paths;
@@ -38,8 +39,8 @@ const IncognitoMode = ({ setChangeMode,
 
 
     const incognito_profileResponse = async () => {
-        try {
 
+        try {
             const responseData = await fetch_users_stories({ type: type, recordingPage: incognitoPage, isincognitoPage: incognitoPage });
             const responsestories = responseData?.data?.stories;
 
@@ -229,7 +230,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: responsiveWidth(12.9),
         height: responsiveHeight(6.3),
-        backgroundColor: "rgba(57, 94, 102, 0.5)",
+        backgroundColor: TextColorGreen,
+        borderWidth: 1,
+        borderColor: "#FFF",
         justifyContent: "center",
         alignItems: "center"
     },

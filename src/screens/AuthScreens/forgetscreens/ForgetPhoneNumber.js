@@ -29,9 +29,7 @@ import ForgetCustomInput from '../../../components/ForgetCustomInput';
 
 
 const ForgetPhoneNumber = () => {
-  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const { OTP_FORGET, FORGET_EMAIL } = NavigationsString;
   const [formatText, setFormatText] = useState('');
   const [phoneCode, setPhoneCode] = useState('');
   const [isError, setIsError] = useState('');

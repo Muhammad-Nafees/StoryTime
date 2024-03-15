@@ -14,6 +14,7 @@ import MessageList from '../../../components/Support/MessageList';
 import SupportButton from '../../../components/Support/SupportButton';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
+
 const Support = ({ navigation }) => {
   const { LEFT_ARROW_IMG } = Img_Paths;
 
