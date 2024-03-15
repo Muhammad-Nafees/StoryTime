@@ -83,7 +83,7 @@ const CustomPhoneInput = ({
   };
 
   return (
-    <View style={{ paddingVertical: 10 }}>
+    <View style={{}}>
       <Text
         style={{
           color: FourthColor,

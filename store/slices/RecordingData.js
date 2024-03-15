@@ -44,15 +44,6 @@ const RecordingData = createSlice({
         extendVideo: (state, { payload }) => {
             state.extendVideo = payload
         },
-
-        // recordingToHome(state, { payload }) {
-        //     state.recordingTextToHome = payload,
-        //         console.log("saveTextrecorHOm", state.recordingTextToHome)
-        // },
-        // recordingVideo(state, { payload }) {
-        //     state.saveRecordingVideo = payload,
-        //         console.log("videorecordingRed", state.saveRecordingVideo)
-        // }
     }
 });
 

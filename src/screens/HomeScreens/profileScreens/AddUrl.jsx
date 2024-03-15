@@ -6,14 +6,12 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import BackButton from '../../../components/BackButton';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
-import SelectDropdown from 'react-native-select-dropdown';
-import TouchableButton from '../../../components/TouchableButton';
 import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAddUrlId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
 import { userLoginid } from '../../../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,11 +24,7 @@ const AddUrl = () => {
     const { BG_PLAYFLOW, BG_URL_PAGE } = Img_Paths;
     const navigation = useNavigation();
 
-    const addUrlId = useSelector((state) => state?.addPlayers?.addUrlid);
-    const categoryId = useSelector((state) => state?.addPlayers?.urlCategoryname);
-    const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
-
-
+    // states
     const [changeColor, setChangeColor] = useState("#AAA");
     const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
     const [textInputValue, setTextInputValue] = useState("");
@@ -42,8 +36,12 @@ const AddUrl = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [pageSubCategory, setPageSubCategory] = useState(1);
     const [responseSubCategories, setResponseSubCategories] = useState([]);
-    const dispatch = useDispatch();
 
+    // redux
+    const addUrlId = useSelector((state) => state?.addPlayers?.addUrlid);
+    const categoryId = useSelector((state) => state?.addPlayers?.urlCategoryname);
+    const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
+    const dispatch = useDispatch();
 
 
     const categories_Api = async () => {
@@ -216,7 +214,12 @@ const AddUrl = () => {
                         isVisible={isVisible}
                         setVisible={setIsVisible}
                         text1={"Successfully Added!"}
-                        onPress={() => navigation.navigate("Profile")}
+                        onPress={() => {
+                            const randomNumbers = Math.floor(Math.random() * 100);
+                            dispatch(setRandomForProfileUpdate(randomNumbers));
+                            console.log("randomNumbers :", randomNumbers)
+                            navigation.navigate("Profile");
+                        }}
                     />
                 }
             </ImageBackground>

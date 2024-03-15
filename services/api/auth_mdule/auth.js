@@ -10,73 +10,88 @@ import {
   stateandCity_endpoint,
   username_endpoint,
   logout_endpoint,
-  delete_account_endpoint
+  delete_account_endpoint,
+  login_andpoint
 } from '../..';
-import { useSelector } from 'react-redux';
+import axios from 'axios';
+
+
+export const login_api = async (values) => {
+
+  try {
+    const responseData = await axios.post(Base_Url + login_andpoint, values)
+    return responseData;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
 
 const reset_email = async (values) => {
   console.log('values---', values);
 
   try {
-
-    const response = await fetch(Base_Url + reset_email_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-
-    });
-
-    const responseData = await response.json();
-    console.log("responseData-------------- :", responseData)
+    const responseData = await axios.post(Base_Url + reset_email_endpoint, values)
+    // const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error('Error:', error);
+    throw error;
   }
 };
+
+// const response = await fetch(Base_Url + reset_email_endpoint, {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify(values),
+
+// });
 
 export const otp_forget = async code => {
   try {
-    const response = await fetch(Base_Url + reset_verify_code, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code: code }),
-    });
-
-    const responseData = await response.json();
+    const responseData = await axios.put(Base_Url + reset_verify_code, {
+      code: code
+    })
+    // const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error('Error:', error);
+    throw error;
   }
 };
 
-export const reset_password = async (
-  newPassword,
-  confirmPassword,
-  forgetuserToken,
-) => {
+//   const response = await fetch(Base_Url + reset_verify_code, {
+//   method: 'PUT',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify({ code: code }),
+// });
+
+export const reset_password = async (newPassword, confirmPassword, accessToken) => {
+
+  const bodyData = {
+    newPassword: newPassword,
+    confirmPassword: confirmPassword
+  }
+
+  const headers = {
+    'Content-Type': 'application/json',
+    accessToken: accessToken,
+  };
+
   try {
-    const response = await fetch(Base_Url + reset_password_endpoint, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        accessToken: forgetuserToken,
-      },
-      body: JSON.stringify({
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-      }),
-    });
-
-    const responseData = await response.json();
-    return responseData;
+    const responseData = await axios.put(Base_Url + reset_password_endpoint, bodyData, {
+      headers: headers
+    })
+    return responseData.data;
   } catch (error) {
     console.error('Error:', error);
+    throw error;
   }
 };
+
 
 export const refresh_token_api = async (refreshToken) => {
 
@@ -98,46 +113,30 @@ export const refresh_token_api = async (refreshToken) => {
   }
 };
 
+export const registerapi = async (registerData, values) => {
 
-export const registerapi = async (firstpageData, secondpageData, values) => {
-  const countryCode = firstpageData?.countryCode;
-  const phonecodee = firstpageData?.phoneCode;
-  console.log("inside----------pa", countryCode, phonecodee)
-  console.log(countryCode, phonecodee)
-  const { email, fcmToken, firstName, lastName, phoneNo, role, username } =
-    firstpageData?.values;
-  const phoneCode = `+${phonecodee}`;
-  const { city, state, zipCode } = secondpageData;
-  const { confirmPassword, password } = values;
-
+  const formData = {
+    email: registerData?.values?.email,
+    fcmToken: registerData?.values?.fcmToken,
+    firstName: registerData?.values?.firstName,
+    lastName: registerData?.values?.lastName,
+    phoneNo: registerData?.values?.phoneNo,
+    role: registerData?.values?.role,
+    username: registerData?.values?.username,
+    zipCode: registerData.zipCode,
+    city: registerData.city,
+    countryCode: registerData.countryCode,
+    phoneCode: registerData.phoneCode,
+    state: registerData.state,
+    password: values.password,
+    confirmPassword: values.confirmPassword,
+  };
   try {
-    const response = await fetch(Base_Url + register_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        countryCode,
-        email,
-        fcmToken,
-        firstName,
-        lastName,
-        phoneCode,
-        phoneNo,
-        role,
-        username,
-        city,
-        state,
-        zipCode,
-        confirmPassword,
-        password,
-      }),
-    });
-
-    const responseData = await response.json();
-    return responseData;
+    const response = await axios.post(Base_Url + register_endpoint, formData);
+    return response.data;
   } catch (err) {
     console.log('error', err);
+    throw err;
   }
 };
 
@@ -185,22 +184,32 @@ export const userandcity_api = async statesinfo => {
   }
 };
 
+
+
 export const username_api = async (data) => {
-  console.log("=========data", data)
-  const requestBody = {};
+  try {
 
-  const response = await fetch(Base_Url + username_endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+    console.log("=========data", data)
+    const requestBody = {};
 
-  const responseData = await response.json();
-  console.log('usernameapi---', responseData);
-  return responseData;
+    // const responseData = await axios.post(Base_Url + username_endpoint, data)
+    const response = await fetch(Base_Url + username_endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const responseData = await response.json();
+    console.log('usernameapi---', responseData);
+    return responseData;
+  } catch (error) {
+    throw error;
+  }
 };
+
+
 
 export const logout_user = async () => {
   try {

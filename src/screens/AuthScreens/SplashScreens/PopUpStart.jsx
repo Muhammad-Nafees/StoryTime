@@ -12,7 +12,6 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 const PopUpStart = () => {
     const {
         SPLASH_SCREEN_IMAGE,
-        GET_STARTED_IMAGE,
         STORY_TIME_IMG
     } = Img_Paths
     const { SPLASH_SCREEN } = NavigationsString;
