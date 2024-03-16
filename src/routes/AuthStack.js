@@ -31,7 +31,7 @@ import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
 import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
+import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
 import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
@@ -88,7 +88,6 @@ const AuthStack = () => {
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-
         }}
         initialRouteName={initialRouteName}>
         <Stack.Screen

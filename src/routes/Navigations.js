@@ -3,29 +3,24 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import {
-  CommonActions,
-  NavigationContainer,
-  useFocusEffect,
   useNavigation,
-  useRoute,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../assets/Imagepaths';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
 import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
 import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
 import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
-import Sequence from '../screens/HomeScreens/catagoriesaddMembers/sequenceofPlayer/Sequence';
+import Sequence from '../screens/HomeScreens/catagoriesaddMembers/Sequence';
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
 import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
@@ -59,6 +54,7 @@ import Report from '../screens/HomeScreens/Setting/Report';
 import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
 import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
 import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
+import SelectGamePoint from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -76,13 +72,6 @@ const Navigations = () => {
     BLOCK_USER,
     DELETE_ACCOUNT,
     LOGIN,
-    SUPPORT,
-    SUPPORT_MESSAGE,
-    SUPPORT_MESSAGE_LIST,
-    REPORT,
-    PAYEMENT,
-    ADD_PAYMENT_CARD,
-    ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -159,7 +148,6 @@ const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
 
   const {
-    FIRSTSCREENPLAYFLOW,
     FIRST_USER,
     SECONDSCREENPLAYFLOW,
     VIDEO_SECOND_USER,
@@ -175,8 +163,8 @@ const PLayFlowScreens = () => {
         headerShown: false,
       }}>
       <Stack.Screen
-        name={FIRSTSCREENPLAYFLOW}
-        component={FirstScreenPlayFlow}
+        name={"SelectGamePoint"}
+        component={SelectGamePoint}
       />
       <Stack.Screen
         name={SECONDSCREENPLAYFLOW}

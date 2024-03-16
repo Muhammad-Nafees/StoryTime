@@ -15,7 +15,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
-import SocialsLogin from '../../components/SocialsLogin';
+import SocialsLogin from '../../components/auth/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import {
   login,

@@ -12,13 +12,12 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
-import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
 const AddPlayers = () => {
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, } = Img_Paths;
-    const { ADD_FRIENDS } = NavigationsString;
-    const { height, width } = Dimensions.get("window")
+    const { height, } = Dimensions.get("window")
     const [Responseapi, setResponseapi] = useState([]);
     const navigation = useNavigation();
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
@@ -68,9 +67,6 @@ const AddPlayers = () => {
     const handlenavigation = () => {
         navigation.navigate(CATEGORIES);
     };
-
-    console.log("addedUsers---- :", addedUsers);
-    console.log("Responseapi outside----- :", Responseapi);
 
     return (
 
@@ -202,37 +198,8 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         letterSpacing: 0.36
     },
-    text_Input_container: {
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: moderateVerticalScale(2)
-    },
-    text_input_child: {
-        flexDirection: 'row',
-        width: responsiveWidth(90),
-    },
-    input_field: {
-        paddingLeft: 30,
-        width: responsiveWidth(70),
-        backgroundColor: '#FFF',
-        color: "#000",
-        borderRadius: 50,
-    },
-    add_button: {
-        borderRadius: 50,
-        width: responsiveWidth(21.5),
-        height: responsiveHeight(7),
-        backgroundColor: '#395E66',
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    add_text: {
-        fontSize: responsiveFontSize(1.9),
-        color: "#FFF",
-        fontWeight: "500",
-        textAlign: "center",
-        letterSpacing: -0.2
-    }
+
+
 })
 
 

@@ -1,44 +1,32 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
-  Dimensions,
-  Image,
-  BackHandler,
   ImageBackground,
   Text,
-  TouchableOpacity,
   View,
   StyleSheet,
   FlatList,
-  ScrollView,
-  TextInput,
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
 import {
   PrimaryColor,
-  SecondaryColor,
   TextColorGreen,
-  ThirdColor,
-  White,
   pinkColor,
 } from '../../Styles/Style';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import SearchField from '../../../components/SearchField';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getCategories,
   setSubCategoriesId,
 } from '../../../../store/slices/getCategoriesSlice';
 import {
@@ -52,22 +40,21 @@ import {
 } from '../../../../store/slices/addplayers/addPlayersSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
-import { BlurView } from '@react-native-community/blur';
-import SvgIcons from '../../../components/svgIcon/svgIcons';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { SPACING, URL } from '../../../constants/Constant';
+import { URL } from '../../../constants/Constant';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
+import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
+import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
+import GuestNumber from '../../../components/categories/guestCategories/GuestNumber';
+import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
 
 const SubCategories = ({ route }) => {
   //destructures
   const { id, name, guestNumber } = route?.params || {};
-  const { height } = Dimensions.get('window');
   const { SPLASH_SCREEN_IMAGE } = Img_Paths;
   const { LUDO_ICON } = Img_Paths;
-  const { PLAYER_SEQUENCE, FIRSTSCREENPLAYFLOW, ADD_PLAYERS } = NavigationsString;
-
 
   //hooks
   const navigation = useNavigation();
@@ -75,7 +62,6 @@ const SubCategories = ({ route }) => {
   const { bottom } = useSafeAreaInsets();
 
   //redux states
-  const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
 
   //states
@@ -110,7 +96,6 @@ const SubCategories = ({ route }) => {
   }, [responsesubCategories, searchTerm]);
 
 
-
   const addFriends_api_handler = async () => {
     try {
       const responseData = await addFriends_api();
@@ -127,7 +112,7 @@ const SubCategories = ({ route }) => {
         console.log('Matched User ID:', userid);
         setIsUsernameInputValue('');
       } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate(ADD_PLAYERS);
+        navigation.navigate("AddPlayers");
       } else {
         Toast.show({
           type: 'error',
@@ -162,43 +147,43 @@ const SubCategories = ({ route }) => {
       setIsLoading(false);
       return response;
     } catch (error) {
-      console.log('error---', error);
+      console.log(error?.response?.data, "ERROR FROM CATEGORIES");
     }
   };
 
+
   const handleRandomSub_category = async () => {
     try {
-      let randomSubName =
-        allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
+      let randomSubName = allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
 
       const filteredSubcategory = responsesubCategories.find(category =>
         category.name.includes(randomSubName),
       );
       const response = user ? await get_Random(id) : filteredSubcategory;
-      console.log('response----', response);
+      console.log(response?.data, "RESOPNSE FROM SUBCATEGORY RANDOM")
       const imageLink = user
-        ? URL + response?.data?.image
-        : URL + response?.image;
-      dispatch(randomNames(user ? response?.data?.name : response?.name));
+        ? URL + response?.data?.data?.image
+        : URL + response?.data?.image;
+
+      dispatch(randomNames(user ? response?.data?.data?.name : response?.data?.name));
       dispatch(setStoryUserImage(imageLink));
-      console.log('storyUserImage0-----', imageLink);
-      // console.log(" response?.image-----", response?.image);
+      console.log("responseName RANDOM", response?.data?.data?.name);
+      console.log("responseIMAGE RANDOAM IMAGE", response?.data?.data?.image);
       user
-        ? navigation.navigate(PLAYER_SEQUENCE)
-        : navigation.navigate(FIRSTSCREENPLAYFLOW);
+        ? navigation.navigate("Sequence")
+        : navigation.navigate("FirstScreenPlayFlow");
 
       return response;
     } catch (error) {
-      console.log('error---', error);
+      console.log(error?.response?.data, "ERROR FROM SUB-RANDOM");
     }
   };
-
 
   const handleStoryUser = (id, name, image) => {
     const imageLink = URL + image;
     user
-      ? navigation.navigate(PLAYER_SEQUENCE)
-      : navigation.navigate(FIRSTSCREENPLAYFLOW);
+      ? navigation.navigate("Sequence")
+      : navigation.navigate("FirstScreenPlayFlow");
     dispatch(randomNames(name));
     dispatch(setStoryUserImage(imageLink));
     dispatch(setSubCategoriesId(id));
@@ -231,8 +216,6 @@ const SubCategories = ({ route }) => {
   const isCategoryBlurred = category => {
     return !allowedCategories.includes(category?.name) && isUserGuest;
   };
-
-
 
   const keyExtractor = (_, index) => `sub_categories.${index}`;
 
@@ -267,26 +250,7 @@ const SubCategories = ({ route }) => {
             handleRandomClick={() => handleRandomSub_category(item)}
           />
           {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-            <View style={styles.blur_wrapper}>
-              <BlurView
-                style={styles.blur_view}
-                blurAmount={20}
-                overlayColor="transparent">
-                <View style={styles.blur_content_container}>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      right: 0,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      top: responsiveHeight(5),
-                    }}>
-                    <SvgIcons name={'Lock'} width={47} height={47} />
-                  </View>
-                </View>
-              </BlurView>
-            </View>
+            <BlurViewGuest />
           )}
         </View>
       </>
@@ -299,9 +263,7 @@ const SubCategories = ({ route }) => {
     }
     if (isLoadMore) {
       return (
-        <View style={{ alignItems: 'center', paddingVertical: SPACING }}>
-          <ActivityIndicator size={40} color={PrimaryColor} />
-        </View>
+        <CustomLoader />
       );
     }
   };
@@ -343,19 +305,9 @@ const SubCategories = ({ route }) => {
               </View>
             </View>
             {isUserGuest && (
-              <View style={{ marginTop: moderateVerticalScale(10) }}>
-                <View
-                  style={{
-                    marginBottom: 'auto',
-                    marginTop: 'auto',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    alignItems: 'center'
-                  }}>
-                  <SvgIcons name={'Guest'} width={36} height={36} />
-                </View>
-                <Text style={styles.text}>Guest{guestNumber}</Text>
-              </View>
+              <GuestNumber
+                guestNumber={guestNumber}
+              />
             )}
           </View>
 
@@ -369,51 +321,7 @@ const SubCategories = ({ route }) => {
                 OnchangeText={setIsUsernameInputValue}
                 placeholder="Username"
               />
-              <View
-                style={{
-                  paddingVertical: moderateVerticalScale(6),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    width: responsiveWidth(90),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                  }}>
-                  <View>
-                    <Text
-                      style={{
-                        color: '#393939',
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        fontSize: responsiveHeight(1.9),
-                        fontFamily: Inter_Regular.Inter_Regular,
-                      }}>
-                      Players:
-                    </Text>
-                  </View>
-
-                  {addUsersGame?.map((item, index) => (
-                    <View
-                      key={index}
-                      style={{
-                        margin: 4,
-                        backgroundColor: '#395E66',
-                        paddingHorizontal: moderateScale(14),
-                        paddingVertical: moderateVerticalScale(4.5),
-                        borderRadius: 40,
-                      }}>
-                      <Text
-                        style={{
-                          color: '#FFF',
-                          fontSize: responsiveFontSize(1.9),
-                        }}>{`@${item.username}`}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
+              <ShowAddedPlayers />
             </>
           ) : (
             <SearchField
@@ -518,19 +426,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
-  },
-  blur_view: {
-    flex: 1,
-  },
-  blur_wrapper: {
-    position: 'absolute',
-    width: responsiveWidth(30),
-    height: responsiveHeight(18.5),
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  blur_content_container: {
-    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   text: {
     fontSize: 10,

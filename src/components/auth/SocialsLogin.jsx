@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { SecondaryColor } from "../screens/Styles/Style";
+import { SecondaryColor } from "../../screens/Styles/Style";
 import { moderateVerticalScale, moderateScale } from "react-native-size-matters"
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 

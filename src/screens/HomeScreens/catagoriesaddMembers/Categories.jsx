@@ -1,29 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
-  Dimensions,
-  Image,
   ImageBackground,
   Text,
-  TouchableOpacity,
   View,
   StyleSheet,
   FlatList,
-  ScrollView,
-  TextInput,
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
 import {
   PrimaryColor,
-  SecondaryColor,
   TextColorGreen,
-  ThirdColor,
-  White,
   pinkColor,
 } from '../../Styles/Style';
 import {
   useFocusEffect,
-  useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import {
@@ -33,7 +24,6 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import NavigationsString from '../../../constants/NavigationsString';
 import StoryUsers from '../../../components/StoryUsers';
 import BackButton from '../../../components/BackButton';
 import MainInputField from '../../../components/MainInputField';
@@ -43,51 +33,40 @@ import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
-import RandomCategories from '../../../components/customCategories/RandomCategories';
-import { get_random } from '../../../../store/slices/randomCategorySlice';
 import { setCategoriesId } from '../../../../store/slices/getCategoriesSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { addFriends, setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { BlurView } from '@react-native-community/blur';
-import SvgIcons from '../../../components/svgIcon/svgIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
-import { SPACING } from '../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
+import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
+import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
+import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
+import GuestNumber from '../../../components/categories/guestCategories/GuestNumber';
 
 const Categories = () => {
   //destructures
-  const { height } = Dimensions.get('window');
   const { SPLASH_SCREEN_IMAGE, LUDO_ICON } = Img_Paths;
-  const { ADD_PLAYERS } = NavigationsString;
-
   //hooks
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { bottom } = useSafeAreaInsets();
-
   //redux states
-  const addUsersGame = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
-
   //states
   const [isLoading, setIsLoading] = useState(false);
   const [responseCategories, setResponseCategories] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [HasMorePages, setHasMorePages] = useState(false);
   const [isLoadMore, setIsLoadMore] = useState(false);
-  const [randomName, setRandomName] = useState('');
-  const [randomId, setRandomId] = useState('');
   const [isUsernameInputValue, setIsUsernameInputValue] = useState('');
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(''); //for guest search only
-
   //refs
   const guestNumberRef = useRef(null);
-
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
 
@@ -171,6 +150,7 @@ const Categories = () => {
     }
   };
 
+
   const addFriends_api_handler = async () => {
     try {
       const responseData = await addFriends_api();
@@ -184,7 +164,7 @@ const Categories = () => {
         dispatch(addFriends({ username, userid }));
         setIsUsernameInputValue('');
       } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate(ADD_PLAYERS);
+        navigation.navigate("AddPlayers");
       } else {
         Toast.show({
           type: 'error',
@@ -193,7 +173,7 @@ const Categories = () => {
       }
       return responseData;
     } catch (error) {
-      console.log('err', error);
+      console.log(error, "ERROR FROM FRIENDS CATEGORIES");
     }
   };
 
@@ -234,7 +214,7 @@ const Categories = () => {
       setIsRefreshing(false);
       return response;
     } catch (error) {
-      console.log('error---', error);
+      console.log(error?.response?.data, "ERROR FROM FETCH_CATEGORIES API");
     }
   };
 
@@ -245,22 +225,20 @@ const Categories = () => {
       const filteredCategory = responseCategories.find(category =>
         category.name.includes(randomCatName),
       );
-
       const response = isUserGuest ? filteredCategory : await get_Random();
 
       navigation.navigate('SubCategories', {
-        id: isUserGuest ? response?._id : response?.data?._id,
-        name: isUserGuest ? response?.name : response?.data?.name,
+        id: isUserGuest ? response?.data?._id : response?.data?.data?._id,
+        name: isUserGuest ? response?.data?.name : response?.data?.data?.name,
       });
 
-      setRandomId(isUserGuest ? response?._id : response?.data?._id);
-      setRandomName(isUserGuest ? response?.name : response?.data?.name);
       return response;
-    } catch (error) { }
+    } catch (error) {
+      console.log(error?.response?.data, "ERROR FROM RANDOM_API")
+    }
   };
 
   const handleStoryUser = (id, name) => {
-    console.log('id----', id);
     dispatch(setCategoriesId(id));
     navigation.navigate('SubCategories', {
       id: id,
@@ -329,28 +307,9 @@ const Categories = () => {
           handleRandomClick={handleRandomClick}
           mainbgColor={TextColorGreen}
         />
-
         {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-          <View style={styles.blur_wrapper}>
-            <BlurView
-              style={styles.blur_view}
-              blurAmount={20}
-              overlayColor="transparent">
-              <View style={styles.blur_content_container}>
-                <View
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    top: responsiveHeight(5),
-                  }}>
-                  <SvgIcons name={'Lock'} width={47} height={47} />
-                </View>
-              </View>
-            </BlurView>
-          </View>
+          <BlurViewGuest
+          />
         )}
       </View>
     );
@@ -362,9 +321,7 @@ const Categories = () => {
     }
     if (isLoadMore) {
       return (
-        <View style={{ alignItems: 'center', paddingVertical: SPACING }}>
-          <ActivityIndicator size={40} color={PrimaryColor} />
-        </View>
+        <CustomLoader />
       );
     }
   };
@@ -381,7 +338,7 @@ const Categories = () => {
         )}
       </View>
     );
-  };
+  }
 
   return (
 
@@ -393,7 +350,6 @@ const Categories = () => {
         <SafeAreaView style={styles.container}>
           <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
             <View style={styles.first_container}>
-
               <BackButton onPress={() => navigation.goBack()} />
               <View style={styles.categories_text_container}>
                 <Text style={styles.categories_text}>Categories</Text>
@@ -401,17 +357,9 @@ const Categories = () => {
             </View>
 
             {isUserGuest && (
-              <View style={{ marginTop: moderateVerticalScale(10) }}>
-                <View
-                  style={{
-                    marginBottom: 'auto',
-                    marginTop: 'auto',
-                    marginLeft: 5,
-                  }}>
-                  <SvgIcons name={'Guest'} width={36} height={36} />
-                </View>
-                <Text style={styles.text}>Guest{guestNumber}</Text>
-              </View>
+              <GuestNumber
+                guestNumber={guestNumber}
+              />
             )}
           </View>
 
@@ -419,52 +367,10 @@ const Categories = () => {
 
           {user ?
             (<>
+              {/* textinputField */}
               <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
-              <View
-                style={{
-                  paddingVertical: moderateVerticalScale(6),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    width: responsiveWidth(90),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                  }}>
-                  <View>
-                    <Text
-                      style={{
-                        color: '#393939',
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        fontSize: responsiveHeight(1.9),
-                        fontFamily: Inter_Regular.Inter_Regular,
-                      }}>
-                      Players:
-                    </Text>
-                  </View>
-
-                  {addUsersGame?.map((item) => (
-                    <View
-                      style={{
-                        margin: 4,
-                        backgroundColor: '#395E66',
-                        paddingHorizontal: moderateScale(14),
-                        paddingVertical: moderateVerticalScale(4.5),
-                        borderRadius: 40,
-                      }}>
-                      <Text
-                        style={{
-                          color: '#FFF',
-                          fontSize: responsiveFontSize(1.9),
-                          fontFamily: Inter_Regular.Inter_Regular,
-                        }}>{`@${item.username}`}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
+              {/* added players */}
+              <ShowAddedPlayers />
             </>
             ) : (
               <SearchField
@@ -497,7 +403,6 @@ const Categories = () => {
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
-
 
   );
 };
@@ -547,6 +452,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: responsiveWidth(90),
   },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
+  },
   input_field: {
     paddingLeft: 30,
     borderTopLeftRadius: 25,
@@ -570,19 +488,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     letterSpacing: -0.2,
-  },
-  blur_view: {
-    flex: 1,
-  },
-  blur_wrapper: {
-    position: 'absolute',
-    width: responsiveWidth(30),
-    height: responsiveHeight(18.5),
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  blur_content_container: {
-    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   text: {
     fontSize: 10,
