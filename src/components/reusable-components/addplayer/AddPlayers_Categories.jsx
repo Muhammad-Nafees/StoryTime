@@ -5,16 +5,16 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../assets/Imagepaths';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addFriends,
   addTagPlayers,
   userId,
-} from '../../store/slices/addplayers/addPlayersSlice';
-import { playerContributorsIds } from '../../store/slices/getCategoriesSlice';
-import { tag_Friends } from '../../services/api/profile';
+} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { playerContributorsIds } from '../../../../store/slices/getCategoriesSlice';
+import { tag_Friends } from '../../../../services/api/profile';
 
 const AddFriends_Categories = ({
   profileimage,

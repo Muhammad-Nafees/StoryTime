@@ -9,9 +9,10 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import { SCREEN_HEIGHT } from '../../../constants/Constant';
-import VoiceToText from '../../../components/VoiceToText';
+import VoiceToText from '../../../components/categories/VoiceToText';
+
 
 const SelectGamePoint = () => {
   const {
@@ -33,12 +34,12 @@ const SelectGamePoint = () => {
         {/* Back Button */}
         <View style={{ paddingTop: responsiveWidth(15) }}>
           <VoiceToText
-            onPress={() => navigation.navigate("SecondScreenPlayFlow")}
+            onPress={() => navigation.navigate("StartGame")}
             text="Voice to Text"
             BackgroundImage={FIRST_VOICE_TO_TEXT_IMAGE}
           />
           <VoiceToText
-            onPress={() => navigation.navigate("VideoFirstStartScreen`")}
+            onPress={() => navigation.navigate("VideoFirstStartScreen")}
             text="Video"
             BackgroundImage={VIDEO_IMAGE}
           />

@@ -1,3 +1,5 @@
+// imports libraries
+
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   ImageBackground,
@@ -24,11 +26,14 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import StoryUsers from '../../../components/StoryUsers';
-import BackButton from '../../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+
+// imports components
+import StoryUsers from '../../../components/categories/StoryUsers';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import SearchField from '../../../components/SearchField';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   get_Categories_Sub_Categories,
   get_Random,
@@ -38,7 +43,6 @@ import { addFriends_api } from '../../../../services/api/add-members';
 import { addFriends, setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Typography from '../../../components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';

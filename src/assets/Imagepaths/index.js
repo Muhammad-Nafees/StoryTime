@@ -23,7 +23,7 @@ export const Img_Paths = {
   CREATE_PASSWORD_IMG: require('../../assets/createpassword.png'),
   CREATE_NEW_PASSWORD_IMG: require('../../assets/createNewpassword.png'),
   // c:\Users\dell\Downloads\.png
-
+  PAUSE_IMG: require("../../assets/pause-img.png"),
   // Categories File-----
 
   // ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),

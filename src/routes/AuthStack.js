@@ -32,10 +32,10 @@ import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Condi
 import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
 import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
+import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/Index';
+import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/StartGame';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
-import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
+import FirstUser from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
 import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
 import { Img_Paths } from '../assets/Imagepaths';

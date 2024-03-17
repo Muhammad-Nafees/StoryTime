@@ -5,9 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../../../assets/Imagepaths/index";
-import BackButton from '../../../../components/BackButton';
+import BackButton from '../../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../../../constants/NavigationsString';
-import VoiceToText from '../../../../components/VoiceToText';
+import VoiceToText from '../../../../components/categories/VoiceToText';
 import { useDispatch } from 'react-redux';
 import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../../store/slices/RecordingData';
 import { nextRandomNumVideo, nextRandomNumVideoExtend } from '../../../../../store/slices/addplayers/addPlayersSlice';
@@ -22,7 +22,6 @@ const VideoSecondStory = () => {
     const { VIDEO_FIRST_USER } = NavigationsString;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
 
     // nextRandomNumVideoExtend
 

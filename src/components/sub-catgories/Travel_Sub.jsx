@@ -2,8 +2,8 @@
 
 import { View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet, TextInput } from 'react-native'
 import React from 'react'
-import BackButton from '../BackButton'
-import StoryUsers from '../StoryUsers'
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton'
+import StoryUsers from '../categories/StoryUsers'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../../assets/Imagepaths'
 import { pinkColor } from '../../screens/Styles/Style'

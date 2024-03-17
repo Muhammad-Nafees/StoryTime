@@ -15,7 +15,7 @@ import {
     responsiveHeight,
     responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
@@ -26,19 +26,13 @@ import {
     extendVideo,
     resetVideoRecording,
 } from '../../../../../store/slices/RecordingData';
-import { SCREEN_HEIGHT } from '../../../../constants/Constant';
 
 const VideoFirstStartScreen = () => {
-    const { SPLASH_SCREEN_IMAGE, PLAY_FLOW_FRAME } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE } = Img_Paths;
     const navigation = useNavigation();
-    const { VIDEO_FIRST_USER } = NavigationsString;
     const windowWidth = Dimensions.get('window').width;
-
     const squareSize = windowWidth * 0.9;
-
-    const randomName = useSelector(
-        state => state.addPlayers.randomnames?.payload,
-    );
+    const randomName = useSelector(state => state.addPlayers.randomnames?.payload,);
     const storyUserImage = useSelector(
         state => state.addPlayers.storyUserImage?.payload,
     );
@@ -113,7 +107,7 @@ const VideoFirstStartScreen = () => {
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate(VIDEO_FIRST_USER);
+                            navigation.navigate("VideoFirstUser");
                             dispatch(resetVideoRecording());
                             dispatch(extendStoryCheckVideo(true));
                             dispatch(extendVideo(null));

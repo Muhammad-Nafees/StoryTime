@@ -115,7 +115,7 @@ export const refresh_token_api = async (refreshToken) => {
 
 export const registerapi = async (registerData, values) => {
 
-  const formData = {
+  const bodyData = {
     email: registerData?.values?.email,
     fcmToken: registerData?.values?.fcmToken,
     firstName: registerData?.values?.firstName,
@@ -131,8 +131,9 @@ export const registerapi = async (registerData, values) => {
     password: values.password,
     confirmPassword: values.confirmPassword,
   };
+  console.log("bodyData---- :`", bodyData);
   try {
-    const response = await axios.post(Base_Url + register_endpoint, formData);
+    const response = await axios.post(Base_Url + register_endpoint, bodyData);
     return response.data;
   } catch (err) {
     console.log('error', err);

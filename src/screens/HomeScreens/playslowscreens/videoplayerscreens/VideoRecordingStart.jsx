@@ -710,7 +710,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: moderateVerticalScale(6),
-    alignSelf:'center'
+    alignSelf: 'center'
   },
   bg_content: {
     // backgroundColor: PrimaryColor,

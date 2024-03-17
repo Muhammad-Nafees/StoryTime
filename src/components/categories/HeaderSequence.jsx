@@ -6,7 +6,7 @@ import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-nat
 import { useNavigation } from '@react-navigation/native'
 import { Img_Paths } from '../../assets/Imagepaths'
 import RandomIcon from '../svgIcon/RandomIcon'
-import BackButton from '../BackButton'
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton'
 
 const HeaderSequence = ({ handleShuffle }) => {
     const navigation = useNavigation();

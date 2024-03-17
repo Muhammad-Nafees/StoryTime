@@ -1,10 +1,10 @@
-import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import React from 'react'
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters'
+import { responsiveWidth } from 'react-native-responsive-dimensions'
+import { moderateVerticalScale, } from 'react-native-size-matters'
 
 
-const VoiceToText = ({ text, BackgroundImage, bgColor, innerColor, onPress, extendStoryCheck }) => {
+const VoiceToText = ({ BackgroundImage, onPress }) => {
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
 

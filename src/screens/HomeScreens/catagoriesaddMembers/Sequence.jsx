@@ -24,6 +24,7 @@ const Sequence = () => {
   const addedUsers = useSelector(state => state.addPlayers.addFriends);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
+
   const [selectedIndices, setSelectedIndices] = useState([]);
 
   const sequenceUser = useMemo(() => [...addedUsers, (USER?._id && USER?.username && { "userid": USER?._id, username: USER?.username })], [USER, addedUsers],);

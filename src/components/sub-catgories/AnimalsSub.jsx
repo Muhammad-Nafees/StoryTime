@@ -8,19 +8,19 @@ import {
   TextInput,
 } from 'react-native';
 import React from 'react';
-import BackButton from '../BackButton';
-import StoryUsers from '../StoryUsers';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
+import StoryUsers from '../categories/StoryUsers';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {pinkColor} from '../../screens/Styles/Style';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { pinkColor } from '../../screens/Styles/Style';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { useNavigation } from '@react-navigation/native';
 
-const Animals_Sub = ({}) => {
+const Animals_Sub = ({ }) => {
   const navigation = useNavigation();
 
   const {
@@ -96,7 +96,7 @@ const Animals_Sub = ({}) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}>
-            <View style={{marginHorizontal: moderateScale(10)}}>
+            <View style={{ marginHorizontal: moderateScale(10) }}>
               <Text
                 style={{
                   color: '#393939',
@@ -113,7 +113,7 @@ const Animals_Sub = ({}) => {
                 paddingVertical: moderateVerticalScale(4.5),
                 borderRadius: 40,
               }}>
-              <Text style={{color: '#FFF', fontSize: responsiveFontSize(1.9)}}>
+              <Text style={{ color: '#FFF', fontSize: responsiveFontSize(1.9) }}>
                 @chrislee
               </Text>
             </View>
@@ -125,7 +125,7 @@ const Animals_Sub = ({}) => {
                 paddingVertical: moderateVerticalScale(4.5),
                 borderRadius: 40,
               }}>
-              <Text style={{color: '#FFF', fontSize: responsiveFontSize(1.9)}}>
+              <Text style={{ color: '#FFF', fontSize: responsiveFontSize(1.9) }}>
                 @Cedrick101
               </Text>
             </View>
@@ -137,7 +137,7 @@ const Animals_Sub = ({}) => {
                 paddingVertical: moderateVerticalScale(4.5),
                 borderRadius: 40,
               }}>
-              <Text style={{color: '#FFF', fontSize: responsiveFontSize(1.9)}}>
+              <Text style={{ color: '#FFF', fontSize: responsiveFontSize(1.9) }}>
                 @its me Like
               </Text>
             </View>

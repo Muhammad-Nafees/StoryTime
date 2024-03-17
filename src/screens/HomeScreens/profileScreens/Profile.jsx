@@ -19,8 +19,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import BackButton from '../../../components/BackButton';
-import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
+import { useNavigation, NavigationAction } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -101,7 +101,8 @@ const Profile = ({ route }) => {
       });
 
       const responsestories = responseData?.data?.stories;
-      console.log("response in", responseData?.data)
+      console.log(responseData?.data, "RESPONSE FROM PROFILE :");
+
       setIsLoadingRecording(false);
       if (responsestories && type === "text") {
         console.log("responsestories text---- :", responsestories);
@@ -122,8 +123,6 @@ const Profile = ({ route }) => {
       console.log("err", error);
     };
   };
-
-
 
   const toggel_mode = async () => {
     try {

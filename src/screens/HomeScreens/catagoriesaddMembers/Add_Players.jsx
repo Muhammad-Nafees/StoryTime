@@ -1,16 +1,18 @@
+// imports libraries
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import { PrimaryColor, TextColorGreen, } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import NavigationsString from '../../../constants/NavigationsString';
-import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
-import AddFriends_Categories from '../../../components/AddPlayers_Categories';
-import { addFriends_api } from '../../../../services/api/add-members';
-import _ from 'lodash';
 import { useSelector } from 'react-redux';
+import _ from 'lodash';
+// imports components and fuctions
+
+import { Img_Paths } from '../../../assets/Imagepaths';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
+import AddFriends_Categories from '../../../components/reusable-components/addplayer/AddPlayers_Categories';
+import { addFriends_api } from '../../../../services/api/add-members';
 import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
@@ -18,36 +20,32 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 const AddPlayers = () => {
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, } = Img_Paths;
     const { height, } = Dimensions.get("window")
-    const [Responseapi, setResponseapi] = useState([]);
+    const [responseApi, setresponseApi] = useState([]);
     const navigation = useNavigation();
     const addedUsers = useSelector((state) => state.addPlayers.addFriends);
-    const { CATEGORIES } = NavigationsString;
-    const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const addFriends_api_handler = async () => {
-        setIsLoading(true);
-        try {
-            const responseData = await addFriends_api();
-            setResponseapi(responseData.data.users);
-            setIsLoading(false);
-            console.log("Responseapi---- :", Responseapi);
-            return responseData;
-        } catch (error) {
-            console.log("err", error)
-        }
-    };
+    useEffect(() => {
+        const addFriends_api_handler = async () => {
+            setIsLoading(true);
+            try {
+                const responseData = await addFriends_api();
+                console.log(responseData, "RESPONSE FROM ADDFRIENDS");
+                setresponseApi(responseData.data);
+                setIsLoading(false);
+                return responseData;
+            } catch (error) {
+                console.log("err", error)
+            }
+        };
+        addFriends_api_handler();
+    }, [])
 
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {
             const responseData = await addFriends_api({ search: text });
-            if (responseData?.data == null) {
-                setIsNoFriends(false)
-            } else {
-                setIsNoFriends(true)
-            }
-            setResponseapi(responseData.data?.users)
+            setresponseApi(responseData.data)
             return responseData
         } catch (error) {
             console.log("error=====", error)
@@ -55,17 +53,13 @@ const AddPlayers = () => {
     }, 700)
     ).current;
 
-    useEffect(() => {
-        addFriends_api_handler();
-    }, []);
-
     const lodashTextHandler = (text) => {
         setInputText(text)
         debonceApiCall(text)
     };
 
     const handlenavigation = () => {
-        navigation.navigate(CATEGORIES);
+        navigation.navigate("Categories");
     };
 
     return (
@@ -114,7 +108,7 @@ const AddPlayers = () => {
 
                         <ScrollView>
                             {
-                                !isNoFriends ?
+                                responseApi === null ?
                                     (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
                                         <Text style={{ fontSize: responsiveFontSize(3.5), color: "#E44173", textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
                                     </View>)
@@ -123,7 +117,7 @@ const AddPlayers = () => {
                                             <ActivityIndicator size={24} color={PrimaryColor} />
                                         </View>
                                         :
-                                        Responseapi?.map((item, index) => {
+                                        responseApi?.users?.map((item, index) => {
                                             console.log("index====", index);
                                             return (
                                                 <AddFriends_Categories
@@ -151,7 +145,6 @@ const AddPlayers = () => {
                     type={"addPlayers"}
                     text="Add" color="#FFF" />
             </View>
-
         </ImageBackground>
 
     )

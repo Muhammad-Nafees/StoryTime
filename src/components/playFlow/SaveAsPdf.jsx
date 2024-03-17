@@ -31,7 +31,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths/index';
-import BackButton from '../BackButton';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import { useDispatch, useSelector } from 'react-redux';
 import { recordingVideo } from '../../../store/slices/RecordingData';

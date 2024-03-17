@@ -21,12 +21,12 @@ import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players'
 import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
 import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
 import Sequence from '../screens/HomeScreens/catagoriesaddMembers/Sequence';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
+import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/StartGame';
+import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/Index';
 import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
 import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
-import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
-import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
+import FirstUser from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
+import FirstUserStory from '../screens/HomeScreens/playslowscreens/GoNextPlayer';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import {
@@ -55,6 +55,9 @@ import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
 import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
 import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
 import SelectGamePoint from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
+import StartGame from '../screens/HomeScreens/playslowscreens/StartGame';
+import StartRecordingVoice from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
+import GoNextPlayer from '../screens/HomeScreens/playslowscreens/GoNextPlayer';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -148,9 +151,6 @@ const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
 
   const {
-    FIRST_USER,
-    SECONDSCREENPLAYFLOW,
-    VIDEO_SECOND_USER,
     VIDEO_FIRST_SCREEN,
     VIDEO_FIRST_USER,
     SECOND_USER_STORY,
@@ -167,11 +167,11 @@ const PLayFlowScreens = () => {
         component={SelectGamePoint}
       />
       <Stack.Screen
-        name={SECONDSCREENPLAYFLOW}
-        component={SecondPlayFlowScreen}
+        name={"StartGame"}
+        component={StartGame}
       />
-      <Stack.Screen name={FIRST_USER} component={FirstUser} />
-      <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
+      <Stack.Screen name="StartRecordingVoice" component={StartRecordingVoice} />
+      <Stack.Screen name="GoNextPlayer" component={GoNextPlayer} />
 
       {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 

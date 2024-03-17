@@ -6,14 +6,13 @@ const initialState = {
     userId: "",
     randomnames: "",
     storyUserImage: "",
-    checkTrueOrFalse: false,
-    extendStoryCheck: null,
+    isCheck: false,
+    isExtendStory: null,
     extendCounting: 30,
     nextRandomNumber: null,
     nextRandomNumberExtend: null,
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
-    publicAndPrivateMode: null,
     addTagPlayers: [],
     isHidden: false,
     friendId: "",
@@ -72,11 +71,11 @@ const addPlayers = createSlice({
             state.storyUserImage = payload
         },
 
-        checkTrueOrFalse: (state, { payload }) => {
-            state.checkTrueOrFalse = payload
+        isCheckValue: (state, { payload }) => {
+            state.isCheck = payload
         },
-        extendStoryCheck: (state, { payload }) => {
-            state.extendStoryCheck = payload
+        isExtendStoryCheck: (state, { payload }) => {
+            state.isExtendStory = payload
         },
         nextRandomNum: (state, action) => {
             state.nextRandomNumber = action.payload
@@ -140,16 +139,14 @@ const addPlayers = createSlice({
     },
 });
 
-
-
 export const {
     addFriends,
     removeUser,
     userId,
     randomNames,
-    checkTrueOrFalse,
+    isCheckValue,
     setStoryUserImage,
-    extendStoryCheck,
+    isExtendStoryCheck,
     nextRandomNum,
     nextRandomNumExtend,
     nextRandomNumVideo,

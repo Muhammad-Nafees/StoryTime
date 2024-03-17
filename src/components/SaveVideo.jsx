@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -33,32 +33,32 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../assets/Imagepaths/index';
-import BackButton from '../components/BackButton';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths/index';
+import BackButton from './reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../constants/NavigationsString';
 import CustomButton from './reusable-components/CustomButton/CustomButton';
 import RNFS from 'react-native-fs';
-import {useDispatch, useSelector} from 'react-redux';
-import {PassionOne_Regular} from '../constants/GlobalFonts';
+import { useDispatch, useSelector } from 'react-redux';
+import { PassionOne_Regular } from '../constants/GlobalFonts';
 import SaveStoryBtn from './playFlow/SaveStoryBtn';
 import StoryTimeSaved from './playFlow/StoryTimeSaved';
 import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
-import {SPACING} from '../constants/Constant';
+import { SPACING } from '../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 import {
   recordingData,
   saveRecordingVideoUser,
 } from '../../store/slices/RecordingData';
-import {resetFriends} from '../../store/slices/addplayers/addPlayersSlice';
+import { resetFriends } from '../../store/slices/addplayers/addPlayersSlice';
 
-const SaveVideo = ({isVisible, setIsVisible, path}) => {
-  const {user} = useSelector(state => state?.authSlice);
+const SaveVideo = ({ isVisible, setIsVisible, path }) => {
+  const { user } = useSelector(state => state?.authSlice);
   const isUserGuest = useMemo(() => !user, [user]);
-  console.log(isUserGuest,"ISUSERGUES")
+  console.log(isUserGuest, "ISUSERGUES")
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] =
     useState(false);
-  const {width, height} = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
   const {
     STORY_TIME_IMG,
     BG_PLAYFLOW,
@@ -71,7 +71,7 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
   } = Img_Paths;
   const SCREENWIDTH = Dimensions.get('window').width;
   const SCREENHEIGHT = Dimensions.get('window').height;
-  const {VIDEO_SECOND_USER, FIRST_USER} = NavigationsString;
+  const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
   const [saveStoryVideoModal, setSaveStoryVideoModal] = useState(false);
   const [isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow] = useState(false);
   const navigation = useNavigation();
@@ -285,8 +285,8 @@ const SaveVideo = ({isVisible, setIsVisible, path}) => {
                 Do you want to save your Story Time in your phone?
               </Text>
 
-              <View style={{paddingVertical: 12}}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{ paddingVertical: 12 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity
                     onPress={pickDirectory}
                     style={{
