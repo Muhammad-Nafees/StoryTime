@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://192.168.1.103:3000';
+const SOCKET_URL = 'http://192.168.1.103:3000'; //change it for your machine //use emulator
 
 class WSService {
   initializeSocket = async () => {
