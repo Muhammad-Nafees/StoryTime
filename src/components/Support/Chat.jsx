@@ -7,8 +7,9 @@ import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
 const Chat = ({item}) => {
   const {STORY_ICON} = Img_Paths;
-  console.log("media",URL+item.media[0])
+  // console.log("media",URL+item.media[0])
   const timestamp = new Date(item.updatedAt);
+  const uri = URL+item.media[0]
   const time = timestamp.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
@@ -33,7 +34,7 @@ const Chat = ({item}) => {
           <View style={{}}>
           <Image 
           resizeMode='contain'
-            source={{uri:URL+item.media[0]}}
+            source={{uri:uri}}
             style={{            
             width:30,
             height: 30,

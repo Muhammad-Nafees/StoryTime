@@ -73,12 +73,12 @@ const SettingsProfile = () => {
   const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
 
   const {userdata, loading} = useSelector(state => state?.userinfostate);
-  console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
+  // console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
   const namesCities = userdatacity?.data?.map(item => item?.name);
-  console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
+  // console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
 
   const {user} = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
@@ -110,7 +110,7 @@ const SettingsProfile = () => {
   const getData = async () => {
     const uid = user?.data?.user?._id;
     let {data} = await getUserProfileData(uid);
-    console.log('🚀 ~ getData ~ data:', data);
+    // console.log('🚀 ~ getData ~ data:', data);
 
     const payload = {
       username: data?.username || '',
@@ -145,7 +145,7 @@ const SettingsProfile = () => {
   };
 
   useEffect(() => {
-    console.log('🚀 ~ initialData ~ initialData:', initialData);
+    // console.log('🚀 ~ initialData ~ initialData:', initialData);
     getData();
   }, []);
 
@@ -156,9 +156,9 @@ const SettingsProfile = () => {
   };
 
   const handleInitCity = selected => {
-    console.log('🚀 ~ selectedItems ~ selected city data:', selected);
+    // console.log('🚀 ~ selectedItems ~ selected city data:', selected);
     const cities = userdata?.data?.find(data => data?.name === selected);
-    console.log('🚀 ~ handleInitCity ~ my - cities:', cities);
+    // console.log('🚀 ~ handleInitCity ~ my - cities:', cities);
     if (cities) {
       dispatch(
         userinfocity({

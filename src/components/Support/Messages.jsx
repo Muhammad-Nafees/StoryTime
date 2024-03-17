@@ -8,6 +8,7 @@ import { URL } from '../../constants/Constant';
 
 const Message = ({item}) => {
   const {MESSAGE_ICON} = Img_Paths;
+  const uri = URL+item.lastMessage.media[0];
   return (
     <View style={{marginBottom: 16}}>
       <View style={styles.message_container}>
@@ -35,7 +36,7 @@ const Message = ({item}) => {
                 <View style={{}}>
           <Image 
           resizeMode='contain'
-            source={{uri:URL+item.lastMessage.media[0]}}
+            source={{uri:uri}}
             style={{            
             width:40,
             height: 40,
