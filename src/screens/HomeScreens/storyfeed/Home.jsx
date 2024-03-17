@@ -75,7 +75,7 @@ const Home = () => {
   useFocusEffect(
     useCallback(() => {
       dispatch(setFriendId(USER?._id));
-    }, []),
+    }, [USER?._id, dispatch]),
   );
 
   //functions
@@ -105,6 +105,12 @@ const Home = () => {
     return <FrameContent key={index} item={item} />;
   };
 
+  const renderListHeaderComponent = () => {
+    if (!isLoadingMain) {
+      return <UserList />;
+    }
+  };
+
   const renderListFooterComponent = () => {
     if (isLoading) {
       return (
@@ -131,7 +137,6 @@ const Home = () => {
   return (
     <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
       <HomeHeader />
-      <UserList />
       <FlatList
         data={responseUsers}
         onRefresh={onRefresh}
@@ -142,6 +147,7 @@ const Home = () => {
         onEndReached={handleLoadMore}
         ListEmptyComponent={renderListEmptyComponent}
         ListFooterComponent={renderListFooterComponent}
+        ListHeaderComponent={renderListHeaderComponent}
       />
     </ImageBackground>
   );
