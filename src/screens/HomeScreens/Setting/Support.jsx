@@ -1,25 +1,27 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import Typography from '../../../components/Typography';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import MessageList from '../../../components/Support/MessageList';
 import SupportButton from '../../../components/Support/SupportButton';
-import { Inter_Medium, Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
-const Support = ({navigation}) => {
-  const {LEFT_ARROW_IMG} = Img_Paths;
+
+const Support = ({ navigation }) => {
+  const { LEFT_ARROW_IMG } = Img_Paths;
 
   const handleScreen = () => {
     navigation.navigate('SupportMessage');
   };
+
   return (
     <BackgroundWrapper disableScrollView coverScreen>
       <View style={styles.first_container}>
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
-    fontFamily:Inter_SemiBold.Inter_SemiBold
+    fontFamily: Inter_SemiBold.Inter_SemiBold
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),

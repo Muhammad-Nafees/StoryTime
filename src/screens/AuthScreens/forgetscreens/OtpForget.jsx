@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {
   FourthColor,
-  PrimaryColor,
   SecondaryColor,
   TextColorGreen,
 } from '../../Styles/Style';
@@ -19,7 +18,7 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TouchableButton from '../../../components/TouchableButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -78,49 +77,50 @@ const OtpForget = ({ route }) => {
         phone: route?.params?.phone,
         email: route?.params?.email,
       });
-      setOtp(response?.data?.code);
-
-      if (response?.statusCode === 200) {
-        setIsLoading(false);
-        setVisible(false);
-        // navigation.navigate(FORGET_CONFIRM_PASSWORD);
-      } else if (response?.stack) {
-        Toast.show({
-          type: 'error',
-          text1: response?.message,
-        });
-        setIsLoading(false);
-      }
-    } catch (err) {
-      console.log(err);
+      console.log(response.data, "RESPONSE FROM EMAIL API");
+      setOtp(response?.data?.data?.code);
+      setIsLoading(false);
+      setVisible(false);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: error?.response?.data?.message
+      });
+      console.log("ERROR FROM EMAIL OTP", error?.response?.data);
     }
   };
+
+
 
   const otp_forget_api = async () => {
     setIsLoading(true);
     setVisible(true);
     try {
       const response = await otp_forget(otptext);
-      if (response?.statusCode === 200) {
-        setStatusCodeForget(true);
-        setTimeout(() => {
-          navigation.navigate(FORGET_CONFIRM_PASSWORD);
-        }, 1500);
-        dispatch(forgetResetToken(response?.data?.accessToken));
-        setIsLoading(false);
-      } else if (response?.stack) {
-        setStatusCodeForget(false);
+      console.log(response?.data, "RESPONSE FROM OTP")
+      setStatusCodeForget(true);
+      setTimeout(() => {
+        navigation.navigate("ForgetConfirmPassword");
+      }, 1500);
+      dispatch(forgetResetToken(response?.data?.data?.accessToken));
+      setIsLoading(false);
+
+    } catch (error) {
+      console.log(error?.response?.data, "RESPONSE FROM OTP")
+      if (error?.response?.data) {
         Toast.show({
           type: 'error',
-          text1: response?.message,
+          text1: error?.response?.data?.message,
         });
+        setStatusCodeForget(false);
         setIsLoading(false);
         setVisible(false);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
+
 
   useEffect(() => {
     const seconds = timeLeft % 60;
@@ -263,7 +263,7 @@ const OtpForget = ({ route }) => {
           </View>
         </View>
 
-        <TouchableButton
+        <CustomButton
           onPress={otptext.length === 6 ? otp_forget_api : null}
           type="optForget"
           backgroundColor={
@@ -278,11 +278,6 @@ const OtpForget = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // width: '100%',
-    // height: '100%',
-    // backgroundColor: SecondaryColor,
-  },
   img_container: {
     paddingVertical: moderateVerticalScale(22),
     justifyContent: 'center',

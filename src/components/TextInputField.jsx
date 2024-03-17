@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -12,8 +12,8 @@ import {
   ThirdColor,
 } from '../screens/Styles/Style';
 import Icon from 'react-native-vector-icons/Feather';
-import {moderateVerticalScale, moderateScale} from 'react-native-size-matters';
-import {Img_Paths} from '../assets/Imagepaths';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { Img_Paths } from '../assets/Imagepaths';
 
 const TextInputField = ({
   placeholderText,
@@ -25,9 +25,7 @@ const TextInputField = ({
   onBlur,
   setShowPassword,
 }) => {
-  const {NOT_EYE_ICON, EYE_ICON} = Img_Paths;
-
-  console.log('onChangeText', value);
+  const { NOT_EYE_ICON, EYE_ICON } = Img_Paths;
 
   return (
     <View
@@ -70,7 +68,7 @@ const TextInputField = ({
         {type == 'password' && (
           <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
             <Image
-              style={{height: 20, width: 20, resizeMode: 'center'}}
+              style={{ height: 20, width: 20, resizeMode: 'center' }}
               source={!showPassword ? NOT_EYE_ICON : EYE_ICON}
             />
           </TouchableOpacity>

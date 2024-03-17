@@ -33,7 +33,7 @@ import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCatego
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
+import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
@@ -79,16 +79,14 @@ const AuthStack = () => {
     initialRouteName = LOGIN;
   } else {
     initialRouteName = POPUP_START;
-  }
-
-  console.log(initialRouteName);
+  };
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          animationEnabled: false,
+
         }}
         initialRouteName={initialRouteName}>
         <Stack.Screen

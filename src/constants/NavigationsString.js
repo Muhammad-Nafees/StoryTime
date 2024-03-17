@@ -41,7 +41,6 @@ export default NavigationString = {
   SUBSCRIPTION_DETAILS: 'SubscriptionDetails',
   FAQ_ROUTE: 'Faq',
   BLOCK_USER: 'BlockUser',
-  PROFILE: 'SettingsProfile',
   DELETE_ACCOUNT: 'DeleteAccount',
   REPORT_USER: 'ReportUser',
   SUPPORT: 'Support',

@@ -27,7 +27,6 @@ import { validationSettingsProfile } from '../../../../validation/validation';
 import CustomInput from '../../../components/auth/CustomInput';
 import UploadImage from '../../../components/UploadImage';
 import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
-import TouchableButton from '../../../components/TouchableButton';
 import {
   FourthColor,
   PrimaryColor,

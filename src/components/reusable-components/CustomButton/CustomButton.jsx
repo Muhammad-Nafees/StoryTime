@@ -1,38 +1,37 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { SecondaryColor, ThirdColor } from '../screens/Styles/Style';
 import {
   responsiveHeight,
   responsiveFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
-const TouchableButton = ({
+
+
+const CustomButton = ({
+
   text,
   onPress,
   backgroundColor,
   color,
   borderWidth,
   isLoading,
-  setIsLoading,
   type,
-  isValid,
-  dirty,
-  timeLeft,
   sequenceUser,
   selectedIndices,
   validate,
   values,
-  StatusCodeSuccess
+  StatusCodeSuccess,
+  value
 
 }) => {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         disabled={
-          type === 'register' && StatusCodeSuccess ? false :
+          type === 'register' && value == "" ? true :
             type === "login" ? false :
-              type === "forgetemail" && StatusCodeSuccess ? false :
+              type === "forgetemail" && value == "" ? true :
                 type === "optForget" ? false :
                   type === "registeruserInfo" ? false :
                     type === "backuser" ? false :
@@ -41,8 +40,12 @@ const TouchableButton = ({
                           type === "tagFriends" ? false :
                             type === "tag" ? false :
                               type == "savestoryphone" ? false :
-                                true
+                                type == "registerFirst" && !validate(values) ? true :
+                                  type == "registerpassword" && !validate(values) ? true :
+
+                                    false
         }
+
         onPress={onPress}
         style={{
           width:
@@ -53,7 +56,6 @@ const TouchableButton = ({
             selectedIndices?.length === sequenceUser?.length
               ? backgroundColor
               : 'rgba(57, 94, 102, 0.3)',
-          // backgroundColor:  "red" : "green",
           borderRadius: 10,
           borderWidth: borderWidth == '1' ? 1 : 0,
           borderColor: borderWidth == '1' ? '#395E66' : null,
@@ -79,4 +81,4 @@ const TouchableButton = ({
   );
 };
 
-export default TouchableButton;
+export default CustomButton;

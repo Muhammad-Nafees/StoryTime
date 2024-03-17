@@ -512,7 +512,7 @@ const FirstUser = ({ route }) => {
                   borderColor: isPressed ? '#D04141' : TextColorGreen,
                   backgroundColor:
                     isFirstCall || timeLeft == 0
-                      ? 'rgba(87, 150, 164, 0.3)'
+                      ? 'rgba(57, 94, 102, 0.3)'
                       : TextColorGreen,
                   width: SCREENWIDTH * 0.32,
                   height: SCREENWIDTH * 0.32,

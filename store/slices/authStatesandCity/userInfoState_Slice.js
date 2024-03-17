@@ -6,7 +6,6 @@ export const userinfoState = createAsyncThunk("userinfostate/userinfo", async (c
 
     try {
         const response = await stateandcity_api(countryinfo)
-        console.log("reduxUserInfo", response);
         return response;
 
     } catch (error) {
@@ -24,7 +23,7 @@ const userinfo_state = createSlice({
         userdata: [],
         loading: false,
         error: null,
-        userImage:""
+        userImage: ""
     },
 
     reducers: {
@@ -32,9 +31,8 @@ const userinfo_state = createSlice({
             state.userdata = action.payload
         },
 
-        setUserImage: (state, action)  => {
+        setUserImage: (state, action) => {
             state.userImage = action.payload;
-            console.log("userImage======", state?.userImage)
         },
     },
 
@@ -47,7 +45,6 @@ const userinfo_state = createSlice({
             builder.addCase(userinfoState.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.userdata = payload;
-                console.log("state.suerdaatA", state.userdata)
             }),
             builder.addCase(userinfoState.rejected, (state, action) => {
                 state.error = true;

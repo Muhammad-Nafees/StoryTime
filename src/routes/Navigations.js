@@ -19,7 +19,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../assets/Imagepaths';
+import { Img_Paths } from '../assets/Imagepaths';
 import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
 import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
@@ -28,7 +28,7 @@ import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
 import Sequence from '../screens/HomeScreens/catagoriesaddMembers/sequenceofPlayer/Sequence';
 import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
 import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
+import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
 import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
 import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
 import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
@@ -52,13 +52,13 @@ import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
 import { useSelector } from 'react-redux';
 
-import Support from '../screens/HomeScreens/setting/Support';
-import SupportMessage from '../screens/HomeScreens/setting/SupportMessage';
-import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageList';
-import Report from '../screens/HomeScreens/setting/Report';
-import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
-import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
-import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
+// import Support from '../screens/HomeScreens/setting/Support';
+// import SupportMessage from '../screens/HomeScreens/setting/SupportMessage';
+// import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageList';
+// import Report from '../screens/HomeScreens/setting/Report';
+// import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
+// import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
+// import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
 import EditAddPaymentCardDetail from '../screens/HomeScreens/setting/EditAddPaymentCardDetail';
 
 const Navigations = () => {
@@ -111,25 +111,24 @@ const Navigations = () => {
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
       <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
-      {/* <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} /> */}
       <Stack.Screen
         name={LOGIN}
         component={Login}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen name={SUPPORT} component={Support} />
+      {/* <Stack.Screen name={SUPPORT} component={Support} />
       <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
-      <Stack.Screen name={REPORT} component={Report} />
-      <Stack.Screen
+      <Stack.Screen name={REPORT} component={Report} /> */}
+      {/* <Stack.Screen
         name={SUPPORT_MESSAGE_LIST}
         component={SupportMessageList}
-      />
-      <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
-      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
+      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} /> */}
+      {/* <Stack.Screen
         name={ADD_PAYMENT_CARD_DETAIL}
         component={AddPaymentCardDetail}
-      />
+      /> */}
       <Stack.Screen
         name={EDIT_ADD_PAYMENT_CARD_DETAIL}
         component={EditAddPaymentCardDetail}
@@ -137,7 +136,7 @@ const Navigations = () => {
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -150,12 +149,12 @@ const GuestStack = () => {
       <Stack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PrivacyAndPolicy"
         component={PrivacyAndPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
@@ -208,15 +207,14 @@ const PLayFlowScreens = () => {
 
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
-  const {HOME, FEED_CHAT, REPORT_USER} = NavigationsString;
   return (
     <Stack.Navigator
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         headerShown: false,
       }}>
-      <Stack.Screen name={HOME} component={Home} />
-      <Stack.Screen name={FEED_CHAT} component={FeedChat} />
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Feedchat" component={FeedChat} />
     </Stack.Navigator>
   );
 };
@@ -225,7 +223,7 @@ const HomeStackBottom = () => {
 
 const CategoriesStackBottom = () => {
   const Stack = createStackNavigator();
-  const {CATEGORIES} = NavigationsString;
+  const { CATEGORIES } = NavigationsString;
 
   return (
     <Stack.Navigator
@@ -248,10 +246,9 @@ const CategoriesStackBottom = () => {
 
 // Profile Bottom And Stack Screens -----
 
-const ProfileStacksBottom = ({ navigation, route, }) => {
-  console.log("route-------------- :substack", route?.params?.screen);
+const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
-  const {HOME} = NavigationsString;
+  const { HOME } = NavigationsString;
   return (
     <Stack.Navigator
       initialRouteName="Profile"
@@ -268,7 +265,7 @@ const ProfileStacksBottom = ({ navigation, route, }) => {
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
-  const {HOME, FEED_CHAT} = NavigationsString;
+  const { HOME, FEED_CHAT } = NavigationsString;
   return (
     <Stack.Navigator screenOptions={{
       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -280,7 +277,7 @@ const ProfileScreens = () => {
   );
 };
 
-const BottomTavNavigator = ({ route }) => {
+const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;
   const Tab = createBottomTabNavigator();
@@ -302,9 +299,8 @@ const BottomTavNavigator = ({ route }) => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStackBottom}
-        initialParams={route}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               {focused ? (
                 <Image
@@ -333,10 +329,8 @@ const BottomTavNavigator = ({ route }) => {
       <Tab.Screen
         name="categoriesStack"
         component={CategoriesStackBottom}
-        initialParams={route}
-
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               {focused ? (
                 <Image
@@ -372,9 +366,8 @@ const BottomTavNavigator = ({ route }) => {
       <Tab.Screen
         name="profileStack"
         component={ProfileStacksBottom}
-        initialParams={route}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               {focused ? (
                 <Image
@@ -410,134 +403,5 @@ const BottomTavNavigator = ({ route }) => {
     </Tab.Navigator>
   );
 };
-
-// const shouldShowTabBar = (route) => {
-//   // Implement your logic here to determine whether to show tabBar or not
-//   console.log("route---- :", route)
-//   if (route.state && route.state.index > 0) {
-//     return false; // Hide tabBar when navigating deeper into screens
-//   }
-//   return true; // Show tabBar by default
-// };
-
-// export default Navigations;
-
-
-
-// const AnimatedTapBar = ({ state: { index: activeIndex, routes }, navigation, descriptors }) => {
-
-//   console.log("activeince----- :", activeIndex)
-//   const route = useRoute();
-//   const { bottom } = useSafeAreaInsets();
-
-//   const reducer = (state, action) => {
-//     return [...state, { x: action.x, index: action.index }];
-//   };
-
-//   const [layout, dispatch] = useReducer(reducer, []);
-
-//   const handleLayout = (event, index) => {
-//     dispatch({ x: event.nativeEvent.layout.x, index });
-//   };
-
-//   return (
-//     <View style={[styles.tabBar, { paddingBottom: bottom }]}>
-
-//       <View style={styles.tabBarContainer}>
-//         {
-//           routes.map((route, index) => {
-//             console.log("route--------", route)
-//             const active = index === activeIndex;
-//             const { options } = descriptors[route.key];
-
-
-//             return (
-//               <TabBarComponent
-//                 //    descriptors={descriptors?.tabBarStyle}
-//                 key={route.key}
-//                 route={route?.name}
-//                 active={active}
-//                 options={options}
-//                 index={index}
-//                 onLayout={(e) => handleLayout(e, index)}
-//                 onPress={() => navigation.navigate(route.name)}
-//               />
-//             );
-//           })}
-//       </View>
-//     </View>
-//   );
-// };
-
-
-
-// const TabBarComponent = ({ active, options, onLayout, onPress, route, index, descriptors }) => {
-
-//   // console.log('descriptors0-0=-=',descriptors)
-//   const ref = useRef(null);
-//   return (
-//     <Pressable onPress={onPress} onLayout={onLayout} style={{ ...styles.component }}>
-
-//       <View style={[styles.iconContainer]}>
-//         {options.tabBarIcon ? options.tabBarIcon({}) : <Text>?</Text>}
-//       </View>
-//     </Pressable>
-//   );
-// };
-
-
-
-// const styles = StyleSheet.create({
-//   tabBar: {
-//     backgroundColor: '#FFF',
-//     height: 80,
-//   },
-//   activeBackground: {
-//     position: 'absolute',
-//   },
-//   tabBarContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//   },
-//   component: {
-//     height: 60,
-//     width: 60,
-//     marginTop: 10
-//   },
-//   componentCircle: {
-//     flex: 1,
-//     borderRadius: 30,
-//   },
-//   iconContainer: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   icon: {
-//     height: 36,
-//     width: 36,
-//   },
-//   tab_icon: {
-//     marginHorizontal: 10,
-//     paddingHorizontal: 10
-//   },
-//   icon_badge: {
-//     // backgroundColor: 'red',
-//     color: '#fff',
-//     position: 'absolute',
-//     top: -6,
-//     right: -10,
-//     borderRadius: 20,
-//     width: 15,
-//     height: 15,
-//     fontWeight: 'bold',
-//     fontSize: 10,
-//     textAlign: 'center'
-//   }
-// });
 
 export default Navigations
