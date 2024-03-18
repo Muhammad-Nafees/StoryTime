@@ -10,9 +10,13 @@ export const Inter_Medium = {
 };
 
 export const Inter_SemiBold = {
-    Inter_SemiBold: 'Inter-SemiBold',
-  };
+  Inter_SemiBold: 'Inter-SemiBold',
+};
 
 export const Inter_Bold = {
   Inter_Bold: 'Inter-Bold',
 };
+export const Poppins_Regular = {
+  Poppins_regular: 'Poppins-Regular',
+};
+

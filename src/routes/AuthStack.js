@@ -29,17 +29,20 @@ import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndCond
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
-import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
-import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
+import Categories from '../screens/HomeScreens/categoriesScreens/Categories';
+import SubCategories from '../screens/HomeScreens/categoriesScreens/SubCategories';
+import FirstScreenPlayFlow from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
+import VideoFirstStartScreen from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/Index';
+import SecondPlayFlowScreen from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import VideoFirstUser from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoRecordingStart';
+import FirstUser from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
 import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
 import { Img_Paths } from '../assets/Imagepaths';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
+import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
 
 const AuthStack = () => {
   const {
@@ -58,7 +61,7 @@ const AuthStack = () => {
 
   const Stack = createStackNavigator();
 
-  const [checkRouteName, setCheckRouteName] = useState(null)
+  const [checkRouteName, setCheckRouteName] = useState(null);
 
   const fetchRouteName = async () => {
     let initialRouteName = await AsyncStorage.getItem('isLoggedOut');
@@ -67,7 +70,7 @@ const AuthStack = () => {
     } else {
       setCheckRouteName('false');
     }
-    await AsyncStorage.removeItem('isLoggedOut')
+    await AsyncStorage.removeItem('isLoggedOut');
   };
 
   useEffect(() => {
@@ -81,16 +84,13 @@ const AuthStack = () => {
     initialRouteName = LOGIN;
   } else {
     initialRouteName = POPUP_START;
-  }
-
-  console.log(initialRouteName);
+  };
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          animationEnabled: false,
         }}
         initialRouteName={initialRouteName}>
         <Stack.Screen
@@ -165,14 +165,20 @@ const AuthStack = () => {
 
 const GuestStack = () => {
   const Stack = createStackNavigator();
-  const { FIRSTSCREENPLAYFLOW, SECONDSCREENPLAYFLOW, VIDEO_FIRST_SCREEN, FIRST_USER, VIDEO_FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
+  const {
+    FIRSTSCREENPLAYFLOW,
+    SECONDSCREENPLAYFLOW,
+    VIDEO_FIRST_SCREEN,
+    FIRST_USER,
+    VIDEO_FIRST_USER,
+    PLAY_STORY_TIME,
+  } = NavigationsString;
   return (
     <Stack.Navigator
-    screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      animationEnabled: false,
-    }}
-    >
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        animationEnabled: false,
+      }}>
       <Stack.Screen
         name="FirstScreenGuest"
         component={FirstScreenGuest}
@@ -189,7 +195,7 @@ const GuestStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={"CategoriesTab"}
+        name={'CategoriesTab'}
         component={CategoriesTab}
         options={{ headerShown: false }}
       />
@@ -199,13 +205,13 @@ const GuestStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={FIRSTSCREENPLAYFLOW}
-        component={FirstScreenPlayFlow}
+        name="SelectGamePoint"
+        component={SelectGamePoint}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={SECONDSCREENPLAYFLOW}
-        component={SecondPlayFlowScreen}
+        name="StartGame"
+        component={StartGame}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -214,8 +220,8 @@ const GuestStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={FIRST_USER}
-        component={FirstUser}
+        name="StartRecordingVoice"
+        component={StartRecordingVoice}
         options={{ headerShown: false }}
       />
 
@@ -224,14 +230,12 @@ const GuestStack = () => {
         component={VideoFirstUser}
         options={{ headerShown: false }}
       />
-
     </Stack.Navigator>
   );
 };
 
 const CategoriesTab = () => {
-  const { CATEGORIES,FIRSTSCREENPLAYFLOW } = NavigationsString;
-  const { HOME_FOCUSED } = Img_Paths;
+  const { CATEGORIES } = NavigationsString;
 
   const Tab = createBottomTabNavigator();
 
@@ -248,7 +252,7 @@ const CategoriesTab = () => {
         component={Categories}
         options={{
           tabBarHideOnKeyboard: true,
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               {focused ? (
                 <Image

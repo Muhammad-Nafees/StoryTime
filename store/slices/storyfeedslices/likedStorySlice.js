@@ -40,4 +40,9 @@ const likedstory_feed_slice = createSlice({
 });
 
 export default likedstory_feed_slice.reducer;
-export const { likedstoryfeed, likedCountingRTK, disLikedCountingRTK, storyFeedContent, storyFeedUsername } = likedstory_feed_slice.actions;
+export const { likedstoryfeed,
+    likedCountingRTK,
+    disLikedCountingRTK,
+    storyFeedContent,
+    storyFeedUsername
+} = likedstory_feed_slice.actions;

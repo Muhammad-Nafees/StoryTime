@@ -12,7 +12,7 @@ import { Circle, Path, Svg } from 'react-native-svg';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { rearrangedFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import { rearrangedFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 const StoryTimeSaved = ({
   isVisible,
@@ -25,14 +25,16 @@ const StoryTimeSaved = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
+  const sequenceUser = useSelector(state => state.getcategories?.gameFriends);
 
   const close = () => {
     if (onPress) {
       onPress();
       setVisible(false);
+      navigation.navigate('Home');
     } else {
-      // setVisible(false);
+      setVisible(false);
+      // navigation.navigate('Home');
       navigation.navigate('Home');
       // dispatch(sequenceUser);
     }

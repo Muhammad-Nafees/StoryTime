@@ -1,9 +1,14 @@
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import {
+  useNavigation,
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
-import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
+import Categories from '../screens/HomeScreens/categoriesScreens/Categories';
 import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
@@ -11,41 +16,69 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../assets/Imagepaths';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
-import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
-import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
+import AddPlayers from '../screens/HomeScreens/categoriesScreens/Add_Players';
+import SubCategories from '../screens/HomeScreens/categoriesScreens/SubCategories';
 import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
-import Sequence from '../screens/HomeScreens/catagoriesaddMembers/sequenceofPlayer/Sequence';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstUser';
-import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
-// import VideoSecondUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondUser';
-import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
-import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
+import Sequence from '../screens/HomeScreens/categoriesScreens/Sequence';
+import VideoFirstStartScreen from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/Index';
+import VideoFirstUser from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoRecordingStart';
+import VideoSecondStory from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoSecondStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
-import { FAQ, Notification, Setting, SubscriptionDetails, SettingsProfile, DeleteAccount, BlockUser } from '../screens/index';
+import {
+  FAQ,
+  Notification,
+  Setting,
+  SubscriptionDetails,
+  SettingsProfile,
+  DeleteAccount,
+  BlockUser,
+} from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
-import { Login } from '../screens/index'
+import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
+import Support from '../screens/HomeScreens/Setting/Support';
+import SupportMessage from '../screens/HomeScreens/Setting/SupportMessage';
+import SupportMessageList from '../screens/HomeScreens/Setting/SupportMessageList';
+import Report from '../screens/HomeScreens/Setting/Report';
+import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
+import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
+import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
+import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
+import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
+import GoNextPlayer from '../screens/HomeScreens/categoriesScreens/playFlowScreens/GoNextPlayer';
 
 const Navigations = () => {
-
   const Stack = createStackNavigator();
 
-  const { ADD_FRIENDS, REPORT_USER, ADD_PLAYERS, PLAYER_SEQUENCE, FAQ_ROUTE, SETTING, NOTIFICATION, SUBSCRIPTION_DETAILS, PROFILE, BLOCK_USER, DELETE_ACCOUNT, LOGIN } = NavigationsString;
+  const {
+    ADD_FRIENDS,
+    REPORT_USER,
+    ADD_PLAYERS,
+    PLAYER_SEQUENCE,
+    FAQ_ROUTE,
+    SETTING,
+    NOTIFICATION,
+    SUBSCRIPTION_DETAILS,
+    PROFILE,
+    BLOCK_USER,
+    DELETE_ACCOUNT,
+    LOGIN,
+  } = NavigationsString;
 
   return (
     <Stack.Navigator
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerShown: false
+        headerShown: false,
       }}
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
@@ -57,7 +90,10 @@ const Navigations = () => {
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
       <Stack.Screen name={SETTING} component={Setting} />
       <Stack.Screen name={NOTIFICATION} component={Notification} />
-      <Stack.Screen name={SUBSCRIPTION_DETAILS} component={SubscriptionDetails} />
+      <Stack.Screen
+        name={SUBSCRIPTION_DETAILS}
+        component={SubscriptionDetails}
+      />
       <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
       <Stack.Screen name={PROFILE} component={SettingsProfile} />
       <Stack.Screen name={BLOCK_USER} component={BlockUser} />
@@ -67,6 +103,19 @@ const Navigations = () => {
         component={Login}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen name={SUPPORT} component={Support} />
+      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
+      <Stack.Screen name={REPORT} component={Report} /> */}
+      {/* <Stack.Screen
+        name={SUPPORT_MESSAGE_LIST}
+        component={SupportMessageList}
+      /> */}
+      {/* <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
+      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} /> */}
+      {/* <Stack.Screen
+        name={ADD_PAYMENT_CARD_DETAIL}
+        component={AddPaymentCardDetail}
+      /> */}
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
@@ -90,42 +139,36 @@ const GuestStack = () => {
         component={PrivacyAndPolicy}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name="ProfileScreens" component={ProfileScreens} /> */}
+      <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
     </Stack.Navigator>
   );
 };
-
-
-
 
 const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
 
   const {
-    FIRSTSCREENPLAYFLOW,
-    FIRST_USER,
-    SECONDSCREENPLAYFLOW,
-    VIDEO_SECOND_USER,
     VIDEO_FIRST_SCREEN,
     VIDEO_FIRST_USER,
     SECOND_USER_STORY,
   } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen
-        name={FIRSTSCREENPLAYFLOW}
-        component={FirstScreenPlayFlow}
+        name="SelectGamePoint"
+        component={SelectGamePoint}
       />
       <Stack.Screen
-        name={SECONDSCREENPLAYFLOW}
-        component={SecondPlayFlowScreen}
+        name="StartGame"
+        component={StartGame}
       />
-      <Stack.Screen name={FIRST_USER} component={FirstUser} />
-      <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
+      <Stack.Screen name="StartRecordingVoice" component={StartRecordingVoice} />
+      <Stack.Screen name="GoNextPlayer" component={GoNextPlayer} />
 
       {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 
@@ -141,18 +184,16 @@ const PLayFlowScreens = () => {
   );
 };
 
-
-
 const HomeStackBottom = () => {
   const Stack = createStackNavigator();
-  const { HOME, FEED_CHAT, REPORT_USER } = NavigationsString;
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
-      <Stack.Screen name={HOME} component={Home} />
-      <Stack.Screen name={FEED_CHAT} component={FeedChat} />
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Feedchat" component={FeedChat} />
     </Stack.Navigator>
   );
 };
@@ -164,12 +205,20 @@ const CategoriesStackBottom = () => {
   const { CATEGORIES } = NavigationsString;
 
   return (
-    <Stack.Navigator screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
-      <Stack.Screen name={CATEGORIES} component={Categories} />
-      <Stack.Screen name="SubCategories" component={SubCategories} />
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}
+      initialRouteName={CATEGORIES}>
+      <Stack.Screen
+        name={CATEGORIES}
+        component={Categories}
+      />
+      <Stack.Screen
+        name="SubCategories"
+        component={SubCategories}
+      />
     </Stack.Navigator>
   );
 };
@@ -180,24 +229,24 @@ const ProfileStacksBottom = () => {
   const Stack = createStackNavigator();
   const { HOME } = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      headerShown: false
-    }}>
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerShown: false,
+      }}>
       <Stack.Screen name="Profile" component={Profile} />
-      {/* <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} /> */}
+      <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
+      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };
-
-
 
 const ProfileScreens = () => {
   const Stack = createStackNavigator();
   const { HOME, FEED_CHAT } = NavigationsString;
   return (
-    <Stack.Navigator initialRouteName="Profile" screenOptions={{
+    <Stack.Navigator screenOptions={{
       cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       headerShown: false
     }}>
@@ -207,19 +256,24 @@ const ProfileScreens = () => {
   );
 };
 
-
 const BottomTavNavigator = () => {
   const { HOME, CATEGORIES, PROFILE } = NavigationsString;
   const { HOME_FOCUSED } = Img_Paths;
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation();
 
+  const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
   return (
     <Tab.Navigator
+      // tabBar={(props) => <AnimatedTapBar {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarLabel: () => null,
         tabBarIcon: () => null,
-        tabBarStyle: { height: responsiveHeight(10) },
+        // tabBarVisible: shouldShowTabBar(route),
+        tabBarStyle: { height: responsiveHeight(10), display: USER?._id !== FriendIdRTK ? "none" : "flex" },
       }}>
       <Tab.Screen
         name="HomeStack"
@@ -279,6 +333,13 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+
+        listeners={({ navigation, route }) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('categoriesStack', { screen: CATEGORIES });
+          },
+        })}
       />
 
       <Tab.Screen
@@ -293,7 +354,7 @@ const BottomTavNavigator = () => {
                     width: responsiveWidth(6),
                     height: responsiveHeight(3),
                     resizeMode: 'center',
-                    tintColor: 'red',
+                    tintColor: '#E44173',
                   }}
                   source={require('../assets/profile_focused.png')}
                 />
@@ -310,9 +371,16 @@ const BottomTavNavigator = () => {
             </View>
           ),
         }}
+
+        listeners={({ navigation, route }) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('profileStack', { screen: "Profile" });
+          },
+        })}
       />
     </Tab.Navigator>
   );
 };
 
-export default Navigations;
+export default Navigations

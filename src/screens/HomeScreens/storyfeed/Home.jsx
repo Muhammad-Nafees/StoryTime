@@ -13,14 +13,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
-
+import { setEndUserProfile, setFriendId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const Home = () => {
 
     const { width, height } = Dimensions.get('window');
     const { STORY_TIME_IMG, SPLASH_SCREEN_IMAGE, } = Img_Paths;
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingMain, setIsLoadingMain] = useState(true)
+    const [isLoadingMain, setIsLoadingMain] = useState(true);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [HasMorePages, setHasMorePages] = useState();
@@ -35,8 +36,10 @@ const Home = () => {
     const navigation = useNavigation();
     const [checkDataisOrNot, setCheckDataisOrNot] = useState("")
     const REFRESH_TOKEN = responseLogin?.data?.refreshToken;
+    const { user } = useSelector(state => state?.authSlice);
+    const USER = user?.data?.user || user?.data;
 
-
+    console.log("user----", USER?._id);
 
     const addFriends_api_handler = async () => {
         try {
@@ -44,7 +47,7 @@ const Home = () => {
             setResponseapi(responseData?.data?.users);
             if (responseData?.statusCode == 401) {
                 const responseToken = await refresh_token_api(REFRESH_TOKEN);
-                console.log("responseTokenfunc-----", responseToken)
+                console.log("responseTokenfunc-----", responseToken);
                 return responseToken;
             }
             return responseData;
@@ -80,9 +83,7 @@ const Home = () => {
             }
         };
         fetchUsers();
-    }, [page, isRefreshing,])
-
-
+    }, [page, isRefreshing,]);
 
     const handleLoadMore = useCallback(() => {
         console.log("HasMorePages-----", HasMorePages);
@@ -94,6 +95,8 @@ const Home = () => {
         }
     }, [HasMorePages]);
 
+
+
     const onRefresh = () => {
         setIsRefreshing(true);
         addFriends_api_handler()
@@ -103,6 +106,37 @@ const Home = () => {
             setIsRefreshing(false);
         }, 1000);
     };
+
+    const handleFriends = (friendId) => {
+
+
+        dispatch(setFriendId(friendId));
+        navigation.navigate("profileStack", {
+            screen: "Profile",
+        });
+        console.log("friendId---- : ", friendId);
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(setFriendId(USER?._id));
+        }, [])
+    );
+
+    async function linkTo(item) {
+        try {
+            const url = item;
+            if (await InAppBrowser.isAvailable()) {
+                const result = await InAppBrowser.open(url, {
+                });
+            } else {
+                Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
 
     return (
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
@@ -118,7 +152,13 @@ const Home = () => {
                             <Image style={{ width: width * 0.11, height: height * 0.05, }} source={require("../../../assets/plus-icon.png")} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("profileStack", {
+                                screen: "Profile",
+                            });
+                            dispatch(setFriendId(USER?._id));
+                            setRandomForProfileUpdate
+                        }}>
                             <Image style={{ width: width * 0.10, height: height * 0.05, resizeMode: "center" }} source={require("../../../assets/avatar.png")} />
                         </TouchableOpacity>
 
@@ -136,12 +176,11 @@ const Home = () => {
                         data={Responseapi}
                         scrollEnabled={true}
                         horizontal
-                        // onRefresh={onRefresh}
-                        // refreshing={isRefreshing}
                         renderItem={({ item, index }) => {
+                            console.log("item---- :", item?._id);
                             return (
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
-                                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
+                                    <TouchableOpacity onPress={() => handleFriends(item?._id)} style={{ alignItems: "center", paddingVertical: moderateVerticalScale(6), paddingHorizontal: moderateScale(12), }}>
                                         <Image style={{ width: responsiveWidth(15.2), height: responsiveHeight(7.7), resizeMode: "center" }} source={require("../../../assets/first-img.png")} />
                                     </TouchableOpacity>
                                     <Text style={{ color: PrimaryColor, fontWeight: "600", fontSize: responsiveFontSize(1.8), textTransform: "capitalize", }}>{item?.firstName}</Text>
@@ -184,8 +223,10 @@ const Home = () => {
                                     dislikeslength={item?.dislikes}
                                     dislikesCount={item?.dislikesCount}
                                     dislikesByMe={item?.dislikesByMe}
+                                    linkTo={linkTo}
                                 />
                             )}
+
                             ListFooterComponent={() => {
                                 if (isLoading) {
                                     return (
@@ -200,13 +241,13 @@ const Home = () => {
                             onEndReachedThreshold={0.3}
                         />
 
-                        {/* {
+                        {
                             responseUsers?.length === 0 && (
                                 <View style={{ position: "absolute", top: 300, left: 45, alignItems: 'center', justifyContent: "center", height: height / 20, }}>
                                     <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>{checkDataisOrNot}</Text>
                                 </View>
                             )
-                        } */}
+                        }
 
                     </>
             }
@@ -214,6 +255,8 @@ const Home = () => {
         </ImageBackground>
     )
 };
+
+
 
 const styles = StyleSheet.create({
     container: {

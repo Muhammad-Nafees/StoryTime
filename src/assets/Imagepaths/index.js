@@ -23,7 +23,7 @@ export const Img_Paths = {
   CREATE_PASSWORD_IMG: require('../../assets/createpassword.png'),
   CREATE_NEW_PASSWORD_IMG: require('../../assets/createNewpassword.png'),
   // c:\Users\dell\Downloads\.png
-
+  PAUSE_IMG: require("../../assets/pause-img.png"),
   // Categories File-----
 
   // ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
@@ -48,7 +48,7 @@ export const Img_Paths = {
   NEXT_PLAYER_IMAGE: require('../../assets/nextplayerimage.png'),
   EXTEND_STORYTIME_IMAGE: require('../../assets/extendstoryTimeimage.png'),
   CONTINUE_IMAGE: require('../../assets/continueimage.png'),
-  // SAVE_STORY_BACKGROUND: require('../../assets/savestorybackgroundImage.png'),
+  SAVE_STORY_BACKGROUND: require('../../assets/savestoryimageBg.png'),
   // c:\Users\dell\Downloads\extendstoryTimeimage.png c:\Users\dell\Downloads\continueimage.png
   // VOICE_TO_TEXT_IMAGE2: require("../../assets/voiceTotextimage2.png"),
   // BORDER_VOICE_TO_TEXT: require("../../assets/borderVoiceToText.png"),
@@ -290,4 +290,25 @@ export const Img_Paths = {
   DROP_ICON: require('../../assets/bottom-icon.png'),
   DEFAULT_ICON: require('../../assets/defaultIcon.png'),
   // DEFAULT_COVER: require("../../assets/plain-grey-background.png")
+
+  //Report a Problem
+  MESSAGE_ICON: require('../../assets/support_story_time.png'),
+  STORY_ICON: require('../../assets/storytime_icon.png'),
+  CAMERA_ICON: require('../../assets/camera_icon.png'),
+
+  //Chat Icons
+  GALLERY_ICON: require('../../assets/galleryicon.png'),
+  CAMERA__ICON: require('../../assets/cameraicon.png'),
+  MESSAGE_SEND: require('../../assets/sendicon.png'),
+
+  //Report Icons
+  REPORT_ICON: require('../../assets/Report_Icon.png'),
+
+  //Payment
+  VISA: require('../../assets/visa.png'),
+  ADD_CARD: require('../../assets/addcard.png'),
+  EDIT: require('../../assets/edit.png'),
+  TRASH: require('../../assets/trash.png'),
+  CHECK: require('../../assets/check.png'),
+  ADD_SUCCEFULLY_PAYMENT_CARD: require('../../assets/Add_Succsessfully_Card_Bg.png'),
 };

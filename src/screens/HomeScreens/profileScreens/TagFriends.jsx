@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput } from 'react-native'
+import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -7,43 +7,46 @@ import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import StoryUsers from '../../../components/StoryUsers';
+import StoryUsers from '../../../components/categories/StoryUsers';
 import AddFriendUsers from '../../../components/AddFriendUsers';
-import TouchableButton from ' ../../../components/TouchableButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { addFriends_api } from '../../../../services/api/add-members';
-import AddFriends_Categories from '../../../components/AddPlayers_Categories';
+import AddFriends_Categories from '../../../components/reusable-components/addplayer/AddPlayers_Categories';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import _ from 'lodash';
 import { tag_Friends } from '../../../../services/api/profile';
 import { useSelector } from 'react-redux';
-import { addTagPlayers } from '../../../../store/slices/addplayers/addPlayersSlice';
-import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { addTagPlayers } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_Categories';
 
 
 const TagFriends = ({ route }) => {
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
-        SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, SECOND_PROFILE } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+
+    // states
     const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
-    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers)
-    console.log("tagPlayersRTK---------- :", tagPlayersRTK);
+    // redux
+    const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers);
     const storyId = route?.params?.storyId;
 
-
     const addFriends_api_handler = async () => {
-
+        setIsLoading(true);
         try {
             const responseData = await addFriends_api();
+            setIsLoading(false);
             setResponseapiFriends(responseData.data.users);
             return responseData;
         } catch (error) {
             console.log("err", error)
         }
     };
+
     useEffect(() => {
         addFriends_api_handler();
     }, []);
@@ -52,9 +55,9 @@ const TagFriends = ({ route }) => {
         try {
             const responseData = await addFriends_api({ search: text });
             if (responseData?.data == null) {
-                setIsNoFriends(false)
+                setIsNoFriends(false);
             } else {
-                setIsNoFriends(true)
+                setIsNoFriends(true);
             }
             setResponseapiFriends(responseData.data?.users)
             return responseData
@@ -64,10 +67,10 @@ const TagFriends = ({ route }) => {
     }, 700)
     ).current;
 
-    const handlenavigation = () => {
-        navigation.navigate("ProfileScreens", { screen: "AddUrl" })
-    };
 
+    const handlenavigation = () => {
+        navigation.navigate("VoiceToTextProfile",)
+    };
     const lodashTextHandler = (text) => {
         setInputText(text)
         debonceApiCall(text)
@@ -108,10 +111,12 @@ const TagFriends = ({ route }) => {
                                             item={item}
                                             userid={item.userid}
                                             username={item.username}
+                                            storyId={storyId}
                                             type="tagFriends"
                                         />
                                     ))
                                 }
+
                             </ScrollView>
 
                             <View style={[styles.categories_text_container2, { paddingTop: responsiveWidth(6) }]}>
@@ -120,27 +125,32 @@ const TagFriends = ({ route }) => {
 
                             <View style={{ paddingVertical: responsiveWidth(2), justifyContent: "center", alignItems: "center" }}>
                                 {
-                                    !isNoFriends ?
-                                        (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
-                                            <Text style={{ fontSize: responsiveFontSize(3.5), color: PrimaryColor, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
-                                        </View>)
+                                    isLoading ?
+                                        <View style={{ justifyContent: "center", alignItems: 'center', height: height / 2 }}>
+                                            <ActivityIndicator size={24} color={PrimaryColor} />
+                                        </View>
                                         :
-                                        ResponseapiFriends?.map((item, index) => {
-                                            console.log("item====", item._id);
-                                            return (
-                                                <AddFriends_Categories
-                                                    key={item?._id}
-                                                    indexNo={index}
-                                                    username={item?.username}
-                                                    userchoice="Tag"
-                                                    profileimage={SECOND_PROFILE}
-                                                    item={item}
-                                                    userid={item?._id}
-                                                    storyId={storyId}
-                                                    type="tagFriends"
-                                                />
-                                            )
-                                        })
+                                        !isNoFriends ?
+                                            (<View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(50) }}>
+                                                <Text style={{ fontSize: responsiveFontSize(3.5), color: PrimaryColor, textAlign: "center", fontFamily: PassionOne_Regular.passionOne }}>No Friends Found</Text>
+                                            </View>)
+                                            :
+                                            ResponseapiFriends?.map((item, index) => {
+                                                console.log("item====", item._id);
+                                                return (
+                                                    <AddFriends_Categories
+                                                        key={item?._id}
+                                                        indexNo={index}
+                                                        username={item?.username}
+                                                        userchoice="Tag"
+                                                        profileimage={SECOND_PROFILE}
+                                                        item={item}
+                                                        userid={item?._id}
+                                                        storyId={storyId}
+                                                        type="tagFriends"
+                                                    />
+                                                )
+                                            })
                                 }
                             </View>
                         </View>
@@ -148,7 +158,7 @@ const TagFriends = ({ route }) => {
                 </View>
 
                 <View style={{ paddingTop: responsiveWidth(5) }}>
-                    <TouchableButton
+                    <CustomButton
                         onPress={handlenavigation}
                         backgroundColor={TextColorGreen}
                         text="Tag"

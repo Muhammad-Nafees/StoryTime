@@ -5,9 +5,9 @@ import { useNavigation, useNavigationBuilder, } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
-import BackButton from '../BackButton';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { Defs, G, Path, Rect, Svg } from 'react-native-svg';
 import { useEffect, useState } from 'react';
@@ -51,9 +51,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
 
     const nextScreenmodalHandler = () => {
-        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("profileStack", {
-            screen: "Profile"
-        }); //guest user doesn't have profile
+        !user ? navigation.navigate(PLAY_STORY_TIME) : navigation.navigate("Home") //guest user doesn't have profile
         // setTimeout(() => {
         setIsVisibleDownloading(false);
         // }, 1000);
@@ -105,8 +103,6 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
 
                         </View>
                     </View>
-
-
 
                 </ImageBackground>
                 {/* </View> */}

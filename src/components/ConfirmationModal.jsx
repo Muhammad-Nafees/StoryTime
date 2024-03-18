@@ -101,11 +101,11 @@ const ConfirmationModal = forwardRef((props, ref) => {
       animationOut="slideOutDown"
       backdropColor='#979797'
       onModalHide={close}
-      backdropOpacity={0.98}
+      backdropOpacity={0.95}
       onBackdropPress={close}>
       <View
         style={{
-          height: inputError?responsiveHeight(35):responsiveHeight(32),
+          height: inputError?responsiveHeight(35):responsiveHeight(30),
           width: responsiveWidth(85),
           borderRadius: 32,
           backgroundColor: White,

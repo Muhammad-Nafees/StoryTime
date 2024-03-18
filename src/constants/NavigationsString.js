@@ -45,5 +45,4 @@ export default NavigationString = {
     PROFILE: "SettingsProfile",
     DELETE_ACCOUNT: "DeleteAccount",
     REPORT_USER: "ReportUser"
-
 };

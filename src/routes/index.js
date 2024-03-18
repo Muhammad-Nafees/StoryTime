@@ -18,6 +18,7 @@ const Routes = () => {
 
         dispatch(setAccessToken(accessToken));
         dispatch(login(JSON.parse(userData)));
+
         setLoading(false);
       } catch (error) {
         console.error('Error authenticating user:', error);

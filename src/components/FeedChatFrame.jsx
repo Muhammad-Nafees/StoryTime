@@ -34,7 +34,6 @@ import {
 } from 'react-native-popup-menu';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
-// import { getComments_func } from '../../store/slices/storyfeedslices/getCommentsSlice'
 import GetComments from './GetComments';
 import { add_comment_api, get_Comment_api } from '../../services/api/storyfeed';
 import NoComment from './comments/NoComments';

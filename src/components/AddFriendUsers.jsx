@@ -4,8 +4,6 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { Img_Paths } from '../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { allusers, getAllUsers } from '../../store/slices/storyfeedslices/getAllUsersSlice';
-import { followandUnfollow, followunfollow } from '../../store/slices/storyfeedslices/followUnfollowSlice';
 import { follow_unfollow_api } from '../../services/api/storyfeed';
 
 
