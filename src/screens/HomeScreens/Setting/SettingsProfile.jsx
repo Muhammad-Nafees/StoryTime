@@ -10,8 +10,8 @@ import {
 import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
-import ScreenHeader from '../../../components/ScreenHeader';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -25,7 +25,7 @@ import {
 import { Formik } from 'formik';
 import { validationSettingsProfile } from '../../../../validation/validation';
 import CustomInput from '../../../components/auth/CustomInput';
-import UploadImage from '../../../components/UploadImage';
+import UploadImage from '../../../components/modals/UploadImage';
 import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
 import TouchableButton from '../../../components/TouchableButton';
 import {
@@ -73,7 +73,7 @@ const SettingsProfile = () => {
   const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
 
   const {userdata, loading} = useSelector(state => state?.userinfostate);
-  // console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
+  console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
   const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
@@ -97,6 +97,8 @@ const SettingsProfile = () => {
   const [initialLoading, setInitialLoading] = React.useState(true);
 
   const handleFormSubmit = async values => {
+    // console.log('pImage',profileImage.uri)
+
     const payload = {
       ...(values || {}),
       ...(profileImage?.uri && {profileImage: profileImage?.uri}),
@@ -108,9 +110,10 @@ const SettingsProfile = () => {
   };
 
   const getData = async () => {
-    const uid = user?.data?.user?._id;
+    const uid = user?.data?.user?._id || user?.data?._id
     let {data} = await getUserProfileData(uid);
-    // console.log('🚀 ~ getData ~ data:', data);
+     console.log('🚀 ~ getData ~ data:', data,data?.profileImage);
+
 
     const payload = {
       username: data?.username || '',
@@ -126,6 +129,7 @@ const SettingsProfile = () => {
     };
 
     if (data?.profileImage) {
+      // console.log('profileimg',data?.profileImage)
       setProfileImage({uri: `${base}${data?.profileImage}`});
     }
     if (data?.coverImage) {

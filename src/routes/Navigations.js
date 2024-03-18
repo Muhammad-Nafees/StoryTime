@@ -68,23 +68,8 @@ const Navigations = () => {
     ADD_FRIENDS,
     REPORT_USER,
     ADD_PLAYERS,
-    PLAYER_SEQUENCE,
-    FAQ_ROUTE,
-    SETTING,
-    NOTIFICATION,
-    SUBSCRIPTION_DETAILS,
-    PROFILE,
-    BLOCK_USER,
-    DELETE_ACCOUNT,
+    PLAYER_SEQUENCE, 
     LOGIN,
-    SUPPORT,
-    SUPPORT_MESSAGE,
-    SUPPORT_MESSAGE_LIST,
-    REPORT,
-    PAYEMENT,
-    ADD_PAYMENT_CARD,
-    ADD_PAYMENT_CARD_DETAIL,
-    EDIT_ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -93,6 +78,7 @@ const Navigations = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         headerShown: false,
       }}
+
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
       <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
@@ -101,37 +87,36 @@ const Navigations = () => {
       <Stack.Screen name={REPORT_USER} component={Reportuser} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
-      <Stack.Screen name={SETTING} component={Setting} />
-      <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={'Setting'} component={Setting} />
+      <Stack.Screen name={'Notification'} component={Notification} />
       <Stack.Screen
-        name={SUBSCRIPTION_DETAILS}
+        name={'SubscriptionDetails'}
         component={SubscriptionDetails}
       />
-      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
-      <Stack.Screen name={PROFILE} component={SettingsProfile} />
-      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
-      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
-      {/* <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} /> */}
+      <Stack.Screen name={'Faq'} component={FAQ} />
+      <Stack.Screen name={'SettingsProfile'} component={SettingsProfile} />
+      <Stack.Screen name={'BlockUser'} component={BlockUser} />
+      <Stack.Screen name={'DeleteAccount'} component={DeleteAccount} />
       <Stack.Screen
         name={LOGIN}
         component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen name={SUPPORT} component={Support} />
-      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
-      <Stack.Screen name={REPORT} component={Report} />
+      <Stack.Screen name={'Support'} component={Support} />
+      <Stack.Screen name={'SupportMessage'} component={SupportMessage} />
+      <Stack.Screen name={'Report'} component={Report} />
       <Stack.Screen
-        name={SUPPORT_MESSAGE_LIST}
+        name={'SupportMessageList'}
         component={SupportMessageList}
       />
-      <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
-      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} />
+      <Stack.Screen name={'PayementSetting'} component={PaymentSetting} />
+      <Stack.Screen name={'AddCard'} component={AddPaymentCard} />
       <Stack.Screen
-        name={ADD_PAYMENT_CARD_DETAIL}
+        name={'AddPaymentCardDetail'}
         component={AddPaymentCardDetail}
       />
       <Stack.Screen
-        name={EDIT_ADD_PAYMENT_CARD_DETAIL}
+        name={'EditAddPaymentCardDetail'}
         component={EditAddPaymentCardDetail}
       />
       <Stack.Screen

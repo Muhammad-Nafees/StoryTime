@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import SupportButton from '../../../components/Support/SupportButton';

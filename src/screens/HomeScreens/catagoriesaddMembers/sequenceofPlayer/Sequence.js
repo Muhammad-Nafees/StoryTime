@@ -7,7 +7,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import React, { useState, useMemo } from 'react';
-import BackButton from '../../../../components/BackButton';
+import BackButton from '../../../../components/reuseable-components/BackButton';
 import {
   responsiveFontSize,
   responsiveHeight,

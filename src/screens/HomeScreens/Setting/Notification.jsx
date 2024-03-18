@@ -21,8 +21,10 @@ import {
 } from '../../Styles/Style';
 import Typography from '../../../components/Typography';
 import { notificationToggle } from '../../../../services/api/settings';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 const NotificationOptBox = ({ title, sectionName = '' }) => {
   const [isEnabled, setIsEnabled] = useState(null);
@@ -88,7 +90,7 @@ const Notification = () => {
 
   return (
     <BackgroundWrapper>
-      <View style={styles.first_container}>
+      {/* <View style={styles.first_container}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.back_button}>
@@ -97,7 +99,9 @@ const Notification = () => {
         <View style={styles.categories_text_container}>
           <Text style={styles.categories_text}>Notifications</Text>
         </View>
-      </View>
+      </View> */}
+        <ScreenHeader title={'Notifications'}/>
+
       <Typography style={styles.typography_spacing}>
         Control your notifications depending on your prefereces.
       </Typography>
@@ -155,6 +159,7 @@ const styles = StyleSheet.create({
   typography_spacing: {
     paddingVertical: moderateVerticalScale(12),
     paddingHorizontal: moderateScale(20),
+    fontFamily:Inter_Regular.Inter_Regular
   },
   box: {
     marginHorizontal: moderateScale(10),
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-between',
+    fontFamily:Inter_Regular.Inter_Regular
   },
   box_container: {
     marginHorizontal: moderateScale(20),

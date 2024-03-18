@@ -25,7 +25,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import {Img_Paths} from '../../../assets/Imagepaths/index';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reuseable-components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
 import {SCREEN_HEIGHT} from '../../../constants/Constant';

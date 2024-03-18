@@ -5,7 +5,7 @@ import { useNavigation, } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
-import BackButton from '../BackButton';
+import BackButton from '../reuseable-components/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 
 import { useDispatch, useSelector } from 'react-redux';

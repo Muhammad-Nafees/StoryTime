@@ -1,13 +1,13 @@
 import React from 'react';
-import SvgIcons from './svgIcon/svgIcons';
-import {Black02} from '../screens/Styles/Style';
+import SvgIcons from '../svgIcon/svgIcons';
+import {Black02} from '../../screens/Styles/Style';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import NavigationsString from '../constants/NavigationsString';
-import Typography from './Typography';
-import {SPACING} from '../constants/Constant';
+import NavigationsString from '../../constants/NavigationsString';
+import Typography from '../Typography';
+import {SPACING} from '../../constants/Constant';
 
 const {width, height} = Dimensions.get('window');
 

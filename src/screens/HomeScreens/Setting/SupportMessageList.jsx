@@ -2,7 +2,7 @@ import React from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import Typography from '../../../components/Typography';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import MessageListItems from '../../../components/Support/MessageListItems';

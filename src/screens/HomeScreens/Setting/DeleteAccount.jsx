@@ -1,25 +1,24 @@
-import SuccessModal from '../../../components/SuccessModal';
+import SuccessModal from '../../../components/modals/SuccessModal';
 import React, {useEffect, useRef,useState} from 'react';
 import Typography from '../../../components/Typography';
 import { useNavigation } from '@react-navigation/native';
-import ScreenHeader from '../../../components/ScreenHeader';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 import { Black02, TextColorGreen, White} from '../../Styles/Style';
-import ConfirmationModal from '../../../components/ConfirmationModal';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import ConfirmationModal from '../../../components/modals/ConfirmationModal';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import { View, StyleSheet,TouchableOpacity, Keyboard } from 'react-native'
 import {responsiveFontSize, responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
 import { useLogout } from '../../../hooks/useLogout';
 import {BlurView} from '@react-native-community/blur';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constant';
+import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 
 const DeleteAccount = () => {
     const navigation = useNavigation();
     const {handleLogout} = useLogout()
     const ConfirmationModalRef = useRef(null);
-    const [blurr, setBlurr] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [successModalVisible, setSuccessModalVisible] = useState(false);
 
     const handleDeleteUser = async () => {
@@ -40,25 +39,6 @@ const DeleteAccount = () => {
     const isBlurred = () =>{
       return  !!successModalVisible
     }
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            () => {
-              setKeyboardVisible(true); // or some other action
-            },
-          );
-          const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-              setKeyboardVisible(false); // or some other action
-            },
-          );   
-       return () => {
-        keyboardDidHideListener.remove();
-        keyboardDidShowListener.remove();
-       }
-     }, [])
-     
 
   return (
     <BackgroundWrapper disableScrollView coverScreen>
@@ -75,7 +55,7 @@ const DeleteAccount = () => {
     <TouchableOpacity 
     activeOpacity={0.9}
     onPress={()=>navigation.goBack()}>
-    <Typography style={styles.txt}>Cancel</Typography>
+    <Typography style={[styles.button_txt,{color:TextColorGreen,marginTop:responsiveHeight(0.9)}]}>Cancel</Typography>
     </TouchableOpacity>
     </View>
     {
@@ -91,25 +71,30 @@ const styles = StyleSheet.create({
     heading_txt: {    
       fontSize: responsiveFontSize(2.5) ,
       color:Black02,
-      fontWeight:'900',
+      fontWeight:'400',
       textAlign:'center',
-      marginBottom:responsiveHeight(3)
+      marginBottom:responsiveHeight(3),
+      fontFamily:Inter_Regular.Inter_Regular
     },
     txt:{
-      fontSize: responsiveFontSize(2),
+      fontSize: responsiveFontSize(1.8),
       color:Black02,
       fontWeight:'400',
       textAlign:'center' ,
       marginBottom:responsiveHeight(3),
-
+      fontFamily:Inter_Regular.Inter_Regular
     },
     button_txt:{
-        fontSize: responsiveFontSize(2),
+        fontSize: responsiveFontSize(1.8),
         color:White,
-        fontWeight:'400',
+        fontWeight:'600',
         textAlign:'center',
         marginBottom:'auto',
-        marginTop:'auto'
+        marginTop:'auto',
+        letterSpacing:0.2,
+        lineHeight:16.94,
+        fontFamily:Inter_SemiBold.Inter_SemiBold,
+
       },
     button:{
         width:responsiveWidth(70),

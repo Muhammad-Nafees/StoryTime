@@ -31,7 +31,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths/index';
-import BackButton from '../BackButton';
+import BackButton from '../reuseable-components/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import TouchableButton from '../TouchableButton';
 import { useDispatch, useSelector } from 'react-redux';

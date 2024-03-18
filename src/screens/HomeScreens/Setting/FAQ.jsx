@@ -8,8 +8,9 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import {moderateScale} from 'react-native-size-matters';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import ScreenHeader from '../../../components/ScreenHeader';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 
 
 const Section = ({txt}) => {
@@ -21,6 +22,8 @@ const Section = ({txt}) => {
         fontWeight: '400',
         lineHeight: 24,
         marginTop: moderateScale(10),
+        marginBottom:moderateScale(10),
+        fontFamily:Inter_Regular.Inter_Regular
       }}>
       {txt}
     </Text>
@@ -28,8 +31,6 @@ const Section = ({txt}) => {
 };
 
 const FAQ = () => {
-  const navigation = useNavigation();
-  const {LEFT_ARROW_IMG} = Img_Paths;
 
   return (
     <BackgroundWrapper

@@ -2,7 +2,7 @@ import { View, Text, ImageBackground, SafeAreaView, StatusBar, Image, StyleSheet
 import React, { useEffect, useState } from 'react'
 import { Img_Paths } from '../../assets/Imagepaths';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import BackButton from '../BackButton';
+import BackButton from '../reuseable-components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import SettingButton from '../SettingButton';
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style';

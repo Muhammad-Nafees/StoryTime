@@ -5,7 +5,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
 import { useSelector } from 'react-redux';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reuseable-components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';

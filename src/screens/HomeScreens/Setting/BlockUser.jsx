@@ -10,11 +10,11 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import BlockModal from '../../../components/BlockModal';
-import ScreenHeader from '../../../components/ScreenHeader';
+import BlockModal from '../../../components/modals/BlockModal';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 import { getBlockList } from '../../../../services/api/settings';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import Typography from '../../../components/Typography';
 
 const BlockUser = () => {

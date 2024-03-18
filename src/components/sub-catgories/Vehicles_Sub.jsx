@@ -4,7 +4,7 @@
 
 import { View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet, TextInput } from 'react-native'
 import React from 'react'
-import BackButton from '../BackButton'
+import BackButton from '../reuseable-components/BackButton'
 import StoryUsers from '../StoryUsers'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { Img_Paths } from '../../assets/Imagepaths'

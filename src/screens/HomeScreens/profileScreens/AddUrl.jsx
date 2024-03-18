@@ -4,7 +4,7 @@ import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputCol
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reuseable-components/BackButton';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
 import SelectDropdown from 'react-native-select-dropdown';
 import TouchableButton from '../../../components/TouchableButton';

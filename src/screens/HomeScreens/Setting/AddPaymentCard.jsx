@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';

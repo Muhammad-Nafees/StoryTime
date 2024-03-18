@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Img_Paths } from '../../../assets/Imagepaths'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen } from '../../Styles/Style';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reuseable-components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Inter_Regular } from '../../../constants/GlobalFonts';

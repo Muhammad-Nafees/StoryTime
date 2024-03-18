@@ -8,7 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import React from 'react';
-import BackButton from '../BackButton';
+import BackButton from '../reuseable-components/BackButton';
 import StoryUsers from '../StoryUsers';
 import {
   responsiveFontSize,

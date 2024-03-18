@@ -12,7 +12,7 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {delete_user_account} from '../../services/api/auth_mdule/auth';
+import {delete_user_account} from '../../../services/api/auth_mdule/auth';
 import React, {
   useState,
   useEffect,
@@ -24,11 +24,11 @@ import {
   Black02,
   PrimaryColor,
   TextColorGreen,
-} from '../screens/Styles/Style';
-import Typography from './Typography';
+} from '../../screens/Styles/Style';
+import Typography from '../Typography';
 import {BlurView} from '@react-native-community/blur';
-import {Img_Paths} from '../assets/Imagepaths/index';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Constant';
+import {Img_Paths} from '../../assets/Imagepaths/index';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const {handleSuccessCallback} = props || {};
@@ -62,11 +62,13 @@ const ConfirmationModal = forwardRef((props, ref) => {
 
   const handleCheckMatch = () => {
     if (userInput.trim().toLowerCase() === randomWord.toLowerCase()) {
-      console.log('Congratulations! Matched!');
-      // DeleteUserAccount();
-      handleSuccessCallback();
-      close();
-    } else {
+      // console.log('Congratulations! Matched!');
+      DeleteUserAccount();
+      // handleSuccessCallback();
+      // close();
+    } else if (userInput.trim().toLowerCase() === ''){
+      setInputError('Please type the word');
+    }else{
       setInputError('Incorrect word. Please re-enter.');
     }
   };
@@ -115,7 +117,8 @@ const ConfirmationModal = forwardRef((props, ref) => {
         <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
           <View
             style={{
-              height: inputError ? responsiveHeight(35) : responsiveHeight(32),
+              height: inputError ? responsiveHeight(37) : responsiveHeight(34),
+             // height: inputError ? 255 : 230,
               width: responsiveWidth(85),
               borderRadius: 32,
               backgroundColor: White,
@@ -187,6 +190,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
                     lineHeight: 16,
                     color: PrimaryColor,
                     textAlign: 'center',
+                    fontWeight:'800'
                   }}>
                   {' '}
                   Cancel
@@ -202,9 +206,10 @@ const ConfirmationModal = forwardRef((props, ref) => {
                     textAlign: 'center',
                     height: responsiveHeight(7.5),
                     color: TextColorGreen,
+                    fontWeight:'800'
                   }}>
                   {' '}
-                  Ok
+                  OK
                 </Text>
               </TouchableOpacity>
             </View>
@@ -225,6 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: responsiveWidth(70),
     marginBottom: responsiveWidth(3),
+    color:PrimaryColor
   },
   blur_view: {
     width:responsiveWidth(100),

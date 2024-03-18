@@ -19,7 +19,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reuseable-components/BackButton';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';

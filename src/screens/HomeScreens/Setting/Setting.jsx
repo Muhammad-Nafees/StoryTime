@@ -2,13 +2,14 @@ import React from 'react';
 import {
   View,
   Image,
+  Text,
   FlatList,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import {Img_Paths} from '../../../assets/Imagepaths';
-import ListView from '../../../components/ListView';
+import ListView from '../../../components/setting/ListView';
 import {useNavigation} from '@react-navigation/native';
 import {
   responsiveFontSize,
@@ -17,70 +18,60 @@ import {
 } from 'react-native-responsive-dimensions';
 import { useSelector } from 'react-redux';
 import { base } from '../../../../services';
-import LogoutBtn from '../../../components/profile/LogoutBtn';
+import LogoutBtn from '../../../components/setting/LogoutBtn';
 import Typography from '../../../components/Typography';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import NavigationsString from '../../../constants/NavigationsString';
+import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {SecondaryColor, FourthColor} from '../../Styles/Style';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 
 const {width, height} = Dimensions.get('window');
 
 const Setting = () => {
   const navigation = useNavigation();
   const {LEFT_ARROW_IMG, DEFAULT_ICON} = Img_Paths;
-  const {
-    NOTIFICATION,
-    SUBSCRIPTION_DETAILS,
-    FAQ_ROUTE,
-    BLOCK_USER,
-    PROFILE,
-    DELETE_ACCOUNT,
-    SUPPORT,
-    PAYEMENT,
-  } = NavigationsString;
   const {user} = useSelector(state => state?.authSlice);
 
   console.log('user', user);
   const generalData = [
-    {key: '1', text: 'Profile', iconName: 'ProfileIcon', routeName: PROFILE},
+    {key: '1', text: 'Profile', iconName: 'ProfileIcon', routeName: 'SettingsProfile'},
     {
       key: '2',
       text: 'Notifications',
       iconName: 'Notifications',
-      routeName: NOTIFICATION,
+      routeName: 'Notification',
     },
     {
       key: '3',
       text: 'Payment Settings',
       iconName: 'PaymentSettings',
-      // routeName: PAYEMENT,
+      // routeName: 'PayementSetting',
     },
     {
       key: '4',
       text: 'Subscriptions',
       iconName: 'Subscription',
-      routeName: SUBSCRIPTION_DETAILS,
+      routeName: 'SubscriptionDetails',
     },
     {
       key: '5',
       text: 'Report a problem',
       iconName: 'ReportAProblem',
-      routeName: SUPPORT,
+      routeName: 'Support',
     },
     {
       key: '6',
       text: 'Block Users',
       iconName: 'BlockUser',
-      routeName: BLOCK_USER,
+      routeName: 'BlockUser',
     },
     {
       key: '7',
       text: 'Delete Account',
       iconName: 'DeleteAccount',
-      routeName: DELETE_ACCOUNT,
+      routeName:'DeleteAccount',
     },
   ];
 
@@ -99,29 +90,21 @@ const Setting = () => {
       stack: 'GuestStack',
       routeName: 'PrivacyAndPolicy',
     },
-    {key: '10', text: 'FAQ', iconName: 'FAQ', routeName: FAQ_ROUTE},
+    {key: '10', text: 'FAQ', iconName: 'FAQ', routeName: 'Faq'},
   ];
 
   const USER = user?.data?.user || user?.data;
 
   return (
     <BackgroundWrapper>
-      <View style={styles.first_container}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.back_button}>
-          <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-        </TouchableOpacity>
-        <View style={styles.categories_text_container}>
-          <Typography style={styles.categories_text}>Settings</Typography>
-        </View>
-      </View>
+        <ScreenHeader title={'Settings'}/> 
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginHorizontal: responsiveWidth(6),
           width: width - 50,
+          
         }}>
         <View style={{flexDirection: 'row', marginBottom: responsiveWidth(4)}}>
           <Image
@@ -151,21 +134,21 @@ const Setting = () => {
         </View>
         <TouchableOpacity
           activeOpacity={0.3}
-          onPress={() => navigation.navigate(PROFILE)}>
+          onPress={() => navigation.navigate('SettingsProfile')}>
           <View style={styles.svgIcon}>
             <SvgIcons name={'PencilIcon'} width={18} height={18} />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.listView}>
-        <Typography
+        <Text
           style={{
             fontWeight: '400',
             fontSize: 14,
             marginBottom: responsiveWidth(4),
           }}>
           GENERAL
-        </Typography>
+        </Text>
         <FlatList
           data={generalData}
           renderItem={({item, index}) => (
@@ -178,14 +161,15 @@ const Setting = () => {
         />
       </View>
       <View style={styles.listView}>
-        <Typography
+        <Text
           style={{
             fontWeight: '400',
             fontSize: 14,
             marginBottom: responsiveWidth(4),
+            marginTop:responsiveHeight(2)
           }}>
           LEGAL TERMS
-        </Typography>
+        </Text>
 
         <FlatList
           data={legalData}

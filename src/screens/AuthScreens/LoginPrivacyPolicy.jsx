@@ -6,7 +6,7 @@ import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-nat
 import NavigationsString from '../../constants/NavigationsString';
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import BackButton from '../../components/BackButton';
+import BackButton from '../../components/reuseable-components/BackButton';
 
 
 

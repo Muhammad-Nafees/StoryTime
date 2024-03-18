@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Typography from '../Typography';
 import { Red02, White } from '../../screens/Styles/Style';
-import { useDispatch, useSelector } from 'react-redux';
 import { SCREEN_WIDTH, SPACING } from '../../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLogout } from '../../hooks/useLogout';
 
 const LogoutBtn = () => {
@@ -13,6 +13,7 @@ const LogoutBtn = () => {
   const handleLogoutPress = async () => {
     try {
       setIsLoggingOut(true);
+      await AsyncStorage.setItem('isLoggedOut', 'true')
       await handleLogout()
     } catch (error) {
     } finally {

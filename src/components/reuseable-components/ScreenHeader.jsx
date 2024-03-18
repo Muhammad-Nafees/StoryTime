@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import BackButton from './BackButton';
-import {Img_Paths} from '../assets/Imagepaths';
+import {Img_Paths} from '../../assets/Imagepaths';
 import {useNavigation} from '@react-navigation/native';
 
 import {
@@ -13,6 +13,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const ScreenHeader = ({title,clr}) => {
 
@@ -37,6 +38,7 @@ const ScreenHeader = ({title,clr}) => {
             color: clr || '#000',
             fontWeight: '600',
             fontSize: responsiveFontSize(2.5),
+            fontFamily:Inter_SemiBold.Inter_SemiBold,
           }}>
           {title}
         </Text>
