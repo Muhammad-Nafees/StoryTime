@@ -7,7 +7,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
-import { setStoryUserImage } from '../../../store/slices/addplayers/addPlayersSlice';
+import { setStoryUserImage } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import { URL } from '../../constants/Constant';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 
@@ -15,7 +15,6 @@ const StoryUsers = ({
   images,
   text,
   backgroundColor,
-  mainbgColor,
   onPress,
   disabled,
   item,

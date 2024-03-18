@@ -1,25 +1,20 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView } from 'react-native'
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../../Styles/Style";
+import { ImageBackground, View, StyleSheet, } from 'react-native'
+import { PrimaryColor, SecondaryColor, pinkColor } from "../../../Styles/Style";
 import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../../../assets/Imagepaths/index";
 import BackButton from '../../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import NavigationsString from '../../../../constants/NavigationsString';
-import VoiceToText from '../../../../components/categories/VoiceToText';
+import VoiceToText from '../../../../components/categories/voiceTextFlow/VoiceToText';
 import { useDispatch } from 'react-redux';
-import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../../store/slices/RecordingData';
-import { nextRandomNumVideo, nextRandomNumVideoExtend } from '../../../../../store/slices/addplayers/addPlayersSlice';
+import { checkVideoTrue, extendStoryCheckVideo, extendVideo } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
+import { nextRandomNumVideo, nextRandomNumVideoExtend } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 
 
 const VideoSecondStory = () => {
 
-    const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, NEXT_PLAYER_IMAGE, EXTEND_STORYTIME_IMAGE } = Img_Paths;
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_FIRST_USER } = NavigationsString;
+    const { BG_PLAYFLOW, NEXT_PLAYER_IMAGE, EXTEND_STORYTIME_IMAGE } = Img_Paths;
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -29,7 +24,7 @@ const VideoSecondStory = () => {
         const randomValuevideo = Math.floor(Math.random() * 100);
         dispatch(nextRandomNumVideo(randomValuevideo));
         dispatch(checkVideoTrue(true));
-        navigation.navigate(VIDEO_FIRST_USER);
+        navigation.navigate("VideoFirstUser");
         dispatch(extendStoryCheckVideo(true));
         dispatch(extendVideo(false));
     };
@@ -37,12 +32,11 @@ const VideoSecondStory = () => {
     const extendVideoHandler = async () => {
         const randomValuevideoExt = Math.floor(Math.random() * 100);
         dispatch(nextRandomNumVideoExtend(randomValuevideoExt));
-        navigation.navigate(VIDEO_FIRST_USER);
+        navigation.navigate("VideoFirstUser");
         dispatch(extendStoryCheckVideo(false));
         dispatch(checkVideoTrue(false));
         dispatch(extendVideo(true));
     };
-
 
 
     return (

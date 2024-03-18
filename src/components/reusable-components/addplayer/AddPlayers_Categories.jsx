@@ -5,15 +5,15 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../../../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addFriends,
   addTagPlayers,
-  userId,
-} from '../../../../store/slices/addplayers/addPlayersSlice';
-import { playerContributorsIds } from '../../../../store/slices/getCategoriesSlice';
+  userId
+} from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { playerContributorsIds } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+
 import { tag_Friends } from '../../../../services/api/profile';
 
 const AddFriends_Categories = ({
@@ -26,10 +26,10 @@ const AddFriends_Categories = ({
 
 }) => {
 
-  const addedUsers = useSelector(state => state.addPlayers.addFriends);
+  const addedUsers = useSelector(state => state.getcategories.addFriends);
   const isUserAdded = addedUsers.some(user => user.userid === userid);
-
-  const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers)
+  const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
+  const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers)
   const isAddedtagPlayers = tagPlayersRTK.some(user => user.userid === userid);
 
   console.log("isAddedtagPlayers----- :", isAddedtagPlayers);
@@ -47,7 +47,7 @@ const AddFriends_Categories = ({
     }
   };
 
-
+  console.log("addIdsCOntributors", playerscontributorsIds);
 
   const tag_FriendsApi_Handler = async () => {
     const responseData = await tag_Friends({ userid, storyId });

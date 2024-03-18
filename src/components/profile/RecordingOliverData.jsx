@@ -26,7 +26,7 @@ const RecordingOliverData = ({
     const [isLoadMore, setIsLoadMore] = useState(false);
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
-    const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+    const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
 
 
     const handleLoadMore = async () => {
@@ -53,10 +53,6 @@ const RecordingOliverData = ({
             console.error(error);
         }
     }
-
-    // const handleProfile = (id) => {
-    //     navigation?.navigate("profileStack", { screen: "VoiceToTextProfile", params: { storyuserId: id }, })
-    // };
 
 
     return (

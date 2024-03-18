@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+
     addFriends: [],
     gameFriends: [],
     userId: "",
@@ -14,14 +15,25 @@ const initialState = {
     nextRandomNumberVideo: null,
     nextRandomNumberVideoExtend: null,
     addTagPlayers: [],
-    isHidden: false,
     friendId: "",
     addUrlid: "",
     urlCategoryname: "",
     urlSubcategoryname: "",
     responseUsersProfile: null,
     endUserProfile: true,
-    randomForProfileUpdate: ""
+    randomForProfileUpdate: "",
+
+    categoriesId: "",
+    subcategoriesId: "",
+    playerscontributorsIds: [],
+
+    recordingText: [],
+    saveRecordingVideo: "",
+    isCheckVideoTrue: false,
+    isExtendStoryVideo: null,
+    extendVideo: null,
+    extendCountingVideo: 30
+
 };
 
 const addPlayers = createSlice({
@@ -106,11 +118,6 @@ const addPlayers = createSlice({
                 addTagPlayers.pop(payload)
             };
         },
-        isHidden: (state, { payload }) => {
-            console.log("payload value---- :", payload)
-            console.log("state.isHidden---- :", state.isHidden)
-            state.isHidden = payload
-        },
         setAddUrlId: (state, { payload }) => {
             state.addUrlid = payload;
         },
@@ -136,6 +143,49 @@ const addPlayers = createSlice({
         setRandomForProfileUpdate: (state, action) => {
             state.randomForProfileUpdate = action.payload
         },
+
+
+        setCategoriesId: (state, action) => {
+            state.categoriesId = action.payload;
+            console.log("payload----getCategories", action.payload)
+        },
+        setSubCategoriesId: (state, action) => {
+            state.subcategoriesId = action.payload
+            console.log("payload----subCategories", action.payload)
+        },
+        playerContributorsIds: (state, { payload }) => {
+            const { userid } = payload;
+            state.playerscontributorsIds.push(payload)
+        },
+
+
+        recordingData: (state, action) => {
+            state.recordingText.push(action.payload);
+            console.log("stateRec--=-=", action.payload);
+        },
+        resetRecordingData: (state) => {
+            state.recordingText = []
+        },
+        saveRecordingVideoUser: (state, { payload }) => {
+            state.saveRecordingVideo = payload
+        },
+
+        checkVideoTrue: (state, action) => {
+            state.isCheckVideoTrue = action.payload
+        },
+
+
+        extendStoryCheckVideo: (state, { payload }) => {
+            state.isExtendStoryVideo = payload
+        },
+        resetVideoRecording: (state) => {
+            state.saveRecordingVideo = ""
+        },
+        extendVideo: (state, { payload }) => {
+            state.extendVideo = payload
+        },
+
+
     },
 });
 
@@ -163,7 +213,22 @@ export const {
     setFriendId,
     setResponseUsersProfile,
     setEndUserProfile,
-    setRandomForProfileUpdate
+    setRandomForProfileUpdate,
+
+
+    get_categories,
+    setCategoriesId,
+    setSubCategoriesId,
+    playerContributorsIds,
+    recordingData,
+    resetRecordingData,
+    saveRecordingVideoUser,
+    checkVideoTrue,
+    extendStoryCheckVideo,
+    resetVideoRecording,
+    extendVideo,
+
+
 } = addPlayers.actions;
 
 export default addPlayers.reducer;

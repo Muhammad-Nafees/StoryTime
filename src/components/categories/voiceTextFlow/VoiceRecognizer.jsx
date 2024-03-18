@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Voice, {
-    SpeechEndEvent,
-    SpeechErrorEvent,
-    SpeechResultsEvent,
-    SpeechStartEvent,
-} from '@react-native-voice/voice';
 import { TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 

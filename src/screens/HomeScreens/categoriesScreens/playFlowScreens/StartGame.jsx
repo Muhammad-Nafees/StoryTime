@@ -4,12 +4,12 @@ import {
   StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { Img_Paths } from '../../../assets/Imagepaths';
+import { Img_Paths } from '../../../../assets/Imagepaths';
 import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import BackiconCategoriesGame from '../../../components/categories/BackiconCategoriesGame';
-import StartGameContent from '../../../components/categories/StartGameContent';
+import BackiconCategoriesGame from '../../../../components/categories/BackiconCategoriesGame';
+import StartGameContent from '../../../../components/categories/voiceTextFlow/StartGameContent';
 
 const StartGame = () => {
   const { SPLASH_SCREEN_IMAGE } = Img_Paths;

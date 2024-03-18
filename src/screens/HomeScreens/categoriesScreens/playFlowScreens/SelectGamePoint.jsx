@@ -8,10 +8,10 @@ import { useNavigation } from '@react-navigation/native';
 import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../../../assets/Imagepaths/index';
-import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import { SCREEN_HEIGHT } from '../../../constants/Constant';
-import VoiceToText from '../../../components/categories/VoiceToText';
+import { Img_Paths } from '../../../../assets/Imagepaths/index';
+import BackButton from '../../../../components/reusable-components/addplayer/customBackButton/BackButton';
+import { SCREEN_HEIGHT } from '../../../../constants/Constant';
+import VoiceToText from '../../../../components/categories/voiceTextFlow/VoiceToText';
 
 
 const SelectGamePoint = () => {

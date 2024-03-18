@@ -1,5 +1,6 @@
 // imports libraries
-import React, { useEffect, useState, useMemo } from 'react';
+
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   ImageBackground,
   Text,
@@ -14,71 +15,67 @@ import {
   TextColorGreen,
   pinkColor,
 } from '../../Styles/Style';
-import { useNavigation } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { useDispatch, useSelector } from 'react-redux';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// imports components
 import { Img_Paths } from '../../../assets/Imagepaths';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+
+// imports components
 import StoryUsers from '../../../components/categories/StoryUsers';
 import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import MainInputField from '../../../components/MainInputField';
 import SearchField from '../../../components/SearchField';
 import {
-  setSubCategoriesId,
-} from '../../../../store/slices/getCategoriesSlice';
-import {
   get_Categories_Sub_Categories,
   get_Random,
 } from '../../../../services/api/categories';
-import {
-  addFriends,
-  randomNames,
-  setStoryUserImage,
-} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setCategoriesId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { addFriends_api } from '../../../../services/api/add-members';
-import Toast from 'react-native-toast-message';
+import { addFriends, setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { URL } from '../../../constants/Constant';
 import Typography from '../../../components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
+import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
 import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
 import GuestNumber from '../../../components/categories/guestCategories/GuestNumber';
-import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
+import Toast from 'react-native-toast-message';
 
-const SubCategories = ({ route }) => {
+const Categories = () => {
   //destructures
-  const { id, name, guestNumber } = route?.params || {};
-  const { SPLASH_SCREEN_IMAGE } = Img_Paths;
-  const { LUDO_ICON } = Img_Paths;
-
+  const { SPLASH_SCREEN_IMAGE, LUDO_ICON } = Img_Paths;
   //hooks
-  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const { bottom } = useSafeAreaInsets();
-
   //redux states
   const { user } = useSelector(state => state?.authSlice);
-
+  const USER = user?.data?.user || user?.data;
   //states
-  const [responsesubCategories, setResponseSubCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseCategories, setResponseCategories] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [HasMorePages, setHasMorePages] = useState(false);
+  const [isLoadMore, setIsLoadMore] = useState(false);
   const [isUsernameInputValue, setIsUsernameInputValue] = useState('');
-  const [isLoadMore, setIsLodeMore] = useState(false);
+  const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(''); //for guest search only
-
+  //refs
+  const guestNumberRef = useRef(null);
   //consts
   const isUserGuest = useMemo(() => !user, [user]);
-  const allowedCategories = ['Shark', 'Whale', 'Cow'];
+
+  const allowedCategories = ['Animals'];
+  const guestNumber = guestNumberRef.current;
   const randomObject = {
     namerandom: 'Random',
     backgroundColor: 'EE5F8A',
@@ -87,15 +84,75 @@ const SubCategories = ({ route }) => {
 
   const DATA = useMemo(() => {
     if (!!searchTerm) {
-      const filtered = responsesubCategories.filter(category =>
+      const filtered = responseCategories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
-      return filtered;
+      return filtered?.length > 0 ? [...filtered, randomObject] : [];
     }
-    return responsesubCategories?.length > 0
-      ? [...responsesubCategories, randomObject]
+    return responseCategories?.length > 0
+      ? [...responseCategories, randomObject]
       : [];
-  }, [responsesubCategories, searchTerm]);
+  }, [responseCategories, searchTerm]);
+
+  //Effects
+  useEffect(() => {
+    fetchCategories(1);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(setFriendId(USER?._id));
+    }, [])
+  );
+
+  useEffect(() => {
+    if (!guestNumberRef.current) {
+      const guestNumber = generateRandomNumber(4);
+      guestNumberRef.current = guestNumber;
+    }
+  }, []);
+
+  //functions
+  const fetchCategoriesUntilFound = async searchTerm => {
+    let page = 1;
+    let found = false;
+    let array = [];
+
+    try {
+      while (!found) {
+        const response = await get_Categories_Sub_Categories({ page });
+
+        if (response.data && response.data.categories) {
+          const responseArray = response.data.categories;
+          // console.log("responseArray-", responseArray)
+          array = [...array, ...responseArray];
+          const filteredCategories = responseArray.filter(category =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          console.log('filter', filteredCategories);
+
+          if (filteredCategories.length > 0) {
+            array = array.filter(
+              el => !el?.name.toLowerCase().includes(searchTerm.toLowerCase()),
+            );
+            setResponseCategories([filteredCategories?.[0], ...array]);
+            setIsLoading(false);
+            found = true;
+          } else if (responseArray.length > 0) {
+            page++;
+          } else {
+            break;
+          }
+        } else {
+          // Handle the case where the response structure is unexpected
+          console.error('Unexpected API response format:', response);
+          break;
+        }
+      };
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
 
   const addFriends_api_handler = async () => {
@@ -104,14 +161,11 @@ const SubCategories = ({ route }) => {
       const usernameObj = responseData?.data?.users?.find(
         item => item.username === isUsernameInputValue,
       );
-      console.log('usernameObj=====', usernameObj);
       if (usernameObj) {
         const userid = usernameObj._id;
         const username = usernameObj?.username;
         console.log('username----', username);
         dispatch(addFriends({ username, userid }));
-        // Now you have the _id of the matched user, you can use it as needed.
-        console.log('Matched User ID:', userid);
         setIsUsernameInputValue('');
       } else if (isUsernameInputValue?.length == 0) {
         navigation.navigate("AddPlayers");
@@ -123,139 +177,145 @@ const SubCategories = ({ route }) => {
       }
       return responseData;
     } catch (error) {
-      console.log('err', error);
+      console.log(error, "ERROR FROM FRIENDS CATEGORIES");
     }
   };
 
-  //Effects
-  useEffect(() => {
-    fetchSubcategories(1);
-  }, []);
-
-  //functions
-
-  const fetchSubcategories = async (page = 1) => {
+  const fetchCategories = async (page = 1) => {
     try {
       setIsLoading(true);
-      const response = await get_Categories_Sub_Categories({
-        page2: page,
-        id: id,
-      });
-      setHasMorePages(response?.data?.pagination?.hasNextPage);
-      setResponseSubCategories(prevValue => [
-        ...prevValue,
+      if (isUserGuest) {
+        fetchCategoriesUntilFound('animals');
+        return;
+      };
+      const response = await get_Categories_Sub_Categories({ page: page });
+      const valObj = [
+        '#56B6A4',
+        '#79905C',
+        '#C79861',
+        '#C453D7',
+        '#82BED1',
+        '#C07632',
+        '#56C488',
+        '#D18282',
+        '#A4C857',
+        '#974444',
+        '#8482D1',
+        '#C45E89',
+      ];
+      for (let i = 0; i < response?.data?.categories?.length; i++) {
+        const colorIndex = i % valObj.length;
+        response.data.categories[i].background = valObj[colorIndex];
+      };
+
+      setResponseCategories(prevData => [
+        ...prevData,
         ...response?.data?.categories,
       ]);
+
       setIsLoading(false);
+      setHasMorePages(response?.data?.pagination?.hasNextPage);
+      setIsRefreshing(false);
       return response;
     } catch (error) {
-      console.log(error?.response?.data, "ERROR FROM CATEGORIES");
+      console.log(error?.response?.data, "ERROR FROM FETCH_CATEGORIES API");
     }
   };
 
-
-  const handleRandomSub_category = async () => {
+  const handleRandomClick = async () => {
     try {
-      let randomSubName = allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
-
-      const filteredSubcategory = responsesubCategories.find(category =>
-        category.name.includes(randomSubName),
+      let randomCatName =
+        allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
+      const filteredCategory = responseCategories.find(category =>
+        category.name.includes(randomCatName),
       );
-      const response = user ? await get_Random(id) : filteredSubcategory;
-      console.log(response?.data, "RESOPNSE FROM SUBCATEGORY RANDOM")
-      const imageLink = user
-        ? URL + response?.data?.data?.image
-        : URL + response?.data?.image;
+      const response = isUserGuest ? filteredCategory : await get_Random();
 
-      dispatch(randomNames(user ? response?.data?.data?.name : response?.data?.name));
-      dispatch(setStoryUserImage(imageLink));
-      console.log("responseName RANDOM", response?.data?.data?.name);
-      console.log("responseIMAGE RANDOAM IMAGE", response?.data?.data?.image);
-      user
-        ? navigation.navigate("Sequence")
-        : navigation.navigate("FirstScreenPlayFlow");
+      navigation.navigate('SubCategories', {
+        id: isUserGuest ? response?.data?._id : response?.data?.data?._id,
+        name: isUserGuest ? response?.data?.name : response?.data?.data?.name,
+      });
 
       return response;
     } catch (error) {
-      console.log(error?.response?.data, "ERROR FROM SUB-RANDOM");
+      console.log(error?.response?.data, "ERROR FROM RANDOM_API")
     }
   };
 
-  const handleStoryUser = (id, name, image) => {
-    const imageLink = URL + image;
-    user
-      ? navigation.navigate("Sequence")
-      : navigation.navigate("FirstScreenPlayFlow");
-    dispatch(randomNames(name));
-    dispatch(setStoryUserImage(imageLink));
-    dispatch(setSubCategoriesId(id));
+  const handleStoryUser = (id, name) => {
+    dispatch(setCategoriesId(id));
+    navigation.navigate('SubCategories', {
+      id: id,
+      name: name,
+      guestNumber: guestNumber,
+    });
   };
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setResponseSubCategories([]);
-    fetchSubcategories(1);
+    setResponseCategories([]);
+    fetchCategories(1);
     setPage(1);
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);
-  }
+  };
 
   const handleLoadMore = async () => {
     if (isLoading) {
       return;
     }
     if (HasMorePages) {
-      fetchSubcategories(page + 1);
+      fetchCategories(page + 1);
       setPage(prevPage => prevPage + 1);
-      setIsLodeMore(true);
+      setIsLoadMore(true);
     } else {
-      setIsLoading(false);
-      setIsLodeMore(false);
+      setIsLoadMore(false);
+      setIsLoadMore(false);
     }
   };
 
   const isCategoryBlurred = category => {
-    return !allowedCategories.includes(category?.name) && isUserGuest;
+    return category?.name !== 'Animals' && isUserGuest;
   };
 
-  const keyExtractor = (_, index) => `sub_categories.${index}`;
+  const generateRandomNumber = numDigits => {
+    const min = Math.pow(10, numDigits - 1);
+    const max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
-  //render functions
+  const keyExtractor = (_, index) => `categories.${index}`;
 
   const renderItem = ({ item }) => {
     return (
-      <>
-        <View
-          key={item?.id}
-          style={{
-            backgroundColor:
-              item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
-            width: responsiveWidth(30),
-            borderRadius: 10,
-            height: responsiveHeight(18.5),
-            alignItems: 'center',
-            margin: responsiveWidth(1.2),
-            borderWidth: 3,
-            borderColor:
-              item?.namerandom === 'Random'
-                ? 'rgba(238, 95, 138, 1)'
-                : '#5797A5',
-          }}>
-          <StoryUsers
-            onPress={() => handleStoryUser(item?._id, item?.name, item?.image)}
-            images={item?.image}
-            text={item?.name}
-            item={item}
-            mainbgColor={TextColorGreen}
-            backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
-            handleRandomClick={() => handleRandomSub_category(item)}
+      <View
+        key={item?.id}
+        style={{
+          backgroundColor:
+            item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
+          width: responsiveWidth(30),
+          borderRadius: 10,
+          height: responsiveHeight(18.5),
+          alignItems: 'center',
+          margin: responsiveWidth(1.2),
+          borderWidth: 3,
+          borderColor:
+            item?.namerandom === 'Random' ? 'rgba(238, 95, 138, 1)' : '#5797A5',
+        }}>
+        <StoryUsers
+          onPress={() => handleStoryUser(item?.id, item?.name)}
+          images={item?.image}
+          text={item?.name}
+          item={item}
+          handleRandomClick={handleRandomClick}
+          mainbgColor={TextColorGreen}
+        />
+        {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
+          <BlurViewGuest
           />
-          {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-            <BlurViewGuest />
-          )}
-        </View>
-      </>
+        )}
+      </View>
     );
   };
 
@@ -282,30 +342,24 @@ const SubCategories = ({ route }) => {
         )}
       </View>
     );
-  };
-
+  }
 
   return (
+
     <LinearGradient
       colors={["#75BDCD", "#FFB5CB",]}
       start={{ x: 1.5, y: 1 }} end={{ x: 1, y: 0 }} locations={[0, 1,]}
       style={[styles.container, { backgroundColor: pinkColor }]}>
       <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
         <SafeAreaView style={styles.container}>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: responsiveWidth(5),
-              marginBottom: moderateVerticalScale(10),
-            }}>
+          <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: responsiveWidth(5), marginBottom: moderateVerticalScale(10) }}>
             <View style={styles.first_container}>
               <BackButton onPress={() => navigation.goBack()} />
               <View style={styles.categories_text_container}>
-                <Text style={styles.categories_text}>{name}</Text>
+                <Text style={styles.categories_text}>Categories</Text>
               </View>
             </View>
+
             {isUserGuest && (
               <GuestNumber
                 guestNumber={guestNumber}
@@ -313,25 +367,22 @@ const SubCategories = ({ route }) => {
             )}
           </View>
 
-          {/* MainnputField----------*/}
+          {/* MainInputField----- */}
 
-          {user ? (
-            <>
-              <MainInputField
-                onPress={addFriends_api_handler}
-                inputValue={isUsernameInputValue}
-                OnchangeText={setIsUsernameInputValue}
-                placeholder="Username"
-              />
+          {user ?
+            (<>
+              {/* textinputField */}
+              <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
+              {/* added players */}
               <ShowAddedPlayers />
             </>
-          ) : (
-            <SearchField
-              placeholder="Search"
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-            />
-          )}
+            ) : (
+              <SearchField
+                placeholder="Search"
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+              />
+            )}
           <FlatList
             data={DATA}
             scrollsToTop
@@ -352,14 +403,12 @@ const SubCategories = ({ route }) => {
             ListEmptyComponent={renderListEmptyComponent}
             ListFooterComponent={renderListFooterComponent}
           />
-          <Toast />
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
+
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -395,6 +444,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 0.36,
     fontFamily: Inter_Regular.Inter_Regular
+
   },
   text_Input_container: {
     justifyContent: 'center',
@@ -404,6 +454,19 @@ const styles = StyleSheet.create({
   text_input_child: {
     flexDirection: 'row',
     width: responsiveWidth(90),
+  },
+  blur_view: {
+    flex: 1,
+  },
+  blur_wrapper: {
+    position: 'absolute',
+    width: responsiveWidth(30),
+    height: responsiveHeight(18.5),
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  blur_content_container: {
+    backgroundColor: 'transparent', //this is a hacky solution fo bug in react native blur to wrap childrens in such a view
   },
   input_field: {
     paddingLeft: 30,
@@ -437,4 +500,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SubCategories;
+export default Categories;

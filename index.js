@@ -15,7 +15,6 @@ const UserApp = () => {
     return (
         <>
             <Provider store={store}>
-                <Toast />
                 <MenuProvider>
                     <App />
                 </MenuProvider>

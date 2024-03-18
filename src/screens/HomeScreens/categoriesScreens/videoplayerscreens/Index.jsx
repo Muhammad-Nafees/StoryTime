@@ -17,7 +17,6 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../../../../constants/NavigationsString';
 import { PassionOne_Regular } from '../../../../constants/GlobalFonts';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -25,17 +24,18 @@ import {
     extendStoryCheckVideo,
     extendVideo,
     resetVideoRecording,
-} from '../../../../../store/slices/RecordingData';
+} from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const VideoFirstStartScreen = () => {
     const { SPLASH_SCREEN_IMAGE } = Img_Paths;
     const navigation = useNavigation();
     const windowWidth = Dimensions.get('window').width;
     const squareSize = windowWidth * 0.9;
-    const randomName = useSelector(state => state.addPlayers.randomnames?.payload,);
+    const randomName = useSelector(state => state.getcategories.randomnames?.payload,);
     const storyUserImage = useSelector(
-        state => state.addPlayers.storyUserImage?.payload,
+        state => state.getcategories.storyUserImage?.payload,
     );
+
     const dispatch = useDispatch();
 
     return (

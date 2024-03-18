@@ -11,7 +11,7 @@ import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-nat
 
 const ShowAddedPlayers = () => {
     // redux state 
-    const addUsersGame = useSelector(state => state.addPlayers.addFriends);
+    const addUsersGame = useSelector(state => state.getcategories.addFriends);
 
     return (
         <View

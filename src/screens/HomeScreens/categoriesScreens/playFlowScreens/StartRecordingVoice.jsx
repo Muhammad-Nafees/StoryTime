@@ -15,19 +15,20 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Voice from '@react-native-voice/voice';
 // imports components
-import UserNames from '../../../components/UserNames';
-import { recordingData } from '../../../../store/slices/RecordingData';
-import CustomPlayFlowButton from '../../../components/playFlow/CustomPlayFlowButton';
-import SaveStoryBtn from '../../../components/playFlow/SaveStoryBtn';
-import SaveStoryPhone from '../../../components/playFlow/SaveStoryPhone';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
-import { SCREEN_HEIGHT, SPACING } from '../../../constants/Constant';
-import GuestModals from '../../../components/GuestModals';
-import CustomHeaderTimer from '../../../components/reusable-components/categoriesplayFlow/customHeaderTimer';
-import UserVoiceContent from '../../../components/reusable-components/categoriesplayFlow/UserVoiceContent';
-import MicrophoneButton from '../../../components/reusable-components/categoriesplayFlow/MicrophoneButton';
-import { isCheckValue } from '../../../../store/slices/addplayers/addPlayersSlice';
+import UserNames from '../../../../components/UserNames';
+import { recordingData } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
+import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
+import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
+import SaveStoryPhone from '../../../../components/playFlow/SaveStoryPhone';
+import { Img_Paths } from '../../../../assets/Imagepaths';
+import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
+import { SCREEN_HEIGHT, SPACING } from '../../../../constants/Constant';
+import GuestModals from '../../../../components/GuestModals';
+import CustomHeaderTimer from '../../../../components/reusable-components/categoriesplayFlow/CustomHeaderTImer';
+
+import UserVoiceContent from '../../../../components/reusable-components/categoriesplayFlow/UserVoiceContent';
+import MicrophoneButton from '../../../../components/reusable-components/categoriesplayFlow/MicrophoneButton';
+import { isCheckValue } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const StartRecordingVoice = () => {
   // global variable
@@ -53,7 +54,7 @@ const StartRecordingVoice = () => {
     extendCounting,
     nextRandomNumberExtend,
     gameFriends
-  } = useSelector(state => state.addPlayers);
+  } = useSelector(state => state.getcategories);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(gameFriends[0]);
   const [isNextUser, setIsNextUser] = useState(gameFriends[1]);
   const navigation = useNavigation();

@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
     Dimensions,
-    Image,
     ImageBackground,
     Text,
     TouchableOpacity,
     View,
     StyleSheet,
-    FlatList,
-    ScrollView,
     Modal,
-    TouchableOpacityBase,
-    ActivityIndicator,
     Alert,
     PermissionsAndroid,
     Platform,
 } from 'react-native';
 import {
-    PrimaryColor,
-    SecondaryColor,
     TextColorGreen,
-    ThirdColor,
-    pinkColor,
 } from '../../screens/Styles/Style';
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import {
@@ -29,23 +20,19 @@ import {
     responsiveHeight,
     responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordingVideo } from '../../../store/slices/RecordingData';
-import RNFetchBlob from 'rn-fetch-blob';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import SaveStoryBtn from './SaveStoryBtn';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
-import StoryTimeSaved from './StoryTimeSaved';
 import DownloadingFlow from './DownloadingFlow';
 import { SPACING } from '../../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import { resetFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import SaveStoryPhone from './SaveStoryPhone';
 
 const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
@@ -59,7 +46,7 @@ const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf, directoryPath }) => {
         useState(false);
     const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const textrecordUsers = useSelector(
-        state => state?.recordingData?.recordingText,
+        state => state?.getcategories?.recordingText,
     );
     const navigation = useNavigation();
     const dispatch = useDispatch();

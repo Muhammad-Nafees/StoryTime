@@ -2,19 +2,19 @@ import { View, Dimensions, StyleSheet, Text, TouchableOpacity, Image } from 'rea
 import React from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
-import { Img_Paths } from '../../assets/Imagepaths';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import { PrimaryColor, TextColorGreen } from '../../screens/Styles/Style';
-import { PassionOne_Regular } from '../../constants/GlobalFonts';
-import { resetRecordingData } from '../../../store/slices/RecordingData';
-import { isCheckValue, extendStoryCheck, isExtendStoryCheck } from '../../../store/slices/addplayers/addPlayersSlice';
+import { PrimaryColor, TextColorGreen } from '../../../screens/Styles/Style';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { resetRecordingData } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { isCheckValue, extendStoryCheck, isExtendStoryCheck } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const StartGameContent = () => {
     // img paths
-    const randomName = useSelector(state => state.addPlayers.randomnames?.payload,);
+    const randomName = useSelector(state => state.getcategories.randomnames?.payload,);
     const storyUserImage = useSelector(
-        state => state.addPlayers.storyUserImage?.payload,
+        state => state.getcategories.storyUserImage?.payload,
     );
 
     const { PAUSE_IMG } = Img_Paths;

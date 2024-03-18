@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { addFriends_api } from '../../../../services/api/add-members';
 import { refresh_token_api } from '../../../../services/api/auth_mdule/auth';
-import { setEndUserProfile, setFriendId, setRandomForProfileUpdate } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setEndUserProfile, setFriendId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const Home = () => {

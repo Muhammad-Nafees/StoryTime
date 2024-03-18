@@ -7,13 +7,14 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
+
 // imports components and fuctions
 
 import { Img_Paths } from '../../../assets/Imagepaths';
 import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import AddFriends_Categories from '../../../components/reusable-components/addplayer/AddPlayers_Categories';
 import { addFriends_api } from '../../../../services/api/add-members';
-import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_Categories';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
@@ -22,7 +23,7 @@ const AddPlayers = () => {
     const { height, } = Dimensions.get("window")
     const [responseApi, setresponseApi] = useState([]);
     const navigation = useNavigation();
-    const addedUsers = useSelector((state) => state.addPlayers.addFriends);
+    const addedUsers = useSelector((state) => state.getcategories.addFriends);
     const [inputText, setInputText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 

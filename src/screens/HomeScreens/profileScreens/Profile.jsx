@@ -30,7 +30,7 @@ import RecordingOliverData from '../../../components/profile/RecordingOliverData
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
@@ -57,8 +57,8 @@ const Profile = ({ route }) => {
 
   // Redux
   const dispatch = useDispatch();
-  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
-  const randomNumberforUpdateProfile = useSelector((state) => state?.addPlayers?.randomForProfileUpdate);
+  const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
+  const randomNumberforUpdateProfile = useSelector((state) => state?.getcategories?.randomForProfileUpdate);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 

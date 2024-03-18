@@ -1,11 +1,12 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { Img_Paths } from '../assets/Imagepaths';
+import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFriends, addTagPlayers, removeUser, tagRemoveUsers } from '../../store/slices/addplayers/addPlayersSlice';
-import { tag_Friends } from '../../services/api/profile';
+import { addFriends, addTagPlayers, removeUser, tagRemoveUsers } from '../../../store/slices/categoriesSlice/categoriesSlice';
+import { tag_Friends } from '../../../services/api/profile';
+import { removeContributors } from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 const RemoveUsers_Categories = ({
     item,
@@ -16,14 +17,17 @@ const RemoveUsers_Categories = ({
 }) => {
 
     const dispatch = useDispatch();
-    const removeFriends = useSelector((state) => state?.addPlayers?.addFriends);
-    console.log("removeFrieds===", removeFriends)
+    const removeFriends = useSelector((state) => state?.getcategories?.addFriends);
+    console.log("removeFrieds===", removeFriends);
+    console.log("userid===", userid);
+
     const { FIRST_PROFILE } = Img_Paths;
 
     const removeUsers = () => {
         if (type !== "tagFriends") {
             const removeuser = { userid, username }
             dispatch(removeUser(removeuser));
+            // dispatch(removeContributors({ userid: userid }));
         } else {
             tagFriendsRemove()
         }

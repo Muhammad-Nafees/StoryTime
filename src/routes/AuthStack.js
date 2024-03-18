@@ -29,13 +29,13 @@ import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndCond
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import LoginPrivacyAndPolicy from '../screens/AuthScreens/LoginPrivacyPolicy';
 import LoginTermsAnd_Conditions from '../screens/AuthScreens/LoginTermsAnd_Conditions';
-import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/Index';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/StartGame';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
-import FirstUser from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
+import Categories from '../screens/HomeScreens/categoriesScreens/Categories';
+import SubCategories from '../screens/HomeScreens/categoriesScreens/SubCategories';
+import FirstScreenPlayFlow from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
+import VideoFirstStartScreen from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/Index';
+import SecondPlayFlowScreen from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import VideoFirstUser from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoRecordingStart';
+import FirstUser from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
 import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
 import { Img_Paths } from '../assets/Imagepaths';
@@ -232,8 +232,7 @@ const GuestStack = () => {
 };
 
 const CategoriesTab = () => {
-  const { CATEGORIES, FIRSTSCREENPLAYFLOW } = NavigationsString;
-  const { HOME_FOCUSED } = Img_Paths;
+  const { CATEGORIES } = NavigationsString;
 
   const Tab = createBottomTabNavigator();
 

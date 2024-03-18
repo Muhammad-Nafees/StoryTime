@@ -19,17 +19,6 @@ export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
 };
 
 
-
-// const responseData = await fetch(apiUrl, {
-//     method: "GET",
-//     headers: {
-//         'Content-Type': 'application/json',
-//     },
-// });
-
-// const response = await responseData.json();
-// console.log("res---", response);
-
 export const get_Random = async (id) => {
 
     let apiUrl;
@@ -45,11 +34,3 @@ export const get_Random = async (id) => {
         throw error;
     }
 };
-
-// const responseData = await fetch(apiUrl, {
-//     method: "GET",
-//     headers: {
-//         'Content-Type': 'application/json',
-//     },
-// });
-//   const response = await responseData.json();

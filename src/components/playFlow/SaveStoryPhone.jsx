@@ -21,9 +21,6 @@ import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    SaveDataToProfile,
-} from '../../../store/slices/RecordingData';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import SaveStoryBtn from './SaveStoryBtn';
 import SaveAsPdf from './SaveAsPdf';
@@ -31,7 +28,7 @@ import StoryTimeSaved from './StoryTimeSaved';
 import { createStory_api } from '../../../services/api/storyfeed';
 import { SPACING } from '../../constants/Constant';
 import Toast from 'react-native-toast-message';
-import { resetFriends, } from '../../../store/slices/addplayers/addPlayersSlice';
+import { resetFriends, } from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const { SAVE_STORY_BACKGROUND, BG_CLOCK } =
@@ -44,7 +41,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const dispatch = useDispatch();
 
     const textrecordUsers = useSelector(
-        state => state?.recordingData?.recordingText,
+        state => state?.getcategories?.recordingText,
     );
     const categoryId = useSelector(state => state?.getcategories?.categoriesId);
     const subCategoryId = useSelector(
@@ -84,7 +81,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
             } else {
                 console.log('storyresData====', responseData);
                 dispatch(resetFriends());
-                dispatch(SaveDataToProfile(textrecordUsers));
                 setSaveStoryModalsecond(true);
                 setVisibleSavePhone(true);
             }

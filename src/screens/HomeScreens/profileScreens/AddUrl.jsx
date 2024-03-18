@@ -11,7 +11,7 @@ import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../../components/auth/UserErrors';
@@ -37,9 +37,9 @@ const AddUrl = () => {
     const [responseSubCategories, setResponseSubCategories] = useState([]);
 
     // redux
-    const addUrlId = useSelector((state) => state?.addPlayers?.addUrlid);
-    const categoryId = useSelector((state) => state?.addPlayers?.urlCategoryname);
-    const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
+    const addUrlId = useSelector((state) => state?.getcategories?.addUrlid);
+    const categoryId = useSelector((state) => state?.getcategories?.urlCategoryname);
+    const subCategoryId = useSelector((state) => state?.getcategories?.urlSubcategoryname);
     const dispatch = useDispatch();
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;

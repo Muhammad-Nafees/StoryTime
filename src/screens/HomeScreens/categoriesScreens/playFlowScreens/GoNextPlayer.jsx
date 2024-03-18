@@ -3,11 +3,11 @@ import { ImageBackground, View, StyleSheet, } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from "../../../assets/Imagepaths/index";
-import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import VoiceToText from '../../../components/categories/VoiceToText';
+import { Img_Paths } from "../../../../assets/Imagepaths/index";
+import BackButton from '../../../../components/reusable-components/addplayer/customBackButton/BackButton';
+import VoiceToText from '../../../../components/categories/voiceTextFlow/VoiceToText';
 import { useDispatch, useSelector } from 'react-redux';
-import { isCheckValue, isExtendStoryCheck, nextRandomNum, nextRandomNumExtend } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { isCheckValue, isExtendStoryCheck, nextRandomNum, nextRandomNumExtend } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 
 
 const GoNextPlayer = () => {
@@ -15,7 +15,7 @@ const GoNextPlayer = () => {
     const { BG_PLAYFLOW, NEXT_PLAYER_IMAGE, CONTINUE_IMAGE, EXTEND_STORYTIME_IMAGE, } = Img_Paths;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const { isExtendStory, } = useSelector(state => state?.addPlayers);
+    const { isExtendStory, } = useSelector(state => state?.getcategories);
 
     const extendStoryHandler = () => {
         const randomvalue = Math.floor(Math.random() * 100);

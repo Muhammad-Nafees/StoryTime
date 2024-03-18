@@ -1,16 +1,13 @@
+// imports from libraries
 import {
   View,
   Text,
   ImageBackground,
   Image,
-  Dimensions,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
   PermissionsAndroid,
-  SafeAreaView,
-  Alert,
 } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Img_Paths } from '../../../../assets/Imagepaths';
@@ -18,40 +15,36 @@ import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
-  responsiveScreenHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import FeedChatFrame from '../../../../components/FeedChatFrame';
-import NavigationsString from '../../../../constants/NavigationsString';
-import UserNames from '../../../../components/UserNames';
 import {
   Camera,
-  getCameraFormat,
-  useCameraDevices,
-  useCameraDevice,
 } from 'react-native-vision-camera';
-import SaveVideo from '../../../../components/SaveVideo';
+import { useDispatch, useSelector } from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
+// imports components
+import SaveVideo from '../../../../components/reusable-components/modals/SaveVideo';
+import UserNames from '../../../../components/UserNames';
 import {
-  checkVideoTrue,
   extendStoryCheckVideo,
   saveRecordingVideoUser,
-} from '../../../../../store/slices/RecordingData';
-import { useDispatch, useSelector } from 'react-redux';
-import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
+} from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 import CustomVideoPlayFlowButton from '../../../../components/playFlow/CustomVideoPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
 import { Inter_Regular } from '../../../../constants/GlobalFonts';
 import GuestModals from '../../../../components/GuestModals';
 import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../../../constants/Constant';
-import LinearGradient from 'react-native-linear-gradient';
+import HeaderContentVideo from '../../../../components/categories/videoFlow/HeaderContentVideo';
+import MainContentVideo from '../../../../components/categories/videoFlow/MainContentVideo';
 
-let videoPath;
 
 const VideoFirstUser = () => {
+  // global variable
+  let videoPath;
+
   //destructures
-  const { SECOND_USER_STORY, PLAY_STORY_TIME } = NavigationsString;
   const { SPLASH_SCREEN_IMAGE, PLAYFLOW_FRAME } = Img_Paths;
 
   //hooks
@@ -59,37 +52,21 @@ const VideoFirstUser = () => {
   const dispatch = useDispatch();
 
   //redux states
-  const recordingVideo = useSelector(
-    state => state.recordingData.saveRecordingVideo,
-  );
   const [currentCamera, setCurrentCamera] = useState('back');
-  const addedUsers = useSelector(state => state.addPlayers.addFriends);
-  const checkVideoisTrue = useSelector(
-    state => state.recordingData.checkVideoTrueorFalse,
-  );
-  const extendStoryCheckVideoTrue = useSelector(
-    state => state.recordingData.extendStoryCheckVideo,
-  );
-  const extendVideoCheck = useSelector(
-    state => state.recordingData.extendVideo,
-  );
-  const extendCountingVideo = useSelector(
-    state => state.recordingData.extendCountingVideo,
-  );
+
   const { user } = useSelector(state => state?.authSlice);
 
-  const nextRandomValueVideo = useSelector(
-    state => state?.addPlayers?.nextRandomNumberVideo,
-  );
-
-  const nextRandomValueVideoExtend = useSelector(
-    state => state?.addPlayers?.nextRandomNumberVideoExtend,
-  );
-
-  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
-  console.log(sequenceUser, "SEQUESNCE")
+  const { nextRandomNumberVideo,
+    nextRandomNumberVideoExtend,
+    gameFriends,
+    extendVideo,
+    isExtendStoryVideo,
+    isCheckVideoTrue,
+    addFriends
+  } = useSelector(state => state?.getcategories);
 
   //states
+
   const [started, setStarted] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
@@ -103,8 +80,8 @@ const VideoFirstUser = () => {
   const [isFirstCall, setIsFirstCall] = useState(false);
   const [isCancelingStory, setisCancelingStory] = useState(true);
   const [cameraPermission, setCameraPermission] = useState(false);
-  const [currentDisplayUser, setCurrentDisplayUser] = useState(sequenceUser[0]);
-  const [isNextUser, setIsNextUser] = useState(sequenceUser[1]);
+  const [currentDisplayUser, setCurrentDisplayUser] = useState(gameFriends[0]);
+  const [isNextUser, setIsNextUser] = useState(gameFriends[1]);
 
   //refs
 
@@ -113,15 +90,15 @@ const VideoFirstUser = () => {
   const GuestModalRefForAds = useRef(null);
 
   //init helper function
+
   const getCameraDetails = () => {
     return devices.find(camera => camera.position === currentCamera);
   };
 
   //consts
   const devices = Camera.getAvailableCameraDevices();
-  const USER = user?.data?.user || user?.data;
   const isUserGuest = useMemo(() => !user, [user]);
-  const USER_LENGTH_CHECK = sequenceUser?.length == 1;
+  const USER_LENGTH_CHECK = gameFriends?.length == 1;
   const activeCamera = getCameraDetails();
   const SHOW_DONE_BTN =
     (timeText === '00:00' && isUserGuest) || (!isCancelingStory && isUserGuest);
@@ -151,7 +128,7 @@ const VideoFirstUser = () => {
   }, [timeLeft]);
 
   useEffect(() => {
-    if (extendVideoCheck == true && timeLeft === null) {
+    if (extendVideo == true && timeLeft === null) {
       // Display default time when countdown is not started
       setTimeText('00:30');
     } else if (timeLeft == null) {
@@ -177,22 +154,22 @@ const VideoFirstUser = () => {
     setTimeLeft(null);
 
     if (
-      extendStoryCheckVideoTrue === false ||
-      extendStoryCheckVideoTrue === true
+      isExtendStoryVideo === false ||
+      isExtendStoryVideo === true
     ) {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
     };
 
-    if (checkVideoisTrue) {
+    if (isCheckVideoTrue) {
 
-      const currentIndex = sequenceUser.indexOf(currentDisplayUser);
-      const nextIndex = (currentIndex + 1) % sequenceUser.length;
-      const nextPlayer = (currentIndex + 2) % sequenceUser.length;
-      if (currentIndex !== addedUsers?.length) {
-        setCurrentDisplayUser(sequenceUser[nextIndex]);
-        setIsNextUser(sequenceUser[nextPlayer]);
+      const currentIndex = gameFriends.indexOf(currentDisplayUser);
+      const nextIndex = (currentIndex + 1) % gameFriends.length;
+      const nextPlayer = (currentIndex + 2) % gameFriends.length;
+      if (currentIndex !== addFriends?.length) {
+        setCurrentDisplayUser(gameFriends[nextIndex]);
+        setIsNextUser(gameFriends[nextPlayer]);
         if (nextPlayer == 0 && timeLeft == 0) {
           // stopRecordings();
           // dispatch(saveRecordingVideoUser(path));
@@ -206,7 +183,7 @@ const VideoFirstUser = () => {
     return () => {
       setisCancelingStory(true);
     };
-  }, [checkVideoisTrue, nextRandomValueVideo, nextRandomValueVideoExtend]);
+  }, [isCheckVideoTrue, nextRandomNumberVideo, nextRandomNumberVideoExtend]);
 
 
   useFocusEffect(
@@ -297,18 +274,18 @@ const VideoFirstUser = () => {
 
   const pressHandlerIn = () => {
     if (timeLeft === null) {
-      if (extendStoryCheckVideoTrue == true) {
+      if (isExtendStoryVideo == true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(120);
         console.log('IF IS RUNNIGN!');
-      } else if (extendVideoCheck == true) {
+      } else if (extendVideo == true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(30);
         console.log('RESUME VIDEO-----');
       };
-      if (timeLeft == null && extendStoryCheckVideoTrue == null) {
+      if (timeLeft == null && isExtendStoryVideo == null) {
         setIsPressed(true);
         setTimeLeft(120);
         recordVideos();
@@ -316,7 +293,6 @@ const VideoFirstUser = () => {
       }
     }
   };
-
 
 
   const pressHandlerOut = () => {
@@ -329,12 +305,12 @@ const VideoFirstUser = () => {
     };
 
     if (timeLeft === null) {
-      if (extendStoryCheckVideoTrue === true) {
+      if (isExtendStoryVideo === true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(30);
         console.log('EXTEND VIDEO----');
-      } else if (extendVideoCheck === true) {
+      } else if (extendVideo === true) {
         resumeRecording();
         setIsPressed(true);
         setTimeLeft(30);
@@ -344,7 +320,7 @@ const VideoFirstUser = () => {
   };
 
   const onpressNextHandler = () => {
-    user ? navigation.navigate(SECOND_USER_STORY) : saveBtnHandler();
+    user ? navigation.navigate("SecondUserStory") : saveBtnHandler();
   };
 
   const modalOpen = (ref, heading, content, buttonText, text) => {
@@ -372,203 +348,26 @@ const VideoFirstUser = () => {
       {/* BACK BUTTON AND TIMER */}
 
       <ScrollView>
-        <View
-          style={{
-            paddingVertical: moderateVerticalScale(18),
-            paddingHorizontal: moderateScale(22),
-          }}>
-          <View
-            style={{
-              paddingTop: responsiveWidth(5),
-              flexDirection: 'row',
-              width: SCREEN_WIDTH - moderateScale(22) * 2,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                style={{
-                  width: responsiveWidth(5),
-                  height: responsiveHeight(2.5),
-                  resizeMode: 'center',
-                }}
-                source={require('../../../../assets/back-playflowicon.png')}
-              />
-            </TouchableOpacity>
+        <HeaderContentVideo
+          SHOW_DONE_BTN={SHOW_DONE_BTN}
+          modalOpen={modalOpen}
+          isCancelingStory={isCancelingStory}
+          timeText={timeText}
+          GuestModalRefForAds={GuestModalRefForAds}
+        />
 
-            <View>
-              {SHOW_DONE_BTN ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    modalOpen(
-                      GuestModalRefForAds,
-                      'Support Story Time',
-                      'Watch the ad to \ncontinue playing',
-                      'Watch ads',
-                      'Subscribe for Ad FREE experience',
-                    );
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: TextColorGreen,
-                    backgroundColor: TextColorGreen,
-                    paddingVertical: moderateVerticalScale(6),
-                    paddingHorizontal: moderateScale(25),
-                  }}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: '400',
-                      fontSize: responsiveFontSize(1.9),
-                      fontFamily: Inter_Regular.Inter_Regular,
-                    }}>
-                    Done
-                  </Text>
-                </TouchableOpacity>
-              ) : isCancelingStory ? (
-                <View
-                  style={{
-                    borderWidth: 4,
-                    borderColor: 'rgba(255, 153, 166, 1)',
-                    borderRadius: 8,
-                  }}>
-                  <LinearGradient
-                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
-                    start={{ x: 1, y: 0.5 }}
-                    end={{ x: 1, y: 0 }}
-                    locations={[0, 1]}
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingVertical: moderateVerticalScale(10),
-                      paddingHorizontal: moderateScale(12),
-                    }}>
-                    <Text
-                      style={{
-                        fontWeight: '600',
-                        color: TextColorGreen,
-                        fontSize: responsiveFontSize(2),
-                      }}>
-                      Time: {timeText}
-                    </Text>
-                  </LinearGradient>
-                </View>
-              ) : (
-                <></>
-              )}
-            </View>
-            {
-              //Layout adjuster text
-              !SHOW_DONE_BTN && <Text></Text>
-            }
-          </View>
-        </View>
+        <MainContentVideo
+          activeCamera={activeCamera}
+          cameraPermission={cameraPermission}
+          cameraRef={cameraRef}
+          isActive={isActive}
+          showCamera={showCamera}
+          started={started}
+          toggleCamera={toggleCamera}
+          user={user}
+          currentDisplayUser={currentDisplayUser}
 
-        <View>
-          <ImageBackground
-            style={styles.img_backgroung_content}
-            resizeMode="stretch"
-            source={PLAYFLOW_FRAME}>
-            <View
-              activeOpacity={0.9}
-              style={[styles.bg_content, { backgroundColor: TextColorGreen }]}>
-              {!showCamera ? (
-                <ImageBackground
-                  style={{
-                    borderRadius: 20,
-                    width: responsiveWidth(72),
-                    height: responsiveHeight(39),
-                    backgroundColor: '#EA89A7',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: responsiveWidth(6),
-                  }}
-                  source={require('../../../../assets/bgImage-video.png')}>
-                  <UserNames backgroundColor="rgba(0,0,0,0.5)" />
-                  <View>
-                    {!activeCamera && !started && (
-                      <Text
-                        style={{
-                          paddingHorizontal: moderateScale(32),
-                          lineHeight: moderateScale(22),
-                          color: '#FFF',
-                          fontWeight: '700',
-                          fontSize: responsiveFontSize(2.1),
-                          textAlign: 'center',
-                        }}>
-                        {' '}
-                        Hold microphone icon and share your story
-                      </Text>
-                    )}
-                  </View>
-                </ImageBackground>
-              ) : (
-                <>
-                  <View>
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: 9999,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      {user ? (
-                        <UserNames
-                          backgroundColor="rgba(0,0,0,0.5)"
-                          currentDisplayUser={currentDisplayUser}
-                        />
-                      ) : (
-                        <></>
-                      )}
-                    </View>
-
-                    {cameraPermission && (
-                      <Camera
-                        ref={cameraRef}
-                        style={{
-                          borderRadius: 50,
-                          width: responsiveWidth(72),
-                          height: responsiveHeight(40),
-                        }}
-                        device={activeCamera}
-                        isActive={isActive}
-                        video={true}
-                        resizeMode="cover"
-                      />
-                    )}
-                  </View>
-                </>
-              )}
-            </View>
-          </ImageBackground>
-
-          <TouchableOpacity
-            onPress={toggleCamera}
-            activeOpacity={0.7}
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 150,
-              width: responsiveWidth(20),
-              height: responsiveHeight(6),
-              backgroundColor: '#4B7A84',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={{
-                width: responsiveWidth(7),
-                height: responsiveHeight(3.5),
-                resizeMode: 'center',
-              }}
-              source={require('../../../../assets/camera-image.png')}
-            />
-          </TouchableOpacity>
-        </View>
+        />
 
         <View
           style={{
@@ -659,12 +458,12 @@ const VideoFirstUser = () => {
 
         <GuestModals
           ref={GuestModalRef}
-          onPress={() => navigation.navigate(PLAY_STORY_TIME)}
+          onPress={() => navigation.navigate("PlayStoryTime")}
         />
         <GuestModals
           ref={GuestModalRefForAds}
           onPress={saverecordingvideo}
-          textOnPress={() => navigation.navigate(PLAY_STORY_TIME)}
+          textOnPress={() => navigation.navigate("PlayStoryTime")}
         />
       </ScrollView>
     </ImageBackground>
@@ -676,27 +475,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#FFF',
-  },
-  backplay_flow: {
-    marginLeft: 'auto',
-    width: responsiveWidth(95),
-  },
-  circle_container: {
-    paddingVertical: moderateVerticalScale(10),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sub_circle: {
-    backgroundColor: TextColorGreen,
-    borderRadius: responsiveWidth(60),
-    height: responsiveHeight(41),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  img_dog: {
-    width: responsiveWidth(21),
-    height: responsiveHeight(10),
-    resizeMode: 'center',
   },
   start: {
     paddingVertical: moderateVerticalScale(8),
@@ -722,8 +500,6 @@ const styles = StyleSheet.create({
     marginTop: responsiveWidth(1),
     // marginBottom: responsiveWidth(2.5)
   },
-  cameraView: {
-    flex: 1,
-  },
+
 });
 export default VideoFirstUser;

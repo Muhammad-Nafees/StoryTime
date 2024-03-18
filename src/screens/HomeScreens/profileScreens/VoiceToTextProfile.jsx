@@ -34,10 +34,9 @@ const VoiceToTextProfile = ({ route }) => {
     const storyId = route?.params?.storyuserId;
     const IS_HIDDEN = route?.params?.isHidden;
     // redux
-    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
-    const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+    const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
 
 
     const getStory_Byid_api = async () => {

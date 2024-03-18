@@ -251,7 +251,6 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Toast />
           </ScrollView>
         </View>
       )}

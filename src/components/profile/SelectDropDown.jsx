@@ -3,7 +3,7 @@ import { Image } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { TextinputColor } from "../../screens/Styles/Style";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
-import { categorynameUrl, setAddUrlId, subCategorynameUrl } from "../../../store/slices/addplayers/addPlayersSlice";
+import { categorynameUrl, setAddUrlId, subCategorynameUrl } from "../../../store/slices/categoriesSlice/categoriesSlice";
 import { useDispatch } from "react-redux";
 
 

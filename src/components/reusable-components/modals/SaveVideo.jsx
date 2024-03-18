@@ -1,56 +1,39 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Dimensions,
-  Image,
   ImageBackground,
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
-  FlatList,
-  ScrollView,
   Modal,
-  TouchableOpacityBase,
-  ActivityIndicator,
-  Alert,
-  PermissionsAndroid,
-  Platform,
 } from 'react-native';
 import {
   PrimaryColor,
-  SecondaryColor,
   TextColorGreen,
-  ThirdColor,
+
   pinkColor,
-} from '../screens/Styles/Style';
+} from '../../../screens/Styles/Style';
 import {
-  useFocusEffect,
   useNavigation,
-  useNavigationBuilder,
 } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../assets/Imagepaths/index';
-import BackButton from './reusable-components/addplayer/customBackButton/BackButton';
-import NavigationsString from '../constants/NavigationsString';
-import CustomButton from './reusable-components/CustomButton/CustomButton';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths/index';
+import BackButton from '../addplayer/customBackButton/BackButton';
+import NavigationsString from '../../../constants/NavigationsString';
 import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { PassionOne_Regular } from '../constants/GlobalFonts';
-import SaveStoryBtn from './playFlow/SaveStoryBtn';
-import StoryTimeSaved from './playFlow/StoryTimeSaved';
-import DownloadingVideoModal from './playFlow/DownloadingVideoModal';
-import { SPACING } from '../constants/Constant';
-import DocumentPicker from 'react-native-document-picker';
-import {
-  recordingData,
-  saveRecordingVideoUser,
-} from '../../store/slices/RecordingData';
-import { resetFriends } from '../../store/slices/addplayers/addPlayersSlice';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import SaveStoryBtn from '../../playFlow/SaveStoryBtn';
+import DownloadingVideoModal from '../../playFlow/DownloadingVideoModal';
+import { SPACING } from '../../../constants/Constant';
+import { recordingData, saveRecordingVideoUser } from "../../../../store/slices/categoriesSlice/categoriesSlice"
+import { resetFriends } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   const { user } = useSelector(state => state?.authSlice);
@@ -58,26 +41,15 @@ const SaveVideo = ({ isVisible, setIsVisible, path }) => {
   console.log(isUserGuest, "ISUSERGUES")
   const [isDownloadingModalVisible, setIsDownloadingModalVisible] =
     useState(false);
-  const { width, height } = Dimensions.get('window');
   const {
-    STORY_TIME_IMG,
     BG_PLAYFLOW,
-    HOME_FRAME,
-    FULL_BORDER_FRAME,
-    EXTEND_STORY_IMG,
-    NEXT_PLAYER_IMG,
-    SAVE_STORY_BACKGROUND,
     BG_CLOCK,
   } = Img_Paths;
-  const SCREENWIDTH = Dimensions.get('window').width;
-  const SCREENHEIGHT = Dimensions.get('window').height;
-  const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
   const [saveStoryVideoModal, setSaveStoryVideoModal] = useState(false);
-  const [isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const recordedVideo = useSelector(
-    state => state.recordingData.saveRecordingVideo,
+    state => state.getcategories.saveRecordingVideo,
   );
   console.log('RECORDVID-----', recordedVideo);
 

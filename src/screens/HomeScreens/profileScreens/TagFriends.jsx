@@ -16,8 +16,8 @@ import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFont
 import _ from 'lodash';
 import { tag_Friends } from '../../../../services/api/profile';
 import { useSelector } from 'react-redux';
-import { addTagPlayers } from '../../../../store/slices/addplayers/addPlayersSlice';
-import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { addTagPlayers } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_Categories';
 
 
 const TagFriends = ({ route }) => {
@@ -32,7 +32,7 @@ const TagFriends = ({ route }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
     // redux
-    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers);
+    const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers);
     const storyId = route?.params?.storyId;
 
     const addFriends_api_handler = async () => {

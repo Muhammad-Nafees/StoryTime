@@ -8,7 +8,7 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
-import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
+import Categories from '../screens/HomeScreens/categoriesScreens/Categories';
 import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
@@ -17,16 +17,13 @@ import {
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../assets/Imagepaths';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
-import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
-import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
+import AddPlayers from '../screens/HomeScreens/categoriesScreens/Add_Players';
+import SubCategories from '../screens/HomeScreens/categoriesScreens/SubCategories';
 import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
-import Sequence from '../screens/HomeScreens/catagoriesaddMembers/Sequence';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/StartGame';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/Index';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
-import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
-import FirstUser from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
-import FirstUserStory from '../screens/HomeScreens/playslowscreens/GoNextPlayer';
+import Sequence from '../screens/HomeScreens/categoriesScreens/Sequence';
+import VideoFirstStartScreen from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/Index';
+import VideoFirstUser from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoRecordingStart';
+import VideoSecondStory from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoSecondStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import {
@@ -44,7 +41,7 @@ import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTex
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
-import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import Support from '../screens/HomeScreens/Setting/Support';
@@ -54,10 +51,10 @@ import Report from '../screens/HomeScreens/Setting/Report';
 import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
 import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
 import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
-import SelectGamePoint from '../screens/HomeScreens/playslowscreens/SelectGamePoint';
-import StartGame from '../screens/HomeScreens/playslowscreens/StartGame';
-import StartRecordingVoice from '../screens/HomeScreens/playslowscreens/StartRecordingVoice';
-import GoNextPlayer from '../screens/HomeScreens/playslowscreens/GoNextPlayer';
+import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
+import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
+import GoNextPlayer from '../screens/HomeScreens/categoriesScreens/playFlowScreens/GoNextPlayer';
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -265,7 +262,7 @@ const BottomTavNavigator = () => {
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
 
-  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+  const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
   return (

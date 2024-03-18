@@ -13,7 +13,7 @@ import { TextColorGreen } from '../../Styles/Style';
 import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { rearrangedFriends } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { rearrangedFriends } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import HeaderSequence from '../../../components/categories/HeaderSequence';
 import SelectSequencePlayers from '../../../components/categories/guestCategories/SelectSequencePlayers';
 
@@ -21,7 +21,7 @@ const Sequence = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { SPLASH_SCREEN_IMAGE } = Img_Paths;
-  const addedUsers = useSelector(state => state.addPlayers.addFriends);
+  const addedUsers = useSelector(state => state.getcategories.addFriends);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 

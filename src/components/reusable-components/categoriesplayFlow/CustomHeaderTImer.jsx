@@ -45,66 +45,67 @@ const CustomHeaderTimer = ({
                 </TouchableOpacity>
 
                 <View style={{}}>
-                    {isCancelingStory ? (
-                        <View
-                            style={{
-                                borderWidth: 4,
-                                borderColor: 'rgba(255, 153, 166, 1)',
-                                borderRadius: 8,
-                            }}>
-                            <LinearGradient
-                                colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
-                                start={{ x: 1, y: 0.5 }}
-                                end={{ x: 1, y: 0 }}
-                                locations={[0, 1]}
+                    {
+                        isCancelingStory ? (
+                            <View
                                 style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    paddingVertical: moderateVerticalScale(10),
-                                    paddingHorizontal: moderateScale(12),
+                                    borderWidth: 4,
+                                    borderColor: 'rgba(255, 153, 166, 1)',
+                                    borderRadius: 8,
+                                }}>
+                                <LinearGradient
+                                    colors={['rgba(255, 164, 164, 0.8)', '#FFFFFF']}
+                                    start={{ x: 1, y: 0.5 }}
+                                    end={{ x: 1, y: 0 }}
+                                    locations={[0, 1]}
+                                    style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        paddingVertical: moderateVerticalScale(10),
+                                        paddingHorizontal: moderateScale(12),
+                                    }}>
+                                    <Text
+                                        style={{
+                                            fontWeight: '600',
+                                            color: TextColorGreen,
+                                            fontSize: responsiveFontSize(2),
+                                        }}>
+                                        Time: {timeText}
+                                    </Text>
+                                </LinearGradient>
+                            </View>
+                        ) : !user ? (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    modalOpen(
+                                        GuestModalRefForAds,
+                                        'Support Story Time',
+                                        'Watch the add to continue playing',
+                                        'Watch ads',
+                                        'Subscribe for Ad FREE experience',
+                                    );
+                                }}
+                                style={{
+                                    borderRadius: 10,
+                                    borderWidth: 4,
+                                    borderColor: TextColorGreen,
+                                    backgroundColor: TextColorGreen,
+                                    paddingVertical: moderateVerticalScale(6),
+                                    paddingHorizontal: moderateScale(25),
                                 }}>
                                 <Text
                                     style={{
-                                        fontWeight: '600',
-                                        color: TextColorGreen,
-                                        fontSize: responsiveFontSize(2),
+                                        color: 'white',
+                                        fontWeight: '400',
+                                        fontSize: responsiveFontSize(1.9),
+                                        fontFamily: Inter_Regular.Inter_Regular,
                                     }}>
-                                    Time: {timeText}
+                                    Done
                                 </Text>
-                            </LinearGradient>
-                        </View>
-                    ) : !user ? (
-                        <TouchableOpacity
-                            onPress={() => {
-                                modalOpen(
-                                    GuestModalRefForAds,
-                                    'Support Story Time',
-                                    'Watch the add to continue playing',
-                                    'Watch ads',
-                                    'Subscribe for Ad FREE experience',
-                                );
-                            }}
-                            style={{
-                                borderRadius: 10,
-                                borderWidth: 4,
-                                borderColor: TextColorGreen,
-                                backgroundColor: TextColorGreen,
-                                paddingVertical: moderateVerticalScale(6),
-                                paddingHorizontal: moderateScale(25),
-                            }}>
-                            <Text
-                                style={{
-                                    color: 'white',
-                                    fontWeight: '400',
-                                    fontSize: responsiveFontSize(1.9),
-                                    fontFamily: Inter_Regular.Inter_Regular,
-                                }}>
-                                Done
-                            </Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <></>
-                    )}
+                            </TouchableOpacity>
+                        ) : (
+                            <></>
+                        )}
                 </View>
             </View>
         </View>
