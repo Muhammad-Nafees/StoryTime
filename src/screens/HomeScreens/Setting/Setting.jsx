@@ -59,7 +59,7 @@ const Setting = () => {
       key: '5',
       text: 'Report a problem',
       iconName: 'ReportAProblem',
-      routeName: 'Support',
+      // routeName: 'Support',
     },
     {
       key: '6',
