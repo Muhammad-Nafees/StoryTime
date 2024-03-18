@@ -23,7 +23,6 @@ import {
 } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import FeedChatFrame from '../../../../components/FeedChatFrame';
 import NavigationsString from '../../../../constants/NavigationsString';
 import UserNames from '../../../../components/UserNames';
 import {

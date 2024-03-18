@@ -3,15 +3,27 @@ import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import Typography from '../Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
-import UploadImage from '../UploadImage';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
-  const uploadProfileImageRef = React.useRef(null);
-
   const {CAMERA_ICON} = Img_Paths;
-  const modalOpen = ref => {
-    if (ref.current) {
-      ref.current.open();
+
+  const handleGalleryPress = async () => {
+    try {
+      const image = await ImageCropPicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      if (!image.didCancel) {
+        setProfileImage({uri: image.path});
+        return image.path;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log('Error selecting image from gallery:', error);
+      return null;
     }
   };
   return (
@@ -27,7 +39,7 @@ const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
       />
       <TouchableOpacity
         style={styles.camera_container}
-        onPress={() => modalOpen(uploadProfileImageRef)}>
+        onPress={handleGalleryPress}>
         <Image
           style={profileImage && styles.image}
           source={profileImage ? {uri: profileImage.uri} : CAMERA_ICON}
@@ -38,10 +50,6 @@ const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
           {profileImage ? 'Change Image' : 'Attach Image or Proof'}
         </Typography>
       </TouchableOpacity>
-      <UploadImage
-        uploadImageRef={uploadProfileImageRef}
-        setImage={setProfileImage}
-      />
     </View>
   );
 };

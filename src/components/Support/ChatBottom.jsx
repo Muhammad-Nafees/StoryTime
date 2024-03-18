@@ -9,56 +9,107 @@ import {
 import React from 'react';
 import {Img_Paths} from '../../assets/Imagepaths';
 import {sendMessage} from '../../../services/api/support';
-import UploadImage from '../UploadImage';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const ChatBottom = ({setReload, reload, chatID}) => {
   const {GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND} = Img_Paths;
   const [profileImage, setProfileImage] = React.useState(null);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const uploadProfileImageRef = React.useRef(null);
+  const [sendDisabled, setSendDisabled] = React.useState(true);
 
-  const modalOpen = ref => {
-    if (ref.current) {
-      ref.current.open();
+  React.useEffect(() => {
+    setSendDisabled(input.trim().length === 0);
+  }, [input]);
+
+  const handleGalleryPress = async () => {
+    try {
+      const image = await ImageCropPicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      if (!image.didCancel) {
+        setProfileImage({uri: image.path});
+        return image.path;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log('Error selecting image from gallery:', error);
+      return null;
+    }
+  };
+
+  const handleCameraPress = async () => {
+    try {
+      const image = await ImageCropPicker.openCamera({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      if (!image.didCancel) {
+        setProfileImage({uri: image.path});
+        return image.path;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log('Error taking picture with camera:', error);
+      return null;
     }
   };
   const handleSendMessage = async () => {
-    const image = profileImage?.uri && {profileImage: profileImage?.uri};
-    const payload = {
-      text: input,
-      media: image,
-      chat: chatID,
-    };
-    setLoading(true);
-    const response = await sendMessage(payload);
-    const data = response.data;
-    console.log('🚀 andar ka data', data);
-    if (response?.statusCode === 200) {
-      setReload(!reload);
-      setInput('');
-      setLoading(false);
-      setProfileImage(null);
+    try {
+      const image = profileImage?.uri && {profileImage: profileImage?.uri};
+      const payload = {
+        text: input,
+        media: image,
+        chat: chatID,
+      };
+      setLoading(true);
+      const response = await sendMessage(payload);
+      const data = response.data;
+      if (response?.statusCode === 200) {
+        setReload(!reload);
+        setInput('');
+        setLoading(false);
+        setProfileImage(null);
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleSendMessage ~ error:', error);
     }
   };
   return (
     <View k style={styles.container}>
       <View style={styles.wrapper}>
-        <TouchableOpacity onPress={() => modalOpen(uploadProfileImageRef)}>
-          <Image style={{marginHorizontal:5}} source={GALLERY_ICON} />
+        <TouchableOpacity onPress={handleGalleryPress}>
+          <Image style={{marginHorizontal: 5}} source={GALLERY_ICON} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => modalOpen(uploadProfileImageRef)}>
+        <TouchableOpacity onPress={handleCameraPress}>
           <Image source={CAMERA__ICON} />
         </TouchableOpacity>
-        <TextInput
-          placeholder="Send Message"
-          placeholderTextColor="#AAAAAA"
-          style={styles.inputfield}
-          onChangeText={e => setInput(e)}
-          value={input}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {profileImage && (
+            <Image
+              source={{uri: profileImage.uri}}
+              style={styles.selectedImage}
+            />
+          )}
+          <TextInput
+            placeholder="Send Message"
+            placeholderTextColor="#AAAAAA"
+            style={[styles.inputfield, profileImage && {paddingLeft: 30}]}
+            onChangeText={e => setInput(e)}
+            value={input}
+            // multiline
+            // numberOfLines={4}
+          />
+        </View>
         {!loading ? (
-          <TouchableOpacity onPress={handleSendMessage}>
+          <TouchableOpacity
+            onPress={sendDisabled ? null : handleSendMessage}
+            disabled={sendDisabled}>
             <Image source={MESSAGE_SEND} />
           </TouchableOpacity>
         ) : (
@@ -67,10 +118,6 @@ const ChatBottom = ({setReload, reload, chatID}) => {
           </View>
         )}
       </View>
-      <UploadImage
-        uploadImageRef={uploadProfileImageRef}
-        setImage={setProfileImage}
-      />
     </View>
   );
 };
@@ -99,6 +146,14 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     color: '#000',
     paddingHorizontal: 17,
-    paddingVertical: 7,marginHorizontal:5
+    paddingVertical: 7,
+    marginHorizontal: 5,
+  },
+  selectedImage: {
+    width: 15,
+    height: 15,
+    borderRadius: 2,
+    position: 'absolute',
+    left: 15,
   },
 });

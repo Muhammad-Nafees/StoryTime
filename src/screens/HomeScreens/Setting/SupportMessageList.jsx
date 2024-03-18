@@ -13,7 +13,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import ChatBottom from '../../../components/Support/ChatBottom';
 import {getMessageWithId} from '../../../../services/api/support';
-import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import {Inter_SemiBold} from '../../../constants/GlobalFonts';
 
 const SupportMessageList = ({navigation, route}) => {
   const [messageList, setMessageList] = React.useState([]);
@@ -40,7 +40,7 @@ const SupportMessageList = ({navigation, route}) => {
     <BackgroundWrapper disableScrollView coverScreen>
       <View style={styles.first_container}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Setting')}
           style={styles.back_button}>
           <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
         </TouchableOpacity>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
-    fontFamily:Inter_SemiBold.Inter_SemiBold
+    fontFamily: Inter_SemiBold.Inter_SemiBold,
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),
