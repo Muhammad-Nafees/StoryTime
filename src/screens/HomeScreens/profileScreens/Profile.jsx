@@ -153,6 +153,39 @@ const Profile = ({ route }) => {
 
 
 
+
+  // isUserLoading ?
+  //   <ActivityIndicator /> :
+  //   <>
+  {/* <ImageBackground style={{ width: 160, height: 190, }} resizeMode="cover" source={require("../../../assets/profile-picture.png")}>
+
+        </ImageBackground> */}
+  {/* <View style={{ paddingBottom: 20 }}>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`@${responseUserProfile?.data?.username || 0}`}
+            </Text>
+          </View>
+
+          <View>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+            </Text>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              Following
+            </Text>
+          </View>
+
+          <View>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+
+            </Text>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              Follower
+            </Text>
+          </View> */}
+  // </>
+
   return (
     <>
       {isPublicOrPrivate ? (
@@ -163,8 +196,84 @@ const Profile = ({ route }) => {
               width: SCREEN_WIDTH,
             }}
             source={BG_CONTAINER}>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+
+            <View style={{ flexDirection: "row", justifyContent: "space-around", }}>
+              <View style={{ paddingTop: responsiveWidth(6) }}>
+                <BackButton onPress={() => navigation?.goBack()} />
+              </View>
+
+              <View>
+                <View style={{ flexDirection: "row", }}>
+                  {
+                    isUserLoading ?
+                      <ActivityIndicator /> :
+                      <>
+                        <ImageBackground style={{ backgroundColor: "orange", width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 3, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../../assets/profile-picture.png")}>
+                          <View style={{ width: responsiveWidth(30), height: 60, justifyContent: "center" }}>
+                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, textAlign: "center" }}>
+                              {`@${responseUserProfile?.data?.username || 0}`}
+                            </Text>
+                          </View>
+
+                          {/* <View style={{ justifyContent: "center" }}>
+                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+                              {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                            </Text>
+                          </View> */}
+
+                        </ImageBackground>
+
+                      </>
+                  }
+
+
+                  <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
+                    {
+                      USER?._id === FriendIdRTK ? (
+                        <>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setChangeMode(1)
+                              setType("video");
+                              toggel_mode();
+                              setProfileResponse([]);
+                              setResponse_ProfileVideo([]);
+                            }
+                            }
+                            style={[
+                              styles.back_button,
+                              {
+                                backgroundColor: 'rgba(57, 94, 102, 0.5)',
+                              },
+                            ]}>
+                            <Image
+                              style={styles.left_arrow}
+                              source={require('../../../assets/incognito-icon.png')}
+                            />
+                          </TouchableOpacity>
+
+                          <View style={{ paddingHorizontal: moderateScale(7) }}>
+                            <SettingButton
+                              onPress={() => navigation.navigate(SETTING)}
+                              image={SETTINGS_ICON}
+                            />
+                          </View>
+                        </>
+                      )
+                        :
+                        null
+                    }
+                  </View>
+
+
+                </View>
+                <View>
+
+                </View>
+              </View>
+            </View>
+
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
 
               <View style={{ paddingTop: responsiveWidth(6) }}>
                 <BackButton onPress={() => navigation?.goBack()} />
@@ -172,54 +281,19 @@ const Profile = ({ route }) => {
 
               <View
                 style={{
-                  height: responsiveHeight(45),
+                  height: responsiveHeight(40),
                   justifyContent: 'center',
                   alignItems: 'center',
-                  position: "relative",
-                  left: 10
+                  width: responsiveWidth(40)
                 }}>
 
-                {
-                  isUserLoading ?
-                    <ActivityIndicator /> :
-                    <>
 
-                      <View style={{ paddingBottom: 20 }}>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`@${responseUserProfile?.data?.username || 0}`}
-                        </Text>
-                      </View>
+              </View> */}
 
-                      <View>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`${responseUserProfile?.data?.noOfFollowings || 0}`}
-                        </Text>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          Following
-                        </Text>
-                      </View>
 
-                      <View>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+            {/* Incognito Icon----- */}
 
-                        </Text>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          Follower
-                        </Text>
-                      </View>
-                    </>
-                }
-
-                {/* <Image
-                  style={{ width: 180, height: 200, resizeMode: 'center' }}
-                  source={require('../../../assets/bgoliver.png')}
-                /> */}
-              </View>
-
-              {/* Incognito Icon----- */}
-
-              <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
+            {/* <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
                 {
                   USER?._id === FriendIdRTK ? (
                     <>
@@ -255,10 +329,10 @@ const Profile = ({ route }) => {
                     :
                     null
                 }
-              </View>
+              </View> */}
 
 
-            </View>
+            {/* </View> */}
           </ImageBackground>
 
           <View

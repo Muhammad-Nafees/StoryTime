@@ -172,8 +172,7 @@ const SubCategories = ({ route }) => {
       console.log("responseIMAGE RANDOAM IMAGE", response?.data?.data?.image);
       user
         ? navigation.navigate("Sequence")
-        : navigation.navigate("FirstScreenPlayFlow");
-
+        : navigation.navigate("SelectGamePoint");
       return response;
     } catch (error) {
       console.log(error?.response?.data, "ERROR FROM SUB-RANDOM");

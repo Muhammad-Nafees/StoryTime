@@ -40,6 +40,9 @@ import PlayStoryTime from '../screens/HomeScreens/storyfeed/PlayStoryTime';
 
 import { Img_Paths } from '../assets/Imagepaths';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
+import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
 
 const AuthStack = () => {
   const {
@@ -202,13 +205,13 @@ const GuestStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={FIRSTSCREENPLAYFLOW}
-        component={FirstScreenPlayFlow}
+        name="SelectGamePoint"
+        component={SelectGamePoint}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={SECONDSCREENPLAYFLOW}
-        component={SecondPlayFlowScreen}
+        name="StartGame"
+        component={StartGame}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -217,8 +220,8 @@ const GuestStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={FIRST_USER}
-        component={FirstUser}
+        name="StartRecordingVoice"
+        component={StartRecordingVoice}
         options={{ headerShown: false }}
       />
 

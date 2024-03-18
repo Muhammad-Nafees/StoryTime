@@ -160,11 +160,11 @@ const PLayFlowScreens = () => {
         headerShown: false,
       }}>
       <Stack.Screen
-        name={"SelectGamePoint"}
+        name="SelectGamePoint"
         component={SelectGamePoint}
       />
       <Stack.Screen
-        name={"StartGame"}
+        name="StartGame"
         component={StartGame}
       />
       <Stack.Screen name="StartRecordingVoice" component={StartRecordingVoice} />
