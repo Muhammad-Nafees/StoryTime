@@ -1,13 +1,15 @@
 import Modal from 'react-native-modal';
-import {Img_Paths} from '../assets/Imagepaths';
+import {Img_Paths} from '../../assets/Imagepaths';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
-import {unBlockUser} from '../../services/api/settings';
+import {unBlockUser} from '../../../services/api/settings';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
 import {
+  Black02,
   PrimaryColor,
   White
-} from '../screens/Styles/Style';
+} from '../../screens/Styles/Style';
+import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const BlockModal = forwardRef((props, ref) => {
   const {removeUnblockUserFromList} = props
@@ -84,9 +86,11 @@ const BlockModal = forwardRef((props, ref) => {
             fontWeight: '400',
             padding: responsiveWidth(6),
             marginBottom: responsiveWidth(3),
+            color:Black02,
+            fontFamily:Inter_Regular.Inter_Regular
           }}>
           Are you sure you want to{' '}
-          <Text style={{color: PrimaryColor}}>unblock </Text>
+          <Text style={{color: PrimaryColor,fontWeight:'600'}}>unblock </Text>
           this user?
         </Text>
         <View
@@ -95,6 +99,7 @@ const BlockModal = forwardRef((props, ref) => {
             justifyContent: 'center',
             borderTopWidth: 0.6,
             borderColor:PrimaryColor,
+            
           }}>
           <TouchableOpacity
             style={{
@@ -109,9 +114,10 @@ const BlockModal = forwardRef((props, ref) => {
             <Text
               style={{
                 fontSize: 12,
-                lineHeight: 16,
                 color:PrimaryColor,
                 textAlign: 'center',
+                fontWeight:'600',
+                fontFamily:Inter_SemiBold.Inter_SemiBold
               }}>
               {' '}
               Unblock
@@ -121,9 +127,11 @@ const BlockModal = forwardRef((props, ref) => {
             <Text
               style={{
                 fontSize: 12,
-                lineHeight: 16,
                 textAlign: 'center',
                 height: 48,
+                fontWeight:'600',
+                fontFamily:Inter_SemiBold.Inter_SemiBold,
+                color:Black02,
               }}>
               {' '}
               Return

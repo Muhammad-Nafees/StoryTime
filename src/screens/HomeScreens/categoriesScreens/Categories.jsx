@@ -40,7 +40,7 @@ import {
 import { setCategoriesId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
 import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';

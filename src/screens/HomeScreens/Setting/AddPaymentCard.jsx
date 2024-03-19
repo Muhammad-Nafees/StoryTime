@@ -1,20 +1,20 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/Typography';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import Typography from '../../../components/reusable-components/Typography';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
 
-const AddPaymentCard = ({navigation}) => {
-  const {LEFT_ARROW_IMG, CHECK} = Img_Paths;
+const AddPaymentCard = ({ navigation }) => {
+  const { LEFT_ARROW_IMG, CHECK } = Img_Paths;
   const handleScreen = () => {
     navigation.navigate('AddPaymentCardDetail');
   };

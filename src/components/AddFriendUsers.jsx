@@ -21,8 +21,6 @@ const AddFriendUsers = ({ profileimage, username, userchoice, userid, isFollowin
         return responseData;
     };
 
-    // console.log("isFollowing=====", isFollowing)
-
     return (
         <View style={{ paddingVertical: moderateVerticalScale(3), flexDirection: "row", justifyContent: "space-between", width: responsiveWidth(90), alignItems: "center" }}>
             <View style={{ flexDirection: "row", width: responsiveWidth(31), justifyContent: "space-between", alignItems: "center" }}>

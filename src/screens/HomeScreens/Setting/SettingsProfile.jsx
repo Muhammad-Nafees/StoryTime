@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useRef, useEffect, useMemo} from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
-import ScreenHeader from '../../../components/ScreenHeader';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -25,7 +25,7 @@ import {
 import { Formik } from 'formik';
 import { validationSettingsProfile } from '../../../../validation/validation';
 import CustomInput from '../../../components/auth/CustomInput';
-import UploadImage from '../../../components/UploadImage';
+import UploadImage from '../../../components/modals/UploadImage';
 import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
 import {
   FourthColor,
@@ -36,26 +36,27 @@ import {
   ThirdColor,
 } from '../../Styles/Style';
 import SelectDropdown from 'react-native-select-dropdown';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TextInputField from '../../../components/TextInputField';
-import {Path, Svg} from 'react-native-svg';
-import {useNavigation} from '@react-navigation/native';
+import { Path, Svg } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 import {
   getUserProfileData,
   updateUserProfileData,
 } from '../../../../services/api/settings';
-import {userinfocity} from '../../../../store/slices/authStatesandCity/userinfoCity';
+import { userinfocity } from '../../../../store/slices/authStatesandCity/userinfoCity';
 import {
   userinfoState,
   userdata,
 } from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
-import {base} from '../../../../services';
-import {login} from '../../../../store/slices/authSlice';
+import { base } from '../../../../services';
+import { login } from '../../../../store/slices/authSlice';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const SettingsProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {BG_CONTAINER, DEFAULT_COVER, DROP_ICON, DEFAULT_ICON} = Img_Paths;
+  const { BG_CONTAINER, DEFAULT_COVER, DROP_ICON, DEFAULT_ICON } = Img_Paths;
 
   const uploadProfileImageRef = useRef(null);
   const uploadCoverImageRef = useRef(null);
@@ -71,15 +72,15 @@ const SettingsProfile = () => {
   const [phoneError, setPhoneError] = useState('');
   const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
 
-  const {userdata, loading} = useSelector(state => state?.userinfostate);
+  const { userdata, loading } = useSelector(state => state?.userinfostate);
   console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
-  const {userdatacity} = useSelector(state => state?.userinfocity);
+  const { userdatacity } = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
   const namesCities = userdatacity?.data?.map(item => item?.name);
-  console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
+  // console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
 
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
     username: '',
     firstName: '',
@@ -96,10 +97,12 @@ const SettingsProfile = () => {
   const [initialLoading, setInitialLoading] = React.useState(true);
 
   const handleFormSubmit = async values => {
+    // console.log('pImage',profileImage.uri)
+
     const payload = {
       ...(values || {}),
-      ...(profileImage?.uri && {profileImage: profileImage?.uri}),
-      ...(coverImage?.uri && {coverImage: coverImage?.uri}),
+      ...(profileImage?.uri && { profileImage: profileImage?.uri }),
+      ...(coverImage?.uri && { coverImage: coverImage?.uri }),
     };
     const response = await updateUserProfileData(payload);
     dispatch(login(response));
@@ -107,9 +110,10 @@ const SettingsProfile = () => {
   };
 
   const getData = async () => {
-    const uid = user?.data?.user?._id;
-    let {data} = await getUserProfileData(uid);
-    console.log('🚀 ~ getData ~ data:', data);
+    const uid = user?.data?.user?._id || user?.data?._id
+    let { data } = await getUserProfileData(uid);
+    console.log('🚀 ~ getData ~ data:', data, data?.profileImage);
+
 
     const payload = {
       username: data?.username || '',
@@ -125,10 +129,11 @@ const SettingsProfile = () => {
     };
 
     if (data?.profileImage) {
-      setProfileImage({uri: `${base}${data?.profileImage}`});
+      // console.log('profileimg',data?.profileImage)
+      setProfileImage({ uri: `${base}${data?.profileImage}` });
     }
     if (data?.coverImage) {
-      setCoverImage({uri: `${base}${data?.coverImage}`});
+      setCoverImage({ uri: `${base}${data?.coverImage}` });
     }
     if (data?.state) {
       setUserCity(data?.state);
@@ -144,7 +149,7 @@ const SettingsProfile = () => {
   };
 
   useEffect(() => {
-    console.log('🚀 ~ initialData ~ initialData:', initialData);
+    // console.log('🚀 ~ initialData ~ initialData:', initialData);
     getData();
   }, []);
 
@@ -155,9 +160,9 @@ const SettingsProfile = () => {
   };
 
   const handleInitCity = selected => {
-    console.log('🚀 ~ selectedItems ~ selected city data:', selected);
+    // console.log('🚀 ~ selectedItems ~ selected city data:', selected);
     const cities = userdata?.data?.find(data => data?.name === selected);
-    console.log('🚀 ~ handleInitCity ~ my - cities:', cities);
+    // console.log('🚀 ~ handleInitCity ~ my - cities:', cities);
     if (cities) {
       dispatch(
         userinfocity({
@@ -177,7 +182,7 @@ const SettingsProfile = () => {
   return (
     <>
       {initialLoading ? (
-        <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
+        <BackgroundWrapper contentContainerStyle={{ flex: 1 }} coverScreen>
           <View style={styles.container}>
             <ActivityIndicator size="large" />
           </View>
@@ -185,15 +190,15 @@ const SettingsProfile = () => {
       ) : (
         <BackgroundWrapper>
           <ImageBackground
-            source={coverImage?.uri ? {uri: coverImage?.uri} : BG_CONTAINER}
+            source={coverImage?.uri ? { uri: coverImage?.uri } : BG_CONTAINER}
             style={styles.bg_img_container}>
             <ScreenHeader title={'Profile'} clr={'#fff'} />
           </ImageBackground>
-          <View style={{width: SCREEN_WIDTH}}>
+          <View style={{ width: SCREEN_WIDTH }}>
             <View style={styles.avatar_wrapper}>
               <Image
                 source={
-                  profileImage?.uri ? {uri: profileImage?.uri} : DEFAULT_ICON
+                  profileImage?.uri ? { uri: profileImage?.uri } : DEFAULT_ICON
                 }
                 style={styles.avatar}
                 resizeMode="contain"
@@ -229,7 +234,7 @@ const SettingsProfile = () => {
             }) => (
               <>
                 {console.log('values', values.state)}
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <CustomInput
                     label="Username"
                     placeholder="Type here"
@@ -242,6 +247,7 @@ const SettingsProfile = () => {
                     // isVisible={isVisible}
                     // setVisible={setVisible}
                     fieldName="username"
+                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
                     handleChange={text => setFieldValue('username', text)}
                   />
 
@@ -254,6 +260,7 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="firstName"
+                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
                     handleChange={text => setFieldValue('firstName', text)}
                   />
 
@@ -266,6 +273,7 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="lastName"
+                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
                     handleChange={text => setFieldValue('lastName', text)}
                   />
 
@@ -285,6 +293,7 @@ const SettingsProfile = () => {
                       setPhoneCode={handleCountryCodeChange}
                       setPhoneError={setPhoneError}
                       setphoneNumberStatusCode={setphoneNumberStatusCode}
+                      labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
                     />
                   )}
 
@@ -299,6 +308,7 @@ const SettingsProfile = () => {
                     // setFieldError={setEmailError}
                     // setEmailstatusCode={setEmailstatusCode}
                     fieldName="email"
+                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
                     handleChange={text => setFieldValue('email', text)}
                   />
                 </View>
@@ -312,7 +322,7 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, {color: FourthColor}]}>
+                        <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }]}>
                           City
                         </Text>
                       </View>
@@ -355,8 +365,8 @@ const SettingsProfile = () => {
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
                           }}
-                          rowStyle={{paddingHorizontal: 8}}
-                          dropdownStyle={{borderRadius: 10}}
+                          rowStyle={{ paddingHorizontal: 8 }}
+                          dropdownStyle={{ borderRadius: 10 }}
                           buttonTextStyle={{
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
@@ -385,7 +395,7 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, {color: FourthColor}]}>
+                        <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }]}>
                           State
                         </Text>
                       </View>
@@ -417,8 +427,8 @@ const SettingsProfile = () => {
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
                           }}
-                          rowStyle={{paddingHorizontal: 8}}
-                          dropdownStyle={{borderRadius: 10}}
+                          rowStyle={{ paddingHorizontal: 8 }}
+                          dropdownStyle={{ borderRadius: 10 }}
                           buttonTextStyle={{
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
@@ -465,7 +475,7 @@ const SettingsProfile = () => {
                         width: responsiveWidth(89),
                         marginLeft: 'auto',
                       }}>
-                      <Text style={[styles.text, {color: FourthColor}]}>
+                      <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold }]}>
                         Zip Code
                       </Text>
                     </View>
@@ -478,7 +488,7 @@ const SettingsProfile = () => {
                       onChangeText={handleChange('zipCode')}
                     />
                   </View>
-
+                  <Text></Text>
                   <View
                     style={{
                       paddingVertical: responsiveWidth(6),
@@ -490,10 +500,10 @@ const SettingsProfile = () => {
                         width: responsiveWidth(80),
                         backgroundColor:
                           values.email &&
-                          values.firstName &&
-                          values.lastName &&
-                          values.phoneNo &&
-                          values.username
+                            values.firstName &&
+                            values.lastName &&
+                            values.phoneNo &&
+                            values.username
                             ? '#395E66'
                             : 'rgba(57, 94, 102, 0.6)',
                         borderRadius: 10,
@@ -514,10 +524,11 @@ const SettingsProfile = () => {
                       }>
                       <Text
                         style={{
-                          fontSize: responsiveFontSize(1.9),
+                          fontSize: 14,
                           fontWeight: '600',
                           letterSpacing: 0.28,
                           color: 'white',
+                          fontFamily: Inter_SemiBold.Inter_SemiBold
                         }}>
                         Save
                       </Text>

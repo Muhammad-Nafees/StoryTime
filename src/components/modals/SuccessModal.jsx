@@ -3,21 +3,24 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   TextColorGreen,
   pastelGreen,
-} from '../screens/Styles/Style';
+} from '../../screens/Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import SvgIcons from './svgIcon/svgIcons';
+import SvgIcons from '../svgIcon/svgIcons';
+import {Img_Paths} from '../../assets/Imagepaths/index';
 import { moderateVerticalScale } from 'react-native-size-matters';
-
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
+import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const SuccessModal = ({
   isVisible,
@@ -28,6 +31,7 @@ const SuccessModal = ({
   iconName,
   loading
 }) => {
+  const {BG_Del} = Img_Paths;
 
   const close = () => {
     if (onPress) {
@@ -37,24 +41,23 @@ const SuccessModal = ({
      setVisible(false);
     }
   };
-
-
   return (
     <Modal
       style={{ flex: 1 }}
       isVisible={isVisible}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      backdropColor='#979797'
+      backdropColor='transparent'
       onModalHide={close}
       backdropOpacity={0.98}
       onBackdropPress={close}>
-        
+    <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
       <View
         style={{
-          width: responsiveWidth(80),
+          width: responsiveWidth(75),
           // height: responsiveHeight(29),
-          padding:responsiveHeight(1.6),
+          paddingTop:responsiveHeight(1.4),
+          paddingBottom:responsiveHeight(2),
           backgroundColor: '#FFF',
           borderRadius: 30,
           paddingHorizontal: responsiveWidth(2),
@@ -83,7 +86,9 @@ const SuccessModal = ({
               color: '#000',
               textAlign: 'center',
               lineHeight: 20,
+              fontWeight:'400',
               marginTop: responsiveHeight(1),
+              fontFamily:Inter_Regular.Inter_Regular
             }}>
             {text}
           </Text>
@@ -99,7 +104,7 @@ const SuccessModal = ({
             <TouchableOpacity
               onPress={close}
               style={{
-                width: responsiveWidth(60),
+                width: responsiveWidth(55),
                 backgroundColor: TextColorGreen,
                 borderRadius: 10,
                 justifyContent: 'center',
@@ -110,8 +115,8 @@ const SuccessModal = ({
                 style={{
                   fontSize: responsiveFontSize(1.9),
                   fontWeight: '600',
-                  letterSpacing: 0.28,
                   color: '#FFF',
+                  fontFamily:Inter_SemiBold.Inter_SemiBold
                 }}>
                 {textButton}
               </Text>
@@ -119,6 +124,7 @@ const SuccessModal = ({
           </View>
         }
       </View>
+      </ImageBackground>
     </Modal>
   );
 };

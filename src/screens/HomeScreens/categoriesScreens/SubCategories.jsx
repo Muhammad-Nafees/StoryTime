@@ -43,7 +43,7 @@ import {
 import Toast from 'react-native-toast-message';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { URL } from '../../../constants/Constant';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
 import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';

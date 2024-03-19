@@ -1,13 +1,12 @@
-import { View, Text, ImageBackground, SafeAreaView, StatusBar, Image, StyleSheet, TouchableOpacity, ScrollView, ScrollViewBase, Dimensions } from 'react-native'
+import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, ScrollView, ScrollViewBase, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Img_Paths } from '../../assets/Imagepaths';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import SettingButton from '../SettingButton';
-import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style';
+import { TextColorGreen } from '../../screens/Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import NavigationsString from '../../constants/NavigationsString';
 import RecordingIncognito from './RecordingIncognito';
 import { fetch_users_stories } from '../../../services/api/profile';
 import IncognitoVideo from './IncognitoVideo';
@@ -89,7 +88,7 @@ const IncognitoMode = ({ setChangeMode,
                     <View>
                         <View style={{ flexDirection: "row", }}>
 
-                            <View style={{}}>
+                            <View>
                                 <ImageBackground style={{ width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 2.9, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../assets/incognito-picture.png")}>
 
                                     <View style={{ width: responsiveWidth(32), height: responsiveHeight(17.5), justifyContent: "center", alignItems: "center" }}>
@@ -99,13 +98,10 @@ const IncognitoMode = ({ setChangeMode,
                                     </View>
 
                                     <View style={{ flexDirection: 'row', width: responsiveWidth(40), justifyContent: "center", alignItems: "center" }}>
-
                                         <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, paddingTop: responsiveWidth(7) }}>
                                             Private Mode
                                         </Text>
-
                                     </View>
-
 
                                 </ImageBackground>
                             </View>

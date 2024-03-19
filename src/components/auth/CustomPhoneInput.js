@@ -11,7 +11,7 @@ import {
 import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import _ from 'lodash';
 import { Path, Svg } from 'react-native-svg';
-import { Inter_Regular } from '../../constants/GlobalFonts';
+import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomPhoneInput = ({
   handleChange,
@@ -25,6 +25,7 @@ const CustomPhoneInput = ({
   disabled = false,
   setFormatText,
   defaultCode,
+  labelStyles
 }) => {
   // console.log("error && isError", error,"//",isError)
 
@@ -74,11 +75,12 @@ const CustomPhoneInput = ({
   return (
     <View style={{}}>
       <Text
-        style={{
-          color: FourthColor,
+        style={[{
+          color:FourthColor,
           fontWeight: '600',
           marginBottom: verticalScale(7),
-        }}>
+        },
+        labelStyles]}>
         Phone Number
       </Text>
 

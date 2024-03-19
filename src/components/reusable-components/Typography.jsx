@@ -5,14 +5,14 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {Inter_Regular} from '../constants/GlobalFonts';
+import {Inter_Regular} from '../../constants/GlobalFonts';
 
 const Typography = props => {
   const {mt, ml, mr, mb, style,size, children,lh,clr,thin,heavy,bold,ff,...rest} = props || {};
 
   const styleComponent = [
     {
-      color: '#000',
+      color: '#000000',
       fontSize: responsiveFontSize(1.9),
       fontWeight: '400',
       lineHeight: 24,

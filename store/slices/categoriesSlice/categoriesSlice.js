@@ -158,7 +158,6 @@ const addPlayers = createSlice({
             state.playerscontributorsIds.push(payload)
         },
 
-
         recordingData: (state, action) => {
             state.recordingText.push(action.payload);
             console.log("stateRec--=-=", action.payload);

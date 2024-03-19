@@ -243,7 +243,6 @@ const Profile = ({ route }) => {
 
                             </View>
 
-
                           </ImageBackground>
                         </View>
 
@@ -279,7 +278,7 @@ const Profile = ({ route }) => {
 
                           <View style={{ paddingHorizontal: moderateScale(7) }}>
                             <SettingButton
-                              onPress={() => navigation.navigate(SETTING)}
+                              onPress={() => navigation.navigate("Setting")}
                               image={SETTINGS_ICON}
                             />
                           </View>
