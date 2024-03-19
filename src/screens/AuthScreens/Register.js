@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import { validationSignUp } from '../../../validation/validation';
 import CustomPhoneInput from '../../components/auth/CustomPhoneInput';
 import { userinfoState, userdata } from '../../../store/slices/authStatesandCity/userInfoState_Slice';
-import { username_api } from '../../../services/api/auth_mdule/auth';
+import { userAvailability_Api } from '../../../services/api/auth_mdule/auth';
 
 
 
@@ -61,36 +61,34 @@ const Register = () => {
     )
   };
 
-
   // setIsSubmitted(false);
+  console.log("phonecode", phoneCode)
+  // console.log("CHECK VALID -------- :", checkValid);
+
+  // const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+
   const handleSubmitRegister = async (values) => {
-    const checkValid = phoneInput.current?.isValidNumber(values.phoneNo);
+
     setIsLoading(true);
-
     try {
-      dispatch(userinfoState(countryCode));
-
-      const responseData = await username_api({ username: values?.username })
-      setIsLoading(false);
-      setStatusCodeusername(responseData.statusCode);
-
-      if (responseData?.statusCode !== 200) {
-        setVisible(true);
-      }
-      if (responseData?.statusCode !== 200 || emailstatusCode !== 200 || phoneNumberStatusCode !== 200 || checkValid === false) {
-        return;
-      }
-
-      dispatch(register({ values, countryCode: countryCode, phoneCode: `+${phoneCode}` }));
-
-      navigation.navigate("RegisterUserInformation");
+      const responseData = await userAvailability_Api(values, phoneCode)
+      console.log("RESPONSE FROM REGISTER", responseData.data);
 
       return responseData;
     } catch (error) {
+      console.log(error?.response?.data, "ERROR FROM REGISTER");
     }
-    setIsLoading(true);
-    setIsLoading(false);
   };
+
+  // setIsLoading(true);
+  // setIsLoading(false);
+
+
+  // dispatch(userinfoState(countryCode));
+  // setIsLoading(false);
+  // setVisible(true);
+  // dispatch(register({ values, countryCode: countryCode, phoneCode: `+${phoneCode}` }));
+  // navigation.navigate("RegisterUserInformation");
 
   return (
     <Formik
@@ -122,7 +120,6 @@ const Register = () => {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
-
               <View style={styles.img_container}>
                 <Image style={styles.img_child} source={CREATE_ACCOUNT_ICON} />
               </View>

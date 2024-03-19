@@ -31,7 +31,7 @@ import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
 import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlice/categoriesSlice';
-import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
 
@@ -208,26 +208,51 @@ const Profile = ({ route }) => {
                     isUserLoading ?
                       <ActivityIndicator /> :
                       <>
-                        <ImageBackground style={{ backgroundColor: "orange", width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 3, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../../assets/profile-picture.png")}>
-                          <View style={{ width: responsiveWidth(30), height: 60, justifyContent: "center" }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, textAlign: "center" }}>
-                              {`@${responseUserProfile?.data?.username || 0}`}
-                            </Text>
-                          </View>
+                        <View style={{}}>
+                          <ImageBackground style={{ width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 3, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../../assets/profile-picture.png")}>
 
-                          {/* <View style={{ justifyContent: "center" }}>
-                            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                              {`${responseUserProfile?.data?.noOfFollowings || 0}`}
-                            </Text>
-                          </View> */}
+                            <View style={{ width: responsiveWidth(30), height: responsiveHeight(17.5), justifyContent: "center" }}>
+                              <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, textAlign: "center", paddingTop: responsiveWidth(15) }}>
+                                {`@${responseUserProfile?.data?.username || 0}`}
+                              </Text>
+                            </View>
 
-                        </ImageBackground>
+
+                            <View style={{ flexDirection: 'row', height: responsiveHeight(7), width: responsiveWidth(40), justifyContent: "space-around", alignItems: "center" }}>
+                              <View>
+                                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>
+                                  {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                                </Text>
+                                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), fontFamily: Inter_Regular.Inter_Regular }}>
+                                  Following
+                                </Text>
+                              </View>
+
+                              <View>
+                                <View style={{}}>
+                                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>
+                                    {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                                  </Text>
+                                </View>
+                                <View>
+                                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), fontFamily: Inter_Regular.Inter_Regular }}>
+                                    Followers
+                                  </Text>
+                                </View>
+                              </View>
+
+                            </View>
+
+
+                          </ImageBackground>
+                        </View>
+
 
                       </>
                   }
 
 
-                  <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
+                  <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6), width: responsiveWidth(30) }}>
                     {
                       USER?._id === FriendIdRTK ? (
                         <>

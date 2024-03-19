@@ -104,7 +104,7 @@ const SubCategories = ({ route }) => {
       const usernameObj = responseData?.data?.users?.find(
         item => item.username === isUsernameInputValue,
       );
-      console.log('usernameObj=====', usernameObj);
+
       if (usernameObj) {
         const userid = usernameObj._id;
         const username = usernameObj?.username;

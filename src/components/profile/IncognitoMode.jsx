@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, SafeAreaView, StatusBar, Image, StyleSheet, TouchableOpacity, ScrollView, ScrollViewBase } from 'react-native'
+import { View, Text, ImageBackground, SafeAreaView, StatusBar, Image, StyleSheet, TouchableOpacity, ScrollView, ScrollViewBase, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Img_Paths } from '../../assets/Imagepaths';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
@@ -6,12 +6,13 @@ import BackButton from '../reusable-components/addplayer/customBackButton/BackBu
 import { useNavigation } from '@react-navigation/native';
 import SettingButton from '../SettingButton';
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style';
-import { moderateVerticalScale } from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import NavigationsString from '../../constants/NavigationsString';
 import RecordingIncognito from './RecordingIncognito';
 import { fetch_users_stories } from '../../../services/api/profile';
 import IncognitoVideo from './IncognitoVideo';
-import { Inter_SemiBold, PassionOne_Regular } from '../../constants/GlobalFonts';
+import { Inter_SemiBold, } from '../../constants/GlobalFonts';
+import { SCREEN_WIDTH } from '../../constants/Constant';
 
 
 const IncognitoMode = ({ setChangeMode,
@@ -21,9 +22,9 @@ const IncognitoMode = ({ setChangeMode,
     changeMode
 }) => {
 
-    const { BG_CONTAINER, SHARE_BTN, SETTINGS_ICON, BG_BLACK_INCOGNITO } = Img_Paths;
+    const { SETTINGS_ICON, BG_BLACK_INCOGNITO } = Img_Paths;
     const navigation = useNavigation();
-    const { FEED_CHAT, } = NavigationsString;
+    const SCREEN_HEIGHT = Dimensions.get("window").height;
     const [isContentIncognito, setIsContentIncognito] = useState(0);
     const [hasMorePagesIncognito, setHasMorePagesincognito] = useState(false);
     const [incognitoPage, setincognitoPage] = useState(1);
@@ -71,49 +72,147 @@ const IncognitoMode = ({ setChangeMode,
 
     return (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+
+            {/* START */}
             <ImageBackground
-                style={{ width: '100%', height: responsiveHeight(35) }}
+                style={{
+                    height: SCREEN_HEIGHT / 3,
+                    width: SCREEN_WIDTH,
+                }}
                 source={BG_BLACK_INCOGNITO}>
 
-                <View
-                    style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-around", }}>
                     <View style={{ paddingTop: responsiveWidth(6) }}>
                         <BackButton onPress={() => navigation?.goBack()} />
                     </View>
 
-                    <View
-                        style={{
-                            height: responsiveHeight(45),
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: "relative",
-                            left: 10
-                        }}>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                            {`@${username}`}
-                        </Text>
-                    </View>
+                    <View>
+                        <View style={{ flexDirection: "row", }}>
 
-                    {/* Incognito Icon----- */}
+                            <View style={{}}>
+                                <ImageBackground style={{ width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 2.9, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../assets/incognito-picture.png")}>
 
-                    <View style={{ paddingTop: responsiveWidth(6) }}>
-                        <TouchableOpacity onPress={() => {
-                            setChangeMode(0);
-                            toggel_mode();
-                            SetIncognito_response([]);
-                            setResponseIncognitoVideo([]);
-                        }} style={styles.back_button}>
-                            <Image style={styles.left_arrow} source={require("../../assets/incognito-icon.png")} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ paddingTop: responsiveWidth(6) }}>
-                        <SettingButton
-                            onPress={() => navigation.navigate(SETTING)}
-                            image={SETTINGS_ICON}
-                        />
+                                    <View style={{ width: responsiveWidth(32), height: responsiveHeight(17.5), justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.9), fontFamily: Inter_SemiBold.Inter_SemiBold, textAlign: "center", paddingTop: responsiveWidth(20) }}>
+                                            {`@${username}`}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', width: responsiveWidth(40), justifyContent: "center", alignItems: "center" }}>
+
+                                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, paddingTop: responsiveWidth(7) }}>
+                                            Private Mode
+                                        </Text>
+
+                                    </View>
+
+
+                                </ImageBackground>
+                            </View>
+
+                            <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6), width: responsiveWidth(30) }}>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setChangeMode(0);
+                                        toggel_mode();
+                                        SetIncognito_response([]);
+                                        setResponseIncognitoVideo([]);
+                                    }
+                                    }
+                                    style={[
+                                        styles.back_button,
+                                        {
+                                            backgroundColor: 'rgba(57, 94, 102, 0.5)',
+                                        },
+                                    ]}>
+                                    <Image
+                                        style={styles.left_arrow}
+                                        source={require('../../assets/incognito-icon.png')}
+                                    />
+                                </TouchableOpacity>
+
+                                <View style={{ paddingHorizontal: moderateScale(7) }}>
+                                    <SettingButton
+                                        onPress={() => navigation.navigate(SETTING)}
+                                        image={SETTINGS_ICON}
+                                    />
+                                </View>
+
+                            </View>
+
+
+                        </View>
+                        <View>
+
+                        </View>
                     </View>
                 </View>
+
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+
+              <View style={{ paddingTop: responsiveWidth(6) }}>
+                <BackButton onPress={() => navigation?.goBack()} />
+              </View>
+
+              <View
+                style={{
+                  height: responsiveHeight(40),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: responsiveWidth(40)
+                }}>
+
+
+              </View> */}
+
+
+                {/* Incognito Icon----- */}
+
+                {/* <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
+                {
+                  USER?._id === FriendIdRTK ? (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setChangeMode(1)
+                          setType("video");
+                          toggel_mode();
+                          setProfileResponse([]);
+                          setResponse_ProfileVideo([]);
+                        }
+                        }
+                        style={[
+                          styles.back_button,
+                          {
+                            backgroundColor: 'rgba(57, 94, 102, 0.5)',
+                          },
+                        ]}>
+                        <Image
+                          style={styles.left_arrow}
+                          source={require('../../../assets/incognito-icon.png')}
+                        />
+                      </TouchableOpacity>
+
+                      <View style={{ paddingHorizontal: moderateScale(7) }}>
+                        <SettingButton
+                          onPress={() => navigation.navigate(SETTING)}
+                          image={SETTINGS_ICON}
+                        />
+                      </View>
+                    </>
+                  )
+                    :
+                    null
+                }
+              </View> */}
+
+
+                {/* </View> */}
             </ImageBackground>
+            {/*  END*/}
+
+
 
             <View
                 style={{

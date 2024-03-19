@@ -372,7 +372,11 @@ const Categories = () => {
           {user ?
             (<>
               {/* textinputField */}
-              <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
+              <MainInputField
+                onPress={addFriends_api_handler}
+                inputValue={isUsernameInputValue}
+                OnchangeText={setIsUsernameInputValue}
+                placeholder="Username" />
               {/* added players */}
               <ShowAddedPlayers />
             </>
