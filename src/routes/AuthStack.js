@@ -23,7 +23,6 @@ import {
 import { useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
-import FrameContent from '../components/FrameContent';
 import FirstScreenGuest from '../screens/AuthScreens/guestScreens/FirstScreenGuest';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
@@ -56,7 +55,6 @@ const AuthStack = () => {
     FORGET_PHONE_NO,
     OTP_FORGET,
     FORGET_CONFIRM_PASSWORD,
-    FRAME_CONTENT,
   } = NavigationsString;
 
   const Stack = createStackNavigator();
@@ -151,11 +149,6 @@ const AuthStack = () => {
         <Stack.Screen
           name={FORGET_CONFIRM_PASSWORD}
           component={ForgetConfirmPassword}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name={FRAME_CONTENT}
-          component={FrameContent}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
