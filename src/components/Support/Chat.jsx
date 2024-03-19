@@ -1,5 +1,5 @@
 import {Image, StyleSheet, View} from 'react-native';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import React from 'react';
 import { URL } from '../../constants/Constant';

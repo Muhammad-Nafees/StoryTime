@@ -1,6 +1,6 @@
 import {StyleSheet, View, Image} from 'react-native';
 import React from 'react';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';

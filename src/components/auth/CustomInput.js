@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { username_api } from '../../../services/api/auth_mdule/auth';
 import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
-import { Inter_Regular } from '../../constants/GlobalFonts';
+import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInput = (props,) => {
 
@@ -58,7 +58,7 @@ const CustomInput = (props,) => {
       <Text
         style={[
           {
-            color: FourthColor,
+            color:FourthColor,
             fontWeight: '600',
             paddingBottom: verticalScale(7),
           },

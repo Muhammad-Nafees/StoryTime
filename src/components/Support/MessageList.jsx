@@ -2,7 +2,7 @@ import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Message from './Messages';
 import {getChats} from '../../../services/api/support';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 
 const MessageList = () => {
   const [messages, setMessages] = React.useState([]);

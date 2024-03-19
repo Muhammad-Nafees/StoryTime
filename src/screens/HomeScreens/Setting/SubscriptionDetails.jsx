@@ -16,7 +16,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import BackButton from '../../../components/reuseable-components/BackButton';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 import { TextColorGreen } from '../../Styles/Style';

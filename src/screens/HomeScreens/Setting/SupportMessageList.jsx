@@ -1,6 +1,6 @@
 import React from 'react';
 import {Img_Paths} from '../../../assets/Imagepaths';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';

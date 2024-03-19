@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import { Red02, White } from '../../screens/Styles/Style';
 import { SCREEN_WIDTH, SPACING } from '../../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLogout } from '../../hooks/useLogout';
+import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const LogoutBtn = () => {
   const { handleLogout } = useLogout()
@@ -37,10 +38,10 @@ export default LogoutBtn;
 const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingVertical: 10,
     backgroundColor: Red02,
-    width: SCREEN_WIDTH - 70,
+    width: SCREEN_WIDTH - 85,
     alignSelf: 'center',
     marginBottom: SPACING * 2,
   },
@@ -49,5 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     color: 'white',
+    fontFamily:Inter_SemiBold.Inter_SemiBold
+    
   },
 });

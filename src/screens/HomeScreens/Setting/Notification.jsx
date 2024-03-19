@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
-  Image,
   ActivityIndicator,
 } from 'react-native';
 import { Switch } from 'react-native-switch';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import { useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -19,87 +14,78 @@ import {
   FourthColor,
   SecondaryColor,
 } from '../../Styles/Style';
-import Typography from '../../../components/Typography';
-import { notificationToggle } from '../../../../services/api/settings';
+import Typography from '../../../components/reuseable-components/Typography';
+import { Inter_Regular } from '../../../constants/GlobalFonts';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Inter_Regular } from '../../../constants/GlobalFonts';
+import NotificationOptBox from '../../../components/notification/NotificationOptBox';
 
-const NotificationOptBox = ({ title, sectionName = '' }) => {
-  const [isEnabled, setIsEnabled] = useState(null);
+// const NotificationOptBox = ({ title, sectionName = '' }) => {
+//   const [isEnabled, setIsEnabled] = useState(null);
 
-  const titleToKeyMapping = {
-    'System Notifications': 'systemNotification',
-    'In-App Notifications': 'inAppNotifications',
-    'Enable App Vibrations': 'appVibrations',
-  };
+//   const titleToKeyMapping = {
+//     'System Notifications': 'systemNotification',
+//     'In-App Notifications': 'inAppNotifications',
+//     'Enable App Vibrations': 'appVibrations',
+//   };
 
-  const key = titleToKeyMapping[title];
+//   const key = titleToKeyMapping[title];
 
-  const toggleSwitch = async (apiKey = null) => {
-    setIsEnabled(previousState => !previousState)
-    let response = await notificationToggle(apiKey)
-    //console.log("responsekey",response,key)
-  };
+//   const toggleSwitch = async (apiKey = null) => {
+//     setIsEnabled(previousState => !previousState)
+//     let response = await notificationToggle(apiKey)
+//     //console.log("responsekey",response,key)
+//   };
 
-  const getInitialToggleValue = async () => {
-    let response = await notificationToggle()
-    setIsEnabled(response.data.settings[key])
-  };
+//   const getInitialToggleValue = async () => {
+//     let response = await notificationToggle()
+//     setIsEnabled(response.data.settings[key])
+//   };
 
-  useEffect(() => {
-    getInitialToggleValue()
-  }, []);
+//   useEffect(() => {
+//     getInitialToggleValue()
+//   }, []);
 
 
-  return (
-    <View style={styles.box_container}>
-      <View style={styles.box}>
-        {!!sectionName && (
-          <Typography size={14} mb={moderateScale(10)}>
-            {sectionName}
-          </Typography>
-        )}
-        <View style={styles.row}>
-          <Typography>{title}</Typography>
-          {isEnabled !== null ?
-            <Switch
-              value={isEnabled}
-              onValueChange={() => toggleSwitch(key)}
-              circleSize={25}
-              barHeight={15}
-              backgroundActive={'#68AEBD'}
-              backgroundInactive={'#D4D4D4'}
-              circleActiveColor={'#2F4F56'}
-              circleInActiveColor={'#68AEBD'}
-              changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-              renderActiveText={false}
-              renderInActiveText={false}
-            /> : <ActivityIndicator />
-          }
-        </View>
-      </View>
-    </View>
-  );
-};
+//   return (
+//     <View style={styles.box_container}>
+//       <View style={styles.box}>
+//         {!!sectionName && (
+//           <Typography size={12} mb={moderateScale(10)}>
+//             {sectionName}
+//           </Typography>
+//         )}
+//         <View style={styles.row}>
+//           <Typography size={12} >{title}</Typography>
+//           {isEnabled !== null ?
+//             <Switch
+//               value={isEnabled}
+//               onValueChange={() => toggleSwitch(key)}
+//               circleSize={25}
+//               barHeight={15}
+//               backgroundActive={'#68AEBD'}
+//               backgroundInactive={'#D4D4D4'}
+//               circleActiveColor={'#2F4F56'}
+//               circleInActiveColor={'#68AEBD'}
+//               changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+//               renderActiveText={false}
+//               renderInActiveText={false}
+//               innerCircleStyle={{
+//               borderColor:isEnabled?'#2F4F56':'#68AEBD'
+//               }}
+//             /> : <ActivityIndicator />
+//           }
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
 
 const Notification = () => {
-  const navigation = useNavigation();
-  const { LEFT_ARROW_IMG } = Img_Paths;
 
   return (
     <BackgroundWrapper>
-      {/* <View style={styles.first_container}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.back_button}>
-          <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-        </TouchableOpacity>
-        <View style={styles.categories_text_container}>
-          <Text style={styles.categories_text}>Notifications</Text>
-        </View>
-      </View> */}
         <ScreenHeader title={'Notifications'}/>
 
       <Typography style={styles.typography_spacing}>
@@ -159,12 +145,12 @@ const styles = StyleSheet.create({
   typography_spacing: {
     paddingVertical: moderateVerticalScale(12),
     paddingHorizontal: moderateScale(20),
-    fontFamily:Inter_Regular.Inter_Regular
+    fontFamily:Inter_Regular.Inter_Regular,
+    fontSize:14
   },
   box: {
     marginHorizontal: moderateScale(10),
     paddingVertical: moderateVerticalScale(30),
-
     borderBottomColor: '#EBEBEB',
     borderBottomWidth: 2,
   },
@@ -177,5 +163,6 @@ const styles = StyleSheet.create({
   box_container: {
     marginHorizontal: moderateScale(20),
     backgroundColor: '#F3F3F3',
+    paddingHorizontal:responsiveWidth(3)
   },
 });

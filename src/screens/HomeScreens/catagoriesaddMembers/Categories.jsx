@@ -53,7 +53,7 @@ import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFont
 import { BlurView } from '@react-native-community/blur';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import { SPACING } from '../../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 

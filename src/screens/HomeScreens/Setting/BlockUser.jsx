@@ -15,7 +15,7 @@ import ScreenHeader from '../../../components/reuseable-components/ScreenHeader'
 import { getBlockList } from '../../../../services/api/settings';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 
 const BlockUser = () => {
   const { DEFAULT_ICON } = Img_Paths;

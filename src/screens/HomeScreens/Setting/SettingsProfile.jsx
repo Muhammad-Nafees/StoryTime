@@ -52,6 +52,7 @@ import {
 } from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
 import {base} from '../../../../services';
 import {login} from '../../../../store/slices/authSlice';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const SettingsProfile = () => {
   const dispatch = useDispatch();
@@ -247,6 +248,7 @@ const SettingsProfile = () => {
                     // isVisible={isVisible}
                     // setVisible={setVisible}
                     fieldName="username"
+                    labelStyles ={{color:TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}}
                     handleChange={text => setFieldValue('username', text)}
                   />
 
@@ -259,6 +261,7 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="firstName"
+                    labelStyles ={{color:TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}}
                     handleChange={text => setFieldValue('firstName', text)}
                   />
 
@@ -271,6 +274,7 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="lastName"
+                    labelStyles ={{color:TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}}
                     handleChange={text => setFieldValue('lastName', text)}
                   />
 
@@ -290,7 +294,8 @@ const SettingsProfile = () => {
                       setPhoneCode={handleCountryCodeChange}
                       setPhoneError={setPhoneError}
                       setphoneNumberStatusCode={setphoneNumberStatusCode}
-                    />
+                      labelStyles ={{color:TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}}
+                      />
                   )}
 
                   <CustomInput
@@ -304,6 +309,7 @@ const SettingsProfile = () => {
                     // setFieldError={setEmailError}
                     // setEmailstatusCode={setEmailstatusCode}
                     fieldName="email"
+                    labelStyles ={{color:TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}}
                     handleChange={text => setFieldValue('email', text)}
                   />
                 </View>
@@ -317,7 +323,7 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, {color: FourthColor}]}>
+                        <Text style={[styles.text, {color: TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}]}>
                           City
                         </Text>
                       </View>
@@ -390,7 +396,7 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, {color: FourthColor}]}>
+                        <Text style={[styles.text, {color: TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold,fontSize:12}]}>
                           State
                         </Text>
                       </View>
@@ -470,7 +476,7 @@ const SettingsProfile = () => {
                         width: responsiveWidth(89),
                         marginLeft: 'auto',
                       }}>
-                      <Text style={[styles.text, {color: FourthColor}]}>
+                      <Text style={[styles.text, {color: TextColorGreen,fontFamily:Inter_SemiBold.Inter_SemiBold}]}>
                         Zip Code
                       </Text>
                     </View>
@@ -483,7 +489,7 @@ const SettingsProfile = () => {
                       onChangeText={handleChange('zipCode')}
                     />
                   </View>
-
+                  <Text></Text>
                   <View
                     style={{
                       paddingVertical: responsiveWidth(6),
@@ -519,10 +525,11 @@ const SettingsProfile = () => {
                       }>
                       <Text
                         style={{
-                          fontSize: responsiveFontSize(1.9),
+                          fontSize: 14,
                           fontWeight: '600',
                           letterSpacing: 0.28,
                           color: 'white',
+                          fontFamily:Inter_SemiBold.Inter_SemiBold
                         }}>
                         Save
                       </Text>

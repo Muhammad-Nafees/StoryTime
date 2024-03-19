@@ -2,7 +2,7 @@ import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {Img_Paths} from '../../../assets/Imagepaths';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';
 import {
   responsiveFontSize,

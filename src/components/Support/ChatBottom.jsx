@@ -17,7 +17,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 const ChatBottom = ({setReload, reload, chatID}) => {
   const {GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND} = Img_Paths;
   const [profileImage, setProfileImage] = React.useState(null);

@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const SupportButton = ({title, onpress, input, loading}) => {

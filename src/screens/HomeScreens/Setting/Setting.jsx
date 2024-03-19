@@ -19,7 +19,7 @@ import {
 import { useSelector } from 'react-redux';
 import { base } from '../../../../services';
 import LogoutBtn from '../../../components/setting/LogoutBtn';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import SvgIcons from '../../../components/svgIcon/svgIcons';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
 import {SecondaryColor, FourthColor} from '../../Styles/Style';
@@ -122,12 +122,13 @@ const Setting = () => {
             <Typography
               style={{
                 fontSize: 14,
-                fontWeight: 600,
+                fontWeight: '600',
                 marginTop: responsiveWidth(3),
+                fontFamily:Inter_SemiBold.Inter_SemiBold
               }}>
               {USER?.username}
             </Typography>
-            <Typography style={{fontSize: 12, fontWeight: 600}}>
+            <Typography style={{fontSize:12, fontWeight: '400'}}>
               {USER?.email}
             </Typography>
           </View>
@@ -141,14 +142,14 @@ const Setting = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.listView}>
-        <Text
+        <Typography
           style={{
             fontWeight: '400',
             fontSize: 14,
             marginBottom: responsiveWidth(4),
           }}>
           GENERAL
-        </Text>
+        </Typography>
         <FlatList
           data={generalData}
           renderItem={({item, index}) => (
@@ -161,7 +162,7 @@ const Setting = () => {
         />
       </View>
       <View style={styles.listView}>
-        <Text
+        <Typography
           style={{
             fontWeight: '400',
             fontSize: 14,
@@ -169,7 +170,7 @@ const Setting = () => {
             marginTop:responsiveHeight(2)
           }}>
           LEGAL TERMS
-        </Text>
+        </Typography>
 
         <FlatList
           data={legalData}
@@ -179,6 +180,7 @@ const Setting = () => {
           keyExtractor={item => item.key}
         />
       </View>
+      <Text></Text>
       <LogoutBtn />
     </BackgroundWrapper>
   );

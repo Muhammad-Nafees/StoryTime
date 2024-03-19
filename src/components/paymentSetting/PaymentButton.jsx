@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 
 const PaymentButton = ({label, onpress}) => {
   return (

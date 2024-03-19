@@ -25,10 +25,11 @@ import {
   PrimaryColor,
   TextColorGreen,
 } from '../../screens/Styles/Style';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import {BlurView} from '@react-native-community/blur';
 import {Img_Paths} from '../../assets/Imagepaths/index';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
+import { moderateScale } from 'react-native-size-matters';
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const {handleSuccessCallback} = props || {};
@@ -61,7 +62,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
   };
 
   const handleCheckMatch = () => {
-    if (userInput.trim().toLowerCase() === randomWord.toLowerCase()) {
+    if (userInput.trim() === randomWord) {
       // console.log('Congratulations! Matched!');
       DeleteUserAccount();
       // handleSuccessCallback();
@@ -114,10 +115,10 @@ const ConfirmationModal = forwardRef((props, ref) => {
       {/* <BlurView style={styles.blur_view}
       blurAmount={5}>      
       <View style={styles.blur_content_container}> */}
-        <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
+        <ImageBackground  resizeMode="cover" style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
           <View
             style={{
-              height: inputError ? responsiveHeight(37) : responsiveHeight(34),
+              height: inputError ? responsiveHeight(37) : responsiveHeight(36),
              // height: inputError ? 255 : 230,
               width: responsiveWidth(85),
               borderRadius: 32,
@@ -125,7 +126,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
               justifyContent: 'center',
               alignItems: 'center',
               alignSelf:'center',
-              // top: responsiveHeight(30)
+              // paddingTop: responsiveHeight(2)
             
             }}>
             <Typography

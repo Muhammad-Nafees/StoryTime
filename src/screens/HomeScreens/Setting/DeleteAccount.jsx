@@ -1,6 +1,6 @@
 import SuccessModal from '../../../components/modals/SuccessModal';
 import React, {useEffect, useRef,useState} from 'react';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import { useNavigation } from '@react-navigation/native';
 import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 import { Black02, TextColorGreen, White} from '../../Styles/Style';

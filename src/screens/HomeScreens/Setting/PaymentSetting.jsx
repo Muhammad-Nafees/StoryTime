@@ -9,7 +9,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import EditPaymentCardModal from '../../../components/paymentSetting/EditPaymentCardModal';
 
 const PaymentSetting = ({navigation}) => {

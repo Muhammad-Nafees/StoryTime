@@ -57,7 +57,7 @@ import SvgIcons from '../../../components/svgIcon/svgIcons';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { SPACING, URL } from '../../../constants/Constant';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 
 const SubCategories = ({ route }) => {

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import SupportButton from '../../../components/Support/SupportButton';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';

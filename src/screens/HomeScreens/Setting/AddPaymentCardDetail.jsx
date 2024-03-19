@@ -10,7 +10,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reuseable-components/Typography';
 import PaymentInput from '../../../components/paymentSetting/PaymentInput';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
 import AddPaymentCardModal from '../../../components/paymentSetting/AddPaymentCardModal';

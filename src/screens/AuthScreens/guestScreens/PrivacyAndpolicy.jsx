@@ -6,8 +6,7 @@ import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-nat
 import NavigationsString from '../../../constants/NavigationsString';
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import BackButton from '../../../components/reuseable-components/BackButton';
-
+import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
 
 const PrivacyAndPolicy = () => {
     const {
@@ -26,12 +25,8 @@ const PrivacyAndPolicy = () => {
             <ScrollView>
 
                 <View style={{ width: responsiveWidth(95), marginLeft: "auto", }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: moderateVerticalScale(16), paddingTop: responsiveWidth(8) }}>
-                        <BackButton onPress={() => navigation.goBack()} leftarrow={LEFT_ARROW_IMG} />
-                        <View style={{ paddingHorizontal: moderateScale(14) }}>
-                            <Text style={{ color: "#000", fontWeight: "600", fontSize: responsiveFontSize(2.5) }}>Privacy Policy</Text>
-                        </View>
-                    </View>
+                    <ScreenHeader title={'Privacy Policy'}/> 
+
                 </View>
 
 
@@ -41,7 +36,7 @@ const PrivacyAndPolicy = () => {
                         <Text style={{ color: "#000", fontWeight: "400", }}>Please read Privacy Policy</Text>
                     </View>
 
-                    <View>
+                    <View style={{ paddingBottom: moderateVerticalScale(15) }}>
                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9), paddingBottom: responsiveWidth(1) }}>Reservation of Rights</Text>
                         <Text style={{ color: "#000", fontSize: responsiveFontSize(1.9), fontWeight: "400", lineHeight: 24 }}>
                             We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it’s linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.
@@ -60,7 +55,7 @@ const PrivacyAndPolicy = () => {
                         </Text>
                     </View>
 
-                    <View style={{ paddingBottom: responsiveWidth(7) }}>
+                    <View style={{ paddingVertical: moderateVerticalScale(15) }}>
                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9), paddingBottom: responsiveWidth(1) }}>Disclaimer</Text>
                         <Text style={{ color: "#000", fontWeight: "400", fontSize: responsiveFontSize(1.9), lineHeight: 24 }}>
                             To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:

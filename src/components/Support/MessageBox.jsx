@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
-import Typography from '../Typography';
+import Typography from '../reuseable-components/Typography';
 import {Img_Paths} from '../../assets/Imagepaths';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { responsiveHeight, responsiveScreenWidth } from 'react-native-responsive-dimensions';
