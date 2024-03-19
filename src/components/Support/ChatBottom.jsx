@@ -5,14 +5,21 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Text,
+  ImageBackground,
 } from 'react-native';
 import React from 'react';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {sendMessage} from '../../../services/api/support';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { sendMessage } from '../../../services/api/support';
 import ImageCropPicker from 'react-native-image-crop-picker';
-
-const ChatBottom = ({setReload, reload, chatID}) => {
-  const {GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND} = Img_Paths;
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import Typography from '../reusable-components/Typography';
+const ChatBottom = ({ setReload, reload, chatID }) => {
+  const { GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND } = Img_Paths;
   const [profileImage, setProfileImage] = React.useState(null);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -30,7 +37,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         cropping: true,
       });
       if (!image.didCancel) {
-        setProfileImage({uri: image.path});
+        setProfileImage({ uri: image.path });
         return image.path;
       } else {
         return null;
@@ -46,10 +53,9 @@ const ChatBottom = ({setReload, reload, chatID}) => {
       const image = await ImageCropPicker.openCamera({
         width: 300,
         height: 400,
-        cropping: true,
       });
       if (!image.didCancel) {
-        setProfileImage({uri: image.path});
+        setProfileImage({ uri: image.path });
         return image.path;
       } else {
         return null;
@@ -61,7 +67,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
   };
   const handleSendMessage = async () => {
     try {
-      const image = profileImage?.uri && {profileImage: profileImage?.uri};
+      const image = profileImage?.uri && { profileImage: profileImage?.uri };
       const payload = {
         text: input,
         media: image,
@@ -81,33 +87,59 @@ const ChatBottom = ({setReload, reload, chatID}) => {
     }
   };
   return (
-    <View k style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { height: profileImage ? responsiveHeight(12) : responsiveHeight(8) },
+      ]}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={handleGalleryPress}>
-          <Image style={{marginHorizontal: 5}} source={GALLERY_ICON} />
+          <Image style={{ marginHorizontal: 5 }} source={GALLERY_ICON} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleCameraPress}>
           <Image source={CAMERA__ICON} />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {profileImage && (
-            <Image
-              source={{uri: profileImage.uri}}
-              style={styles.selectedImage}
-            />
-          )}
+        <View
+          style={{
+            height: profileImage ? responsiveHeight(9) : responsiveHeight(4.5),
+            borderColor: '#AAAAAA',
+            borderWidth: 1,
+            borderRadius: 15,
+            marginHorizontal: 5,
+            paddingHorizontal: 10,
+            width: responsiveWidth(70),
+          }}>
           <TextInput
             placeholder="Send Message"
             placeholderTextColor="#AAAAAA"
-            style={[styles.inputfield, profileImage && {paddingLeft: 30}]}
+            style={[styles.inputfield, profileImage && { paddingLeft: 0 }]}
             onChangeText={e => setInput(e)}
             value={input}
-            // multiline
-            // numberOfLines={4}
+            multiline={true}
           />
+          <View>
+            {profileImage && (
+              <>
+                <View style={{ width: 100 }}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    source={{ uri: profileImage.uri }}
+                    style={styles.selectedImage}></ImageBackground>
+                  <TouchableOpacity
+                    style={styles.crossButton}
+                    onPress={() => setProfileImage(null)}>
+                    <Typography style={styles.cross}>
+                      {'×'}
+                    </Typography>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
         </View>
         {!loading ? (
           <TouchableOpacity
+            style={{ opacity: sendDisabled ? 0.3 : 1 }}
             onPress={sendDisabled ? null : handleSendMessage}
             disabled={sendDisabled}>
             <Image source={MESSAGE_SEND} />
@@ -128,8 +160,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 18.5,
     backgroundColor: '#FFF',
-    height: 74,
     justifyContent: 'center',
+    paddingBottom: responsiveHeight(1.5),
   },
   wrapper: {
     flexDirection: 'row',
@@ -138,22 +170,30 @@ const styles = StyleSheet.create({
   },
   inputfield: {
     borderWidth: 1,
-    borderColor: '#AAAAAA',
+    borderColor: 'transparent',
     borderRadius: 15,
-    width: 255,
-    height: 30,
-    fontSize: 12,
+    width: '100%',
+    height: responsiveHeight(4.5),
+    fontSize: responsiveFontSize(1.5),
     lineHeight: 14.52,
     color: '#000',
-    paddingHorizontal: 17,
-    paddingVertical: 7,
-    marginHorizontal: 5,
+    textAlignVertical: 'center',
   },
   selectedImage: {
-    width: 15,
-    height: 15,
+    width: 30,
+    height: 30,
     borderRadius: 2,
     position: 'absolute',
     left: 15,
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  crossButton: {
+    alignSelf: 'center',
+    bottom: 15,
+    marginLeft: 5
+  },
+  cross: {
+    color: '#AAAAAA',
+    fontSize: 15
+  }
 });

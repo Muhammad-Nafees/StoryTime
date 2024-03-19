@@ -19,8 +19,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import BackButton from '../../../components/BackButton';
-import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
+import { useNavigation, NavigationAction } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -30,8 +30,8 @@ import RecordingOliverData from '../../../components/profile/RecordingOliverData
 import IncognitoMode from '../../../components/profile/IncognitoMode';
 import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } from "../../../../services/api/profile/index"
 import { useDispatch, useSelector } from 'react-redux';
-import { setResponseUsersProfile } from '../../../../store/slices/addplayers/addPlayersSlice';
-import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const Profile = ({ route }) => {
 
@@ -57,8 +57,8 @@ const Profile = ({ route }) => {
 
   // Redux
   const dispatch = useDispatch();
-  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
-  const randomNumberforUpdateProfile = useSelector((state) => state?.addPlayers?.randomForProfileUpdate);
+  const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
+  const randomNumberforUpdateProfile = useSelector((state) => state?.getcategories?.randomForProfileUpdate);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
@@ -101,7 +101,8 @@ const Profile = ({ route }) => {
       });
 
       const responsestories = responseData?.data?.stories;
-      console.log("response in", responseData?.data)
+      console.log(responseData?.data, "RESPONSE FROM PROFILE :");
+
       setIsLoadingRecording(false);
       if (responsestories && type === "text") {
         console.log("responsestories text---- :", responsestories);
@@ -122,8 +123,6 @@ const Profile = ({ route }) => {
       console.log("err", error);
     };
   };
-
-
 
   const toggel_mode = async () => {
     try {
@@ -154,6 +153,39 @@ const Profile = ({ route }) => {
 
 
 
+
+  // isUserLoading ?
+  //   <ActivityIndicator /> :
+  //   <>
+  {/* <ImageBackground style={{ width: 160, height: 190, }} resizeMode="cover" source={require("../../../assets/profile-picture.png")}>
+
+        </ImageBackground> */}
+  {/* <View style={{ paddingBottom: 20 }}>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`@${responseUserProfile?.data?.username || 0}`}
+            </Text>
+          </View>
+
+          <View>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+            </Text>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              Following
+            </Text>
+          </View>
+
+          <View>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+
+            </Text>
+            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
+              Follower
+            </Text>
+          </View> */}
+  // </>
+
   return (
     <>
       {isPublicOrPrivate ? (
@@ -164,8 +196,108 @@ const Profile = ({ route }) => {
               width: SCREEN_WIDTH,
             }}
             source={BG_CONTAINER}>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+
+            <View style={{ flexDirection: "row", justifyContent: "space-around", }}>
+              <View style={{ paddingTop: responsiveWidth(6) }}>
+                <BackButton onPress={() => navigation?.goBack()} />
+              </View>
+
+              <View>
+                <View style={{ flexDirection: "row", }}>
+                  {
+                    isUserLoading ?
+                      <ActivityIndicator /> :
+                      <>
+                        <View style={{}}>
+                          <ImageBackground style={{ width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 3, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../../assets/profile-picture.png")}>
+
+                            <View style={{ width: responsiveWidth(30), height: responsiveHeight(17.5), justifyContent: "center" }}>
+                              <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold, textAlign: "center", paddingTop: responsiveWidth(15) }}>
+                                {`@${responseUserProfile?.data?.username || 0}`}
+                              </Text>
+                            </View>
+
+
+                            <View style={{ flexDirection: 'row', height: responsiveHeight(7), width: responsiveWidth(40), justifyContent: "space-around", alignItems: "center" }}>
+                              <View>
+                                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>
+                                  {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                                </Text>
+                                <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), fontFamily: Inter_Regular.Inter_Regular }}>
+                                  Following
+                                </Text>
+                              </View>
+
+                              <View>
+                                <View style={{}}>
+                                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>
+                                    {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                                  </Text>
+                                </View>
+                                <View>
+                                  <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), fontFamily: Inter_Regular.Inter_Regular }}>
+                                    Followers
+                                  </Text>
+                                </View>
+                              </View>
+
+                            </View>
+
+                          </ImageBackground>
+                        </View>
+
+
+                      </>
+                  }
+
+
+                  <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6), width: responsiveWidth(30) }}>
+                    {
+                      USER?._id === FriendIdRTK ? (
+                        <>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setChangeMode(1)
+                              setType("video");
+                              toggel_mode();
+                              setProfileResponse([]);
+                              setResponse_ProfileVideo([]);
+                            }
+                            }
+                            style={[
+                              styles.back_button,
+                              {
+                                backgroundColor: 'rgba(57, 94, 102, 0.5)',
+                              },
+                            ]}>
+                            <Image
+                              style={styles.left_arrow}
+                              source={require('../../../assets/incognito-icon.png')}
+                            />
+                          </TouchableOpacity>
+
+                          <View style={{ paddingHorizontal: moderateScale(7) }}>
+                            <SettingButton
+                              onPress={() => navigation.navigate("Setting")}
+                              image={SETTINGS_ICON}
+                            />
+                          </View>
+                        </>
+                      )
+                        :
+                        null
+                    }
+                  </View>
+
+
+                </View>
+                <View>
+
+                </View>
+              </View>
+            </View>
+
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
 
               <View style={{ paddingTop: responsiveWidth(6) }}>
                 <BackButton onPress={() => navigation?.goBack()} />
@@ -173,54 +305,19 @@ const Profile = ({ route }) => {
 
               <View
                 style={{
-                  height: responsiveHeight(45),
+                  height: responsiveHeight(40),
                   justifyContent: 'center',
                   alignItems: 'center',
-                  position: "relative",
-                  left: 10
+                  width: responsiveWidth(40)
                 }}>
 
-                {
-                  isUserLoading ?
-                    <ActivityIndicator /> :
-                    <>
 
-                      <View style={{ paddingBottom: 20 }}>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`@${responseUserProfile?.data?.username || 0}`}
-                        </Text>
-                      </View>
+              </View> */}
 
-                      <View>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`${responseUserProfile?.data?.noOfFollowings || 0}`}
-                        </Text>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          Following
-                        </Text>
-                      </View>
 
-                      <View>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          {`${responseUserProfile?.data?.noOfFollowers || 0}`}
+            {/* Incognito Icon----- */}
 
-                        </Text>
-                        <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-                          Follower
-                        </Text>
-                      </View>
-                    </>
-                }
-
-                {/* <Image
-                  style={{ width: 180, height: 200, resizeMode: 'center' }}
-                  source={require('../../../assets/bgoliver.png')}
-                /> */}
-              </View>
-
-              {/* Incognito Icon----- */}
-
-              <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
+            {/* <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
                 {
                   USER?._id === FriendIdRTK ? (
                     <>
@@ -256,10 +353,10 @@ const Profile = ({ route }) => {
                     :
                     null
                 }
-              </View>
+              </View> */}
 
 
-            </View>
+            {/* </View> */}
           </ImageBackground>
 
           <View

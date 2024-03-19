@@ -15,7 +15,6 @@ const UserApp = () => {
     return (
         <>
             <Provider store={store}>
-                <Toast />
                 <MenuProvider>
                     <App />
                 </MenuProvider>
@@ -23,7 +22,6 @@ const UserApp = () => {
         </>
     )
 };
-
 
 
 AppRegistry.registerComponent(appName, () => UserApp);

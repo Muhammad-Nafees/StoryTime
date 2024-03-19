@@ -5,7 +5,7 @@ import { useNavigation, useNavigationBuilder, } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
-import BackButton from '../BackButton';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
 import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
     const { FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryModalAfterDownloading, setSaveStoryModalAfterDownloading] = useState(false);
     const [isVisibleAfterDownloading, setIsVisibleAfterDownloading] = useState(false)
-    const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const textrecordUsers = useSelector((state) => state?.getcategories?.recordingText);
     const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);

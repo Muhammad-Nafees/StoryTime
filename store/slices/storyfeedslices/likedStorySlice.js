@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const likedstory_feed_slice = createSlice({
   name: 'LikedStoryFeed',
@@ -15,33 +15,32 @@ const likedstory_feed_slice = createSlice({
   },
 
   reducers: {
-    likedstoryfeed: (state, {payload}) => {
+    likedstoryfeed: (state, { payload }) => {
       state.storyId = payload;
     },
     likedCountapi: (state, action) => {
       console.log('likecount---', state.likeCount);
       state.likeCount = action.payload;
     },
-    likedCountingRTK: (state, {payload}) => {
+    likedCountingRTK: (state, { payload }) => {
       state.likeCount = payload;
     },
-    disLikedCountingRTK: (state, {payload}) => {
+    disLikedCountingRTK: (state, { payload }) => {
       state.disLikedCount = payload;
     },
-    storyFeedContent: (state, {payload}) => {
+    storyFeedContent: (state, { payload }) => {
       state.storyfeedContent = payload;
     },
-    storyFeedUsername: (state, {payload}) => {
+    storyFeedUsername: (state, { payload }) => {
       state.storyfeedUsername = payload;
     },
   },
 });
 
 export default likedstory_feed_slice.reducer;
-export const {
-  likedstoryfeed,
+export const { likedstoryfeed,
   likedCountingRTK,
   disLikedCountingRTK,
   storyFeedContent,
-  storyFeedUsername,
+  storyFeedUsername
 } = likedstory_feed_slice.actions;

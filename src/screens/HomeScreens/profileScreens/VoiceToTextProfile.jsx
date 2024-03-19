@@ -5,7 +5,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../Styles/Style";
 import { useSelector } from 'react-redux';
-import BackButton from '../../../components/BackButton';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import SettingButton from '../../../components/SettingButton';
@@ -34,10 +34,9 @@ const VoiceToTextProfile = ({ route }) => {
     const storyId = route?.params?.storyuserId;
     const IS_HIDDEN = route?.params?.isHidden;
     // redux
-    const profileUsersStories = useSelector((state) => state?.recordingData?.saveDatatoProfile);
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
-    const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+    const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
 
 
     const getStory_Byid_api = async () => {

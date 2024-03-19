@@ -188,7 +188,6 @@ const RegisterPassword = () => {
                             )}
                         </ScrollView>
                     </View>
-                    <Toast />
                 </>
             )}
         </Formik>

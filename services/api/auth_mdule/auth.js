@@ -115,7 +115,7 @@ export const refresh_token_api = async (refreshToken) => {
 
 export const registerapi = async (registerData, values) => {
 
-  const formData = {
+  const bodyData = {
     email: registerData?.values?.email,
     fcmToken: registerData?.values?.fcmToken,
     firstName: registerData?.values?.firstName,
@@ -131,8 +131,9 @@ export const registerapi = async (registerData, values) => {
     password: values.password,
     confirmPassword: values.confirmPassword,
   };
+  console.log("bodyData---- :`", bodyData);
   try {
-    const response = await axios.post(Base_Url + register_endpoint, formData);
+    const response = await axios.post(Base_Url + register_endpoint, bodyData);
     return response.data;
   } catch (err) {
     console.log('error', err);
@@ -180,34 +181,39 @@ export const userandcity_api = async statesinfo => {
     console.log('resposeData--', responseData);
     return responseData;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 
 
 
-export const username_api = async (data) => {
+console.log("URL- REGISTER", Base_Url + "user/availability")
+export const userAvailability_Api = async (data, phonecode) => {
+  const { email, phoneNo, username } = data;
+  const bodyData = {
+    username: username,
+    email: email,
+    completePhone: `${phonecode + phoneNo}`,
+  };
+
   try {
+    const responseData = await axios.post(Base_Url + "user/availability", bodyData);
+    console.log('res---', responseData);
+    return responseData.data;
 
-    console.log("=========data", data)
-    const requestBody = {};
-
-    // const responseData = await axios.post(Base_Url + username_endpoint, data)
-    const response = await fetch(Base_Url + username_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    const responseData = await response.json();
-    console.log('usernameapi---', responseData);
-    return responseData;
   } catch (error) {
     throw error;
   }
 };
+
+// const response = await fetch(Base_Url + username_endpoint, {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify(data),
+// });
+// const responseData = await response.json();
 
 
 

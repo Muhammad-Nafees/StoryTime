@@ -6,17 +6,17 @@ import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsive
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import StoryUsers from '../../../components/StoryUsers';
+import StoryUsers from '../../../components/categories/StoryUsers';
 import AddFriendUsers from '../../../components/AddFriendUsers';
 import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { addFriends_api } from '../../../../services/api/add-members';
-import AddFriends_Categories from '../../../components/AddPlayers_Categories';
+import AddFriends_Categories from '../../../components/reusable-components/addplayer/AddPlayers_Categories';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import _ from 'lodash';
 import { tag_Friends } from '../../../../services/api/profile';
 import { useSelector } from 'react-redux';
-import { addTagPlayers } from '../../../../store/slices/addplayers/addPlayersSlice';
-import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { addTagPlayers } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_Categories';
 
 
 const TagFriends = ({ route }) => {
@@ -31,7 +31,7 @@ const TagFriends = ({ route }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
     // redux
-    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers);
+    const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers);
     const storyId = route?.params?.storyId;
 
     const addFriends_api_handler = async () => {

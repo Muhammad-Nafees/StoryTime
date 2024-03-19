@@ -23,7 +23,7 @@ export const Img_Paths = {
   CREATE_PASSWORD_IMG: require('../../assets/createpassword.png'),
   CREATE_NEW_PASSWORD_IMG: require('../../assets/createNewpassword.png'),
   // c:\Users\dell\Downloads\.png
-
+  PAUSE_IMG: require("../../assets/pause-img.png"),
   // Categories File-----
 
   // ANIMAL_IMG: require("../../assets/Categories-image/animal-icon.png"),
@@ -290,6 +290,7 @@ export const Img_Paths = {
   DROP_ICON: require('../../assets/bottom-icon.png'),
   DEFAULT_ICON: require('../../assets/defaultIcon.png'),
   // DEFAULT_COVER: require("../../assets/plain-grey-background.png")
+  BG_Del:require("../../assets/Bgdel.png"),
 
   //Report a Problem
   MESSAGE_ICON: require('../../assets/support_story_time.png'),

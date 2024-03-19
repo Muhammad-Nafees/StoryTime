@@ -1,18 +1,18 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/Typography';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import Typography from '../../../components/reusable-components/Typography';
 import EditPaymentCardModal from '../../../components/paymentSetting/EditPaymentCardModal';
 
-const PaymentSetting = ({navigation}) => {
+const PaymentSetting = ({ navigation }) => {
   const [isVisible, setVisible] = React.useState(false);
   const {
     LEFT_ARROW_IMG,

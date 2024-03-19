@@ -3,35 +3,27 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import {
-  CommonActions,
-  NavigationContainer,
-  useFocusEffect,
   useNavigation,
-  useRoute,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreens/storyfeed/Home';
 import Profile from '../screens/HomeScreens/profileScreens/Profile';
-import Categories from '../screens/HomeScreens/catagoriesaddMembers/Categories';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import Categories from '../screens/HomeScreens/categoriesScreens/Categories';
+import { Image, View } from 'react-native';
 import NavigationsString from '../constants/NavigationsString';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { Img_Paths } from '../assets/Imagepaths';
-import FirstScreenPlayFlow from '../screens/HomeScreens/playslowscreens/FirstScreenPlayFlow';
 import AddFiends from '../screens/HomeScreens/storyfeed/AddFriends';
-import AddPlayers from '../screens/HomeScreens/catagoriesaddMembers/Add_Players';
-import SubCategories from '../screens/HomeScreens/catagoriesaddMembers/SubCategories';
+import AddPlayers from '../screens/HomeScreens/categoriesScreens/Add_Players';
+import SubCategories from '../screens/HomeScreens/categoriesScreens/SubCategories';
 import FeedChat from '../screens/HomeScreens/storyfeed/FeedChat';
-import Sequence from '../screens/HomeScreens/catagoriesaddMembers/sequenceofPlayer/Sequence';
-import SecondPlayFlowScreen from '../screens/HomeScreens/playslowscreens/SecondPlayFlowScreen';
-import VideoFirstStartScreen from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoFirstStartScreen';
-import VideoFirstUser from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoRecordingStart';
-import VideoSecondStory from '../screens/HomeScreens/playslowscreens/videoplayerscreens/VideoSecondStory';
-import FirstUser from '../screens/HomeScreens/playslowscreens/FirstUser';
-import FirstUserStory from '../screens/HomeScreens/playslowscreens/FirstUserStory';
+import Sequence from '../screens/HomeScreens/categoriesScreens/Sequence';
+import VideoFirstStartScreen from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/Index';
+import VideoFirstUser from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoRecordingStart';
+import VideoSecondStory from '../screens/HomeScreens/categoriesScreens/videoplayerscreens/VideoSecondStory';
 import TagFriends from '../screens/HomeScreens/profileScreens/TagFriends';
 import AddUrl from '../screens/HomeScreens/profileScreens/AddUrl';
 import {
@@ -41,7 +33,7 @@ import {
   SubscriptionDetails,
   SettingsProfile,
   DeleteAccount,
-  BlockUser,
+  BlockUser
 } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
@@ -49,17 +41,23 @@ import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTex
 import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
-import React, { useEffect, useReducer, useRef, useState, useTransition } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
-// import Support from '../screens/HomeScreens/setting/Support';
-// import SupportMessage from '../screens/HomeScreens/setting/SupportMessage';
-// import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageList';
-// import Report from '../screens/HomeScreens/setting/Report';
-// import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
-// import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
-// import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
-import EditAddPaymentCardDetail from '../screens/HomeScreens/setting/EditAddPaymentCardDetail';
+import Support from '../screens/HomeScreens/Setting/Support';
+import SupportMessage from '../screens/HomeScreens/Setting/SupportMessage';
+import SupportMessageList from '../screens/HomeScreens/Setting/SupportMessageList';
+import Report from '../screens/HomeScreens/Setting/Report';
+import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
+import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
+import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
+import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
+import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
+import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
+import GoNextPlayer from '../screens/HomeScreens/categoriesScreens/playFlowScreens/GoNextPlayer';
+import EditAddPaymentCardDetail from '../screens/HomeScreens/Setting/EditAddPaymentCardDetail';
+
+
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -69,22 +67,7 @@ const Navigations = () => {
     REPORT_USER,
     ADD_PLAYERS,
     PLAYER_SEQUENCE,
-    FAQ_ROUTE,
-    SETTING,
-    NOTIFICATION,
-    SUBSCRIPTION_DETAILS,
-    PROFILE,
-    BLOCK_USER,
-    DELETE_ACCOUNT,
     LOGIN,
-    SUPPORT,
-    SUPPORT_MESSAGE,
-    SUPPORT_MESSAGE_LIST,
-    REPORT,
-    PAYEMENT,
-    ADD_PAYMENT_CARD,
-    ADD_PAYMENT_CARD_DETAIL,
-    EDIT_ADD_PAYMENT_CARD_DETAIL,
   } = NavigationsString;
 
   return (
@@ -93,6 +76,7 @@ const Navigations = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         headerShown: false,
       }}
+
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
       <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
@@ -101,36 +85,36 @@ const Navigations = () => {
       <Stack.Screen name={REPORT_USER} component={Reportuser} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
-      <Stack.Screen name={SETTING} component={Setting} />
-      <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={'Setting'} component={Setting} />
+      <Stack.Screen name={'Notification'} component={Notification} />
       <Stack.Screen
-        name={SUBSCRIPTION_DETAILS}
+        name={'SubscriptionDetails'}
         component={SubscriptionDetails}
       />
-      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
-      <Stack.Screen name={PROFILE} component={SettingsProfile} />
-      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
-      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
+      <Stack.Screen name={'Faq'} component={FAQ} />
+      <Stack.Screen name={'SettingsProfile'} component={SettingsProfile} />
+      <Stack.Screen name={'BlockUser'} component={BlockUser} />
+      <Stack.Screen name={'DeleteAccount'} component={DeleteAccount} />
       <Stack.Screen
         name={LOGIN}
         component={Login}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name={SUPPORT} component={Support} />
-      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
-      <Stack.Screen name={REPORT} component={Report} /> */}
-      {/* <Stack.Screen
-        name={SUPPORT_MESSAGE_LIST}
-        component={SupportMessageList}
-      /> */}
-      {/* <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
-      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} /> */}
-      {/* <Stack.Screen
-        name={ADD_PAYMENT_CARD_DETAIL}
-        component={AddPaymentCardDetail}
-      /> */}
+      <Stack.Screen name={'Support'} component={Support} />
+      <Stack.Screen name={'SupportMessage'} component={SupportMessage} />
+      <Stack.Screen name={'Report'} component={Report} />
       <Stack.Screen
-        name={EDIT_ADD_PAYMENT_CARD_DETAIL}
+        name={'SupportMessageList'}
+        component={SupportMessageList}
+      />
+      <Stack.Screen name={'PayementSetting'} component={PaymentSetting} />
+      <Stack.Screen name={'AddCard'} component={AddPaymentCard} />
+      <Stack.Screen
+        name={'AddPaymentCardDetail'}
+        component={AddPaymentCardDetail}
+      />
+      <Stack.Screen
+        name={'EditAddPaymentCardDetail'}
         component={EditAddPaymentCardDetail}
       />
       <Stack.Screen
@@ -165,10 +149,6 @@ const PLayFlowScreens = () => {
   const Stack = createStackNavigator();
 
   const {
-    FIRSTSCREENPLAYFLOW,
-    FIRST_USER,
-    SECONDSCREENPLAYFLOW,
-    VIDEO_SECOND_USER,
     VIDEO_FIRST_SCREEN,
     VIDEO_FIRST_USER,
     SECOND_USER_STORY,
@@ -181,15 +161,15 @@ const PLayFlowScreens = () => {
         headerShown: false,
       }}>
       <Stack.Screen
-        name={FIRSTSCREENPLAYFLOW}
-        component={FirstScreenPlayFlow}
+        name="SelectGamePoint"
+        component={SelectGamePoint}
       />
       <Stack.Screen
-        name={SECONDSCREENPLAYFLOW}
-        component={SecondPlayFlowScreen}
+        name="StartGame"
+        component={StartGame}
       />
-      <Stack.Screen name={FIRST_USER} component={FirstUser} />
-      <Stack.Screen name="FirstUserStorytext" component={FirstUserStory} />
+      <Stack.Screen name="StartRecordingVoice" component={StartRecordingVoice} />
+      <Stack.Screen name="GoNextPlayer" component={GoNextPlayer} />
 
       {/* <Stack.Screen name="SecondUsertext" component={SecondUser} /> */}
 
@@ -283,7 +263,7 @@ const BottomTavNavigator = () => {
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
 
-  const FriendIdRTK = useSelector((state) => state?.addPlayers?.friendId);
+  const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
   return (

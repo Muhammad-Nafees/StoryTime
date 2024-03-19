@@ -11,6 +11,7 @@ const Routes = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
     const authenticateUser = async () => {
       try {
         const accessToken = await AsyncStorage.getItem('isLoggedIn');

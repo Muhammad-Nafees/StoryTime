@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,26 +7,26 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {useDispatch, useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
-import {SCREEN_HEIGHT} from '../../../constants/Constant';
-import {PrimaryColor, SecondaryColor} from '../../Styles/Style';
-import {PassionOne_Regular} from '../../../constants/GlobalFonts';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
-import {fetchallFeedStories} from '../../../../services/api/storyfeed';
-import {HomeHeader, UserList, FrameContent} from '../../../components';
-import {setFriendId} from '../../../../store/slices/addplayers/addPlayersSlice';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import { SCREEN_HEIGHT } from '../../../constants/Constant';
+import { PrimaryColor, SecondaryColor } from '../../Styles/Style';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { fetchallFeedStories } from '../../../../services/api/storyfeed';
+import { HomeHeader, UserList, FrameContent } from '../../../components';
+import { setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
 
 const Home = () => {
   //destructures
-  const {SPLASH_SCREEN_IMAGE} = Img_Paths;
+  const { SPLASH_SCREEN_IMAGE } = Img_Paths;
 
   //hooks
   const dispatch = useDispatch();
 
   //redux states
-  const {user} = useSelector(state => state?.authSlice);
+  const { user } = useSelector(state => state?.authSlice);
 
   //states
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +101,7 @@ const Home = () => {
   //render functions
   const keyExtractor = (_, index) => `home.${index}`;
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return <FrameContent key={index} item={item} />;
   };
 

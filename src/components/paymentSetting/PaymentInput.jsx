@@ -1,7 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {TextInput} from 'react-native-gesture-handler';
-import Typography from '../Typography';
+import { TextInput } from 'react-native-gesture-handler';
+import Typography from '../reusable-components/Typography';
 
 const PaymentInput = ({
   label,
