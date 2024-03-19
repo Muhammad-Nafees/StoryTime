@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React ,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import {Img_Paths} from '../../../assets/Imagepaths';
 import Typography from '../../../components/Typography';
@@ -12,21 +12,14 @@ import {
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import MessageList from '../../../components/Support/MessageList';
 import SupportButton from '../../../components/Support/SupportButton';
-import socketServcies from '../../../../services/sockets';
-import { Inter_Medium, Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
+import {
+  Inter_Medium,
+  Inter_Regular,
+  Inter_SemiBold,
+} from '../../../constants/GlobalFonts';
 
 const Support = ({navigation}) => {
   const {LEFT_ARROW_IMG} = Img_Paths;
-
-  useEffect(()=>{
-    socketServcies.initializeSocket()
-  },[])
-  
-  useEffect(() => {
-    socketServcies.on('received_message',(msg)=>{
-      console.log('message received in App',msg)
-    })
-  }, [])
 
   const handleScreen = () => {
     navigation.navigate('SupportMessage');
@@ -82,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
-    fontFamily:Inter_SemiBold.Inter_SemiBold
+    fontFamily: Inter_SemiBold.Inter_SemiBold,
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),

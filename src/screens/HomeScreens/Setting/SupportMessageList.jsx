@@ -3,7 +3,7 @@ import {Img_Paths} from '../../../assets/Imagepaths';
 import Typography from '../../../components/Typography';
 import {FourthColor, SecondaryColor} from '../../Styles/Style';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import MessageListItems from '../../../components/Support/MessageListItems';
 import {
@@ -14,12 +14,11 @@ import {
 import ChatBottom from '../../../components/Support/ChatBottom';
 import {getMessageWithId} from '../../../../services/api/support';
 import {Inter_SemiBold} from '../../../constants/GlobalFonts';
+import socketServcies from '../../../../services/sockets';
 
 const SupportMessageList = ({navigation, route}) => {
   const [messageList, setMessageList] = React.useState([]);
-  const [reload, setReload] = React.useState(false);
-  const {chatID,img} = route.params;
-  console.log('🚀 ~ SupportMessageList ~ chatID:', chatID);
+  const {chatID, img} = route.params;
   const {LEFT_ARROW_IMG} = Img_Paths;
 
   React.useEffect(() => {
@@ -35,7 +34,21 @@ const SupportMessageList = ({navigation, route}) => {
       }
     };
     getAllChatsWithId();
-  }, [reload]);
+  }, []);
+
+  React.useEffect(() => {
+    socketServcies.initializeSocket();
+  }, []);
+  React.useEffect(() => {
+    socketServcies.on('received_message', msg => {
+      console.log('message received in App', msg);
+      setMessageList(prevMessageList => [
+        ...prevMessageList,
+        {adminMessage: msg},
+      ]);
+    });
+  }, []);
+
   return (
     <BackgroundWrapper disableScrollView coverScreen>
       <View style={styles.first_container}>
@@ -48,8 +61,12 @@ const SupportMessageList = ({navigation, route}) => {
           <Typography style={styles.categories_text}>Support</Typography>
         </View>
       </View>
-      <MessageListItems messageList={messageList} chatID={chatID} img={img}/>
-      <ChatBottom setReload={setReload} reload={reload} chatID={chatID} />
+      <MessageListItems messageList={messageList} chatID={chatID} img={img} />
+      <ChatBottom
+        setMessageList={setMessageList}
+        messageList={messageList}
+        chatID={chatID}
+      />
     </BackgroundWrapper>
   );
 };

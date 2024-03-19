@@ -19,7 +19,6 @@ const messages = [
   },
 ];
 const MessageListItems = ({messageList}) => {
-  console.log('🚀 ~ MessageListItems ~ messageList:', messageList);
   return (
     <FlatList
       data={messageList}
