@@ -67,7 +67,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
       DeleteUserAccount();
       // handleSuccessCallback();
       // close();
-    } else if (userInput.trim().toLowerCase() === ''){
+    } else if (userInput.trim() === ''){
       setInputError('Please type the word');
     }else{
       setInputError('Incorrect word. Please re-enter.');
@@ -118,7 +118,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
         <ImageBackground  resizeMode="cover" style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={BG_Del}>
           <View
             style={{
-              height: inputError ? responsiveHeight(37) : responsiveHeight(36),
+              height: inputError ? responsiveHeight(37) : responsiveHeight(33),
              // height: inputError ? 255 : 230,
               width: responsiveWidth(85),
               borderRadius: 32,
