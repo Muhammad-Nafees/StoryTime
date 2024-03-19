@@ -1,5 +1,4 @@
 // imports libraries
-
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   ImageBackground,
@@ -39,8 +38,7 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import { setCategoriesId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
-import { addFriends_api } from '../../../../services/api/add-members';
-import { addFriends, setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import Typography from '../../../components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
@@ -48,7 +46,6 @@ import BlurViewGuest from '../../../components/categories/guestCategories/BlurVi
 import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
 import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
 import GuestNumber from '../../../components/categories/guestCategories/GuestNumber';
-import Toast from 'react-native-toast-message';
 
 const Categories = () => {
   //destructures
@@ -154,32 +151,6 @@ const Categories = () => {
     }
   };
 
-
-  const addFriends_api_handler = async () => {
-    try {
-      const responseData = await addFriends_api();
-      const usernameObj = responseData?.data?.users?.find(
-        item => item.username === isUsernameInputValue,
-      );
-      if (usernameObj) {
-        const userid = usernameObj._id;
-        const username = usernameObj?.username;
-        console.log('username----', username);
-        dispatch(addFriends({ username, userid }));
-        setIsUsernameInputValue('');
-      } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate("AddPlayers");
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Friends Not Found',
-        });
-      }
-      return responseData;
-    } catch (error) {
-      console.log(error, "ERROR FROM FRIENDS CATEGORIES");
-    }
-  };
 
   const fetchCategories = async (page = 1) => {
     try {
@@ -289,20 +260,7 @@ const Categories = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <View
-        key={item?.id}
-        style={{
-          backgroundColor:
-            item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
-          width: responsiveWidth(30),
-          borderRadius: 10,
-          height: responsiveHeight(18.5),
-          alignItems: 'center',
-          margin: responsiveWidth(1.2),
-          borderWidth: 3,
-          borderColor:
-            item?.namerandom === 'Random' ? 'rgba(238, 95, 138, 1)' : '#5797A5',
-        }}>
+      <>
         <StoryUsers
           onPress={() => handleStoryUser(item?.id, item?.name)}
           images={item?.image}
@@ -315,7 +273,7 @@ const Categories = () => {
           <BlurViewGuest
           />
         )}
-      </View>
+      </>
     );
   };
 
@@ -373,10 +331,11 @@ const Categories = () => {
             (<>
               {/* textinputField */}
               <MainInputField
-                onPress={addFriends_api_handler}
                 inputValue={isUsernameInputValue}
                 OnchangeText={setIsUsernameInputValue}
-                placeholder="Username" />
+                setUsernameInput={setIsUsernameInputValue}
+                placeholder="Username"
+              />
               {/* added players */}
               <ShowAddedPlayers />
             </>

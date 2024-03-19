@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setStoryUserImage } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import { URL } from '../../constants/Constant';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
+import { TextColorGreen } from '../../screens/Styles/Style';
 
 const StoryUsers = ({
   images,
@@ -30,56 +31,75 @@ const StoryUsers = ({
   };
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <TouchableOpacity
-        onPress={item?.namerandom == 'Random' ? handleRandomClick : handlePress}
-        style={{
-          marginVertical: moderateVerticalScale(10),
-          borderRadius: 10,
-          width: responsiveWidth(25),
-          height: responsiveHeight(11),
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor:
-            item?.namerandom === 'Random'
-              ? 'rgba(238, 95, 138, 1)'
-              : item.background
-                ? item.background
-                : backgroundColor
-                  ? backgroundColor
-                  : '#56B6A4',
-        }}
-        disabled={disabled}>
-        {item?.namerandom == 'Random' ? (
-          <Image
-            style={{ width: 65, height: 65, borderRadius: 10 }}
-            resizeMode="center"
-            source={item?.imageludo}
-          />
-        ) : (
-          <Image
-            style={{
-              width: text === 'Whale' ? 80 : 65,
-              height: 65,
-              borderRadius: 10,
-            }}
-            resizeMode="contain"
-            source={{ uri: imageLink }}
-          />
-        )}
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: '#FFF',
-          fontWeight: '400',
-          fontSize: responsiveFontSize(1.9),
-          letterSpacing: 0.4,
-          fontFamily: PassionOne_Regular.passionOne,
-          textAlign: 'center',
-        }}>
-        {item?.namerandom == 'Random' ? item?.namerandom : text}
-      </Text>
+    <View
+      key={item?.id}
+      style={{
+        backgroundColor:
+          item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
+        width: responsiveWidth(30),
+        borderRadius: 10,
+        height: responsiveHeight(18.5),
+        alignItems: 'center',
+        margin: responsiveWidth(1.2),
+        borderWidth: 3,
+        borderColor:
+          item?.namerandom === 'Random'
+            ? 'rgba(238, 95, 138, 1)'
+            : '#5797A5',
+      }}>
+
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <TouchableOpacity
+          onPress={item?.namerandom == 'Random' ? handleRandomClick : handlePress}
+          style={{
+            marginVertical: moderateVerticalScale(10),
+            borderRadius: 10,
+            width: responsiveWidth(25),
+            height: responsiveHeight(11),
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor:
+              item?.namerandom === 'Random'
+                ? 'rgba(238, 95, 138, 1)'
+                : item.background
+                  ? item.background
+                  : backgroundColor
+                    ? backgroundColor
+                    : '#56B6A4',
+          }}
+          disabled={disabled}>
+          {item?.namerandom == 'Random' ? (
+            <Image
+              style={{ width: 65, height: 65, borderRadius: 10 }}
+              resizeMode="center"
+              source={item?.imageludo}
+            />
+          ) : (
+            <Image
+              style={{
+                width: text === 'Whale' ? 80 : 65,
+                height: 65,
+                borderRadius: 10,
+              }}
+              resizeMode="contain"
+              source={{ uri: imageLink }}
+            />
+          )}
+        </TouchableOpacity>
+        <Text
+          style={{
+            color: '#FFF',
+            fontWeight: '400',
+            fontSize: responsiveFontSize(1.9),
+            letterSpacing: 0.4,
+            fontFamily: PassionOne_Regular.passionOne,
+            textAlign: 'center',
+          }}>
+          {item?.namerandom == 'Random' ? item?.namerandom : text}
+        </Text>
+      </View>
     </View>
+
   );
 };
 

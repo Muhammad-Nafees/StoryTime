@@ -17,7 +17,9 @@ import { rearrangedFriends } from '../../../../store/slices/categoriesSlice/cate
 import HeaderSequence from '../../../components/categories/HeaderSequence';
 import SelectSequencePlayers from '../../../components/categories/guestCategories/SelectSequencePlayers';
 
+
 const Sequence = () => {
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { SPLASH_SCREEN_IMAGE } = Img_Paths;
