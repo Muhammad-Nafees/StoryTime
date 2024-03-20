@@ -13,29 +13,42 @@ import { Img_Paths } from '../../assets/Imagepaths';
 
 const CustomInput = (props) => {
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths
-  console.log("value--- :", props?.value);
-  // const debouncedApiCall = useRef(
-  //   _.debounce(async (value, setFieldError, fieldName) => {
-  //     const response = await username_api({ email: fieldName === 'email' ? value : '' });
-  //     props.setEmailstatusCode(response.statusCode)
-  //     if (response?.statusCode !== 200) {
-  //       if (fieldName === 'email') {
-  //         setFieldError('Email already exists');
-  //       }
-  //     } else {
-  //       setFieldError('');
-  //       setFieldError('');
-  //     }
-  //   }, 850)
-  // ).current;
+  console.log("value--- :", props?.value)
+  const debouncedApiCall = useRef(
+    _.debounce(async (value, setFieldError, fieldName) => {
+      const response = await username_api({ email: fieldName === 'email' ? value : '' });
+      props.setEmailstatusCode(response.statusCode)
+      if (response?.statusCode !== 200) {
+        if (fieldName === 'email') {
+          setFieldError('Email already exists');
+        }
+      } else {
+        setFieldError('');
+        setFieldError('');
+      }
+    }, 850)
+  ).current;
 
-  // const handleChangeText = async (text, fieldName) => {
-  //   props.handleChange(text);
-  //   if (fieldName === 'email' && text !== '') {
-  //     debouncedApiCall(text, props.setFieldError, fieldName);
-  //   }
-  // };
+  const handleChangeText = async (text, fieldName) => {
+    props.handleChange(text);
+    if (fieldName === 'email' && text !== '') {
+      debouncedApiCall(text, props.setFieldError, fieldName);
+    }
+  };
 
+  const inputStyle = {
+    color: "rgba(0,0,0,1)",
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: verticalScale(50),
+    textAlignVertical: 'center',
+    color: '#000',
+    paddingLeft: 28,
+    fontFamily: Inter_Regular.Inter_Regular,
+    fontSize: responsiveFontSize(1.8),
+    backgroundColor: TextinputColor,
+  };
 
   // paddingVertical: props?.type == "email" || props?.type == "password" ? null : 10
 
@@ -50,9 +63,8 @@ const CustomInput = (props) => {
 
   return (
     <>
-      {/* props.labelStyles Remaining */}
       <View style={{ marginLeft: "auto", width: responsiveWidth(90), }}>
-        <Text style={[props.labelStyles, { color: FourthColor, fontWeight: "600", }]}>
+        <Text style={[props?.labelStyles, { color: FourthColor, fontWeight: "600", }]}>
           {props.label}
         </Text>
       </View>
@@ -89,7 +101,7 @@ const CustomInput = (props) => {
                   ? '600'
                   : '400',
             }}
-            onChangeText={(text) => props?.handleChange(text)}
+            onChangeText={(text) => handleChangeText(text, props.fieldName)}
             underlineColorAndroid="transparent"
             secureTextEntry={props?.type == 'password' ? !props?.showPassword : null}
             placeholderTextColor="gray"
