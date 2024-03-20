@@ -1,36 +1,33 @@
 import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, progre, } from 'react-native'
 import { ProgressBar } from "@react-native-community/progress-bar-android"
-import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
 import { useNavigation, useNavigationBuilder, } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
-import BackButton from '../reuseable-components/BackButton';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { Defs, G, Path, Rect, Svg } from 'react-native-svg';
 import { useEffect, useState } from 'react';
 import StoryTimeSaved from './StoryTimeSaved';
 import { Inter_Regular } from '../../constants/GlobalFonts';
-import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import { resetFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 
 
 const DownloadingVideoModal = ({ isVisibleFirstVideoFlow, setIsVisibleFirstVideoFlow }) => {
 
     const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BGIMAGE_DOWNLOADING, NEXT_PLAYER_IMG } = Img_Paths;
+    const { BGIMAGE_DOWNLOADING } = Img_Paths;
     const SCREENWIDTH = Dimensions.get("window").width
     const SCREENHEIGHT = Dimensions.get("window").height;
     const { VIDEO_SECOND_USER, FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryVideoModalAfterDownloading, setSaveStoryVideoModalAfterDownloading] = useState(false);
     const [isVisibleVideoAfterDownloading, setIsVisibleVideoAfterDownloading] = useState(false)
-    const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const textrecordUsers = useSelector((state) => state?.getcategories?.recordingText);
     const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);
     const dispatch = useDispatch()
+
 
 
     useEffect(() => {

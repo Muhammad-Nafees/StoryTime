@@ -12,9 +12,9 @@ import { Circle, Path, Svg } from 'react-native-svg';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { rearrangedFriends } from '../../../store/slices/addplayers/addPlayersSlice';
+import { rearrangedFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
-import { Img_Paths } from '../../assets/Imagepaths/index';
+import { Img_Paths } from '../../assets/Imagepaths';
 
 const StoryTimeSaved = ({
   isVisible,
@@ -27,7 +27,7 @@ const StoryTimeSaved = ({
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const sequenceUser = useSelector(state => state.addPlayers?.gameFriends);
+  const sequenceUser = useSelector(state => state.getcategories?.gameFriends);
   const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
 
   const close = () => {
@@ -53,94 +53,94 @@ const StoryTimeSaved = ({
       onModalHide={close}
       backdropOpacity={0.95}
       onBackdropPress={close}>
-        <ImageBackground style={{height:SCREEN_HEIGHT,width:SCREEN_WIDTH,alignSelf:'center',justifyContent:'center'}} source={SAVE_STORY_BACKGROUND}>
-      <View
-        style={{
-          width: responsiveWidth(80),
-          // height: responsiveHeight(29),
-          padding: responsiveHeight(1.6),
-          backgroundColor: '#FFF',
-          borderRadius: 30,
-          paddingHorizontal: responsiveWidth(2),
-          alignSelf: 'center',
-        }}>
+      <ImageBackground style={{ height: SCREEN_HEIGHT, width: SCREEN_WIDTH, alignSelf: 'center', justifyContent: 'center' }} source={SAVE_STORY_BACKGROUND}>
         <View
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: moderateVerticalScale(12),
+            width: responsiveWidth(80),
+            // height: responsiveHeight(29),
+            padding: responsiveHeight(1.6),
+            backgroundColor: '#FFF',
+            borderRadius: 30,
+            paddingHorizontal: responsiveWidth(2),
+            alignSelf: 'center',
           }}>
-          {iconName ? (
-            <View
-              style={{
-                marginTop: 'auto',
-                marginBottom: 'auto',
-                borderRadius: 100,
-                backgroundColor: pastelGreen,
-                padding: responsiveWidth(2),
-              }}>
-              <SvgIcons name={iconName} width={27} height={23} />
-            </View>
-          ) : (
-            <Svg
-              width="35"
-              height="34"
-              viewBox="0 0 35 34"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
-              <Path
-                d="M24.5 13L14.875 22L10.5 17.9091"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </Svg>
-          )}
-          <Text
-            style={{
-              fontSize: responsiveFontSize(1.9),
-              color: '#000',
-              textAlign: 'center',
-              lineHeight: 20,
-              marginTop: responsiveHeight(1),
-            }}>
-            {text}
-          </Text>
-        </View>
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
           <View
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: responsiveHeight(2),
+              paddingVertical: moderateVerticalScale(12),
             }}>
-            <TouchableOpacity
-              onPress={close}
+            {iconName ? (
+              <View
+                style={{
+                  marginTop: 'auto',
+                  marginBottom: 'auto',
+                  borderRadius: 100,
+                  backgroundColor: pastelGreen,
+                  padding: responsiveWidth(2),
+                }}>
+                <SvgIcons name={iconName} width={27} height={23} />
+              </View>
+            ) : (
+              <Svg
+                width="35"
+                height="34"
+                viewBox="0 0 35 34"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <Circle cx="17.5" cy="17" r="17" fill="#30D298" />
+                <Path
+                  d="M24.5 13L14.875 22L10.5 17.9091"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </Svg>
+            )}
+            <Text
               style={{
-                width: responsiveWidth(60),
-                backgroundColor: TextColorGreen,
-                borderRadius: 10,
+                fontSize: responsiveFontSize(1.9),
+                color: '#000',
+                textAlign: 'center',
+                lineHeight: 20,
+                marginTop: responsiveHeight(1),
+              }}>
+              {text}
+            </Text>
+          </View>
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <View
+              style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: responsiveHeight(6.6),
+                marginTop: responsiveHeight(2),
               }}>
-              <Text
+              <TouchableOpacity
+                onPress={close}
                 style={{
-                  fontSize: responsiveFontSize(1.9),
-                  fontWeight: '600',
-                  letterSpacing: 0.28,
-                  color: '#FFF',
+                  width: responsiveWidth(60),
+                  backgroundColor: TextColorGreen,
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: responsiveHeight(6.6),
                 }}>
-                {textButton}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(1.9),
+                    fontWeight: '600',
+                    letterSpacing: 0.28,
+                    color: '#FFF',
+                  }}>
+                  {textButton}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </ImageBackground>
     </Modal>
   );

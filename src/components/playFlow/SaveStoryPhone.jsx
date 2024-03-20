@@ -1,72 +1,47 @@
 import React, { useState, useMemo } from 'react';
 import {
     Dimensions,
-    Image,
-    Platform,
     ImageBackground,
     Text,
-    TouchableOpacity,
     View,
     StyleSheet,
-    FlatList,
-    ScrollView,
     Modal,
-    ProgressBarAndroid,
 } from 'react-native';
 import {
     PrimaryColor,
-    SecondaryColor,
     TextColorGreen,
-    ThirdColor,
     pinkColor,
 } from '../../screens/Styles/Style';
-import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import {
-    responsiveFontSize,
     responsiveHeight,
     responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths/index';
-import BackButton from '../reuseable-components/BackButton';
-import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
-import RNFS from 'react-native-fs';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    SaveDataToProfile,
-    recordingVideo,
-} from '../../../store/slices/RecordingData';
-import RNFetchBlob from 'rn-fetch-blob';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
-import SaveStory from './SaveStory';
 import SaveStoryBtn from './SaveStoryBtn';
 import SaveAsPdf from './SaveAsPdf';
 import StoryTimeSaved from './StoryTimeSaved';
 import { createStory_api } from '../../../services/api/storyfeed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SPACING } from '../../constants/Constant';
-import * as ScopedStorage from 'react-native-scoped-storage';
-import DocumentPicker from 'react-native-document-picker';
-import { resetFriends } from '../../../store/slices/addplayers/addPlayersSlice';
 import Toast from 'react-native-toast-message';
+import { resetFriends, } from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
-    const { width, height } = Dimensions.get('window');
-    const { STORY_TIME_IMG, BG_PLAYFLOW, SAVE_STORY_BACKGROUND, BG_CLOCK } =
+    const { SAVE_STORY_BACKGROUND, BG_CLOCK } =
         Img_Paths;
-    const SCREENWIDTH = Dimensions.get('window').width;
-    const SCREENHEIGHT = Dimensions.get('window').height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
     const [saveStoryModal, setSaveStoryModal] = useState(false);
     const [saveStoryModalsecond, setSaveStoryModalsecond] = useState(false);
     const [isVisibleSavePhone, setVisibleSavePhone] = useState(false);
     const [isVisiblePdf, setVisiblePdf] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [directoryPath, setDirectoryPath] = useState('');
+    const dispatch = useDispatch();
 
     const textrecordUsers = useSelector(
-        state => state?.recordingData?.recordingText,
+        state => state?.getcategories?.recordingText,
     );
     const categoryId = useSelector(state => state?.getcategories?.categoriesId);
     const subCategoryId = useSelector(
@@ -76,18 +51,9 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         state => state?.getcategories?.playerscontributorsIds,
     );
     const { user } = useSelector(state => state?.authSlice);
-
+    const USER = user?.data?.user || user?.data;
     const isUserGuest = useMemo(() => !user, [user]);
-
-    // console.log("categoryId-----", categoryId);
-    // console.log("subCategoryId-----", subCategoryId)
-    // console.log("playerContributorsId-----", playerContributorsId);
-    // console.log("textrecordUsers-----", textrecordUsers);
-
     const convertStr = textrecordUsers.join();
-    console.log('convertstr----', convertStr);
-
-    const dispatch = useDispatch();
 
     const saveStoryhandler = () => {
         setIsVisible(false);
@@ -98,25 +64,23 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const handleSaveStories = async () => {
         setIsLoading(true);
         try {
-            const userLoginId = await AsyncStorage.getItem('isUserId');
             const responseData = await createStory_api({
                 type: "text",
-                creator: userLoginId,
+                creator: USER?._id,
                 category: categoryId,
                 subCategory: subCategoryId,
                 contributors: playerContributorsId,
                 content: convertStr,
             });
-            if (responseData?.message === 'content is not allowed to be empty') {
+            if (responseData?.message === "content is not allowed to be empty") {
                 Toast.show({
-                    type: 'error',
-                    text1: 'content is not allowed to be empty',
-                });
+                    type: "error",
+                    text1: "content is not allowed to be empty",
+                })
                 setIsLoading(false);
             } else {
                 console.log('storyresData====', responseData);
                 dispatch(resetFriends());
-                dispatch(SaveDataToProfile(textrecordUsers));
                 setSaveStoryModalsecond(true);
                 setVisibleSavePhone(true);
             }
@@ -142,7 +106,6 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                     </View>
 
                     {/* Back Button */}
-                    <Toast />
 
                     <ImageBackground
                         style={styles.img_frame}
@@ -165,6 +128,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                                 }}>
                                 Save Story
                             </Text>
+
                             <Text
                                 style={{
                                     paddingVertical: 2,
@@ -180,7 +144,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
 
                             {!isUserGuest && (
                                 <View style={{}}>
-                                    <TouchableButton
+                                    <CustomButton
                                         isLoading={isLoading}
                                         type="savestoryphone"
                                         onPress={handleSaveStories}
@@ -203,26 +167,26 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                             {/* </View> */}
                         </View>
                     </ImageBackground>
+                    <Toast />
                 </ImageBackground>
             </Modal>
+
+            {saveStoryModalsecond &&
+                <StoryTimeSaved isLoading={isLoading}
+                    isVisible={isVisibleSavePhone}
+                    setVisible={setVisibleSavePhone}
+                    text={`Story Time\nSuccessfully Saved!`}
+                    textButton="Back" />
+            }
+
             {saveStoryModal && (
                 <SaveAsPdf
-                    isVisiblePdf={true}
+                    isVisiblePdf={isVisiblePdf}
                     setIsVisiblePdf={setVisiblePdf}
                 />
             )}
-
-            {saveStoryModalsecond && (
-                <StoryTimeSaved
-                    isLoading={isLoading}
-                    isVisible={isVisibleSavePhone}
-                    setVisible={setVisibleSavePhone}
-                    text={`Story Time\nSuccessfully Saved`}
-                    textButton="Back"
-                />
-            )}
         </>
-    );
+    )
 };
 
 const styles = StyleSheet.create({
@@ -233,7 +197,6 @@ const styles = StyleSheet.create({
     img: {
         resizeMode: 'center',
     },
-
     img_backgroung_content: {
         width: responsiveWidth(90),
         height: responsiveHeight(32),

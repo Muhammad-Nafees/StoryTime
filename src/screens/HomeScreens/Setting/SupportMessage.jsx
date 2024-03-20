@@ -1,28 +1,28 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import Typography from '../../../components/reuseable-components/Typography';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import Typography from '../../../components/reusable-components/Typography';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import SupportButton from '../../../components/Support/SupportButton';
 import MessageBox from '../../../components/Support/MessageBox';
-import {sendMessage} from '../../../../services/api/support';
+import { sendMessage } from '../../../../services/api/support';
 import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
-const SupportMessage = ({navigation}) => {
+const SupportMessage = ({ navigation }) => {
   const [profileImage, setProfileImage] = React.useState(null);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const {LEFT_ARROW_IMG} = Img_Paths;
+  const { LEFT_ARROW_IMG } = Img_Paths;
 
   const handleSendMessage = async () => {
-    const image = profileImage?.uri && {profileImage: profileImage?.uri};
+    const image = profileImage?.uri && { profileImage: profileImage?.uri };
     const payload = {
       text: input,
       media: image,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.4),
     fontWeight: '600',
     letterSpacing: 0.36,
-    fontFamily:Inter_SemiBold.Inter_SemiBold
+    fontFamily: Inter_SemiBold.Inter_SemiBold
   },
   categories_text_container: {
     paddingHorizontal: moderateScale(20),

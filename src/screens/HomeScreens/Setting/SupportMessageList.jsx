@@ -1,10 +1,10 @@
 import React from 'react';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import Typography from '../../../components/reuseable-components/Typography';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import Typography from '../../../components/reusable-components/Typography';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import MessageListItems from '../../../components/Support/MessageListItems';
 import {
   responsiveFontSize,
@@ -12,15 +12,15 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import ChatBottom from '../../../components/Support/ChatBottom';
-import {getMessageWithId} from '../../../../services/api/support';
-import {Inter_SemiBold} from '../../../constants/GlobalFonts';
+import { getMessageWithId } from '../../../../services/api/support';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
 
-const SupportMessageList = ({navigation, route}) => {
+const SupportMessageList = ({ navigation, route }) => {
   const [messageList, setMessageList] = React.useState([]);
   const [reload, setReload] = React.useState(false);
-  const {chatID,img} = route.params;
+  const { chatID, img } = route.params;
   console.log('🚀 ~ SupportMessageList ~ chatID:', chatID);
-  const {LEFT_ARROW_IMG} = Img_Paths;
+  const { LEFT_ARROW_IMG } = Img_Paths;
 
   React.useEffect(() => {
     const getAllChatsWithId = async () => {
@@ -48,7 +48,7 @@ const SupportMessageList = ({navigation, route}) => {
           <Typography style={styles.categories_text}>Support</Typography>
         </View>
       </View>
-      <MessageListItems messageList={messageList} chatID={chatID} img={img}/>
+      <MessageListItems messageList={messageList} chatID={chatID} img={img} />
       <ChatBottom setReload={setReload} reload={reload} chatID={chatID} />
     </BackgroundWrapper>
   );

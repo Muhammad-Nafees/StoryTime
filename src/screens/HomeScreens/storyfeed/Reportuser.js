@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 import { Img_Paths } from '../../../assets/Imagepaths'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { SecondaryColor, TextColorGreen } from '../../Styles/Style';
-import BackButton from '../../../components/reuseable-components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
-import TouchableButton from '../../../components/TouchableButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { reportUser_Story } from '../../../../services/api/storyfeed';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 
 const Reportuser = () => {
     const { SPLASH_SCREEN_IMAGE, USERNAME_IMAGE_REPORT } = Img_Paths;
@@ -121,7 +121,7 @@ const Reportuser = () => {
                     </View>
 
                     <View style={{ height: responsiveHeight(45), justifyContent: "flex-end", alignItems: "center", }}>
-                        <TouchableButton isLoading={isLoading} onPress={() => report_StoryUser()} backgroundColor={TextColorGreen} color={"#FFF"} text={"Send Message"} />
+                        <CustomButton isLoading={isLoading} onPress={() => report_StoryUser()} backgroundColor={TextColorGreen} color={"#FFF"} text={"Send Message"} />
                     </View>
 
 

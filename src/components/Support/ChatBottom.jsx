@@ -9,17 +9,17 @@ import {
   ImageBackground,
 } from 'react-native';
 import React from 'react';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {sendMessage} from '../../../services/api/support';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { sendMessage } from '../../../services/api/support';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Typography from '../reuseable-components/Typography';
-const ChatBottom = ({setReload, reload, chatID}) => {
-  const {GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND} = Img_Paths;
+import Typography from '../reusable-components/Typography';
+const ChatBottom = ({ setReload, reload, chatID }) => {
+  const { GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND } = Img_Paths;
   const [profileImage, setProfileImage] = React.useState(null);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -37,7 +37,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         cropping: true,
       });
       if (!image.didCancel) {
-        setProfileImage({uri: image.path});
+        setProfileImage({ uri: image.path });
         return image.path;
       } else {
         return null;
@@ -55,7 +55,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         height: 400,
       });
       if (!image.didCancel) {
-        setProfileImage({uri: image.path});
+        setProfileImage({ uri: image.path });
         return image.path;
       } else {
         return null;
@@ -67,7 +67,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
   };
   const handleSendMessage = async () => {
     try {
-      const image = profileImage?.uri && {profileImage: profileImage?.uri};
+      const image = profileImage?.uri && { profileImage: profileImage?.uri };
       const payload = {
         text: input,
         media: image,
@@ -90,11 +90,11 @@ const ChatBottom = ({setReload, reload, chatID}) => {
     <View
       style={[
         styles.container,
-        {height: profileImage ? responsiveHeight(12) : responsiveHeight(8)},
+        { height: profileImage ? responsiveHeight(12) : responsiveHeight(8) },
       ]}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={handleGalleryPress}>
-          <Image style={{marginHorizontal: 5}} source={GALLERY_ICON} />
+          <Image style={{ marginHorizontal: 5 }} source={GALLERY_ICON} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleCameraPress}>
           <Image source={CAMERA__ICON} />
@@ -112,7 +112,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
           <TextInput
             placeholder="Send Message"
             placeholderTextColor="#AAAAAA"
-            style={[styles.inputfield, profileImage && {paddingLeft: 0}]}
+            style={[styles.inputfield, profileImage && { paddingLeft: 0 }]}
             onChangeText={e => setInput(e)}
             value={input}
             multiline={true}
@@ -120,10 +120,10 @@ const ChatBottom = ({setReload, reload, chatID}) => {
           <View>
             {profileImage && (
               <>
-                <View style={{width: 100}}>
+                <View style={{ width: 100 }}>
                   <ImageBackground
                     resizeMode="contain"
-                    source={{uri: profileImage.uri}}
+                    source={{ uri: profileImage.uri }}
                     style={styles.selectedImage}></ImageBackground>
                   <TouchableOpacity
                     style={styles.crossButton}
@@ -139,7 +139,7 @@ const ChatBottom = ({setReload, reload, chatID}) => {
         </View>
         {!loading ? (
           <TouchableOpacity
-            style={{opacity: sendDisabled ? 0.3 : 1}}
+            style={{ opacity: sendDisabled ? 0.3 : 1 }}
             onPress={sendDisabled ? null : handleSendMessage}
             disabled={sendDisabled}>
             <Image source={MESSAGE_SEND} />
@@ -189,10 +189,10 @@ const styles = StyleSheet.create({
   },
   crossButton: {
     alignSelf: 'center',
-    bottom: 15, 
+    bottom: 15,
     marginLeft: 5
   },
-  cross:{
+  cross: {
     color: '#AAAAAA',
     fontSize: 15
   }

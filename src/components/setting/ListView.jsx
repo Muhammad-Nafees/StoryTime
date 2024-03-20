@@ -1,18 +1,18 @@
 import React from 'react';
 import SvgIcons from '../svgIcon/svgIcons';
-import {Black02} from '../../screens/Styles/Style';
-import {responsiveFontSize, responsiveWidth} from 'react-native-responsive-dimensions';
-import {View, StyleSheet, Dimensions} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import { Black02 } from '../../screens/Styles/Style';
+import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
-import Typography from '../reuseable-components/Typography';
-import {SPACING} from '../../constants/Constant';
+import Typography from '../reusable-components/Typography';
+import { SPACING } from '../../constants/Constant';
 import { Inter_Regular } from '../../constants/GlobalFonts';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const ListView = ({item, isLastItem}) => {
+const ListView = ({ item, isLastItem }) => {
   const navigation = useNavigation();
 
   const handleOnPress = () => {
@@ -28,7 +28,7 @@ const ListView = ({item, isLastItem}) => {
   return (
     <TouchableOpacity onPress={handleOnPress}>
       <View style={styles.container}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.svgIcon}>
             <SvgIcons name={item.iconName} width={24} height={24} />
           </View>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    paddingVertical:SPACING
+    paddingVertical: SPACING
   },
   withLine: {
     borderBottomWidth: 1,
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
   txt: {
     textAlignVertical: 'center',
     marginLeft: SPACING,
-    fontFamily:Inter_Regular.Inter_Regular,
-    fontWeight:'400',
-    fontSize:12
+    fontFamily: Inter_Regular.Inter_Regular,
+    fontWeight: '400',
+    fontSize: 12
   },
 });

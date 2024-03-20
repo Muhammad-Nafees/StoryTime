@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Typography from '../reuseable-components/Typography';
+import Typography from '../reusable-components/Typography';
 import { Red02, White } from '../../screens/Styles/Style';
 import { SCREEN_WIDTH, SPACING } from '../../constants/Constant';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     color: 'white',
-    fontFamily:Inter_SemiBold.Inter_SemiBold
-    
+    fontFamily: Inter_SemiBold.Inter_SemiBold
+
   },
 });

@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
 import { useDispatch } from 'react-redux'
 import { PassionOne_Regular } from '../../constants/GlobalFonts'
+import { NavigationAction } from '@react-navigation/native';
 
 
 const ProfileOliverData = ({
@@ -18,7 +19,7 @@ const ProfileOliverData = ({
     isLoadingRecording,
     hasMorePagesRecording,
     isUserProfileData,
-    isUserLoading
+    isUserLoading,
 
 }) => {
 
@@ -41,8 +42,11 @@ const ProfileOliverData = ({
     };
 
     const handleProfile = (isHidden, id) => {
-        console.log("ishideen", isHidden);
-        navigation?.navigate("profileStack", { screen: "VoiceToTextProfile", params: { storyuserId: id, isHidden: isHidden }, })
+        navigation.navigate("Profile")
+        // navigation.navigate("profileStack", {
+        //     screen: "VoiceToTextProfile",
+        //     params: { storyuserId: id, isHidden: isHidden },
+        // })
     };
 
     return (
@@ -65,7 +69,12 @@ const ProfileOliverData = ({
                             renderItem={({ item, index }) => (
                                 console.log("ishideen item----", item?.isHidden),
                                 <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
-                                    <TouchableOpacity onPress={() => handleProfile(item?.isHidden, item?._id)} style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
+                                    <TouchableOpacity onPress={() => {
+                                        navigation.navigate("profileStack", {
+                                            screen: "VoiceToTextProfile",
+                                            params: { storyuserId: item?._id, isHidden: item?.isHidden },
+                                        })
+                                    }} style={{ backgroundColor: "#56B6A4", flexDirection: "row", paddingHorizontal: moderateScale(24), width: 175, height: 47, justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
                                         <Image style={{ width: SCREENWIDTH * 0.1, height: SCREENHEIGHT * 0.1, resizeMode: "center" }} source={{ uri: base + item?.subCategory?.image }} />
                                         <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2) }}>{item?.subCategory?.name}</Text>
                                     </TouchableOpacity>

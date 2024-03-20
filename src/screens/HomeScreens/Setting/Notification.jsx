@@ -14,10 +14,10 @@ import {
   FourthColor,
   SecondaryColor,
 } from '../../Styles/Style';
-import Typography from '../../../components/reuseable-components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
 import { Inter_Regular } from '../../../constants/GlobalFonts';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import NotificationOptBox from '../../../components/notification/NotificationOptBox';
 
@@ -86,7 +86,7 @@ const Notification = () => {
 
   return (
     <BackgroundWrapper>
-        <ScreenHeader title={'Notifications'}/>
+      <ScreenHeader title={'Notifications'} />
 
       <Typography style={styles.typography_spacing}>
         Control your notifications depending on your prefereces.
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
   typography_spacing: {
     paddingVertical: moderateVerticalScale(12),
     paddingHorizontal: moderateScale(20),
-    fontFamily:Inter_Regular.Inter_Regular,
-    fontSize:14
+    fontFamily: Inter_Regular.Inter_Regular,
+    fontSize: 14
   },
   box: {
     marginHorizontal: moderateScale(10),
@@ -158,11 +158,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-between',
-    fontFamily:Inter_Regular.Inter_Regular
+    fontFamily: Inter_Regular.Inter_Regular
   },
   box_container: {
     marginHorizontal: moderateScale(20),
     backgroundColor: '#F3F3F3',
-    paddingHorizontal:responsiveWidth(3)
+    paddingHorizontal: responsiveWidth(3)
   },
 });

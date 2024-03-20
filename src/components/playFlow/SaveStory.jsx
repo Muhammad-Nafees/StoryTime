@@ -1,28 +1,19 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
+import { ImageBackground, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
-import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
-import BackButton from '../reuseable-components/BackButton';
-import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
-import RNFS from 'react-native-fs';
-import { useDispatch, useSelector } from 'react-redux';
+import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
+import { useSelector } from 'react-redux';
+
 
 
 const SaveStory = ({ isVisible, setVisible }) => {
-
-    const { width, height } = Dimensions.get('window');
     const { BG_PLAYFLOW, } = Img_Paths;
-    const SCREENWIDTH = Dimensions.get("window").width
-    const SCREENHEIGHT = Dimensions.get("window").height;
-    const { VIDEO_SECOND_USER, FIRST_USER } = NavigationsString;
-    const navigation = useNavigation();
 
-    const RecordingText = useSelector((state) => state.recordingData.recordingText)
-    const dispatch = useDispatch();
+    const RecordingText = useSelector((state) => state.getcategories.recordingText)
 
     const saveStoryhandler = () => {
         setSaveStoryModal(true);
@@ -38,8 +29,8 @@ const SaveStory = ({ isVisible, setVisible }) => {
                         <BackButton onPress={() => setVisible(false)} />
                     </View>
                     <View style={styles.container}>
-                        <TouchableButton onPress={saveStoryhandler} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
-                        <TouchableButton text="Save as Pdf" color={"#FFF"} />
+                        <CustomButton onPress={saveStoryhandler} backgroundColor={TextColorGreen} text="Save" color="#FFF" />
+                        <CustomButton text="Save as Pdf" color={"#FFF"} />
                     </View>
 
                 </View>
@@ -48,6 +39,7 @@ const SaveStory = ({ isVisible, setVisible }) => {
         </Modal>
     )
 };
+
 
 
 const styles = StyleSheet.create({

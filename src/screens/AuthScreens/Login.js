@@ -3,10 +3,8 @@ import {
   Text,
   View,
   Image,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { FourthColor, SecondaryColor, TextColorGreen } from '../Styles/Style';
@@ -15,47 +13,69 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import TextInputField from '../../components/TextInputField';
-import TouchableButton from '../../components/TouchableButton';
-import SocialsLogin from '../../components/SocialsLogin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomButton from '../../components/reusable-components/CustomButton/CustomButton';
+import SocialsLogin from '../../components/auth/SocialsLogin';
 import { useNavigation } from '@react-navigation/native';
 import {
   login,
   setRefreshToken,
-  userLoginid,
 } from '../../../store/slices/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-import NavigationsString from '../../constants/NavigationsString';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import { Base_Url, login_andpoint } from '../../../services';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setAccessToken } from '../../../store/slices/authSlice';
-import Toast from 'react-native-toast-message';
 import { validationUserLogin } from '../../../validation/validation';
-import { Path, Svg } from 'react-native-svg';
-import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
 import { Inter_Regular, Poppins_Regular } from '../../constants/GlobalFonts';
-import ErrorMessageForm from '../../components/ErrorMessagesForm';
+import CustomInput from '../../components/auth/CustomInput';
+import Toast from 'react-native-toast-message';
+import { login_api } from '../../../services/api/auth_mdule/auth';
 
 const Login = () => {
-  const { REGISTER, FORGET_EMAIL } = NavigationsString;
+  // states
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmail, setIsEmail] = useState('');
-  const [isPasswordErr, setPasswordErr] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const [] = useState();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // images
   const { GOOGLE_ICON, FACEBOOK_ICON, APPLE_ICON } = Img_Paths;
+  // navigation
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
+
   const toggleShowPassword = () => {
-    // console.log("setShowPassword---=====", setShowPassword);
     setShowPassword(!showPassword);
   };
+  // api calling
+  const handleLoginSubmit = async (values) => {
+    setIsSubmitted(false);
+    setIsLoading(true);
 
+    try {
+      const responseData = await login_api(values)
+      console.log(responseData, "RESPONSE FROM LOGIN");
+      setIsLoading(false);
+      dispatch(login(responseData?.data));
+      await AsyncStorage.setItem('userData', JSON.stringify(responseData.data));
+      await AsyncStorage.setItem('isLoggedIn', responseData?.data?.data?.accessToken);
+      await AsyncStorage.setItem('refreshToken', responseData?.data?.data?.refreshToken);
+      dispatch(setAccessToken(responseData?.data?.data?.accessToken));
+      dispatch(setRefreshToken(responseData?.data?.data.refreshToken));
+      return responseData;
+
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error?.response, "ERROR FROM LOGIN");
+      if (error?.response?.data) {
+        Toast.show({
+          type: "error",
+          text1: error?.response?.data?.message
+        })
+      }
+    }
+  };
+  // form handling
   return (
     <Formik
       initialValues={{
@@ -64,84 +84,18 @@ const Login = () => {
         fcmToken: 'fcmtoken12121212',
       }}
       validationSchema={validationUserLogin}
-      onSubmit={async (values, actions) => {
-        console.log(values);
-        // Reset form submission state
-        setIsSubmitted(false);
-
-        setIsLoading(true);
-
-        try {
-          const { email, password, fcmToken } = values;
-          const response = await fetch(Base_Url + login_andpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-              fcmToken,
-            }),
-          });
-
-          const responseData = await response.json();
-          console.log('RESPONSE_LOGIN----', responseData);
-          dispatch(login(responseData));
-          await AsyncStorage.setItem('userData', JSON.stringify(responseData));
-
-          if (responseData?.data) {
-            setIsLoading(false);
-          }
-
-          const statusCode = responseData?.statusCode;
-          const message = responseData?.message;
-          const accessToken = responseData?.data?.accessToken;
-          const refreshToken = responseData?.data?.refreshToken;
-          const username = responseData?.data?.user?.username;
-          const userLoginId = responseData?.data?.user?._id;
-          const error = responseData?.stack;
-
-          if (statusCode === 200) {
-            await AsyncStorage.setItem('isLoggedIn', accessToken);
-            await AsyncStorage.setItem('isUsername', username);
-            await AsyncStorage.setItem('isUserId', userLoginId);
-            await AsyncStorage.setItem('refreshToken', refreshToken);
-            dispatch(setAccessToken(accessToken));
-            dispatch(setRefreshToken(refreshToken));
-            dispatch(userLoginid(userLoginId));
-          }
-
-          if (error) {
-            if (message === 'Email not found') {
-              setIsEmail('Invalid email');
-            } else if (
-              message ===
-              'password length must be at least 8 characters long' ||
-              message === 'Invalid password'
-            ) {
-              setPasswordErr('Invalid password');
-              setIsEmail('');
-            }
-            setIsLoading(false);
-            console.log('message-----', message);
-          }
-          return responseData;
-        } catch (err) {
-          console.log(err);
-        }
-      }}>
+      onSubmit={handleLoginSubmit}>
       {({
         values,
         errors,
         handleChange,
         handleSubmit,
         setFieldTouched,
-        isValid,
-        touched,
+        touched
       }) => (
         <View style={styles.container}>
           <ScrollView keyboardShouldPersistTaps="always">
+
             <View
               style={[styles.img_container, { paddingTop: responsiveWidth(6) }]}>
               <Image
@@ -149,138 +103,39 @@ const Login = () => {
                 source={require('../../assets/story-time-without.png')}
               />
             </View>
-            <View style={{ paddingBottom: moderateVerticalScale(6) }}>
-              <View style={{ width: responsiveWidth(90), marginLeft: 'auto' }}>
-                <Text
-                  style={{
-                    color: FourthColor,
-                    fontWeight: '600',
-                    fontSize: responsiveFontSize(1.9),
-                  }}>
-                  Email
-                </Text>
-              </View>
 
-              <TextInputField
+            <View style={{ paddingBottom: moderateVerticalScale(6) }}>
+
+              <CustomInput
                 value={values.email}
-                // onPress={toggleShowPassword}
-                showPassword={showPassword}
-                onChangeText={handleChange('email')}
-                setShowPassword={setShowPassword}
-                placeholderText="Type here"
+                label={"Email"}
+                placeholder={"Type here"}
+                error={errors.email}
+                touched={touched}
+                Submitted={isSubmitted}
+                handleChange={handleChange('email')}
                 onBlur={() => setFieldTouched('email')}
               />
 
-              <View style={{ height: responsiveHeight(3) }}>
-                {isEmail.length > 0 ? (
-                  <View style={{ height: responsiveHeight(3) }}>
-                    <View
-                      style={{
-                        width: responsiveWidth(90),
-                        marginLeft: 'auto',
-                        paddingBottom: responsiveWidth(1),
-                      }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View>
-                          <Svg
-                            width={20}
-                            height={20}
-                            viewBox="0 0 24 24"
-                            fill="red">
-                            <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                          </Svg>
-                        </View>
-                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                          <Text
-                            style={{
-                              color: 'red',
-                              fontSize: responsiveFontSize(1.9),
-                              fontWeight: '600',
-                            }}>
-                            {isEmail}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                ) : (
-                  <ErrorMessageForm
-                    errorsField={errors.email}
-                    isSubmitted={isSubmitted}
-                  />
-                )}
-              </View>
-
-              <View
-                style={{
-                  width: responsiveWidth(90),
-                  marginLeft: 'auto',
-                  paddingTop: responsiveWidth(1),
-                }}>
-                <Text
-                  style={{
-                    color: FourthColor,
-                    fontWeight: '600',
-                    fontSize: responsiveFontSize(1.9),
-                  }}>
-                  Password
-                </Text>
-              </View>
-
-              <TextInputField
+              <CustomInput
+                label={"Password"}
                 value={values.password}
-                onChangeText={handleChange('password')}
-                // onBlur={() => setFieldTouched("password")}
+                handleChange={handleChange('password')}
                 onPress={toggleShowPassword}
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
-                placeholderText="Type here"
+                error={errors.password}
+                placeholder={"Type here"}
+                touched={touched}
+                onBlur={() => setFieldTouched('password')}
+                Submitted={isSubmitted}
                 type="password"
               />
 
-              <View style={{ height: responsiveHeight(3) }}>
-                {isPasswordErr.length > 0 ? (
-                  <View style={{ height: responsiveHeight(3) }}>
-                    <View
-                      style={{
-                        width: responsiveWidth(90),
-                        marginLeft: 'auto',
-                        paddingBottom: responsiveWidth(1),
-                      }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View>
-                          <Svg
-                            width={20}
-                            height={20}
-                            viewBox="0 0 24 24"
-                            fill="red">
-                            <Path d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                          </Svg>
-                        </View>
-                        <View style={{ paddingHorizontal: moderateScale(5) }}>
-                          <Text
-                            style={{
-                              color: 'red',
-                              fontSize: responsiveFontSize(1.9),
-                              fontWeight: '600',
-                            }}>
-                            {isPasswordErr}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                ) : (
-                  <ErrorMessageForm
-                    errorsField={errors.password}
-                    isSubmitted={isSubmitted}
-                  />
-                )}
-              </View>
             </View>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate(FORGET_EMAIL)}
+              onPress={() => navigation.navigate("ForgetEmail")}
               style={{ justifyContent: 'center', alignItems: 'center' }}>
               <Text
                 style={{
@@ -293,7 +148,7 @@ const Login = () => {
             </TouchableOpacity>
 
             <View style={{ paddingVertical: moderateVerticalScale(14) }}>
-              <TouchableButton
+              <CustomButton
                 type="login"
                 isLoading={isLoading}
                 color="#FFF"
@@ -382,7 +237,7 @@ const Login = () => {
               <Text style={[styles.text, { color: FourthColor }]}>
                 Don’t have an account yet?{' '}
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate(REGISTER)}>
+              <TouchableOpacity onPress={() => navigation.navigate("Register")}>
                 <Text
                   style={[
                     styles.text,
@@ -397,8 +252,6 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </ScrollView>
-
-          <Toast />
         </View>
       )}
     </Formik>

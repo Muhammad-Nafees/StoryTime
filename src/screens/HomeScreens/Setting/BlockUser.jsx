@@ -10,12 +10,12 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import BlockModal from '../../../components/modals/BlockModal';
-import ScreenHeader from '../../../components/reuseable-components/ScreenHeader';
+import BlockModal from '../../../components/reusable-components/modals/BlockModal';
+import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
 import { getBlockList } from '../../../../services/api/settings';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import Typography from '../../../components/reuseable-components/Typography';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import Typography from '../../../components/reusable-components/Typography';
 
 const BlockUser = () => {
   const { DEFAULT_ICON } = Img_Paths;

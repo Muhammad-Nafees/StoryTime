@@ -4,18 +4,15 @@ import { FourthColor, PrimaryColor, SecondaryColor, TextColorGreen, TextinputCol
 import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import BackButton from '../../../components/reuseable-components/BackButton';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
-import SelectDropdown from 'react-native-select-dropdown';
-import TouchableButton from '../../../components/TouchableButton';
 import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAddUrlId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
-import { userLoginid } from '../../../../store/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../../components/auth/UserErrors';
 
@@ -23,14 +20,10 @@ import UserErrors from '../../../components/auth/UserErrors';
 
 const AddUrl = () => {
 
-    const { BG_PLAYFLOW, BG_URL_PAGE } = Img_Paths;
+    const { BG_URL_PAGE } = Img_Paths;
     const navigation = useNavigation();
 
-    const addUrlId = useSelector((state) => state?.addPlayers?.addUrlid);
-    const categoryId = useSelector((state) => state?.addPlayers?.urlCategoryname);
-    const subCategoryId = useSelector((state) => state?.addPlayers?.urlSubcategoryname);
-
-
+    // states
     const [changeColor, setChangeColor] = useState("#AAA");
     const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
     const [textInputValue, setTextInputValue] = useState("");
@@ -42,9 +35,14 @@ const AddUrl = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [pageSubCategory, setPageSubCategory] = useState(1);
     const [responseSubCategories, setResponseSubCategories] = useState([]);
+
+    // redux
+    const addUrlId = useSelector((state) => state?.getcategories?.addUrlid);
+    const categoryId = useSelector((state) => state?.getcategories?.urlCategoryname);
+    const subCategoryId = useSelector((state) => state?.getcategories?.urlSubcategoryname);
     const dispatch = useDispatch();
-
-
+    const { user } = useSelector(state => state?.authSlice);
+    const USER = user?.data?.user || user?.data;
 
     const categories_Api = async () => {
         try {
@@ -71,11 +69,9 @@ const AddUrl = () => {
     const createStory_video = async () => {
         setIsLoading(true);
         try {
-            const userLoginId = await AsyncStorage.getItem('isUserId');
-            console.log("userloginId---- :", userLoginId)
             const response = await createStory_api({
                 type: "video",
-                creator: userLoginId,
+                creator: USER?._id,
                 category: categoryId,
                 subCategory: subCategoryId,
                 content: textInputValue
@@ -216,7 +212,12 @@ const AddUrl = () => {
                         isVisible={isVisible}
                         setVisible={setIsVisible}
                         text1={"Successfully Added!"}
-                        onPress={() => navigation.navigate("Profile")}
+                        onPress={() => {
+                            const randomNumbers = Math.floor(Math.random() * 100);
+                            dispatch(setRandomForProfileUpdate(randomNumbers));
+                            console.log("randomNumbers :", randomNumbers)
+                            navigation.navigate("Profile");
+                        }}
                     />
                 }
             </ImageBackground>

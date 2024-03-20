@@ -6,9 +6,8 @@ import { Path, Svg } from "react-native-svg"
 
 
 const ErrorMessageForm = ({ errorsField, isSubmitted }) => {
-  console.log("errorsField----", errorsField)
   return (
-    <View style={{ height: responsiveHeight(3), }}>
+    <View style={{ height: responsiveHeight(3) }}>
       {isSubmitted && errorsField && (
         <View style={{ width: responsiveWidth(90), marginLeft: 'auto', paddingBottom: responsiveWidth(1) }}>
           <View style={{ flexDirection: "row", }}>
@@ -29,6 +28,6 @@ const ErrorMessageForm = ({ errorsField, isSubmitted }) => {
       }
     </View>
   )
-}
+};
 
 export default ErrorMessageForm;

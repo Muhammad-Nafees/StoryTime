@@ -3,34 +3,35 @@ import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, Style
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize, responsiveHeight, responsiveScreenWidth, responsiveWidth } from 'react-native-responsive-dimensions';
-import FrameContent from '../../../components/FrameContent';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import NavigationsString from '../../../constants/NavigationsString';
-import StoryUsers from '../../../components/StoryUsers';
+import StoryUsers from '../../../components/categories/StoryUsers';
 import AddFriendUsers from '../../../components/AddFriendUsers';
-import TouchableButton from ' ../../../components/TouchableButton';
+import CustomButton from '../../../components/reusable-components/CustomButton/CustomButton';
 import { addFriends_api } from '../../../../services/api/add-members';
-import AddFriends_Categories from '../../../components/AddPlayers_Categories';
+import AddFriends_Categories from '../../../components/reusable-components/addplayer/AddPlayers_Categories';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import _ from 'lodash';
 import { tag_Friends } from '../../../../services/api/profile';
 import { useSelector } from 'react-redux';
-import { addTagPlayers } from '../../../../store/slices/addplayers/addPlayersSlice';
-import RemoveUsers_Categories from '../../../components/RemoveUsers_Categories';
+import { addTagPlayers } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_Categories';
 
 
 const TagFriends = ({ route }) => {
     const { width, height } = Dimensions.get('window');
-    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE,
-        SECOND_PROFILE, THIRD_PROFILE, FOURTH_PROFILE, FIFTH_PROFILE, SIXTH_PROFILE } = Img_Paths;
+    const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, SECOND_PROFILE } = Img_Paths;
     const { ADD_FRIENDS } = NavigationsString;
     const navigation = useNavigation();
+
+    // states
     const [isNoFriends, setIsNoFriends] = useState(true);
     const [inputText, setInputText] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [ResponseapiFriends, setResponseapiFriends] = useState([]);
-    const tagPlayersRTK = useSelector((state) => state.addPlayers?.addTagPlayers);
+    // redux
+    const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers);
     const storyId = route?.params?.storyId;
 
     const addFriends_api_handler = async () => {
@@ -156,7 +157,7 @@ const TagFriends = ({ route }) => {
                 </View>
 
                 <View style={{ paddingTop: responsiveWidth(5) }}>
-                    <TouchableButton
+                    <CustomButton
                         onPress={handlenavigation}
                         backgroundColor={TextColorGreen}
                         text="Tag"

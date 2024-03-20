@@ -1,31 +1,31 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/reuseable-components/Typography';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import Typography from '../../../components/reusable-components/Typography';
 import PaymentInput from '../../../components/paymentSetting/PaymentInput';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
 import AddPaymentCardModal from '../../../components/paymentSetting/AddPaymentCardModal';
 
-const AddPaymentCardDetail = ({navigation}) => {
+const AddPaymentCardDetail = ({ navigation }) => {
   const [isVisible, setVisible] = React.useState(false);
   const [inputValue, setInputValue] = React.useState();
-  const {LEFT_ARROW_IMG, ADD_SUCCEFULLY_PAYMENT_CARD} = Img_Paths;
+  const { LEFT_ARROW_IMG, ADD_SUCCEFULLY_PAYMENT_CARD } = Img_Paths;
 
   const handleInput = (e, key) => {
-    setInputValue({...inputValue, [key]: e});
+    setInputValue({ ...inputValue, [key]: e });
   };
 
   return (
-    <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
+    <BackgroundWrapper contentContainerStyle={{ flex: 1 }} coverScreen>
       <View style={styles.first_container}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -38,7 +38,7 @@ const AddPaymentCardDetail = ({navigation}) => {
       </View>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{flexGrow: 1}}>
+        contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.body}>
           <Typography style={styles.cardText}>Card Info</Typography>
           <View style={styles.input_container}>
@@ -78,7 +78,7 @@ const AddPaymentCardDetail = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-      <View style={{marginTop: 70}}>
+      <View style={{ marginTop: 70 }}>
         <PaymentButton label="Save Card" onpress={() => setVisible(true)} />
       </View>
       {isVisible && (

@@ -1,54 +1,61 @@
 import React, { useState } from 'react';
 import {
-  Text,
   View,
   Image,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
-  Button,
-  Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
 import {
-  FourthColor,
-  PrimaryColor,
   SecondaryColor,
-  TextColorGreen,
-  TextinputColor,
-  ThirdColor,
 } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-
-import { useNavigation } from '@react-navigation/native';
-import TextInputField from '../../../components/TextInputField';
-import TouchableButton from '../../../components/TouchableButton';
-import NavigationsString from '../../../constants/NavigationsString';
-import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateVerticalScale, } from 'react-native-size-matters';
 import { Img_Paths } from '../../../assets/Imagepaths';
-import reset_email from '../../../../services/api/auth_mdule/auth';
-import Toast from 'react-native-toast-message';
 import { Formik } from 'formik';
 import { validationforgetEmail } from '../../../../validation/validation';
-import { Path, Svg } from 'react-native-svg';
 import _ from 'lodash';
 import CustomInputForgetEmail from '../../../components/auth/CustomInputForgetEmail';
-import useKeyboard from '../../../hooks/AvoidingKeyboard';
+import reset_email from '../../../../services/api/auth_mdule/auth';
+import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const ForgetEmail = () => {
-  const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
-  const { ANOTHER_FORGET_BG_IMG, GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
-  const [EmailError, setEmailError] = useState('');
+  // states
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // images
+  const { GREEN_COLOUR_FORGETIMAGE } = Img_Paths;
+  // navigation
   const navigation = useNavigation();
+  // api calling
+  const handleForgetEmail = async (values) => {
 
-  // const keyboardHeight = useKeyboard();
+    setIsSubmitted(false);
+    setIsLoading(true);
 
+    try {
+      const responseData = await reset_email({ email: values?.email })
+      console.log(responseData.data?.data, "RESPONSE FROM EMAIL")
+      setIsLoading(false);
+      navigation.navigate("OtpForget", {
+        code: responseData?.data?.data?.code,
+        email: values?.email,
+        type: 'email',
+      });
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: "error",
+        text1: error?.response?.data?.message
+      })
+      console.log(error?.response?.data?.message, "ERROE FROM EMAIL")
+    }
+  };
+  // form handling
   return (
     <KeyboardAvoidingView>
       <Formik
@@ -56,11 +63,10 @@ const ForgetEmail = () => {
           email: '',
         }}
         validationSchema={validationforgetEmail}
-        onSubmit={async values => { }}>
+        onSubmit={handleForgetEmail}>
         {({
           values,
           errors,
-          handleChange,
           handleSubmit,
           setFieldError,
           touched,
@@ -99,16 +105,19 @@ const ForgetEmail = () => {
                   fieldName="email"
                   dirty={dirty}
                   isValid={isValid}
+                  isLoading={isLoading}
+                  isSubmitted={isSubmitted}
+                  setIsSubmitted={setIsSubmitted}
                   handleChange={text => setFieldValue('email', text)}
                 />
               </View>
 
               {/* Next------------ */}
             </View>
-            <Toast />
           </>
         )}
       </Formik>
+      <Toast />
     </KeyboardAvoidingView>
   );
 };

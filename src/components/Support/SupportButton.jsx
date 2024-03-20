@@ -6,10 +6,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import Typography from '../reuseable-components/Typography';
+import Typography from '../reusable-components/Typography';
 import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
-const SupportButton = ({title, onpress, input, loading}) => {
+const SupportButton = ({ title, onpress, input, loading }) => {
   return (
     <View style={styles.bottomTextContainer}>
       <TouchableOpacity
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.02,
     color: '#FFF',
     fontWeight: '600',
-    fontFamily:Inter_SemiBold.Inter_SemiBold
+    fontFamily: Inter_SemiBold.Inter_SemiBold
   },
   disabled_button: {
     // opacity: 0.5,

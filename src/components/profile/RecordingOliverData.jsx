@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
 import { PassionOne_Regular } from '../../constants/GlobalFonts'
 import InAppBrowser from 'react-native-inappbrowser-reborn'
+import { useSelector } from 'react-redux'
 
 const RecordingOliverData = ({
 
@@ -23,6 +24,10 @@ const RecordingOliverData = ({
 
     const navigation = useNavigation();
     const [isLoadMore, setIsLoadMore] = useState(false);
+    const { user } = useSelector(state => state?.authSlice);
+    const USER = user?.data?.user || user?.data;
+    const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
+
 
     const handleLoadMore = async () => {
         console.log("hasmorepages===", hasMorePagesRecording)
@@ -40,7 +45,6 @@ const RecordingOliverData = ({
             const url = item;
             if (await InAppBrowser.isAvailable()) {
                 const result = await InAppBrowser.open(url, {
-                    // You can customize the in-app browser behavior and appearance here
                 });
             } else {
                 Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
@@ -50,31 +54,32 @@ const RecordingOliverData = ({
         }
     }
 
-    // const handleProfile = (id) => {
-    //     navigation?.navigate("profileStack", { screen: "VoiceToTextProfile", params: { storyuserId: id }, })
-    // };
-
 
     return (
         <>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate("ProfileScreens", { screen: "AddUrl" })
-                }} activeOpacity={0.7} style={{
-                    borderWidth: 1,
-                    borderStyle: "dashed",
-                    paddingVertical: 10,
-                    flexDirection: "row",
-                    width: responsiveWidth(90),
-                    borderRadius: 10,
-                    alignItems: "center",
-                    paddingHorizontal: 16
-                }}>
-                    <View style={{ flexDirection: 'row', width: responsiveWidth(50), alignItems: "center", justifyContent: "space-between" }}>
-                        <Image style={{ width: 30, height: 30 }} source={require("../../assets/profileplus-icon.png")} />
-                        <Text style={{ color: TextColorGreen, fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Add URL</Text>
-                    </View>
-                </TouchableOpacity>
+                {
+                    USER?._id === FriendIdRTK ?
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("ProfileScreens", { screen: "AddUrl" })
+                        }} activeOpacity={0.7} style={{
+                            borderWidth: 1,
+                            borderStyle: "dashed",
+                            paddingVertical: 10,
+                            flexDirection: "row",
+                            width: responsiveWidth(90),
+                            borderRadius: 10,
+                            alignItems: "center",
+                            paddingHorizontal: 16
+                        }}>
+                            <View style={{ flexDirection: 'row', width: responsiveWidth(50), alignItems: "center", justifyContent: "space-between" }}>
+                                <Image style={{ width: 30, height: 30 }} source={require("../../assets/profileplus-icon.png")} />
+                                <Text style={{ color: TextColorGreen, fontWeight: "700", fontSize: responsiveFontSize(1.9) }}>Add URL</Text>
+                            </View>
+                        </TouchableOpacity>
+                        : null
+                }
+
             </View>
 
             {

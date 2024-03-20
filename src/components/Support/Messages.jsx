@@ -1,16 +1,16 @@
-import {StyleSheet, View, Image} from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import React from 'react';
-import Typography from '../reuseable-components/Typography';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {responsiveWidth} from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import Typography from '../reusable-components/Typography';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { URL } from '../../constants/Constant';
 
-const Message = ({item}) => {
-  const {MESSAGE_ICON} = Img_Paths;
-  const uri = URL+item.lastMessage.media[0];
+const Message = ({ item }) => {
+  const { MESSAGE_ICON } = Img_Paths;
+  const uri = URL + item.lastMessage.media[0];
   return (
-    <View style={{marginBottom: 16}}>
+    <View style={{ marginBottom: 16 }}>
       <View style={styles.message_container}>
         <View style={styles.message_wrapper}>
           <View style={styles.message_content}>
@@ -18,35 +18,35 @@ const Message = ({item}) => {
               <Image source={MESSAGE_ICON} />
             </View>
             {/* <View style={styles.message_text_container}> */}
-              <View style={styles.message_text_container_wrapper}>
-                <View style={styles.message_text_date_container}>
-                  <Typography style={styles.message_date_text}>
-                    {item?.lastMessage?.updatedAt}
-                  </Typography>
-                  <Typography style={styles.message_pending_text}>
-                    {item?.status}
-                  </Typography>
-                </View>
-                <Typography style={styles.message_id_text}>
-                  {item?.lastMessage?._id}
+            <View style={styles.message_text_container_wrapper}>
+              <View style={styles.message_text_date_container}>
+                <Typography style={styles.message_date_text}>
+                  {item?.lastMessage?.updatedAt}
                 </Typography>
-                <Typography style={styles.message}>
-                  {item?.lastMessage?.text}
+                <Typography style={styles.message_pending_text}>
+                  {item?.status}
                 </Typography>
-                <View style={{}}>
-          <Image 
-          resizeMode='contain'
-            source={{uri:uri}}
-            style={{            
-            width:40,
-            height: 40,
-            borderRadius: 2,
-            marginLeft:responsiveWidth(5)
-          }}></Image>
-          </View>
+              </View>
+              <Typography style={styles.message_id_text}>
+                {item?.lastMessage?._id}
+              </Typography>
+              <Typography style={styles.message}>
+                {item?.lastMessage?.text}
+              </Typography>
+              <View style={{}}>
+                <Image
+                  resizeMode='contain'
+                  source={{ uri: uri }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 2,
+                    marginLeft: responsiveWidth(5)
+                  }}></Image>
               </View>
             </View>
           </View>
+        </View>
         {/* </View> */}
       </View>
     </View>

@@ -1,24 +1,18 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native'
-// import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
+import { ImageBackground, Text, TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions"
-import NavigationsString from '../../constants/NavigationsString';
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import BackButton from '../../components/reuseable-components/BackButton';
+import BackButton from '../../components/reusable-components/addplayer/customBackButton/BackButton';
 
 
 
 const LoginTermsAnd_Conditions = () => {
     const {
         SPLASH_SCREEN_IMAGE,
-        GET_STARTED_IMAGE,
-        STORY_TIME_IMG,
         LEFT_ARROW_IMG
     } = Img_Paths
-    const { SPLASH_SCREEN } = NavigationsString
-    const { width, height } = Dimensions.get('window');
     const navigation = useNavigation()
 
     return (

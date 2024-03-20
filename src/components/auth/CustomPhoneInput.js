@@ -13,7 +13,7 @@ import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import { username_api } from '../../../services/api/auth_mdule/auth';
 import _ from 'lodash';
 import { Path, Svg } from 'react-native-svg';
-import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 const CustomPhoneInput = ({
   handleChange,
@@ -84,10 +84,10 @@ const CustomPhoneInput = ({
   };
 
   return (
-    <View style={{ paddingVertical: 10 }}>
+    <View style={{}}>
       <Text
         style={[{
-          color:FourthColor,
+          color: FourthColor,
           fontWeight: '600',
           marginBottom: verticalScale(7),
         },

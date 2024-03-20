@@ -5,7 +5,6 @@ export const userinfocity = createAsyncThunk("userinfocity/userinfo", async (sta
 
     try {
         const response = await userandcity_api(statesinfo)
-        console.log("reduxUserIncity--", response);
         return response
 
     } catch (error) {
@@ -39,7 +38,6 @@ const userinfo_city = createSlice({
             builder.addCase(userinfocity.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.userdatacity = payload;
-                console.log("state.-a-userdataCITY-=-", state.userdatacity)
             }),
             builder.addCase(userinfocity.rejected, (state, action) => {
                 state.error = true;

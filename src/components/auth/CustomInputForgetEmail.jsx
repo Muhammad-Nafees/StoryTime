@@ -20,63 +20,70 @@ import {
 } from '../../screens/Styles/Style';
 import _ from 'lodash';
 import reset_email, { username_api } from '../../../services/api/auth_mdule/auth';
-import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-import { Img_Paths } from '../../assets/Imagepaths';
 import NavigationsString from '../../constants/NavigationsString';
-import TouchableButton from '../TouchableButton';
-import { Inter_Medium, Inter_SemiBold } from '../../constants/GlobalFonts';
+import CustomButton from '../reusable-components/CustomButton/CustomButton';
+import { Inter_SemiBold } from '../../constants/GlobalFonts';
 
 const CustomInputForgetEmail = props => {
-  const { FORGET_BG_IMG } = Img_Paths;
   const [isFocused, setIsFocused] = useState(false);
   const { FORGET_PHONE_NO, OTP_FORGET } = NavigationsString;
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState();
-  const [navigatee, setNavigate] = useState(false);
   const [responses, setResponse] = useState('');
   const [isStatusCodeSuccess, setIsStatusCodeSuccess] = useState(false);
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState("");
   const [textval, seText] = useState('');
   const navigation = useNavigation();
 
-  const handleInputFocus = () => {
-    setIsFocused(true);
-  };
 
-  const handleInputBlur = () => {
-    setIsFocused(false);
-  };
 
-  const debouncedApiCall = useRef(
-    _.debounce(async text => {
-      try {
-        const response = await reset_email({ email: text });
-        seText(text);
-        setResponse(response?.data?.code);
-        console.log('response---', response?.data?.code);
-        if (response?.message === "Invalid Information, Record Not Found!") {
-          setInvalidPhoneNumber("Invalid Information, Record Not Found!");
-        } else {
-          setInvalidPhoneNumber("Invalid email")
-        }
+  // const debouncedApiCall = useRef(
+  //   _.debounce(async text => {
+  //     try {
+  //       const response = await reset_email({ email: text });
+  //       console.log("response --- :", response);
+  //       seText(text);
+  //       setResponse(response?.data?.code);
+  //       console.log('response---', response?.data?.code);
+  //       if (response?.message === "Invalid Information, Record Not Found!") {
+  //         setInvalidPhoneNumber("Invalid Information, Record Not Found!");
+  //       } else {
+  //         setInvalidPhoneNumber("Invalid email");
+  //       }
+  //       if (response?.statusCode === 200) {
+  //         setIsStatusCodeSuccess(true);
+  //         setInvalidPhoneNumber("");
+  //       } else {
+  //         setIsStatusCodeSuccess(false);
+  //       };
 
-        if (response?.statusCode === 200) {
-          setIsStatusCodeSuccess(true);
-          setInvalidPhoneNumber("");
-        } else {
-          setIsStatusCodeSuccess(false);
-        };
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }, 300),
+  // ).current;
 
-      } catch (err) {
-        console.log(err);
-      }
-    }, 300),
-  ).current;
+  // const handleInputFocus = () => {
+  //   setIsFocused(true);
+  // };
+
+  // const handleInputBlur = () => {
+  //   setIsFocused(false);
+  // };
+
+  // const reset_email_Api = async () => {
+  //   try {
+  //     const responseData = await reset_email({ email: textval })
+  //     console.log(responseData, "RESPONSE FROM EMAIL")
+  //   } catch (error) {
+  //     console.log(error?.response?.data?.message, "ERROE FROM EMAIL")
+  //   }
+  // }
+
 
   const handleChangeText = async (text, fieldName) => {
+    console.log("handletext-- :", text);
     props.handleChange(text);
-    debouncedApiCall(text);
   };
 
 
@@ -135,8 +142,8 @@ const CustomInputForgetEmail = props => {
           multiline={props.multiline ? props.multiline : false}
           keyboardType={props.keyboardType}
           autoCapitalize={props.autoCapitalize}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
+          // onFocus={handleInputFocus}
+          // onBlur={handleInputBlur}
           editable={props.editable}
         />
       </View>
@@ -156,10 +163,10 @@ const CustomInputForgetEmail = props => {
                     <Text style={[{ color: 'red' }]}>{props.customError}</Text>
                 </View>
             )} */}
-      {console.log('res-=', responses)}
+      {/* {console.log('res-=', responses)} */}
 
       {
-        invalidPhoneNumber &&
+        props?.isSubmitted && props?.touched && props?.error &&
         <>
           <View
             style={{
@@ -169,7 +176,7 @@ const CustomInputForgetEmail = props => {
               marginTop: 2,
             }}>
             <Icon name="alert-circle" size={22} color="red" />
-            <Text style={{ color: 'red' }}>{invalidPhoneNumber}</Text>
+            <Text style={{ color: 'red' }}>{props?.error}</Text>
           </View>
           <View style={{ height: 0 }} />
         </>
@@ -190,24 +197,27 @@ const CustomInputForgetEmail = props => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableButton
-          isLoading={isLoading}
+        <CustomButton
+          isLoading={props?.isLoading}
           setIsLoading={setIsLoading}
           type="forgetemail"
-          StatusCodeSuccess={isStatusCodeSuccess}
+          // StatusCodeSuccess={isStatusCodeSuccess}
+          value={props?.value}
           isValid={props?.isValid}
           dirty={props?.dirty}
           onPress={() => {
-            props?.value === !'' ? props?.handleSubmit : null;
-            if (isStatusCodeSuccess) {
-              navigation.navigate(OTP_FORGET, {
-                code: responses,
-                email: textval,
-                type: 'email',
-              });
-            }
+            props?.setIsSubmitted(true);
+            props?.handleSubmit();
+            console.log("CALLING")
+            // if (isStatusCodeSuccess) {
+            // navigation.navigate(OTP_FORGET, {
+            //   code: responses,
+            //   email: textval,
+            //   type: 'email',
+            // });
+            // }
           }}
-          backgroundColor={isStatusCodeSuccess ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
+          backgroundColor={props?.value !== "" ? '#395E66' : 'rgba(57, 94, 102, 0.5)'}
           color="#FFF"
           text="Next"
         />

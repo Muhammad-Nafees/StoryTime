@@ -7,26 +7,26 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/reuseable-components/BackgroundWrapper';
-import Typography from '../../../components/reuseable-components/Typography';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import Typography from '../../../components/reusable-components/Typography';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import SupportButton from '../../../components/Support/SupportButton';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {ReportUser} from '../../../../services/api/report';
+import { ReportUser } from '../../../../services/api/report';
 
-const Report = ({navigation, route}) => {
+const Report = ({ navigation, route }) => {
   const [input, setInput] = React.useState(
     "I hope this message finds you well. I am writing to report a user I encountered while using your app. I believe it's essential to bring this matter to your attention to ensure the continued positive experience of all users.",
   );
   const [loading, setLoading] = React.useState(false);
-  const {LEFT_ARROW_IMG, REPORT_ICON} = Img_Paths;
-  const {id} = route.params;
+  const { LEFT_ARROW_IMG, REPORT_ICON } = Img_Paths;
+  const { id } = route.params;
   console.log('🚀 ~ Report ~ _id:', id);
   const handleReport = async () => {
     const payload = {
