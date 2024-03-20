@@ -64,6 +64,7 @@ const Home = () => {
           setHasMorePages(responseData?.data?.pagination?.hasNextPage);
           return responseData;
         } catch (error) {
+          setIsLoadingMain(false);
         } finally {
           setIsRefreshing(false);
         }
@@ -91,6 +92,7 @@ const Home = () => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
+    setIsLoadingMain(true)
     setPage(1);
     setResponseUsers([]);
     setTimeout(() => {
@@ -125,7 +127,7 @@ const Home = () => {
   const renderListEmptyComponent = () => {
     return (
       <View style={styles.loadingContainer}>
-        {isLoadingMain ? (
+         {isLoadingMain ? (
           <ActivityIndicator size={24} color={PrimaryColor} />
         ) : (
           <Text style={styles.noDataText}>Follow someone to get Feeds</Text>

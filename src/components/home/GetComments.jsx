@@ -12,12 +12,12 @@ import {
   responsiveFontSize,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../assets/Imagepaths';
+import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import CommentImagePreview, {
   CommentsImagePreview,
-} from './comments/CommentImagePreview';
-import ReplyingContent from './comments/ReplyingContent';
+} from '../comments/CommentImagePreview';
+import ReplyingContent from '../comments/ReplyingContent';
 
 const GetComments = ({
   text,

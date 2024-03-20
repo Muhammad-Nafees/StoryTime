@@ -26,7 +26,7 @@ const HomeHeader = () => {
     <View style={{ justifyContent: "center", alignItems: "center", }}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Image style={[styles.img, styles.logo]} source={STORY_TIME_IMG} />
+          <Image resizeMode='contain' style={[styles.img, styles.logo]} source={STORY_TIME_IMG} />
         </View>
         <View style={styles.iconsContainer}>
           <TouchableOpacity
