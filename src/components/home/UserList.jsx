@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -17,13 +17,13 @@ import {
   setFriendId,
   setRandomForProfileUpdate,
 } from '../../../store/slices/categoriesSlice/categoriesSlice';
-import {useSelector, useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
-import {PrimaryColor} from '../../screens/Styles/Style';
-import {PassionOne_Regular} from '../../constants/GlobalFonts';
-import {addFriends_api} from '../../../services/api/add-members';
-import {refresh_token_api} from '../../../services/api/auth_mdule/auth';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { PrimaryColor } from '../../screens/Styles/Style';
+import { PassionOne_Regular } from '../../constants/GlobalFonts';
+import { addFriends_api } from '../../../services/api/add-members';
+import { refresh_token_api } from '../../../services/api/auth_mdule/auth';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
 const UserList = () => {
   // States
@@ -72,7 +72,7 @@ const UserList = () => {
 
   //render functions
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View style={styles.friendContainer}>
         <TouchableOpacity
@@ -102,9 +102,10 @@ const UserList = () => {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    // width: '100%',
-    alignItems: 'center',
-    marginTop: responsiveWidth(6),
+    width: responsiveWidth(95),
+    marginLeft: "auto",
+    paddingTop: responsiveWidth(6),
+
   },
   title: {
     color: PrimaryColor,
