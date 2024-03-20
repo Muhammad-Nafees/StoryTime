@@ -6,14 +6,14 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-nat
 import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
 import _ from 'lodash';
 import { username_api } from '../../../services/api/auth_mdule/auth';
-import Toast from 'react-native-toast-message';
 import UserNameExist from './UserNameExist';
-import { Inter_Regular } from '../../constants/GlobalFonts';
 import { Img_Paths } from '../../assets/Imagepaths';
+
+
 
 const CustomInput = (props) => {
   const { NOT_EYE_ICON, EYE_ICON } = Img_Paths
-  console.log("value--- :", props?.value)
+  console.log("value--- :", props?.value);
   const debouncedApiCall = useRef(
     _.debounce(async (value, setFieldError, fieldName) => {
       const response = await username_api({ email: fieldName === 'email' ? value : '' });
@@ -36,30 +36,7 @@ const CustomInput = (props) => {
     }
   };
 
-  const inputStyle = {
-    color: "rgba(0,0,0,1)",
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: verticalScale(50),
-    textAlignVertical: 'center',
-    color: '#000',
-    paddingLeft: 28,
-    fontFamily: Inter_Regular.Inter_Regular,
-    fontSize: responsiveFontSize(1.8),
-    backgroundColor: TextinputColor,
-  };
 
-  // paddingVertical: props?.type == "email" || props?.type == "password" ? null : 10
-
-  // {
-  //   color: FourthColor,
-  //   fontWeight: '600',
-  //   paddingBottom: props?.type !== "customfield" || props?.typeStyle == "alignStyling" ? verticalScale(7) : null,
-  //   paddingVertical: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 5 : null,
-  //   width: props?.width,
-  //   marginLeft: props?.type == "customfield" || props?.typeStyle == "alignStyling" ? 'auto' : null
-  // },
 
   return (
     <>
@@ -109,7 +86,7 @@ const CustomInput = (props) => {
             keyboardType={props.keyboardType}
             autoCapitalize={props.autoCapitalize}
             editable={props.editable}
-            onBlur={props.setFieldTouched}
+            onBlur={props.setFieldBlur}
           />
 
           {props?.type == 'password' && (
@@ -128,10 +105,9 @@ const CustomInput = (props) => {
           <View
             style={[
               {
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2,
-                marginTop: verticalScale(7),
+                width: responsiveWidth(90),
+                marginLeft: "auto",
+                flexDirection: "row",
               },
             ]}
           >
@@ -140,6 +116,8 @@ const CustomInput = (props) => {
           </View>
         )
       }
+
+
 
       <View style={{ height: responsiveHeight(3.5) }}>
         {
@@ -151,9 +129,6 @@ const CustomInput = (props) => {
                   alignItems: 'center',
                   paddingLeft: moderateScale(16),
                   gap: 5,
-                  // backgroundColor: "orange",
-                  // height: responsiveHeight(4.5),
-                  // marginTop: verticalScale(7),
                 },
               ]}
             >
@@ -163,7 +138,6 @@ const CustomInput = (props) => {
           )
         }
       </View>
-
 
 
       {

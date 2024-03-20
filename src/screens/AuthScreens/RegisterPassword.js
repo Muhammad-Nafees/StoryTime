@@ -119,9 +119,7 @@ const RegisterPassword = () => {
                                 Submitted={isSubmitted}
                             />
 
-
                             {/* Confirm Password------------ */}
-
 
                             <CustomInput
                                 label={"Confirm Password"}
@@ -193,6 +191,7 @@ const RegisterPassword = () => {
         </Formik>
     );
 };
+
 
 
 const styles = StyleSheet.create({

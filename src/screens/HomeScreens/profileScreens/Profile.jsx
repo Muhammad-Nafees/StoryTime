@@ -20,7 +20,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import { useNavigation, NavigationAction } from '@react-navigation/native';
+import { useNavigation, NavigationAction, useFocusEffect } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -58,71 +58,93 @@ const Profile = ({ route }) => {
   // Redux
   const dispatch = useDispatch();
   const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
-  const randomNumberforUpdateProfile = useSelector((state) => state?.getcategories?.randomForProfileUpdate);
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-
-  const getUsersProfile = async () => {
-    setIsUserLoading(true);
-    setProfileResponse([]);
-    setResponse_ProfileVideo([]);
-    try {
-      const response = await getUsers_Profile({ user: FriendIdRTK });
-      if (response) {
-        setResponseUserProfile(response);
-        setIsUserLoading(false);
-      }
-      console.log("response--- :", response);
-      setRecordingPage(1);
-      dispatch(setResponseUsersProfile(response))
-      setIsPublicOrPrivate(response?.data?.isPublic);
-      return response;
-    } catch (error) {
-    };
-  };
+  console.log("FriendIdRTK--- :", FriendIdRTK);
 
 
+  useFocusEffect(
+    useCallback(() => {
 
-  const profile_story_api = async () => {
-
-    if (hasMorePagesRecording) {
-      setIsLoadingRecording(false);
-    }
-    else {
-      setIsLoadingRecording(true);
-    };
-
-    try {
-      const responseData = await fetch_users_stories({
-        recordingPage: recordingPage,
-        type: type,
-        user: FriendIdRTK,
-      });
-
-      const responsestories = responseData?.data?.stories;
-      console.log(responseData?.data, "RESPONSE FROM PROFILE :");
-
-      setIsLoadingRecording(false);
-      if (responsestories && type === "text") {
-        console.log("responsestories text---- :", responsestories);
-        setIsLoadingRecording(false);
-        setProfileResponse((prevData) => [...prevData, ...responsestories]);
-        setIsUserProfileData(false);
-      }
-      else if (responsestories && type === "video") {
-        console.log("responsestories Video---- :", responsestories);
-        setIsLoadingRecording(false);
-        setIsUserProfileData(false);
-        setResponse_ProfileVideo((prevData) => [...prevData, ...responsestories]);
+      const getUsersProfile = async () => {
+        setIsUserLoading(true);
+        setProfileResponse([]);
+        setResponse_ProfileVideo([]);
+        try {
+          const response = await getUsers_Profile({ user: FriendIdRTK });
+          if (response) {
+            setResponseUserProfile(response);
+            setIsUserLoading(false);
+          }
+          setRecordingPage(1);
+          dispatch(setResponseUsersProfile(response))
+          setIsPublicOrPrivate(response?.data?.isPublic);
+          return response;
+        } catch (error) {
+          console.log("ERROR FROM USERS_PROFILE", error?.response?.data);
+        };
       };
-      setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
+      getUsersProfile();
+    }, [FriendIdRTK])
+  )
 
-      return responseData;
-    } catch (error) {
-      console.log("err", error);
-    };
-  };
+
+
+  useFocusEffect(
+    useCallback(() => {
+      const profile_story_api = async () => {
+        if (hasMorePagesRecording) {
+          setIsLoadingRecording(false);
+        }
+        else {
+          setIsLoadingRecording(true);
+        };
+        try {
+          const responseData = await fetch_users_stories({
+            recordingPage: recordingPage,
+            type: type,
+            user: FriendIdRTK,
+          });
+
+          const responsestories = responseData?.data?.stories;
+          setIsLoadingRecording(false);
+          if (responsestories && type === "text") {
+            setIsLoadingRecording(false);
+            setType("text");
+            setProfileResponse((prevData) => {
+              const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              console.log("filteredDataTEXT", filteredData);
+              return [...prevData, ...filteredData]
+            }
+            );
+            setIsUserProfileData(false);
+          }
+
+          else if (responsestories && type === "video") {
+            setIsLoadingRecording(false);
+            setType("video");
+            setIsUserProfileData(false);
+            setResponse_ProfileVideo((prevData) => {
+              const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              console.log("filteredDataVIDEO", filteredData);
+              return [...prevData, ...filteredData];
+            }
+            );
+          };
+
+          setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
+
+          return responseData;
+        } catch (error) {
+          console.log("error :", error);
+        };
+      };
+      profile_story_api();
+    }, [type, recordingPage, FriendIdRTK])
+  );
+
+
 
   const toggel_mode = async () => {
     try {
@@ -138,53 +160,38 @@ const Profile = ({ route }) => {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   // setType("text");
+  //   getUsersProfile();
+  // }, [FriendIdRTK]);
+
+  // setRecordingPage(1);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     profile_story_api();
+  //   }, [type, recordingPage])
+  // )
+
+
+  // useEffect(() => {
+  //   profile_story_api();
+  // }, [type, recordingPage])
+
+  const handleText = () => {
+    setType("text");
+    setIsContent(0);
     setRecordingPage(1);
-    setType("text");
-    getUsersProfile();
-  }, [FriendIdRTK]);
+    setIsLoadingRecording(false);
+  }
+
+  const handleVideo = () => {
+    setType("video");
+    setIsContent(1);
+    setRecordingPage(1);
+    setIsLoadingRecording(false);
+  };
 
 
-
-  useEffect(() => {
-    setType("text");
-    profile_story_api();
-  }, [type, recordingPage, FriendIdRTK]);
-
-
-
-
-  // isUserLoading ?
-  //   <ActivityIndicator /> :
-  //   <>
-  {/* <ImageBackground style={{ width: 160, height: 190, }} resizeMode="cover" source={require("../../../assets/profile-picture.png")}>
-
-        </ImageBackground> */}
-  {/* <View style={{ paddingBottom: 20 }}>
-            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-              {`@${responseUserProfile?.data?.username || 0}`}
-            </Text>
-          </View>
-
-          <View>
-            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-              {`${responseUserProfile?.data?.noOfFollowings || 0}`}
-            </Text>
-            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-              Following
-            </Text>
-          </View>
-
-          <View>
-            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), textAlign: "center", fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-              {`${responseUserProfile?.data?.noOfFollowers || 0}`}
-
-            </Text>
-            <Text style={{ color: "#FFF", fontSize: responsiveFontSize(2), fontFamily: Inter_SemiBold.Inter_SemiBold }}>
-              Follower
-            </Text>
-          </View> */}
-  // </>
 
   return (
     <>
@@ -206,7 +213,10 @@ const Profile = ({ route }) => {
                 <View style={{ flexDirection: "row", }}>
                   {
                     isUserLoading ?
-                      <ActivityIndicator /> :
+                      <View style={{ height: SCREEN_HEIGHT / 3, width: SCREEN_WIDTH / 2.5, justifyContent: "center" }}>
+                        <ActivityIndicator />
+                      </View>
+                      :
                       <>
                         <View style={{}}>
                           <ImageBackground style={{ width: SCREEN_WIDTH / 2, height: SCREEN_HEIGHT / 3, justifyContent: "center", alignItems: "center" }} resizeMode="contain" source={require("../../../assets/profile-picture.png")}>
@@ -231,7 +241,7 @@ const Profile = ({ route }) => {
                               <View>
                                 <View style={{}}>
                                   <Text style={{ color: "#FFF", fontSize: responsiveFontSize(1.8), textAlign: "center", fontFamily: Inter_Regular.Inter_Regular }}>
-                                    {`${responseUserProfile?.data?.noOfFollowings || 0}`}
+                                    {`${responseUserProfile?.data?.noOfFollowers || 0}`}
                                   </Text>
                                 </View>
                                 <View>
@@ -246,7 +256,6 @@ const Profile = ({ route }) => {
                           </ImageBackground>
                         </View>
 
-
                       </>
                   }
 
@@ -255,6 +264,7 @@ const Profile = ({ route }) => {
                     {
                       USER?._id === FriendIdRTK ? (
                         <>
+
                           <TouchableOpacity
                             onPress={() => {
                               setChangeMode(1)
@@ -297,66 +307,9 @@ const Profile = ({ route }) => {
               </View>
             </View>
 
-            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-
-              <View style={{ paddingTop: responsiveWidth(6) }}>
-                <BackButton onPress={() => navigation?.goBack()} />
-              </View>
-
-              <View
-                style={{
-                  height: responsiveHeight(40),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: responsiveWidth(40)
-                }}>
-
-
-              </View> */}
-
-
             {/* Incognito Icon----- */}
 
-            {/* <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
-                {
-                  USER?._id === FriendIdRTK ? (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setChangeMode(1)
-                          setType("video");
-                          toggel_mode();
-                          setProfileResponse([]);
-                          setResponse_ProfileVideo([]);
-                        }
-                        }
-                        style={[
-                          styles.back_button,
-                          {
-                            backgroundColor: 'rgba(57, 94, 102, 0.5)',
-                          },
-                        ]}>
-                        <Image
-                          style={styles.left_arrow}
-                          source={require('../../../assets/incognito-icon.png')}
-                        />
-                      </TouchableOpacity>
 
-                      <View style={{ paddingHorizontal: moderateScale(7) }}>
-                        <SettingButton
-                          onPress={() => navigation.navigate(SETTING)}
-                          image={SETTINGS_ICON}
-                        />
-                      </View>
-                    </>
-                  )
-                    :
-                    null
-                }
-              </View> */}
-
-
-            {/* </View> */}
           </ImageBackground>
 
           <View
@@ -372,14 +325,7 @@ const Profile = ({ route }) => {
                 justifyContent: 'space-around',
               }}>
               <TouchableOpacity
-                onPress={() => {
-                  setIsContent(0)
-                  setType("text");
-                  setRecordingPage(1);
-                  setIsLoadingRecording(false);
-                  setResponse_ProfileVideo([]);
-                }
-                }
+                onPress={() => handleText()}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -397,12 +343,7 @@ const Profile = ({ route }) => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  setIsContent(1);
-                  setType("video");
-                  setProfileResponse([]);
-                  setRecordingPage(1);
-                }}
+                onPress={() => handleVideo()}
                 style={{
                   borderRadius: 10,
                   paddingVertical: moderateVerticalScale(14),

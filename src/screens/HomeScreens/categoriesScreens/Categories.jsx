@@ -126,6 +126,7 @@ const Categories = () => {
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
+
           console.log('filter', filteredCategories);
 
           if (filteredCategories.length > 0) {
@@ -151,7 +152,6 @@ const Categories = () => {
     }
   };
 
-
   const fetchCategories = async (page = 1) => {
     try {
       setIsLoading(true);
@@ -176,6 +176,7 @@ const Categories = () => {
       ];
       for (let i = 0; i < response?.data?.categories?.length; i++) {
         const colorIndex = i % valObj.length;
+        console.log(colorIndex, "COLOR INDEX");
         response.data.categories[i].background = valObj[colorIndex];
       };
 
@@ -267,12 +268,9 @@ const Categories = () => {
           text={item?.name}
           item={item}
           handleRandomClick={handleRandomClick}
+          isCategoryBlurred={isCategoryBlurred}
           mainbgColor={TextColorGreen}
         />
-        {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-          <BlurViewGuest
-          />
-        )}
       </>
     );
   };

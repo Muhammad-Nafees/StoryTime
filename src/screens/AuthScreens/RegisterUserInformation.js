@@ -23,10 +23,12 @@ import { zipCodeValidation } from '../../../validation/validation';
 import AuthCustomSelectDropdown from '../../components/auth/AuthSelectDropDown';
 import CustomInput from '../../components/auth/CustomInput';
 
+
 const RegisterUserInformation = ({ }) => {
   // states
   const [changeColor, setChangeColor] = useState("#AAA")
-  const [secondChangeColor, setSecondChangeColor] = useState("#AAA")
+  const [secondChangeColor, setSecondChangeColor] = useState("#AAA");
+  const [isSubmitted, setIsSubmitted] = useState(false)
   // redux states
   const { userdata } = useSelector(state => state?.userinfostate);
   const { userdatacity } = useSelector(state => state?.userinfocity);
@@ -42,6 +44,7 @@ const RegisterUserInformation = ({ }) => {
   const dispatch = useDispatch();
 
   const handlerSubmitUserInfo = async (values) => {
+    setIsSubmitted(false);
     dispatch(
       register({ ...registerData, state: values?.state, city: values?.city, zipCode: values?.zipCode }),
     );
@@ -78,6 +81,8 @@ const RegisterUserInformation = ({ }) => {
               />
             </View>
 
+
+
             <View>
               {/* State----------- */}
 
@@ -106,7 +111,9 @@ const RegisterUserInformation = ({ }) => {
                       />
                     )}
                   />
-
+                  {
+                    console.log("errorsZipcode--- :", errors.zipCode)
+                  }
                   <AuthCustomSelectDropdown
                     data={namesCities}
                     defaultText="Select here"
@@ -136,9 +143,10 @@ const RegisterUserInformation = ({ }) => {
                   label={"Zip Code"}
                   error={errors.zipCode}
                   touched={touched.zipCode}
+                  Submitted={isSubmitted}
                   width={responsiveWidth(90)}
                   handleChange={handleChange('zipCode')}
-                  setFieldTouched={() => setFieldTouched("zipcode")}
+                  setFieldTouched={() => setFieldTouched("zipCode")}
                 />
               </View>
 
@@ -149,11 +157,14 @@ const RegisterUserInformation = ({ }) => {
             <View style={{ paddingTop: responsiveWidth(25) }}>
 
               <CustomButton
-                onPress={
-                  values.city !== '' && values.state !== '' && values.zip !== ''
-                    ? handleSubmit
-                    : null
-                }
+                onPress={() => {
+                  if (values.city !== '' && values.state !== '' && values.zip !== '') {
+                    handleSubmit();
+                    setIsSubmitted(true);
+                  } else {
+                    return null;
+                  }
+                }}
                 backgroundColor={
                   values.city !== '' && values.state !== '' && values.zip !== ''
                     ? '#395E66'

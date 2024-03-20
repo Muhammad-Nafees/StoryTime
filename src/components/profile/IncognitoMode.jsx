@@ -130,7 +130,7 @@ const IncognitoMode = ({ setChangeMode,
 
                                 <View style={{ paddingHorizontal: moderateScale(7) }}>
                                     <SettingButton
-                                        onPress={() => navigation.navigate(SETTING)}
+                                        onPress={() => navigation.navigate("Setting")}
                                         image={SETTINGS_ICON}
                                     />
                                 </View>
@@ -288,16 +288,15 @@ const IncognitoMode = ({ setChangeMode,
                     hasMorePagesIncognito={hasMorePagesIncognito}
                     isincognitoPage={incognitoPage}
                     isNoDataProfile={isNoDataProfile}
-                // videoPage={incorg}
                 />
             }
-
 
 
         </View>
 
     )
 };
+
 
 
 export default IncognitoMode;

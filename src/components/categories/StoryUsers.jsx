@@ -11,6 +11,7 @@ import { setStoryUserImage } from '../../../store/slices/categoriesSlice/categor
 import { URL } from '../../constants/Constant';
 import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import { TextColorGreen } from '../../screens/Styles/Style';
+import BlurViewGuest from './guestCategories/BlurViewGuest';
 
 const StoryUsers = ({
   images,
@@ -20,6 +21,7 @@ const StoryUsers = ({
   disabled,
   item,
   handleRandomClick,
+  isCategoryBlurred
 }) => {
   const dispatch = useDispatch();
   const imageLink = URL + images;
@@ -31,6 +33,7 @@ const StoryUsers = ({
   };
 
   return (
+
     <View
       key={item?.id}
       style={{
@@ -98,6 +101,10 @@ const StoryUsers = ({
           {item?.namerandom == 'Random' ? item?.namerandom : text}
         </Text>
       </View>
+      {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
+        <BlurViewGuest
+        />
+      )}
     </View>
 
   );

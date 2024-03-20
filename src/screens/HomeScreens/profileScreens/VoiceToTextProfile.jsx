@@ -134,8 +134,6 @@ const VoiceToTextProfile = ({ route }) => {
                                                     /> : <ActivityIndicator />
                                             }
 
-
-
                                         </View>
                                         :
                                         null

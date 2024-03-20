@@ -198,12 +198,10 @@ const SubCategories = ({ route }) => {
           text={item?.name}
           item={item}
           mainbgColor={TextColorGreen}
+          isCategoryBlurred={isCategoryBlurred}
           backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
           handleRandomClick={() => handleRandomSub_category(item)}
         />
-        {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-          <BlurViewGuest />
-        )}
       </>
     );
   };

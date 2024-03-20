@@ -1,22 +1,19 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, FlatList, ActivityIndicator, } from 'react-native'
 import React, { useState } from 'react'
-import { profile_oliverPierce } from '../../../dummyData/DummyData'
-import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style'
+import { PrimaryColor } from '../../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateScale } from 'react-native-size-matters'
-import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
 
 
+
 const RecordingIncognito = ({ setIsincognitoPage, hasMorePagesIncognito, incognito_response, isincognitoPage }) => {
-    const navigation = useNavigation();
     const SCREENHEIGHT = Dimensions.get("window").height;
     const SCREENWIDTH = Dimensions.get("window").width;
 
     const [isLoadMore, setIsLoadMore] = useState(false);
 
-    console.log("hasMorePagesIncognito-", hasMorePagesIncognito)
-    console.log("isincognitoPage", isincognitoPage);
+
 
     const handleLoadMore = async () => {
 

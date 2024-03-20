@@ -15,6 +15,7 @@ import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices
 import { createStory_api } from '../../../../services/api/storyfeed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../../components/auth/UserErrors';
+import Toast from 'react-native-toast-message';
 
 
 
@@ -66,8 +67,22 @@ const AddUrl = () => {
     };
 
 
+    const isURLValid = (url) => {
+        const pattern = /^(https?:\/\/)?([\w.]+)\.([a-z]{2,})([\w\/]*)*$/i;
+        return pattern.test(url);
+    };
+
+
     const createStory_video = async () => {
         setIsLoading(true);
+        if (!isURLValid(textInputValue)) {
+            Toast.show({
+                type: "error",
+                text1: "Invalid URL"
+            })
+            setIsLoading(false);
+            return; // Return agar URL invalid hai
+        }
         try {
             const response = await createStory_api({
                 type: "video",

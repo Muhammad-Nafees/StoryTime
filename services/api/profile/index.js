@@ -116,7 +116,6 @@ export const getUsers_Profile = async ({ user }) => {
     console.log("user----", user)
     let url = `${Base_Url}${user_profile}?user=${user}`;
 
-
     try {
         const responseData = await fetch(url, {
             method: "GET",
