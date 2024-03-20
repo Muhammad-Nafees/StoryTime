@@ -1,40 +1,36 @@
-// imports libraries 
-import {
-  View,
-  ImageBackground,
-  StyleSheet,
-} from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
+// imports libraries
+import {View, ImageBackground, StyleSheet} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { moderateVerticalScale } from 'react-native-size-matters';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import {moderateVerticalScale} from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import Voice from '@react-native-voice/voice';
 // imports components
 import UserNames from '../../../../components/UserNames';
-import { recordingData } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
+import {recordingData} from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 import CustomPlayFlowButton from '../../../../components/playFlow/CustomPlayFlowButton';
 import SaveStoryBtn from '../../../../components/playFlow/SaveStoryBtn';
 import SaveStoryPhone from '../../../../components/playFlow/SaveStoryPhone';
-import { Img_Paths } from '../../../../assets/Imagepaths';
-import { PrimaryColor, TextColorGreen } from '../../../Styles/Style';
-import { SCREEN_HEIGHT, SPACING } from '../../../../constants/Constant';
+import {Img_Paths} from '../../../../assets/Imagepaths';
+import {PrimaryColor, TextColorGreen} from '../../../Styles/Style';
+import {SCREEN_HEIGHT, SPACING} from '../../../../constants/Constant';
 import GuestModals from '../../../../components/GuestModals';
 import CustomHeaderTimer from '../../../../components/reusable-components/categoriesplayFlow/CustomHeaderTImer';
 
 import UserVoiceContent from '../../../../components/reusable-components/categoriesplayFlow/UserVoiceContent';
 import MicrophoneButton from '../../../../components/reusable-components/categoriesplayFlow/MicrophoneButton';
-import { isCheckValue } from '../../../../../store/slices/categoriesSlice/categoriesSlice';
+import {isCheckValue} from '../../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const StartRecordingVoice = () => {
   // global variable
   let longPressTimeout;
   // img paths
-  const { SPLASH_SCREEN_IMAGE, BG_VOICE_TO_TEXT_IMG } = Img_Paths;
+  const {SPLASH_SCREEN_IMAGE, BG_VOICE_TO_TEXT_IMG} = Img_Paths;
   // states
   const [started, setStarted] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -48,19 +44,20 @@ const StartRecordingVoice = () => {
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const { isCheck,
+  const {
+    isCheck,
     nextRandomNumber,
     isExtendStory,
     extendCounting,
     nextRandomNumberExtend,
-    gameFriends
+    gameFriends,
   } = useSelector(state => state.getcategories);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(gameFriends[0]);
   const [isNextUser, setIsNextUser] = useState(gameFriends[1]);
   const navigation = useNavigation();
 
   // redux states
-  const { user } = useSelector(state => state?.authSlice);
+  const {user} = useSelector(state => state?.authSlice);
 
   const dispatch = useDispatch();
 
@@ -85,7 +82,6 @@ const StartRecordingVoice = () => {
     setStarted(true);
   };
 
-
   const onSpeechResult = async e => {
     if (!e.value) return;
     setSpeaking(false);
@@ -105,7 +101,7 @@ const StartRecordingVoice = () => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  };
+  }
 
   useEffect(() => {
     setTimeLeft(null);
@@ -156,12 +152,12 @@ const StartRecordingVoice = () => {
     user
       ? navigation.navigate('GoNextPlayer')
       : modalOpen(
-        GuestModalRef,
-        'Get Story Time Premium',
-        'Subscribe now to save your Story to your profile',
-        'Subscribe',
-        'Back',
-      );
+          GuestModalRef,
+          'Get Story Time Premium',
+          'Subscribe now to save your Story to your profile',
+          'Subscribe',
+          'Back',
+        );
   };
 
   useEffect(() => {
@@ -169,7 +165,7 @@ const StartRecordingVoice = () => {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    };
+    }
 
     if (isCheck) {
       const currentIndex = gameFriends.indexOf(currentDisplayUser);
@@ -190,7 +186,6 @@ const StartRecordingVoice = () => {
       setisCancelingStory(true);
     };
   }, [isCheck, nextRandomNumber, nextRandomNumberExtend]);
-
 
   const saveBtnHandler = () => {
     if (!user) {
@@ -223,7 +218,7 @@ const StartRecordingVoice = () => {
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
-    };
+    }
 
     if (timeLeft !== 0) {
       setIsPressed(true);
@@ -252,7 +247,7 @@ const StartRecordingVoice = () => {
   useEffect(() => {
     if (USER_LENGTH_CHECK) {
       setIsNext(false);
-    };
+    }
 
     let countdown;
 
@@ -274,7 +269,6 @@ const StartRecordingVoice = () => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
-
   useEffect(() => {
     if (isExtendStory === true && timeLeft == null) {
       setTimeText('00:30');
@@ -290,7 +284,8 @@ const StartRecordingVoice = () => {
     }
   }, [timeLeft]);
 
-
+  const [description, setDescription] = useState('');
+  console.log(description, 'DESCRIPTIOJ');
 
   return (
     <>
@@ -331,7 +326,7 @@ const StartRecordingVoice = () => {
           </View>
         </ImageBackground>
 
-        <View style={{ height: responsiveHeight(35), marginBottom: SPACING * 4 }}>
+        <View style={{height: responsiveHeight(35), marginBottom: SPACING * 4}}>
           <View
             style={{
               paddingVertical: moderateVerticalScale(25),
@@ -353,13 +348,14 @@ const StartRecordingVoice = () => {
               isLongPress={isLongPress}
               backgroundColor={TextColorGreen}
               color="#FFF"
-              text={`Next Player${isNextUser?.username ? ': @' + isNextUser?.username : ''
-                }`}
+              text={`Next Player${
+                isNextUser?.username ? ': @' + isNextUser?.username : ''
+              }`}
               timeLeft={timeLeft}
               isNextUser={isNextUser}
               isCancelingStory={isCancelingStory}
             />
-          ) :
+          ) : (
             !user && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
@@ -373,9 +369,9 @@ const StartRecordingVoice = () => {
                 isCancelingStory={isCancelingStory}
               />
             )
-          }
+          )}
 
-          <View style={{ paddingTop: responsiveWidth(6) }}>
+          <View style={{paddingTop: responsiveWidth(6)}}>
             <SaveStoryBtn
               onPress={!user ? saveStoryhandler : saveBtnHandler}
               text={!user ? 'Save to phone' : 'Save Story'}
@@ -386,20 +382,18 @@ const StartRecordingVoice = () => {
           </View>
 
           {saveStoryModal && (
-            <SaveStoryPhone
-              isVisible={isVisible}
-              setIsVisible={setVisible} />
+            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
           )}
         </View>
 
         <GuestModals
           ref={GuestModalRef}
-          onPress={() => navigation.navigate("PlayStoryTime")}
+          onPress={() => navigation.navigate('PlayStoryTime')}
         />
         <GuestModals
           ref={GuestModalRefForAds}
           onPress={saveStoryhandler}
-          textOnPress={() => navigation.navigate("PlayStoryTime")}
+          textOnPress={() => navigation.navigate('PlayStoryTime')}
         />
         {/* </ScrollView> */}
       </ImageBackground>

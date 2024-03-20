@@ -16,7 +16,7 @@ import {
 import {
   setFriendId,
   setRandomForProfileUpdate,
-} from '../../../store/slices/addplayers/addPlayersSlice';
+} from '../../../store/slices/categoriesSlice/categoriesSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {PrimaryColor} from '../../screens/Styles/Style';

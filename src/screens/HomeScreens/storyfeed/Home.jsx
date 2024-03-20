@@ -16,7 +16,7 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { HomeHeader, UserList, FrameContent } from '../../../components';
-import { setFriendId } from '../../../../store/slices/addplayers/addPlayersSlice';
+import { setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const Home = () => {
   //destructures

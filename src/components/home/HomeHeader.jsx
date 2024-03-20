@@ -6,7 +6,7 @@ import {moderateVerticalScale} from 'react-native-size-matters';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
 import {Image, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {setFriendId} from '../../../store/slices/addplayers/addPlayersSlice';
+import {setFriendId} from '../../../store/slices/categoriesSlice/categoriesSlice';
 
 const HomeHeader = () => {
   // Destructures
