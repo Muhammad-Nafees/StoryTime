@@ -1,86 +1,95 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Field } from 'formik';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { verticalScale } from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import {
   responsiveFontSize,
+  responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { FourthColor, TextinputColor } from '../../screens/Styles/Style';
+import { username_api } from '../../../services/api/auth_mdule/auth';
 import _ from 'lodash';
 import { Path, Svg } from 'react-native-svg';
-import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 const CustomPhoneInput = ({
   handleChange,
   error,
   value,
+  touched,
+  setFieldValue,
   phoneInput,
   isError,
   setIsError,
   setPhoneCode,
   setFieldError,
+  countryCode,
+  placeholder,
+  setPhoneError,
   disabled = false,
+  extraStyles,
   setFormatText,
+  setphoneNumberStatusCode,
   defaultCode,
-  labelStyles
 }) => {
   // console.log("error && isError", error,"//",isError)
 
-  // const [isFocused, setIsFocused] = useState(false);
-  // const [response, setResponse] = useState();
-  // const [statusCodePhone, setStatusCodePhone] = useState();
+  const [isFocused, setIsFocused] = useState(false);
+  const [response, setResponse] = useState();
+  const [statusCodePhone, setStatusCodePhone] = useState();
 
-  // const debouncedApiCall = useRef(
-  //   _.debounce(async (phoneNumber, setFieldError) => {
-  //     const code = phoneInput?.current?.state?.code;
-  //     setResponse(response?.status);
-  //     const response = await username_api({
-  //       completePhone: `+${code}${phoneNumber}`,
-  //     });
-  //     setphoneNumberStatusCode(response?.statusCode);
-  //     setStatusCodePhone(response?.statusCode);
-  //     console.log(response?.statusCode);
-  //     if (response?.statusCode !== 200) {
-  //       setPhoneError('Phone Number already exists'); //no need for this
-  //       setIsError('Phone Number already exists');
-  //       setFieldError('phoneNo', `Phone Number already exists`);
-  //     }
-  //   }, 300),
-  // ).current;
+  const debouncedApiCall = useRef(
+    _.debounce(async (phoneNumber, setFieldError) => {
+      const code = phoneInput?.current?.state?.code;
+      setResponse(response?.status);
+      const response = await username_api({
+        completePhone: `+${code}${phoneNumber}`,
+      });
+      setphoneNumberStatusCode(response?.statusCode);
+      setStatusCodePhone(response?.statusCode);
+      console.log(response?.statusCode);
+      if (response?.statusCode !== 200) {
+        setPhoneError('Phone Number already exists'); //no need for this
+        setIsError('Phone Number already exists');
+        setFieldError('phoneNo', `Phone Number already exists`);
+      }
+    }, 300),
+  ).current;
 
   const handleCountryChange = () => {
     phoneInput.current?.setState({ number: '' });
+    setFieldValue('phoneNo', '');
+    setIsError('Phone number is required!');
   };
 
-  // useEffect(() => {
-  //   if (touched && value === '') {
-  //     setIsError('Phone number is required!');
-  //   }
-  // }, [touched, value]);
+  useEffect(() => {
+    if (touched && value === '') {
+      setIsError('Phone number is required!');
+    }
+  }, [touched, value]);
 
-  // console.log('statusPhoneCOde===', statusCodePhone);
-  // // ----------------------
+  console.log('statusPhoneCOde===', statusCodePhone);
+  // ----------------------
 
-  // const handleFocus = () => {
-  //   setIsFocused(true);
-  // };
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
 
-  // const handleBlur = () => {
-  //   setIsFocused(false);
-  // };
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
 
   return (
     <View style={{}}>
       <Text
-        style={[{
-          color:FourthColor,
+        style={{
+          color: FourthColor,
           fontWeight: '600',
           marginBottom: verticalScale(7),
-        },
-        labelStyles]}>
+        }}>
         Phone Number
       </Text>
 
@@ -109,6 +118,13 @@ const CustomPhoneInput = ({
               setFieldError('phoneNo', '');
               setIsError('');
               const checkValid = phoneInput.current?.isValidNumber(phoneNumber);
+              if (checkValid) {
+                debouncedApiCall(phoneNumber, setFieldError);
+              }
+              if (!checkValid) {
+                setFieldError('phoneNo', 'Invalid phone number');
+                setIsError('Invalid phone number');
+              }
             }}
             renderDropdownImage={
               <Svg
@@ -136,6 +152,8 @@ const CustomPhoneInput = ({
               console.log('Copy event triggered');
               // Add any additional debugging statements here
             }}
+            onFocus={handleFocus} // Simulate focus event
+            onBlur={handleBlur}
           />
         )}
       </Field>

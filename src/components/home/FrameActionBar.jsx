@@ -1,22 +1,16 @@
-import React, {useState} from 'react';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   responsiveWidth,
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 // import {useDispatch} from 'react-redux';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {useNavigation} from '@react-navigation/native';
-import {SecondaryColor} from '../../screens/Styles/Style';
-import {moderateVerticalScale} from 'react-native-size-matters';
-// import {
-//   likedstoryfeed,
-//   likedCountingRTK,
-//   storyFeedContent,
-//   storyFeedUsername,
-//   disLikedCountingRTK,
-// } from '../../../store/slices/storyfeedslices/likedStorySlice';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { useNavigation } from '@react-navigation/native';
+import { SecondaryColor } from '../../screens/Styles/Style';
+import { moderateVerticalScale } from 'react-native-size-matters';
+
 import {
   Menu,
   MenuOption,
@@ -28,10 +22,10 @@ import {
   storydisLikedFeed,
 } from '../../../services/api/storyfeed';
 
-const FrameActionBar = ({item, setIsVisible}) => {
+const FrameActionBar = ({ item, setIsVisible }) => {
   const {
     content,
-    creator: {username},
+    creator: { username },
     likedByMe,
     _id: likedUserId,
     dislikesByMe,
@@ -40,7 +34,7 @@ const FrameActionBar = ({item, setIsVisible}) => {
     likesCount: likesCountuser,
   } = item || {};
 
-  const {SHARE_BTN} = Img_Paths;
+  const { SHARE_BTN } = Img_Paths;
 
   // Hooks
   // const dispatch = useDispatch();
