@@ -34,6 +34,7 @@ const HomeHeader = () => {
             onPress={() => navigation.navigate('AddFiends')}>
             <Image
               style={styles.iconImage}
+              resizeMode='contain'
               source={require('../../assets/plus-icon.png')}
             />
           </TouchableOpacity>
@@ -45,6 +46,7 @@ const HomeHeader = () => {
             }}>
             <Image
               style={styles.iconImage}
+              resizeMode='contain'
               source={require('../../assets/avatar.png')}
             />
           </TouchableOpacity>
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingBottom:responsiveWidth(1.5)
   },
   logoContainer: {
     width: SCREEN_WIDTH * 0.23,
