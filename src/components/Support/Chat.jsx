@@ -1,13 +1,18 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import {URL} from '../../constants/Constant';
+import { Img_Paths } from '../../assets/Imagepaths';
 import { Image, StyleSheet, View } from 'react-native';
 import Typography from '../reusable-components/Typography';
-import { Img_Paths } from '../../assets/Imagepaths';
-import React from 'react';
-import {URL} from '../../constants/Constant';
 import {responsiveScreenWidth} from 'react-native-responsive-dimensions';
 
 const Chat = ({ item }) => {
   const { STORY_ICON } = Img_Paths;
   // console.log("media",URL+item.media[0])
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
+  const IS_ADMIN_MSG = USER?._id !== item?.user?._id
+  console.log("🚀 ~ Chat ~ item:", item,USER?._id)
   const timestamp = new Date(item.updatedAt);
   const uri = item.media && item.media.length > 0 ? URL + item.media[0] : '';
 
@@ -40,9 +45,9 @@ const Chat = ({ item }) => {
             <Typography
               style={[
                 styles.message_text,
-                item?.adminMessage && {color: 'red'},
+                IS_ADMIN_MSG && {color: 'red'},
               ]}>
-              {item?.adminMessage ? item?.adminMessage : item?.text}
+              {item?.text}
             </Typography>
           </View>
           <View style={{}}>

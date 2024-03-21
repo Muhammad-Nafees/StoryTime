@@ -34,7 +34,7 @@ const SupportMessageList = ({ navigation, route }) => {
         const response = await getMessageWithId(chatID);
         const data = await response.data;
         console.log('🚀 ~ getAllChatsWithId ~ data:', data.supportMessages);
-        setMessageList(data.supportMessages);
+        setMessageList(data.supportMessages?.slice?.()?.reverse?.());
       } catch (error) {
         console.log('🚀 ~ getAllChatsWithId ~ error:', error);
       }
@@ -50,8 +50,7 @@ const SupportMessageList = ({ navigation, route }) => {
       console.log('message received in App', msg);
       if(msg?.user?._id !== USER?._id){
         setMessageList(prevMessageList => [
-          ...prevMessageList,
-          {adminMessage: msg},
+          ...prevMessageList,msg,
         ]);
       }
     });
