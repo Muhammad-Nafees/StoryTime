@@ -147,12 +147,12 @@ const VoiceToTextProfile = ({ route }) => {
                                 {/* <ImageBackground
                                     style={[styles.img_background_content,
                                     {
-                                        width: SCREENWIDTH * 0.9,
-                                        height: SCREENWIDTH * 0.8,
+                                        width: SCREENWIDTH * 1,
+                                        height: SCREENWIDTH * 1,
                                     },
                                     ]}
                                     resizeMode="contain"
-                                    source={PROFILE_BG_FRAME}
+                                    source={require("../../../assets/backgroundVoice.jpeg")}
                                 > */}
 
                                 <View style={{ justifyContent: "center", alignItems: "center", }}>
