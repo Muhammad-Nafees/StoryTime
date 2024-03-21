@@ -26,10 +26,8 @@ import {
   TextColorGreen,
 } from '../../../screens/Styles/Style';
 import Typography from '../Typography';
-import { BlurView } from '@react-native-community/blur';
 import { Img_Paths } from '../../../assets/Imagepaths/index';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constant';
-import { moderateScale } from 'react-native-size-matters';
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const { handleSuccessCallback } = props || {};

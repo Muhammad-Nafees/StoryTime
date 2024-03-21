@@ -1,10 +1,10 @@
 import React from 'react';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import Typography from '../../../components/reusable-components/Typography';
-import { FourthColor, SecondaryColor } from '../../Styles/Style';
-import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import {Img_Paths} from '../../../assets/Imagepaths';
+import {Typography} from '../../../components';
+import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import {BackgroundWrapper} from '../../../components';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import MessageListItems from '../../../components/Support/MessageListItems';
 import {
   responsiveFontSize,
@@ -12,15 +12,20 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import ChatBottom from '../../../components/Support/ChatBottom';
-import { getMessageWithId } from '../../../../services/api/support';
-import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import {getMessageWithId} from '../../../../services/api/support';
+import {Inter_SemiBold} from '../../../constants/GlobalFonts';
+import socketServcies from '../../../../services/sockets';
+import { useSelector } from 'react-redux';
 
 const SupportMessageList = ({ navigation, route }) => {
   const [messageList, setMessageList] = React.useState([]);
-  const [reload, setReload] = React.useState(false);
-  const { chatID, img } = route.params;
-  console.log('🚀 ~ SupportMessageList ~ chatID:', chatID);
-  const { LEFT_ARROW_IMG } = Img_Paths;
+  const {chatID, img} = route.params;
+  const {LEFT_ARROW_IMG} = Img_Paths;
+
+  const { user } = useSelector(state => state?.authSlice);
+  const USER = user?.data?.user || user?.data;
+
+  console.log("CHANNEL => ", `support-${chatID}`)
 
   React.useEffect(() => {
     const getAllChatsWithId = async () => {
@@ -35,7 +40,23 @@ const SupportMessageList = ({ navigation, route }) => {
       }
     };
     getAllChatsWithId();
-  }, [reload]);
+  }, []);
+
+  React.useEffect(() => {
+    socketServcies.initializeSocket();
+  }, []);
+  React.useEffect(() => {
+    socketServcies.on(`support-${chatID}`, msg => {
+      console.log('message received in App', msg);
+      if(msg?.user?._id !== USER?._id){
+        setMessageList(prevMessageList => [
+          ...prevMessageList,
+          {adminMessage: msg},
+        ]);
+      }
+    });
+  }, []);
+
   return (
     <BackgroundWrapper disableScrollView coverScreen>
       <View style={styles.first_container}>
@@ -49,7 +70,11 @@ const SupportMessageList = ({ navigation, route }) => {
         </View>
       </View>
       <MessageListItems messageList={messageList} chatID={chatID} img={img} />
-      <ChatBottom setReload={setReload} reload={reload} chatID={chatID} />
+      <ChatBottom
+        setMessageList={setMessageList}
+        messageList={messageList}
+        chatID={chatID}
+      />
     </BackgroundWrapper>
   );
 };
