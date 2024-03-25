@@ -7,7 +7,7 @@ export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
     if (id) {
         apiUrl = Base_Url + `category?parent=${id}&page=${page2}&limit=${15}`;
     } else {
-        apiUrl = `${Base_Url + category_endpoint}?page=${page}&limit=${15}`;
+        apiUrl = `${Base_Url + category_endpoint}?page=${page}&limit=${10}`;
     };
     console.log("apiUrl---- :", apiUrl); // Move the console.log here
     try {

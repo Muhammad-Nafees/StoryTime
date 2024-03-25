@@ -13,7 +13,6 @@ import { get_Categories_Sub_Categories } from '../../../../services/api/categori
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../../components/auth/UserErrors';
 import Toast from 'react-native-toast-message';
 
@@ -38,6 +37,7 @@ const AddUrl = () => {
     const [responseSubCategories, setResponseSubCategories] = useState([]);
 
     // redux
+
     const addUrlId = useSelector((state) => state?.getcategories?.addUrlid);
     const categoryId = useSelector((state) => state?.getcategories?.urlCategoryname);
     const subCategoryId = useSelector((state) => state?.getcategories?.urlSubcategoryname);
@@ -45,26 +45,50 @@ const AddUrl = () => {
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
 
-    const categories_Api = async () => {
-        try {
-            const responseData = await get_Categories_Sub_Categories({
-                page: page,
-                id: addUrlId,
-                page2: pageSubCategory
-            });
-            if (addUrlId) {
-                setResponseSubCategories(responseData?.data?.categories);
-            } else {
-                setResponseCategories(responseData?.data?.categories);
-            };
-            setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-            console.log("responseData----- :", responseData);
 
-            return responseData;
-        } catch (error) {
 
+
+    console.log("PAGE----", page)
+    console.log("addUrlId----", addUrlId);
+    console.log("pageSubCategory----", pageSubCategory)
+
+    useEffect(() => {
+        const categories_Api = async () => {
+            try {
+                if (addUrlId !== undefined) {
+                    console.log("API CALLING START _:")
+                    const responseData = await get_Categories_Sub_Categories({
+                        page: page,
+                        id: addUrlId,
+                        page2: pageSubCategory
+                    });
+                    console.log("IF CONDITION START_:")
+                    if (addUrlId) {
+                        console.log("addURLid -------- :", addUrlId)
+                        setResponseSubCategories((prevData) => {
+                            return [...prevData, ...responseData?.data?.categories] || {}
+                        });
+                    } else {
+                        setResponseCategories((prevData) => {
+                            return [...prevData, ...responseData?.data?.categories] || {}
+                        });
+                    };
+                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
+                    console.log("END DEBUGGING")
+                    return responseData;
+                }
+            } catch (error) {
+                console.log("ERROR FROM CATEGORIES", error?.response)
+            }
+        };
+
+        categories_Api();
+        return () => {
+            dispatch(setAddUrlId(""))
         }
-    };
+    }, [page, addUrlId, pageSubCategory])
+
+
 
 
     const isURLValid = (url) => {
@@ -100,19 +124,13 @@ const AddUrl = () => {
         };
     };
 
-    useEffect(() => {
-        categories_Api();
-        return () => {
-            dispatch(setAddUrlId(""))
-        }
-    }, [page, addUrlId, pageSubCategory]);
 
 
+    const categoriesNames = [...new Set(responseCategories?.map(category => category?.name))];
+    const subCategoriesNames = [...new Set(responseSubCategories?.map((category) => category?.name))];
 
-    const categoriesNames = responseCategories?.map((category) => category?.name);
-    const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
-
-
+    console.log("categoriesNames--------- :", categoriesNames)
+    console.log("subCategoriesNames------ :", subCategoriesNames)
 
     return (
         <View style={{ height: responsiveHeight(100), }}>
@@ -122,6 +140,7 @@ const AddUrl = () => {
                 </View>
                 <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
                     <View style={{ backgroundColor: "#FFF", height: responsiveHeight(70), width: responsiveWidth(90), }}>
+
                         <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(20) }}>
                             <Text style={{ color: "rgba(47, 79, 86, 1)", fontSize: responsiveFontSize(3), fontWeight: "400", fontFamily: PassionOne_Regular.passionOne }}>Add URL</Text>
                         </View>
@@ -133,15 +152,13 @@ const AddUrl = () => {
 
                             <CustomSelectDropDown
                                 categoriesNames={categoriesNames}
-                                addUrlid={addUrlId}
-                                setResponseCategories={setResponseCategories}
                                 responseCategories={responseCategories}
                                 defaultText="Select a Category"
                                 changeColor={changeColor}
                                 setChangeColor={setChangeColor}
-                                setResponseSubCategories={setResponseSubCategories}
                                 HasMorePages={HasMorePages}
                                 setIsLoadMore={setIsLoadMore}
+                                setPage={setPage}
                             />
                         </View>
 
@@ -150,17 +167,18 @@ const AddUrl = () => {
                                 <Text style={{ color: "#000", fontWeight: "500" }}>Sub-Category</Text>
                             </View>
 
+                            {/* sub category dropdown */}
                             <CustomSelectDropDown
-                                subCategoriesNames={subCategoriesNames}
-                                subResponseCategories={responseSubCategories}
+                                categoriesNames={subCategoriesNames}
+                                responseCategories={responseSubCategories}
                                 defaultText="Select a Sub-Category"
                                 changeColor={secondChangeColor}
-                                addUrlid={addUrlId}
+                                setPage={setPageSubCategory}
+                                // addUrlid={addUrlId}
                                 setChangeColor={setSecondChangeColor}
-                                setResponseSubCategories={setResponseSubCategories}
                                 HasMorePages={HasMorePages}
-                                setPageSubCategory={setPageSubCategory}
                                 setIsLoadMore={setIsLoadMore}
+                            // setResponseSubCategories={setResponseSubCategories}
                             />
 
                         </View>

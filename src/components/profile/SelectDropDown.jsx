@@ -8,36 +8,32 @@ import { useDispatch } from "react-redux";
 
 
 
-const CustomSelectDropDown = ({ responseCategories,
+const CustomSelectDropDown = ({
+
+    responseCategories,
     defaultText,
     setChangeColor,
     changeColor,
-    secondChangeColor,
     categoriesNames,
-    addUrlid,
-    subCategoriesNames,
-    setResponseCategories,
     setResponseSubCategories,
+    subResponseCategories,
     HasMorePages,
-    setPageSubCategory,
     setIsLoadMore,
-    subResponseCategories
+    setPage
+
 }) => {
 
     const dispatch = useDispatch();
 
 
     const handleLoadMore = async () => {
-
-        // if (HasMorePages) {
-        //     // setshowTextUser(false);
-        //     setPageSubCategory((prevPage) => prevPage + 1);
-        //     setIsLoadMore(true);
-        //     console.log("hasmore Pages Dropdown", HasMorePages)
-        // } else {
-        //     setIsLoadMore(false);
-        // }
-
+        if (HasMorePages) {
+            setPage((prevPage) => prevPage + 1);
+            setIsLoadMore(true);
+            console.log("hasmore Pages Dropdown", HasMorePages)
+        } else {
+            setIsLoadMore(false);
+        }
     };
 
 
@@ -46,7 +42,7 @@ const CustomSelectDropDown = ({ responseCategories,
     return (
 
         <SelectDropdown
-            data={categoriesNames || subCategoriesNames}
+            data={categoriesNames}
             defaultButtonText={defaultText}
             buttonStyle={[
                 {
@@ -75,23 +71,33 @@ const CustomSelectDropDown = ({ responseCategories,
             }}
             onSelect={(selectedItem, index) => {
                 if (selectedItem) {
-                    const categoriesObj = responseCategories?.find((category) => category?.name === selectedItem);
-                    const subcategoriesObj = subResponseCategories?.find((category) => category?.name === selectedItem);
-                    console.log("subcategoir------- :", subcategoriesObj);
-                    if (categoriesObj) {
-                        const _id = categoriesObj?._id;
-                        setResponseSubCategories([]);
-                        dispatch(categorynameUrl(_id));
-                        dispatch(setAddUrlId(_id));
-                    } else if (subcategoriesObj) {
-                        const subcat_id = subcategoriesObj?._id;
-                        dispatch(subCategorynameUrl(subcat_id));
+                    const categoriesFind = responseCategories?.find((category) => category?.name === selectedItem);
+                    // const subCategoriesFind = subResponseCategories?.find((category) => category?.name === selectedItem);
+                    console.log('categoriesFind--- :', categoriesFind);
+                    console.log('SELECTED ITEM--- :', selectedItem);
+                    console.log('categoriesFind?._id--- :', categoriesFind?._id);
+
+
+                    if (!categoriesFind) {
+                        dispatch(setAddUrlId(""));
+                    } else {
+                        dispatch(setAddUrlId(categoriesFind?._id));
                     }
+
+                    // if (categoriesFind) {
+                    //     const _id = categoriesFind?._id;
+                    //     dispatch(categorynameUrl(_id));
+                    // } else {
+                    //     const subcat_id = subCategoriesFind?._id;
+                    //     dispatch(subCategorynameUrl(subcat_id));
+                    // };
                     setChangeColor("#000")
                 }
 
                 console.log('selectitem', selectedItem);
+                return selectedItem;
             }}
+
             onScrollEndReached={() => {
                 handleLoadMore()
             }}
@@ -110,51 +116,3 @@ const CustomSelectDropDown = ({ responseCategories,
 };
 
 export default CustomSelectDropDown;
-
-
-
-// data={namesCities}
-// defaultButtonText="Select here"
-// // plac
-// // searchPlaceHolderColor={"red"}
-// renderDropdownIcon={() => (
-//   <Image
-//     style={{ width: 16, height: 16, resizeMode: 'center' }}
-//     source={require('../../assets/bottom-icon.png')}
-//   />
-// )}
-// buttonStyle={[
-//   {
-//     width: '80%',
-//     backgroundColor: TextinputColor,
-//     borderRadius: 10,
-//     justifyContent: 'flex-start',
-//     paddingHorizontal: 25,
-//   },
-
-//   errors.state && { borderColor: 'red', borderWidth: 2 },
-// ]}
-// rowTextStyle={{
-//   textAlign: 'left',
-//   fontSize: responsiveFontSize(1.9),
-// }}
-// rowStyle={{ paddingHorizontal: 8 }}
-// dropdownStyle={{ borderRadius: 10, }}
-// buttonTextStyle={{
-//   textAlign: 'left',
-//   fontSize: responsiveFontSize(1.9),
-//   color: secondChangeColor
-// }}
-// onSelect={(selectedItem, index) => {
-//   if (selectedItem) {
-//     setSecondChangeColor("#000")
-//   }
-//   setFieldValue('city', selectedItem);
-//   console.log('selectitem', selectedItem);
-// }}
-// buttonTextAfterSelection={(selectedItem, index) => {
-//   return selectedItem;
-// }}
-// rowTextForSelection={(item, index) => {
-//   return item;
-// }}

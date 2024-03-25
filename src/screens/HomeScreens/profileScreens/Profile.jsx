@@ -61,16 +61,15 @@ const Profile = ({ route }) => {
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-  console.log("FriendIdRTK--- :", FriendIdRTK);
 
 
   useFocusEffect(
     useCallback(() => {
-
       const getUsersProfile = async () => {
         setIsUserLoading(true);
         setProfileResponse([]);
         setResponse_ProfileVideo([]);
+        setType("text");
         try {
           const response = await getUsers_Profile({ user: FriendIdRTK });
           if (response) {
@@ -100,6 +99,7 @@ const Profile = ({ route }) => {
         else {
           setIsLoadingRecording(true);
         };
+
         try {
           const responseData = await fetch_users_stories({
             recordingPage: recordingPage,
@@ -110,20 +110,20 @@ const Profile = ({ route }) => {
           const responsestories = responseData?.data?.stories;
           setIsLoadingRecording(false);
           if (responsestories && type === "text") {
-            setIsLoadingRecording(false);
             setType("text");
+            setIsLoadingRecording(false);
+            setIsUserProfileData(false);
             setProfileResponse((prevData) => {
               const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
               console.log("filteredDataTEXT", filteredData);
               return [...prevData, ...filteredData]
             }
             );
-            setIsUserProfileData(false);
           }
 
           else if (responsestories && type === "video") {
-            setIsLoadingRecording(false);
             setType("video");
+            setIsLoadingRecording(false);
             setIsUserProfileData(false);
             setResponse_ProfileVideo((prevData) => {
               const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
@@ -158,24 +158,6 @@ const Profile = ({ route }) => {
     };
   };
 
-
-
-  // useEffect(() => {
-  //   // setType("text");
-  //   getUsersProfile();
-  // }, [FriendIdRTK]);
-
-  // setRecordingPage(1);
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     profile_story_api();
-  //   }, [type, recordingPage])
-  // )
-
-
-  // useEffect(() => {
-  //   profile_story_api();
-  // }, [type, recordingPage])
 
   const handleText = () => {
     setType("text");
