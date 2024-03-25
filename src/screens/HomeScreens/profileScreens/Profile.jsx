@@ -86,7 +86,7 @@ const Profile = ({ route }) => {
       };
       getUsersProfile();
     }, [FriendIdRTK])
-  )
+  );
 
 
 
@@ -106,27 +106,28 @@ const Profile = ({ route }) => {
             type: type,
             user: FriendIdRTK,
           });
+          console.log("RESPONSE DATA :", responseData.data.stories)
+          // const responsestories = ;
 
-          const responsestories = responseData?.data?.stories;
           setIsLoadingRecording(false);
-          if (responsestories && type === "text") {
+          if (responseData?.data?.stories && type === "text") {
             setType("text");
             setIsLoadingRecording(false);
             setIsUserProfileData(false);
             setProfileResponse((prevData) => {
-              const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              const filteredData = responseData?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
               console.log("filteredDataTEXT", filteredData);
               return [...prevData, ...filteredData]
             }
             );
           }
 
-          else if (responsestories && type === "video") {
+          else if (responseData?.data?.stories && type === "video") {
             setType("video");
             setIsLoadingRecording(false);
             setIsUserProfileData(false);
             setResponse_ProfileVideo((prevData) => {
-              const filteredData = responsestories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              const filteredData = responseData?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
               console.log("filteredDataVIDEO", filteredData);
               return [...prevData, ...filteredData];
             }

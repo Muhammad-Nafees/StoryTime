@@ -1,13 +1,13 @@
 import axios from "axios";
-import { Base_Url, category_Random, category_endpoint } from "../.."
+import { Base_Url, categoryFetchall, category_Random, } from "../.."
 
 
-export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
+export const get_Categories_Sub_Categories = async ({ id, }) => {
     let apiUrl;
     if (id) {
-        apiUrl = Base_Url + `category?parent=${id}&page=${page2}&limit=${15}`;
+        apiUrl = `${Base_Url}${categoryFetchall}?parent=${id}`;
     } else {
-        apiUrl = `${Base_Url + category_endpoint}?page=${page}&limit=${10}`;
+        apiUrl = `${Base_Url}${categoryFetchall}`;
     };
     console.log("apiUrl---- :", apiUrl); // Move the console.log here
     try {
@@ -17,6 +17,7 @@ export const get_Categories_Sub_Categories = async ({ page, id, page2 }) => {
         throw error;
     }
 };
+
 
 
 export const get_Random = async (id) => {

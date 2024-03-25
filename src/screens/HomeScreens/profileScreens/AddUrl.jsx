@@ -46,48 +46,36 @@ const AddUrl = () => {
     const USER = user?.data?.user || user?.data;
 
 
-
-
     console.log("PAGE----", page)
-    console.log("addUrlId----", addUrlId);
+    console.log("ADDURL----------------------", !!addUrlId);
     console.log("pageSubCategory----", pageSubCategory)
+    console.log("textInputValue---- :", textInputValue)
 
     useEffect(() => {
         const categories_Api = async () => {
             try {
-                if (addUrlId !== undefined) {
-                    console.log("API CALLING START _:")
-                    const responseData = await get_Categories_Sub_Categories({
-                        page: page,
-                        id: addUrlId,
-                        page2: pageSubCategory
-                    });
-                    console.log("IF CONDITION START_:")
-                    if (addUrlId) {
-                        console.log("addURLid -------- :", addUrlId)
-                        setResponseSubCategories((prevData) => {
-                            return [...prevData, ...responseData?.data?.categories] || {}
-                        });
-                    } else {
-                        setResponseCategories((prevData) => {
-                            return [...prevData, ...responseData?.data?.categories] || {}
-                        });
-                    };
-                    setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-                    console.log("END DEBUGGING")
-                    return responseData;
-                }
+
+                const responseData = await get_Categories_Sub_Categories({
+                    id: addUrlId,
+                });
+
+                const SortingData = responseData?.data?.reverse();
+                if (!!addUrlId) {
+                    setResponseSubCategories(SortingData);
+                } else {
+                    setResponseCategories(SortingData);
+                };
+                console.log("END DEBUGGING")
+                return responseData;
             } catch (error) {
                 console.log("ERROR FROM CATEGORIES", error?.response)
             }
         };
-
         categories_Api();
         return () => {
             dispatch(setAddUrlId(""))
         }
-    }, [page, addUrlId, pageSubCategory])
-
+    }, [page, addUrlId]);
 
 
 
@@ -105,7 +93,7 @@ const AddUrl = () => {
                 text1: "Invalid URL"
             })
             setIsLoading(false);
-            return; // Return agar URL invalid hai
+            return;
         }
         try {
             const response = await createStory_api({
@@ -117,7 +105,7 @@ const AddUrl = () => {
             });
             setIsVisible(true);
             setIsLoading(false);
-            console.log("response---- :", response)
+            console.log("RESPONSE FROM VIDEO_STORY:", response?.data)
             return response;
         } catch (error) {
             console.log(error)
@@ -126,8 +114,8 @@ const AddUrl = () => {
 
 
 
-    const categoriesNames = [...new Set(responseCategories?.map(category => category?.name))];
-    const subCategoriesNames = [...new Set(responseSubCategories?.map((category) => category?.name))];
+    const categoriesNames = responseCategories?.map(category => category?.name);
+    const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
 
     console.log("categoriesNames--------- :", categoriesNames)
     console.log("subCategoriesNames------ :", subCategoriesNames)
@@ -170,10 +158,10 @@ const AddUrl = () => {
                             {/* sub category dropdown */}
                             <CustomSelectDropDown
                                 categoriesNames={subCategoriesNames}
-                                responseCategories={responseSubCategories}
+                                subResponseCategories={responseSubCategories}
                                 defaultText="Select a Sub-Category"
                                 changeColor={secondChangeColor}
-                                setPage={setPageSubCategory}
+                                setPage={setPage}
                                 // addUrlid={addUrlId}
                                 setChangeColor={setSecondChangeColor}
                                 HasMorePages={HasMorePages}

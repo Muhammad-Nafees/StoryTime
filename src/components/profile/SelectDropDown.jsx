@@ -25,20 +25,6 @@ const CustomSelectDropDown = ({
 
     const dispatch = useDispatch();
 
-
-    const handleLoadMore = async () => {
-        if (HasMorePages) {
-            setPage((prevPage) => prevPage + 1);
-            setIsLoadMore(true);
-            console.log("hasmore Pages Dropdown", HasMorePages)
-        } else {
-            setIsLoadMore(false);
-        }
-    };
-
-
-
-
     return (
 
         <SelectDropdown
@@ -70,27 +56,18 @@ const CustomSelectDropDown = ({
                 color: changeColor
             }}
             onSelect={(selectedItem, index) => {
+                console.log("INDEX------- :", index);
                 if (selectedItem) {
                     const categoriesFind = responseCategories?.find((category) => category?.name === selectedItem);
-                    // const subCategoriesFind = subResponseCategories?.find((category) => category?.name === selectedItem);
-                    console.log('categoriesFind--- :', categoriesFind);
-                    console.log('SELECTED ITEM--- :', selectedItem);
-                    console.log('categoriesFind?._id--- :', categoriesFind?._id);
-
+                    const subCategoriesFind = subResponseCategories?.find((category) => category?.name === selectedItem);
 
                     if (!categoriesFind) {
                         dispatch(setAddUrlId(""));
+                        dispatch(categorynameUrl(subCategoriesFind?._id));
                     } else {
                         dispatch(setAddUrlId(categoriesFind?._id));
+                        dispatch(subCategorynameUrl(categoriesFind?._id));
                     }
-
-                    // if (categoriesFind) {
-                    //     const _id = categoriesFind?._id;
-                    //     dispatch(categorynameUrl(_id));
-                    // } else {
-                    //     const subcat_id = subCategoriesFind?._id;
-                    //     dispatch(subCategorynameUrl(subcat_id));
-                    // };
                     setChangeColor("#000")
                 }
 
@@ -99,7 +76,7 @@ const CustomSelectDropDown = ({
             }}
 
             onScrollEndReached={() => {
-                handleLoadMore()
+                // handleLoadMore()
             }}
 
             buttonTextAfterSelection={(selectedItem, index) => {
