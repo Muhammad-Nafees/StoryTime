@@ -13,8 +13,8 @@ import {
   userId
 } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { playerContributorsIds } from '../../../../store/slices/categoriesSlice/categoriesSlice';
-
 import { tag_Friends } from '../../../../services/api/profile';
+
 
 const AddFriends_Categories = ({
   profileimage,
@@ -31,8 +31,10 @@ const AddFriends_Categories = ({
   const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
   const tagPlayersRTK = useSelector((state) => state.getcategories?.addTagPlayers)
   const isAddedtagPlayers = tagPlayersRTK.some(user => user.userid === userid);
+  const { user } = useSelector(state => state?.authSlice);
 
   console.log("isAddedtagPlayers----- :", isAddedtagPlayers);
+  console.log("PLAYER_CONTRIBUTORS----- :", playerscontributorsIds);
 
   const dispatch = useDispatch();
 
@@ -40,7 +42,7 @@ const AddFriends_Categories = ({
     if (type !== "tagFriends") {
       const friend = { username, userid };
       dispatch(addFriends(friend));
-      dispatch(playerContributorsIds(userid));
+      dispatch(playerContributorsIds(user?.data?.user?._id, userid));
       dispatch(userId(userid));
     } else {
       tag_FriendsApi_Handler();

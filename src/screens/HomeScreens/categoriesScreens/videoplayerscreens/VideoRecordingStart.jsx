@@ -364,7 +364,6 @@ const VideoFirstUser = () => {
           toggleCamera={toggleCamera}
           user={user}
           currentDisplayUser={currentDisplayUser}
-
         />
 
         <View

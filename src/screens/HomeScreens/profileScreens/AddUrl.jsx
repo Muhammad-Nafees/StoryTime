@@ -9,7 +9,7 @@ import { Img_Paths } from '../../../assets/Imagepaths/index';
 import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
+import { get_CategoriesProfile, } from '../../../../services/api/categories';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
@@ -54,11 +54,9 @@ const AddUrl = () => {
     useEffect(() => {
         const categories_Api = async () => {
             try {
-
-                const responseData = await get_Categories_Sub_Categories({
+                const responseData = await get_CategoriesProfile({
                     id: addUrlId,
                 });
-
                 const SortingData = responseData?.data?.reverse();
                 if (!!addUrlId) {
                     setResponseSubCategories(SortingData);
@@ -101,6 +99,7 @@ const AddUrl = () => {
                 creator: USER?._id,
                 category: categoryId,
                 subCategory: subCategoryId,
+                // contributors
                 content: textInputValue
             });
             setIsVisible(true);

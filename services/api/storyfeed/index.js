@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Base_Url, addComment_endpoint, follow_Unfollow_endpoint, getAllUsers_endpoint, getComment_endpoint, storyLikedfeed, storyfeed_Endpoint } from "../.."
 
 
@@ -178,20 +179,12 @@ export const createStory_api = async ({ type, creator, category, subCategory, co
         }
     }
     console.log("textstory== :", textstory);
-
+    let url = Base_Url + "story";
     try {
-        const url = Base_Url + "story";
-        const responseData = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(textstory)
-        });
-        const response = await responseData.json()
-        return response
+        const responseData = await axios.get(url);
+        return responseData.data;
     } catch (error) {
-        console.log(error)
+        throw error;
     }
 };
 
