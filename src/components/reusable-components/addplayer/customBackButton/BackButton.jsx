@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { TouchableOpacity, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import { Img_Paths } from '../../../../assets/Imagepaths';
 import { useNavigation } from '@react-navigation/native';
@@ -6,10 +6,9 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 
 
 
-const BackButton = ({ leftarrow, onPress }) => {
+const BackButton = ({ onPress }) => {
 
     const { LEFT_ARROW_IMG } = Img_Paths;
-    const navigation = useNavigation();
 
     return (
         <TouchableOpacity activeOpacity={0.3} onPress={onPress} style={styles.back_button}>

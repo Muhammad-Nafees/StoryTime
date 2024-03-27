@@ -1,8 +1,8 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import Typography from '../Typography';
+import Typography from '../reusable-components/Typography';
 
-const PaymentButton = ({label, onpress}) => {
+const PaymentButton = ({ label, onpress }) => {
   return (
     <View style={styles.btncontainer}>
       <TouchableOpacity style={styles.btn} onPress={onpress}>

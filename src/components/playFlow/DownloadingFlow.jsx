@@ -24,7 +24,7 @@ const DownloadingFlow = ({ isVisibleDownloading, setIsVisibleDownloading }) => {
     const { FIRST_USER, PLAY_STORY_TIME } = NavigationsString;
     const [saveStoryModalAfterDownloading, setSaveStoryModalAfterDownloading] = useState(false);
     const [isVisibleAfterDownloading, setIsVisibleAfterDownloading] = useState(false)
-    const textrecordUsers = useSelector((state) => state?.recordingData?.recordingText);
+    const textrecordUsers = useSelector((state) => state?.getcategories?.recordingText);
     const { user } = useSelector(state => state?.authSlice);
     const navigation = useNavigation();
     const [progress, setProgress] = useState(0);

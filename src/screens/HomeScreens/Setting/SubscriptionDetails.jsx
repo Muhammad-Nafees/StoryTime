@@ -9,26 +9,36 @@ import {
 } from 'react-native';
 import React from 'react';
 import ElementsBgWrapper from '../../../components/ElementsBgWrapper';
-import {moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {useNavigation} from '@react-navigation/native';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { useNavigation } from '@react-navigation/native';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
+import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
+import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+import { TextColorGreen } from '../../Styles/Style';
 
 const SubscribeBtn = () => {
   return (
-    <TouchableOpacity style={styles.sub_btn}>
+    <TouchableOpacity style={[styles.sub_btn,
+    {
+      backgroundColor: TextColorGreen,
+      opacity: 0.3 //wii set on condition 
+    }]}
+
+      disabled={true}// condition not define
+    >
       <Typography clr={'#FFF'}>Subscribe</Typography>
     </TouchableOpacity>
   );
 };
 
-const Bar = ({amount, period, bgColor = '#2F4F56'}) => {
+const Bar = ({ amount, period, bgColor = '#2F4F56' }) => {
   return (
-    <View style={{...styles.bar, backgroundColor: bgColor}}>
+    <View style={{ ...styles.bar, backgroundColor: bgColor }}>
       <Typography clr={'#FFF'} style={{}}>
         {amount}
       </Typography>
@@ -38,24 +48,25 @@ const Bar = ({amount, period, bgColor = '#2F4F56'}) => {
 };
 
 const SubscriptionDetails = () => {
-  const {STORY_TIME_IMG, LEFT_ARROW_IMG} = Img_Paths;
-  const {width, height} = Dimensions.get('window');
+  const { STORY_TIME_IMG, LEFT_ARROW_IMG } = Img_Paths;
+  const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();
 
   return (
     <ElementsBgWrapper>
       <View style={styles.first_container}>
-        <TouchableOpacity
+        <BackButton
           onPress={() => navigation.goBack()}
-          style={styles.back_button}>
-          <Image style={styles.left_arrow} source={LEFT_ARROW_IMG} />
-        </TouchableOpacity>
+          leftarrow={LEFT_ARROW_IMG}
+        />
       </View>
+
       <ScrollView
-        contentContainerStyle={{paddingHorizontal: moderateVerticalScale(25)}}>
+        contentContainerStyle={{ paddingHorizontal: moderateVerticalScale(25) }}>
         <View style={styles.story_time_container}>
           <Image
-            style={[styles.img, {width: width * 0.8, height: height * 0.3}]}
+            resizeMode='contain'
+            style={[styles.img, { width: width * 0.8, height: height * 0.3 }]}
             source={STORY_TIME_IMG}
           />
         </View>
@@ -63,14 +74,14 @@ const SubscriptionDetails = () => {
         <Bar
           amount={'$60.00'}
           period={'annual'}
-          bgColor="rgba(204, 204, 204, 0.9)"
+          bgColor="rgb(191, 200, 202)"
         />
-        <Typography mt={'5%'} bold size={18}>
+        <Typography mt={responsiveHeight(4)} bold size={18} ff={Inter_SemiBold.Inter_SemiBold}>
           Your Subsciption
         </Typography>
         <Bar amount={'$60.00'} period={'annual'} />
         <SubscribeBtn />
-        <View style={{paddingBottom: 100}} />
+        <View style={{ paddingBottom: 100 }} />
       </ScrollView>
     </ElementsBgWrapper>
   );
@@ -79,31 +90,13 @@ const SubscriptionDetails = () => {
 export default SubscriptionDetails;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
   first_container: {
     paddingTop: responsiveWidth(6),
-    paddingVertical: moderateVerticalScale(12),
+    // paddingVertical: moderateVerticalScale(12),
     flexDirection: 'row',
     marginLeft: 'auto',
     width: responsiveWidth(95),
     alignItems: 'center',
-  },
-  back_button: {
-    borderRadius: 10,
-    width: responsiveWidth(12.9),
-    height: responsiveHeight(6.3),
-    backgroundColor: '#395E66',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  left_arrow: {
-    width: responsiveWidth(5),
-    height: responsiveHeight(2.5),
-    resizeMode: 'center',
   },
   img: {
     marginVertical: moderateVerticalScale(8),
@@ -133,7 +126,6 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   sub_btn: {
-    backgroundColor: '#395E66',
     borderRadius: 10,
     alignSelf: 'center',
     paddingLeft: '3.5%',

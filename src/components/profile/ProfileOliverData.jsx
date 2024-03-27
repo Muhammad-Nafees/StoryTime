@@ -1,21 +1,18 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, FlatList, ActivityIndicator, } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { profile_oliverPierce } from '../../../dummyData/DummyData'
+import React, { useState } from 'react'
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
-import { useDispatch } from 'react-redux'
 import { PassionOne_Regular } from '../../constants/GlobalFonts'
-import { NavigationAction } from '@react-navigation/native';
+
 
 
 const ProfileOliverData = ({
+
     profile_response,
-    setVideoPage,
     setRecordingPage,
-    setIsLoadingRecording,
     isLoadingRecording,
     hasMorePagesRecording,
     isUserProfileData,
@@ -27,11 +24,10 @@ const ProfileOliverData = ({
     const SCREENHEIGHT = Dimensions.get("window").height;
     const SCREENWIDTH = Dimensions.get("window").width;
     const [isLoadMore, setIsLoadMore] = useState(false);
-    const [isHiddenstate, setIsHiddenState] = useState()
-    const dispatch = useDispatch();
+
+
 
     const handleLoadMore = async () => {
-        console.log("hasmorepages VIdeoOlivere===", hasMorePagesRecording)
         if (hasMorePagesRecording) {
             setIsLoadMore(true)
             setRecordingPage((prevPage) => prevPage + 1);

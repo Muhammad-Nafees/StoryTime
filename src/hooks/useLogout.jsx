@@ -14,7 +14,6 @@ export const useLogout = () =>{
           const data = responseData?.data;
           await AsyncStorage.removeItem('isLoggedIn');
           await AsyncStorage.removeItem('userData');
-          await AsyncStorage.setItem('isLoggedOut', 'true')
           dispatch(logout())
         } catch (error) {
     

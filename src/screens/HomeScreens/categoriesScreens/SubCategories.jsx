@@ -37,15 +37,13 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import {
-  addFriends,
   randomNames,
   setStoryUserImage,
 } from '../../../../store/slices/categoriesSlice/categoriesSlice';
-import { addFriends_api } from '../../../../services/api/add-members';
 import Toast from 'react-native-toast-message';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { URL } from '../../../constants/Constant';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
 import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
@@ -96,36 +94,6 @@ const SubCategories = ({ route }) => {
       ? [...responsesubCategories, randomObject]
       : [];
   }, [responsesubCategories, searchTerm]);
-
-
-  const addFriends_api_handler = async () => {
-    try {
-      const responseData = await addFriends_api();
-      const usernameObj = responseData?.data?.users?.find(
-        item => item.username === isUsernameInputValue,
-      );
-      console.log('usernameObj=====', usernameObj);
-      if (usernameObj) {
-        const userid = usernameObj._id;
-        const username = usernameObj?.username;
-        console.log('username----', username);
-        dispatch(addFriends({ username, userid }));
-        // Now you have the _id of the matched user, you can use it as needed.
-        console.log('Matched User ID:', userid);
-        setIsUsernameInputValue('');
-      } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate("AddPlayers");
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Friends Not Found',
-        });
-      }
-      return responseData;
-    } catch (error) {
-      console.log('err', error);
-    }
-  };
 
   //Effects
   useEffect(() => {
@@ -224,38 +192,21 @@ const SubCategories = ({ route }) => {
   const renderItem = ({ item }) => {
     return (
       <>
-        <View
-          key={item?.id}
-          style={{
-            backgroundColor:
-              item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
-            width: responsiveWidth(30),
-            borderRadius: 10,
-            height: responsiveHeight(18.5),
-            alignItems: 'center',
-            margin: responsiveWidth(1.2),
-            borderWidth: 3,
-            borderColor:
-              item?.namerandom === 'Random'
-                ? 'rgba(238, 95, 138, 1)'
-                : '#5797A5',
-          }}>
-          <StoryUsers
-            onPress={() => handleStoryUser(item?._id, item?.name, item?.image)}
-            images={item?.image}
-            text={item?.name}
-            item={item}
-            mainbgColor={TextColorGreen}
-            backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
-            handleRandomClick={() => handleRandomSub_category(item)}
-          />
-          {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-            <BlurViewGuest />
-          )}
-        </View>
+        <StoryUsers
+          onPress={() => handleStoryUser(item?._id, item?.name, item?.image)}
+          images={item?.image}
+          text={item?.name}
+          item={item}
+          mainbgColor={TextColorGreen}
+          isCategoryBlurred={isCategoryBlurred}
+          backgroundColor={isUserGuest ? "#497780" : name !== "Animals" ? "#497780" : "#56B6A4"}
+          handleRandomClick={() => handleRandomSub_category(item)}
+        />
       </>
     );
   };
+
+
 
   const renderListFooterComponent = () => {
     if (isLoading || DATA.length === 0) {
@@ -316,9 +267,9 @@ const SubCategories = ({ route }) => {
           {user ? (
             <>
               <MainInputField
-                onPress={addFriends_api_handler}
                 inputValue={isUsernameInputValue}
                 OnchangeText={setIsUsernameInputValue}
+                setUsernameInput={setIsUsernameInputValue}
                 placeholder="Username"
               />
               <ShowAddedPlayers />

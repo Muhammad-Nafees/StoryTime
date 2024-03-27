@@ -23,10 +23,8 @@ import {
   Camera,
 } from 'react-native-vision-camera';
 import { useDispatch, useSelector } from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
 // imports components
 import SaveVideo from '../../../../components/reusable-components/modals/SaveVideo';
-import UserNames from '../../../../components/UserNames';
 import {
   extendStoryCheckVideo,
   saveRecordingVideoUser,
@@ -366,7 +364,6 @@ const VideoFirstUser = () => {
           toggleCamera={toggleCamera}
           user={user}
           currentDisplayUser={currentDisplayUser}
-
         />
 
         <View

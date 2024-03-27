@@ -31,3 +31,4 @@ export const support_chat_list = 'support/chat-list';
 export const support_send_message = 'support/send-message';
 export const support_send_message_with_id = 'support/';
 export const report = 'user/report-user';
+export const categoryFetchall = 'category/fetch-all/';

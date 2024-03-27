@@ -1,18 +1,27 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import {Img_Paths} from '../../../assets/Imagepaths';
-import {FourthColor, SecondaryColor} from '../../Styles/Style';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import { Img_Paths } from '../../../assets/Imagepaths';
+import { FourthColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import Typography from '../../../components/Typography';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import Typography from '../../../components/reusable-components/Typography';
+import EditPaymentCardModal from '../../../components/paymentSetting/EditPaymentCardModal';
 
-const PaymentSetting = ({navigation}) => {
-  const {LEFT_ARROW_IMG, VISA, EDIT, TRASH, ADD_CARD} = Img_Paths;
+const PaymentSetting = ({ navigation }) => {
+  const [isVisible, setVisible] = React.useState(false);
+  const {
+    LEFT_ARROW_IMG,
+    VISA,
+    EDIT,
+    TRASH,
+    ADD_CARD,
+    ADD_SUCCEFULLY_PAYMENT_CARD,
+  } = Img_Paths;
   return (
     <BackgroundWrapper>
       <View style={styles.first_container}>
@@ -39,8 +48,13 @@ const PaymentSetting = ({navigation}) => {
             </View>
           </View>
           <View style={styles.rightcard}>
-            <Image source={EDIT} />
-            <Image source={TRASH} />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EditAddPaymentCardDetail')}>
+              <Image source={EDIT} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setVisible(true)}>
+              <Image source={TRASH} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -61,6 +75,20 @@ const PaymentSetting = ({navigation}) => {
           </Typography>
         </View>
       </View>
+      {isVisible && (
+        <EditPaymentCardModal
+          setVisible={setVisible}
+          bgImage={ADD_SUCCEFULLY_PAYMENT_CARD}
+          isVisible={isVisible}
+          modalHeading="Remove Card"
+          modalText="Are you sure you want to delete this card?"
+          modalButtonText1="No"
+          modalButtonText2="Delete"
+          onPress={() => {
+            setVisible(false);
+          }}
+        />
+      )}
     </BackgroundWrapper>
   );
 };

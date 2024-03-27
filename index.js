@@ -24,5 +24,4 @@ const UserApp = () => {
 };
 
 
-
 AppRegistry.registerComponent(appName, () => UserApp);

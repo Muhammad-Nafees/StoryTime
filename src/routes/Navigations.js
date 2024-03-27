@@ -33,12 +33,11 @@ import {
   SubscriptionDetails,
   SettingsProfile,
   DeleteAccount,
-  BlockUser,
+  BlockUser
 } from '../screens';
 import TermsAndConditions from '../screens/AuthScreens/guestScreens/TermsAndConditions';
 import PrivacyAndPolicy from '../screens/AuthScreens/guestScreens/PrivacyAndpolicy';
 import VoiceToTextProfile from '../screens/HomeScreens/profileScreens/VoiceToTextProfile';
-import TranscriptVoice from '../screens/HomeScreens/profileScreens/TranscriptVoice';
 import { Login } from '../screens/index';
 import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React from 'react';
@@ -55,6 +54,9 @@ import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowSc
 import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
 import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
 import GoNextPlayer from '../screens/HomeScreens/categoriesScreens/playFlowScreens/GoNextPlayer';
+import EditAddPaymentCardDetail from '../screens/HomeScreens/Setting/EditAddPaymentCardDetail';
+
+
 
 const Navigations = () => {
   const Stack = createStackNavigator();
@@ -64,13 +66,6 @@ const Navigations = () => {
     REPORT_USER,
     ADD_PLAYERS,
     PLAYER_SEQUENCE,
-    FAQ_ROUTE,
-    SETTING,
-    NOTIFICATION,
-    SUBSCRIPTION_DETAILS,
-    PROFILE,
-    BLOCK_USER,
-    DELETE_ACCOUNT,
     LOGIN,
   } = NavigationsString;
 
@@ -80,6 +75,7 @@ const Navigations = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         headerShown: false,
       }}
+
       initialRouteName="BottomTavNavigator">
       <Stack.Screen name="BottomTavNavigator" component={BottomTavNavigator} />
       <Stack.Screen name="PLayFlowScreens" component={PLayFlowScreens} />
@@ -88,34 +84,38 @@ const Navigations = () => {
       <Stack.Screen name={REPORT_USER} component={Reportuser} />
       <Stack.Screen name={PLAYER_SEQUENCE} component={Sequence} />
       <Stack.Screen name="ProfileScreens" component={ProfileScreens} />
-      <Stack.Screen name={SETTING} component={Setting} />
-      <Stack.Screen name={NOTIFICATION} component={Notification} />
+      <Stack.Screen name={'Setting'} component={Setting} />
+      <Stack.Screen name={'Notification'} component={Notification} />
       <Stack.Screen
-        name={SUBSCRIPTION_DETAILS}
+        name={'SubscriptionDetails'}
         component={SubscriptionDetails}
       />
-      <Stack.Screen name={FAQ_ROUTE} component={FAQ} />
-      <Stack.Screen name={PROFILE} component={SettingsProfile} />
-      <Stack.Screen name={BLOCK_USER} component={BlockUser} />
-      <Stack.Screen name={DELETE_ACCOUNT} component={DeleteAccount} />
+      <Stack.Screen name={'Faq'} component={FAQ} />
+      <Stack.Screen name={'SettingsProfile'} component={SettingsProfile} />
+      <Stack.Screen name={'BlockUser'} component={BlockUser} />
+      <Stack.Screen name={'DeleteAccount'} component={DeleteAccount} />
       <Stack.Screen
         name={LOGIN}
         component={Login}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name={SUPPORT} component={Support} />
-      <Stack.Screen name={SUPPORT_MESSAGE} component={SupportMessage} />
-      <Stack.Screen name={REPORT} component={Report} /> */}
-      {/* <Stack.Screen
-        name={SUPPORT_MESSAGE_LIST}
+      <Stack.Screen name={'Support'} component={Support} />
+      <Stack.Screen name={'SupportMessage'} component={SupportMessage} />
+      <Stack.Screen name={'Report'} component={Report} />
+      <Stack.Screen
+        name={'SupportMessageList'}
         component={SupportMessageList}
-      /> */}
-      {/* <Stack.Screen name={PAYEMENT} component={PaymentSetting} />
-      <Stack.Screen name={ADD_PAYMENT_CARD} component={AddPaymentCard} /> */}
-      {/* <Stack.Screen
-        name={ADD_PAYMENT_CARD_DETAIL}
+      />
+      <Stack.Screen name={'PayementSetting'} component={PaymentSetting} />
+      <Stack.Screen name={'AddCard'} component={AddPaymentCard} />
+      <Stack.Screen
+        name={'AddPaymentCardDetail'}
         component={AddPaymentCardDetail}
-      /> */}
+      />
+      <Stack.Screen
+        name={'EditAddPaymentCardDetail'}
+        component={EditAddPaymentCardDetail}
+      />
       <Stack.Screen
         name="GuestStack"
         component={GuestStack}
@@ -237,7 +237,6 @@ const ProfileStacksBottom = () => {
       }}>
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="VoiceToTextProfile" component={VoiceToTextProfile} />
-      <Stack.Screen name="TranscriptVoice" component={TranscriptVoice} />
     </Stack.Navigator>
   );
 };

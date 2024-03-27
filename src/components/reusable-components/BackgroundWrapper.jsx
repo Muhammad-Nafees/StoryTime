@@ -1,13 +1,13 @@
 import React from 'react';
-import { Img_Paths } from '../assets/Imagepaths';
-import { SecondaryColor } from '../screens/Styles/Style';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { SecondaryColor } from '../../screens/Styles/Style';
 import {
   StyleSheet,
   ImageBackground,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import { SCREEN_WIDTH } from '../constants/Constant';
+import { SCREEN_WIDTH } from '../../constants/Constant';
 
 const BackgroundWrapper = props => {
   const { children, contentContainerStyle, disableScrollView, coverScreen } =

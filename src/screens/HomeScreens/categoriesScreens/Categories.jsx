@@ -1,5 +1,4 @@
 // imports libraries
-
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
   ImageBackground,
@@ -39,16 +38,14 @@ import {
   get_Random,
 } from '../../../../services/api/categories';
 import { setCategoriesId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
-import { addFriends_api } from '../../../../services/api/add-members';
-import { addFriends, setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { setFriendId } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, PassionOne_Regular } from '../../../constants/GlobalFonts';
-import Typography from '../../../components/Typography';
+import Typography from '../../../components/reusable-components/Typography';
 import LinearGradient from 'react-native-linear-gradient';
 import BlurViewGuest from '../../../components/categories/guestCategories/BlurViewGuest';
 import ShowAddedPlayers from '../../../components/categories/ShowAddedPlayers';
 import CustomLoader from '../../../components/reusable-components/customLoader/CustomLoader';
 import GuestNumber from '../../../components/categories/guestCategories/GuestNumber';
-import Toast from 'react-native-toast-message';
 
 const Categories = () => {
   //destructures
@@ -129,6 +126,7 @@ const Categories = () => {
           const filteredCategories = responseArray.filter(category =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
+
           console.log('filter', filteredCategories);
 
           if (filteredCategories.length > 0) {
@@ -151,33 +149,6 @@ const Categories = () => {
       };
     } catch (error) {
       console.error('Error fetching categories:', error);
-    }
-  };
-
-
-  const addFriends_api_handler = async () => {
-    try {
-      const responseData = await addFriends_api();
-      const usernameObj = responseData?.data?.users?.find(
-        item => item.username === isUsernameInputValue,
-      );
-      if (usernameObj) {
-        const userid = usernameObj._id;
-        const username = usernameObj?.username;
-        console.log('username----', username);
-        dispatch(addFriends({ username, userid }));
-        setIsUsernameInputValue('');
-      } else if (isUsernameInputValue?.length == 0) {
-        navigation.navigate("AddPlayers");
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Friends Not Found',
-        });
-      }
-      return responseData;
-    } catch (error) {
-      console.log(error, "ERROR FROM FRIENDS CATEGORIES");
     }
   };
 
@@ -205,6 +176,7 @@ const Categories = () => {
       ];
       for (let i = 0; i < response?.data?.categories?.length; i++) {
         const colorIndex = i % valObj.length;
+        console.log(colorIndex, "COLOR INDEX");
         response.data.categories[i].background = valObj[colorIndex];
       };
 
@@ -289,33 +261,17 @@ const Categories = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <View
-        key={item?.id}
-        style={{
-          backgroundColor:
-            item?.namerandom == 'Random' ? '#E44173' : TextColorGreen,
-          width: responsiveWidth(30),
-          borderRadius: 10,
-          height: responsiveHeight(18.5),
-          alignItems: 'center',
-          margin: responsiveWidth(1.2),
-          borderWidth: 3,
-          borderColor:
-            item?.namerandom === 'Random' ? 'rgba(238, 95, 138, 1)' : '#5797A5',
-        }}>
+      <>
         <StoryUsers
           onPress={() => handleStoryUser(item?.id, item?.name)}
           images={item?.image}
           text={item?.name}
           item={item}
           handleRandomClick={handleRandomClick}
+          isCategoryBlurred={isCategoryBlurred}
           mainbgColor={TextColorGreen}
         />
-        {!!isCategoryBlurred(item) && item?.namerandom !== 'Random' && (
-          <BlurViewGuest
-          />
-        )}
-      </View>
+      </>
     );
   };
 
@@ -372,7 +328,12 @@ const Categories = () => {
           {user ?
             (<>
               {/* textinputField */}
-              <MainInputField onPress={addFriends_api_handler} inputValue={isUsernameInputValue} OnchangeText={setIsUsernameInputValue} placeholder="Username" />
+              <MainInputField
+                inputValue={isUsernameInputValue}
+                OnchangeText={setIsUsernameInputValue}
+                setUsernameInput={setIsUsernameInputValue}
+                placeholder="Username"
+              />
               {/* added players */}
               <ShowAddedPlayers />
             </>

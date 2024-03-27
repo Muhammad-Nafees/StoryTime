@@ -3,7 +3,6 @@ import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, Style
 // import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
 import { useNavigation } from '@react-navigation/native';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions"
-import NavigationsString from '../../constants/NavigationsString';
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import BackButton from '../../components/reusable-components/addplayer/customBackButton/BackButton';

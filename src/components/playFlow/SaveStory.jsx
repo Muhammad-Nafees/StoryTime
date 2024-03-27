@@ -1,13 +1,13 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
+import { ImageBackground, View, StyleSheet, FlatList, ScrollView, Modal, TouchableOpacityBase, ActivityIndicator, Alert } from 'react-native'
 import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } from "../../screens/Styles/Style";
-import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from "../../assets/Imagepaths/index";
 import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import CustomButton from '../reusable-components/CustomButton/CustomButton';
 import { useSelector } from 'react-redux';
+
 
 
 const SaveStory = ({ isVisible, setVisible }) => {

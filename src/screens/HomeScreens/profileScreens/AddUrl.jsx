@@ -9,12 +9,12 @@ import { Img_Paths } from '../../../assets/Imagepaths/index';
 import CustomSelectDropDown from '../../../components/profile/SelectDropDown';
 import TextInputField from '../../../components/TextInputField';
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
-import { get_Categories_Sub_Categories } from '../../../../services/api/categories';
+import { get_CategoriesProfile, } from '../../../../services/api/categories';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddUrlId, setRandomForProfileUpdate } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { createStory_api } from '../../../../services/api/storyfeed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserErrors from '../../../components/auth/UserErrors';
+import Toast from 'react-native-toast-message';
 
 
 
@@ -35,8 +35,10 @@ const AddUrl = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [pageSubCategory, setPageSubCategory] = useState(1);
     const [responseSubCategories, setResponseSubCategories] = useState([]);
+    const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
 
     // redux
+
     const addUrlId = useSelector((state) => state?.getcategories?.addUrlid);
     const categoryId = useSelector((state) => state?.getcategories?.urlCategoryname);
     const subCategoryId = useSelector((state) => state?.getcategories?.urlSubcategoryname);
@@ -44,60 +46,79 @@ const AddUrl = () => {
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
 
-    const categories_Api = async () => {
-        try {
-            const responseData = await get_Categories_Sub_Categories({
-                page: page,
-                id: addUrlId,
-                page2: pageSubCategory
-            });
-            if (addUrlId) {
-                setResponseSubCategories(responseData?.data?.categories);
-            } else {
-                setResponseCategories(responseData?.data?.categories);
-            };
-            setHasMorePages(responseData?.data?.pagination?.hasNextPage);
-            console.log("responseData----- :", responseData);
 
-            return responseData;
-        } catch (error) {
+    console.log("PAGE----", page)
+    console.log("ADDURL----------------------", !!addUrlId);
+    console.log("pageSubCategory----", pageSubCategory)
+    console.log("textInputValue---- :", textInputValue)
 
+    useEffect(() => {
+        const categories_Api = async () => {
+            try {
+                const responseData = await get_CategoriesProfile({
+                    id: addUrlId,
+                });
+                const SortingData = responseData?.data?.reverse();
+                if (!!addUrlId) {
+                    setResponseSubCategories(SortingData);
+                } else {
+                    setResponseCategories(SortingData);
+                };
+                console.log("END DEBUGGING")
+                return responseData;
+            } catch (error) {
+                console.log("ERROR FROM CATEGORIES", error?.response)
+            }
+        };
+        categories_Api();
+        return () => {
+            dispatch(setAddUrlId(""))
         }
+    }, [page, addUrlId]);
+
+
+
+    const isURLValid = (url) => {
+        const pattern = /^(https?:\/\/)?([\w.]+)\.([a-z]{2,})([\w\/]*)*$/i;
+        return pattern.test(url);
     };
 
 
     const createStory_video = async () => {
         setIsLoading(true);
+        if (!isURLValid(textInputValue)) {
+            Toast.show({
+                type: "error",
+                text1: "Invalid URL"
+            })
+            setIsLoading(false);
+            return;
+        }
         try {
             const response = await createStory_api({
                 type: "video",
                 creator: USER?._id,
                 category: categoryId,
                 subCategory: subCategoryId,
+                contributors: playerscontributorsIds,
                 content: textInputValue
             });
             setIsVisible(true);
             setIsLoading(false);
-            console.log("response---- :", response)
+            console.log("RESPONSE FROM VIDEO_STORY:", response?.data)
             return response;
         } catch (error) {
             console.log(error)
         };
     };
 
-    useEffect(() => {
-        categories_Api();
-        return () => {
-            dispatch(setAddUrlId(""))
-        }
-    }, [page, addUrlId, pageSubCategory]);
 
 
-
-    const categoriesNames = responseCategories?.map((category) => category?.name);
+    const categoriesNames = responseCategories?.map(category => category?.name);
     const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
 
-
+    console.log("categoriesNames--------- :", categoriesNames)
+    console.log("subCategoriesNames------ :", subCategoriesNames)
 
     return (
         <View style={{ height: responsiveHeight(100), }}>
@@ -107,6 +128,7 @@ const AddUrl = () => {
                 </View>
                 <View style={{ justifyContent: "center", alignItems: "center", paddingTop: responsiveWidth(4) }}>
                     <View style={{ backgroundColor: "#FFF", height: responsiveHeight(70), width: responsiveWidth(90), }}>
+
                         <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: moderateVerticalScale(20) }}>
                             <Text style={{ color: "rgba(47, 79, 86, 1)", fontSize: responsiveFontSize(3), fontWeight: "400", fontFamily: PassionOne_Regular.passionOne }}>Add URL</Text>
                         </View>
@@ -118,15 +140,13 @@ const AddUrl = () => {
 
                             <CustomSelectDropDown
                                 categoriesNames={categoriesNames}
-                                addUrlid={addUrlId}
-                                setResponseCategories={setResponseCategories}
                                 responseCategories={responseCategories}
                                 defaultText="Select a Category"
                                 changeColor={changeColor}
                                 setChangeColor={setChangeColor}
-                                setResponseSubCategories={setResponseSubCategories}
                                 HasMorePages={HasMorePages}
                                 setIsLoadMore={setIsLoadMore}
+                                setPage={setPage}
                             />
                         </View>
 
@@ -135,17 +155,18 @@ const AddUrl = () => {
                                 <Text style={{ color: "#000", fontWeight: "500" }}>Sub-Category</Text>
                             </View>
 
+                            {/* sub category dropdown */}
                             <CustomSelectDropDown
-                                subCategoriesNames={subCategoriesNames}
+                                categoriesNames={subCategoriesNames}
                                 subResponseCategories={responseSubCategories}
                                 defaultText="Select a Sub-Category"
                                 changeColor={secondChangeColor}
-                                addUrlid={addUrlId}
+                                setPage={setPage}
+                                // addUrlid={addUrlId}
                                 setChangeColor={setSecondChangeColor}
-                                setResponseSubCategories={setResponseSubCategories}
                                 HasMorePages={HasMorePages}
-                                setPageSubCategory={setPageSubCategory}
                                 setIsLoadMore={setIsLoadMore}
+                            // setResponseSubCategories={setResponseSubCategories}
                             />
 
                         </View>

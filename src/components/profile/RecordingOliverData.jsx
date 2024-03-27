@@ -50,7 +50,7 @@ const RecordingOliverData = ({
                 Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
             }
         } catch (error) {
-            console.error(error);
+            console.error("ERROR", error);
         }
     }
 

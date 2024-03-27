@@ -1,9 +1,7 @@
 import React from 'react'
-import { Dimensions, Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native'
-// import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../Styles/Style';
+import { ImageBackground, Text, TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions"
-import NavigationsString from '../../constants/NavigationsString';
 import { moderateScale, scale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
 import BackButton from '../../components/reusable-components/addplayer/customBackButton/BackButton';

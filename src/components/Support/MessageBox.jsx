@@ -1,48 +1,68 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import {TextInput} from 'react-native-gesture-handler';
-import Typography from '../Typography';
-import {Img_Paths} from '../../assets/Imagepaths';
-import UploadImage from '../UploadImage';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import Typography from '../reusable-components/Typography';
+import { Img_Paths } from '../../assets/Imagepaths';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import { responsiveHeight, responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
-const MessageBox = ({profileImage, setProfileImage, input, setInput}) => {
-  const uploadProfileImageRef = React.useRef(null);
+const MessageBox = ({ profileImage, setProfileImage, input, setInput }) => {
+  const { CAMERA_ICON } = Img_Paths;
 
-  const {CAMERA_ICON} = Img_Paths;
-  const modalOpen = ref => {
-    if (ref.current) {
-      ref.current.open();
+  const handleGalleryPress = async () => {
+    try {
+      const image = await ImageCropPicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      if (!image.didCancel) {
+        setProfileImage({ uri: image.path });
+        return image.path;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log('Error selecting image from gallery:', error);
+      return null;
     }
   };
   return (
-    <View style={styles.container}>
-      <Typography style={styles.label}>Your Message</Typography>
-      <TextInput
-        style={styles.input}
-        multiline={true}
-        placeholder="Type here"
-        placeholderTextColor="#AAAAAA"
-        onChangeText={e => setInput(e)}
-        value={input}
-      />
-      <TouchableOpacity
-        style={styles.camera_container}
-        onPress={() => modalOpen(uploadProfileImageRef)}>
-        <Image
-          style={profileImage && styles.image}
-          source={profileImage ? {uri: profileImage.uri} : CAMERA_ICON}
-          height={50}
-          width={50}
+    <ScrollView contentContainerStyle={{
+      paddingBottom: responsiveHeight(20)
+    }
+    }>
+      <View style={styles.container}>
+        <Typography style={styles.label}>Your Message</Typography>
+        <TextInput
+          style={styles.input}
+          multiline={true}
+          placeholder="Type here"
+          placeholderTextColor="#AAAAAA"
+          onChangeText={e => setInput(e)}
+          value={input}
         />
-        <Typography style={styles.camera_text}>
-          {profileImage ? 'Change Image' : 'Attach Image or Proof'}
-        </Typography>
-      </TouchableOpacity>
-      <UploadImage
-        uploadImageRef={uploadProfileImageRef}
-        setImage={setProfileImage}
-      />
-    </View>
+        <TouchableOpacity
+          style={styles.camera_container}
+          onPress={handleGalleryPress}>
+          <Image
+            resizeMode='contain'
+            style={profileImage && styles.image}
+            source={profileImage ? { uri: profileImage.uri } : CAMERA_ICON}
+            height={50}
+            width={50}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.camera_container}
+          onPress={() => profileImage ? setProfileImage(null) : handleGalleryPress()}>
+          <Typography style={styles.camera_text}>
+            {profileImage ? 'Cancel Image' : 'Attach Image or Proof'}
+          </Typography>
+        </TouchableOpacity>
+
+      </View>
+    </ScrollView>
   );
 };
 

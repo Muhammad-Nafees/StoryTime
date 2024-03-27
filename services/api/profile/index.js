@@ -1,14 +1,14 @@
 import { Base_Url, get_story_byId, story_profile, user_profile } from "../../index"
 
 
-
 export const fetch_users_stories = async ({
+
     type,
     recordingPage,
     isincognitoPage,
     user
-}) => {
 
+}) => {
 
     let url;
     if (isincognitoPage) {
@@ -17,8 +17,7 @@ export const fetch_users_stories = async ({
         url = `${Base_Url}${story_profile}?page=${recordingPage}&limit=${10}&type=${type}&user=${user}`;
     };
 
-    console.log("url ---- :", url);
-    console.log("user in api---- :", user);
+    console.log("URL--------------", url)
 
     try {
         const responseData = await fetch(url, {
@@ -30,7 +29,7 @@ export const fetch_users_stories = async ({
         const response = responseData.json();
         return response;
     } catch (error) {
-        console.log("error===", error);
+        throw error;
     }
 };
 
@@ -46,10 +45,10 @@ export const getStory_Byid = async (storyuserId) => {
             },
         })
         const response = responseData.json();
-        return response
+        return response;
     }
     catch (err) {
-        console.log(err);
+        throw error;
     }
 };
 
@@ -113,9 +112,8 @@ export const hide_Story = async (storyId) => {
 };
 
 export const getUsers_Profile = async ({ user }) => {
-    console.log("user----", user)
     let url = `${Base_Url}${user_profile}?user=${user}`;
-
+    console.log("user----", user);
 
     try {
         const responseData = await fetch(url, {
@@ -124,10 +122,11 @@ export const getUsers_Profile = async ({ user }) => {
                 "Content-Type": "application/json"
             },
         });
+
         const response = responseData.json();
         return response;
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        throw error;
     }
 };

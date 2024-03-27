@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import {
   Image,
-  ImageBackground,
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
   TextInput,
+  ScrollView,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
 import {
   responsiveWidth,
@@ -21,61 +19,63 @@ import {
   SecondaryColor,
   TextColorGreen,
   pinkColor,
-} from '../screens/Styles/Style';
-import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { Img_Paths } from '../assets/Imagepaths';
-import { useNavigation } from '@react-navigation/native';
-import NavigationsString from '../constants/NavigationsString';
+} from '../../screens/Styles/Style';
+import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import {Img_Paths} from '../../assets/Imagepaths';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import NavigationsString from '../../constants/NavigationsString';
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { useDispatch, useSelector } from 'react-redux';
-import { launchImageLibrary } from 'react-native-image-picker';
-import GetComments from './GetComments';
-import { add_comment_api, get_Comment_api } from '../../services/api/storyfeed';
-import NoComment from './comments/NoComments';
+import {launchImageLibrary} from 'react-native-image-picker';
+import GetComments from '../GetComments';
+import {
+  add_comment_api,
+  get_Comment_api,
+} from '../../../services/api/storyfeed';
+import NoComment from '../comments/NoComments';
 import Toast from 'react-native-toast-message';
-import CustomAttachmentDialog from './comments/CustomAttachedDialog';
+import CustomAttachmentDialog from '../comments/CustomAttachedDialog';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
 
-const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) => {
-  const SCREENWIDTH = Dimensions.get('window').width;
-  const SCREENHEIGHT = Dimensions.get('window').height;
+const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
+  //hooks
+  const route = useRoute();
   const navigation = useNavigation();
-  const [messages, setMessages] = useState([]);
+
+  //destructures
+  const {HOME_FRAME, SHARE_BTN} = Img_Paths;
+  const {likedUserId, dislikesCounting, likesCounting, content, username} =
+    route?.params || {};
+
+  //redux states
+  const story = likedUserId;
+  const disLikedCountRTK = dislikesCounting;
+  const likeCountRTK = likesCounting;
+  const contentFeedRTK = content;
+  const usernameFeedRTK = username;
+
+  //consts
+  const isComment = false;
+  const page = 1;
+  const limit = 100;
+
+  //states
+  // const [HasMorePages, setHasMorePages] = useState();
+  // const [isRefreshing, setIsRefreshing] = useState(false);
+  // const [loadingPage, setLoadingPage] = useState(false);
+  // const [isLaodMore, setIsLoadMore] = useState(false);
+  // const [responseMedia, setResponseMedia] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [media, setMedia] = useState(null);
   const [inputText, setInputText] = useState('');
-  const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
-  const { FEED_CHAT, HOME } = NavigationsString;
-  const story = useSelector(state => state?.likedstoryfeed?.storyId);
-
-  const disLikedCountRTK = useSelector(
-    state => state?.likedstoryfeed?.disLikedCount,
-  );
-  const likeCountRTK = useSelector(state => state?.likedstoryfeed?.likeCount);
-  const contentFeedRTK = useSelector(
-    state => state?.likedstoryfeed?.storyfeedContent,
-  );
-  const usernameFeedRTK = useSelector(
-    state => state?.likedstoryfeed?.storyfeedUsername,
-  );
-
-  const [isComment, setIsComment] = useState(false);
-  const [HasMorePages, setHasMorePages] = useState();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(100);
-  const [loadingPage, setLoadingPage] = useState(false);
   const [isReplyingId, setIsReplyingId] = useState();
-  const [isLaodMore, setIsLoadMore] = useState(false);
-  const [responseMedia, setResponseMedia] = useState(null);
   const [commentsCount, setCommentsCount] = useState(0);
   const [userCommentsData, setuserCommentsData] = useState([]);
   const [isReply, setIsReply] = useState(false);
-  const { width, height } = Dimensions.get('window');
   const inputRef = useRef();
   const bottomSCroll = useRef();
 
@@ -108,7 +108,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     if (inputText.trim() === '') {
       Toast.show({
         type: 'error',
-        text1: `Add a comment message!`,
+        text1: 'Add a comment message!',
         position: 'top',
         topOffset: 0,
       });
@@ -136,7 +136,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
       setIsLoading(true);
       const response = await add_comment_api(ReqBody);
       fetchDatagetComments();
-      setResponseMedia(response?.data?.media);
+      // setResponseMedia(response?.data?.media);
       console.log('addComme==', response.data?.media);
       return response.data;
     } catch (error) {
@@ -144,16 +144,16 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     }
   };
 
-  const fetchDatagetComments = async () => {
+  const fetchDatagetComments = useCallback(async () => {
     try {
-      const response = await get_Comment_api({ page, limit, storyId });
-      setHasMorePages(response?.data?.pagination?.hasNextPage);
+      const response = await get_Comment_api({page, limit, storyId});
+      // setHasMorePages(response?.data?.pagination?.hasNextPage);
       const sortComments = response.data?.comments.sort((sortA, sortB) => {
         const dateA = new Date(sortA.createdAt);
         const dateB = new Date(sortB.createdAt);
         return dateA - dateB;
       });
-      bottomSCroll.current.scrollToEnd({ animated: true });
+      bottomSCroll.current.scrollToEnd({animated: true});
       setuserCommentsData(sortComments);
       setCommentsCount(response?.data?.commentsCount);
       setIsLoading(false);
@@ -164,26 +164,27 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
     } catch (error) {
       console.log('error---', error);
     }
-  };
+  }, [limit, page, storyId]);
 
   useEffect(() => {
     fetchDatagetComments();
-  }, [page, loadingPage, isLaodMore]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); //[page, loadingPage, isLaodMore, fetchDatagetComments]
 
-  const onRefresh = () => {
-    setIsRefreshing(true);
-    setPage(1);
-  };
+  // const onRefresh = () => {
+  //   setIsRefreshing(true);
+  //   setPage(1);
+  // };
 
-  const handleLoadMore = async () => {
-    setIsLoadMore(true);
-    // setLimit(commentsCount);
-  };
+  // const handleLoadMore = async () => {
+  //   setIsLoadMore(true);
+  //   // setLimit(commentsCount);
+  // };
 
   return (
     <>
       <View style={styles.container}>
-        <View style={{ width: responsiveWidth(90) }}>
+        <View style={{width: responsiveWidth(90)}}>
           <ImageBackground
             style={styles.img_backgroung_content}
             resizeMode="center"
@@ -226,8 +227,8 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                   <ImageBackground
                     style={{
                       marginTop: responsiveWidth(3),
-                      width: SCREENWIDTH / 1.4,
-                      height: SCREENHEIGHT / 3.6,
+                      width: SCREEN_WIDTH / 1.4,
+                      height: SCREEN_HEIGHT / 3.6,
                     }}
                     resizeMode="cover"
                     borderRadius={18}
@@ -283,7 +284,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                           height: responsiveHeight(4),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/456-img.png')}
+                        source={require('../../assets/456-img.png')}
                       />
                       <Text
                         style={{
@@ -301,7 +302,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                           height: responsiveHeight(4),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/1.5k-img.png')}
+                        source={require('../../assets/1.5k-img.png')}
                       />
                       <Text
                         style={{
@@ -313,7 +314,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate(HOME)}
+                      onPress={() => navigation.navigate('Home')}
                       style={styles.third_view}>
                       <Image
                         style={{
@@ -321,7 +322,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                           height: responsiveHeight(4),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/message-icon.png')}
+                        source={require('../../assets/message-icon.png')}
                       />
                       <Text
                         style={{
@@ -358,7 +359,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                       justifyContent: 'flex-end',
                       alignItems: 'flex-end',
                     }}>
-                    <TouchableOpacity style={{ width: responsiveWidth(6) }}>
+                    <TouchableOpacity style={{width: responsiveWidth(6)}}>
                       <Menu>
                         <MenuTrigger>
                           <Image
@@ -367,7 +368,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                               height: responsiveHeight(3.5),
                               resizeMode: 'center',
                             }}
-                            source={require('../assets/three-dots-mod.png')}
+                            source={require('../../assets/three-dots-mod.png')}
                           />
                         </MenuTrigger>
 
@@ -427,7 +428,6 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                     alignItems: 'center',
                     height: responsiveHeight(25.5),
                   }}>
-
                   {/* {!isLaodMore && commentsCount > 2 && (
                                         <TouchableOpacity onPress={handleLoadMore}>
                                             <Text
@@ -547,14 +547,14 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                           height: responsiveHeight(3),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/image-icon.png')}
+                        source={require('../../assets/image-icon.png')}
                       />
                     </TouchableOpacity>
                   </View>
 
                   <TouchableOpacity
                     onPress={fetchaddDataComments}
-                    style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    style={{justifyContent: 'center', alignItems: 'center'}}>
                     {!isLoading ? (
                       <Image
                         style={{
@@ -562,7 +562,7 @@ const FeedChatFrame = ({ type, profile_text, backgroundImage, profileImage }) =>
                           height: responsiveHeight(3.5),
                           resizeMode: 'center',
                         }}
-                        source={require('../assets/send-btn.png')}
+                        source={require('../../assets/send-btn.png')}
                       />
                     ) : (
                       <ActivityIndicator size={20} color={'#000'} />
@@ -628,22 +628,6 @@ const styles = StyleSheet.create({
   text_container: {
     paddingTop: responsiveWidth(4),
   },
-  second_container: {
-    position: 'relative',
-    bottom: responsiveWidth(5),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sec_container_firstchild: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: moderateVerticalScale(50),
-    width: responsiveWidth(92),
-    marginLeft: responsiveWidth(1),
-    backgroundColor: '#E44173',
-    height: responsiveHeight(7.5),
-  },
   third_container: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -677,43 +661,3 @@ const styles = StyleSheet.create({
 });
 
 export default FeedChatFrame;
-
-{
-  /* <FlatList
-                                                data={userCommentsData}
-                                                keyExtractor={(item, index) => index.toString()}
-                                                nestedScrollEnabled={true}
-                                                renderItem={({ item, index }) => (
-                                                    <GetComments
-                                                        key={index}
-                                                        text={item?.text}
-                                                        commentsUserid={item?._id}
-                                                        firstName={item?.user?.firstName}
-                                                        lastName={item?.user?.lastName}
-                                                        getCommentsstoryId={item?.story}
-                                                        isComment={isComment}
-                                                        media={item?.media}
-                                                        replies={item?.replies}
-                                                        isReplying={isReplyingId}
-                                                        inputRef={inputRef}
-                                                        setIsReplyingId={setIsReplyingId}
-                                                        setIsReply={setIsReply}
-                                                        createdAt={item?.createdAt}
-                                                    />
-                                                )}
-                                                ListFooterComponent={() => {
-                                                    if (loadingPage) {
-                                                        return (
-                                                            <View style={{ alignItems: 'center', }}>
-                                                                <ActivityIndicator size={40} color={'#000'} />
-                                                            </View>
-                                                        );
-                                                    }
-                                                    return null;
-                                                }}
-                                                onEndReached={() => {
-                                                    handleLoadMore();
-                                                }}
-                                                onEndReachedThreshold={0.3}
-                                            /> */
-}

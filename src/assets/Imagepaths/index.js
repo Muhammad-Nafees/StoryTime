@@ -290,6 +290,7 @@ export const Img_Paths = {
   DROP_ICON: require('../../assets/bottom-icon.png'),
   DEFAULT_ICON: require('../../assets/defaultIcon.png'),
   // DEFAULT_COVER: require("../../assets/plain-grey-background.png")
+  BG_Del:require("../../assets/Bgdel.png"),
 
   //Report a Problem
   MESSAGE_ICON: require('../../assets/support_story_time.png'),

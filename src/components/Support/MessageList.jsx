@@ -1,8 +1,8 @@
-import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import React from 'react';
 import Message from './Messages';
-import {getChats} from '../../../services/api/support';
-import Typography from '../Typography';
+import { getChats } from '../../../services/api/support';
+import Typography from '../reusable-components/Typography';
 
 const MessageList = () => {
   const [messages, setMessages] = React.useState([]);
@@ -41,8 +41,8 @@ const MessageList = () => {
             <FlatList
               data={messages}
               key={item => item.id}
-              contentContainerStyle={{paddingBottom: 50}}
-              renderItem={({item}) => <Message item={item} />}
+              contentContainerStyle={{ paddingBottom: 50 }}
+              renderItem={({ item }) => <Message item={item} />}
             />
           )}
         </>

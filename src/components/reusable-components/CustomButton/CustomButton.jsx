@@ -42,7 +42,6 @@ const CustomButton = ({
                               type == "savestoryphone" ? false :
                                 type == "registerFirst" && !validate(values) ? true :
                                   type == "registerpassword" && !validate(values) ? true :
-
                                     false
         }
 

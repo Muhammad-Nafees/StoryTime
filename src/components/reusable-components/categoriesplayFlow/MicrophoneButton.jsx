@@ -50,4 +50,4 @@ const MicrophoneButton = ({
     )
 }
 
-export default MicrophoneButton
+export default MicrophoneButton;
