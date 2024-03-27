@@ -50,6 +50,7 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
     const playerContributorsId = useSelector(
         state => state?.getcategories?.playerscontributorsIds,
     );
+
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
     const isUserGuest = useMemo(() => !user, [user]);
@@ -60,6 +61,8 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
         setSaveStoryModal(true);
         setVisiblePdf(true);
     };
+
+
 
     const handleSaveStories = async () => {
         setIsLoading(true);
@@ -72,21 +75,20 @@ const SaveStoryPhone = ({ isVisible, setIsVisible }) => {
                 contributors: playerContributorsId,
                 content: convertStr,
             });
-            if (responseData?.message === "content is not allowed to be empty") {
-                Toast.show({
-                    type: "error",
-                    text1: "content is not allowed to be empty",
-                })
-                setIsLoading(false);
-            } else {
-                console.log('storyresData====', responseData);
-                dispatch(resetFriends());
-                setSaveStoryModalsecond(true);
-                setVisibleSavePhone(true);
-            }
+            console.log('RESPONSSE FROM CREATE_STORYAPI====', responseData);
+            dispatch(resetFriends());
+            setSaveStoryModalsecond(true);
+            setVisibleSavePhone(true);
+            setIsLoading(false);
             return responseData;
-        } catch (error) {
-            console.log('error', error);
+        }
+        catch (error) {
+            Toast.show({
+                type: "error",
+                text1: error?.response?.data?.message
+            })
+            setIsLoading(false);
+            console.log('ERROR FROM SAVESTORIES', error?.response);
         }
     };
 

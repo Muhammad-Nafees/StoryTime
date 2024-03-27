@@ -42,7 +42,7 @@ const AddFriends_Categories = ({
     if (type !== "tagFriends") {
       const friend = { username, userid };
       dispatch(addFriends(friend));
-      dispatch(playerContributorsIds(user?.data?.user?._id, userid));
+      dispatch(playerContributorsIds(userid));
       dispatch(userId(userid));
     } else {
       tag_FriendsApi_Handler();

@@ -58,10 +58,11 @@ const Profile = ({ route }) => {
   // Redux
   const dispatch = useDispatch();
   const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
+  console.log("FRITNE", FriendIdRTK)
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-
+  console.log("ROUTE", route.params);
 
   useFocusEffect(
     useCallback(() => {
@@ -160,6 +161,7 @@ const Profile = ({ route }) => {
   };
 
 
+
   const handleText = () => {
     setType("text");
     setIsContent(0);
@@ -173,7 +175,6 @@ const Profile = ({ route }) => {
     setRecordingPage(1);
     setIsLoadingRecording(false);
   };
-
 
 
   return (

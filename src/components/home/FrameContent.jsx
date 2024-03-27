@@ -1,18 +1,18 @@
 import Frame from './Frame';
-import React, {useState, memo} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, { useState, memo } from 'react';
+import { View, StyleSheet } from 'react-native';
 import FrameActionBar from './FrameActionBar';
 import BlockUserStory from '../blockuser/BlockUserModal';
-import {moderateVerticalScale} from 'react-native-size-matters';
-import {responsiveWidth} from 'react-native-responsive-dimensions';
+import { moderateVerticalScale } from 'react-native-size-matters';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
-const FrameContent = ({item}) => {
+const FrameContent = ({ item }) => {
   //states
   const [isVisible, setIsVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <View style={{width: responsiveWidth(90)}}>
+      <View style={{ width: responsiveWidth(90) }}>
         <Frame item={item} />
         <FrameActionBar item={item} setIsVisible={setIsVisible} />
       </View>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
+
 
 const initialState = {
 
@@ -52,6 +52,7 @@ const addPlayers = createSlice({
         },
         resetFriends: (state) => {
             state.addFriends = [];
+            state.playerscontributorsIds = []
         },
 
         rearrangedFriends: (state, { payload }) => {
@@ -146,7 +147,6 @@ const addPlayers = createSlice({
             state.randomForProfileUpdate = action.payload
         },
 
-
         setCategoriesId: (state, action) => {
             state.categoriesId = action.payload;
             console.log("payload----getCategories", action.payload)
@@ -156,8 +156,10 @@ const addPlayers = createSlice({
             console.log("payload----subCategories", action.payload)
         },
         playerContributorsIds: (state, { payload }) => {
-            const { userid } = payload;
-            state.playerscontributorsIds.push(payload)
+            const isExisting = state.playerscontributorsIds.some(id => id === payload);
+            if (!isExisting) {
+                state.playerscontributorsIds.push(payload);
+            }
         },
 
         recordingData: (state, action) => {

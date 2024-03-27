@@ -35,6 +35,7 @@ const AddUrl = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [pageSubCategory, setPageSubCategory] = useState(1);
     const [responseSubCategories, setResponseSubCategories] = useState([]);
+    const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
 
     // redux
 
@@ -99,7 +100,7 @@ const AddUrl = () => {
                 creator: USER?._id,
                 category: categoryId,
                 subCategory: subCategoryId,
-                // contributors
+                contributors: playerscontributorsIds,
                 content: textInputValue
             });
             setIsVisible(true);

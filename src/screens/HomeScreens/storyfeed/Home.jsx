@@ -16,17 +16,16 @@ import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { fetchallFeedStories } from '../../../../services/api/storyfeed';
 import { HomeHeader, UserList, FrameContent } from '../../../components';
-import { setFriendId, } from '../../../../store/slices/categoriesSlice/categoriesSlice';
+import { playerContributorsIds, setFriendId, } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 
 const Home = () => {
   //destructures
   const { SPLASH_SCREEN_IMAGE } = Img_Paths;
-
   //hooks
   const dispatch = useDispatch();
-
   //redux states
   const { user } = useSelector(state => state?.authSlice);
+  const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
 
   //states
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +40,8 @@ const Home = () => {
   const limit = 10;
 
   //effects
+  console.log("PLAYER_CONTRIBUTORS", playerscontributorsIds);
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -88,6 +89,11 @@ const Home = () => {
       setIsLoading(false);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(playerContributorsIds(USER?._id))
+    }, []));
 
   const onRefresh = () => {
     setIsRefreshing(true);

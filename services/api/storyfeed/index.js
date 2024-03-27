@@ -158,7 +158,10 @@ export const get_Comment_api = async (paginations) => {
 
 
 export const createStory_api = async ({ type, creator, category, subCategory, contributors, content }) => {
-    console.log("creatorsss=====", creator, category, subCategory, contributors, content)
+
+    console.log("CREATORS=====", creator, category, subCategory, contributors);
+    console.log("CONTENT=====", content);
+
     let textstory = {};
     if (contributors) {
         textstory = {
@@ -181,7 +184,7 @@ export const createStory_api = async ({ type, creator, category, subCategory, co
     console.log("textstory== :", textstory);
     let url = Base_Url + "story";
     try {
-        const responseData = await axios.get(url);
+        const responseData = await axios.post(url, textstory);
         return responseData.data;
     } catch (error) {
         throw error;

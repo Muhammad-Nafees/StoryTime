@@ -14,29 +14,30 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {SCREEN_WIDTH} from '../../constants/Constant';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { SCREEN_WIDTH } from '../../constants/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
-import {PassionOne_Regular} from '../../constants/GlobalFonts';
-import {SecondaryColor, TextColorGreen} from '../../screens/Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { PassionOne_Regular } from '../../constants/GlobalFonts';
+import { SecondaryColor, TextColorGreen } from '../../screens/Styles/Style';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
-const Frame = ({item}) => {
+const Frame = ({ item }) => {
   // destructure
-  const {HOME_FRAME} = Img_Paths;
+  const { HOME_FRAME } = Img_Paths;
   const {
     type,
-    creator: {username},
+    creator: { username },
     content,
-    subCategory: {image: subCategoryimage} = {},
-    subCategory: {name: subCategoryname} = {},
+    subCategory: { image: subCategoryimage } = {},
+    subCategory: { name: subCategoryname } = {},
   } = item || {};
   // const
   const profileImage = require('../../assets/avatar-inn.png');
 
   // functions
   const linkTo = async url => {
+
     try {
       if (!(await InAppBrowser.isAvailable())) {
         Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
@@ -55,8 +56,8 @@ const Frame = ({item}) => {
         {type === 'text' && (
           <LinearGradient
             colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-            start={{x: 1, y: 1}}
-            end={{x: 1, y: 0}}
+            start={{ x: 1, y: 1 }}
+            end={{ x: 1, y: 0 }}
             locations={[0.8, 1]}
             style={styles.child_bg}>
             <View style={styles.second_childbg}>
@@ -76,8 +77,8 @@ const Frame = ({item}) => {
         {type === 'video' && (
           <LinearGradient
             colors={['rgba(234, 137, 167, 1)', 'rgba(0,0,0,0.4)']}
-            start={{x: 1, y: 1}}
-            end={{x: 1, y: 0}}
+            start={{ x: 1, y: 1 }}
+            end={{ x: 1, y: 0 }}
             locations={[0.8, 1]}
             style={styles.child_bg}>
             <View style={styles.second_childbg}>
