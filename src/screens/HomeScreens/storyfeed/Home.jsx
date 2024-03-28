@@ -127,7 +127,7 @@ const Home = () => {
   const renderListEmptyComponent = () => {
     return (
       <View style={styles.loadingContainer}>
-         {isLoadingMain ? (
+        {isLoadingMain ? (
           <ActivityIndicator size={24} color={PrimaryColor} />
         ) : (
           <Text style={styles.noDataText}>Follow someone to get Feeds</Text>

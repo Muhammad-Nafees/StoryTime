@@ -44,18 +44,19 @@ import Reportuser from '../screens/HomeScreens/storyfeed/Reportuser';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Support from '../screens/HomeScreens/setting/Support';
-import SupportMessage from '../screens/HomeScreens/setting/SupportMessage';
-import SupportMessageList from '../screens/HomeScreens/setting/SupportMessageList';
-import Report from '../screens/HomeScreens/setting/Report';
-import PaymentSetting from '../screens/HomeScreens/setting/PaymentSetting';
-import AddPaymentCard from '../screens/HomeScreens/setting/AddPaymentCard';
-import AddPaymentCardDetail from '../screens/HomeScreens/setting/AddPaymentCardDetail';
+import Support from '../screens/HomeScreens/Setting/Support';
+import SupportMessage from '../screens/HomeScreens/Setting/SupportMessage';
+import SupportMessageList from '../screens/HomeScreens/Setting/SupportMessageList';
+import Report from '../screens/HomeScreens/Setting/Report';
+import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
+import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
+
+import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
 import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
 import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';
 import StartRecordingVoice from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartRecordingVoice';
 import GoNextPlayer from '../screens/HomeScreens/categoriesScreens/playFlowScreens/GoNextPlayer';
-import EditAddPaymentCardDetail from '../screens/HomeScreens/setting/EditAddPaymentCardDetail';
+import EditAddPaymentCardDetail from '../screens/HomeScreens/Setting/EditAddPaymentCardDetail';
 
 
 

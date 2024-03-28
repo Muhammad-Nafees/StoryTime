@@ -9,10 +9,10 @@ export { default as RegisterUserInformation } from './AuthScreens/RegisterUserIn
 export { default as ForgetPhoneNumber } from './AuthScreens/forgetscreens/ForgetPhoneNumber';
 export { default as ForgetConfirmPassword } from './AuthScreens/forgetscreens/ForgetConfirmPassword';
 
-export {default as FAQ} from './HomeScreens/setting/FAQ';
-export {default as Setting} from './HomeScreens/setting/Setting';
-export {default as Notification} from './HomeScreens/setting/Notification';
-export {default as SubscriptionDetails} from './HomeScreens/setting/SubscriptionDetails';
-export {default as BlockUser} from './HomeScreens/setting/BlockUser';
-export {default as SettingsProfile} from './HomeScreens/setting/SettingsProfile';
-export {default as DeleteAccount} from './HomeScreens/setting/DeleteAccount';
+export { default as FAQ } from './HomeScreens/Setting/FAQ';
+export { default as Setting } from './HomeScreens/Setting/Setting';
+export { default as Notification } from './HomeScreens/Setting/Notification';
+export { default as SubscriptionDetails } from './HomeScreens/Setting/SubscriptionDetails';
+export { default as BlockUser } from './HomeScreens/Setting/BlockUser';
+export { default as SettingsProfile } from './HomeScreens/Setting/SettingsProfile';
+export { default as DeleteAccount } from './HomeScreens/Setting/DeleteAccount';
