@@ -7,7 +7,7 @@ import { base } from '../../../services'
 
 
 
-const RecordingIncognito = ({ setIsincognitoPage, hasMorePagesIncognito, incognito_response, isincognitoPage }) => {
+const RecordingIncognito = ({ setIsincognitoPage, hasMorePagesIncognito, incognito_response, isLoading }) => {
     const SCREENHEIGHT = Dimensions.get("window").height;
     const SCREENWIDTH = Dimensions.get("window").width;
 
@@ -31,32 +31,40 @@ const RecordingIncognito = ({ setIsincognitoPage, hasMorePagesIncognito, incogni
     return (
 
         <>
-            <FlatList
-                data={incognito_response}
-                renderItem={({ item, index }) => (
-                    <View key={index} style={{ backgroundColor: "rgba(57, 57, 57, 1)", flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
-                        <View style={{ backgroundColor: "#AAA", flexDirection: "row", paddingHorizontal: moderateScale(90), width: responsiveWidth(85), height: responsiveHeight(7), justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
-                            <Image style={{ width: SCREENWIDTH * 0.1, height: SCREENHEIGHT * 0.1, resizeMode: "center" }} source={{ uri: base + item?.subCategory?.image }} />
-                            <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2) }}>{item?.subCategory?.name}</Text>
-                        </View>
-                    </View>
-                )}
-                ListFooterComponent={() => {
-                    if (isLoadMore) {
-                        return (
-                            <View style={{ alignItems: 'center', height: SCREENHEIGHT / 4, }}>
-                                <ActivityIndicator color={PrimaryColor} />
-                            </View>
-                        );
-                    }
-                    return null;
-                }}
+            {
 
-                onEndReached={() => {
-                    handleLoadMore();
-                }}
-                onEndReachedThreshold={0.3}
-            />
+                isLoading ?
+                    <View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(40), }}>
+                        <ActivityIndicator size={22} color={PrimaryColor} />
+                    </View>
+                    :
+                    <FlatList
+                        data={incognito_response}
+                        renderItem={({ item, index }) => (
+                            <View key={index} style={{ backgroundColor: "rgba(57, 57, 57, 1)", flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
+                                <View style={{ backgroundColor: "#AAA", flexDirection: "row", paddingHorizontal: moderateScale(90), width: responsiveWidth(85), height: responsiveHeight(7), justifyContent: "space-evenly", alignItems: "center", borderRadius: 10 }}>
+                                    <Image style={{ width: SCREENWIDTH * 0.1, height: SCREENHEIGHT * 0.1, resizeMode: "center" }} source={{ uri: base + item?.subCategory?.image }} />
+                                    <Text style={{ color: "#FFF", fontWeight: "700", fontSize: responsiveFontSize(2) }}>{item?.subCategory?.name}</Text>
+                                </View>
+                            </View>
+                        )}
+                        ListFooterComponent={() => {
+                            if (isLoadMore) {
+                                return (
+                                    <View style={{ alignItems: 'center', height: SCREENHEIGHT / 4, }}>
+                                        <ActivityIndicator color={PrimaryColor} />
+                                    </View>
+                                );
+                            }
+                            return null;
+                        }}
+
+                        onEndReached={() => {
+                            handleLoadMore();
+                        }}
+                        onEndReachedThreshold={0.3}
+                    />
+            }
         </>
 
     )

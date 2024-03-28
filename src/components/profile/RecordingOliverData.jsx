@@ -52,7 +52,8 @@ const RecordingOliverData = ({
         } catch (error) {
             console.error("ERROR", error);
         }
-    }
+    };
+
 
 
     return (
@@ -88,7 +89,7 @@ const RecordingOliverData = ({
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>
                     :
-                    isUserProfileData || video_profile_response?.length == 0 ?
+                    video_profile_response?.length == 0 ?
                         (
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                                 <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>No story Found</Text>

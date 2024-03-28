@@ -46,12 +46,6 @@ const AddUrl = () => {
     const { user } = useSelector(state => state?.authSlice);
     const USER = user?.data?.user || user?.data;
 
-
-    console.log("PAGE----", page)
-    console.log("ADDURL----------------------", !!addUrlId);
-    console.log("pageSubCategory----", pageSubCategory)
-    console.log("textInputValue---- :", textInputValue)
-
     useEffect(() => {
         const categories_Api = async () => {
             try {
@@ -75,7 +69,6 @@ const AddUrl = () => {
             dispatch(setAddUrlId(""))
         }
     }, [page, addUrlId]);
-
 
 
     const isURLValid = (url) => {
@@ -116,9 +109,6 @@ const AddUrl = () => {
 
     const categoriesNames = responseCategories?.map(category => category?.name);
     const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
-
-    console.log("categoriesNames--------- :", categoriesNames)
-    console.log("subCategoriesNames------ :", subCategoriesNames)
 
     return (
         <View style={{ height: responsiveHeight(100), }}>

@@ -53,7 +53,7 @@ const ProfileOliverData = ({
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>
                     :
-                    isUserProfileData || profile_response?.length == 0 ?
+                    profile_response?.length == 0 || profile_response === null ?
                         (
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                                 <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>No Story Found</Text>

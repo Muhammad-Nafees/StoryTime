@@ -14,11 +14,12 @@ import { Inter_SemiBold, } from '../../constants/GlobalFonts';
 import { SCREEN_WIDTH } from '../../constants/Constant';
 
 
-const IncognitoMode = ({ setChangeMode,
+const IncognitoMode = ({
+
+    setChangeMode,
     toggel_mode,
-    hasMorePagesRecording,
     username,
-    changeMode
+
 }) => {
 
     const { SETTINGS_ICON, BG_BLACK_INCOGNITO } = Img_Paths;
@@ -27,10 +28,9 @@ const IncognitoMode = ({ setChangeMode,
     const [isContentIncognito, setIsContentIncognito] = useState(0);
     const [hasMorePagesIncognito, setHasMorePagesincognito] = useState(false);
     const [incognitoPage, setincognitoPage] = useState(1);
-    const [InconitoVideoPage, setIncognitoVideoPage] = useState(1);
     const [isLoadingIncognitoRec, setIsLoadingIncognitoRec] = useState(false);
     const [isNoDataProfile, setIsNoDataProfile] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
 
     const [type, setType] = useState("text");
     const [incognito_response, SetIncognito_response] = useState([])
@@ -39,18 +39,17 @@ const IncognitoMode = ({ setChangeMode,
 
 
     const incognito_profileResponse = async () => {
-
+        setIsLoading(true);
         try {
             const responseData = await fetch_users_stories({ type: type, recordingPage: incognitoPage, isincognitoPage: incognitoPage });
-            const responsestories = responseData?.data?.stories;
-
-            if (responsestories && type === "text") {
+            setIsLoading(false);
+            if (responseData?.data?.data?.stories && type === "text") {
                 setIsLoadingIncognitoRec(false);
-                SetIncognito_response((prevData) => [...prevData, ...responsestories]);
+                SetIncognito_response((prevData) => [...prevData, ...responseData?.data?.data?.stories]);
             }
-            else if (responsestories && type === "video") {
+            else if (responseData?.data?.data?.stories && type === "video") {
                 setIsLoadingIncognitoRec(false);
-                setResponseIncognitoVideo((prevData) => [...prevData, ...responsestories]);
+                setResponseIncognitoVideo((prevData) => [...prevData, ...responseData?.data?.data?.stories]);
             } else {
                 setIsNoDataProfile("No any story found");
             };
@@ -61,13 +60,17 @@ const IncognitoMode = ({ setChangeMode,
             console.log("hamsorepage", hasMorePagesIncognito);
             return responseData;
         } catch (error) {
+            setIsLoading(false);
             console.log("err", error);
         };
     };
 
+
+
     useEffect(() => {
         incognito_profileResponse();
     }, [type, incognitoPage]);
+
 
     return (
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -107,7 +110,6 @@ const IncognitoMode = ({ setChangeMode,
                             </View>
 
                             <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6), width: responsiveWidth(30) }}>
-
                                 <TouchableOpacity
                                     onPress={() => {
                                         setChangeMode(0);
@@ -134,7 +136,6 @@ const IncognitoMode = ({ setChangeMode,
                                         image={SETTINGS_ICON}
                                     />
                                 </View>
-
                             </View>
 
 
@@ -145,69 +146,8 @@ const IncognitoMode = ({ setChangeMode,
                     </View>
                 </View>
 
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-
-              <View style={{ paddingTop: responsiveWidth(6) }}>
-                <BackButton onPress={() => navigation?.goBack()} />
-              </View>
-
-              <View
-                style={{
-                  height: responsiveHeight(40),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: responsiveWidth(40)
-                }}>
-
-
-              </View> */}
-
-
-                {/* Incognito Icon----- */}
-
-                {/* <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveWidth(6) }}>
-                {
-                  USER?._id === FriendIdRTK ? (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setChangeMode(1)
-                          setType("video");
-                          toggel_mode();
-                          setProfileResponse([]);
-                          setResponse_ProfileVideo([]);
-                        }
-                        }
-                        style={[
-                          styles.back_button,
-                          {
-                            backgroundColor: 'rgba(57, 94, 102, 0.5)',
-                          },
-                        ]}>
-                        <Image
-                          style={styles.left_arrow}
-                          source={require('../../../assets/incognito-icon.png')}
-                        />
-                      </TouchableOpacity>
-
-                      <View style={{ paddingHorizontal: moderateScale(7) }}>
-                        <SettingButton
-                          onPress={() => navigation.navigate(SETTING)}
-                          image={SETTINGS_ICON}
-                        />
-                      </View>
-                    </>
-                  )
-                    :
-                    null
-                }
-              </View> */}
-
-
-                {/* </View> */}
             </ImageBackground>
             {/*  END*/}
-
 
 
             <View
@@ -280,6 +220,7 @@ const IncognitoMode = ({ setChangeMode,
                     setIsincognitoPage={setincognitoPage}
                     hasMorePagesIncognito={hasMorePagesIncognito}
                     isincognitoPage={incognitoPage}
+                    isLoading={isLoading}
                 />
                 :
                 <IncognitoVideo
@@ -288,6 +229,8 @@ const IncognitoMode = ({ setChangeMode,
                     hasMorePagesIncognito={hasMorePagesIncognito}
                     isincognitoPage={incognitoPage}
                     isNoDataProfile={isNoDataProfile}
+                    isLoading={isLoading}
+
                 />
             }
 

@@ -71,6 +71,7 @@ const addPlayers = createSlice({
             const isUserExist = state.addFriends.some((friend) => friend.userid === userid);
             if (isUserExist) {
                 state.addFriends.pop(action.payload);
+                state.playerscontributorsIds = state.playerscontributorsIds.filter((item) => item !== userid);
             }
         },
         userId: (state, action) => {
@@ -96,7 +97,7 @@ const addPlayers = createSlice({
             state.nextRandomNumber = action.payload
         },
         nextRandomNumExtend: (state, action) => {
-            state.nextRandomNumberExtend = action.payload
+            state.nextRandomNumberExtend = action.payload;
         },
         nextRandomNumVideo: (state, action) => {
             state.nextRandomNumberVideo = action.payload

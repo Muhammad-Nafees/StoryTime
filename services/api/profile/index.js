@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Base_Url, get_story_byId, story_profile, user_profile } from "../../index"
 
 
@@ -20,14 +21,8 @@ export const fetch_users_stories = async ({
     console.log("URL--------------", url)
 
     try {
-        const responseData = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-        const response = responseData.json();
-        return response;
+        const responseData = await axios.get(url)
+        return responseData;
     } catch (error) {
         throw error;
     }
@@ -47,7 +42,7 @@ export const getStory_Byid = async (storyuserId) => {
         const response = responseData.json();
         return response;
     }
-    catch (err) {
+    catch (error) {
         throw error;
     }
 };

@@ -2,17 +2,13 @@ import {
   View,
   Text,
   ImageBackground,
-  StatusBar,
   Image,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  ScrollViewBase,
   Dimensions,
-  BackHandler,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
@@ -20,11 +16,10 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import { useNavigation, NavigationAction, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
-import { PrimaryColor, TextColorGreen } from '../../Styles/Style';
+import { TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import NavigationsString from '../../../constants/NavigationsString';
 import ProfileOliverData from '../../../components/profile/ProfileOliverData';
 import RecordingOliverData from '../../../components/profile/RecordingOliverData';
 import IncognitoMode from '../../../components/profile/IncognitoMode';
@@ -33,17 +28,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
-const Profile = ({ route }) => {
+const Profile = () => {
 
   const { BG_CONTAINER, SETTINGS_ICON } = Img_Paths;
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
   const navigation = useNavigation();
-  const { SETTING } = NavigationsString;
   const [isContent, setIsContent] = useState(0);
   const [changeMode, setChangeMode] = useState(0);
   const [recordingPage, setRecordingPage] = useState(1);
-  const [videoPage, setVideoPage] = useState(1);
   const [hasMorePagesRecording, setHasMorePagesRecording] = useState(false);
   const [type, setType] = useState("text");
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
@@ -53,16 +46,14 @@ const Profile = ({ route }) => {
   const [isUserProfileData, setIsUserProfileData] = useState(false);
   const [isUserLoading, setIsUserLoading] = useState(false);
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
-  const [isNoDataProfile, setIsNoDataProfile] = useState("");
 
   // Redux
   const dispatch = useDispatch();
   const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
-  console.log("FRITNE", FriendIdRTK)
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-  console.log("ROUTE", route.params);
+
 
   useFocusEffect(
     useCallback(() => {
@@ -100,35 +91,30 @@ const Profile = ({ route }) => {
         else {
           setIsLoadingRecording(true);
         };
-
         try {
           const responseData = await fetch_users_stories({
             recordingPage: recordingPage,
             type: type,
             user: FriendIdRTK,
           });
-          console.log("RESPONSE DATA :", responseData.data.stories)
-          // const responsestories = ;
-
+          console.log("RESPONSE DATA :", responseData?.data?.data?.stories);
           setIsLoadingRecording(false);
-          if (responseData?.data?.stories && type === "text") {
+          if (responseData?.data?.data?.stories && type === "text") {
             setType("text");
             setIsLoadingRecording(false);
-            setIsUserProfileData(false);
             setProfileResponse((prevData) => {
-              const filteredData = responseData?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              const filteredData = responseData?.data?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
               console.log("filteredDataTEXT", filteredData);
               return [...prevData, ...filteredData]
             }
             );
           }
 
-          else if (responseData?.data?.stories && type === "video") {
+          else if (responseData?.data?.data?.stories && type === "video") {
             setType("video");
             setIsLoadingRecording(false);
-            setIsUserProfileData(false);
             setResponse_ProfileVideo((prevData) => {
-              const filteredData = responseData?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
+              const filteredData = responseData?.data?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
               console.log("filteredDataVIDEO", filteredData);
               return [...prevData, ...filteredData];
             }
@@ -136,16 +122,15 @@ const Profile = ({ route }) => {
           };
 
           setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
-
           return responseData;
+
         } catch (error) {
-          console.log("error :", error);
+          console.log("ERROR FROM FETCH_USERS_SRORIES :", error);
         };
       };
       profile_story_api();
     }, [type, recordingPage, FriendIdRTK])
   );
-
 
 
   const toggel_mode = async () => {
@@ -161,7 +146,6 @@ const Profile = ({ route }) => {
   };
 
 
-
   const handleText = () => {
     setType("text");
     setIsContent(0);
@@ -175,6 +159,7 @@ const Profile = ({ route }) => {
     setRecordingPage(1);
     setIsLoadingRecording(false);
   };
+
 
 
   return (
@@ -363,7 +348,6 @@ const Profile = ({ route }) => {
             (
               <RecordingOliverData
                 video_profile_response={response_ProfileVideo}
-                isNoDataProfile={isNoDataProfile}
                 hasMorePagesRecording={hasMorePagesRecording}
                 setRecordingPage={setRecordingPage}
                 isLoadingRecording={isLoadingRecording}
