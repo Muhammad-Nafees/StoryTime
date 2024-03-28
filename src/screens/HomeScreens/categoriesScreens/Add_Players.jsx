@@ -27,6 +27,7 @@ const AddPlayers = () => {
     const [inputText, setInputText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+
     useEffect(() => {
         const addFriends_api_handler = async () => {
             setIsLoading(true);
@@ -37,11 +38,11 @@ const AddPlayers = () => {
                 setIsLoading(false);
                 return responseData;
             } catch (error) {
-                console.log("err", error)
+                console.log("ERROR FROM ADD_PLAYERS", error)
             }
         };
         addFriends_api_handler();
-    }, [])
+    }, []);
 
     const debonceApiCall = useRef(_.debounce(async (text) => {
         try {

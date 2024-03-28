@@ -15,7 +15,6 @@ const ProfileOliverData = ({
     setRecordingPage,
     isLoadingRecording,
     hasMorePagesRecording,
-    isUserProfileData,
     isUserLoading,
 
 }) => {
@@ -39,10 +38,6 @@ const ProfileOliverData = ({
 
     const handleProfile = (isHidden, id) => {
         navigation.navigate("Profile")
-        // navigation.navigate("profileStack", {
-        //     screen: "VoiceToTextProfile",
-        //     params: { storyuserId: id, isHidden: isHidden },
-        // })
     };
 
     return (
@@ -63,7 +58,6 @@ const ProfileOliverData = ({
                             data={profile_response}
                             scrollEnabled={true}
                             renderItem={({ item, index }) => (
-                                console.log("ishideen item----", item?.isHidden),
                                 <View key={index} style={{ backgroundColor: TextColorGreen, flexDirection: "row", justifyContent: "space-evenly", height: responsiveHeight(10), alignItems: "center", marginTop: responsiveWidth(2), }}>
                                     <TouchableOpacity onPress={() => {
                                         navigation.navigate("profileStack", {

@@ -8,6 +8,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+
 import React, { useCallback, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import {
@@ -27,6 +28,7 @@ import { fetch_users_stories, getUsers_Profile, toggle_publicandPrivateMode } fr
 import { useDispatch, useSelector } from 'react-redux';
 import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlice/categoriesSlice';
 import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
+
 
 const Profile = () => {
 
@@ -146,6 +148,7 @@ const Profile = () => {
   };
 
 
+
   const handleText = () => {
     setType("text");
     setIsContent(0);
@@ -239,8 +242,6 @@ const Profile = () => {
                               setChangeMode(1)
                               setType("video");
                               toggel_mode();
-                              setProfileResponse([]);
-                              setResponse_ProfileVideo([]);
                             }
                             }
                             style={[

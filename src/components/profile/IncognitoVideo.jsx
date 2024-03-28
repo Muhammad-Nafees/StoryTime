@@ -4,7 +4,6 @@ import { profile_oliverPierce } from '../../../dummyData/DummyData'
 import { PrimaryColor, SecondaryColor, TextColorGreen } from '../../screens/Styles/Style'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 import { moderateScale } from 'react-native-size-matters'
-import { useNavigation } from '@react-navigation/native'
 import { base } from '../../../services'
 import { PassionOne_Regular } from '../../constants/GlobalFonts'
 

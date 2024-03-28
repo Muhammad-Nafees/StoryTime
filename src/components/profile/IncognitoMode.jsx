@@ -114,8 +114,6 @@ const IncognitoMode = ({
                                     onPress={() => {
                                         setChangeMode(0);
                                         toggel_mode();
-                                        SetIncognito_response([]);
-                                        setResponseIncognitoVideo([]);
                                     }
                                     }
                                     style={[
