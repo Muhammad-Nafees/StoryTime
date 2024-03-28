@@ -1,62 +1,96 @@
 import {
-  StyleSheet,
   Text,
-  ImageBackground,
-  Image,
   View,
+  Image,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Img_Paths } from '../../../assets/Imagepaths';
-import SvgIcons from '../../../components/svgIcon/svgIcons';
-import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
-import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
 import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
   SPACING,
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
 } from '../../../constants/Constant';
 import {
-  responsiveFontSize,
-  responsiveHeight,
   responsiveWidth,
+  responsiveHeight,
+  responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import { Formik } from 'formik';
-import { validationSettingsProfile } from '../../../../validation/validation';
-import CustomInput from '../../../components/auth/CustomInput';
-import UploadImage from '../../../components/modals/UploadImage';
-import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
-import {
-  FourthColor,
-  PrimaryColor,
-  SecondaryColor,
-  TextColorGreen,
-  TextinputColor,
-  ThirdColor,
-} from '../../Styles/Style';
-import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import TextInputField from '../../../components/TextInputField';
-import { Path, Svg } from 'react-native-svg';
-import { useNavigation } from '@react-navigation/native';
+import {TextColorGreen, TextinputColor} from '../../Styles/Style';
 import {
   getUserProfileData,
   updateUserProfileData,
 } from '../../../../services/api/settings';
-import { userinfocity } from '../../../../store/slices/authStatesandCity/userinfoCity';
-import {
-  userinfoState,
-  userdata,
-} from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
-import { base } from '../../../../services';
-import { login } from '../../../../store/slices/authSlice';
-import { Inter_SemiBold } from '../../../constants/GlobalFonts';
+
+import {Formik} from 'formik';
+import {base} from '../../../../services';
+import {useDispatch, useSelector} from 'react-redux';
+import {Img_Paths} from '../../../assets/Imagepaths';
+import {useNavigation} from '@react-navigation/native';
+import SelectDropdown from 'react-native-select-dropdown';
+import {login} from '../../../../store/slices/authSlice';
+import React, {useState, useRef, useEffect} from 'react';
+import SvgIcons from '../../../components/svgIcon/svgIcons';
+import CustomInput from '../../../components/auth/CustomInput';
+import TextInputField from '../../../components/TextInputField';
+import {Inter_SemiBold} from '../../../constants/GlobalFonts';
+import CustomPhoneInput from '../../../components/auth/CustomPhoneInput';
+import {validationSettingsProfile} from '../../../../validation/validation';
+import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
+import UploadImage from '../../../components/reusable-components/modals/UploadImage';
+import {userinfocity} from '../../../../store/slices/authStatesandCity/userinfoCity';
+import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import {userinfoState} from '../../../../store/slices/authStatesandCity/userInfoState_Slice';
+
+const CoverAndProfileContent = ({
+  coverImage,
+  profileImage,
+  uploadProfileImageRef,
+  uploadCoverImageRef,
+}) => {
+  const {BG_CONTAINER, DROP_ICON, DEFAULT_ICON} = Img_Paths;
+
+  const modalOpen = ref => {
+    if (ref.current) {
+      ref.current.open();
+    }
+  };
+
+  return (
+    <>
+      <ImageBackground
+        source={coverImage?.uri ? {uri: coverImage?.uri} : BG_CONTAINER}
+        style={styles.bg_img_container}>
+        <ScreenHeader title={'Profile'} clr={'#fff'} />
+      </ImageBackground>
+      <View style={{width: SCREEN_WIDTH}}>
+        <View style={styles.avatar_wrapper}>
+          <Image
+            source={profileImage?.uri ? {uri: profileImage?.uri} : DEFAULT_ICON}
+            style={styles.avatar}
+            resizeMode="contain"
+          />
+          <TouchableOpacity
+            onPress={() => modalOpen(uploadProfileImageRef)}
+            style={styles.icon_container}>
+            <SvgIcons name={'PencilEdit'} width={40} height={40} />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => modalOpen(uploadCoverImageRef)}
+          style={styles.icon_container2}>
+          <SvgIcons name={'PencilEdit'} width={40} height={40} />
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+};
 
 const SettingsProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { BG_CONTAINER, DEFAULT_COVER, DROP_ICON, DEFAULT_ICON } = Img_Paths;
+  const {DROP_ICON} = Img_Paths;
 
   const uploadProfileImageRef = useRef(null);
   const uploadCoverImageRef = useRef(null);
@@ -64,23 +98,16 @@ const SettingsProfile = () => {
   const phoneInput = useRef(null);
   const [isError, setIsError] = useState('');
 
-  const phoneCode = phoneInput?.current?.state?.code;
-  const countryCode = phoneInput?.current?.state?.countryCode;
-
-  const [formatText, setFormatText] = useState('');
   const [countryCodeState, setCountryCodeState] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [phoneNumberStatusCode, setphoneNumberStatusCode] = useState(); //checks of phone no is valid
 
-  const { userdata, loading } = useSelector(state => state?.userinfostate);
+  const {userdata, loading} = useSelector(state => state?.userinfostate);
   console.log('🚀 ~ SettingsProfile ~ userdata:', userdata);
-  const { userdatacity } = useSelector(state => state?.userinfocity);
+  const {userdatacity} = useSelector(state => state?.userinfocity);
   const cityloading = useSelector(state => state?.userinfocity?.loading);
   const namesArray = userdata?.data?.map(item => item.name); //state names
   const namesCities = userdatacity?.data?.map(item => item?.name);
-  // console.log('🚀 ~ SettingsProfile ~ namesCities:', namesCities);
 
-  const { user } = useSelector(state => state?.authSlice);
+  const {user} = useSelector(state => state?.authSlice);
   const [initialData, setinitialData] = useState({
     username: '',
     firstName: '',
@@ -101,8 +128,8 @@ const SettingsProfile = () => {
 
     const payload = {
       ...(values || {}),
-      ...(profileImage?.uri && { profileImage: profileImage?.uri }),
-      ...(coverImage?.uri && { coverImage: coverImage?.uri }),
+      ...(profileImage?.uri && {profileImage: profileImage?.uri}),
+      ...(coverImage?.uri && {coverImage: coverImage?.uri}),
     };
     const response = await updateUserProfileData(payload);
     dispatch(login(response));
@@ -110,10 +137,9 @@ const SettingsProfile = () => {
   };
 
   const getData = async () => {
-    const uid = user?.data?.user?._id || user?.data?._id
-    let { data } = await getUserProfileData(uid);
+    const uid = user?.data?.user?._id || user?.data?._id;
+    let {data} = await getUserProfileData(uid);
     console.log('🚀 ~ getData ~ data:', data, data?.profileImage);
-
 
     const payload = {
       username: data?.username || '',
@@ -130,10 +156,10 @@ const SettingsProfile = () => {
 
     if (data?.profileImage) {
       // console.log('profileimg',data?.profileImage)
-      setProfileImage({ uri: `${base}${data?.profileImage}` });
+      setProfileImage({uri: `${base}${data?.profileImage}`});
     }
     if (data?.coverImage) {
-      setCoverImage({ uri: `${base}${data?.coverImage}` });
+      setCoverImage({uri: `${base}${data?.coverImage}`});
     }
     if (data?.state) {
       setUserCity(data?.state);
@@ -149,15 +175,8 @@ const SettingsProfile = () => {
   };
 
   useEffect(() => {
-    // console.log('🚀 ~ initialData ~ initialData:', initialData);
     getData();
   }, []);
-
-  const modalOpen = ref => {
-    if (ref.current) {
-      ref.current.open();
-    }
-  };
 
   const handleInitCity = selected => {
     // console.log('🚀 ~ selectedItems ~ selected city data:', selected);
@@ -182,40 +201,19 @@ const SettingsProfile = () => {
   return (
     <>
       {initialLoading ? (
-        <BackgroundWrapper contentContainerStyle={{ flex: 1 }} coverScreen>
+        <BackgroundWrapper contentContainerStyle={{flex: 1}} coverScreen>
           <View style={styles.container}>
             <ActivityIndicator size="large" />
           </View>
         </BackgroundWrapper>
       ) : (
         <BackgroundWrapper>
-          <ImageBackground
-            source={coverImage?.uri ? { uri: coverImage?.uri } : BG_CONTAINER}
-            style={styles.bg_img_container}>
-            <ScreenHeader title={'Profile'} clr={'#fff'} />
-          </ImageBackground>
-          <View style={{ width: SCREEN_WIDTH }}>
-            <View style={styles.avatar_wrapper}>
-              <Image
-                source={
-                  profileImage?.uri ? { uri: profileImage?.uri } : DEFAULT_ICON
-                }
-                style={styles.avatar}
-                resizeMode="contain"
-              />
-              <TouchableOpacity
-                onPress={() => modalOpen(uploadProfileImageRef)}
-                style={styles.icon_container}>
-                <SvgIcons name={'PencilEdit'} width={40} height={40} />
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              onPress={() => modalOpen(uploadCoverImageRef)}
-              style={styles.icon_container2}>
-              <SvgIcons name={'PencilEdit'} width={40} height={40} />
-            </TouchableOpacity>
-          </View>
-
+          <CoverAndProfileContent
+            coverImage={coverImage}
+            profileImage={profileImage}
+            uploadProfileImageRef={uploadProfileImageRef}
+            uploadCoverImageRef={uploadCoverImageRef}
+          />
           <Formik
             enableReinitialize
             initialValues={initialData}
@@ -234,20 +232,22 @@ const SettingsProfile = () => {
             }) => (
               <>
                 {console.log('values', values.state)}
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <CustomInput
                     label="Username"
                     placeholder="Type here"
                     value={values.username}
                     error={errors.username}
-                    // customError={usernameError}
                     touched={touched.username}
                     initialTouched={true}
                     setFieldError={setFieldError}
-                    // isVisible={isVisible}
-                    // setVisible={setVisible}
                     fieldName="username"
-                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
+                    labelStyles={{
+                      color: TextColorGreen,
+                      fontFamily: Inter_SemiBold.Inter_SemiBold,
+                      fontSize: 12,
+                      marginTop: responsiveHeight(2),
+                    }}
                     handleChange={text => setFieldValue('username', text)}
                   />
 
@@ -260,7 +260,11 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="firstName"
-                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
+                    labelStyles={{
+                      color: TextColorGreen,
+                      fontFamily: Inter_SemiBold.Inter_SemiBold,
+                      fontSize: 12,
+                    }}
                     handleChange={text => setFieldValue('firstName', text)}
                   />
 
@@ -273,7 +277,11 @@ const SettingsProfile = () => {
                     initialTouched={true}
                     setFieldError={setFieldError}
                     fieldName="lastName"
-                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
+                    labelStyles={{
+                      color: TextColorGreen,
+                      fontFamily: Inter_SemiBold.Inter_SemiBold,
+                      fontSize: 12,
+                    }}
                     handleChange={text => setFieldValue('lastName', text)}
                   />
 
@@ -287,13 +295,17 @@ const SettingsProfile = () => {
                       phoneInput={phoneInput}
                       setIsError={setIsError}
                       setFieldError={setFieldError}
-                      setFormatText={setFormatText}
+                      setFormatText={()=>{}}
                       isError={isError}
                       defaultCode={countryCodeState}
                       setPhoneCode={handleCountryCodeChange}
-                      setPhoneError={setPhoneError}
-                      setphoneNumberStatusCode={setphoneNumberStatusCode}
-                      labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
+                      setPhoneError={()=>{}}
+                      setphoneNumberStatusCode={()=>{}}
+                      labelStyles={{
+                        color: TextColorGreen,
+                        fontFamily: Inter_SemiBold.Inter_SemiBold,
+                        fontSize: 12,
+                      }}
                     />
                   )}
 
@@ -308,7 +320,12 @@ const SettingsProfile = () => {
                     // setFieldError={setEmailError}
                     // setEmailstatusCode={setEmailstatusCode}
                     fieldName="email"
-                    labelStyles={{ color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }}
+                    labelStyles={{
+                      color: TextColorGreen,
+                      fontFamily: Inter_SemiBold.Inter_SemiBold,
+                      fontSize: 12,
+                      marginTop: responsiveHeight(3.5),
+                    }}
                     handleChange={text => setFieldValue('email', text)}
                   />
                 </View>
@@ -322,7 +339,15 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }]}>
+                        <Text
+                          style={[
+                            styles.text,
+                            {
+                              color: TextColorGreen,
+                              fontFamily: Inter_SemiBold.Inter_SemiBold,
+                              fontSize: 12,
+                            },
+                          ]}>
                           City
                         </Text>
                       </View>
@@ -365,8 +390,8 @@ const SettingsProfile = () => {
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
                           }}
-                          rowStyle={{ paddingHorizontal: 8 }}
-                          dropdownStyle={{ borderRadius: 10 }}
+                          rowStyle={{paddingHorizontal: 8}}
+                          dropdownStyle={{borderRadius: 10}}
                           buttonTextStyle={{
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
@@ -395,7 +420,16 @@ const SettingsProfile = () => {
                           width: responsiveWidth(89),
                           marginLeft: 'auto',
                         }}>
-                        <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold, fontSize: 12 }]}>
+                        <Text
+                          style={[
+                            styles.text,
+                            {
+                              color: TextColorGreen,
+                              fontFamily: Inter_SemiBold.Inter_SemiBold,
+                              fontSize: 12,
+                              marginTop: responsiveHeight(2),
+                            },
+                          ]}>
                           State
                         </Text>
                       </View>
@@ -427,8 +461,8 @@ const SettingsProfile = () => {
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
                           }}
-                          rowStyle={{ paddingHorizontal: 8 }}
-                          dropdownStyle={{ borderRadius: 10 }}
+                          rowStyle={{paddingHorizontal: 8}}
+                          dropdownStyle={{borderRadius: 10}}
                           buttonTextStyle={{
                             textAlign: 'left',
                             fontSize: responsiveFontSize(1.9),
@@ -475,7 +509,16 @@ const SettingsProfile = () => {
                         width: responsiveWidth(89),
                         marginLeft: 'auto',
                       }}>
-                      <Text style={[styles.text, { color: TextColorGreen, fontFamily: Inter_SemiBold.Inter_SemiBold }]}>
+                      <Text
+                        style={[
+                          styles.text,
+                          {
+                            color: TextColorGreen,
+                            fontFamily: Inter_SemiBold.Inter_SemiBold,
+                            fontSize: 12,
+                            marginTop: responsiveHeight(2),
+                          },
+                        ]}>
                         Zip Code
                       </Text>
                     </View>
@@ -500,10 +543,10 @@ const SettingsProfile = () => {
                         width: responsiveWidth(80),
                         backgroundColor:
                           values.email &&
-                            values.firstName &&
-                            values.lastName &&
-                            values.phoneNo &&
-                            values.username
+                          values.firstName &&
+                          values.lastName &&
+                          values.phoneNo &&
+                          values.username
                             ? '#395E66'
                             : 'rgba(57, 94, 102, 0.6)',
                         borderRadius: 10,
@@ -528,7 +571,7 @@ const SettingsProfile = () => {
                           fontWeight: '600',
                           letterSpacing: 0.28,
                           color: 'white',
-                          fontFamily: Inter_SemiBold.Inter_SemiBold
+                          fontFamily: Inter_SemiBold.Inter_SemiBold,
                         }}>
                         Save
                       </Text>
@@ -540,12 +583,12 @@ const SettingsProfile = () => {
             )}
           </Formik>
           <UploadImage
-            uploadImageRef={uploadProfileImageRef}
             setImage={setProfileImage}
+            uploadImageRef={uploadProfileImageRef}
           />
           <UploadImage
-            uploadImageRef={uploadCoverImageRef}
             setImage={setCoverImage}
+            uploadImageRef={uploadCoverImageRef}
           />
         </BackgroundWrapper>
       )}

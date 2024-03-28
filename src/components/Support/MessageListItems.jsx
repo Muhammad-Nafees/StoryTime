@@ -3,12 +3,11 @@ import React from 'react';
 import Chat from './Chat';
 
 const MessageListItems = ({messageList}) => {
-  console.log('🚀 ~ MessageListItems ~ messageList:', messageList);
   return (
     <FlatList
       data={messageList}
       keyExtractor={item => item.id}
-      renderItem={({item}) => <Chat item={item} />}
+      renderItem={({item}) => <Chat key={item.id} item={item} />}
     />
   );
 };

@@ -64,7 +64,7 @@ const CustomInput = (props) => {
   return (
     <>
       <View style={{ marginLeft: "auto", width: responsiveWidth(90), }}>
-        <Text style={[props?.labelStyles, { color: FourthColor, fontWeight: "600", }]}>
+        <Text style={[{ color: FourthColor, fontWeight: "600"},props?.labelStyles]}>
           {props.label}
         </Text>
       </View>

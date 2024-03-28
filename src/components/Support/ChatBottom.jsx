@@ -17,9 +17,9 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Typography from '../reusable-components/Typography';
-const ChatBottom = ({ setReload, reload, chatID }) => {
-  const { GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND } = Img_Paths;
+import {Typography} from '../index';
+const ChatBottom = ({setMessageList, messageList, chatID}) => {
+  const {GALLERY_ICON, CAMERA__ICON, MESSAGE_SEND} = Img_Paths;
   const [profileImage, setProfileImage] = React.useState(null);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -77,7 +77,7 @@ const ChatBottom = ({ setReload, reload, chatID }) => {
       const response = await sendMessage(payload);
       const data = response.data;
       if (response?.statusCode === 200) {
-        setReload(!reload);
+        setMessageList([...messageList, data]);
         setInput('');
         setLoading(false);
         setProfileImage(null);
@@ -128,9 +128,7 @@ const ChatBottom = ({ setReload, reload, chatID }) => {
                   <TouchableOpacity
                     style={styles.crossButton}
                     onPress={() => setProfileImage(null)}>
-                    <Typography style={styles.cross}>
-                      {'×'}
-                    </Typography>
+                    <Typography style={styles.cross}>{'×'}</Typography>
                   </TouchableOpacity>
                 </View>
               </>
@@ -190,10 +188,10 @@ const styles = StyleSheet.create({
   crossButton: {
     alignSelf: 'center',
     bottom: 15,
-    marginLeft: 5
+    marginLeft: 5,
   },
   cross: {
     color: '#AAAAAA',
-    fontSize: 15
-  }
+    fontSize: 15,
+  },
 });

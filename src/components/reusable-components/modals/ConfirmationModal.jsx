@@ -12,7 +12,7 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import { delete_user_account } from '../../../services/api/auth_mdule/auth';
+import { delete_user_account } from '../../../../services/api/auth_mdule/auth';
 import React, {
   useState,
   useEffect,
@@ -24,12 +24,10 @@ import {
   Black02,
   PrimaryColor,
   TextColorGreen,
-} from '../../screens/Styles/Style';
-import Typography from '../reusable-components/Typography';
-import { BlurView } from '@react-native-community/blur';
-import { Img_Paths } from '../../assets/Imagepaths/index';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
-import { moderateScale } from 'react-native-size-matters';
+} from '../../../screens/Styles/Style';
+import Typography from '../Typography';
+import { Img_Paths } from '../../../assets/Imagepaths/index';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constant';
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const { handleSuccessCallback } = props || {};
@@ -134,7 +132,6 @@ const ConfirmationModal = forwardRef((props, ref) => {
                 fontSize: responsiveFontSize(2.5),
                 fontWeight: '600',
                 textAlign: 'center',
-                lineHeight: 20,
                 marginTop: responsiveHeight(4),
               }}>
               Confirmation

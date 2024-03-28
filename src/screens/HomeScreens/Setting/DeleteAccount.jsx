@@ -1,10 +1,10 @@
-import SuccessModal from '../../../components/modals/SuccessModal';
+import SuccessModal from '../../../components/reusable-components/modals/SuccessModal';
 import React, { useEffect, useRef, useState } from 'react';
 import Typography from '../../../components/reusable-components/Typography';
 import { useNavigation } from '@react-navigation/native';
 import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
 import { Black02, TextColorGreen, White } from '../../Styles/Style';
-import ConfirmationModal from '../../../components/modals/ConfirmationModal';
+import ConfirmationModal from '../../../components/reusable-components/modals/ConfirmationModal';
 import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
 import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';

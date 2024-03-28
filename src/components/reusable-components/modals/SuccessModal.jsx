@@ -10,17 +10,17 @@ import Modal from 'react-native-modal';
 import {
   TextColorGreen,
   pastelGreen,
-} from '../../screens/Styles/Style';
+} from '../../../screens/Styles/Style';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import SvgIcons from '../svgIcon/svgIcons';
-import {Img_Paths} from '../../assets/Imagepaths/index';
+import SvgIcons from '../../svgIcon/svgIcons';
+import {Img_Paths} from '../../../assets/Imagepaths/index';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
-import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../constants/Constant';
+import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const SuccessModal = ({
   isVisible,

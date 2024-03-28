@@ -1,15 +1,15 @@
 import Modal from 'react-native-modal';
-import {Img_Paths} from '../../assets/Imagepaths';
+import {Img_Paths} from '../../../assets/Imagepaths';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
-import {unBlockUser} from '../../../services/api/settings';
+import {unBlockUser} from '../../../../services/api/settings';
 import React, {useState, forwardRef, useImperativeHandle} from 'react';
 import {
   Black02,
   PrimaryColor,
   White
-} from '../../screens/Styles/Style';
-import { Inter_Regular, Inter_SemiBold } from '../../constants/GlobalFonts';
+} from '../../../screens/Styles/Style';
+import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 const BlockModal = forwardRef((props, ref) => {
   const {removeUnblockUserFromList} = props

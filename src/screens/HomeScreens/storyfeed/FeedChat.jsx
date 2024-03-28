@@ -23,6 +23,7 @@ import {PassionOne_Regular} from '../../../constants/GlobalFonts';
 import {addFriends_api} from '../../../../services/api/add-members';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../constants/Constant';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { HomeHeader } from '../../../components';
 
 const FeedChat = () => {
   //hooks
@@ -60,21 +61,7 @@ const FeedChat = () => {
     <SafeAreaView style={styles.safeAreaView}>
       <ScrollView>
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <Image style={styles.headerImage} source={STORY_TIME_IMG} />
-            </View>
-            <View style={styles.headerRight}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AddFiends')}
-                style={styles.plusButton}>
-                <Image style={styles.plusIcon} source={PLUS_ICON} />
-              </TouchableOpacity>
-              <View style={styles.avatarContainer}>
-                <Image style={styles.avatar} source={AVATAR} />
-              </View>
-            </View>
-          </View>
+        <HomeHeader/>
 
           <View style={styles.titleContainer}>
             <Text style={styles.title}>My Friend’s Story Time</Text>

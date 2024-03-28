@@ -31,7 +31,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import {launchImageLibrary} from 'react-native-image-picker';
-import GetComments from '../GetComments';
+import GetComments from './GetComments';
 import {
   add_comment_api,
   get_Comment_api,

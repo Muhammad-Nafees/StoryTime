@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import SvgIcons from '../svgIcon/svgIcons';
+import SvgIcons from '../../svgIcon/svgIcons';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   Black02,
   White
-} from '../../screens/Styles/Style';
+} from '../../../screens/Styles/Style';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { BlurView } from '@react-native-community/blur';
 import {
@@ -13,7 +13,7 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import { Poppins_Regular } from '../../constants/GlobalFonts';
+import { Poppins_Regular } from '../../../constants/GlobalFonts';
 
 const UploadImage = ({ uploadImageRef, setImage }) => {
 
