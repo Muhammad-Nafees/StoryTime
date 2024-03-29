@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Img_Paths } from '../../../assets/Imagepaths';
 import {
   responsiveFontSize,
@@ -30,8 +30,7 @@ import { setResponseUsersProfile } from '../../../../store/slices/categoriesSlic
 import { Inter_Regular, Inter_SemiBold } from '../../../constants/GlobalFonts';
 
 
-const Profile = () => {
-
+const Profile = ({ route }) => {
   const { BG_CONTAINER, SETTINGS_ICON } = Img_Paths;
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -55,7 +54,11 @@ const Profile = () => {
   const { user } = useSelector(state => state?.authSlice);
   const USER = user?.data?.user || user?.data;
 
-
+  useEffect(() => {
+    if (route?.params?.videoData === "video") {
+      setType("video");
+    }
+  }, [route.params?.videoData]);
 
   useFocusEffect(
     useCallback(() => {
@@ -84,6 +87,12 @@ const Profile = () => {
 
 
 
+  console.log("type---------- :", type);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setType("text");
+  //   }, []));
+
   useFocusEffect(
     useCallback(() => {
       const profile_story_api = async () => {
@@ -99,7 +108,6 @@ const Profile = () => {
             type: type,
             user: FriendIdRTK,
           });
-          console.log("RESPONSE DATA :", responseData?.data?.data?.stories);
           setIsLoadingRecording(false);
           if (responseData?.data?.data?.stories && type === "text") {
             setType("text");
@@ -122,10 +130,8 @@ const Profile = () => {
             }
             );
           };
-
           setHasMorePagesRecording(responseData?.data?.pagination?.hasNextPage);
           return responseData;
-
         } catch (error) {
           console.log("ERROR FROM FETCH_USERS_SRORIES :", error);
         };
@@ -133,6 +139,7 @@ const Profile = () => {
       profile_story_api();
     }, [type, recordingPage, FriendIdRTK])
   );
+
 
 
   const toggel_mode = async () => {
@@ -354,6 +361,7 @@ const Profile = () => {
                 isLoadingRecording={isLoadingRecording}
                 isUserProfileData={isUserProfileData}
                 isUserLoading={isUserLoading}
+                setType={setType}
               />
             )}
         </View>

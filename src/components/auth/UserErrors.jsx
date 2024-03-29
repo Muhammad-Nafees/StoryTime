@@ -4,8 +4,8 @@ import { PrimaryColor, SecondaryColor, TextColorGreen, ThirdColor, pinkColor } f
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { Img_Paths } from '../../assets/Imagepaths';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
-import { Inter_Medium, Inter_Regular } from '../../constants/GlobalFonts';
+import { SCREEN_WIDTH } from '../../constants/Constant';
+import { Inter_Regular } from '../../constants/GlobalFonts';
 
 
 

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import BlockModal from '../../../components/modals/BlockModal';
+import BlockModal from '../../../components/reusable-components/modals/BlockModal';
 import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
 import { getBlockList } from '../../../../services/api/settings';
 import { responsiveWidth } from 'react-native-responsive-dimensions';

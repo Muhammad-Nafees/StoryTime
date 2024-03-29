@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, useCallback} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   Image,
   Text,
@@ -20,9 +20,9 @@ import {
   TextColorGreen,
   pinkColor,
 } from '../../screens/Styles/Style';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../assets/Imagepaths';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../assets/Imagepaths';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import NavigationsString from '../../constants/NavigationsString';
 import {
   Menu,
@@ -30,8 +30,8 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {launchImageLibrary} from 'react-native-image-picker';
-import GetComments from '../GetComments';
+import { launchImageLibrary } from 'react-native-image-picker';
+import GetComments from './GetComments';
 import {
   add_comment_api,
   get_Comment_api,
@@ -39,16 +39,16 @@ import {
 import NoComment from '../comments/NoComments';
 import Toast from 'react-native-toast-message';
 import CustomAttachmentDialog from '../comments/CustomAttachedDialog';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Constant';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
 
-const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
+const FeedChatFrame = ({ type, backgroundImage, profileImage }) => {
   //hooks
   const route = useRoute();
   const navigation = useNavigation();
 
   //destructures
-  const {HOME_FRAME, SHARE_BTN} = Img_Paths;
-  const {likedUserId, dislikesCounting, likesCounting, content, username} =
+  const { HOME_FRAME, SHARE_BTN } = Img_Paths;
+  const { likedUserId, dislikesCounting, likesCounting, content, username } =
     route?.params || {};
 
   //redux states
@@ -64,11 +64,7 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
   const limit = 100;
 
   //states
-  // const [HasMorePages, setHasMorePages] = useState();
-  // const [isRefreshing, setIsRefreshing] = useState(false);
-  // const [loadingPage, setLoadingPage] = useState(false);
-  // const [isLaodMore, setIsLoadMore] = useState(false);
-  // const [responseMedia, setResponseMedia] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [media, setMedia] = useState(null);
   const [inputText, setInputText] = useState('');
@@ -104,6 +100,8 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
     });
   };
 
+
+
   const fetchaddDataComments = async () => {
     if (inputText.trim() === '') {
       Toast.show({
@@ -137,7 +135,6 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
       const response = await add_comment_api(ReqBody);
       fetchDatagetComments();
       // setResponseMedia(response?.data?.media);
-      console.log('addComme==', response.data?.media);
       return response.data;
     } catch (error) {
       console.log('error---', error);
@@ -146,14 +143,14 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
 
   const fetchDatagetComments = useCallback(async () => {
     try {
-      const response = await get_Comment_api({page, limit, storyId});
+      const response = await get_Comment_api({ page, limit, storyId });
       // setHasMorePages(response?.data?.pagination?.hasNextPage);
       const sortComments = response.data?.comments.sort((sortA, sortB) => {
         const dateA = new Date(sortA.createdAt);
         const dateB = new Date(sortB.createdAt);
         return dateA - dateB;
       });
-      bottomSCroll.current.scrollToEnd({animated: true});
+      bottomSCroll.current.scrollToEnd({ animated: true });
       setuserCommentsData(sortComments);
       setCommentsCount(response?.data?.commentsCount);
       setIsLoading(false);
@@ -171,20 +168,11 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); //[page, loadingPage, isLaodMore, fetchDatagetComments]
 
-  // const onRefresh = () => {
-  //   setIsRefreshing(true);
-  //   setPage(1);
-  // };
-
-  // const handleLoadMore = async () => {
-  //   setIsLoadMore(true);
-  //   // setLimit(commentsCount);
-  // };
 
   return (
     <>
       <View style={styles.container}>
-        <View style={{width: responsiveWidth(90)}}>
+        <View style={{ width: responsiveWidth(90) }}>
           <ImageBackground
             style={styles.img_backgroung_content}
             resizeMode="center"
@@ -359,7 +347,7 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
                       justifyContent: 'flex-end',
                       alignItems: 'flex-end',
                     }}>
-                    <TouchableOpacity style={{width: responsiveWidth(6)}}>
+                    <TouchableOpacity style={{ width: responsiveWidth(6) }}>
                       <Menu>
                         <MenuTrigger>
                           <Image
@@ -428,18 +416,6 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
                     alignItems: 'center',
                     height: responsiveHeight(25.5),
                   }}>
-                  {/* {!isLaodMore && commentsCount > 2 && (
-                                        <TouchableOpacity onPress={handleLoadMore}>
-                                            <Text
-                                                style={{
-                                                    color: 'rgba(40, 88, 144, 1)',
-                                                    fontWeight: '500',
-                                                    fontSize: 12,
-                                                }}>
-                                                View {commentsCount - 2} more comments
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )} */}
 
                   <ScrollView
                     keyboardShouldPersistTaps="always"
@@ -554,7 +530,7 @@ const FeedChatFrame = ({type, backgroundImage, profileImage}) => {
 
                   <TouchableOpacity
                     onPress={fetchaddDataComments}
-                    style={{justifyContent: 'center', alignItems: 'center'}}>
+                    style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {!isLoading ? (
                       <Image
                         style={{

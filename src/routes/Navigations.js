@@ -49,6 +49,7 @@ import SupportMessageList from '../screens/HomeScreens/Setting/SupportMessageLis
 import Report from '../screens/HomeScreens/Setting/Report';
 import PaymentSetting from '../screens/HomeScreens/Setting/PaymentSetting';
 import AddPaymentCard from '../screens/HomeScreens/Setting/AddPaymentCard';
+
 import AddPaymentCardDetail from '../screens/HomeScreens/Setting/AddPaymentCardDetail';
 import SelectGamePoint from '../screens/HomeScreens/categoriesScreens/playFlowScreens/SelectGamePoint';
 import StartGame from '../screens/HomeScreens/categoriesScreens/playFlowScreens/StartGame';

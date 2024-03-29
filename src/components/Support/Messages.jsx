@@ -1,17 +1,25 @@
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import Typography from '../reusable-components/Typography';
+import { Typography } from '../index';
 import { Img_Paths } from '../../assets/Imagepaths';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { URL } from '../../constants/Constant';
+import { useNavigation } from '@react-navigation/native';
 
 const Message = ({ item }) => {
   const { MESSAGE_ICON } = Img_Paths;
   const uri = URL + item.lastMessage.media[0];
+  const navigation = useNavigation();
   return (
     <View style={{ marginBottom: 16 }}>
-      <View style={styles.message_container}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('SupportMessageList', {
+            chatID: item?.lastMessage?.chat,
+          })
+        }
+        style={styles.message_container}>
         <View style={styles.message_wrapper}>
           <View style={styles.message_content}>
             <View style={styles.message_icon}>
@@ -35,20 +43,20 @@ const Message = ({ item }) => {
               </Typography>
               <View style={{}}>
                 <Image
-                  resizeMode='contain'
+                  resizeMode="contain"
                   source={{ uri: uri }}
                   style={{
                     width: 40,
                     height: 40,
                     borderRadius: 2,
-                    marginLeft: responsiveWidth(5)
+                    marginLeft: responsiveWidth(5),
                   }}></Image>
               </View>
             </View>
           </View>
         </View>
         {/* </View> */}
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -34,6 +34,7 @@ const CustomPhoneInput = ({
   setFormatText,
   setphoneNumberStatusCode,
   defaultCode,
+  labelStyles
 }) => {
   // console.log("error && isError", error,"//",isError)
 
@@ -85,11 +86,12 @@ const CustomPhoneInput = ({
   return (
     <View style={{}}>
       <Text
-        style={{
+        style={[{
           color: FourthColor,
           fontWeight: '600',
           marginBottom: verticalScale(7),
-        }}>
+        },
+        labelStyles]}>
         Phone Number
       </Text>
 

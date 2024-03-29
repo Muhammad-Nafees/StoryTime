@@ -1,21 +1,10 @@
-import React, { useEffect } from 'react';
-import BackgroundWrapper from '../../../components/reusable-components/BackgroundWrapper';
+import React from 'react';
 import MessageList from '../../../components/Support/MessageList';
+import {BackgroundWrapper,ScreenHeader} from '../../../components';
 import SupportButton from '../../../components/Support/SupportButton';
-import socketServcies from '../../../../services/sockets';
-import ScreenHeader from '../../../components/reusable-components/ScreenHeader';
+
 
 const Support = ({ navigation }) => {
-
-  useEffect(() => {
-    socketServcies.initializeSocket()
-  }, [])
-
-  useEffect(() => {
-    socketServcies.on('received_message', (msg) => {
-      console.log('message received in App', msg)
-    })
-  }, [])
 
   const handleScreen = () => {
     navigation.navigate('SupportMessage');
@@ -31,4 +20,3 @@ const Support = ({ navigation }) => {
 };
 
 export default Support;
-

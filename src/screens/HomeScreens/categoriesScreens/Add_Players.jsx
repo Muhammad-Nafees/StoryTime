@@ -18,6 +18,7 @@ import RemoveUsers_Categories from '../../../components/categories/RemoveUsers_C
 import { PassionOne_Regular } from '../../../constants/GlobalFonts';
 
 
+
 const AddPlayers = () => {
     const { SPLASH_SCREEN_IMAGE, LEFT_ARROW_IMG, SEARCH_ADD_ICON, FIRST_PROFILE, } = Img_Paths;
     const { height, } = Dimensions.get("window")

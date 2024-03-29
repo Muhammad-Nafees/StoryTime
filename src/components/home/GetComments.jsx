@@ -12,12 +12,10 @@ import {
   responsiveFontSize,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
-import { Img_Paths } from '../assets/Imagepaths';
+import { Img_Paths } from '../../assets/Imagepaths';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import CommentImagePreview, {
-  CommentsImagePreview,
-} from './comments/CommentImagePreview';
-import ReplyingContent from './comments/ReplyingContent';
+import CommentImagePreview from '../comments/CommentImagePreview';
+import ReplyingContent from '../comments/ReplyingContent';
 
 const GetComments = ({
   text,
@@ -31,7 +29,7 @@ const GetComments = ({
   replies,
   inputRef,
 }) => {
-  const { HOME_FRAME, FRANKIN_DRAWEN, SHARE_BTN } = Img_Paths;
+  const { FRANKIN_DRAWEN } = Img_Paths;
   const [isImageFullscreen, setImageFullscreen] = useState(false);
   const width = Dimensions.get('window').width;
 

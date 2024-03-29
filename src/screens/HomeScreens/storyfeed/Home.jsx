@@ -65,6 +65,7 @@ const Home = () => {
           setHasMorePages(responseData?.data?.pagination?.hasNextPage);
           return responseData;
         } catch (error) {
+          setIsLoadingMain(false);
         } finally {
           setIsRefreshing(false);
         }
@@ -97,6 +98,7 @@ const Home = () => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
+    setIsLoadingMain(true)
     setPage(1);
     setResponseUsers([]);
     setTimeout(() => {

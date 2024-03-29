@@ -1,9 +1,5 @@
-// imports libraries 
-import {
-  View,
-  ImageBackground,
-  StyleSheet,
-} from 'react-native';
+// imports libraries
+import { View, ImageBackground, StyleSheet } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   responsiveFontSize,
@@ -48,12 +44,13 @@ const StartRecordingVoice = () => {
   const [saveStoryModal, setSaveStoryModal] = useState(false);
   const [isVisible, setVisible] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const { isCheck,
+  const {
+    isCheck,
     nextRandomNumber,
     isExtendStory,
     extendCounting,
     nextRandomNumberExtend,
-    gameFriends
+    gameFriends,
   } = useSelector(state => state.getcategories);
   const [currentDisplayUser, setCurrentDisplayUser] = useState(gameFriends[0]);
   const [isNextUser, setIsNextUser] = useState(gameFriends[1]);
@@ -85,7 +82,6 @@ const StartRecordingVoice = () => {
     setStarted(true);
   };
 
-
   const onSpeechResult = async e => {
     if (!e.value) return;
     setSpeaking(false);
@@ -105,7 +101,7 @@ const StartRecordingVoice = () => {
   function onSpeechError(e) {
     setSpeaking(false);
     console.log('onSpeechError: ', JSON.stringify(e.error));
-  };
+  }
 
   useEffect(() => {
     setTimeLeft(null);
@@ -169,7 +165,7 @@ const StartRecordingVoice = () => {
       setTimeLeft(null);
       setIsPressed(false);
       setIsFirstCall(false);
-    };
+    }
 
     if (isCheck) {
       const currentIndex = gameFriends.indexOf(currentDisplayUser);
@@ -224,7 +220,7 @@ const StartRecordingVoice = () => {
       setTimeLeft(extendCounting);
       startRecognizing();
       setIsPressed(true);
-    };
+    }
 
     if (timeLeft !== 0) {
       setIsPressed(true);
@@ -253,7 +249,7 @@ const StartRecordingVoice = () => {
   useEffect(() => {
     if (USER_LENGTH_CHECK) {
       setIsNext(false);
-    };
+    }
 
     let countdown;
 
@@ -275,7 +271,6 @@ const StartRecordingVoice = () => {
     return () => clearInterval(countdown);
   }, [timeLeft]);
 
-
   useEffect(() => {
     if (isExtendStory === true && timeLeft == null) {
       setTimeText('00:30');
@@ -291,7 +286,8 @@ const StartRecordingVoice = () => {
     }
   }, [timeLeft]);
 
-
+  const [description, setDescription] = useState('');
+  console.log(description, 'DESCRIPTIOJ');
 
   return (
     <>
@@ -360,7 +356,7 @@ const StartRecordingVoice = () => {
               isNextUser={isNextUser}
               isCancelingStory={isCancelingStory}
             />
-          ) :
+          ) : (
             !user && (
               <CustomPlayFlowButton
                 onPress={onPressNext}
@@ -374,7 +370,7 @@ const StartRecordingVoice = () => {
                 isCancelingStory={isCancelingStory}
               />
             )
-          }
+          )}
 
           <View style={{ paddingTop: responsiveWidth(6) }}>
             <SaveStoryBtn
@@ -387,20 +383,18 @@ const StartRecordingVoice = () => {
           </View>
 
           {saveStoryModal && (
-            <SaveStoryPhone
-              isVisible={isVisible}
-              setIsVisible={setVisible} />
+            <SaveStoryPhone isVisible={isVisible} setIsVisible={setVisible} />
           )}
         </View>
 
         <GuestModals
           ref={GuestModalRef}
-          onPress={() => navigation.navigate("PlayStoryTime")}
+          onPress={() => navigation.navigate('PlayStoryTime')}
         />
         <GuestModals
           ref={GuestModalRefForAds}
           onPress={saveStoryhandler}
-          textOnPress={() => navigation.navigate("PlayStoryTime")}
+          textOnPress={() => navigation.navigate('PlayStoryTime')}
         />
         {/* </ScrollView> */}
       </ImageBackground>

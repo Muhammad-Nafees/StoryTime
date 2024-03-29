@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import SvgIcons from '../svgIcon/svgIcons';
+import SvgIcons from '../../svgIcon/svgIcons';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   Black02,
   White
-} from '../../screens/Styles/Style';
+} from '../../../screens/Styles/Style';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { BlurView } from '@react-native-community/blur';
 import {
@@ -13,7 +13,7 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import { Poppins_Regular } from '../../constants/GlobalFonts';
+import { Poppins_Regular } from '../../../constants/GlobalFonts';
 
 const UploadImage = ({ uploadImageRef, setImage }) => {
 
@@ -61,12 +61,12 @@ const UploadImage = ({ uploadImageRef, setImage }) => {
           backgroundColor: Black02,
         },
       }}>
-      <TouchableOpacity onPress={openImagePicker} style={{ flexDirection: 'row', alignItems: 'center',marginTop:responsiveHeight(2) }}>
+      <TouchableOpacity onPress={openImagePicker} style={{ flexDirection: 'row', alignItems: 'center', marginTop: responsiveHeight(2) }}>
         <View style={styles.svgIcon}>
           <SvgIcons name={'UploadImage'} width={responsiveWidth(8)} height={responsiveHeight(5)} />
         </View>
-        <Text style={{ color: "#101010", fontWeight: '600', fontSize:responsiveFontSize(2), marginLeft: 10,fontFamily:Poppins_Regular.Poppins_regular }}>Upload picture</Text>
-      </TouchableOpacity>  
+        <Text style={{ color: "#101010", fontWeight: '600', fontSize: responsiveFontSize(2), marginLeft: 10, fontFamily: Poppins_Regular.Poppins_regular }}>Upload picture</Text>
+      </TouchableOpacity>
     </RBSheet>
   )
 }
@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
     marginBottom: 'auto',
   },
   blur_view: {
-    width:responsiveWidth(100),
-    height:responsiveHeight(100),
-    alignContent:'center',
-    justifyContent:'center',
-    alignSelf:'center',
+    width: responsiveWidth(100),
+    height: responsiveHeight(100),
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   blur_content_container: {
     backgroundColor: 'transparent',
- 
+
   },
 });

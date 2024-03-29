@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -10,33 +10,28 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import {PrimaryColor, SecondaryColor} from '../../Styles/Style';
+import { PrimaryColor, SecondaryColor } from '../../Styles/Style';
 import {
   responsiveWidth,
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../../../assets/Imagepaths';
+import { Img_Paths } from '../../../assets/Imagepaths';
 import FeedChatFrame from '../../../components/home/FeedChatFrame';
-import {useNavigation} from '@react-navigation/native';
-import {PassionOne_Regular} from '../../../constants/GlobalFonts';
-import {addFriends_api} from '../../../../services/api/add-members';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../constants/Constant';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import { PassionOne_Regular } from '../../../constants/GlobalFonts';
+import { addFriends_api } from '../../../../services/api/add-members';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constant';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { HomeHeader } from '../../../components';
 
 const FeedChat = () => {
-  //hooks
-  const navigation = useNavigation();
-
   //detructures
-  const {STORY_TIME_IMG, SPLASH_SCREEN_IMAGE} = Img_Paths;
+  const { SPLASH_SCREEN_IMAGE } = Img_Paths;
 
   //states
   const [ResponseapiChat, setResponseapiChat] = useState([]);
 
   //consts
-  const AVATAR = require('../../../assets/avatar.png');
-  const PLUS_ICON = require('../../../assets/plus-icon.png');
   const FIRST_IMG = require('../../../assets/first-img.png');
   const AVATAR_IN = require('../../../assets/avatar-inn.png');
 
@@ -47,6 +42,7 @@ const FeedChat = () => {
 
   //functions
   const addFriends_api_handler = async () => {
+
     try {
       const responseData = await addFriends_api();
       setResponseapiChat(responseData?.data?.users);
@@ -54,27 +50,14 @@ const FeedChat = () => {
     } catch (error) {
       console.log('err', error);
     }
+
   };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <ScrollView>
         <ImageBackground style={styles.container} source={SPLASH_SCREEN_IMAGE}>
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <Image style={styles.headerImage} source={STORY_TIME_IMG} />
-            </View>
-            <View style={styles.headerRight}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AddFiends')}
-                style={styles.plusButton}>
-                <Image style={styles.plusIcon} source={PLUS_ICON} />
-              </TouchableOpacity>
-              <View style={styles.avatarContainer}>
-                <Image style={styles.avatar} source={AVATAR} />
-              </View>
-            </View>
-          </View>
+          <HomeHeader />
 
           <View style={styles.titleContainer}>
             <Text style={styles.title}>My Friend’s Story Time</Text>
@@ -85,7 +68,7 @@ const FeedChat = () => {
               data={ResponseapiChat}
               scrollEnabled={true}
               horizontal
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <View style={styles.flatlistItem}>
                     <TouchableOpacity style={styles.friendButton}>
@@ -165,8 +148,8 @@ const styles = StyleSheet.create({
   flatlistContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: responsiveWidth(95),
-    marginLeft: 'auto',
+    width: responsiveWidth(90),
+    marginRight: 'auto',
   },
   flatlistItem: {
     justifyContent: 'center',

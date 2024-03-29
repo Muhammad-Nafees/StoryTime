@@ -17,8 +17,7 @@ const RecordingOliverData = ({
     isNoDataProfile,
     setRecordingPage,
     hasMorePagesRecording,
-    isUserProfileData,
-    isUserLoading,
+    setType,
 
 }) => {
 
@@ -62,7 +61,7 @@ const RecordingOliverData = ({
                 {
                     USER?._id === FriendIdRTK ?
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate("ProfileScreens", { screen: "AddUrl" })
+                            navigation.navigate("ProfileScreens", { screen: "AddUrl", })
                         }} activeOpacity={0.7} style={{
                             borderWidth: 1,
                             borderStyle: "dashed",
@@ -84,12 +83,12 @@ const RecordingOliverData = ({
             </View>
 
             {
-                isUserLoading || isLoadingRecording ?
+                isLoadingRecording ?
                     <View style={{ justifyContent: "center", alignItems: "center", height: responsiveHeight(40), }}>
                         <ActivityIndicator size={22} color={PrimaryColor} />
                     </View>
                     :
-                    video_profile_response?.length == 0 ?
+                    video_profile_response?.length == 0 || video_profile_response == null ?
                         (
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                                 <Text style={{ color: PrimaryColor, fontSize: responsiveFontSize(3.5), fontFamily: PassionOne_Regular.passionOne, }}>No story Found</Text>

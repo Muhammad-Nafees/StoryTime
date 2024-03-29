@@ -19,7 +19,7 @@ import Toast from 'react-native-toast-message';
 
 
 const AddUrl = () => {
-
+    // console.log()
     const { BG_URL_PAGE } = Img_Paths;
     const navigation = useNavigation();
 
@@ -33,7 +33,6 @@ const AddUrl = () => {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
-    const [pageSubCategory, setPageSubCategory] = useState(1);
     const [responseSubCategories, setResponseSubCategories] = useState([]);
     const { playerscontributorsIds } = useSelector((state) => state?.getcategories)
 
@@ -104,8 +103,6 @@ const AddUrl = () => {
             console.log(error)
         };
     };
-
-
 
     const categoriesNames = responseCategories?.map(category => category?.name);
     const subCategoriesNames = responseSubCategories?.map((category) => category?.name);
@@ -227,7 +224,7 @@ const AddUrl = () => {
                             const randomNumbers = Math.floor(Math.random() * 100);
                             dispatch(setRandomForProfileUpdate(randomNumbers));
                             console.log("randomNumbers :", randomNumbers)
-                            navigation.navigate("Profile");
+                            navigation.navigate("Profile", { videoData: "video" });
                         }}
                     />
                 }
