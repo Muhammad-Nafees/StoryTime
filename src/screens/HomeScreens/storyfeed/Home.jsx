@@ -40,8 +40,6 @@ const Home = () => {
   const limit = 10;
 
   //effects
-  console.log("PLAYER_CONTRIBUTORS", playerscontributorsIds);
-
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -74,6 +72,7 @@ const Home = () => {
     fetchUsers();
   }, [page, isRefreshing]);
 
+
   useFocusEffect(
     useCallback(() => {
       dispatch(setFriendId(USER?._id));
@@ -82,7 +81,6 @@ const Home = () => {
 
   //functions
   const handleLoadMore = () => {
-    console.log('HasMorePages-----', HasMorePages);
     if (HasMorePages) {
       setIsLoading(true);
       setPage(prevPage => prevPage + 1);

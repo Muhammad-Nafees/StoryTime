@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -11,67 +11,44 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import {TextColorGreen} from '../../screens/Styles/Style';
-import {useNavigation, useNavigationBuilder} from '@react-navigation/native';
+import { TextColorGreen } from '../../screens/Styles/Style';
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {Img_Paths} from '../../assets/Imagepaths/index';
+import { Img_Paths } from '../../assets/Imagepaths/index';
 import BackButton from '../reusable-components/addplayer/customBackButton/BackButton';
 import NavigationsString from '../../constants/NavigationsString';
-import {useDispatch, useSelector} from 'react-redux';
-import {PassionOne_Regular} from '../../constants/GlobalFonts';
+import { useDispatch, useSelector } from 'react-redux';
+import { PassionOne_Regular } from '../../constants/GlobalFonts';
 import SaveStoryBtn from './SaveStoryBtn';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import DownloadingFlow from './DownloadingFlow';
-import {SPACING} from '../../constants/Constant';
+import { SPACING } from '../../constants/Constant';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {resetFriends} from '../../../store/slices/categoriesSlice/categoriesSlice';
+import { resetFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import SaveStoryPhone from './SaveStoryPhone';
 
-const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
-  console.log('SAVEASPDF FIEL!', isVisiblePdf);
-  const {width, height} = Dimensions.get('window');
-  const {SAVE_STORY_BACKGROUND, BG_CLOCK} = Img_Paths;
-  const SCREENWIDTH = Dimensions.get('window').width;
-  const SCREENHEIGHT = Dimensions.get('window').height;
+const SaveAsPdf = ({ isVisiblePdf, setIsVisiblePdf }) => {
+  const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
   const [isVisibleDownloading, setIsVisibleDownloading] = useState(false);
   const [saveStoryModalDownloading, setSaveStoryModalDownloading] =
     useState(false);
-  const {VIDEO_SECOND_USER, FIRST_USER} = NavigationsString;
   const textrecordUsers = useSelector(
     state => state?.getcategories?.recordingText,
   );
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [dontSaveToPdf, setDontSaveToPdf] = useState(false);
-  // const {user} = useSelector(state => state?.authSlice);
-
-  // const isUserGuest = useMemo(() => !user, [user]);
 
   console.log('textrecordusers', textrecordUsers);
 
   const loadSavedPath = async () => {
     console.log('Saving pdf file!');
     pickDirectory();
-
-    // try {
-    //   const savedPath = await AsyncStorage.getItem('selectedFolderPath');
-    //   if (savedPath) {
-    //     // If path is saved, use it for subsequent PDF creations
-    //     console.log(savedPath, '.....');
-    //     createPDF(savedPath);
-    //   } else {
-    //     // If no path is saved, prompt the user to select
-    //     pickDirectory();
-    //   }
-    // } catch (error) {
-    //   console.error('Error loading saved path: ', error);
-    // }
   };
 
   const saveSelectedPath = async path => {
@@ -86,9 +63,11 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
   const convertExternalStorageUriToAbsolutePath = uri => {
     let dirToRead = uri.split('tree')[1];
     dirToRead = '/storage' + dirToRead.replace(/%3A/g, '%2F');
-    console.log(dirToRead);
+    console.log("DIR_READ", dirToRead);
     return decodeURIComponent(dirToRead);
   };
+
+
 
   const convertInternalStoragePathToAbsolutePath = uri => {
     let dirToRead = uri?.split('primary')[1];
@@ -98,6 +77,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
     console.log(dirToRead);
     return decodeURIComponent(dirToRead);
   };
+
   const [isLoadingDirectory, setIsLoadingDirectory] = useState(false);
 
   const pickDirectory = async () => {
@@ -122,8 +102,7 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
           // It's SD card or other external storage
           absolutePath = convertExternalStorageUriToAbsolutePath(result.uri);
         }
-
-        console.log(absolutePath);
+        console.log("Absolute Path", absolutePath);
 
         // Save the selected path
         saveSelectedPath(absolutePath);
@@ -154,9 +133,9 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
 
       if (
         granted['android.permission.READ_EXTERNAL_STORAGE'] ===
-          PermissionsAndroid.RESULTS.GRANTED &&
+        PermissionsAndroid.RESULTS.GRANTED &&
         granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-          PermissionsAndroid.RESULTS.GRANTED
+        PermissionsAndroid.RESULTS.GRANTED
       ) {
         console.log('External storage permissions granted');
         createPDF(selectedPath);
@@ -186,9 +165,8 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
       };
 
       const pdf = await RNHTMLtoPDF.convert(options);
-      const downloadDest = `${
-        RNFS.DownloadDirectoryPath
-      }/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
+      const downloadDest = `${RNFS.DownloadDirectoryPath
+        }/voicetotext_${Math.floor(Math.random() * 100000)}.pdf`;
       console.log('downloadDest---------------------', downloadDest);
       await RNFS.moveFile(pdf.filePath, downloadDest);
 
@@ -254,8 +232,8 @@ const SaveAsPdf = ({isVisiblePdf, setIsVisiblePdf, directoryPath}) => {
                 Do you want to save your Story Time as PDF?
               </Text>
 
-              <View style={{paddingVertical: 12}}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{ paddingVertical: 12 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity
                     disabled={isLoadingDirectory}
                     onPress={loadSavedPath}

@@ -223,7 +223,6 @@ const AddUrl = () => {
                         onPress={() => {
                             const randomNumbers = Math.floor(Math.random() * 100);
                             dispatch(setRandomForProfileUpdate(randomNumbers));
-                            console.log("randomNumbers :", randomNumbers)
                             navigation.navigate("Profile", { videoData: "video" });
                         }}
                     />

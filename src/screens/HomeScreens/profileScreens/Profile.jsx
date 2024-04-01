@@ -277,6 +277,7 @@ const Profile = ({ route }) => {
                   </View>
 
 
+
                 </View>
                 <View>
 

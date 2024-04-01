@@ -4,8 +4,6 @@ import { Base_Url, addComment_endpoint, follow_Unfollow_endpoint, getAllUsers_en
 
 export const fetchallFeedStories = async (paginations) => {
     const { limit, pagination } = paginations;
-    console.log("===Apipage========", paginations)
-
     try {
         const responseData = await fetch(Base_Url + storyfeed_Endpoint + `?page=${pagination}&limit=${limit}`, {
             method: "GET",

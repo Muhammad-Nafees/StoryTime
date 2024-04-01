@@ -68,6 +68,7 @@ const MainContentVideo = ({
                                     device={activeCamera}
                                     isActive={isActive}
                                     video={true}
+                                    fps={30}
                                     resizeMode="cover"
                                 />
                             </SafeAreaView>

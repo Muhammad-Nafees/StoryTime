@@ -20,7 +20,7 @@ import {
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
-  Camera,
+  Camera, getCameraFormat,
 } from 'react-native-vision-camera';
 import { useDispatch, useSelector } from 'react-redux';
 // imports components
@@ -224,7 +224,6 @@ const VideoFirstUser = () => {
 
     cameraRef.current.startRecording({
       videoCodec: 'h264',
-      // videoBitRate: 'extra-low',
       onRecordingFinished: video => {
         const pathVideo = video.path;
         console.log(video, 'VIDEO');

@@ -61,7 +61,6 @@ const UserList = () => {
   const handleFriends = friendId => {
     const randomNumbers = Math.floor(Math.random() * 100);
     dispatch(setRandomForProfileUpdate(randomNumbers));
-    console.log('randomNumbers :', randomNumbers);
 
     dispatch(setFriendId(friendId));
     navigation.navigate('profileStack', {
