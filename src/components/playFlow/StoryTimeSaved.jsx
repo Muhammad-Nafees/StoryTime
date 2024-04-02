@@ -11,10 +11,9 @@ import SvgIcons from '../svgIcon/svgIcons';
 import { Circle, Path, Svg } from 'react-native-svg';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { rearrangedFriends } from '../../../store/slices/categoriesSlice/categoriesSlice';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constant';
 import { Img_Paths } from '../../assets/Imagepaths';
+
 
 const StoryTimeSaved = ({
   isVisible,
@@ -26,9 +25,8 @@ const StoryTimeSaved = ({
   loading,
 }) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const sequenceUser = useSelector(state => state.getcategories?.gameFriends);
-  const { SAVE_STORY_BACKGROUND, BG_CLOCK } = Img_Paths;
+  const { SAVE_STORY_BACKGROUND } = Img_Paths;
+
 
   const close = () => {
     if (onPress) {
@@ -37,9 +35,7 @@ const StoryTimeSaved = ({
       navigation.navigate('Home');
     } else {
       setVisible(false);
-      // navigation.navigate('Home');
       navigation.navigate('Home');
-      // dispatch(sequenceUser);
     }
   };
 

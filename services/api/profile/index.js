@@ -89,7 +89,7 @@ export const tag_Friends = async ({ userid, storyId }) => {
 };
 
 export const hide_Story = async (storyId) => {
-
+    console.log("storyid", storyId)
     try {
         let url = `${Base_Url}story/hide/${storyId}`;
         const responseData = await fetch(url, {

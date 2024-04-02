@@ -51,7 +51,6 @@ const VideoFirstUser = () => {
 
   //redux states
   const [currentCamera, setCurrentCamera] = useState('back');
-
   const { user } = useSelector(state => state?.authSlice);
 
   const { nextRandomNumberVideo,
@@ -65,7 +64,6 @@ const VideoFirstUser = () => {
 
   //states
 
-  const [started, setStarted] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [timeText, setTimeText] = useState('02:00');
@@ -359,7 +357,6 @@ const VideoFirstUser = () => {
           cameraRef={cameraRef}
           isActive={isActive}
           showCamera={showCamera}
-          started={started}
           toggleCamera={toggleCamera}
           user={user}
           currentDisplayUser={currentDisplayUser}

@@ -287,7 +287,6 @@ const Profile = ({ route }) => {
 
             {/* Incognito Icon----- */}
 
-
           </ImageBackground>
 
           <View

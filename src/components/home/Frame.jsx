@@ -35,17 +35,20 @@ const Frame = ({ item }) => {
   // const
   const profileImage = require('../../assets/avatar-inn.png');
 
-  // functions
-  const linkTo = async url => {
-
+  async function linkTo(item) {
     try {
-      if (!(await InAppBrowser.isAvailable())) {
-        Linking.openURL(url); // If the in-app browser is not available, open the link in the device's default browser
+      if (await InAppBrowser.isAvailable()) {
+        await InAppBrowser.open(item, {
+        });
+      } else {
+        Linking.openURL(item); // If the in-app browser is not available, open the link in the device's default browser
       }
     } catch (error) {
-      console.error(error);
+      console.error("ERROR", error);
     }
   };
+
+
 
   return (
     <ImageBackground

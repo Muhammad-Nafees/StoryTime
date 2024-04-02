@@ -24,6 +24,5 @@ api.interceptors.response.use((response) => {
 
     return response;
 }, (error) => {
-    // Agar koi error aata hai to use reject karein
     return Promise.reject(error);
 });

@@ -17,35 +17,28 @@ import {
   ThirdColor,
   pinkColor,
 } from '../../Styles/Style';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
-import {Img_Paths} from '../../../assets/Imagepaths/index';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import { Img_Paths } from '../../../assets/Imagepaths/index';
 import BackButton from '../../../components/reuseable-components/BackButton';
 import NavigationsString from '../../../constants/NavigationsString';
 import VoiceToText from '../../../components/VoiceToText';
-import {SCREEN_HEIGHT} from '../../../constants/Constant';
+import { SCREEN_HEIGHT } from '../../../constants/Constant';
+
 
 const FirstScreenPlayFlow = () => {
-  const {width, height} = Dimensions.get('window');
   const {
-    STORY_TIME_IMG,
     BG_PLAYFLOW,
-    HOME_FRAME,
-    FULL_BORDER_FRAME,
     FIRST_VOICE_TO_TEXT_IMAGE,
     VIDEO_IMAGE,
   } = Img_Paths;
-  const SCREENWIDTH = Dimensions.get('window').width;
-  const SCREENHEIGHT = Dimensions.get('window').height;
   const {
-    FEED_CHAT,
     SECONDSCREENPLAYFLOW,
-    THIRDSCREENPLAYFLOW,
     VIDEO_FIRST_SCREEN,
   } = NavigationsString;
   const navigation = useNavigation();
@@ -56,11 +49,11 @@ const FirstScreenPlayFlow = () => {
         style={{
           height: SCREEN_HEIGHT / 1,
         }}>
-        <View style={{paddingTop: responsiveWidth(10)}}>
+        <View style={{ paddingTop: responsiveWidth(10) }}>
           <BackButton onPress={() => navigation.goBack()} />
         </View>
         {/* Back Button */}
-        <View style={{paddingTop: responsiveWidth(15)}}>
+        <View style={{ paddingTop: responsiveWidth(15) }}>
           <VoiceToText
             onPress={() => navigation.navigate(SECONDSCREENPLAYFLOW)}
             text="Voice to Text"

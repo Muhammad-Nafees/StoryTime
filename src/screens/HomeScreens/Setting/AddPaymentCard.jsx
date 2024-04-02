@@ -14,10 +14,12 @@ import Typography from '../../../components/reusable-components/Typography';
 import PaymentButton from '../../../components/paymentSetting/PaymentButton';
 
 const AddPaymentCard = ({ navigation }) => {
+
   const { LEFT_ARROW_IMG, CHECK } = Img_Paths;
   const handleScreen = () => {
     navigation.navigate('AddPaymentCardDetail');
   };
+
   return (
     <BackgroundWrapper disableScrollView coverScreen>
       <View style={styles.first_container}>
