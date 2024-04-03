@@ -17,7 +17,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import BackButton from '../../../components/reusable-components/addplayer/customBackButton/BackButton';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import SettingButton from '../../../components/SettingButton';
 import { TextColorGreen } from '../../Styles/Style';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -49,6 +49,7 @@ const Profile = ({ route }) => {
   const [isPublicOrPrivate, setIsPublicOrPrivate] = useState(true);
 
   // Redux
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const FriendIdRTK = useSelector((state) => state?.getcategories?.friendId);
   const { user } = useSelector(state => state?.authSlice);
@@ -60,13 +61,13 @@ const Profile = ({ route }) => {
     }
   }, [route.params?.videoData]);
 
+
   useFocusEffect(
     useCallback(() => {
       const getUsersProfile = async () => {
         setIsUserLoading(true);
         setProfileResponse([]);
         setResponse_ProfileVideo([]);
-        setType("text");
         try {
           const response = await getUsers_Profile({ user: FriendIdRTK });
           if (response) {
@@ -88,10 +89,6 @@ const Profile = ({ route }) => {
 
 
   console.log("type---------- :", type);
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setType("text");
-  //   }, []));
 
   useFocusEffect(
     useCallback(() => {
@@ -108,9 +105,9 @@ const Profile = ({ route }) => {
             type: type,
             user: FriendIdRTK,
           });
+
           setIsLoadingRecording(false);
           if (responseData?.data?.data?.stories && type === "text") {
-            setType("text");
             setIsLoadingRecording(false);
             setProfileResponse((prevData) => {
               const filteredData = responseData?.data?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
@@ -121,7 +118,6 @@ const Profile = ({ route }) => {
           }
 
           else if (responseData?.data?.data?.stories && type === "video") {
-            setType("video");
             setIsLoadingRecording(false);
             setResponse_ProfileVideo((prevData) => {
               const filteredData = responseData?.data?.data?.stories.filter(item => !prevData.some(prevItem => prevItem._id === item._id));
@@ -169,8 +165,6 @@ const Profile = ({ route }) => {
     setRecordingPage(1);
     setIsLoadingRecording(false);
   };
-
-
 
   return (
     <>
